@@ -1,4 +1,3 @@
-// hooks/scaffold-eth/useUser.ts
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useAccount } from "wagmi";
 import { UserByAddress } from "~~/services/database/respositories/users";
