@@ -3,7 +3,7 @@ import { relations } from 'drizzle-orm';
 
 // Define custom enums
 export const reviewActionEnum = pgEnum('review_action_enum', ['REJECTED', 'ACCEPTED']);
-export const eventTypeEnum = pgEnum('event_type_enum', ['challenge.submit', 'challenge.autograde']);
+export const eventTypeEnum = pgEnum('event_type_enum', ['challenge.submit', 'challenge.autograde', 'user.create']);
 
 // Users table definition
 export const users = pgTable('users', {
