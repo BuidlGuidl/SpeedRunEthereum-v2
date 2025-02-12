@@ -1,0 +1,345 @@
+{
+  "version": "2.0.0",
+  "users": {
+    "0xB4F53bd85c00EF22946d24Ae26BC38Ac64F5E7B1": {
+      "role": "user",
+      "creationTimestamp": 1679063274534,
+      "socialLinks": {
+        "twitter": "pabl0cks",
+        "telegram": "pabl0cks"
+      },
+      "joinedBg": true,
+      "challenges": {
+        "simple-nft-example": {
+          "deployedUrl": "https://dreary-use.surge.sh/",
+          "submittedTimestamp": 1679063312936,
+          "contractUrl": "https://sepolia.etherscan.io/address/0x7f918d7b7d0fe0d3a8de3c0570ed4e154c0096e0",
+          "reviewComment": "Dummy review, nice work",
+          "autograding": true,
+          "status": "ACCEPTED"
+        },
+        "dice-game": {
+          "deployedUrl": "https://aggressive-party.surge.sh/",
+          "submittedTimestamp": 1679359244796,
+          "contractUrl": "https://sepolia.etherscan.io/address/0xd08b984c3ee4a880112d81de5a4a074c857b7f2f",
+          "reviewComment": "Dummy review, it's working great",
+          "autograding": true,
+          "status": "ACCEPTED"
+        },
+        "decentralized-staking": {
+          "deployedUrl": "https://chunky-beam.surge.sh/",
+          "submittedTimestamp": 1679185806311,
+          "contractUrl": "https://sepolia.etherscan.io/address/0xbF35fC995A2Cc4F1508B5F769922623dE7f220d6",
+          "reviewComment": "Dummy review, it's working great",
+          "autograding": true,
+          "status": "ACCEPTED"
+        },
+        "token-vendor": {
+          "deployedUrl": "https://nonstop-fiction.surge.sh/",
+          "submittedTimestamp": 1679317471852,
+          "contractUrl": "https://sepolia.etherscan.io/address/0x57D312c3E4bF22F22d6A900Be8B38b5546b47C3f",
+          "reviewComment": "Dummy review, it's working great",
+          "autograding": true,
+          "status": "ACCEPTED"
+        }
+      }
+    },
+    "0x000084821704d731438d2D06f4295e1AB0ace7D8": {
+      "role": "user",
+      "creationTimestamp": 1664777161512,
+      "socialLinks": {
+        "twitter": "FarhanRyuu",
+        "discord": "farhan0601#0157",
+        "email": "ryuufarhan7@gmail.com"
+      },
+      "challenges": {
+        "simple-nft-example": {
+          "deployedUrl": "http://simple-nft-ryuufarhan.surge.sh/",
+          "submittedTimestamp": 1664778633262,
+          "contractUrl": "https://goerli.etherscan.io/address/0x861346d67b728949bcb69595638a78723a2adae3",
+          "reviewComment": "Dummy review, nice work",
+          "autograding": true,
+          "status": "ACCEPTED"
+        }
+      }
+    },
+    "0x014EC6296B3493f0f59a3FE90E0FFf377fb8826a": {
+      "role": "user",
+      "creationTimestamp": 1672731143934,
+      "socialLinks": {
+        "twitter": "meta_Goku",
+        "github": "kesgokul",
+        "discord": "Meta_Goku#1534",
+        "instagram": "meta_goku",
+        "email": "gokulkesavan5005@gmail.com"
+      },
+      "joinedBg": true,
+      "challenges": {
+        "simple-nft-example": {
+          "deployedUrl": "http://clumsy-week.surge.sh",
+          "submittedTimestamp": 1672831270556,
+          "contractUrl": "https://goerli.etherscan.io/address/0xe3DF14f1482074916A8Aeb40d84898C879b2B5f6",
+          "reviewComment": "Dummy review, nice work",
+          "autograding": true,
+          "status": "ACCEPTED"
+        },
+        "state-channels": {
+          "submittedTimestamp": 1673150820763,
+          "deployedUrl": "https://pumped-parcel.surge.sh",
+          "contractUrl": "https://goerli.etherscan.io/address/0x71F80197032c9a07b966D3f8eCAFE601Af244F35",
+          "reviewComment": "Dummy review, it's working great",
+          "autograding": true,
+          "status": "ACCEPTED"
+        },
+        "dice-game": {
+          "deployedUrl": "https://busy-pizzas.surge.sh",
+          "submittedTimestamp": 1672974794575,
+          "contractUrl": "https://goerli.etherscan.io/address/0xEd2aF24B1a657000C9b4509BC91FCfA5E76D3d33",
+          "reviewComment": "Dummy review, it's working great",
+          "autograding": true,
+          "status": "ACCEPTED"
+        },
+        "decentralized-staking": {
+          "submittedTimestamp": 1672830084301,
+          "deployedUrl": "https://tasteful-plough.surge.sh",
+          "contractUrl": "https://goerli.etherscan.io/address/0xf3384118b56827271979A879e2d5A4d28569eb48",
+          "reviewComment": "Dummy review, it's working great",
+          "autograding": true,
+          "status": "ACCEPTED"
+        },
+        "minimum-viable-exchange": {
+          "deployedUrl": "https://sour-snake.surge.sh",
+          "submittedTimestamp": 1673006384070,
+          "contractUrl": "https://goerli.etherscan.io/address/0x0752d3847601b506cBFB10330172821B495e6bB0",
+          "reviewComment": "Dummy review, it's working great",
+          "autograding": true,
+          "status": "ACCEPTED"
+        },
+        "token-vendor": {
+          "deployedUrl": "https://speedrunethereum.com/challenge/token-vendor",
+          "submittedTimestamp": 1672819901984,
+          "contractUrl": "https://goerli.etherscan.io/address/0x9626C68Dd8d000BBB7B06f0782266976dEB91c35",
+          "reviewComment": "Dummy review, it's working great",
+          "autograding": true,
+          "status": "ACCEPTED"
+        }
+      }
+    },
+    "0x01B2686Bd146bFc3F4B3DD6F7F86f26ac7c2f7Fd": {
+      "role": "user",
+      "creationTimestamp": 1668050419502,
+      "socialLinks": {
+        "github": "Oba-One",
+        "twitter": "Time_Is_Oba",
+        "discord": "Oba-One#1320",
+        "email": "afo@wefa.app"
+      },
+      "challenges": {
+        "simple-nft-example": {
+          "deployedUrl": "https://kind-fifth.surge.sh/",
+          "submittedTimestamp": 1668196973527,
+          "contractUrl": "https://goerli.etherscan.io/address/0xb9487f8d9E336a9468fcbb50dAF39587D0EBCA63",
+          "reviewComment": "Dummy review, nice work",
+          "autograding": true,
+          "status": "ACCEPTED"
+        },
+        "decentralized-staking": {
+          "deployedUrl": "https://stupid-beginner.surge.sh",
+          "submittedTimestamp": 1668830120864,
+          "contractUrl": "https://goerli.etherscan.io/address/0xd68edd04EbB81c6f187A526F3656C18dD0258cd8",
+          "reviewComment": "Dummy review, it's working great",
+          "autograding": true,
+          "status": "ACCEPTED"
+        }
+      }
+    }
+  },
+  "events": [
+    {
+      "payload": {
+        "challengeId": "simple-nft-example",
+        "contractUrl": "https://sepolia.etherscan.io/address/0x7f918d7b7d0fe0d3a8de3c0570ed4e154c0096e0",
+        "deployedUrl": "https://dreary-use.surge.sh/",
+        "userAddress": "0xB4F53bd85c00EF22946d24Ae26BC38Ac64F5E7B1"
+      },
+      "signature": "0x7a808ee181d8655f38c48e0154903bea229b91e32f6062f6c23ad9da5fa25c3008238b07e367e7904200015157a43378b39244140c43ea35e5eea11c055a170500",
+      "timestamp": 1679063312936,
+      "type": "challenge.submit"
+    },
+    {
+      "payload": {
+        "challengeId": "dice-game",
+        "contractUrl": "https://sepolia.etherscan.io/address/0xd08b984c3ee4a880112d81de5a4a074c857b7f2f",
+        "deployedUrl": "https://aggressive-party.surge.sh/",
+        "userAddress": "0xB4F53bd85c00EF22946d24Ae26BC38Ac64F5E7B1"
+      },
+      "signature": "0x4eca15955283c15c1f9565945c34638c9943a313a79301d73178b814e82e3e183e3d89aebdafa10a1012912cb820950fb6eea6ba76e58bf875f226bdc8257dc700",
+      "timestamp": 1679359244796,
+      "type": "challenge.submit"
+    },
+    {
+      "payload": {
+        "userAddress": "0xB4F53bd85c00EF22946d24Ae26BC38Ac64F5E7B1"
+      },
+      "signature": "0xe6d747b3e4760aa9ceb15ae8274366ab010d057136782bdf77ea755c9f148fc85046b2ed24bcd6a39720e6e62db5cfc52b476099126ef6d90985115d494b606a01",
+      "timestamp": 1679063274533,
+      "type": "user.create"
+    },
+    {
+      "payload": {
+        "challengeId": "token-vendor",
+        "contractUrl": "https://sepolia.etherscan.io/address/0x57D312c3E4bF22F22d6A900Be8B38b5546b47C3f",
+        "deployedUrl": "https://nonstop-fiction.surge.sh/",
+        "userAddress": "0xB4F53bd85c00EF22946d24Ae26BC38Ac64F5E7B1"
+      },
+      "signature": "0x4e681d003b6310a604944bd334966cd10348b283d1797db0f93b6ce55f9c02d149b53e59a331362b7f6468528fe4dfee1cd8d923199fc9949ac8386ec633213a01",
+      "timestamp": 1679317471852,
+      "type": "challenge.submit"
+    },
+    {
+      "payload": {
+        "autograding": true,
+        "challengeId": "simple-nft-example",
+        "reviewAction": "ACCEPTED",
+        "reviewMessage": "Dummy review, nice work",
+        "userAddress": "0xB4F53bd85c00EF22946d24Ae26BC38Ac64F5E7B1"
+      },
+      "signature": "0x7a808ee181d8655f38c48e0154903bea229b91e32f6062f6c23ad9da5fa25c3008238b07e367e7904200015157a43378b39244140c43ea35e5eea11c055a170500",
+      "timestamp": 1679063320289,
+      "type": "challenge.autograde"
+    },
+    {
+      "payload": {
+        "autograding": true,
+        "challengeId": "decentralized-staking",
+        "contractUrl": "https://sepolia.etherscan.io/address/0xbF35fC995A2Cc4F1508B5F769922623dE7f220d6",
+        "deployedUrl": "https://chunky-beam.surge.sh/",
+        "userAddress": "0xB4F53bd85c00EF22946d24Ae26BC38Ac64F5E7B1"
+      },
+      "signature": "0x78e60403c8f0d5e8094de16f059d169e8e3a92e3a2df940589f2ce9c2b556d5d0dc0230c421df265fa8975f6175d0a7881a58e0e51b31107c6de1ee4a55a9eb601",
+      "timestamp": 1679185806311,
+      "type": "challenge.submit"
+    },
+    {
+      "payload": {
+        "autograding": true,
+        "challengeId": "decentralized-staking",
+        "reviewAction": "ACCEPTED",
+        "reviewMessage": "Dummy review, it's working great",
+        "userAddress": "0xB4F53bd85c00EF22946d24Ae26BC38Ac64F5E7B1"
+      },
+      "signature": "0x78e60403c8f0d5e8094de16f059d169e8e3a92e3a2df940589f2ce9c2b556d5d0dc0230c421df265fa8975f6175d0a7881a58e0e51b31107c6de1ee4a55a9eb601",
+      "timestamp": 1679185814845,
+      "type": "challenge.autograde"
+    },
+    {
+      "payload": {
+        "autograding": true,
+        "challengeId": "token-vendor",
+        "reviewAction": "ACCEPTED",
+        "reviewMessage": "Dummy review, it's working great",
+        "userAddress": "0xB4F53bd85c00EF22946d24Ae26BC38Ac64F5E7B1"
+      },
+      "signature": "0x4e681d003b6310a604944bd334966cd10348b283d1797db0f93b6ce55f9c02d149b53e59a331362b7f6468528fe4dfee1cd8d923199fc9949ac8386ec633213a01",
+      "timestamp": 1679317478533,
+      "type": "challenge.autograde"
+    },
+    {
+      "payload": {
+        "autograding": true,
+        "challengeId": "dice-game",
+        "reviewAction": "ACCEPTED",
+        "reviewMessage": "Dummy review, it's working great",
+        "userAddress": "0xB4F53bd85c00EF22946d24Ae26BC38Ac64F5E7B1"
+      },
+      "signature": "0x4eca15955283c15c1f9565945c34638c9943a313a79301d73178b814e82e3e183e3d89aebdafa10a1012912cb820950fb6eea6ba76e58bf875f226bdc8257dc700",
+      "timestamp": 1679359253588,
+      "type": "challenge.autograde"
+    },
+    {
+      "payload": {
+        "challengeId": "simple-nft-example",
+        "contractUrl": "https://goerli.etherscan.io/address/0x861346d67b728949bcb69595638a78723a2adae3",
+        "deployedUrl": "http://simple-nft-ryuufarhan.surge.sh/",
+        "userAddress": "0x000084821704d731438d2D06f4295e1AB0ace7D8"
+      },
+      "signature": "0xc6d7cd95c4baf16851aec5817b08a07ca52f1682f37548c57173d3432df734d17d4e6d810ce55f151dcc5272ae07991305b8d40b0863b4308d5bd74788b645471c",
+      "timestamp": 1664778633262,
+      "type": "challenge.submit"
+    },
+    {
+      "payload": {
+        "userAddress": "0x000084821704d731438d2D06f4295e1AB0ace7D8"
+      },
+      "signature": "0x8d319d59ce02619610376d6ebb2aae2581935d4176ec3ba2228d2b2cab720d260b4d4499f0000ec63d029df5271c10c92ccd68333ddedf506878511f79dd7fad1b",
+      "timestamp": 1664777161511,
+      "type": "user.create"
+    },
+    {
+      "payload": {
+        "autograding": true,
+        "challengeId": "simple-nft-example",
+        "reviewAction": "ACCEPTED",
+        "reviewMessage": "Dummy review, nice work",
+        "userAddress": "0x000084821704d731438d2D06f4295e1AB0ace7D8"
+      },
+      "signature": "0xc6d7cd95c4baf16851aec5817b08a07ca52f1682f37548c57173d3432df734d17d4e6d810ce55f151dcc5272ae07991305b8d40b0863b4308d5bd74788b645471c",
+      "timestamp": 1664778651266,
+      "type": "challenge.autograde"
+    },
+    {
+      "payload": {
+        "challengeId": "decentralized-staking",
+        "contractUrl": "https://goerli.etherscan.io/address/0xd68edd04EbB81c6f187A526F3656C18dD0258cd8",
+        "deployedUrl": "https://stupid-beginner.surge.sh",
+        "userAddress": "0x01B2686Bd146bFc3F4B3DD6F7F86f26ac7c2f7Fd"
+      },
+      "signature": "0x40a5005851b26a87a1ed130da6b1eedcf938dda15703f6d7155db088f91cca42496cd84d53e949d0ecb89ed3ed82db3bae9705c6a91b9198693c646690d9dea01c",
+      "timestamp": 1668830120864,
+      "type": "challenge.submit"
+    },
+    {
+      "payload": {
+        "autograding": true,
+        "challengeId": "simple-nft-example",
+        "reviewAction": "ACCEPTED",
+        "reviewMessage": "Dummy review, nice work",
+        "userAddress": "0x01B2686Bd146bFc3F4B3DD6F7F86f26ac7c2f7Fd"
+      },
+      "signature": "0x03699f6b44e96814d5bac9e4a8a53195216af7b3d4eb44a76206e75ccb7869594755cf526826153335a00e0b140ec3f498db454681bd34d245d801f065b4ccf91c",
+      "timestamp": 1668196991801,
+      "type": "challenge.autograde"
+    },
+    {
+      "payload": {
+        "autograding": true,
+        "challengeId": "decentralized-staking",
+        "reviewAction": "ACCEPTED",
+        "reviewMessage": "Dummy review, it's working great",
+        "userAddress": "0x01B2686Bd146bFc3F4B3DD6F7F86f26ac7c2f7Fd"
+      },
+      "signature": "0x40a5005851b26a87a1ed130da6b1eedcf938dda15703f6d7155db088f91cca42496cd84d53e949d0ecb89ed3ed82db3bae9705c6a91b9198693c646690d9dea01c",
+      "timestamp": 1668830138768,
+      "type": "challenge.autograde"
+    },
+    {
+      "payload": {
+        "userAddress": "0x01B2686Bd146bFc3F4B3DD6F7F86f26ac7c2f7Fd"
+      },
+      "signature": "0x760bf0c7f94d6fdce07a72d07274e36a258ffe1c4386201b8d34ba7e14882c0432fbedfb77259cbf42599b9939db4fe4ba5a73a4deffef10aa99b757f6f5957e1c",
+      "timestamp": 1668050419499,
+      "type": "user.create"
+    },
+    {
+      "payload": {
+        "challengeId": "simple-nft-example",
+        "contractUrl": "https://goerli.etherscan.io/address/0xb9487f8d9E336a9468fcbb50dAF39587D0EBCA63",
+        "deployedUrl": "https://kind-fifth.surge.sh/",
+        "userAddress": "0x01B2686Bd146bFc3F4B3DD6F7F86f26ac7c2f7Fd"
+      },
+      "signature": "0x03699f6b44e96814d5bac9e4a8a53195216af7b3d4eb44a76206e75ccb7869594755cf526826153335a00e0b140ec3f498db454681bd34d245d801f065b4ccf91c",
+      "timestamp": 1668196973527,
+      "type": "challenge.submit"
+    }
+  ]
+}
