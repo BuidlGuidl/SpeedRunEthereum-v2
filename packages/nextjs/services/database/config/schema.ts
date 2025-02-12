@@ -1,11 +1,9 @@
-import { pgTable, varchar, boolean, bigint, text, integer, serial, pgEnum } from 'drizzle-orm/pg-core';
+import { pgTable, varchar, boolean, bigint, text, serial, pgEnum } from 'drizzle-orm/pg-core';
 import { relations } from 'drizzle-orm';
 
-// Define custom enums
 export const reviewActionEnum = pgEnum('review_action_enum', ['REJECTED', 'ACCEPTED']);
 export const eventTypeEnum = pgEnum('event_type_enum', ['challenge.submit', 'challenge.autograde', 'user.create']);
 
-// Users table definition
 export const users = pgTable('users', {
   userAddress: varchar('userAddress', { length: 42 }).primaryKey(), // Ethereum address
   role: varchar('role', { length: 50 }),
@@ -17,14 +15,12 @@ export const users = pgTable('users', {
   github: varchar('github', { length: 255 })
 });
 
-// Challenges table definition
 export const challenges = pgTable('challenges', {
-  challengeCode: varchar('challengeCode', { length: 255 }).primaryKey(),
+  challengeCode: varchar('challengeCode', { length: 255 }).primaryKey(), // Unique identifier for the challenge
   challengeName: varchar('challengeName', { length: 255 }).notNull(),
-  autograding: boolean('autograding').default(false)
+  autograding: boolean('autograding').default(false) // Whether the challenge supports automatic grading
 });
 
-// UserChallenges table definition
 export const userChallenges = pgTable('user_challenges', {
   userChallengeId: serial('userChallengeId').primaryKey(),
   userAddress: varchar('userAddress', { length: 42 })
@@ -33,17 +29,16 @@ export const userChallenges = pgTable('user_challenges', {
   challengeCode: varchar('challengeCode', { length: 255 })
     .notNull()
     .references(() => challenges.challengeCode),
-  reviewComment: text('reviewComment'),
+  reviewComment: text('reviewComment'), // Feedback provided during from the autograder
   submittedTimestamp: bigint('submittedTimestamp', { mode: 'number' }),
-  reviewAction: reviewActionEnum('reviewAction')
+  reviewAction: reviewActionEnum('reviewAction') // Final review decision from autograder (REJECTED or ACCEPTED)
 });
 
-// Events table definition
 export const events = pgTable('events', {
   eventId: serial('eventId').primaryKey(),
-  eventType: eventTypeEnum('eventType').notNull(),
+  eventType: eventTypeEnum('eventType').notNull(), // Type of event (challenge.submission, challenge.autograding, user.create)
   timestamp: bigint('timestamp', { mode: 'number' }).notNull(),
-  signature: varchar('signature', { length: 255 }),
+  signature: varchar('signature', { length: 255 }), // Cryptographic signature of the event
   userAddress: varchar('userAddress', { length: 42 })
     .notNull()
     .references(() => users.userAddress),
@@ -54,7 +49,6 @@ export const events = pgTable('events', {
   reviewMessage: text('reviewMessage')
 });
 
-// Define relationships
 export const usersRelations = relations(users, ({ many }) => ({
   userChallenges: many(userChallenges),
   events: many(events)
