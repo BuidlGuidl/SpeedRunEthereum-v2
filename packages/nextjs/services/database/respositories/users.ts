@@ -4,11 +4,16 @@ import { db } from "~~/services/database/config/postgresClient";
 import { users } from "~~/services/database/config/schema";
 
 export type UserInsert = InferInsertModel<typeof users>;
+export type UserByAddress = Awaited<ReturnType<typeof findUserByAddress>>[0];
 
 export async function findUserByAddress(address: string) {
   return await db.select().from(users).where(eq(users.id, address));
 }
 
+export async function isUserPresent(address: string) {
+  return Boolean(await db.$count(users, eq(users.id, address)));
+}
+
 export async function createUser(user: UserInsert) {
-  return await db.insert(users).values(user);
+  return await db.insert(users).values(user).returning();
 }
