@@ -1,13 +1,13 @@
-import { pgTable, varchar, boolean, bigint, text, integer, serial, pgEnum } from 'drizzle-orm/pg-core';
+import { pgTable, varchar, boolean, bigint, text, serial, pgEnum } from 'drizzle-orm/pg-core';
 import { relations } from 'drizzle-orm';
 
 // Define custom enums
 export const reviewActionEnum = pgEnum('review_action_enum', ['REJECTED', 'ACCEPTED']);
-export const eventTypeEnum = pgEnum('event_type_enum', ['challenge.submit', 'challenge.autograde', 'user.create']);
+export const eventTypeEnum = pgEnum('event_type_enum', ['challenge.submit', 'challenge.autograde']);
 
 // Users table definition
 export const users = pgTable('users', {
-  userAddress: varchar('userAddress', { length: 42 }).primaryKey(), // Ethereum address
+  userAddress: varchar('userAddress', { length: 42 }).primaryKey(),
   role: varchar('role', { length: 50 }),
   creationTimestamp: bigint('creationTimestamp', { mode: 'number' }),
   joinedBg: boolean('joinedBg'),
