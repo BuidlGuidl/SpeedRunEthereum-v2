@@ -92,6 +92,20 @@ async function seed() {
 
     // Insert challenges
     console.log("Inserting challenges...");
+    const challengeNameMap: Record<string, string> = {
+      'decentralized-staking': 'Decentralized Staking App',
+      'dice-game': 'Dice Game',
+      'minimum-viable-exchange': 'Build a DEX',
+      'simple-nft-example': 'Simple NFT Example',
+      'state-channels': 'A State Channel Application',
+      'token-vendor': 'Token Vendor',
+      'multisig': 'Multisig Wallet',
+      'svg-nft': 'SVG NFT'
+    };
+
+    const nonAutogradingChallenges = new Set(['multisig', 'svg-nft']);
+
+    // Get unique challenges from seed data
     const uniqueChallenges = new Set<string>();
     Object.values(seedData.users as Record<string, UserData>).forEach(userData => {
       if (userData.challenges) {
@@ -101,13 +115,17 @@ async function seed() {
       }
     });
 
+    // Add additional challenges that might not be in seed data
+    uniqueChallenges.add('multisig');
+    uniqueChallenges.add('svg-nft');
+
     for (const challengeCode of uniqueChallenges) {
       await db.insert(challenges).values({
         challengeCode,
-        challengeName: challengeCode.split('-').map(word =>
+        challengeName: challengeNameMap[challengeCode] || challengeCode.split('-').map(word =>
           word.charAt(0).toUpperCase() + word.slice(1)
         ).join(' '),
-        autograding: true,
+        autograding: !nonAutogradingChallenges.has(challengeCode),
       }).execute();
     }
 
