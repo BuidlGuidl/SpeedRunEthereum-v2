@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { createUser, isUserPresent } from "~~/services/database/respositories/users";
+import { createUser, isUserRegistered } from "~~/services/database/respositories/users";
 import { isValidEIP712UserRegisterSignature } from "~~/utils/eip712/register";
 
 type RegisterPayload = {
@@ -16,7 +16,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Address and signature are required" }, { status: 400 });
     }
 
-    const userExist = await isUserPresent(address.toLowerCase());
+    const userExist = await isUserRegistered(address.toLowerCase());
 
     if (userExist) {
       return NextResponse.json({ error: "User already registered" }, { status: 401 });

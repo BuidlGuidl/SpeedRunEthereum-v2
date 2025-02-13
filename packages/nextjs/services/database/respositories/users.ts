@@ -10,7 +10,7 @@ export async function findUserByAddress(address: string) {
   return await db.select().from(users).where(eq(users.id, address));
 }
 
-export async function isUserPresent(address: string) {
+export async function isUserRegistered(address: string) {
   return Boolean(await db.$count(users, eq(users.id, address)));
 }
 
