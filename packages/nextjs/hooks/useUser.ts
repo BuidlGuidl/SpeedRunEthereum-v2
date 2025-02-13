@@ -18,7 +18,6 @@ async function fetchUser(address: string | undefined) {
 }
 
 async function registerUser({ address, signature }: { address: string; signature: string }) {
-  console.log("registerUser", address, signature);
   const response = await fetch("/api/users/register", {
     method: "POST",
     headers: {
