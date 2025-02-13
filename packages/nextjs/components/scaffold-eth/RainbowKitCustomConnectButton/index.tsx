@@ -21,7 +21,7 @@ export const RainbowKitCustomConnectButton = () => {
   const networkColor = useNetworkColor();
   const { targetNetwork } = useTargetNetwork();
   const { address: connectedAddress } = useAccount();
-  const { register, isRegistering } = useUserRegister();
+  const { handleRegister, isRegistering } = useUserRegister();
   const { data: user, isLoading: isLoadingUser } = useUser(connectedAddress);
 
   return (
@@ -50,7 +50,7 @@ export const RainbowKitCustomConnectButton = () => {
 
         if (!user) {
           return (
-            <button className="btn btn-primary btn-sm" onClick={register} disabled={isRegistering}>
+            <button className="btn btn-primary btn-sm" onClick={handleRegister} disabled={isRegistering}>
               {isRegistering ? <span className="loading loading-spinner loading-sm"></span> : "Register"}
             </button>
           );

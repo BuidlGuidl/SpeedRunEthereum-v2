@@ -34,7 +34,7 @@ export function useUserRegister() {
   };
 
   return {
-    register: handleRegister,
+    handleRegister,
     isRegistering,
   };
 }
