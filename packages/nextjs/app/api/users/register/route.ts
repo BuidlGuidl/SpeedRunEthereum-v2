@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
-import { recoverTypedDataAddress } from "viem";
 import { createUser, isUserPresent } from "~~/services/database/respositories/users";
-import { EIP_712_DOMAIN, EIP_712_TYPES__USER_REGISTER } from "~~/utils/eip712";
+import { isValidEIP712UserRegisterSignature } from "~~/utils/eip712/register";
 
 type RegisterPayload = {
   address: string;
@@ -23,19 +22,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "User already registered" }, { status: 401 });
     }
 
-    const typedData = {
-      domain: EIP_712_DOMAIN,
-      types: EIP_712_TYPES__USER_REGISTER,
-      primaryType: "Message",
-      message: {
-        action: "Register",
-        description: "I would like to register as a builder in speedrunethereum.com signing this offchain message",
-      },
-      signature,
-    } as const;
-
-    const recoveredAddress = await recoverTypedDataAddress(typedData);
-    const isValidSignature = recoveredAddress.toLowerCase() === address.toLowerCase();
+    const isValidSignature = isValidEIP712UserRegisterSignature({ address, signature });
 
     if (!isValidSignature) {
       return NextResponse.json({ error: "Invalid signature" }, { status: 401 });

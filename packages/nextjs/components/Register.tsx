@@ -1,7 +1,7 @@
 // components/scaffold-eth/RegisterButton.tsx
 import { useAccount, useSignTypedData } from "wagmi";
 import { useUser } from "~~/hooks/useUser";
-import { EIP_712_DOMAIN, EIP_712_TYPES__USER_REGISTER } from "~~/utils/eip712";
+import { EIP_712_TYPED_DATA__USER_REGISTER } from "~~/utils/eip712/register";
 import { notification } from "~~/utils/scaffold-eth";
 
 export const RegisterButton = () => {
@@ -13,17 +13,7 @@ export const RegisterButton = () => {
     if (!address) return;
 
     try {
-      const typedData = {
-        domain: EIP_712_DOMAIN,
-        types: EIP_712_TYPES__USER_REGISTER,
-        primaryType: "Message",
-        message: {
-          action: "Register",
-          description: "I would like to register as a builder in speedrunethereum.com signing this offchain message",
-        },
-      } as const;
-
-      const signature = await signTypedDataAsync(typedData);
+      const signature = await signTypedDataAsync(EIP_712_TYPED_DATA__USER_REGISTER);
 
       register({ address, signature });
     } catch (error) {
