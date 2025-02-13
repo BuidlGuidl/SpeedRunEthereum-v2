@@ -1,12 +1,11 @@
-import { users, challenges, userChallenges, events } from "./config/schema";
+import { challenges, events, userChallenges, users } from "./config/schema";
 import * as schema from "./config/schema";
+// Import seed data
+import seedData from "./seed.json";
 import * as dotenv from "dotenv";
 import { drizzle } from "drizzle-orm/node-postgres";
 import * as path from "path";
 import { Client } from "pg";
-
-// Import seed data
-import seedData from "./seed.json";
 
 // Define types for the seed data
 interface SocialLinks {
@@ -19,19 +18,18 @@ interface SocialLinks {
 }
 
 interface ChallengeData {
-  deployedUrl: string;
-  submittedTimestamp: number;
-  contractUrl: string;
-  reviewComment: string;
-  autograding: boolean;
-  status: "ACCEPTED" | "REJECTED";
+  deployedUrl?: string;
+  submittedTimestamp?: number;
+  contractUrl?: string;
+  reviewComment?: string;
+  autograding?: boolean;
+  status?: "ACCEPTED" | "REJECTED";
 }
 
 interface UserData {
   role: string;
   creationTimestamp: number;
-  socialLinks?: SocialLinks;
-  joinedBg?: boolean;
+  socialLinks: SocialLinks;
   challenges?: Record<string, ChallengeData>;
 }
 
@@ -49,7 +47,7 @@ interface Event {
   payload: EventPayload;
   signature: string;
   timestamp: number;
-  type: "challenge.submit" | "challenge.autograde";
+  type: "challenge.submit" | "challenge.autograde" | "user.create";
 }
 
 interface SeedData {
@@ -58,7 +56,20 @@ interface SeedData {
   events: Event[];
 }
 
+const typedSeedData = seedData as SeedData;
+
 dotenv.config({ path: path.resolve(__dirname, "../../.env.development") });
+
+// Add this helper function at the top level
+function createValidDate(timestamp: number | undefined): Date | undefined {
+  if (!timestamp) {
+    return undefined; // Let the database handle the default value
+  }
+  // Check if timestamp is in milliseconds (13 digits) or seconds (10 digits)
+  const isMilliseconds = timestamp.toString().length === 13;
+  const validTimestamp = isMilliseconds ? timestamp : timestamp * 1000;
+  return new Date(validTimestamp);
+}
 
 async function seed() {
   const client = new Client({
@@ -76,38 +87,41 @@ async function seed() {
     await db.delete(users).execute();
 
     // Insert users
+    // TODO: Check who should be admin and manually set it
     console.log("Inserting users...");
-    for (const [userAddress, userData] of Object.entries(seedData.users as Record<string, UserData>)) {
-      await db.insert(users).values({
-        userAddress,
-        role: userData.role,
-        creationTimestamp: userData.creationTimestamp,
-        joinedBg: userData.joinedBg || false,
-        email: userData.socialLinks?.email,
-        telegram: userData.socialLinks?.telegram,
-        twitter: userData.socialLinks?.twitter,
-        github: userData.socialLinks?.github,
-      }).execute();
+    for (const [userAddress, userData] of Object.entries(typedSeedData.users)) {
+      await db
+        .insert(users)
+        .values({
+          userAddress,
+          role: "user", // Set everyone as user by default
+          creationTimestamp: createValidDate(userData.creationTimestamp),
+          email: userData.socialLinks?.email,
+          telegram: userData.socialLinks?.telegram,
+          twitter: userData.socialLinks?.twitter,
+          github: userData.socialLinks?.github,
+        })
+        .execute();
     }
 
     // Insert challenges
     console.log("Inserting challenges...");
     const challengeNameMap: Record<string, string> = {
-      'decentralized-staking': 'Decentralized Staking App',
-      'dice-game': 'Dice Game',
-      'minimum-viable-exchange': 'Build a DEX',
-      'simple-nft-example': 'Simple NFT Example',
-      'state-channels': 'A State Channel Application',
-      'token-vendor': 'Token Vendor',
-      'multisig': 'Multisig Wallet',
-      'svg-nft': 'SVG NFT'
+      "decentralized-staking": "Decentralized Staking App",
+      "dice-game": "Dice Game",
+      "minimum-viable-exchange": "Build a DEX",
+      "simple-nft-example": "Simple NFT Example",
+      "state-channels": "A State Channel Application",
+      "token-vendor": "Token Vendor",
+      multisig: "Multisig Wallet",
+      "svg-nft": "SVG NFT",
     };
 
-    const nonAutogradingChallenges = new Set(['multisig', 'svg-nft']);
+    const nonAutogradingChallenges = new Set(["multisig", "svg-nft"]);
 
     // Get unique challenges from seed data
     const uniqueChallenges = new Set<string>();
-    Object.values(seedData.users as Record<string, UserData>).forEach(userData => {
+    Object.values(typedSeedData.users).forEach(userData => {
       if (userData.challenges) {
         Object.keys(userData.challenges).forEach(challengeCode => {
           uniqueChallenges.add(challengeCode);
@@ -116,48 +130,63 @@ async function seed() {
     });
 
     // Add additional challenges that might not be in seed data
-    uniqueChallenges.add('multisig');
-    uniqueChallenges.add('svg-nft');
+    uniqueChallenges.add("multisig");
+    uniqueChallenges.add("svg-nft");
 
     for (const challengeCode of uniqueChallenges) {
-      await db.insert(challenges).values({
-        challengeCode,
-        challengeName: challengeNameMap[challengeCode] || challengeCode.split('-').map(word =>
-          word.charAt(0).toUpperCase() + word.slice(1)
-        ).join(' '),
-        autograding: !nonAutogradingChallenges.has(challengeCode),
-      }).execute();
+      await db
+        .insert(challenges)
+        .values({
+          challengeCode,
+          challengeName:
+            challengeNameMap[challengeCode] ||
+            challengeCode
+              .split("-")
+              .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+              .join(" "),
+          autograding: !nonAutogradingChallenges.has(challengeCode),
+        })
+        .execute();
     }
 
     // Insert user challenges
     console.log("Inserting user challenges...");
-    for (const [userAddress, userData] of Object.entries(seedData.users as Record<string, UserData>)) {
+    for (const [userAddress, userData] of Object.entries(typedSeedData.users)) {
       if (userData.challenges) {
         for (const [challengeCode, challengeData] of Object.entries(userData.challenges)) {
-          await db.insert(userChallenges).values({
-            userAddress,
-            challengeCode,
-            reviewComment: challengeData.reviewComment,
-            submittedTimestamp: challengeData.submittedTimestamp,
-            reviewAction: challengeData.status,
-          }).execute();
+          await db
+            .insert(userChallenges)
+            .values({
+              userAddress,
+              challengeCode,
+              deployedUrl: challengeData.deployedUrl,
+              contractUrl: challengeData.contractUrl,
+              reviewComment: challengeData.reviewComment,
+              submittedTimestamp: createValidDate(challengeData.submittedTimestamp),
+              reviewAction: challengeData.status,
+            })
+            .execute();
         }
       }
     }
 
     // Insert events
     console.log("Inserting events...");
-    for (const event of (seedData as SeedData).events) {
-      await db.insert(events).values({
-        eventType: event.type,
-        timestamp: event.timestamp,
-        signature: event.signature,
-        userAddress: event.payload.userAddress,
-        challengeCode: event.payload.challengeId,
-        autograding: event.payload.autograding,
-        reviewAction: event.payload.reviewAction,
-        reviewMessage: event.payload.reviewMessage,
-      }).execute();
+    for (const event of typedSeedData.events) {
+      await db
+        .insert(events)
+        .values({
+          eventType: event.type,
+          eventTimestamp: createValidDate(event.timestamp),
+          signature: event.signature,
+          userAddress: event.payload.userAddress,
+          challengeCode: event.payload.challengeId,
+          deployedUrl: event.payload.deployedUrl,
+          contractUrl: event.payload.contractUrl,
+          reviewAction: event.payload.reviewAction,
+          reviewMessage: event.payload.reviewMessage,
+        })
+        .execute();
     }
 
     console.log("Database seeded successfully");
@@ -169,8 +198,7 @@ async function seed() {
   }
 }
 
-seed()
-  .catch(error => {
-    console.error("Error in seed script:", error);
-    process.exit(1);
-  });
+seed().catch(error => {
+  console.error("Error in seed script:", error);
+  process.exit(1);
+});
