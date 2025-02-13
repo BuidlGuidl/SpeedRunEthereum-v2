@@ -1,34 +1,10 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useAccount } from "wagmi";
-import { fetchUser, registerUser } from "~~/services/api/users";
-import { notification } from "~~/utils/scaffold-eth";
+import { useQuery } from "@tanstack/react-query";
+import { fetchUser } from "~~/services/api/users";
 
-export function useUser() {
-  const { address, isConnected } = useAccount();
-  const queryClient = useQueryClient();
-
-  const { data: user, isLoading } = useQuery({
+export function useUser(address: string | undefined) {
+  return useQuery({
     queryKey: ["user", address],
     queryFn: () => fetchUser(address),
-    enabled: Boolean(address) && isConnected,
+    enabled: Boolean(address),
   });
-
-  const { mutate: register, isPending: isRegistering } = useMutation({
-    mutationFn: registerUser,
-    onSuccess: user => {
-      queryClient.setQueryData(["user", address], user);
-      notification.success("Successfully registered!");
-    },
-    onError: (error: Error) => {
-      console.error("Registration error:", error);
-      notification.error(error.message || "Failed to register. Please try again.");
-    },
-  });
-
-  return {
-    user,
-    isLoading,
-    register,
-    isRegistering,
-  };
 }

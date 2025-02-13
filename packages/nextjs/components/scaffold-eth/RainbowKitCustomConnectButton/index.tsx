@@ -7,10 +7,11 @@ import { AddressQRCodeModal } from "./AddressQRCodeModal";
 import { WrongNetworkDropdown } from "./WrongNetworkDropdown";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { Address } from "viem";
-import { RegisterButton } from "~~/components/Register";
+import { useAccount } from "wagmi";
 import { useNetworkColor } from "~~/hooks/scaffold-eth";
 import { useTargetNetwork } from "~~/hooks/scaffold-eth/useTargetNetwork";
 import { useUser } from "~~/hooks/useUser";
+import { useUserRegister } from "~~/hooks/useUserRegister";
 import { getBlockExplorerAddressLink } from "~~/utils/scaffold-eth";
 
 /**
@@ -19,7 +20,9 @@ import { getBlockExplorerAddressLink } from "~~/utils/scaffold-eth";
 export const RainbowKitCustomConnectButton = () => {
   const networkColor = useNetworkColor();
   const { targetNetwork } = useTargetNetwork();
-  const { user, isLoading: isLoadingUser } = useUser();
+  const { address: connectedAddress } = useAccount();
+  const { register, isRegistering } = useUserRegister();
+  const { data: user, isLoading: isLoadingUser } = useUser(connectedAddress);
 
   return (
     <ConnectButton.Custom>
@@ -46,7 +49,11 @@ export const RainbowKitCustomConnectButton = () => {
         }
 
         if (!user) {
-          return <RegisterButton />;
+          return (
+            <button className="btn btn-primary btn-sm" onClick={register} disabled={isRegistering}>
+              {isRegistering ? <span className="loading loading-spinner loading-sm"></span> : "Register"}
+            </button>
+          );
         }
 
         return (
