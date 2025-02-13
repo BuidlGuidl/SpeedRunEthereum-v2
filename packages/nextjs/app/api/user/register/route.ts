@@ -43,7 +43,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Unauthorized in batch" }, { status: 401 });
     }
 
-    await createUser({ id: signerAddress });
+    await createUser({ userAddress: signerAddress });
     return NextResponse.json({ message: "User registered successfully" }, { status: 200 });
   } catch (error) {
     console.error("Error when registering", error);

@@ -6,7 +6,7 @@ import { users } from "~~/services/database/config/schema";
 export type UserInsert = InferInsertModel<typeof users>;
 
 export async function findUserByAddress(address: string) {
-  return await db.select().from(users).where(eq(users.id, address));
+  return await db.select().from(users).where(eq(users.userAddress, address));
 }
 
 export async function createUser(user: UserInsert) {
