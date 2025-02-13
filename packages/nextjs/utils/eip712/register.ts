@@ -1,5 +1,4 @@
-import { EIP_712_DOMAIN } from "./common";
-import { recoverTypedDataAddress } from "viem";
+import { EIP_712_DOMAIN, isValidEip712Signature } from "./common";
 
 export const EIP_712_TYPED_DATA__USER_REGISTER = {
   domain: EIP_712_DOMAIN,
@@ -23,9 +22,5 @@ export const isValidEIP712UserRegisterSignature = async ({
   address: string;
   signature: `0x${string}`;
 }) => {
-  const recoveredAddress = await recoverTypedDataAddress({
-    ...EIP_712_TYPED_DATA__USER_REGISTER,
-    signature,
-  });
-  return recoveredAddress.toLowerCase() === address.toLowerCase();
+  return await isValidEip712Signature({ typedData: { ...EIP_712_TYPED_DATA__USER_REGISTER, signature }, address });
 };
