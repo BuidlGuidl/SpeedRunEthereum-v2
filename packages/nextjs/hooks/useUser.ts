@@ -1,44 +1,13 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useAccount } from "wagmi";
-import { UserByAddress } from "~~/services/database/respositories/users";
+import { fetchUser, registerUser } from "~~/services/api/users";
 import { notification } from "~~/utils/scaffold-eth";
-
-async function fetchUser(address: string | undefined) {
-  if (!address) return null;
-
-  const response = await fetch(`/api/users/${address}`);
-  if (!response.ok) {
-    if (response.status === 404) {
-      return null;
-    }
-    throw new Error("Failed to fetch user");
-  }
-  const data = await response.json();
-  return data.user;
-}
-
-async function registerUser({ address, signature }: { address: string; signature: string }) {
-  const response = await fetch("/api/users/register", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ address, signature }),
-  });
-
-  if (!response.ok) {
-    const data = await response.json();
-    throw new Error(data.error || "Registration failed");
-  }
-
-  return response.json();
-}
 
 export function useUser() {
   const { address, isConnected } = useAccount();
   const queryClient = useQueryClient();
 
-  const { data: user, isLoading } = useQuery<UserByAddress>({
+  const { data: user, isLoading } = useQuery({
     queryKey: ["user", address],
     queryFn: () => fetchUser(address),
     enabled: Boolean(address) && isConnected,
@@ -46,8 +15,8 @@ export function useUser() {
 
   const { mutate: register, isPending: isRegistering } = useMutation({
     mutationFn: registerUser,
-    onSuccess: data => {
-      queryClient.setQueryData(["user", address], data.user);
+    onSuccess: user => {
+      queryClient.setQueryData(["user", address], user);
       notification.success("Successfully registered!");
     },
     onError: (error: Error) => {
