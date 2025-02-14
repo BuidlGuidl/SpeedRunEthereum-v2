@@ -21,8 +21,6 @@ export async function fetchGithubReadme(githubString: string): Promise<string> {
   const { owner, repo, branch } = parseGithubUrl(githubString);
   const readmeUrl = `${GITHUB_RAW_BASE_URL}/${owner}/${repo}/${branch}/README.md`;
 
-  console.log("readmeUrl", readmeUrl);
-
   const response = await fetch(readmeUrl);
   if (!response.ok) {
     throw new Error(`Failed to fetch README: ${response.statusText}`);
