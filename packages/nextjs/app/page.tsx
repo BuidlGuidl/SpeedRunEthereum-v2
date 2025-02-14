@@ -1,6 +1,5 @@
 import Link from "next/link";
 import type { NextPage } from "next";
-import { useAccount } from "wagmi";
 import { getAllChallenges } from "~~/services/database/respositories/challenges";
 
 const Home: NextPage = async () => {
