@@ -7,7 +7,6 @@ import { fetchGithubReadme } from "~~/services/github";
 // 6 hours
 export const revalidate = 21600;
 
-// Generate static params for all challenges
 export async function generateStaticParams() {
   const challenges = await getAllChallenges();
 
@@ -16,7 +15,6 @@ export async function generateStaticParams() {
   }));
 }
 
-// The page component
 export default async function ChallengePage({ params }: { params: { challengeId: string } }) {
   const challenge = await findChallengeById(params.challengeId);
   if (!challenge) {
