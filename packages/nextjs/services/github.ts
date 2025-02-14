@@ -7,7 +7,6 @@ interface GithubRepoInfo {
 }
 
 export function parseGithubUrl(githubString: string): GithubRepoInfo {
-  // Format: "owner/repo:branch"
   const [repoPath, branch] = githubString.split(":");
   const [owner, repo] = repoPath.split("/");
 
