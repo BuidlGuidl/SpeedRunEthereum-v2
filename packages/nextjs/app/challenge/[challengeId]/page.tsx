@@ -29,6 +29,7 @@ export default async function ChallengePage({ params }: { params: { challengeId:
     <div className="flex flex-col gap-4 p-4">
       {challengeReadme ? (
         <div className="prose dark:prose-invert max-w-none">
+          {/* TODO. Parse the markdown correctly */}
           <Markdown>{challengeReadme}</Markdown>
         </div>
       ) : (
