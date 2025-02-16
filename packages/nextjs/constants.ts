@@ -4,7 +4,7 @@ export const CHALLENGE_SUBMISSION_STATUS = {
   ACCEPTED: "ACCEPTED",
   REJECTED: "REJECTED",
   SUBMITTED: "SUBMITTED",
-};
+} as const;
 
 export const USER_ROLES = {
   anonymous: "user_role.anonymous",

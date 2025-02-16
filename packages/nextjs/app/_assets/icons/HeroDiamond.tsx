@@ -1,19 +1,26 @@
+import { useEffect, useState } from "react";
 import { useTheme } from "next-themes";
 
 const HeroDiamond = ({ className }: { className?: string }) => {
-  const { resolvedTheme } = useTheme();
-  const isDarkMode = resolvedTheme === "dark";
+  const { resolvedTheme, theme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) {
+    return (
+      <svg className={className} width="57px" viewBox="0 0 57 56" xmlns="http://www.w3.org/2000/svg" fill="#551D98" />
+    );
+  }
+
+  const currentTheme = resolvedTheme || theme || "light";
+  const isDarkMode = currentTheme === "dark";
   const fillColor = isDarkMode ? "#DABFFF" : "#551D98";
 
   return (
-    <svg
-      className={className}
-      width="57px"
-      viewBox="0 0 57 56"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      style={{ fill: fillColor }}
-    >
+    <svg className={className} width="57px" viewBox="0 0 57 56" xmlns="http://www.w3.org/2000/svg" fill={fillColor}>
       <path d="M56.4274 37.3758H53.7568V40.0463H56.4274V37.3758Z" />
       <path d="M53.7569 24.0929H43.127V13.4456H45.7801V10.7925H43.127V8.12196H13.8731V10.7925H11.2025V13.4456H8.54943V16.0987H5.89632V18.7693H3.22577V21.4224H0.572662V29.3991H3.22577V26.746H16.5262V32.0697H19.1793V37.3759H21.8499V42.6996H24.503V48.0232H27.1735V26.746H37.8034V32.0697H35.1503V37.3759H32.4797V42.6996H29.8266V48.0232H27.1735V50.6763H24.503V53.3469H27.1735V56H29.8266V53.3469H32.4797V50.6763H35.1503V48.0232H37.8034V45.3701H40.4739V42.6996H43.127V40.0465H45.7801V37.3759H48.4507V34.7228H51.1038V32.0697H53.7569V29.3991H56.4275V21.4224H53.7569V24.0929ZM37.8034 24.0929H19.1793V21.4224H16.5262V10.7925H27.1735V13.4456H29.8266V16.0987H32.4797V18.7693H35.1503V21.4224H37.8034V24.0929Z" />
       <path d="M53.757 45.3704H51.1039V48.0235H53.757V45.3704Z" />

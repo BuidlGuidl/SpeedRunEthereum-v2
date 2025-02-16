@@ -1,15 +1,15 @@
 "use client";
 
 import { useCallback, useMemo } from "react";
-// import Image from "next/image";
 import { useRouter } from "next/navigation";
 import HeroDiamond from "./_assets/icons/HeroDiamond";
 import HeroLogo from "./_assets/icons/HeroLogo";
 import { ChallengeExpandedCard } from "./_components/ChallengeExpandedCard";
+import { JoinBGCard } from "./_components/JoinBGCard";
 import { challengeInfo } from "./_data/challenges";
 import { User } from "./_types/User";
-import { usePublicClient } from "wagmi";
 
+// TODO: remove
 const connectedBuilder: User = {
   id: "0x45334F41aAA464528CD5bc0F582acadC49Eb0Cd1",
   creationTimestamp: 1694880584365,
@@ -50,7 +50,6 @@ const connectedBuilder: User = {
       reviewComment:
         "<p>This looks good! Demo site and contract code are solid and the dice only roll when it’s a winner!</p><<p>--</p><pre>Compiled 6 Solidity files successfully (evm target: paris).\nasdf\n\n\n  🚩 Challenge 3: 🎲 Dice Game\n    ⚙  Setup contracts\n1\n2\n3\n      ✔ Should deploy contracts (41ms)\ndsssa\n      ✔ Should revert if balance is less than 0.002 ethers\n\t 💸 Funding RiggedRoll contract\n\t 💲 RiggedRoll balance:  0.002\n      ✔ Should transfer sufficient eth to RiggedRoll\n    🔑 Rigged Rolls\n\t    Dice Game Roll: 6\n\t 🎲 Expect roll to be less than or equal to 5. Dice Game Roll: 0\n\t    Rigged Game Roll: 0\n\t    Dice Game Roll: 0\n      ✔ Should call diceGame.rollTheDice for a roll <= 5\n\t 🎲 Expect roll to be greater than 5. Dice Game Roll: 7\n\t ◀  Expect riggedRoll to be reverted\n      ✔ Should not call diceGame.rollTheDice for a roll > 5\n\t 💸 Funding RiggedRoll contract\n\t 💲 Current RiggedRoll balance:  9999.993048923646746569\n\t 💲 New RiggedRoll balance:  9999.996636961796103684\n      ✔ Should withdraw funds\n\n\n  6 passing (65ms)\n\n····························································································································································\n|  \u001b[32m\u001b[1mSolidity and Network Configuration\u001b[22m\u001b[39m                                                                                                                      │\n·······································································|·················|···············|·················|································\n|  \u001b[36mSolidity: 0.8.20\u001b[39m                                                    ·  \u001b[36mOptim: true\u001b[39m    ·  \u001b[36mRuns: 200\u001b[39m    ·  \u001b[36mviaIR: false\u001b[39m   ·     \u001b[36mBlock: 30,000,000 gas\u001b[39m     │\n·······································································|·················|···············|·················|································\n|  \u001b[32m\u001b[1mMethods\u001b[22m\u001b[39m                                                                                                                                                 │\n·······································································|·················|···············|·················|················|···············\n|  \u001b[32m\u001b[1mContracts / Methods\u001b[22m\u001b[39m                                                 ·  \u001b[1mMin\u001b[22m            ·  \u001b[1mMax\u001b[22m          ·  \u001b[1mAvg\u001b[22m            ·  \u001b[1m# calls\u001b[22m       ·  \u001b[1musd (avg)\u001b[22m   │\n·······································································|·················|···············|·················|················|···············\n|  \u001b[1mDiceGame\u001b[22m                                                            ·                                                                                   │\n·······································································|·················|···············|·················|················|···············\n|      rollTheDice                                                     ·              \u001b[90m-\u001b[39m  ·            \u001b[90m-\u001b[39m  ·         71,534  ·             1  ·           \u001b[32m\u001b[90m-\u001b[39m\u001b[32m\u001b[39m  │\n·······································································|·················|···············|·················|················|···············\n|  \u001b[1mdownload-0xb30b4d0ad811de445656fa49d3cbfd26f24fa20f.sol:RiggedRoll\u001b[22m  ·                                                                                   │\n·······································································|·················|···············|·················|················|···············\n|      riggedRoll                                                      ·              \u001b[90m-\u001b[39m  ·            \u001b[90m-\u001b[39m  ·         60,124  ·             3  ·           \u001b[32m\u001b[90m-\u001b[39m\u001b[32m\u001b[39m  │\n·······································································|·················|···············|·················|················|···············\n|      withdraw                                                        ·              \u001b[90m-\u001b[39m  ·            \u001b[90m-\u001b[39m  ·         31,135  ·             1  ·           \u001b[32m\u001b[90m-\u001b[39m\u001b[32m\u001b[39m  │\n·······································································|·················|···············|·················|················|···············\n|  \u001b[32m\u001b[1mDeployments\u001b[22m\u001b[39m                                                                           ·                                 ·  \u001b[1m% of limit\u001b[22m    ·              │\n·······································································|·················|···············|·················|················|···············\n|  \u001b[1mDiceGame\u001b[22m                                                            ·              \u001b[90m-\u001b[39m  ·            \u001b[90m-\u001b[39m  ·        327,198  ·         1.1 %  ·           \u001b[32m\u001b[90m-\u001b[39m\u001b[32m\u001b[39m  │\n·······································································|·················|···············|·················|················|···············\n|  \u001b[1mdownload-0xb30b4d0ad811de445656fa49d3cbfd26f24fa20f.sol:RiggedRoll\u001b[22m  ·              \u001b[90m-\u001b[39m  ·            \u001b[90m-\u001b[39m  ·        466,624  ·         1.6 %  ·           \u001b[32m\u001b[90m-\u001b[39m\u001b[32m\u001b[39m  │\n·······································································|·················|···············|·················|················|···············\n|  \u001b[32m\u001b[1mKey\u001b[22m\u001b[39m                                                                                                                                                     │\n····························································································································································\n|  \u001b[35m\u001b[1m◯\u001b[22m\u001b[39m  Execution gas for this method does not include intrinsic gas overhead                                                                                │\n····························································································································································\n|  \u001b[35m\u001b[1m△\u001b[22m\u001b[39m  Cost was non-zero but below the precision setting for the currency display (see options)                                                             │\n····························································································································································\n|  \u001b[35mToolchain:\u001b[39m  hardhat                                                                                                                                     │\n·········································································�</pre>",
       autograding: true,
-      disabled: true,
     },
     "minimum-viable-exchange": {
       status: "ACCEPTED",
@@ -72,9 +71,16 @@ const connectedBuilder: User = {
     },
   },
 };
-export default function HomeView() {
+
+const LAST_CHALLENGE_BEFORE_JOIN_BG = "minimum-viable-exchange";
+
+export default function Home() {
   const router = useRouter();
-  const provider = usePublicClient();
+
+  const challengeInfoEntries = useMemo(() => Object.entries(challengeInfo), [challengeInfo]);
+  const lastChallengeBeforeJoinBgIndex = challengeInfoEntries.findIndex(
+    ([key]) => key === LAST_CHALLENGE_BEFORE_JOIN_BG,
+  );
 
   const builderAttemptedChallenges = useMemo(() => {
     if (!connectedBuilder?.challenges) {
@@ -111,13 +117,6 @@ export default function HomeView() {
           </p>
 
           <div className="mb-10 lg:mb-5 mt-4 w-full flex justify-center">
-            {/* <Image
-              src="/assets/hero-logo.svg"
-              alt="Hero Logo"
-              width={600}
-              height={200}
-              className="max-w-[600px] h-auto"
-            /> */}
             <HeroLogo className="max-w-[600px]" />
           </div>
 
@@ -136,19 +135,36 @@ export default function HomeView() {
       </div>
 
       <div className="bg-base-200">
-        {Object.entries(challengeInfo).map(([challengeId, challenge], index, { length }) => (
-          <ChallengeExpandedCard
-            key={challengeId}
-            challengeId={challengeId}
-            challenge={challenge}
-            challengeIndex={challenge.sortOrder}
-            builderAttemptedChallenges={builderAttemptedChallenges}
-            userProvider={provider}
-            connectedBuilder={connectedBuilder}
-            isFirst={index === 0}
-            isLast={length - 1 === index}
-          />
-        ))}
+        {challengeInfoEntries
+          .slice(0, lastChallengeBeforeJoinBgIndex + 1)
+          .map(([challengeId, challenge], index, { length }) => (
+            <ChallengeExpandedCard
+              key={challengeId}
+              challengeId={challengeId}
+              challenge={challenge}
+              challengeIndex={challenge.sortOrder}
+              builderAttemptedChallenges={builderAttemptedChallenges}
+              // connectedBuilder={connectedBuilder}
+              isFirst={index === 0}
+              isLast={length - 1 === index}
+            />
+          ))}
+
+        <JoinBGCard builderAttemptedChallenges={builderAttemptedChallenges} connectedBuilder={connectedBuilder} />
+
+        {challengeInfoEntries
+          .slice(lastChallengeBeforeJoinBgIndex + 1)
+          .map(([challengeId, challenge], index, { length }) => (
+            <ChallengeExpandedCard
+              key={challengeId}
+              challengeId={challengeId}
+              challenge={challenge}
+              challengeIndex={challenge.sortOrder}
+              builderAttemptedChallenges={builderAttemptedChallenges}
+              // connectedBuilder={connectedBuilder}
+              isLast={length - 1 === index}
+            />
+          ))}
       </div>
     </div>
   );

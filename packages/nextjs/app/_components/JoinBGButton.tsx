@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { User } from "../_types/User";
-import { useAccount } from "wagmi";
+import { useAccount, useWalletClient } from "wagmi";
 import { SERVER_URL as serverUrl } from "~~/constants";
 import { notification } from "~~/utils/scaffold-eth";
 
@@ -10,12 +10,12 @@ const serverPath = "/bg/join";
 interface JoinBGProps {
   text: string;
   isChallengeLocked: boolean;
-  userProvider: any; // Replace with appropriate web3 provider type
   connectedBuilder: User;
 }
 
-const JoinBG: React.FC<JoinBGProps> = ({ text, isChallengeLocked, userProvider, connectedBuilder }) => {
+const JoinBGButton: React.FC<JoinBGProps> = ({ text, isChallengeLocked, connectedBuilder }) => {
   const { address: connectedAddress } = useAccount();
+  const { data: walletClient } = useWalletClient();
   const [isJoining, setIsJoining] = useState(false);
   // Optimistic update.
   const [joined, setJoined] = useState(false);
@@ -57,7 +57,7 @@ const JoinBG: React.FC<JoinBGProps> = ({ text, isChallengeLocked, userProvider, 
 
     let signature;
     try {
-      signature = await userProvider.send("personal_sign", [signMessage, address]);
+      signature = await walletClient?.signMessage({ message: signMessage });
     } catch (error) {
       notification.error("The signature was cancelled");
       console.error(error);
@@ -103,7 +103,7 @@ const JoinBG: React.FC<JoinBGProps> = ({ text, isChallengeLocked, userProvider, 
 
   // const builderAlreadyJoined = !!connectedBuilder?.joinedBg;
 
-  if (!userProvider || !connectedAddress) {
+  if (!walletClient || !connectedAddress) {
     return (
       <button
         disabled
@@ -144,4 +144,4 @@ const JoinBG: React.FC<JoinBGProps> = ({ text, isChallengeLocked, userProvider, 
   );
 };
 
-export default JoinBG;
+export default JoinBGButton;

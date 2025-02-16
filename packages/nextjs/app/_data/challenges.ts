@@ -1,4 +1,6 @@
-export const challengeInfo = {
+import { Challenge } from "../_types/User";
+
+export const challengeInfo: Record<string, Challenge> = {
   "simple-nft-example": {
     id: 0,
     branchName: "challenge-0-simple-nft",
@@ -55,29 +57,6 @@ export const challengeInfo = {
     dependencies: ["simple-nft-example", "decentralized-staking", "token-vendor", "dice-game"],
     sortOrder: 4,
   },
-  // "buidl-guidl": {
-  //   id: 9999,
-  //   branchName: "",
-  //   label: "Eligible to join 🏰️ BuidlGuidl",
-  //   icon: "/assets/vault_icon.svg",
-  //   // Not a challenge, just a checkpoint in the Challenge timeline.
-  //   checkpoint: true,
-  //   disabled: false,
-  //   description:
-  //     "The BuidlGuidl is a curated group of Ethereum builders creating products, prototypes, and tutorials to enrich the web3 ecosystem. A place to show off your builds and meet other builders. Start crafting your Web3 portfolio by submitting your DEX, Multisig or SVG NFT build.",
-  //   previewImage: "assets/bg.png",
-  //   dependencies: [
-  //     "simple-nft-example",
-  //     "decentralized-staking",
-  //     "token-vendor",
-  //     "dice-game",
-  //     "minimum-viable-exchange",
-  //   ],
-  //   externalLink: {
-  //     link: "https://buidlguidl.com/",
-  //     claim: "Join the 🏰️ BuidlGuidl",
-  //   },
-  // },
   "state-channels": {
     id: 5,
     branchName: "challenge-5-state-channels",

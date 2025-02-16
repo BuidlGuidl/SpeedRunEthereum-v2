@@ -8,32 +8,46 @@ interface SocialLinks {
   [key: string]: string | undefined; // Allow for other social platforms
 }
 
-interface Challenge {
+export type Challenge = {
+  id: number; // remove?
+  branchName: string;
+  label: string;
+  dependencies?: string[];
+  description: string;
+  icon?: string;
+  disabled?: boolean;
+  previewImage?: string;
+  externalLink?: {
+    link?: string;
+    claim: string;
+  };
+  sortOrder: number;
+};
+
+export interface ChallengeAttempt {
   status: ChallengeStatus;
-  contractUrl: string;
-  deployedUrl: string;
+  contractUrl?: string;
+  deployedUrl?: string;
   submittedTimestamp: number;
   reviewComment?: string;
   autograding?: boolean;
-  disabled?: boolean;
+  // disabled?: boolean;
 }
 
-interface User {
+export type User = {
   id: string; // Ethereum address
   creationTimestamp: number;
   role: Role;
   socialLinks?: SocialLinks;
   reachedOut?: boolean;
-  challenges?: {
-    [challengeId: string]: Challenge;
-  };
+  challenges: Record<string, ChallengeAttempt>;
   joinedBg?: boolean;
-}
+  address?: string;
+  username?: string;
+};
 
 // Optional: Database response type based on usage in the code
-interface UserResponse {
+export type UserResponse = {
   exists: boolean;
   data: User;
-}
-
-export type { User, UserResponse };
+};
