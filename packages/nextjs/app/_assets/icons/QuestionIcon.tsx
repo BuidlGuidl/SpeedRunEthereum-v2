@@ -1,5 +1,3 @@
-import React from "react";
-
 const QuestionIcon = ({ className }: { className: string }) => {
   return (
     <svg
