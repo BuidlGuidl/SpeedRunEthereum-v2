@@ -85,7 +85,7 @@ const ChallengeExpandedCard: React.FC<ChallengeExpandedCardProps> = ({
                   ) : (
                     <div className="flex items-center">
                       <PadLockIcon className="w-6 h-6" />
-                      <span className="text-sre-text ml-2 uppercase">Locked</span>
+                      <span className="ml-2 uppercase">Locked</span>
                     </div>
                   )}
                 </button>
@@ -109,7 +109,7 @@ const ChallengeExpandedCard: React.FC<ChallengeExpandedCardProps> = ({
                   {!isChallengeLocked ? (
                     <div className="flex items-center">
                       <CrossedSwordsIcon className="w-6 h-6" />
-                      <span className="text-sre-text ml-2 uppercase font-medium">Quest</span>
+                      <span className="ml-2 uppercase font-medium">Quest</span>
                     </div>
                   ) : (
                     <div className="flex items-center">

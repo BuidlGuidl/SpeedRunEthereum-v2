@@ -35,7 +35,7 @@ export const JoinBGCard = ({
   });
 
   return (
-    <div className="flex justify-center bg-sre-bgBannerBackground bg-[url(/assets/bgBanner_castlePlatform.svg)] bg-bottom bg-repeat-x bg-[length:150%_auto] lg:bg-auto relative overflow-hidden bg-accent">
+    <div className="flex justify-center bg-[url(/assets/bgBanner_castlePlatform.svg)] bg-bottom bg-repeat-x bg-[length:150%_auto] lg:bg-auto relative overflow-hidden bg-accent">
       <Image
         src="/assets/bgBanner_joinBgClouds.svg"
         alt="bgBanner_joinBgClouds"
@@ -48,7 +48,7 @@ export const JoinBGCard = ({
           <Image src="/assets/bgBanner_JoinBG.svg" width={820} height={400} alt="bgBanner_JoinBG" />
         </div>
         <div className="flex flex-col lg:flex-row justify-between">
-          <p className="mb-4 text-sre-text text-center lg:text-left lg:max-w-[35%]">
+          <p className="mb-4 text-center lg:text-left lg:max-w-[35%]">
             The BuidlGuidl is a curated group of Ethereum builders creating products, prototypes, and tutorials to
             enrich the web3 ecosystem. A place to show off your builds and meet other builders. Start crafting your Web3
             portfolio by submitting your DEX, Multisig or SVG NFT build.

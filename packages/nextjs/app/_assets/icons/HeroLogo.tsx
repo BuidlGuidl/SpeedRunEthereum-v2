@@ -1,10 +1,4 @@
-/* eslint react/jsx-props-no-spreading: off */
-// ☝️ we want this component to be usable with chakra props
-import React from "react";
-
 const HeroLogo = ({ className }: { className?: string }) => {
-  // const fillColor = useColorModeValue("sre.default", "sreDark.default");
-
   return (
     <svg
       className={`text-primary ${className}`}

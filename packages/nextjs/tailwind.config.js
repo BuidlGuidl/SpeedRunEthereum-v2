@@ -63,27 +63,3 @@ module.exports = {
     },
   },
 };
-
-// sre: {
-//   default: "#088484",
-//   text: "#026262",
-//   background: "#C8F5FF",
-//   cardBackground: "#E9FBFF",
-//   bgBannerBackground: "#67DDDE",
-//   linkAlt: "#2FBABB",
-// },
-// sreDark: {
-//   default: "#C8F5FF",
-//   text: "#C8F5FF",
-//   background: "#088484",
-//   cardBackground: "#026262",
-//   linkAlt: "#67DDDE",
-// },
-// green: {
-//   100: "#C8F5FF",
-//   200: "#C8F5FF",
-//   300: "#E9FBFF",
-//   500: "#088484",
-//   600: "#026262",
-//   700: "#088484",
-// },
