@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { createUser, isUserRegistered } from "~~/services/database/respositories/users";
+import { createUser, isUserRegistered } from "~~/services/database/repositories/users";
 import { isValidEIP712UserRegisterSignature } from "~~/utils/eip712/register";
 
 type RegisterPayload = {

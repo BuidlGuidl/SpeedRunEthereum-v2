@@ -1,44 +1,34 @@
-"use client";
-
-import { useCallback, useMemo } from "react";
-import { useRouter } from "next/navigation";
 import HeroDiamond from "./_assets/icons/HeroDiamond";
 import HeroLogo from "./_assets/icons/HeroLogo";
 import { ChallengeExpandedCard } from "./_components/ChallengeExpandedCard";
 import { JoinBGCard } from "./_components/JoinBGCard";
 import { connectedBuilder } from "./_data/_hardcodedUser";
-import { challengeInfo } from "./_data/challenges";
+import { NextPage } from "next";
+import { getAllChallenges } from "~~/services/database/repositories/challenges";
 
 const LAST_CHALLENGE_BEFORE_JOIN_BG = "minimum-viable-exchange";
 
-export default function Home() {
-  const router = useRouter();
+const Home: NextPage = async () => {
+  const challenges = await getAllChallenges();
 
-  const challengeInfoEntries = useMemo(() => Object.entries(challengeInfo), []);
-  const lastChallengeBeforeJoinBgIndex = challengeInfoEntries.findIndex(
-    ([key]) => key === LAST_CHALLENGE_BEFORE_JOIN_BG,
+  const lastChallengeBeforeJoinBgIndex = challenges.findIndex(
+    challenge => challenge.id === LAST_CHALLENGE_BEFORE_JOIN_BG,
   );
 
-  const builderAttemptedChallenges = useMemo(() => {
-    if (!connectedBuilder?.challenges) {
-      return {};
-    }
+  const builderAttemptedChallenges = Object.fromEntries(
+    Object.entries(connectedBuilder?.challenges || {}).filter(([, challengeData]) => challengeData?.status),
+  );
 
-    return Object.fromEntries(
-      Object.entries(connectedBuilder.challenges).filter(([, challengeData]) => challengeData?.status),
-    );
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [connectedBuilder]);
+  // TODO: use react-plausible
+  // const handleCtaClick = useCallback(() => {
+  //   // if (window.plausible) {
+  //   //   window.plausible("cta");
+  //   // }
 
-  const handleCtaClick = useCallback(() => {
-    // if (window.plausible) {
-    //   window.plausible("cta");
-    // }
-
-    setTimeout(() => {
-      router.push(`/challenge/${Object.keys(challengeInfo)[0]}`);
-    }, 100);
-  }, [router]);
+  //   setTimeout(() => {
+  //     router.push(`/challenge/${Object.keys(challengeInfo)[0]}`);
+  //   }, 100);
+  // }, [router]);
 
   return (
     <div>
@@ -59,7 +49,7 @@ export default function Home() {
           </div>
 
           <button
-            onClick={handleCtaClick}
+            // onClick={handleCtaClick}
             className="mt-4 px-6 py-3 text-lg font-medium text-white bg-primary rounded-full hover:bg-neutral dark:text-gray-800 transition-colors"
           >
             Start Building on Ethereum
@@ -73,37 +63,35 @@ export default function Home() {
       </div>
 
       <div className="bg-base-200">
-        {challengeInfoEntries
-          .slice(0, lastChallengeBeforeJoinBgIndex + 1)
-          .map(([challengeId, challenge], index, { length }) => (
-            <ChallengeExpandedCard
-              key={challengeId}
-              challengeId={challengeId}
-              challenge={challenge}
-              challengeIndex={challenge.sortOrder}
-              builderAttemptedChallenges={builderAttemptedChallenges}
-              // connectedBuilder={connectedBuilder}
-              isFirst={index === 0}
-              isLast={length - 1 === index}
-            />
-          ))}
+        {challenges.slice(0, lastChallengeBeforeJoinBgIndex + 1).map((challenge, index, { length }) => (
+          <ChallengeExpandedCard
+            key={challenge.id}
+            challengeId={challenge.id}
+            challenge={challenge}
+            challengeIndex={challenge.sortOrder}
+            builderAttemptedChallenges={builderAttemptedChallenges}
+            // connectedBuilder={connectedBuilder}
+            isFirst={index === 0}
+            isLast={length - 1 === index}
+          />
+        ))}
 
         <JoinBGCard builderAttemptedChallenges={builderAttemptedChallenges} connectedBuilder={connectedBuilder} />
 
-        {challengeInfoEntries
-          .slice(lastChallengeBeforeJoinBgIndex + 1)
-          .map(([challengeId, challenge], index, { length }) => (
-            <ChallengeExpandedCard
-              key={challengeId}
-              challengeId={challengeId}
-              challenge={challenge}
-              challengeIndex={challenge.sortOrder}
-              builderAttemptedChallenges={builderAttemptedChallenges}
-              // connectedBuilder={connectedBuilder}
-              isLast={length - 1 === index}
-            />
-          ))}
+        {challenges.slice(lastChallengeBeforeJoinBgIndex + 1).map((challenge, index, { length }) => (
+          <ChallengeExpandedCard
+            key={challenge.id}
+            challengeId={challenge.id}
+            challenge={challenge}
+            challengeIndex={challenge.sortOrder}
+            builderAttemptedChallenges={builderAttemptedChallenges}
+            // connectedBuilder={connectedBuilder}
+            isLast={length - 1 === index}
+          />
+        ))}
       </div>
     </div>
   );
-}
+};
+
+export default Home;

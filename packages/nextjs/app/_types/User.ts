@@ -9,8 +9,8 @@ interface SocialLinks {
 }
 
 export type Challenge = {
-  id: number; // remove?
-  branchName: string;
+  id: string;
+  github: string;
   label: string;
   dependencies?: string[];
   description: string;

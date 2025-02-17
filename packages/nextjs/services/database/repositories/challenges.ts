@@ -1,9 +1,7 @@
-import { Challenge } from "../_types/User";
-
-export const challengeInfo: Record<string, Challenge> = {
-  "simple-nft-example": {
-    id: 0,
-    branchName: "challenge-0-simple-nft",
+const fakeChallenges = [
+  {
+    id: "simple-nft",
+    github: "scaffold-eth/se-2-challenges:challenge-0-simple-nft",
     label: "🚩 Challenge 0: 🎟 Simple NFT Example",
     disabled: false,
     description:
@@ -12,9 +10,9 @@ export const challengeInfo: Record<string, Challenge> = {
     dependencies: [],
     sortOrder: 0,
   },
-  "decentralized-staking": {
-    id: 1,
-    branchName: "challenge-1-decentralized-staking",
+  {
+    id: "decentralized-staking",
+    github: "scaffold-eth/se-2-challenges:challenge-1-decentralized-staking",
     label: "🚩 Challenge 1: 🔏 Decentralized Staking App ",
     disabled: false,
     description:
@@ -23,9 +21,9 @@ export const challengeInfo: Record<string, Challenge> = {
     dependencies: [],
     sortOrder: 1,
   },
-  "token-vendor": {
-    id: 2,
-    branchName: "challenge-2-token-vendor",
+  {
+    id: "token-vendor",
+    github: "scaffold-eth/se-2-challenges:challenge-2-token-vendor",
     label: "🚩 Challenge 2: 🏵 Token Vendor",
     icon: "/assets/key_icon.svg",
     disabled: false,
@@ -35,9 +33,9 @@ export const challengeInfo: Record<string, Challenge> = {
     dependencies: [],
     sortOrder: 2,
   },
-  "dice-game": {
-    id: 3,
-    branchName: "challenge-3-dice-game",
+  {
+    id: "dice-game",
+    github: "scaffold-eth/se-2-challenges:challenge-3-dice-game",
     label: "🚩 Challenge 3: 🎲 Dice Game",
     disabled: false,
     description:
@@ -46,9 +44,9 @@ export const challengeInfo: Record<string, Challenge> = {
     dependencies: ["simple-nft-example", "decentralized-staking", "token-vendor"],
     sortOrder: 3,
   },
-  "minimum-viable-exchange": {
-    id: 4,
-    branchName: "challenge-4-dex",
+  {
+    id: "minimum-viable-exchange",
+    github: "scaffold-eth/se-2-challenges:challenge-4-dex",
     label: "🚩 Challenge 4: ⚖️ Build a DEX",
     disabled: false,
     description:
@@ -57,9 +55,9 @@ export const challengeInfo: Record<string, Challenge> = {
     dependencies: ["simple-nft-example", "decentralized-staking", "token-vendor", "dice-game"],
     sortOrder: 4,
   },
-  "state-channels": {
-    id: 5,
-    branchName: "challenge-5-state-channels",
+  {
+    id: "state-channels",
+    github: "scaffold-eth/se-2-challenges:challenge-5-state-channels",
     label: "🚩 Challenge 5: 📺 A State Channel Application",
     disabled: false,
     description:
@@ -68,9 +66,9 @@ export const challengeInfo: Record<string, Challenge> = {
     dependencies: ["simple-nft-example", "decentralized-staking", "token-vendor", "dice-game"],
     sortOrder: 5,
   },
-  "learn-multisig": {
-    id: 6,
-    branchName: "challenge-3-multi-sig",
+  {
+    id: "learn-multisig",
+    github: "scaffold-eth/se-2-challenges:challenge-6-multisig",
     label: "👛 Multisig Wallet Challenge",
     disabled: false,
     description:
@@ -86,9 +84,9 @@ export const challengeInfo: Record<string, Challenge> = {
     },
     sortOrder: 6,
   },
-  "nft-cohort": {
-    id: 7,
-    branchName: "challenge-5-svg-nft-cohort",
+  {
+    id: "nft-cohort",
+    github: "scaffold-eth/se-2-challenges:challenge-7-svg-nft",
     label: "🎁 SVG NFT 🎫 Challenge",
     disabled: false,
     description:
@@ -104,9 +102,14 @@ export const challengeInfo: Record<string, Challenge> = {
     },
     sortOrder: 7,
   },
-};
+];
 
-const githubChallengesRepoBaseRawUrl = "https://raw.githubusercontent.com/scaffold-eth/se-2-challenges";
+// TODO. Query the database
+export async function findChallengeById(id: string) {
+  return fakeChallenges.find(challenge => challenge.id === id);
+}
 
-export const getGithubChallengeReadmeUrl = (challengeId: string) =>
-  `${githubChallengesRepoBaseRawUrl}/${challengeInfo[challengeId as keyof typeof challengeInfo].branchName}/README.md`;
+// TODO. Query the database
+export async function getAllChallenges() {
+  return fakeChallenges.sort((a, b) => a.sortOrder - b.sortOrder);
+}
