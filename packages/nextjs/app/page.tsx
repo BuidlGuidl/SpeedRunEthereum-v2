@@ -1,6 +1,6 @@
 import Link from "next/link";
 import type { NextPage } from "next";
-import { getAllChallenges } from "~~/services/database/respositories/challenges";
+import { getAllChallenges } from "~~/services/database/repositories/challenges";
 
 const Home: NextPage = async () => {
   const challenges = await getAllChallenges();

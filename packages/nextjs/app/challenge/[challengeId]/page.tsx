@@ -1,5 +1,5 @@
 import Markdown from "react-markdown";
-import { findChallengeById, getAllChallenges } from "~~/services/database/respositories/challenges";
+import { findChallengeById, getAllChallenges } from "~~/services/database/repositories/challenges";
 import { fetchGithubReadme } from "~~/services/github";
 
 // TODO. Metadata

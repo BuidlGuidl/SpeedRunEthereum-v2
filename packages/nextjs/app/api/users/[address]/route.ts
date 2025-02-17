@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { findUserByAddress } from "~~/services/database/respositories/users";
+import { findUserByAddress } from "~~/services/database/repositories/users";
 
 export async function GET(_req: Request, { params }: { params: { address: string } }) {
   try {
