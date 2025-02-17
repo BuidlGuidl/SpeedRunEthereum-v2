@@ -23,7 +23,7 @@ const Home: NextPage = async () => {
   return (
     <div>
       <div className="relative bg-base-300">
-        <div className="absolute inset-0 bg-[url('/assets/home_header_clouds.svg')] bg-top bg-repeat-x bg-[length:auto_300px]" />
+        <div className="absolute inset-0 bg-[url('/assets/home_header_clouds.svg')] bg-top bg-repeat-x bg-[length:auto_200px] sm:bg-[length:auto_300px]" />
 
         <div className="relative container mx-auto px-5 mb-11 flex flex-col items-center">
           <div className="mb-9 w-full flex justify-center">
