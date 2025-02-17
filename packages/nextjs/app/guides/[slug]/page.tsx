@@ -2,6 +2,8 @@ import { notFound } from "next/navigation";
 import { MDXRemote } from "next-mdx-remote/rsc";
 import { getAllGuidesSlugs, getGuideBySlug } from "~~/services/guides";
 
+// ToDo: Metadata
+
 export async function generateStaticParams() {
   const slugs = await getAllGuidesSlugs();
 
