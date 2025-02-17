@@ -1,5 +1,4 @@
 import { notFound } from "next/navigation";
-import { MDXRemote } from "next-mdx-remote/rsc";
 import { getAllGuidesSlugs, getGuideBySlug } from "~~/services/guides";
 
 // ToDo: Metadata
@@ -10,8 +9,8 @@ export async function generateStaticParams() {
   return slugs;
 }
 
-export default function GuidePage({ params }: { params: { slug: string } }) {
-  const guide = getGuideBySlug(params.slug);
+export default async function GuidePage({ params }: { params: { slug: string } }) {
+  const guide = await getGuideBySlug(params.slug);
 
   if (!guide) {
     return notFound();
@@ -22,9 +21,7 @@ export default function GuidePage({ params }: { params: { slug: string } }) {
       <div className="flex flex-col gap-4">
         <h1 className="text-4xl font-bold">{guide.title}</h1>
       </div>
-      <div className="prose dark:prose-invert max-w-none">
-        <MDXRemote source={guide.content} />
-      </div>
+      <div className="prose dark:prose-invert max-w-none">{guide.content}</div>
     </div>
   );
 }

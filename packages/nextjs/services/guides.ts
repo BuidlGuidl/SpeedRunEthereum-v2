@@ -1,5 +1,6 @@
+import { ReactElement } from "react";
 import fs from "fs";
-import matter from "gray-matter";
+import { compileMDX } from "next-mdx-remote/rsc";
 import path from "path";
 
 const guidesDirectory = path.join(process.cwd(), "guides");
@@ -7,28 +8,31 @@ const guidesDirectory = path.join(process.cwd(), "guides");
 type GuideMetadata = {
   title: string;
   description: string;
-  slug: string;
 };
 
 type Guide = GuideMetadata & {
-  content: string;
+  content: ReactElement;
 };
 
 export function getAllGuidesSlugs(): string[] {
   return fs.readdirSync(guidesDirectory).map(fileName => fileName.replace(/\.md$/, ""));
 }
 
-export function getGuideBySlug(slug: string): Guide | null {
+export async function getGuideBySlug(slug: string): Promise<Guide | null> {
   const fullPath = path.join(guidesDirectory, `${slug}.md`);
 
   try {
     const fileContents = fs.readFileSync(fullPath, "utf8");
-    const { data, content } = matter(fileContents);
+    const { frontmatter, content } = await compileMDX<GuideMetadata>({
+      source: fileContents,
+      options: { parseFrontmatter: true },
+    });
+
+    console.log("content", content);
 
     return {
-      ...(data as GuideMetadata),
-      content,
-      slug,
+      ...frontmatter,
+      content: content,
     };
   } catch (error) {
     // Not found.
