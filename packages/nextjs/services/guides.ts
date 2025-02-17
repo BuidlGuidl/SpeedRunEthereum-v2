@@ -28,8 +28,6 @@ export async function getGuideBySlug(slug: string): Promise<Guide | null> {
       options: { parseFrontmatter: true },
     });
 
-    console.log("content", content);
-
     return {
       ...frontmatter,
       content: content,
