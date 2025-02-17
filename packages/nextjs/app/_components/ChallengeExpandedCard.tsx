@@ -41,8 +41,7 @@ const ChallengeExpandedCard: React.FC<ChallengeExpandedCardProps> = ({
   return (
     <div className="flex justify-center">
       <div
-        className={`flex max-w-7xl py-8 mx-14 pl-10 border-primary border-l-[5px] relative flex-col-reverse lg:flex-row 
-        ${!isLast ? "border-b-2" : ""}`}
+        className={`flex justify-between max-w-7xl py-8 mx-14 pl-10 lg:pr-12 border-primary border-l-[5px] relative flex-col-reverse lg:flex-row ${!isLast ? "border-b-2" : ""}`}
       >
         {isFirst && <div className="absolute -left-3 z-10 top-0 w-[18px] h-[58%] lg:h-[50%] bg-base-200" />}
         {/* {isLast && (
