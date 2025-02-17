@@ -1,4 +1,4 @@
-import Markdown from "react-markdown";
+import { MDXRemote } from "next-mdx-remote/rsc";
 import { findChallengeById, getAllChallenges } from "~~/services/database/repositories/challenges";
 import { fetchGithubReadme } from "~~/services/github";
 
@@ -27,8 +27,7 @@ export default async function ChallengePage({ params }: { params: { challengeId:
     <div className="flex flex-col gap-4 p-4">
       {challengeReadme ? (
         <div className="prose dark:prose-invert max-w-none">
-          {/* TODO. Parse the markdown correctly */}
-          <Markdown>{challengeReadme}</Markdown>
+          <MDXRemote source={challengeReadme} />
         </div>
       ) : (
         <div>Failed to load challenge content</div>
