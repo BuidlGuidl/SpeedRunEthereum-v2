@@ -4,13 +4,13 @@ import path from "path";
 
 const guidesDirectory = path.join(process.cwd(), "guides");
 
-export type GuideMetadata = {
+type GuideMetadata = {
   title: string;
   description: string;
   slug: string;
 };
 
-export type Guide = GuideMetadata & {
+type Guide = GuideMetadata & {
   content: string;
 };
 
