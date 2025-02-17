@@ -1,5 +1,5 @@
 import { relations } from "drizzle-orm";
-import { boolean, pgEnum, pgTable, serial, text, timestamp, varchar } from "drizzle-orm/pg-core";
+import { boolean, pgEnum, pgTable, serial, text, timestamp, unique, varchar } from "drizzle-orm/pg-core";
 
 export const reviewActionEnum = pgEnum("review_action_enum", ["REJECTED", "ACCEPTED"]);
 export const eventTypeEnum = pgEnum("event_type_enum", ["challenge.submit", "challenge.autograde", "user.create"]);
@@ -21,20 +21,26 @@ export const challenges = pgTable("challenges", {
   autograding: boolean("autograding").default(false), // Whether the challenge supports automatic grading
 });
 
-export const userChallenges = pgTable("user_challenges", {
-  userChallengeId: serial("userChallengeId").primaryKey(),
-  userAddress: varchar("userAddress", { length: 42 })
-    .notNull()
-    .references(() => users.userAddress),
-  challengeCode: varchar("challengeCode", { length: 255 })
-    .notNull()
-    .references(() => challenges.challengeCode),
-  deployedUrl: varchar("deployedUrl", { length: 255 }),
-  contractUrl: varchar("contractUrl", { length: 255 }),
-  reviewComment: text("reviewComment"), // Feedback provided during from the autograder
-  submittedTimestamp: timestamp("submittedTimestamp").defaultNow(),
-  reviewAction: reviewActionEnum("reviewAction"), // Final review decision from autograder (REJECTED or ACCEPTED)
-});
+export const userChallenges = pgTable(
+  "user_challenges",
+  {
+    userChallengeId: serial("userChallengeId").primaryKey(),
+    userAddress: varchar("userAddress", { length: 42 })
+      .notNull()
+      .references(() => users.userAddress),
+    challengeCode: varchar("challengeCode", { length: 255 })
+      .notNull()
+      .references(() => challenges.challengeCode),
+    deployedUrl: varchar("deployedUrl", { length: 255 }),
+    contractUrl: varchar("contractUrl", { length: 255 }),
+    reviewComment: text("reviewComment"), // Feedback provided during from the autograder
+    submittedTimestamp: timestamp("submittedTimestamp").defaultNow(),
+    reviewAction: reviewActionEnum("reviewAction"), // Final review decision from autograder (REJECTED or ACCEPTED)
+  },
+  table => ({
+    userChallengeUnique: unique().on(table.userAddress, table.challengeCode),
+  }),
+);
 
 export const events = pgTable("events", {
   eventId: serial("eventId").primaryKey(),

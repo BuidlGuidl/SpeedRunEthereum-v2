@@ -1,21 +1,58 @@
 import { forwardRef, useState } from "react";
+import { useMutation } from "@tanstack/react-query";
+import { useAccount, useSignTypedData } from "wagmi";
 import { QuestionMarkCircleIcon } from "@heroicons/react/24/outline";
 import { InputBase } from "~~/components/scaffold-eth";
+import { submitChallenge } from "~~/services/api/challenges";
+import { EIP_712_TYPED_DATA__CHALLENGE_SUBMIT } from "~~/utils/eip712/challenge";
+import { notification } from "~~/utils/scaffold-eth";
 
 type SubmitChallengeModalProps = {
   challengeId: string;
   closeModal: () => void;
 };
+
 export const SubmitChallengeModal = forwardRef<HTMLDialogElement, SubmitChallengeModalProps>(
   ({ closeModal, challengeId }, ref) => {
     const [deployedUrl, setDeployedUrl] = useState("");
     const [etherscanUrl, setEtherscanUrl] = useState("");
 
-    const handleSubmit = () => {
-      // Handle submission logic here
-      console.log({ deployedUrl, etherscanUrl });
-      closeModal();
-    };
+    const { address } = useAccount();
+    const { signTypedDataAsync } = useSignTypedData();
+
+    const { mutate: submit, isPending } = useMutation({
+      mutationFn: async () => {
+        if (!address) throw new Error("Wallet not connected");
+
+        const message = {
+          ...EIP_712_TYPED_DATA__CHALLENGE_SUBMIT.message,
+          challengeId,
+          deployedUrl,
+          contractUrl: etherscanUrl,
+        };
+
+        const signature = await signTypedDataAsync({
+          ...EIP_712_TYPED_DATA__CHALLENGE_SUBMIT,
+          message,
+        });
+
+        return submitChallenge({
+          challengeId,
+          userAddress: address,
+          deployedUrl,
+          contractUrl: etherscanUrl,
+          signature,
+        });
+      },
+      onSuccess: () => {
+        notification.success("Challenge submitted successfully!");
+        closeModal();
+      },
+      onError: (error: Error) => {
+        notification.error(error.message);
+      },
+    });
+
     return (
       <dialog ref={ref} className="modal">
         <div className="modal-box flex flex-col space-y-3">
@@ -64,10 +101,17 @@ export const SubmitChallengeModal = forwardRef<HTMLDialogElement, SubmitChalleng
             <div className="modal-action">
               <button
                 className="btn btn-primary self-center"
-                disabled={!deployedUrl || !etherscanUrl}
-                onClick={handleSubmit}
+                disabled={!deployedUrl || !etherscanUrl || isPending}
+                onClick={() => submit()}
               >
-                Submit Challenge
+                {isPending ? (
+                  <>
+                    <span className="loading loading-spinner loading-xs"></span>
+                    Submitting...
+                  </>
+                ) : (
+                  "Submit Challenge"
+                )}
               </button>
             </div>
           </div>
