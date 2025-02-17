@@ -2,6 +2,7 @@ import HeroDiamond from "./_assets/icons/HeroDiamond";
 import HeroLogo from "./_assets/icons/HeroLogo";
 import { ChallengeExpandedCard } from "./_components/ChallengeExpandedCard";
 import { JoinBGCard } from "./_components/JoinBGCard";
+import { StartBuildingButton } from "./_components/StartBuildingButton";
 import { connectedBuilder } from "./_data/_hardcodedUser";
 import { NextPage } from "next";
 import { getAllChallenges } from "~~/services/database/repositories/challenges";
@@ -18,17 +19,6 @@ const Home: NextPage = async () => {
   const builderAttemptedChallenges = Object.fromEntries(
     Object.entries(connectedBuilder?.challenges || {}).filter(([, challengeData]) => challengeData?.status),
   );
-
-  // TODO: use react-plausible
-  // const handleCtaClick = useCallback(() => {
-  //   // if (window.plausible) {
-  //   //   window.plausible("cta");
-  //   // }
-
-  //   setTimeout(() => {
-  //     router.push(`/challenge/${Object.keys(challengeInfo)[0]}`);
-  //   }, 100);
-  // }, [router]);
 
   return (
     <div>
@@ -48,12 +38,7 @@ const Home: NextPage = async () => {
             <HeroLogo className="max-w-[600px]" />
           </div>
 
-          <button
-            // onClick={handleCtaClick}
-            className="mt-4 px-6 py-3 text-lg font-medium text-white bg-primary rounded-full hover:bg-neutral dark:text-gray-800 transition-colors"
-          >
-            Start Building on Ethereum
-          </button>
+          <StartBuildingButton firstChallengeId={challenges[0].id} />
         </div>
 
         <div className="relative h-[130px]">
