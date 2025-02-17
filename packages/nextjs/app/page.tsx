@@ -14,7 +14,7 @@ const LAST_CHALLENGE_BEFORE_JOIN_BG = "minimum-viable-exchange";
 export default function Home() {
   const router = useRouter();
 
-  const challengeInfoEntries = useMemo(() => Object.entries(challengeInfo), [challengeInfo]);
+  const challengeInfoEntries = useMemo(() => Object.entries(challengeInfo), []);
   const lastChallengeBeforeJoinBgIndex = challengeInfoEntries.findIndex(
     ([key]) => key === LAST_CHALLENGE_BEFORE_JOIN_BG,
   );
@@ -27,6 +27,7 @@ export default function Home() {
     return Object.fromEntries(
       Object.entries(connectedBuilder.challenges).filter(([, challengeData]) => challengeData?.status),
     );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [connectedBuilder]);
 
   const handleCtaClick = useCallback(() => {

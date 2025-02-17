@@ -3,7 +3,7 @@ import PadLockIcon from "../_assets/icons/PadLockIcon";
 import QuestionIcon from "../_assets/icons/QuestionIcon";
 import { ChallengeAttempt, User } from "../_types/User";
 import JoinBGButton from "./JoinBGButton";
-import { getChallengeDependenciesInfo, getDepsChallengesCompleted } from "./utils";
+import { getChallengeDependenciesInfo } from "./utils";
 
 // TODO: use later
 // "buidl-guidl": {,

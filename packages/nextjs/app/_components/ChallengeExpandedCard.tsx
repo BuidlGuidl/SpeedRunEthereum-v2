@@ -4,7 +4,7 @@ import CrossedSwordsIcon from "../_assets/icons/CrossedSwordsIcon";
 import PadLockIcon from "../_assets/icons/PadLockIcon";
 import QuestionIcon from "../_assets/icons/QuestionIcon";
 import { Challenge, ChallengeAttempt } from "../_types/User";
-import { getChallengeDependenciesInfo, getDepsChallengesCompleted } from "./utils";
+import { getChallengeDependenciesInfo } from "./utils";
 import { CHALLENGE_SUBMISSION_STATUS } from "~~/constants";
 
 const challengeLabels: Record<keyof typeof CHALLENGE_SUBMISSION_STATUS, { label: string }> = {

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import Link from "next/link";
 import { User } from "../_types/User";
 import { useAccount, useWalletClient } from "wagmi";
@@ -16,14 +16,14 @@ interface JoinBGProps {
 const JoinBGButton: React.FC<JoinBGProps> = ({ text, isChallengeLocked, connectedBuilder }) => {
   const { address: connectedAddress } = useAccount();
   const { data: walletClient } = useWalletClient();
-  const [isJoining, setIsJoining] = useState(false);
-  // Optimistic update.
-  const [joined, setJoined] = useState(false);
+  // const [isJoining, setIsJoining] = useState(false);
+  // // Optimistic update.
+  // const [joined, setJoined] = useState(false);
 
   const address = connectedBuilder?.id;
 
   const onJoin = async () => {
-    setIsJoining(true);
+    // setIsJoining(true);
 
     if (!connectedBuilder.socialLinks || Object.keys(connectedBuilder?.socialLinks ?? {}).length === 0) {
       notification.error("Can't join the BuidlGuidl", {
@@ -37,7 +37,8 @@ const JoinBGButton: React.FC<JoinBGProps> = ({ text, isChallengeLocked, connecte
         //   </>
         // ),
       });
-      setIsJoining(false);
+      // setIsJoining(false);
+
       return;
     }
 
@@ -51,7 +52,7 @@ const JoinBGButton: React.FC<JoinBGProps> = ({ text, isChallengeLocked, connecte
       signMessage = data;
     } catch (error) {
       notification.error("Can't get the message to sign. Please try again");
-      setIsJoining(false);
+      // setIsJoining(false);
       return;
     }
 
@@ -61,7 +62,7 @@ const JoinBGButton: React.FC<JoinBGProps> = ({ text, isChallengeLocked, connecte
     } catch (error) {
       notification.error("The signature was cancelled");
       console.error(error);
-      setIsJoining(false);
+      // setIsJoining(false);
       return;
     }
 
@@ -82,7 +83,7 @@ const JoinBGButton: React.FC<JoinBGProps> = ({ text, isChallengeLocked, connecte
     } catch (error) {
       notification.error("Submission Error. Please try again.");
       console.error(error);
-      setIsJoining(false);
+      // setIsJoining(false);
       return;
     }
 
@@ -97,8 +98,8 @@ const JoinBGButton: React.FC<JoinBGProps> = ({ text, isChallengeLocked, connecte
       //   </>
       // ),
     });
-    setIsJoining(false);
-    setJoined(true);
+    // setIsJoining(false);
+    // setJoined(true);
   };
 
   // const builderAlreadyJoined = !!connectedBuilder?.joinedBg;
