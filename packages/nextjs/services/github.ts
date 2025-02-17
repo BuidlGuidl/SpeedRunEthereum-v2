@@ -1,10 +1,10 @@
 const GITHUB_RAW_BASE_URL = "https://raw.githubusercontent.com";
 
-interface GithubRepoInfo {
+type GithubRepoInfo = {
   owner: string;
   repo: string;
   branch: string;
-}
+};
 
 export function parseGithubUrl(githubString: string): GithubRepoInfo {
   const [repoPath, branch] = githubString.split(":");
