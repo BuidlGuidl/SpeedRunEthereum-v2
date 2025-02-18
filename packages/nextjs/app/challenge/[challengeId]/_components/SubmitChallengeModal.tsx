@@ -1,4 +1,5 @@
 import { forwardRef, useState } from "react";
+import { useRouter } from "next/navigation";
 import { useMutation } from "@tanstack/react-query";
 import { useAccount, useSignTypedData } from "wagmi";
 import { QuestionMarkCircleIcon } from "@heroicons/react/24/outline";
@@ -12,10 +13,12 @@ type SubmitChallengeModalProps = {
   closeModal: () => void;
 };
 
+// TODO: Add input validation for URLs
 export const SubmitChallengeModal = forwardRef<HTMLDialogElement, SubmitChallengeModalProps>(
   ({ closeModal, challengeId }, ref) => {
     const [frontendUrl, setFrontendUrl] = useState("");
     const [etherscanUrl, setEtherscanUrl] = useState("");
+    const router = useRouter();
 
     const { address } = useAccount();
     const { signTypedDataAsync } = useSignTypedData();
@@ -46,6 +49,7 @@ export const SubmitChallengeModal = forwardRef<HTMLDialogElement, SubmitChalleng
       },
       onSuccess: () => {
         notification.success("Challenge submitted successfully!");
+        router.push(`/builders/${address}`);
         closeModal();
       },
       onError: (error: Error) => {
