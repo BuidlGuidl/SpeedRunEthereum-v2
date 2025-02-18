@@ -6,7 +6,6 @@ import { Address } from "viem";
 import { useDisconnect } from "wagmi";
 import {
   ArrowLeftOnRectangleIcon,
-  ArrowTopRightOnSquareIcon,
   ArrowsRightLeftIcon,
   CheckCircleIcon,
   ChevronDownIcon,
@@ -30,6 +29,7 @@ export const AddressInfoDropdown = ({
   address,
   ensAvatar,
   displayName,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   blockExplorerAddressLink,
 }: AddressInfoDropdownProps) => {
   const { disconnect } = useDisconnect();

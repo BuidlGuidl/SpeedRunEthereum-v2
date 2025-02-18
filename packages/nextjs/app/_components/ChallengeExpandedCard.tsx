@@ -3,7 +3,7 @@ import Image from "next/image";
 import CrossedSwordsIcon from "../_assets/icons/CrossedSwordsIcon";
 import PadLockIcon from "../_assets/icons/PadLockIcon";
 import QuestionIcon from "../_assets/icons/QuestionIcon";
-import { Challenge, ChallengeAttempt, User } from "../_types/User";
+import { ChallengeAttempt } from "../_types/User";
 import { getChallengeDependenciesInfo } from "./utils";
 import { CHALLENGE_SUBMISSION_STATUS } from "~~/constants";
 import { getChallengeById } from "~~/services/database/repositories/challenges";
