@@ -5,14 +5,8 @@ import { connectedBuilder } from "./_data/_hardcodedUser";
 import { NextPage } from "next";
 import { getAllChallenges } from "~~/services/database/repositories/challenges";
 
-const LAST_CHALLENGE_BEFORE_JOIN_BG = "minimum-viable-exchange";
-
 const Home: NextPage = async () => {
   const challenges = await getAllChallenges();
-
-  const lastChallengeBeforeJoinBgIndex = challenges.findIndex(
-    challenge => challenge.id === LAST_CHALLENGE_BEFORE_JOIN_BG,
-  );
 
   const builderAttemptedChallenges = Object.fromEntries(
     Object.entries(connectedBuilder?.challenges || {}).filter(([, challengeData]) => challengeData?.status),
@@ -22,32 +16,51 @@ const Home: NextPage = async () => {
     <div>
       <Hero firstChallengeId={challenges[0].id} />
       <div className="bg-base-200">
-        {challenges.slice(0, lastChallengeBeforeJoinBgIndex + 1).map((challenge, index, { length }) => (
-          <ChallengeExpandedCard
-            key={challenge.id}
-            challengeId={challenge.id}
-            challenge={challenge}
-            challengeIndex={challenge.sortOrder}
-            builderAttemptedChallenges={builderAttemptedChallenges}
-            // connectedBuilder={connectedBuilder}
-            isFirst={index === 0}
-            isLast={length - 1 === index}
-          />
-        ))}
+        <ChallengeExpandedCard
+          key="simple-nft"
+          challengeId="simple-nft"
+          builderAttemptedChallenges={builderAttemptedChallenges}
+        />
+        <ChallengeExpandedCard
+          key="decentralized-staking"
+          challengeId="decentralized-staking"
+          builderAttemptedChallenges={builderAttemptedChallenges}
+        />
+        <ChallengeExpandedCard
+          key="token-vendor"
+          challengeId="token-vendor"
+          builderAttemptedChallenges={builderAttemptedChallenges}
+        />
+        <ChallengeExpandedCard
+          key="dice-game"
+          challengeId="dice-game"
+          builderAttemptedChallenges={builderAttemptedChallenges}
+        />
+        <ChallengeExpandedCard
+          key="minimum-viable-exchange"
+          challengeId="minimum-viable-exchange"
+          builderAttemptedChallenges={builderAttemptedChallenges}
+          hideBottomBorder
+        />
 
         <JoinBGCard builderAttemptedChallenges={builderAttemptedChallenges} connectedBuilder={connectedBuilder} />
 
-        {challenges.slice(lastChallengeBeforeJoinBgIndex + 1).map((challenge, index, { length }) => (
-          <ChallengeExpandedCard
-            key={challenge.id}
-            challengeId={challenge.id}
-            challenge={challenge}
-            challengeIndex={challenge.sortOrder}
-            builderAttemptedChallenges={builderAttemptedChallenges}
-            // connectedBuilder={connectedBuilder}
-            isLast={length - 1 === index}
-          />
-        ))}
+        <ChallengeExpandedCard
+          key="state-channels"
+          challengeId="state-channels"
+          builderAttemptedChallenges={builderAttemptedChallenges}
+        />
+        <ChallengeExpandedCard
+          key="learn-multisig"
+          challengeId="learn-multisig"
+          builderAttemptedChallenges={builderAttemptedChallenges}
+        />
+        <ChallengeExpandedCard
+          key="nft-cohort"
+          challengeId="nft-cohort"
+          builderAttemptedChallenges={builderAttemptedChallenges}
+          hideBottomBorder
+        />
       </div>
     </div>
   );

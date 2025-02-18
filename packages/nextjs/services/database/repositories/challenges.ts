@@ -105,7 +105,7 @@ const fakeChallenges = [
 ];
 
 // TODO. Query the database
-export async function findChallengeById(id: string) {
+export async function getChallengeById(id: string) {
   return fakeChallenges.find(challenge => challenge.id === id);
 }
 

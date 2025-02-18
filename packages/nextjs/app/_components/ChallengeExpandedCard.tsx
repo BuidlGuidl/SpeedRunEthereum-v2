@@ -3,33 +3,29 @@ import Image from "next/image";
 import CrossedSwordsIcon from "../_assets/icons/CrossedSwordsIcon";
 import PadLockIcon from "../_assets/icons/PadLockIcon";
 import QuestionIcon from "../_assets/icons/QuestionIcon";
-import { Challenge, ChallengeAttempt } from "../_types/User";
+import { Challenge, ChallengeAttempt, User } from "../_types/User";
 import { getChallengeDependenciesInfo } from "./utils";
 import { CHALLENGE_SUBMISSION_STATUS } from "~~/constants";
-
-const challengeLabels: Record<keyof typeof CHALLENGE_SUBMISSION_STATUS, { label: string }> = {
-  [CHALLENGE_SUBMISSION_STATUS.ACCEPTED]: { label: "Accepted" },
-  [CHALLENGE_SUBMISSION_STATUS.REJECTED]: { label: "Rejected" },
-  [CHALLENGE_SUBMISSION_STATUS.SUBMITTED]: { label: "Submitted" },
-};
+import { getChallengeById } from "~~/services/database/repositories/challenges";
 
 type ChallengeExpandedCardProps = {
   challengeId: string;
-  challenge: Challenge;
   builderAttemptedChallenges: Record<string, ChallengeAttempt>;
-  isFirst?: boolean;
-  isLast?: boolean;
-  challengeIndex: number;
+  hideBottomBorder?: boolean;
 };
 
-const ChallengeExpandedCard: React.FC<ChallengeExpandedCardProps> = ({
+const ChallengeExpandedCard: React.FC<ChallengeExpandedCardProps> = async ({
   challengeId,
-  challenge,
   builderAttemptedChallenges,
-  isFirst = false,
-  isLast = false,
-  challengeIndex,
+  hideBottomBorder = false,
 }) => {
+  const challenge = await getChallengeById(challengeId);
+
+  if (!challenge) {
+    return null;
+  }
+
+  const { sortOrder } = challenge;
   const { completed: builderHasCompletedDependenciesChallenges, lockReasonToolTip } = getChallengeDependenciesInfo({
     dependencies: challenge.dependencies || [],
     builderAttemptedChallenges,
@@ -39,16 +35,18 @@ const ChallengeExpandedCard: React.FC<ChallengeExpandedCardProps> = ({
   const isChallengeLocked = challenge.disabled || !builderHasCompletedDependenciesChallenges;
 
   return (
-    <div className="flex justify-center">
+    <div className="flex justify-center group">
       <div
-        className={`flex justify-between max-w-7xl py-8 mx-14 pl-10 lg:pr-12 border-primary border-l-[5px] relative flex-col-reverse lg:flex-row ${!isLast ? "border-b-2" : ""}`}
+        className={`flex justify-between max-w-7xl py-8 mx-14 pl-10 lg:pr-12 border-primary border-l-[5px] relative flex-col-reverse lg:flex-row ${
+          hideBottomBorder ? "border-b-0" : "border-b-2"
+        }`}
       >
-        {isFirst && <div className="absolute -left-3 z-10 top-0 w-[18px] h-[58%] lg:h-[50%] bg-base-200" />}
+        <div className="hidden group-first:block absolute -left-3 z-10 top-0 w-[18px] h-[58%] lg:h-[50%] bg-base-200" />
         <div className="flex flex-col max-w-full lg:max-w-[40%] gap-18 lg:gap-20">
           <div className="flex flex-col items-start gap-0">
             {challengeStatus && (
               <span
-                className={`rounded-xl py-0.5 px-2.5 text-sm ${
+                className={`rounded-xl py-0.5 px-2.5 text-sm capitalize ${
                   challengeStatus === CHALLENGE_SUBMISSION_STATUS.ACCEPTED
                     ? "bg-base-300 text-base-content"
                     : challengeStatus === CHALLENGE_SUBMISSION_STATUS.REJECTED
@@ -56,11 +54,11 @@ const ChallengeExpandedCard: React.FC<ChallengeExpandedCardProps> = ({
                       : "bg-gray-100 text-gray-800"
                 }`}
               >
-                {challengeLabels[challengeStatus].label}
+                {challengeStatus.toLowerCase()}
               </span>
             )}
 
-            <span className="text-xl lg:text-lg">Challenge #{challengeIndex}</span>
+            <span className="text-xl lg:text-lg">Challenge #{sortOrder}</span>
             <h2 className="text-3xl lg:text-2xl font-bold mt-0">
               {challenge.label.split(": ")[1] ? challenge.label.split(": ")[1] : challenge.label}
             </h2>
@@ -128,7 +126,14 @@ const ChallengeExpandedCard: React.FC<ChallengeExpandedCardProps> = ({
         </div>
         <div className="flex justify-center mb-6 lg:mb-0">
           {challenge.previewImage ? (
-            <Image src={challenge.previewImage} alt={challenge.label} width={490} height={490} />
+            <Image
+              src={challenge.previewImage}
+              alt={challenge.label}
+              // workaround to avoid console warnings
+              className="w-full max-w-[490px] h-auto"
+              width={0}
+              height={0}
+            />
           ) : (
             <p className="p-3 text-center">{challengeId} image</p>
           )}
