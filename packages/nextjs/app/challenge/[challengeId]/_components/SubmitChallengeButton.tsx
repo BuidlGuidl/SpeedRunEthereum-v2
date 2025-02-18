@@ -13,7 +13,7 @@ export const SubmitChallengeButton = ({ challengeId }: { challengeId: string }) 
   return (
     <>
       <button
-        className="btn btn-primary mt-2"
+        className="btn btn-lg btn-primary mt-2 fixed bottom-8 inset-x-0 mx-auto w-fit"
         disabled={!user || isLoadingUser}
         onClick={() => submitChallengeModalRef && submitChallengeModalRef.current?.showModal()}
       >
