@@ -2,17 +2,15 @@ import React from "react";
 import Link from "next/link";
 import { User } from "../_types/User";
 import { useAccount, useWalletClient } from "wagmi";
-import { SERVER_URL as serverUrl } from "~~/constants";
 import { notification } from "~~/utils/scaffold-eth";
 
-const serverPath = "/bg/join";
-
-interface JoinBGProps {
+type JoinBGProps = {
   text: string;
   isChallengeLocked: boolean;
   connectedBuilder: User;
-}
+};
 
+// TODO: Basic implementation. Update when user schema is ready.
 const JoinBGButton: React.FC<JoinBGProps> = ({ text, isChallengeLocked, connectedBuilder }) => {
   const { address: connectedAddress } = useAccount();
   const { data: walletClient } = useWalletClient();
@@ -44,7 +42,7 @@ const JoinBGButton: React.FC<JoinBGProps> = ({ text, isChallengeLocked, connecte
 
     let signMessage;
     try {
-      const signMessageResponse = await fetch(`${serverUrl}/sign-message?messageId=bgJoin&address=${address}`);
+      const signMessageResponse = await fetch(`/sign-message?messageId=bgJoin&address=${address}`);
       if (!signMessageResponse.ok) {
         throw new Error("Failed to fetch sign message");
       }
@@ -67,7 +65,7 @@ const JoinBGButton: React.FC<JoinBGProps> = ({ text, isChallengeLocked, connecte
     }
 
     try {
-      const response = await fetch(serverUrl + serverPath, {
+      const response = await fetch("/bg/join", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
