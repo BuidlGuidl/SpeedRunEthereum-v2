@@ -3,6 +3,7 @@ import { db } from "~~/services/database/config/postgresClient";
 import { lower, userChallenges } from "~~/services/database/config/schema";
 
 export type UserChallengeInsert = InferInsertModel<typeof userChallenges>;
+export type UserChallenges = Awaited<ReturnType<typeof findUserChallengesByAddress>>;
 
 export async function findUserChallengesByAddress(userAddress: string) {
   return await db
