@@ -45,7 +45,14 @@ export const JoinBGCard = ({
       />
       <div className="max-w-7xl py-8 mx-14 pl-10 border-l-[5px] border-primary relative space-y-16 lg:space-y-32 min-h-[28rem] lg:min-h-[32rem]">
         <div className="flex justify-center relative mt-2 lg:mt-8">
-          <Image src="/assets/bgBanner_JoinBG.svg" width={820} height={400} className="w-full" alt="bgBanner_JoinBG" />
+          <Image
+            src="/assets/bgBanner_JoinBG.svg"
+            // workaround to avoid console warnings
+            className="max-w-[820px] w-full"
+            width={0}
+            height={0}
+            alt="bgBanner_JoinBG"
+          />
         </div>
         <div className="flex flex-col lg:flex-row justify-between">
           <p className="mb-4 text-center lg:text-left lg:max-w-[35%]">
