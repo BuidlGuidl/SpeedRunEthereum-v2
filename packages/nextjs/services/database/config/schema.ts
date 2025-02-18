@@ -25,7 +25,6 @@ export const userChallenges = pgTable("user_challenges", {
 
 export const usersRelations = relations(users, ({ many }) => ({
   userChallenges: many(userChallenges),
-  events: many(events),
 }));
 
 export const userChallengesRelations = relations(userChallenges, ({ one }) => ({
