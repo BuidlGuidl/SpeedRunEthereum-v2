@@ -18,7 +18,7 @@ interface SocialLinks {
 }
 
 interface ChallengeData {
-  deployedUrl?: string;
+  frontendUrl?: string;
   submittedTimestamp?: number;
   contractUrl?: string;
   reviewComment?: string;
@@ -36,7 +36,7 @@ interface UserData {
 interface EventPayload {
   challengeId?: string;
   contractUrl?: string;
-  deployedUrl?: string;
+  frontendUrl?: string;
   userAddress: string;
   autograding?: boolean;
   reviewAction?: "ACCEPTED" | "REJECTED";
@@ -159,7 +159,7 @@ async function seed() {
             .values({
               userAddress,
               challengeCode,
-              deployedUrl: challengeData.deployedUrl,
+              frontendUrl: challengeData.frontendUrl,
               contractUrl: challengeData.contractUrl,
               reviewComment: challengeData.reviewComment,
               submittedTimestamp: createValidDate(challengeData.submittedTimestamp),
@@ -181,7 +181,7 @@ async function seed() {
           signature: event.signature,
           userAddress: event.payload.userAddress,
           challengeCode: event.payload.challengeId,
-          deployedUrl: event.payload.deployedUrl,
+          frontendUrl: event.payload.frontendUrl,
           contractUrl: event.payload.contractUrl,
           reviewAction: event.payload.reviewAction,
           reviewMessage: event.payload.reviewMessage,

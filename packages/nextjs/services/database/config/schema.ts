@@ -29,7 +29,7 @@ export const userChallenges = pgTable("user_challenges", {
   challengeCode: varchar("challengeCode", { length: 255 })
     .notNull()
     .references(() => challenges.challengeCode),
-  deployedUrl: varchar("deployedUrl", { length: 255 }),
+  frontendUrl: varchar("frontendUrl", { length: 255 }),
   contractUrl: varchar("contractUrl", { length: 255 }),
   reviewComment: text("reviewComment"), // Feedback provided during from the autograder
   submittedTimestamp: timestamp("submittedTimestamp").defaultNow(),
@@ -45,7 +45,7 @@ export const events = pgTable("events", {
     .notNull()
     .references(() => users.userAddress),
   challengeCode: varchar("challengeCode", { length: 255 }).references(() => challenges.challengeCode),
-  deployedUrl: varchar("deployedUrl", { length: 255 }),
+  frontendUrl: varchar("frontendUrl", { length: 255 }),
   contractUrl: varchar("contractUrl", { length: 255 }),
   reviewAction: reviewActionEnum("reviewAction"),
   reviewMessage: text("reviewMessage"),
