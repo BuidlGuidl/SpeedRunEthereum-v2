@@ -71,11 +71,8 @@ export const JoinBGCard = ({
             )}
 
             {!builderHasCompletedDependenciesChallenges && (
-              <div className="group relative cursor-pointer ml-2">
+              <div className="tooltip relative cursor-pointer ml-2" data-tip={lockReasonToolTip}>
                 <QuestionIcon className="h-8 w-8" />
-                <span className="invisible group-hover:visible absolute z-10 px-3 py-2 text-sm bg-gray-900 text-white rounded shadow-lg">
-                  {lockReasonToolTip}
-                </span>
               </div>
             )}
           </div>
