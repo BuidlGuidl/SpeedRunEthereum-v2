@@ -1,4 +1,4 @@
-import { UserByAddress } from "~~/services/database/respositories/users";
+import { UserByAddress } from "~~/services/database/repositories/users";
 
 export async function fetchUser(address: string | undefined) {
   if (!address) return null;
