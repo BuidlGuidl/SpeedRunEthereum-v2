@@ -30,7 +30,6 @@ export async function POST(req: NextRequest, { params }: { params: { challengeId
   try {
     const challengeId = params.challengeId;
     const { userAddress, frontendUrl, contractUrl, signature } = (await req.json()) as ChallengeSubmitPayload;
-    const lowerCasedUserAddress = userAddress.toLowerCase();
 
     if (!userAddress || !frontendUrl || !contractUrl || !signature) {
       return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
@@ -48,7 +47,7 @@ export async function POST(req: NextRequest, { params }: { params: { challengeId
       return NextResponse.json({ error: "Invalid signature" }, { status: 401 });
     }
 
-    const user = await findUserByAddress(lowerCasedUserAddress);
+    const user = await findUserByAddress(userAddress);
     if (user.length === 0) {
       return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
@@ -64,7 +63,7 @@ export async function POST(req: NextRequest, { params }: { params: { challengeId
     const gradingResult = await mockAutograding(contractUrl);
 
     await upsertUserChallenge({
-      userAddress: lowerCasedUserAddress,
+      userAddress: userAddress,
       challengeCode: challengeId,
       frontendUrl,
       contractUrl,
@@ -74,7 +73,7 @@ export async function POST(req: NextRequest, { params }: { params: { challengeId
 
     await createEvent({
       eventType: "challenge.autograde",
-      userAddress: lowerCasedUserAddress,
+      userAddress: userAddress,
       challengeCode: challengeId,
     });
 

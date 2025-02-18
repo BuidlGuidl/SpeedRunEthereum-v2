@@ -1,14 +1,32 @@
-import { relations, sql } from "drizzle-orm";
-import { pgEnum, pgTable, serial, text, timestamp, unique, varchar } from "drizzle-orm/pg-core";
+import { SQL, relations, sql } from "drizzle-orm";
+import {
+  AnyPgColumn,
+  pgEnum,
+  pgTable,
+  serial,
+  text,
+  timestamp,
+  unique,
+  uniqueIndex,
+  varchar,
+} from "drizzle-orm/pg-core";
+
+export function lower(address: AnyPgColumn): SQL {
+  return sql`lower(${address})`;
+}
 
 export const reviewActionEnum = pgEnum("review_action_enum", ["REJECTED", "ACCEPTED", "SUBMITTED"]);
 export const eventTypeEnum = pgEnum("event_type_enum", ["challenge.submit", "challenge.autograde"]);
 
 // TODO: Define the right schema.
-export const users = pgTable("users", {
-  id: varchar("id", { length: 42 }).primaryKey(),
-  creationTimestamp: timestamp("creation_timestamp").default(sql`now()`),
-});
+export const users = pgTable(
+  "users",
+  {
+    id: varchar("id", { length: 42 }).primaryKey(),
+    creationTimestamp: timestamp("creation_timestamp").default(sql`now()`),
+  },
+  table => [uniqueIndex("idUniqueIndex").on(lower(table.id))],
+);
 
 export const userChallenges = pgTable(
   "user_challenges",
