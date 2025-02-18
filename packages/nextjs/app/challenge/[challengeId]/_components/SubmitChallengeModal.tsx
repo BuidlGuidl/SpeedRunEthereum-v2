@@ -5,7 +5,7 @@ import { useAccount, useSignTypedData } from "wagmi";
 import { QuestionMarkCircleIcon } from "@heroicons/react/24/outline";
 import { InputBase } from "~~/components/scaffold-eth";
 import { submitChallenge } from "~~/services/api/challenges";
-import { EIP_712_TYPED_DATA__CHALLENGE_SUBMIT } from "~~/utils/eip712/challenge";
+import { EIP_712_TYPED_DATA__CHALLENGE_SUBMIT } from "~~/services/eip712/challenge";
 import { notification } from "~~/utils/scaffold-eth";
 
 const VALID_BLOCK_EXPLORER_HOSTS = ["sepolia.etherscan.io", "sepolia-optimism.etherscan.io"];

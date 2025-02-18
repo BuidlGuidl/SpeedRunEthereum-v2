@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { createEvent } from "~~/services/database/repositories/events";
 import { upsertUserChallenge } from "~~/services/database/repositories/userChallenges";
 import { findUserByAddress } from "~~/services/database/repositories/users";
-import { isValidEIP712ChallengeSubmitSignature } from "~~/utils/eip712/challenge";
+import { isValidEIP712ChallengeSubmitSignature } from "~~/services/eip712/challenge";
 
 export type ChallengeSubmitPayload = {
   userAddress: string;
