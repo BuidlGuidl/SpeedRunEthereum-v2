@@ -1,3 +1,4 @@
+// TODO: Remove and use types from schema later
 type Role = "registered" | "builder" | "admin";
 
 type ChallengeStatus = "SUBMITTED" | "ACCEPTED" | "REJECTED";
