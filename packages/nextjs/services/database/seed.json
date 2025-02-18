@@ -11,7 +11,7 @@
       "joinedBg": true,
       "challenges": {
         "simple-nft-example": {
-          "deployedUrl": "https://dreary-use.surge.sh/",
+          "frontendUrl": "https://dreary-use.surge.sh/",
           "submittedTimestamp": 1679063312936,
           "contractUrl": "https://sepolia.etherscan.io/address/0x7f918d7b7d0fe0d3a8de3c0570ed4e154c0096e0",
           "reviewComment": "Dummy review, nice work",
@@ -159,7 +159,7 @@
       "payload": {
         "challengeId": "simple-nft-example",
         "contractUrl": "https://sepolia.etherscan.io/address/0x7f918d7b7d0fe0d3a8de3c0570ed4e154c0096e0",
-        "deployedUrl": "https://dreary-use.surge.sh/",
+        "frontendUrl": "https://dreary-use.surge.sh/",
         "userAddress": "0xB4F53bd85c00EF22946d24Ae26BC38Ac64F5E7B1"
       },
       "signature": "0x7a808ee181d8655f38c48e0154903bea229b91e32f6062f6c23ad9da5fa25c3008238b07e367e7904200015157a43378b39244140c43ea35e5eea11c055a170500",
