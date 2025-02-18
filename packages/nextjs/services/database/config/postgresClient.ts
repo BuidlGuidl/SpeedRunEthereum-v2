@@ -14,7 +14,10 @@ if (process.env.POSTGRES_URL?.includes(VERCEL_DB_STRING)) {
     connectionString: process.env.POSTGRES_URL,
   });
 
-  db = drizzle(pool, { schema });
+  db = drizzle(pool, {
+    schema,
+    casing: "snake_case",
+  });
 
   pool.on("error", err => {
     console.error("Unexpected error on idle client", err);

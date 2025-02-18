@@ -95,7 +95,7 @@ async function seed() {
         .values({
           userAddress,
           role: "user", // Set everyone as user by default
-          creationTimestamp: createValidDate(userData.creationTimestamp),
+          createdAt: createValidDate(userData.creationTimestamp),
           email: userData.socialLinks?.email,
           telegram: userData.socialLinks?.telegram,
           twitter: userData.socialLinks?.twitter,
