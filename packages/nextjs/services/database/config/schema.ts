@@ -1,7 +1,7 @@
 import { relations } from "drizzle-orm";
 import { boolean, pgEnum, pgTable, serial, text, timestamp, varchar } from "drizzle-orm/pg-core";
 
-export const reviewActionEnum = pgEnum("review_action_enum", ["REJECTED", "ACCEPTED"]);
+export const reviewActionEnum = pgEnum("review_action_enum", ["REJECTED", "ACCEPTED", "SUBMITTED"]);
 export const eventTypeEnum = pgEnum("event_type_enum", ["challenge.submit", "challenge.autograde", "user.create"]);
 export const userRoleEnum = pgEnum("user_role_enum", ["user", "admin"]);
 
