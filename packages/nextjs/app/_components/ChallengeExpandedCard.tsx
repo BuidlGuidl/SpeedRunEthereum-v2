@@ -11,13 +11,11 @@ import { getChallengeById } from "~~/services/database/repositories/challenges";
 type ChallengeExpandedCardProps = {
   challengeId: string;
   builderAttemptedChallenges: Record<string, ChallengeAttempt>;
-  hideBottomBorder?: boolean;
 };
 
 const ChallengeExpandedCard: React.FC<ChallengeExpandedCardProps> = async ({
   challengeId,
   builderAttemptedChallenges,
-  hideBottomBorder = false,
 }) => {
   const challenge = await getChallengeById(challengeId);
 
@@ -35,12 +33,8 @@ const ChallengeExpandedCard: React.FC<ChallengeExpandedCardProps> = async ({
   const isChallengeLocked = challenge.disabled || !builderHasCompletedDependenciesChallenges;
 
   return (
-    <div className="flex justify-center group">
-      <div
-        className={`flex justify-between max-w-7xl py-8 mx-14 pl-10 lg:pr-12 border-primary border-l-[5px] relative flex-col-reverse lg:flex-row ${
-          hideBottomBorder ? "border-b-0" : "border-b-2"
-        }`}
-      >
+    <div className="challenge-expanded-card flex justify-center group relative  ">
+      <div className="flex justify-between max-w-7xl py-8 mx-14 pl-10 lg:pr-12 border-primary border-l-[5px] relative flex-col-reverse lg:flex-row border-b-2 group-[:not(:has(+.challenge-expanded-card))]:border-b-0">
         <div className="hidden group-first:block absolute -left-3 z-10 top-0 w-[18px] h-[58%] lg:h-[50%] bg-base-200" />
         <div className="flex flex-col max-w-full lg:max-w-[40%] gap-18 lg:gap-20">
           <div className="flex flex-col items-start gap-0">

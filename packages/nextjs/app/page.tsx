@@ -40,7 +40,6 @@ const Home: NextPage = async () => {
           key="minimum-viable-exchange"
           challengeId="minimum-viable-exchange"
           builderAttemptedChallenges={builderAttemptedChallenges}
-          hideBottomBorder
         />
 
         <JoinBGCard builderAttemptedChallenges={builderAttemptedChallenges} connectedBuilder={connectedBuilder} />
@@ -59,7 +58,6 @@ const Home: NextPage = async () => {
           key="nft-cohort"
           challengeId="nft-cohort"
           builderAttemptedChallenges={builderAttemptedChallenges}
-          hideBottomBorder
         />
       </div>
     </div>
