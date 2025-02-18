@@ -197,7 +197,7 @@ async function seed() {
               frontendUrl: challengeData.frontendUrl,
               contractUrl: challengeData.contractUrl,
               reviewComment: challengeData.reviewComment,
-              submittedTimestamp: createValidDate(challengeData.submittedTimestamp),
+              submittedAt: createValidDate(challengeData.submittedTimestamp),
               reviewAction: challengeData.status,
             })
             .execute();
@@ -212,7 +212,7 @@ async function seed() {
         .insert(events)
         .values({
           eventType: event.type,
-          eventTimestamp: createValidDate(event.timestamp),
+          eventAt: createValidDate(event.timestamp),
           signature: event.signature,
           userAddress: event.payload.userAddress,
           challengeId: event.payload.challengeId,

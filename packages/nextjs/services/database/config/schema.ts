@@ -32,15 +32,15 @@ export const userChallenges = pgTable("user_challenges", {
     .references(() => challenges.id),
   frontendUrl: varchar("frontend_url", { length: 255 }),
   contractUrl: varchar("contract_url", { length: 255 }),
-  reviewComment: text("review_comment"), // Feedback provided during from the autograder
-  submittedTimestamp: timestamp("submitted_at").defaultNow(),
-  reviewAction: reviewActionEnum("review_action"), // Final review decision from autograder (REJECTED or ACCEPTED)
+  reviewComment: text("review_comment"), // Feedback provided during autograding
+  submittedAt: timestamp("submitted_at").defaultNow(),
+  reviewAction: reviewActionEnum("review_action"), // Final review decision from autograder (REJECTED or ACCEPTED). Initially set to SUBMITTED.
 });
 
 export const events = pgTable("events", {
   eventId: serial("event_id").primaryKey(),
   eventType: eventTypeEnum("event_type").notNull(), // Type of event (challenge.submission, challenge.autograding, user.create)
-  eventTimestamp: timestamp("event_at").defaultNow(), // Renamed for clarity
+  eventAt: timestamp("event_at").defaultNow(),
   signature: varchar("signature", { length: 255 }), // Cryptographic signature of the event
   userAddress: varchar("user_address", { length: 42 })
     .notNull()
