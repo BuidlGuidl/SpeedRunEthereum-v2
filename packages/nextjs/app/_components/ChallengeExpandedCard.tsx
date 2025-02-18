@@ -44,9 +44,6 @@ const ChallengeExpandedCard: React.FC<ChallengeExpandedCardProps> = ({
         className={`flex justify-between max-w-7xl py-8 mx-14 pl-10 lg:pr-12 border-primary border-l-[5px] relative flex-col-reverse lg:flex-row ${!isLast ? "border-b-2" : ""}`}
       >
         {isFirst && <div className="absolute -left-3 z-10 top-0 w-[18px] h-[58%] lg:h-[50%] bg-base-200" />}
-        {/* {isLast && (
-          <div className="absolute -left-3 z-10 bottom-0 w-[18px] h-[calc(58%-20px)] lg:h-[calc(50%-20px)] bg-base-200" />
-        )} */}
         <div className="flex flex-col max-w-full lg:max-w-[40%] gap-18 lg:gap-20">
           <div className="flex flex-col items-start gap-0">
             {challengeStatus && (
