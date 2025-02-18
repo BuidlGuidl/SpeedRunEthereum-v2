@@ -8,12 +8,13 @@ import { submitChallenge } from "~~/services/api/challenges";
 import { EIP_712_TYPED_DATA__CHALLENGE_SUBMIT } from "~~/utils/eip712/challenge";
 import { notification } from "~~/utils/scaffold-eth";
 
+const VALID_BLOCK_EXPLORER_HOSTS = ["sepolia.etherscan.io", "sepolia-optimism.etherscan.io"];
+
 type SubmitChallengeModalProps = {
   challengeId: string;
   closeModal: () => void;
 };
 
-// TODO: Add input validation for URLs
 export const SubmitChallengeModal = forwardRef<HTMLDialogElement, SubmitChallengeModalProps>(
   ({ closeModal, challengeId }, ref) => {
     const [frontendUrl, setFrontendUrl] = useState("");
@@ -26,6 +27,16 @@ export const SubmitChallengeModal = forwardRef<HTMLDialogElement, SubmitChalleng
     const { mutate: submit, isPending } = useMutation({
       mutationFn: async () => {
         if (!address) throw new Error("Wallet not connected");
+        try {
+          new URL(frontendUrl);
+          const etherscan = new URL(etherscanUrl);
+
+          if (!VALID_BLOCK_EXPLORER_HOSTS.includes(etherscan.host)) {
+            throw new Error("Please use a valid Etherscan testnet URL (Sepolia)");
+          }
+        } catch (e) {
+          throw new Error("Please enter valid URLs");
+        }
 
         const message = {
           ...EIP_712_TYPED_DATA__CHALLENGE_SUBMIT.message,
