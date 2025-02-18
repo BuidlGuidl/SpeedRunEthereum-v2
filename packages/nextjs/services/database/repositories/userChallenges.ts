@@ -1,8 +1,12 @@
-import { InferInsertModel } from "drizzle-orm";
+import { InferInsertModel, eq } from "drizzle-orm";
 import { db } from "~~/services/database/config/postgresClient";
 import { userChallenges } from "~~/services/database/config/schema";
 
 export type UserChallengeInsert = InferInsertModel<typeof userChallenges>;
+
+export async function findUserChallengesByAddress(userAddress: string) {
+  return await db.select().from(userChallenges).where(eq(userChallenges.userAddress, userAddress.toLowerCase()));
+}
 
 export async function upsertUserChallenge(challenge: UserChallengeInsert) {
   return await db
