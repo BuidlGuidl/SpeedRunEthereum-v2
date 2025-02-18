@@ -37,7 +37,12 @@ export const Footer = () => {
         <ul className="menu menu-horizontal w-full">
           <div className="flex justify-center items-center gap-2 text-sm w-full">
             <div className="text-center">
-              <a href="https://github.com/scaffold-eth/se-2" target="_blank" rel="noreferrer" className="link">
+              <a
+                href="https://github.com/BuidlGuidl/SpeedRunEthereum-v2"
+                target="_blank"
+                rel="noreferrer"
+                className="link"
+              >
                 Fork me
               </a>
             </div>
