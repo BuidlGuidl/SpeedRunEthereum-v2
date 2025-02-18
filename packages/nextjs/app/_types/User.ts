@@ -2,11 +2,11 @@ type Role = "registered" | "builder" | "admin";
 
 type ChallengeStatus = "SUBMITTED" | "ACCEPTED" | "REJECTED";
 
-interface SocialLinks {
+type SocialLinks = {
   twitter?: string;
   github?: string;
   [key: string]: string | undefined; // Allow for other social platforms
-}
+};
 
 export type Challenge = {
   id: string;
@@ -24,7 +24,7 @@ export type Challenge = {
   sortOrder: number;
 };
 
-export interface ChallengeAttempt {
+export type ChallengeAttempt = {
   status: ChallengeStatus;
   contractUrl?: string;
   deployedUrl?: string;
@@ -32,7 +32,7 @@ export interface ChallengeAttempt {
   reviewComment?: string;
   autograding?: boolean;
   // disabled?: boolean;
-}
+};
 
 export type User = {
   id: string; // Ethereum address

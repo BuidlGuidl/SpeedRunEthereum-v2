@@ -13,14 +13,14 @@ const challengeLabels: Record<keyof typeof CHALLENGE_SUBMISSION_STATUS, { label:
   [CHALLENGE_SUBMISSION_STATUS.SUBMITTED]: { label: "Submitted" },
 };
 
-interface ChallengeExpandedCardProps {
+type ChallengeExpandedCardProps = {
   challengeId: string;
   challenge: Challenge;
   builderAttemptedChallenges: Record<string, ChallengeAttempt>;
   isFirst?: boolean;
   isLast?: boolean;
   challengeIndex: number;
-}
+};
 
 const ChallengeExpandedCard: React.FC<ChallengeExpandedCardProps> = ({
   challengeId,
