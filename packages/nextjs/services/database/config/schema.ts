@@ -1,5 +1,5 @@
 import { relations } from "drizzle-orm";
-import { boolean, pgEnum, pgTable, serial, text, timestamp, varchar } from "drizzle-orm/pg-core";
+import { boolean, jsonb, pgEnum, pgTable, serial, text, timestamp, varchar } from "drizzle-orm/pg-core";
 
 export const reviewActionEnum = pgEnum("review_action_enum", ["REJECTED", "ACCEPTED", "SUBMITTED"]);
 export const eventTypeEnum = pgEnum("event_type_enum", ["challenge.submit", "challenge.autograde", "user.create"]);
@@ -45,11 +45,9 @@ export const events = pgTable("events", {
   userAddress: varchar("user_address", { length: 42 })
     .notNull()
     .references(() => users.userAddress),
-  challengeId: varchar("challenge_id", { length: 255 }).references(() => challenges.id),
-  frontendUrl: varchar("frontend_url", { length: 255 }),
-  contractUrl: varchar("contract_url", { length: 255 }),
-  reviewAction: reviewActionEnum("review_action"),
-  reviewMessage: text("review_message"),
+  payload: jsonb("payload")
+    .notNull()
+    .$defaultFn(() => ({})), // Flexible event payload stored as JSONB
 });
 
 export const usersRelations = relations(users, ({ many }) => ({
@@ -77,9 +75,5 @@ export const eventsRelations = relations(events, ({ one }) => ({
   user: one(users, {
     fields: [events.userAddress],
     references: [users.userAddress],
-  }),
-  challenge: one(challenges, {
-    fields: [events.challengeId],
-    references: [challenges.id],
   }),
 }));

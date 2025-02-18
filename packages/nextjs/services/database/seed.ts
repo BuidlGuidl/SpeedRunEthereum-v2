@@ -37,14 +37,17 @@ interface EventPayload {
   challengeId?: string;
   contractUrl?: string;
   frontendUrl?: string;
-  userAddress: string;
   autograding?: boolean;
   reviewAction?: "ACCEPTED" | "REJECTED";
   reviewMessage?: string;
+  [key: string]: any; // Allow for additional fields in the payload
 }
 
 interface Event {
-  payload: EventPayload;
+  payload: {
+    userAddress: string; // This is in the original Firebase data
+    [key: string]: any;
+  };
   signature: string;
   timestamp: number;
   type: "challenge.submit" | "challenge.autograde" | "user.create";
@@ -208,18 +211,22 @@ async function seed() {
     // Insert events
     console.log("Inserting events...");
     for (const event of typedSeedData.events) {
+      // Create a new payload without userAddress
+      const { userAddress, ...payloadWithoutUser } = event.payload;
+      const eventPayload = {
+        ...payloadWithoutUser,
+        // Convert reviewAction to proper enum value if present
+        reviewAction: event.payload.reviewAction as "ACCEPTED" | "REJECTED" | undefined,
+      };
+
       await db
         .insert(events)
         .values({
           eventType: event.type,
           eventAt: createValidDate(event.timestamp),
           signature: event.signature,
-          userAddress: event.payload.userAddress,
-          challengeId: event.payload.challengeId,
-          frontendUrl: event.payload.frontendUrl,
-          contractUrl: event.payload.contractUrl,
-          reviewAction: event.payload.reviewAction,
-          reviewMessage: event.payload.reviewMessage,
+          userAddress: userAddress, // Use the extracted userAddress
+          payload: eventPayload,
         })
         .execute();
     }
