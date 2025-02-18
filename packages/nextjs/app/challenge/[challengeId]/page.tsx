@@ -1,3 +1,4 @@
+import { SubmitChallengeButton } from "./_components/SubmitChallengeButton";
 import { MDXRemote } from "next-mdx-remote/rsc";
 import { findChallengeById, getAllChallenges } from "~~/services/database/repositories/challenges";
 import { fetchGithubReadme } from "~~/services/github";
@@ -32,6 +33,7 @@ export default async function ChallengePage({ params }: { params: { challengeId:
       ) : (
         <div>Failed to load challenge content</div>
       )}
+      <SubmitChallengeButton challengeId={challenge.id} />
     </div>
   );
 }
