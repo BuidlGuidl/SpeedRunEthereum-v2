@@ -106,25 +106,55 @@ async function seed() {
 
     // Insert challenges
     console.log("Inserting challenges...");
-    const challengeNameMap: Record<string, string> = {
-      "decentralized-staking": "Decentralized Staking App",
-      "dice-game": "Dice Game",
-      "minimum-viable-exchange": "Build a DEX",
-      "simple-nft-example": "Simple NFT Example",
-      "state-channels": "A State Channel Application",
-      "token-vendor": "Token Vendor",
-      multisig: "Multisig Wallet",
-      "svg-nft": "SVG NFT",
+    const challengeData: Record<string, { name: string; github: string; autograding: boolean }> = {
+      "simple-nft-example": {
+        name: "Simple NFT Example",
+        github: "scaffold-eth/se-2-challenges:challenge-0-simple-nft",
+        autograding: true,
+      },
+      "decentralized-staking": {
+        name: "Decentralized Staking App",
+        github: "scaffold-eth/se-2-challenges:challenge-1-decentralized-staking",
+        autograding: true,
+      },
+      "token-vendor": {
+        name: "Token Vendor",
+        github: "scaffold-eth/se-2-challenges:challenge-2-token-vendor",
+        autograding: true,
+      },
+      "dice-game": {
+        name: "Dice Game",
+        github: "scaffold-eth/se-2-challenges:challenge-3-dice-game",
+        autograding: true,
+      },
+      "minimum-viable-exchange": {
+        name: "Build a DEX",
+        github: "scaffold-eth/se-2-challenges:challenge-4-dex",
+        autograding: true,
+      },
+      "state-channels": {
+        name: "A State Channel Application",
+        github: "scaffold-eth/se-2-challenges:challenge-5-state-channels",
+        autograding: true,
+      },
+      multisig: {
+        name: "Multisig Wallet",
+        github: "scaffold-eth/se-2-challenges:challenge-6-multisig",
+        autograding: false,
+      },
+      "svg-nft": {
+        name: "SVG NFT",
+        github: "scaffold-eth/se-2-challenges:challenge-7-svg-nft",
+        autograding: false,
+      },
     };
-
-    const nonAutogradingChallenges = new Set(["multisig", "svg-nft"]);
 
     // Get unique challenges from seed data
     const uniqueChallenges = new Set<string>();
     Object.values(typedSeedData.users).forEach(userData => {
       if (userData.challenges) {
-        Object.keys(userData.challenges).forEach(challengeCode => {
-          uniqueChallenges.add(challengeCode);
+        Object.keys(userData.challenges).forEach(challengeId => {
+          uniqueChallenges.add(challengeId);
         });
       }
     });
@@ -133,18 +163,23 @@ async function seed() {
     uniqueChallenges.add("multisig");
     uniqueChallenges.add("svg-nft");
 
-    for (const challengeCode of uniqueChallenges) {
+    for (const id of uniqueChallenges) {
+      const data = challengeData[id] || {
+        name: id
+          .split("-")
+          .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+          .join(" "),
+        github: "",
+        autograding: true,
+      };
+
       await db
         .insert(challenges)
         .values({
-          challengeCode,
-          challengeName:
-            challengeNameMap[challengeCode] ||
-            challengeCode
-              .split("-")
-              .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-              .join(" "),
-          autograding: !nonAutogradingChallenges.has(challengeCode),
+          id,
+          challengeName: data.name,
+          github: data.github,
+          autograding: data.autograding,
         })
         .execute();
     }
@@ -153,12 +188,12 @@ async function seed() {
     console.log("Inserting user challenges...");
     for (const [userAddress, userData] of Object.entries(typedSeedData.users)) {
       if (userData.challenges) {
-        for (const [challengeCode, challengeData] of Object.entries(userData.challenges)) {
+        for (const [challengeId, challengeData] of Object.entries(userData.challenges)) {
           await db
             .insert(userChallenges)
             .values({
               userAddress,
-              challengeCode,
+              challengeId,
               frontendUrl: challengeData.frontendUrl,
               contractUrl: challengeData.contractUrl,
               reviewComment: challengeData.reviewComment,
@@ -180,7 +215,7 @@ async function seed() {
           eventTimestamp: createValidDate(event.timestamp),
           signature: event.signature,
           userAddress: event.payload.userAddress,
-          challengeCode: event.payload.challengeId,
+          challengeId: event.payload.challengeId,
           frontendUrl: event.payload.frontendUrl,
           contractUrl: event.payload.contractUrl,
           reviewAction: event.payload.reviewAction,

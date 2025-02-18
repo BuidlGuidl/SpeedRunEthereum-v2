@@ -16,8 +16,9 @@ export const users = pgTable("users", {
 });
 
 export const challenges = pgTable("challenges", {
-  challengeCode: varchar("challengeCode", { length: 255 }).primaryKey(), // Unique identifier for the challenge
+  id: varchar("id", { length: 255 }).primaryKey(), // Unique identifier for the challenge
   challengeName: varchar("challengeName", { length: 255 }).notNull(),
+  github: varchar("github", { length: 255 }), // Repository reference for the challenge
   autograding: boolean("autograding").default(false), // Whether the challenge supports automatic grading
 });
 
@@ -26,9 +27,9 @@ export const userChallenges = pgTable("user_challenges", {
   userAddress: varchar("userAddress", { length: 42 })
     .notNull()
     .references(() => users.userAddress),
-  challengeCode: varchar("challengeCode", { length: 255 })
+  challengeId: varchar("challengeId", { length: 255 })
     .notNull()
-    .references(() => challenges.challengeCode),
+    .references(() => challenges.id),
   frontendUrl: varchar("frontendUrl", { length: 255 }),
   contractUrl: varchar("contractUrl", { length: 255 }),
   reviewComment: text("reviewComment"), // Feedback provided during from the autograder
@@ -44,7 +45,7 @@ export const events = pgTable("events", {
   userAddress: varchar("userAddress", { length: 42 })
     .notNull()
     .references(() => users.userAddress),
-  challengeCode: varchar("challengeCode", { length: 255 }).references(() => challenges.challengeCode),
+  challengeId: varchar("challengeId", { length: 255 }).references(() => challenges.id),
   frontendUrl: varchar("frontendUrl", { length: 255 }),
   contractUrl: varchar("contractUrl", { length: 255 }),
   reviewAction: reviewActionEnum("reviewAction"),
@@ -67,8 +68,8 @@ export const userChallengesRelations = relations(userChallenges, ({ one }) => ({
     references: [users.userAddress],
   }),
   challenge: one(challenges, {
-    fields: [userChallenges.challengeCode],
-    references: [challenges.challengeCode],
+    fields: [userChallenges.challengeId],
+    references: [challenges.id],
   }),
 }));
 
@@ -78,7 +79,7 @@ export const eventsRelations = relations(events, ({ one }) => ({
     references: [users.userAddress],
   }),
   challenge: one(challenges, {
-    fields: [events.challengeCode],
-    references: [challenges.challengeCode],
+    fields: [events.challengeId],
+    references: [challenges.id],
   }),
 }));

@@ -21,6 +21,10 @@ export default async function ChallengePage({ params }: { params: { challengeId:
     return <div>Challenge not found</div>;
   }
 
+  if (!challenge.github) {
+    return <div>No challenge content available</div>;
+  }
+
   const challengeReadme = await fetchGithubReadme(challenge.github);
 
   return (
