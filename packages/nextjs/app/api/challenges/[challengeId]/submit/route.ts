@@ -21,8 +21,8 @@ async function mockAutograding(contractUrl: string): Promise<AutogradingResult> 
   console.log("Mock autograding for contract:", contractUrl);
   await new Promise(resolve => setTimeout(resolve, 1000));
   return {
-    success: false,
-    feedback: "You Failed",
+    success: true,
+    feedback: "All tests passed successfully! Great work!",
   };
 }
 
