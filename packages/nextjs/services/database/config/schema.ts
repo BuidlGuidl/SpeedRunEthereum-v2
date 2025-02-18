@@ -24,9 +24,7 @@ export const userChallenges = pgTable(
     submittedTimestamp: timestamp("submittedTimestamp").defaultNow(),
     reviewAction: reviewActionEnum("reviewAction"),
   },
-  table => ({
-    uniqueUserChallenge: unique().on(table.userAddress, table.challengeCode),
-  }),
+  table => [unique().on(table.userAddress, table.challengeCode)],
 );
 
 export const usersRelations = relations(users, ({ many }) => ({
