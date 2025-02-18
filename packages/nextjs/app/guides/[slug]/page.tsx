@@ -6,7 +6,7 @@ import { getAllGuidesSlugs, getGuideBySlug } from "~~/services/guides";
 export async function generateStaticParams() {
   const slugs = await getAllGuidesSlugs();
 
-  return slugs;
+  return slugs.map(slug => ({ slug }));
 }
 
 export default async function GuidePage({ params }: { params: { slug: string } }) {
