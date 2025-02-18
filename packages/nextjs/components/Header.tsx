@@ -14,10 +14,11 @@ type HeaderMenuLink = {
   icon?: React.ReactNode;
 };
 
+// TODO: Hardcoded. Fix later
 export const menuLinks: HeaderMenuLink[] = [
   {
-    label: "Home",
-    href: "/",
+    label: "Portfolio",
+    href: "/portfolio",
   },
 ];
 
