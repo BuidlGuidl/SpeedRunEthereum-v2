@@ -28,7 +28,6 @@ async function mockAutograding(contractUrl: string): Promise<AutogradingResult> 
 
 export async function POST(req: NextRequest, { params }: { params: { challengeId: string } }) {
   try {
-    console.log("Submit challenge");
     const challengeId = params.challengeId;
     const { userAddress, frontendUrl, contractUrl, signature } = (await req.json()) as ChallengeSubmitPayload;
     const lowerCasedUserAddress = userAddress.toLowerCase();
@@ -54,11 +53,12 @@ export async function POST(req: NextRequest, { params }: { params: { challengeId
       return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
 
-    await createEvent({
+    // TODO: Create challenge submission only when autograder is turned on for that challenge
+    /* await createEvent({
       eventType: "challenge.submit",
       userAddress: lowerCasedUserAddress,
       challengeCode: challengeId,
-    });
+    }); */
 
     // TODO: Make request to actual autograder
     const gradingResult = await mockAutograding(contractUrl);
