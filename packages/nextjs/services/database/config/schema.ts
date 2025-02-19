@@ -57,7 +57,6 @@ export const usersRelations = relations(users, ({ many }) => ({
 
 export const challengesRelations = relations(challenges, ({ many }) => ({
   userChallenges: many(userChallenges),
-  events: many(events),
 }));
 
 export const userChallengesRelations = relations(userChallenges, ({ one }) => ({
