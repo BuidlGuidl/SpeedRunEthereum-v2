@@ -33,16 +33,6 @@ interface UserData {
   challenges?: Record<string, ChallengeData>;
 }
 
-interface EventPayload {
-  challengeId?: string;
-  contractUrl?: string;
-  frontendUrl?: string;
-  autograding?: boolean;
-  reviewAction?: "ACCEPTED" | "REJECTED";
-  reviewMessage?: string;
-  [key: string]: any; // Allow for additional fields in the payload
-}
-
 interface Event {
   payload: {
     userAddress: string; // This is in the original Firebase data
