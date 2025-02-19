@@ -61,6 +61,7 @@ export const SubmitChallengeModal = forwardRef<HTMLDialogElement, SubmitChalleng
       onSuccess: () => {
         notification.success("Challenge submitted successfully!");
         router.push(`/builders/${address}`);
+        router.refresh();
         closeModal();
       },
       onError: (error: Error) => {
