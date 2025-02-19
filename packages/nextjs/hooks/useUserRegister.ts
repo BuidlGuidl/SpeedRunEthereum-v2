@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAccount, useSignTypedData } from "wagmi";
 import { registerUser } from "~~/services/api/users";
-import { EIP_712_TYPED_DATA__USER_REGISTER } from "~~/utils/eip712/register";
+import { EIP_712_TYPED_DATA__USER_REGISTER } from "~~/services/eip712/register";
 import { notification } from "~~/utils/scaffold-eth";
 
 export function useUserRegister() {

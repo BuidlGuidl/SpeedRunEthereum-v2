@@ -9,7 +9,7 @@ export async function GET(_req: Request, { params }: { params: { address: string
       return NextResponse.json({ error: "Address is required" }, { status: 400 });
     }
 
-    const users = await findUserByAddress(address.toLowerCase());
+    const users = await findUserByAddress(address);
     if (users.length === 0) {
       return NextResponse.json({ user: null }, { status: 404 });
     }
