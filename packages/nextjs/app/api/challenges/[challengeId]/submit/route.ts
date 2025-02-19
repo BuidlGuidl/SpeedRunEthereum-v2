@@ -60,6 +60,9 @@ export async function POST(req: NextRequest, { params }: { params: { challengeId
     }); */
 
     // TODO: Make request to actual autograder
+    // TODO: Think if we want to wait the autograder to finish or just return the result immediately
+    // - Check Vercel timeout limit and see if we return and have the function idle until the result is ready
+    // An alternative is have and endpoint that receives the autograder result and update the database
     const gradingResult = await mockAutograding(contractUrl);
 
     await upsertUserChallenge({
