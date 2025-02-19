@@ -3,10 +3,10 @@ import {
   AnyPgColumn,
   pgEnum,
   pgTable,
+  primaryKey,
   serial,
   text,
   timestamp,
-  unique,
   uniqueIndex,
   varchar,
 } from "drizzle-orm/pg-core";
@@ -31,7 +31,6 @@ export const users = pgTable(
 export const userChallenges = pgTable(
   "user_challenges",
   {
-    userChallengeId: serial("userChallengeId").primaryKey(),
     userAddress: varchar("userAddress", { length: 42 })
       .notNull()
       .references(() => users.id),
@@ -42,7 +41,7 @@ export const userChallenges = pgTable(
     submittedTimestamp: timestamp("submittedTimestamp").defaultNow(),
     reviewAction: reviewActionEnum("reviewAction"),
   },
-  table => [unique().on(table.userAddress, table.challengeCode)],
+  table => [primaryKey({ columns: [table.userAddress, table.challengeCode] })],
 );
 
 export const usersRelations = relations(users, ({ many }) => ({

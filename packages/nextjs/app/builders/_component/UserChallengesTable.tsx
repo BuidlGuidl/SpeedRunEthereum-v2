@@ -21,7 +21,7 @@ export const UserChallengesTable = ({ challenges }: { challenges: UserChallenges
           </thead>
           <tbody>
             {challenges.map(challenge => (
-              <tr key={challenge.userChallengeId} className="hover">
+              <tr key={challenge.challengeCode} className="hover">
                 <td>🏃‍♂️ Challenge {challenge.challengeCode}</td>
                 <td>
                   {challenge.contractUrl ? (
