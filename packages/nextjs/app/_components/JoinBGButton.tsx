@@ -3,18 +3,19 @@
 import React from "react";
 import Link from "next/link";
 import PadLockIcon from "../_assets/icons/PadLockIcon";
+import QuestionIcon from "../_assets/icons/QuestionIcon";
 import { User } from "../_types/User";
 import { useAccount, useWalletClient } from "wagmi";
 import { notification } from "~~/utils/scaffold-eth";
 
 type JoinBGProps = {
-  text: string;
   isLocked: boolean;
   connectedBuilder: User;
+  lockReasonToolTip: string;
 };
 
 // TODO: Basic implementation. Update when user schema is ready.
-const JoinBGButton: React.FC<JoinBGProps> = ({ text, isLocked, connectedBuilder }) => {
+const JoinBGButton: React.FC<JoinBGProps> = ({ isLocked, connectedBuilder, lockReasonToolTip }) => {
   const { address: connectedAddress } = useAccount();
   const { data: walletClient } = useWalletClient();
   // const [isJoining, setIsJoining] = useState(false);
@@ -120,13 +121,10 @@ const JoinBGButton: React.FC<JoinBGProps> = ({ text, isLocked, connectedBuilder 
   // const builderAlreadyJoined = !!connectedBuilder?.joinedBg;
 
   if (!walletClient || !connectedAddress) {
+    // TODO: Add connect wallet functionality
     return (
-      <button
-        disabled
-        className="flex items-center px-6 py-5 text-lg font-medium border-2 border-gray-300 
-          bg-gray-100 rounded-lg opacity-70 cursor-not-allowed"
-      >
-        <span className="text-gray-600">Connect Wallet</span>
+      <button className="flex justify-center text-[#088484] bg-[#C8F5FF] items-center text-xl lg:text-lg px-4 py-1 border-2 border-[#088484] rounded-full opacity-70">
+        <span>Connect Wallet</span>
       </button>
     );
   }
@@ -135,24 +133,29 @@ const JoinBGButton: React.FC<JoinBGProps> = ({ text, isLocked, connectedBuilder 
     return (
       <Link
         href="/apply"
-        className="flex items-center px-6 py-5 text-lg font-medium border-2 
-          border-primary hover:border-primary-dark bg-white rounded-lg 
-          transition-colors duration-200"
+        className="flex justify-center text-[#088484] bg-[#C8F5FF] items-center text-xl lg:text-lg px-4 py-1 border-2 border-[#088484] rounded-full"
       >
-        <span className="text-primary hover:text-primary-dark">Apply to BuidlGuidl</span>
+        <span>Apply to 🏰️ BuidlGuidl</span>
       </Link>
     );
   }
 
   return (
-    <button
-      disabled={isLocked}
-      className="flex justify-center items-center text-xl lg:text-lg px-2 py-1 border-2 border-primary rounded-full disabled:opacity-70"
-      onClick={onJoin}
-    >
-      {isLocked && <PadLockIcon className="w-6 h-6 mr-2" />}
-      <span>{text}</span>
-    </button>
+    <>
+      <button
+        disabled={isLocked}
+        className="flex justify-center text-[#088484] bg-[#C8F5FF] items-center text-xl lg:text-lg px-4 py-1 border-2 border-[#088484] rounded-full disabled:opacity-70"
+        onClick={onJoin}
+      >
+        {isLocked && <PadLockIcon className="w-6 h-6 mr-2" />}
+        <span>Join the 🏰️ BuidlGuidl</span>
+      </button>
+      {isLocked && (
+        <div className="tooltip relative cursor-pointer ml-2 text-[#088484]" data-tip={lockReasonToolTip}>
+          <QuestionIcon className="h-8 w-8" />
+        </div>
+      )}
+    </>
   );
 };
 

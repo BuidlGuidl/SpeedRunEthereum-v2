@@ -1,5 +1,4 @@
 import Image from "next/image";
-import QuestionIcon from "../_assets/icons/QuestionIcon";
 import { ChallengeAttempt, User } from "../_types/User";
 import JoinBGButton from "./JoinBGButton";
 import { getChallengeDependenciesInfo } from "./utils";
@@ -61,16 +60,10 @@ export const JoinBGCard = ({
           </p>
           <div className="flex items-center self-end">
             <JoinBGButton
-              text="Join the 🏰️ BuidlGuidl"
               isLocked={!builderHasCompletedDependenciesChallenges}
               connectedBuilder={connectedBuilder}
+              lockReasonToolTip={lockReasonToolTip}
             />
-
-            {!builderHasCompletedDependenciesChallenges && (
-              <div className="tooltip relative cursor-pointer ml-2" data-tip={lockReasonToolTip}>
-                <QuestionIcon className="h-8 w-8" />
-              </div>
-            )}
           </div>
         </div>
         <span className="absolute h-5 w-5 rounded-full bg-base-300 border-primary border-4 top-[22%] lg:top-[30%] -left-[13px]" />
