@@ -1,5 +1,4 @@
 import Image from "next/image";
-import PadLockIcon from "../_assets/icons/PadLockIcon";
 import QuestionIcon from "../_assets/icons/QuestionIcon";
 import { ChallengeAttempt, User } from "../_types/User";
 import JoinBGButton from "./JoinBGButton";
