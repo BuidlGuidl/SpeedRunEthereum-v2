@@ -1,3 +1,4 @@
+import { SubmitChallengeButton } from "./_components/SubmitChallengeButton";
 import { MDXRemote } from "next-mdx-remote/rsc";
 import { findChallengeById, getAllChallenges } from "~~/services/database/repositories/challenges";
 import { fetchGithubReadme } from "~~/services/github";
@@ -28,7 +29,7 @@ export default async function ChallengePage({ params }: { params: { challengeId:
   const challengeReadme = await fetchGithubReadme(challenge.github);
 
   return (
-    <div className="flex flex-col gap-4 p-4">
+    <div className="flex flex-col gap-4 p-4 relative">
       {challengeReadme ? (
         <div className="prose dark:prose-invert max-w-none">
           <MDXRemote source={challengeReadme} />
@@ -36,6 +37,7 @@ export default async function ChallengePage({ params }: { params: { challengeId:
       ) : (
         <div>Failed to load challenge content</div>
       )}
+      <SubmitChallengeButton challengeId={challenge.id} />
     </div>
   );
 }

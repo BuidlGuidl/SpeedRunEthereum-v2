@@ -1,13 +1,16 @@
 import { InferInsertModel } from "drizzle-orm";
 import { eq } from "drizzle-orm";
 import { db } from "~~/services/database/config/postgresClient";
-import { users } from "~~/services/database/config/schema";
+import { lower, users } from "~~/services/database/config/schema";
 
 export type UserInsert = InferInsertModel<typeof users>;
 export type UserByAddress = Awaited<ReturnType<typeof findUserByAddress>>[0];
 
 export async function findUserByAddress(address: string) {
-  return await db.select().from(users).where(eq(users.userAddress, address));
+  return await db
+    .select()
+    .from(users)
+    .where(eq(lower(users.userAddress), address.toLowerCase()));
 }
 
 export async function isUserRegistered(address: string) {
