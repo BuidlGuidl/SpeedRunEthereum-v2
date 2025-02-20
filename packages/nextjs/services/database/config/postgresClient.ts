@@ -8,7 +8,7 @@ let db: ReturnType<typeof drizzle<typeof schema>> | ReturnType<typeof drizzleVer
 
 const VERCEL_DB_STRING = "verceldb";
 if (process.env.POSTGRES_URL?.includes(VERCEL_DB_STRING)) {
-  db = drizzleVercel(sql, { schema });
+  db = drizzleVercel(sql, { schema, casing: "snake_case" });
 } else {
   const pool = new Pool({
     connectionString: process.env.POSTGRES_URL,
