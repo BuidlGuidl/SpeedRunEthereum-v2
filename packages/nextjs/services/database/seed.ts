@@ -93,9 +93,9 @@ async function seed() {
           role: "user", // Set everyone as user by default
           createdAt: createValidDate(userData.creationTimestamp),
           email: userData.socialLinks?.email,
-          telegram: userData.socialLinks?.telegram,
-          twitter: userData.socialLinks?.twitter,
-          github: userData.socialLinks?.github,
+          socialTelegram: userData.socialLinks?.telegram,
+          socialTwitter: userData.socialLinks?.twitter,
+          socialGithub: userData.socialLinks?.github,
         })
         .execute();
     }

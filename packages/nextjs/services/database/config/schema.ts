@@ -28,9 +28,9 @@ export const users = pgTable(
     role: userRoleEnum().default("user"), // Using the enum and setting default
     createdAt: timestamp().defaultNow(),
     email: varchar({ length: 255 }),
-    telegram: varchar({ length: 255 }),
-    twitter: varchar({ length: 255 }),
-    github: varchar({ length: 255 }),
+    socialTelegram: varchar({ length: 255 }),
+    socialTwitter: varchar({ length: 255 }),
+    socialGithub: varchar({ length: 255 }),
   },
   table => [uniqueIndex("idUniqueIndex").on(lower(table.userAddress))],
 );
