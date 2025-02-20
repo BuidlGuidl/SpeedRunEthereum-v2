@@ -6,7 +6,7 @@ import { socials } from "~~/utils/socials";
 
 type UpdateSocialsModalProps = {
   closeModal: () => void;
-  initialSocials?: {
+  existingSocials?: {
     socialTelegram?: string;
     socialTwitter?: string;
     socialGithub?: string;
@@ -17,14 +17,14 @@ type UpdateSocialsModalProps = {
 };
 
 export const UpdateSocialsModal = forwardRef<HTMLDialogElement, UpdateSocialsModalProps>(
-  ({ closeModal, initialSocials }, ref) => {
+  ({ closeModal, existingSocials }, ref) => {
     const [socialsData, setSocialsData] = useState({
-      socialTelegram: initialSocials?.socialTelegram || "",
-      socialTwitter: initialSocials?.socialTwitter || "",
-      socialGithub: initialSocials?.socialGithub || "",
-      socialInstagram: initialSocials?.socialInstagram || "",
-      socialDiscord: initialSocials?.socialDiscord || "",
-      socialEmail: initialSocials?.socialEmail || "",
+      socialTelegram: existingSocials?.socialTelegram || "",
+      socialTwitter: existingSocials?.socialTwitter || "",
+      socialGithub: existingSocials?.socialGithub || "",
+      socialInstagram: existingSocials?.socialInstagram || "",
+      socialDiscord: existingSocials?.socialDiscord || "",
+      socialEmail: existingSocials?.socialEmail || "",
     });
 
     const { updateSocials, isPending } = useUpdateSocials({

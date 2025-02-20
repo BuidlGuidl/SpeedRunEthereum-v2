@@ -1,3 +1,5 @@
+import { UserByAddress } from "~~/services/database/repositories/users";
+
 export type Social = {
   label: string;
   placeholder: string;
@@ -54,4 +56,26 @@ export const socials: { [key: string]: Social } = {
     getLink: (value: string) => `https://instagram.com/${value}`,
     weight: 5,
   },
+};
+
+// Get the user socials from the database
+export const getUserSocials = (user: UserByAddress): UserSocials => {
+  return Object.fromEntries(
+    Object.entries(socials)
+      .map(([key]) => [key, user[key as keyof UserSocials]])
+      .filter(([, value]) => value != null),
+  ) as UserSocials;
+};
+
+// Transforms a user's social media data into a sorted, display-ready list
+export const getUserSocialsList = (user: UserByAddress) => {
+  const definedSocials = getUserSocials(user);
+  return Object.entries(socials)
+    .filter(([key]) => key in definedSocials)
+    .map(([key, social]) => ({
+      ...social,
+      value: definedSocials[key as keyof UserSocials],
+      key,
+    }))
+    .sort((a, b) => a.weight - b.weight);
 };

@@ -4,7 +4,7 @@ import { useRef } from "react";
 import { UpdateSocialsModal } from "./UpdateSocialsModal";
 import { useAccount } from "wagmi";
 import { UserByAddress } from "~~/services/database/repositories/users";
-import { socials } from "~~/utils/socials";
+import { getUserSocials, socials } from "~~/utils/socials";
 
 export const UserSocials = ({ user }: { user: UserByAddress }) => {
   const { address } = useAccount();
@@ -61,14 +61,7 @@ export const UserSocials = ({ user }: { user: UserByAddress }) => {
       <UpdateSocialsModal
         ref={modalRef}
         closeModal={() => modalRef.current?.close()}
-        initialSocials={{
-          socialTelegram: user.socialTelegram || "",
-          socialTwitter: user.socialTwitter || "",
-          socialGithub: user.socialGithub || "",
-          socialInstagram: user.socialInstagram || "",
-          socialDiscord: user.socialDiscord || "",
-          socialEmail: user.socialEmail || "",
-        }}
+        existingSocials={getUserSocials(user)}
       />
     </div>
   );
