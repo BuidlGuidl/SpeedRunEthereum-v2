@@ -6,46 +6,46 @@ export const eventTypeEnum = pgEnum("event_type_enum", ["challenge.submit", "cha
 export const userRoleEnum = pgEnum("user_role_enum", ["user", "admin"]);
 
 export const users = pgTable("users", {
-  userAddress: varchar("user_address", { length: 42 }).primaryKey(), // Ethereum wallet address
-  role: userRoleEnum("role").default("user"), // Using the enum and setting default
-  createdAt: timestamp("created_at").defaultNow(),
-  email: varchar("email", { length: 255 }),
-  telegram: varchar("telegram", { length: 255 }),
-  twitter: varchar("twitter", { length: 255 }),
-  github: varchar("github", { length: 255 }),
+  userAddress: varchar({ length: 42 }).primaryKey(), // Ethereum wallet address
+  role: userRoleEnum().default("user"), // Using the enum and setting default
+  createdAt: timestamp().defaultNow(),
+  email: varchar({ length: 255 }),
+  telegram: varchar({ length: 255 }),
+  twitter: varchar({ length: 255 }),
+  github: varchar({ length: 255 }),
 });
 
 export const challenges = pgTable("challenges", {
-  id: varchar("id", { length: 255 }).primaryKey(), // Unique identifier for the challenge
-  challengeName: varchar("challenge_name", { length: 255 }).notNull(),
-  github: varchar("github", { length: 255 }), // Repository reference for the challenge
-  autograding: boolean("autograding").default(false), // Whether the challenge supports automatic grading
+  id: varchar({ length: 255 }).primaryKey(), // Unique identifier for the challenge
+  challengeName: varchar({ length: 255 }).notNull(),
+  github: varchar({ length: 255 }), // Repository reference for the challenge
+  autograding: boolean().default(false), // Whether the challenge supports automatic grading
 });
 
 export const userChallenges = pgTable("user_challenges", {
-  userChallengeId: serial("user_challenge_id").primaryKey(),
-  userAddress: varchar("user_address", { length: 42 })
+  userChallengeId: serial().primaryKey(),
+  userAddress: varchar({ length: 42 })
     .notNull()
     .references(() => users.userAddress),
-  challengeId: varchar("challenge_id", { length: 255 })
+  challengeId: varchar({ length: 255 })
     .notNull()
     .references(() => challenges.id),
-  frontendUrl: varchar("frontend_url", { length: 255 }),
-  contractUrl: varchar("contract_url", { length: 255 }),
-  reviewComment: text("review_comment"), // Feedback provided during autograding
-  submittedAt: timestamp("submitted_at").defaultNow(),
-  reviewAction: reviewActionEnum("review_action"), // Final review decision from autograder (REJECTED or ACCEPTED). Initially set to SUBMITTED.
+  frontendUrl: varchar({ length: 255 }),
+  contractUrl: varchar({ length: 255 }),
+  reviewComment: text(), // Feedback provided during autograding
+  submittedAt: timestamp().defaultNow(),
+  reviewAction: reviewActionEnum(), // Final review decision from autograder (REJECTED or ACCEPTED). Initially set to SUBMITTED.
 });
 
 export const events = pgTable("events", {
-  eventId: serial("event_id").primaryKey(),
-  eventType: eventTypeEnum("event_type").notNull(), // Type of event (challenge.submission, challenge.autograding, user.create)
-  eventAt: timestamp("event_at").defaultNow(),
-  signature: varchar("signature", { length: 255 }), // Cryptographic signature of the event
-  userAddress: varchar("user_address", { length: 42 })
+  eventId: serial().primaryKey(),
+  eventType: eventTypeEnum().notNull(), // Type of event (challenge.submission, challenge.autograding, user.create)
+  eventAt: timestamp().defaultNow(),
+  signature: varchar({ length: 255 }), // Cryptographic signature of the event
+  userAddress: varchar({ length: 42 })
     .notNull()
     .references(() => users.userAddress),
-  payload: jsonb("payload")
+  payload: jsonb()
     .notNull()
     .$defaultFn(() => ({})), // Flexible event payload stored as JSONB
 });
