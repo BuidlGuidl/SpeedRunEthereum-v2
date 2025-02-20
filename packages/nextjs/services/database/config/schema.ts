@@ -18,14 +18,14 @@ export function lower(address: AnyPgColumn): SQL {
 }
 
 export const reviewActionEnum = pgEnum("review_action_enum", ["REJECTED", "ACCEPTED", "SUBMITTED"]);
-export const eventTypeEnum = pgEnum("event_type_enum", ["challenge.submit", "challenge.autograde", "user.create"]);
-export const userRoleEnum = pgEnum("user_role_enum", ["user", "admin"]);
+export const eventTypeEnum = pgEnum("event_type_enum", ["CHALLENGE_SUBMIT", "CHALLENGE_AUTOGRADE", "USER_CREATE"]);
+export const userRoleEnum = pgEnum("user_role_enum", ["USER", "ADMIN"]);
 
 export const users = pgTable(
   "users",
   {
     userAddress: varchar({ length: 42 }).primaryKey(), // Ethereum wallet address
-    role: userRoleEnum().default("user"), // Using the enum and setting default
+    role: userRoleEnum().default("USER"), // Using the enum and setting default
     createdAt: timestamp().defaultNow(),
     email: varchar({ length: 255 }),
     socialTelegram: varchar({ length: 255 }),
@@ -62,7 +62,7 @@ export const userChallenges = pgTable(
 
 export const events = pgTable("events", {
   eventId: serial().primaryKey(),
-  eventType: eventTypeEnum().notNull(), // Type of event (challenge.submission, challenge.autograding, user.create)
+  eventType: eventTypeEnum().notNull(), // Type of event (CHALLENGE_SUBMIT, CHALLENGE_AUTOGRADE, USER_CREATE)
   eventAt: timestamp().defaultNow(),
   signature: varchar({ length: 255 }), // Cryptographic signature of the event
   userAddress: varchar({ length: 42 })
