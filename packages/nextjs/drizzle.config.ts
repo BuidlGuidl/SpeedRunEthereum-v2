@@ -10,4 +10,5 @@ export default defineConfig({
   dbCredentials: {
     url: process.env.POSTGRES_URL as string,
   },
+  casing: "snake_case",
 });

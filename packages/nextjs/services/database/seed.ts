@@ -69,7 +69,10 @@ async function seed() {
     connectionString: process.env.POSTGRES_URL,
   });
   await client.connect();
-  const db = drizzle(client, { schema });
+  const db = drizzle(client, {
+    schema,
+    casing: "snake_case",
+  });
 
   try {
     // Clear existing data
