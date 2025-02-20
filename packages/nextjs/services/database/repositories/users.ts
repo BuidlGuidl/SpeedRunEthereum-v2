@@ -2,6 +2,7 @@ import { InferInsertModel } from "drizzle-orm";
 import { eq } from "drizzle-orm";
 import { db } from "~~/services/database/config/postgresClient";
 import { lower, users } from "~~/services/database/config/schema";
+import { UserSocials } from "~~/utils/socials";
 
 export type UserInsert = InferInsertModel<typeof users>;
 export type UserByAddress = Awaited<ReturnType<typeof findUserByAddress>>[0];
@@ -19,4 +20,12 @@ export async function isUserRegistered(address: string) {
 
 export async function createUser(user: UserInsert) {
   return await db.insert(users).values(user).returning();
+}
+
+export async function updateUserSocials(userAddress: string, socials: UserSocials) {
+  return await db
+    .update(users)
+    .set(socials)
+    .where(eq(lower(users.userAddress), userAddress.toLowerCase()))
+    .returning();
 }

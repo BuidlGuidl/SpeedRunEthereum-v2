@@ -1,3 +1,4 @@
+import { UpdateSocialsPayload } from "~~/app/api/users/update-socials/route";
 import { UserByAddress } from "~~/services/database/repositories/users";
 
 export async function fetchUser(address: string | undefined) {
@@ -30,4 +31,21 @@ export async function registerUser({ address, signature }: { address: string; si
   }
 
   return data.user as UserByAddress;
+}
+
+export async function updateSocials(payload: UpdateSocialsPayload) {
+  const response = await fetch("/api/users/update-socials", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(payload),
+  });
+
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error.error || "Failed to update socials");
+  }
+
+  return response.json();
 }
