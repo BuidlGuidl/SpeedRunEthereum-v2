@@ -17,13 +17,13 @@ export async function upsertUserChallenge(challenge: UserChallengeInsert) {
     .insert(userChallenges)
     .values(challenge)
     .onConflictDoUpdate({
-      target: [userChallenges.userAddress, userChallenges.challengeCode],
+      target: [userChallenges.userAddress, userChallenges.challengeId],
       set: {
         frontendUrl: challenge.frontendUrl,
         contractUrl: challenge.contractUrl,
         reviewAction: challenge.reviewAction,
         reviewComment: challenge.reviewComment,
-        submittedTimestamp: challenge.submittedTimestamp,
+        submittedAt: challenge.submittedAt,
       },
     });
 }

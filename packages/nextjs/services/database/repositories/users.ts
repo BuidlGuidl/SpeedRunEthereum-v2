@@ -10,11 +10,11 @@ export async function findUserByAddress(address: string) {
   return await db
     .select()
     .from(users)
-    .where(eq(lower(users.id), address.toLowerCase()));
+    .where(eq(lower(users.userAddress), address.toLowerCase()));
 }
 
 export async function isUserRegistered(address: string) {
-  return Boolean(await db.$count(users, eq(users.id, address)));
+  return Boolean(await db.$count(users, eq(users.userAddress, address)));
 }
 
 export async function createUser(user: UserInsert) {

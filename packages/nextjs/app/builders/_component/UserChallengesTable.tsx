@@ -21,8 +21,8 @@ export const UserChallengesTable = ({ challenges }: { challenges: UserChallenges
           </thead>
           <tbody>
             {challenges.map(challenge => (
-              <tr key={challenge.challengeCode} className="hover">
-                <td>🏃‍♂️ Challenge {challenge.challengeCode}</td>
+              <tr key={challenge.challengeId} className="hover">
+                <td>🏃‍♂️ Challenge {challenge.challengeId}</td>
                 <td>
                   {challenge.contractUrl ? (
                     <a href={challenge.contractUrl} target="_blank" rel="noopener noreferrer" className="link">
@@ -41,7 +41,7 @@ export const UserChallengesTable = ({ challenges }: { challenges: UserChallenges
                     "-"
                   )}
                 </td>
-                <td>{challenge.submittedTimestamp ? challenge.submittedTimestamp.toLocaleString() : "-"}</td>
+                <td>{challenge.submittedAt ? challenge.submittedAt.toLocaleString() : "-"}</td>
                 <td>
                   <span
                     className={`badge ${

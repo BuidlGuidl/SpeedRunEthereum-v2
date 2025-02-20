@@ -54,7 +54,7 @@ export async function POST(req: NextRequest, { params }: { params: { challengeId
 
     // TODO: Create challenge submission only when autograder is turned on for that challenge
     /* await createEvent({
-      eventType: "challenge.submit",
+      eventType: "CHALLENGE_SUBMIT",
       userAddress: lowerCasedUserAddress,
       challengeCode: challengeId,
     }); */
@@ -67,7 +67,7 @@ export async function POST(req: NextRequest, { params }: { params: { challengeId
 
     await upsertUserChallenge({
       userAddress: userAddress,
-      challengeCode: challengeId,
+      challengeId,
       frontendUrl,
       contractUrl,
       reviewAction: gradingResult.success ? "ACCEPTED" : "REJECTED",
@@ -75,9 +75,15 @@ export async function POST(req: NextRequest, { params }: { params: { challengeId
     });
 
     await createEvent({
-      eventType: "challenge.autograde",
+      eventType: "CHALLENGE_AUTOGRADE",
       userAddress: userAddress,
-      challengeCode: challengeId,
+      signature: signature,
+      payload: {
+        autograding: true,
+        challengeId: challengeId,
+        reviewAction: gradingResult.success ? "ACCEPTED" : "REJECTED",
+        reviewMessage: gradingResult.feedback,
+      },
     });
 
     return NextResponse.json({
