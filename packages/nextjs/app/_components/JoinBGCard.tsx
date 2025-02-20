@@ -61,21 +61,11 @@ export const JoinBGCard = ({
             portfolio by submitting your DEX, Multisig or SVG NFT build.
           </p>
           <div className="flex items-center self-end">
-            {builderHasCompletedDependenciesChallenges ? (
-              <JoinBGButton
-                text="Join the 🏰️ BuidlGuidl"
-                isChallengeLocked={!builderHasCompletedDependenciesChallenges}
-                connectedBuilder={connectedBuilder}
-              />
-            ) : (
-              <button
-                className="flex justify-center items-center text-xl lg:text-lg px-2 py-1 border-2 border-primary rounded-full disabled:opacity-70"
-                disabled={true}
-              >
-                <PadLockIcon className="w-6 h-6" />
-                <span className="ml-2 uppercase font-medium">Locked</span>
-              </button>
-            )}
+            <JoinBGButton
+              text="Join the 🏰️ BuidlGuidl"
+              isLocked={!builderHasCompletedDependenciesChallenges}
+              connectedBuilder={connectedBuilder}
+            />
 
             {!builderHasCompletedDependenciesChallenges && (
               <div className="tooltip relative cursor-pointer ml-2" data-tip={lockReasonToolTip}>

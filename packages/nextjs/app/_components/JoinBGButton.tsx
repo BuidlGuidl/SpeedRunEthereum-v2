@@ -1,17 +1,20 @@
+"use client";
+
 import React from "react";
 import Link from "next/link";
+import PadLockIcon from "../_assets/icons/PadLockIcon";
 import { User } from "../_types/User";
 import { useAccount, useWalletClient } from "wagmi";
 import { notification } from "~~/utils/scaffold-eth";
 
 type JoinBGProps = {
   text: string;
-  isChallengeLocked: boolean;
+  isLocked: boolean;
   connectedBuilder: User;
 };
 
 // TODO: Basic implementation. Update when user schema is ready.
-const JoinBGButton: React.FC<JoinBGProps> = ({ text, isChallengeLocked, connectedBuilder }) => {
+const JoinBGButton: React.FC<JoinBGProps> = ({ text, isLocked, connectedBuilder }) => {
   const { address: connectedAddress } = useAccount();
   const { data: walletClient } = useWalletClient();
   // const [isJoining, setIsJoining] = useState(false);
@@ -24,17 +27,18 @@ const JoinBGButton: React.FC<JoinBGProps> = ({ text, isChallengeLocked, connecte
     // setIsJoining(true);
 
     if (!connectedBuilder.socialLinks || Object.keys(connectedBuilder?.socialLinks ?? {}).length === 0) {
-      notification.error("Can't join the BuidlGuidl", {
-        // description: (
-        //   <>
-        //     In order to join the BuildGuidl you need to set your socials in{" "}
-        //     <Link href="/portfolio" className="underline">
-        //       your portfolio
-        //     </Link>
-        //     . It&apos;s our way to contact you.
-        //   </>
-        // ),
-      });
+      notification.error(
+        <div className="flex flex-col gap-2">
+          <span className="font-medium">Can&apos;t join the BuidlGuidl.</span>
+          <span>
+            In order to join the BuildGuidl you need to set your socials in{" "}
+            <Link href="/portfolio" className="underline">
+              your portfolio
+            </Link>
+            . It&apos;s our way to contact you.
+          </span>
+        </div>,
+      );
       // setIsJoining(false);
 
       return;
@@ -49,8 +53,12 @@ const JoinBGButton: React.FC<JoinBGProps> = ({ text, isChallengeLocked, connecte
       const data = await signMessageResponse.json();
       signMessage = data;
     } catch (error) {
-      notification.error("Can't get the message to sign. Please try again");
-      // setIsJoining(false);
+      notification.error(
+        <div className="flex flex-col gap-2">
+          <span className="font-medium">Error Getting Signature</span>
+          <span>Can&apos;t get the message to sign. Please try again</span>
+        </div>,
+      );
       return;
     }
 
@@ -58,9 +66,13 @@ const JoinBGButton: React.FC<JoinBGProps> = ({ text, isChallengeLocked, connecte
     try {
       signature = await walletClient?.signMessage({ message: signMessage });
     } catch (error) {
-      notification.error("The signature was cancelled");
+      notification.error(
+        <div className="flex flex-col gap-2">
+          <span className="font-medium">Signature Cancelled</span>
+          <span>The signature was cancelled</span>
+        </div>,
+      );
       console.error(error);
-      // setIsJoining(false);
       return;
     }
 
@@ -79,23 +91,28 @@ const JoinBGButton: React.FC<JoinBGProps> = ({ text, isChallengeLocked, connecte
         throw new Error(errorData);
       }
     } catch (error) {
-      notification.error("Submission Error. Please try again.");
+      notification.error(
+        <div className="flex flex-col gap-2">
+          <span className="font-medium">Submission Failed</span>
+          <span>Submission Error. Please try again.</span>
+        </div>,
+      );
       console.error(error);
-      // setIsJoining(false);
       return;
     }
 
-    notification.success("Welcome to the BuildGuidl :)", {
-      // description: (
-      //   <>
-      //     Visit{" "}
-      //     <Link href="https://buidlguidl.com" className="underline" target="_blank">
-      //       BuidlGuidl
-      //     </Link>{" "}
-      //     and start crafting your Web3 portfolio by submitting your DEX, Multisig or SVG NFT build.
-      //   </>
-      // ),
-    });
+    notification.success(
+      <div className="flex flex-col gap-2">
+        <span className="font-medium">Welcome to BuidlGuidl!</span>
+        <span>
+          Visit{" "}
+          <Link href="https://buidlguidl.com" className="underline" target="_blank">
+            BuidlGuidl
+          </Link>{" "}
+          and start crafting your Web3 portfolio by submitting your DEX, Multisig or SVG NFT build.
+        </span>
+      </div>,
+    );
     // setIsJoining(false);
     // setJoined(true);
   };
@@ -129,15 +146,11 @@ const JoinBGButton: React.FC<JoinBGProps> = ({ text, isChallengeLocked, connecte
 
   return (
     <button
-      disabled={isChallengeLocked}
-      className={`flex items-center px-6 py-5 text-lg font-medium border-2 rounded-lg
-        transition-colors duration-200 ${
-          isChallengeLocked
-            ? "border-gray-300 bg-gray-100 text-gray-600 cursor-not-allowed"
-            : "border-primary hover:border-primary-dark bg-white text-primary hover:text-primary-dark"
-        }`}
+      disabled={isLocked}
+      className="flex justify-center items-center text-xl lg:text-lg px-2 py-1 border-2 border-primary rounded-full disabled:opacity-70"
       onClick={onJoin}
     >
+      {isLocked && <PadLockIcon className="w-6 h-6 mr-2" />}
       <span>{text}</span>
     </button>
   );
