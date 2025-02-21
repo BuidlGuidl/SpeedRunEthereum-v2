@@ -1,6 +1,6 @@
 "use client";
 
-import PunkBlockie from "../PunkBlockie";
+import { PunkBlockie } from "../PunkBlockie";
 import { AvatarComponent } from "@rainbow-me/rainbowkit";
 
 export const BlockieAvatar: AvatarComponent = ({ address, ensImage, size }) => {

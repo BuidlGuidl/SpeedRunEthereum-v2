@@ -1,5 +1,5 @@
 import { UserChallengesTable } from "../_component/UserChallengesTable";
-import PunkBlockie from "~~/components/PunkBlockie";
+import { PunkBlockie } from "~~/components/PunkBlockie";
 import { findUserChallengesByAddress } from "~~/services/database/repositories/userChallenges";
 
 export default async function BuilderPage({ params }: { params: { address: string } }) {

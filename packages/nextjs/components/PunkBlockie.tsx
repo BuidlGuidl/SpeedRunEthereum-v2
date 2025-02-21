@@ -14,7 +14,7 @@ interface PunkBlockieProps {
   className?: string;
 }
 
-export default function PunkBlockie({ address, scale, width, className }: PunkBlockieProps) {
+export const PunkBlockie = ({ address, scale, width, className }: PunkBlockieProps) => {
   const part1 = address?.slice(2, 22);
   const part2 = address?.slice(-20);
 
@@ -45,4 +45,4 @@ export default function PunkBlockie({ address, scale, width, className }: PunkBl
       />
     </div>
   );
-}
+};
