@@ -31,7 +31,11 @@ export const RainbowKitCustomConnectButton = () => {
 
         if (!connected) {
           return (
-            <button className="btn btn-primary btn-sm" onClick={openConnectModal} type="button">
+            <button
+              className="flex items-center py-1.5 lg:py-2 px-3 lg:px-4 border-2 border-primary rounded-full bg-base-300 hover:bg-base-200 transition-colors cursor-pointer"
+              onClick={openConnectModal}
+              type="button"
+            >
               Connect Wallet
             </button>
           );
@@ -47,7 +51,11 @@ export const RainbowKitCustomConnectButton = () => {
 
         if (!user) {
           return (
-            <button className="btn btn-primary btn-sm" onClick={handleRegister} disabled={isRegistering}>
+            <button
+              className="flex items-center py-1.5 lg:py-2 px-3 lg:px-4 border-2 border-primary rounded-full bg-base-300 hover:bg-base-200 transition-colors cursor-pointer"
+              onClick={handleRegister}
+              disabled={isRegistering}
+            >
               {isRegistering ? <span className="loading loading-spinner loading-sm"></span> : "Register"}
             </button>
           );
