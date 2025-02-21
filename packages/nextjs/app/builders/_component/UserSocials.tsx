@@ -4,7 +4,7 @@ import { useRef } from "react";
 import { UpdateSocialsModal } from "./UpdateSocialsModal";
 import { useAccount } from "wagmi";
 import { UserByAddress } from "~~/services/database/repositories/users";
-import { getUserSocials, getUserSocialsList, socials } from "~~/utils/socials";
+import { getUserSocials, getUserSocialsList } from "~~/utils/socials";
 
 export const UserSocials = ({ user }: { user: UserByAddress }) => {
   const { address } = useAccount();
@@ -12,10 +12,6 @@ export const UserSocials = ({ user }: { user: UserByAddress }) => {
   const isProfileOwner = address?.toLowerCase() === user.userAddress.toLowerCase();
 
   const userSocials = getUserSocialsList(user);
-
-  const openModal = () => {
-    modalRef.current?.showModal();
-  };
 
   return (
     <div className="flex flex-col gap-8 py-8 px-4 lg:px-8 max-w-md">
@@ -48,7 +44,7 @@ export const UserSocials = ({ user }: { user: UserByAddress }) => {
       )}
 
       {isProfileOwner && (
-        <button onClick={openModal} className="btn btn-sm btn-primary">
+        <button onClick={() => modalRef.current?.showModal()} className="btn btn-sm btn-primary">
           Update Socials
         </button>
       )}
