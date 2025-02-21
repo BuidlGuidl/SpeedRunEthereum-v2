@@ -5,7 +5,6 @@ export type Social = {
   placeholder: string;
   getLink: (value: string) => string | null;
   weight: number;
-  validator?: string;
 };
 
 export const socials: Record<keyof UserSocials, Social> = {
@@ -26,7 +25,6 @@ export const socials: Record<keyof UserSocials, Social> = {
     placeholder: "Your Discord username#id",
     getLink: (value: string) => `https://discord.com/users/${value}`,
     weight: 2,
-    validator: "discord",
   },
   socialGithub: {
     label: "GitHub",
@@ -39,7 +37,6 @@ export const socials: Record<keyof UserSocials, Social> = {
     placeholder: "Your e-mail address",
     getLink: (value: string) => `mailto:${value}`,
     weight: 4,
-    validator: "email",
   },
   socialInstagram: {
     label: "Instagram",
