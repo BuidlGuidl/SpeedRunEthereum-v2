@@ -2,7 +2,8 @@ import { forwardRef, useState } from "react";
 import { QuestionMarkCircleIcon } from "@heroicons/react/24/outline";
 import { InputBase } from "~~/components/scaffold-eth";
 import { useUpdateSocials } from "~~/hooks/useUpdateSocials";
-import { UserSocials, socials } from "~~/utils/socials";
+import { UserSocials } from "~~/services/database/repositories/users";
+import { socials } from "~~/utils/socials";
 
 type UpdateSocialsModalProps = {
   closeModal: () => void;

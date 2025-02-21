@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { updateUserSocials } from "~~/services/database/repositories/users";
+import { UserSocials } from "~~/services/database/repositories/users";
 import { isValidEIP712UpdateSocialsSignature } from "~~/services/eip712/socials";
-import { UserSocials } from "~~/utils/socials";
 
 export type UpdateSocialsPayload = {
   userAddress: string;

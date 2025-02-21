@@ -1,4 +1,4 @@
-import { UserByAddress } from "~~/services/database/repositories/users";
+import { UserByAddress, UserSocials } from "~~/services/database/repositories/users";
 
 export type Social = {
   label: string;
@@ -6,15 +6,6 @@ export type Social = {
   getLink: (value: string) => string | null;
   weight: number;
   validator?: string;
-};
-
-export type UserSocials = {
-  socialTelegram?: string;
-  socialTwitter?: string;
-  socialGithub?: string;
-  socialInstagram?: string;
-  socialDiscord?: string;
-  socialEmail?: string;
 };
 
 export const socials: Record<keyof UserSocials, Social> = {

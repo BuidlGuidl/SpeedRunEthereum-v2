@@ -1,5 +1,5 @@
 import { EIP_712_DOMAIN, isValidEip712Signature } from "./common";
-import { UserSocials } from "~~/utils/socials";
+import { UserSocials } from "~~/services/database/repositories/users";
 
 export const EIP_712_TYPED_DATA__UPDATE_SOCIALS = {
   domain: EIP_712_DOMAIN,
