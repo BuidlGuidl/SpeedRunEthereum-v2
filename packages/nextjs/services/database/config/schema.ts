@@ -2,6 +2,7 @@ import { SQL, relations, sql } from "drizzle-orm";
 import {
   AnyPgColumn,
   boolean,
+  integer,
   jsonb,
   pgEnum,
   pgTable,
@@ -38,8 +39,11 @@ export const users = pgTable(
 export const challenges = pgTable("challenges", {
   id: varchar({ length: 255 }).primaryKey(), // Unique identifier for the challenge
   challengeName: varchar({ length: 255 }).notNull(),
+  description: text().notNull(),
+  sortOrder: integer().notNull(),
   github: varchar({ length: 255 }), // Repository reference for the challenge
   autograding: boolean().default(false), // Whether the challenge supports automatic grading
+  disabled: boolean().default(false),
 });
 
 export const userChallenges = pgTable(

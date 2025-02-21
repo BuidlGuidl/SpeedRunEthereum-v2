@@ -1,7 +1,7 @@
 import { ChallengeExpandedCard } from "./_components/ChallengeExpandedCard";
 import { Hero } from "./_components/Hero";
 import { JoinBGCard } from "./_components/JoinBGCard";
-import { connectedBuilder } from "./_data/_hardcodedUser";
+import { connectedBuilder } from "./_data/_hardcoded";
 import { NextPage } from "next";
 import { getAllChallenges } from "~~/services/database/repositories/challenges";
 
@@ -17,8 +17,8 @@ const Home: NextPage = async () => {
       <Hero firstChallengeId={challenges[0].id} />
       <div className="bg-base-200">
         <ChallengeExpandedCard
-          key="simple-nft"
-          challengeId="simple-nft"
+          key="simple-nft-example"
+          challengeId="simple-nft-example"
           builderAttemptedChallenges={builderAttemptedChallenges}
         />
         <ChallengeExpandedCard
@@ -50,13 +50,13 @@ const Home: NextPage = async () => {
           builderAttemptedChallenges={builderAttemptedChallenges}
         />
         <ChallengeExpandedCard
-          key="learn-multisig"
-          challengeId="learn-multisig"
+          key="multisig"
+          challengeId="multisig"
           builderAttemptedChallenges={builderAttemptedChallenges}
         />
         <ChallengeExpandedCard
-          key="nft-cohort"
-          challengeId="nft-cohort"
+          key="svg-nft"
+          challengeId="svg-nft"
           builderAttemptedChallenges={builderAttemptedChallenges}
         />
       </div>

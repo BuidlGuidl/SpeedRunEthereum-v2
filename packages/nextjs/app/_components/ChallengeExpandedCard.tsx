@@ -3,6 +3,7 @@ import Image from "next/image";
 import CrossedSwordsIcon from "../_assets/icons/CrossedSwordsIcon";
 import PadLockIcon from "../_assets/icons/PadLockIcon";
 import QuestionIcon from "../_assets/icons/QuestionIcon";
+import { ChallengeData, challengesData } from "../_data/_hardcoded";
 import { ChallengeAttempt } from "../_types/User";
 import { getChallengeDependenciesInfo } from "./utils";
 import { CHALLENGE_SUBMISSION_STATUS } from "~~/constants";
@@ -17,11 +18,16 @@ const ChallengeExpandedCard: React.FC<ChallengeExpandedCardProps> = async ({
   challengeId,
   builderAttemptedChallenges,
 }) => {
-  const challenge = await getChallengeById(challengeId);
+  const fetchedChallenge = await getChallengeById(challengeId);
 
-  if (!challenge) {
+  if (!fetchedChallenge) {
     return null;
   }
+
+  const additionalChallengeData = challengesData.find(c => c.id === challengeId);
+  // Define a merged type for better type safety
+  type FullChallenge = typeof fetchedChallenge & ChallengeData;
+  const challenge = { ...fetchedChallenge, ...additionalChallengeData } as FullChallenge;
 
   const { sortOrder } = challenge;
   const { completed: builderHasCompletedDependenciesChallenges, lockReasonToolTip } = getChallengeDependenciesInfo({
