@@ -1,5 +1,4 @@
 import { forwardRef, useState } from "react";
-import { QuestionMarkCircleIcon } from "@heroicons/react/24/outline";
 import { InputBase } from "~~/components/scaffold-eth";
 import { useUpdateSocials } from "~~/hooks/useUpdateSocials";
 import { UserSocials } from "~~/services/database/repositories/users";
@@ -42,9 +41,6 @@ export const UpdateSocialsModal = forwardRef<HTMLDialogElement, UpdateSocialsMod
               <div key={key} className="flex flex-col gap-1.5 w-full">
                 <div className="flex items-base ml-2">
                   <span className="text-sm font-medium mr-2 leading-none">{social.label}</span>
-                  <div className="tooltip" data-tip={social.placeholder}>
-                    <QuestionMarkCircleIcon className="h-4 w-4" />
-                  </div>
                 </div>
                 <InputBase
                   placeholder={social.placeholder}
