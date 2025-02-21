@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { EventType, ReviewAction } from "~~/services/database/config/types";
 import { createEvent } from "~~/services/database/repositories/events";
 import { upsertUserChallenge } from "~~/services/database/repositories/userChallenges";
 import { findUserByAddress } from "~~/services/database/repositories/users";
@@ -70,12 +71,12 @@ export async function POST(req: NextRequest, { params }: { params: { challengeId
       challengeId,
       frontendUrl,
       contractUrl,
-      reviewAction: gradingResult.success ? "ACCEPTED" : "REJECTED",
+      reviewAction: gradingResult.success ? ReviewAction.ACCEPTED : ReviewAction.REJECTED,
       reviewComment: gradingResult.feedback,
     });
 
     await createEvent({
-      eventType: "CHALLENGE_AUTOGRADE",
+      eventType: EventType.CHALLENGE_AUTOGRADE,
       userAddress: userAddress,
       signature: signature,
       payload: {

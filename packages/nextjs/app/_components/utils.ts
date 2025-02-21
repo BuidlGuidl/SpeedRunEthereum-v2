@@ -1,5 +1,5 @@
 import { Challenge, ChallengeAttempt } from "../_types/User";
-import { CHALLENGE_SUBMISSION_STATUS } from "~~/constants";
+import { ReviewAction } from "~~/services/database/config/types";
 
 export const getDepsChallengesCompleted = (
   challenge: Pick<Challenge, "dependencies">,
@@ -9,7 +9,7 @@ export const getDepsChallengesCompleted = (
     if (!builderAttemptedChallenges[name]) {
       return false;
     }
-    if (!(builderAttemptedChallenges[name].status === CHALLENGE_SUBMISSION_STATUS.ACCEPTED)) {
+    if (!(builderAttemptedChallenges[name].status === ReviewAction.ACCEPTED)) {
       return false;
     }
     // TODO: is this needed?
@@ -31,8 +31,7 @@ const getLockReasonTooltip = ({
 }) => {
   const pendingDependenciesChallenges = dependencies?.filter(dependency => {
     return (
-      !builderAttemptedChallenges[dependency] ||
-      builderAttemptedChallenges[dependency].status !== CHALLENGE_SUBMISSION_STATUS.ACCEPTED
+      !builderAttemptedChallenges[dependency] || builderAttemptedChallenges[dependency].status !== ReviewAction.ACCEPTED
     );
   });
 

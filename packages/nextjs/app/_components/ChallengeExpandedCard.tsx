@@ -1,4 +1,3 @@
-import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import CrossedSwordsIcon from "../_assets/icons/CrossedSwordsIcon";
@@ -7,7 +6,7 @@ import QuestionIcon from "../_assets/icons/QuestionIcon";
 import { ChallengeData, challengesData } from "../_data/_hardcoded";
 import { ChallengeAttempt } from "../_types/User";
 import { getChallengeDependenciesInfo } from "./utils";
-import { CHALLENGE_SUBMISSION_STATUS } from "~~/constants";
+import { ReviewAction } from "~~/services/database/config/types";
 import { getChallengeById } from "~~/services/database/repositories/challenges";
 
 type ChallengeExpandedCardProps = {
@@ -48,9 +47,9 @@ const ChallengeExpandedCard: React.FC<ChallengeExpandedCardProps> = async ({
             {challengeStatus && (
               <span
                 className={`rounded-xl py-0.5 px-2.5 text-sm capitalize ${
-                  challengeStatus === CHALLENGE_SUBMISSION_STATUS.ACCEPTED
+                  challengeStatus === ReviewAction.ACCEPTED
                     ? "bg-base-300 text-base-content"
-                    : challengeStatus === CHALLENGE_SUBMISSION_STATUS.REJECTED
+                    : challengeStatus === ReviewAction.REJECTED
                       ? "bg-red-400 text-white"
                       : "bg-gray-100 text-gray-800"
                 }`}
