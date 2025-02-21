@@ -53,7 +53,7 @@ export const JoinBGCard = ({
           />
         </div>
         <div className="flex flex-col lg:flex-row justify-between">
-          <p className="mb-4 text-center lg:text-left lg:max-w-[35%]">
+          <p className="mb-4 text-[#026262] text-center lg:text-left lg:max-w-[35%]">
             The BuidlGuidl is a curated group of Ethereum builders creating products, prototypes, and tutorials to
             enrich the web3 ecosystem. A place to show off your builds and meet other builders. Start crafting your Web3
             portfolio by submitting your DEX, Multisig or SVG NFT build.
