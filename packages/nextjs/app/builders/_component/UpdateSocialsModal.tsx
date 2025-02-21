@@ -2,18 +2,11 @@ import { forwardRef, useState } from "react";
 import { QuestionMarkCircleIcon } from "@heroicons/react/24/outline";
 import { InputBase } from "~~/components/scaffold-eth";
 import { useUpdateSocials } from "~~/hooks/useUpdateSocials";
-import { socials } from "~~/utils/socials";
+import { UserSocials, socials } from "~~/utils/socials";
 
 type UpdateSocialsModalProps = {
   closeModal: () => void;
-  existingSocials?: {
-    socialTelegram?: string;
-    socialTwitter?: string;
-    socialGithub?: string;
-    socialInstagram?: string;
-    socialDiscord?: string;
-    socialEmail?: string;
-  };
+  existingSocials?: UserSocials;
 };
 
 export const UpdateSocialsModal = forwardRef<HTMLDialogElement, UpdateSocialsModalProps>(
