@@ -17,7 +17,7 @@ export type UserSocials = {
   socialEmail?: string;
 };
 
-export const socials: { [key: string]: Social } = {
+export const socials: Record<keyof UserSocials, Social> = {
   socialTelegram: {
     label: "Telegram",
     placeholder: "Your Telegram handle without the @",
@@ -72,7 +72,7 @@ export const getUserSocialsList = (user: UserByAddress) => {
   const definedSocials = getUserSocials(user);
   return Object.entries(definedSocials)
     .map(([key, value]) => ({
-      ...socials[key],
+      ...socials[key as keyof UserSocials],
       value,
       key,
     }))
