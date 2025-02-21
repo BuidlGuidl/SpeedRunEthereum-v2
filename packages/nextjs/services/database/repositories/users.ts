@@ -23,9 +23,12 @@ export async function createUser(user: UserInsert) {
 }
 
 export async function updateUserSocials(userAddress: string, socials: UserSocials) {
+  // Non-values on socials should be saved as NULL
+  const socialsToUpdate = Object.fromEntries(Object.entries(socials).map(([key, value]) => [key, value || null]));
+
   return await db
     .update(users)
-    .set(socials)
+    .set(socialsToUpdate)
     .where(eq(lower(users.userAddress), userAddress.toLowerCase()))
     .returning();
 }
