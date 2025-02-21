@@ -1,5 +1,6 @@
 import React from "react";
 import Image from "next/image";
+import Link from "next/link";
 import CrossedSwordsIcon from "../_assets/icons/CrossedSwordsIcon";
 import PadLockIcon from "../_assets/icons/PadLockIcon";
 import QuestionIcon from "../_assets/icons/QuestionIcon";
@@ -91,24 +92,27 @@ const ChallengeExpandedCard: React.FC<ChallengeExpandedCardProps> = async ({
               </div>
             ) : (
               <div className="flex items-center">
-                <button
-                  className={`flex items-center text-xl lg:text-lg px-4 py-1 border-2 border-primary rounded-full bg-base-300 ${
-                    isChallengeLocked ? "opacity-50" : ""
-                  }`}
-                  disabled={isChallengeLocked}
-                >
-                  {!isChallengeLocked ? (
-                    <div className="flex items-center">
-                      <CrossedSwordsIcon className="w-6 h-6" />
-                      <span className="ml-2 uppercase font-medium">Quest</span>
-                    </div>
-                  ) : (
+                {isChallengeLocked ? (
+                  <button
+                    disabled
+                    className="flex items-center text-xl lg:text-lg px-4 py-1 border-2 border-primary rounded-full bg-base-300 opacity-50 cursor-not-allowed"
+                  >
                     <div className="flex items-center">
                       <PadLockIcon className="w-6 h-6" />
                       <span className="ml-2 uppercase font-medium">Locked</span>
                     </div>
-                  )}
-                </button>
+                  </button>
+                ) : (
+                  <Link
+                    href={`/challenge/${challengeId}`}
+                    className="flex items-center text-xl lg:text-lg px-4 py-1 border-2 border-primary rounded-full bg-base-300 cursor-pointer"
+                  >
+                    <div className="flex items-center">
+                      <CrossedSwordsIcon className="w-6 h-6" />
+                      <span className="ml-2 uppercase font-medium">Quest</span>
+                    </div>
+                  </Link>
+                )}
                 {!builderHasCompletedDependenciesChallenges && (
                   <div className="tooltip relative cursor-pointer ml-2" data-tip={lockReasonToolTip}>
                     <QuestionIcon className="h-8 w-8" />
