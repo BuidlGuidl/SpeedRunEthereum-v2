@@ -11,9 +11,10 @@ interface PunkBlockieProps {
   address: string;
   scale?: number;
   width?: number;
+  className?: string;
 }
 
-export default function PunkBlockie({ address, scale, width }: PunkBlockieProps) {
+export default function PunkBlockie({ address, scale, width, className }: PunkBlockieProps) {
   const part1 = address?.slice(2, 22);
   const part2 = address?.slice(-20);
 
@@ -24,7 +25,7 @@ export default function PunkBlockie({ address, scale, width }: PunkBlockieProps)
 
   return (
     <div
-      className="relative block overflow-hidden m-0"
+      className={`relative block overflow-hidden m-0 ${className}`}
       style={{
         width: PUNK_SIZE * computedScale,
         height: PUNK_SIZE * computedScale,
