@@ -1,7 +1,8 @@
 import Image from "next/image";
-import { ChallengeAttempt, User } from "../_types/User";
 import JoinBGButton from "./JoinBGButton";
 import { getChallengeDependenciesInfo } from "./utils";
+import { UserChallenges } from "~~/services/database/repositories/userChallenges";
+import { UserByAddress } from "~~/services/database/repositories/users";
 
 // TODO: use later
 // "buidl-guidl": {,
@@ -20,16 +21,10 @@ const JOIN_BG_DEPENDENCIES = [
   "minimum-viable-exchange",
 ];
 
-export const JoinBGCard = ({
-  builderAttemptedChallenges,
-  connectedBuilder,
-}: {
-  builderAttemptedChallenges: Record<string, ChallengeAttempt>;
-  connectedBuilder: User;
-}) => {
+export const JoinBGCard = ({ userChallenges, user }: { userChallenges: UserChallenges; user: UserByAddress }) => {
   const { completed: builderHasCompletedDependenciesChallenges, lockReasonToolTip } = getChallengeDependenciesInfo({
     dependencies: JOIN_BG_DEPENDENCIES,
-    builderAttemptedChallenges,
+    userChallenges,
   });
 
   return (
@@ -61,7 +56,7 @@ export const JoinBGCard = ({
           <div className="flex items-center self-end">
             <JoinBGButton
               isLocked={!builderHasCompletedDependenciesChallenges}
-              connectedBuilder={connectedBuilder}
+              user={user}
               lockReasonToolTip={lockReasonToolTip}
             />
           </div>

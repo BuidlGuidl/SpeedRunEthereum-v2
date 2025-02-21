@@ -1,15 +1,17 @@
-import { Challenge, ChallengeAttempt } from "../_types/User";
 import { ReviewAction } from "~~/services/database/config/types";
+import { UserChallenges } from "~~/services/database/repositories/userChallenges";
 
-export const getDepsChallengesCompleted = (
-  challenge: Pick<Challenge, "dependencies">,
-  builderAttemptedChallenges: Record<string, ChallengeAttempt>,
-) =>
-  challenge.dependencies?.every(name => {
-    if (!builderAttemptedChallenges[name]) {
+// TODO: update deps later
+export const getDepsChallengesCompleted = (deps: { dependencies: string[] }, userChallenges: UserChallenges) =>
+  deps.dependencies?.every(name => {
+    if (!userChallenges.find(userChallenge => userChallenge.challengeId === name)?.reviewAction) {
       return false;
     }
-    if (!(builderAttemptedChallenges[name].status === ReviewAction.ACCEPTED)) {
+    if (
+      !(
+        userChallenges.find(userChallenge => userChallenge.challengeId === name)?.reviewAction === ReviewAction.ACCEPTED
+      )
+    ) {
       return false;
     }
     // TODO: is this needed?
@@ -24,14 +26,16 @@ export const getDepsChallengesCompleted = (
 
 const getLockReasonTooltip = ({
   dependencies,
-  builderAttemptedChallenges,
+  userChallenges,
 }: {
   dependencies?: string[];
-  builderAttemptedChallenges: Record<string, ChallengeAttempt>;
+  userChallenges: UserChallenges;
 }) => {
   const pendingDependenciesChallenges = dependencies?.filter(dependency => {
     return (
-      !builderAttemptedChallenges[dependency] || builderAttemptedChallenges[dependency].status !== ReviewAction.ACCEPTED
+      !userChallenges.find(userChallenge => userChallenge.challengeId === dependency)?.reviewAction ||
+      userChallenges.find(userChallenge => userChallenge.challengeId === dependency)?.reviewAction !==
+        ReviewAction.ACCEPTED
     );
   });
 
@@ -43,14 +47,14 @@ const getLockReasonTooltip = ({
 
 export const getChallengeDependenciesInfo = ({
   dependencies,
-  builderAttemptedChallenges,
+  userChallenges,
 }: {
   dependencies: string[];
-  builderAttemptedChallenges: Record<string, ChallengeAttempt>;
+  userChallenges: UserChallenges;
 }) => {
   const lockReasonToolTip = getLockReasonTooltip({
     dependencies,
-    builderAttemptedChallenges,
+    userChallenges,
   });
 
   return { completed: !lockReasonToolTip, lockReasonToolTip };

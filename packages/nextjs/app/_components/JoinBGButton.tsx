@@ -4,46 +4,47 @@ import React from "react";
 import Link from "next/link";
 import PadLockIcon from "../_assets/icons/PadLockIcon";
 import QuestionIcon from "../_assets/icons/QuestionIcon";
-import { User } from "../_types/User";
 import { useAccount, useWalletClient } from "wagmi";
+import { UserByAddress } from "~~/services/database/repositories/users";
 import { notification } from "~~/utils/scaffold-eth";
 
 type JoinBGProps = {
   isLocked: boolean;
-  connectedBuilder: User;
+  user: UserByAddress;
   lockReasonToolTip: string;
 };
 
 // TODO: Basic implementation. Update when user schema is ready.
-const JoinBGButton: React.FC<JoinBGProps> = ({ isLocked, connectedBuilder, lockReasonToolTip }) => {
+const JoinBGButton: React.FC<JoinBGProps> = ({ isLocked, user, lockReasonToolTip }) => {
   const { address: connectedAddress } = useAccount();
   const { data: walletClient } = useWalletClient();
   // const [isJoining, setIsJoining] = useState(false);
   // // Optimistic update.
   // const [joined, setJoined] = useState(false);
 
-  const address = connectedBuilder?.id;
+  const address = user?.userAddress;
 
   const onJoin = async () => {
     // setIsJoining(true);
 
-    if (!connectedBuilder.socialLinks || Object.keys(connectedBuilder?.socialLinks ?? {}).length === 0) {
-      notification.error(
-        <div className="flex flex-col gap-2">
-          <span className="font-medium">Can&apos;t join the BuidlGuidl.</span>
-          <span>
-            In order to join the BuildGuidl you need to set your socials in{" "}
-            <Link href="/portfolio" className="underline">
-              your portfolio
-            </Link>
-            . It&apos;s our way to contact you.
-          </span>
-        </div>,
-      );
-      // setIsJoining(false);
+    // TODO: update when social links are merged
+    // if (!user.socialLinks || Object.keys(user?.socialLinks ?? {}).length === 0) {
+    //   notification.error(
+    //     <div className="flex flex-col gap-2">
+    //       <span className="font-medium">Can&apos;t join the BuidlGuidl.</span>
+    //       <span>
+    //         In order to join the BuildGuidl you need to set your socials in{" "}
+    //         <Link href="/portfolio" className="underline">
+    //           your portfolio
+    //         </Link>
+    //         . It&apos;s our way to contact you.
+    //       </span>
+    //     </div>,
+    //   );
+    //   // setIsJoining(false);
 
-      return;
-    }
+    //   return;
+    // }
 
     let signMessage;
     try {
@@ -118,7 +119,7 @@ const JoinBGButton: React.FC<JoinBGProps> = ({ isLocked, connectedBuilder, lockR
     // setJoined(true);
   };
 
-  // const builderAlreadyJoined = !!connectedBuilder?.joinedBg;
+  // const builderAlreadyJoined = !!user?.joinedBg;
 
   if (!walletClient || !connectedAddress) {
     // TODO: Add connect wallet functionality
@@ -129,7 +130,7 @@ const JoinBGButton: React.FC<JoinBGProps> = ({ isLocked, connectedBuilder, lockR
     );
   }
 
-  if (!connectedBuilder) {
+  if (!user) {
     return (
       <Link
         href="/apply"

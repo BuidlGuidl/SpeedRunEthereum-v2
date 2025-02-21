@@ -1,8 +1,9 @@
-// export async function getChallengeById(id: string) {
-//   return fakeChallenges.find(challenge => challenge.id === id);
-import { eq } from "drizzle-orm";
+import { InferInsertModel, eq } from "drizzle-orm";
 import { db } from "~~/services/database/config/postgresClient";
 import { challenges } from "~~/services/database/config/schema";
+
+export type ChallengeInsert = InferInsertModel<typeof challenges>;
+export type Challenges = Awaited<ReturnType<typeof getAllChallenges>>;
 
 export async function getChallengeById(id: string) {
   const result = await db.select().from(challenges).where(eq(challenges.id, id));

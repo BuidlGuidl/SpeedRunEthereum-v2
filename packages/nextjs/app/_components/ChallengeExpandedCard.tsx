@@ -4,22 +4,20 @@ import CrossedSwordsIcon from "../_assets/icons/CrossedSwordsIcon";
 import PadLockIcon from "../_assets/icons/PadLockIcon";
 import QuestionIcon from "../_assets/icons/QuestionIcon";
 import { ChallengeData, challengesData } from "../_data/_hardcoded";
-import { ChallengeAttempt } from "../_types/User";
 import { getChallengeDependenciesInfo } from "./utils";
 import { ReviewAction } from "~~/services/database/config/types";
 import { getChallengeById } from "~~/services/database/repositories/challenges";
+import { UserChallenges } from "~~/services/database/repositories/userChallenges";
 
 type ChallengeExpandedCardProps = {
   challengeId: string;
-  builderAttemptedChallenges: Record<string, ChallengeAttempt>;
+  userChallenges: UserChallenges;
 };
 
-const ChallengeExpandedCard: React.FC<ChallengeExpandedCardProps> = async ({
-  challengeId,
-  builderAttemptedChallenges,
-}) => {
+const ChallengeExpandedCard: React.FC<ChallengeExpandedCardProps> = async ({ challengeId, userChallenges }) => {
   const fetchedChallenge = await getChallengeById(challengeId);
 
+  const userChallenge = userChallenges.find(userChallenge => userChallenge.challengeId === challengeId);
   if (!fetchedChallenge) {
     return null;
   }
@@ -32,10 +30,10 @@ const ChallengeExpandedCard: React.FC<ChallengeExpandedCardProps> = async ({
   const { sortOrder } = challenge;
   const { completed: builderHasCompletedDependenciesChallenges, lockReasonToolTip } = getChallengeDependenciesInfo({
     dependencies: challenge.dependencies || [],
-    builderAttemptedChallenges,
+    userChallenges,
   });
 
-  const challengeStatus = builderAttemptedChallenges[challengeId]?.status;
+  const reviewAction = userChallenge?.reviewAction;
   const isChallengeLocked = challenge.disabled || !builderHasCompletedDependenciesChallenges;
 
   return (
@@ -44,17 +42,17 @@ const ChallengeExpandedCard: React.FC<ChallengeExpandedCardProps> = async ({
         <div className="hidden group-first:block absolute -left-3 z-10 top-0 w-[18px] h-[58%] lg:h-[50%] bg-base-200" />
         <div className="flex flex-col max-w-full lg:max-w-[40%] gap-18 lg:gap-20">
           <div className="flex flex-col items-start gap-0">
-            {challengeStatus && (
+            {reviewAction && (
               <span
                 className={`rounded-xl py-0.5 px-2.5 text-sm capitalize ${
-                  challengeStatus === ReviewAction.ACCEPTED
+                  reviewAction === ReviewAction.ACCEPTED
                     ? "bg-base-300 text-base-content"
-                    : challengeStatus === ReviewAction.REJECTED
+                    : reviewAction === ReviewAction.REJECTED
                       ? "bg-red-400 text-white"
                       : "bg-gray-100 text-gray-800"
                 }`}
               >
-                {challengeStatus.toLowerCase()}
+                {reviewAction.toLowerCase()}
               </span>
             )}
 

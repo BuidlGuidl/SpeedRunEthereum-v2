@@ -34,6 +34,13 @@ export const seedUsers: (typeof users.$inferInsert)[] = [
     socialTwitter: "Time_Is_Oba",
     socialGithub: "Oba-One",
   },
+  {
+    userAddress: "0x45334F41aAA464528CD5bc0F582acadC49Eb0Cd1",
+    role: UserRole.USER,
+    createdAt: new Date(1679063274534),
+    socialTwitter: "rinat_eth",
+    socialTelegram: "rinat_eth",
+  },
 ];
 
 export const seedChallenges: (typeof challenges.$inferInsert)[] = [
@@ -227,6 +234,62 @@ export const seedUserChallenges: (typeof userChallenges.$inferInsert)[] = [
     contractUrl: "https://goerli.etherscan.io/address/0xd68edd04EbB81c6f187A526F3656C18dD0258cd8",
     reviewComment: "Dummy review, it's working great",
     submittedAt: new Date(1668830120864),
+    reviewAction: ReviewAction.ACCEPTED,
+  },
+  {
+    userAddress: "0x45334F41aAA464528CD5bc0F582acadC49Eb0Cd1",
+    challengeId: "token-vendor",
+    frontendUrl: "https://sepolia-optimism.etherscan.io/address/0xad5e878a62D5B77277aCDC321614a9727815B4C8#code",
+    contractUrl: "https://sepolia-optimism.etherscan.io/address/0xad5e878a62D5B77277aCDC321614a9727815B4C8#code",
+    submittedAt: new Date(1736441361988),
+    reviewComment:
+      "<p>You have successfully passed challenge 2!</p><p>You have passed the first three challenges on SpeedRunEthereum and can now join the BuidlGuidl!</p>",
+    reviewAction: ReviewAction.REJECTED,
+  },
+  {
+    userAddress: "0x45334F41aAA464528CD5bc0F582acadC49Eb0Cd1",
+    challengeId: "simple-nft-example",
+    frontendUrl: "https://sepolia-optimism.etherscan.io/address/0x82b4935ebe7a5d802cf465a3495da1aff96f1153#code",
+    contractUrl: "https://sepolia-optimism.etherscan.io/address/0x82b4935ebe7a5d802cf465a3495da1aff96f1153#code",
+    submittedAt: new Date(1736437841322),
+    reviewComment: "<p>You passed all tests on Challenge 0, keep it up!</p>",
+    reviewAction: ReviewAction.ACCEPTED,
+  },
+  {
+    userAddress: "0x45334F41aAA464528CD5bc0F582acadC49Eb0Cd1",
+    challengeId: "decentralized-staking",
+    frontendUrl: "https://sepolia-optimism.etherscan.io/address/0x75CCfC494667c91F4926213A04619f93812885b2#code",
+    contractUrl: "https://sepolia-optimism.etherscan.io/address/0x75CCfC494667c91F4926213A04619f93812885b2#code",
+    submittedAt: new Date(1736440199150),
+    reviewComment: "<p>You passed all tests on Challenge 1, keep it up!</p>",
+    reviewAction: ReviewAction.SUBMITTED,
+  },
+  {
+    userAddress: "0x45334F41aAA464528CD5bc0F582acadC49Eb0Cd1",
+    challengeId: "dice-game",
+    frontendUrl: "https://sepolia-optimism.etherscan.io/address/0xB30b4D0AD811De445656FA49d3CbfD26f24Fa20f#code",
+    contractUrl: "https://sepolia-optimism.etherscan.io/address/0xB30b4D0AD811De445656FA49d3CbfD26f24Fa20f#code",
+    submittedAt: new Date(1736455465938),
+    reviewComment:
+      "<p>This looks good! Demo site and contract code are solid and the dice only roll when it's a winner!</p>",
+    reviewAction: ReviewAction.ACCEPTED,
+  },
+  {
+    userAddress: "0x45334F41aAA464528CD5bc0F582acadC49Eb0Cd1",
+    challengeId: "minimum-viable-exchange",
+    frontendUrl: "https://sepolia-optimism.etherscan.io/address/0xFD893C93f44fdCd16D4673072D2a071578e6C7Ee#code",
+    contractUrl: "https://sepolia-optimism.etherscan.io/address/0xFD893C93f44fdCd16D4673072D2a071578e6C7Ee#code",
+    submittedAt: new Date(1736523426599),
+    reviewComment: "<p>You have successfully passed the Dex Challenge! Great work!</p>",
+    reviewAction: ReviewAction.ACCEPTED,
+  },
+  {
+    userAddress: "0x45334F41aAA464528CD5bc0F582acadC49Eb0Cd1",
+    challengeId: "state-channels",
+    frontendUrl: "https://sepolia-optimism.etherscan.io/address/0x1BC437381EC1A36Eb30A0F3AfEFF1Fd5E0078256#code",
+    contractUrl: "https://sepolia-optimism.etherscan.io/address/0x1BC437381EC1A36Eb30A0F3AfEFF1Fd5E0078256#code",
+    submittedAt: new Date(1736524737219),
+    reviewComment: "<p>You have successfully passed the State Channel Challenge! Great work!</p>",
     reviewAction: ReviewAction.ACCEPTED,
   },
 ];
