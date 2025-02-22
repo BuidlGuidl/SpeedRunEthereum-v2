@@ -27,10 +27,12 @@ export const users = pgTable(
     userAddress: varchar({ length: 42 }).primaryKey(), // Ethereum wallet address
     role: userRoleEnum().default("USER"), // Using the enum and setting default
     createdAt: timestamp().defaultNow(),
-    email: varchar({ length: 255 }),
     socialTelegram: varchar({ length: 255 }),
     socialTwitter: varchar({ length: 255 }),
     socialGithub: varchar({ length: 255 }),
+    socialInstagram: varchar({ length: 255 }),
+    socialDiscord: varchar({ length: 255 }),
+    socialEmail: varchar({ length: 255 }),
   },
   table => [uniqueIndex("idUniqueIndex").on(lower(table.userAddress))],
 );
