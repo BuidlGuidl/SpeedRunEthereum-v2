@@ -1,5 +1,6 @@
 import { UserChallengesTable } from "../_component/UserChallengesTable";
 import { UserSocials } from "../_component/UserSocials";
+import { PunkBlockie } from "~~/components/PunkBlockie";
 import { findUserChallengesByAddress } from "~~/services/database/repositories/userChallenges";
 import { findUserByAddress } from "~~/services/database/repositories/users";
 
@@ -15,6 +16,7 @@ export default async function BuilderPage({ params }: { params: { address: strin
 
   return (
     <div className="flex flex-col gap-8">
+      <PunkBlockie address={userAddress} scale={2} />
       <UserSocials user={user} />
       <UserChallengesTable challenges={challenges} />
     </div>
