@@ -2,20 +2,10 @@ import { ReviewAction } from "~~/services/database/config/types";
 import { UserChallenges } from "~~/services/database/repositories/userChallenges";
 
 // TODO: update deps later
-export const getDepsChallengesCompleted = (deps: { dependencies: string[] }, userChallenges: UserChallenges) =>
+export const getIsDependencyChallengesCompleted = (deps: { dependencies: string[] }, userChallenges: UserChallenges) =>
   deps.dependencies?.every(name => {
-    if (!userChallenges.find(userChallenge => userChallenge.challengeId === name)?.reviewAction) {
-      return false;
-    }
-    if (
-      !(
-        userChallenges.find(userChallenge => userChallenge.challengeId === name)?.reviewAction === ReviewAction.ACCEPTED
-      )
-    ) {
-      return false;
-    }
-
-    return true;
+    const userChallenge = userChallenges.find(uc => uc.challengeId === name);
+    return userChallenge?.reviewAction === ReviewAction.ACCEPTED;
   });
 
 const getLockReasonTooltip = ({
