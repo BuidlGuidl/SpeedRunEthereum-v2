@@ -38,7 +38,7 @@ const ChallengeExpandedCard: React.FC<ChallengeExpandedCardProps> = async ({ cha
 
   return (
     <div className="challenge-expanded-card flex justify-center group relative  ">
-      <div className="flex justify-between max-w-7xl py-8 mx-14 pl-10 lg:pr-12 border-primary border-l-[5px] relative flex-col-reverse lg:flex-row border-b-2 group-[:not(:has(+.challenge-expanded-card))]:border-b-0">
+      <div className="flex justify-between max-w-7xl py-8 mx-14 pl-10 border-primary border-l-[5px] relative flex-col-reverse lg:flex-row border-b-2 group-[:not(:has(+.challenge-expanded-card))]:border-b-0">
         <div className="hidden group-first:block absolute -left-3 z-10 top-0 w-[18px] h-[58%] lg:h-[50%] bg-base-200" />
         <div className="flex flex-col max-w-full lg:max-w-[40%] gap-18 lg:gap-20">
           <div className="flex flex-col items-start gap-0">
@@ -57,12 +57,12 @@ const ChallengeExpandedCard: React.FC<ChallengeExpandedCardProps> = async ({ cha
             )}
 
             <span className="text-xl lg:text-lg">Challenge #{sortOrder}</span>
-            <h2 className="text-3xl lg:text-2xl font-bold mt-0">
+            <h2 className="text-3xl lg:text-2xl font-medium mt-0">
               {challenge.label.split(": ")[1] ? challenge.label.split(": ")[1] : challenge.label}
             </h2>
           </div>
           <div className="flex flex-col gap-8">
-            <span className="text-lg lg:text-md">{challenge.description}</span>
+            <span className="text-lg lg:text-base leading-[1.5]">{challenge.description}</span>
             {challenge.externalLink?.link ? (
               // Redirect to externalLink if set (instead of challenge detail view)
               <div className="flex items-center">
@@ -125,7 +125,7 @@ const ChallengeExpandedCard: React.FC<ChallengeExpandedCardProps> = async ({ cha
               src={challenge.previewImage}
               alt={challenge.label}
               // workaround to avoid console warnings
-              className="w-full max-w-[490px] h-auto"
+              className="w-full max-w-[490px] h-auto lg:mr-12"
               width={0}
               height={0}
             />
