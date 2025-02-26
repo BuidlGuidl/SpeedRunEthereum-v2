@@ -14,12 +14,6 @@ export const getDepsChallengesCompleted = (deps: { dependencies: string[] }, use
     ) {
       return false;
     }
-    // TODO: is this needed?
-    // if (challenge.lockedTimestamp) {
-    //   return (
-    //     new Date().getTime() - builderAttemptedChallenges[name].submittedTimestamp > challenge.lockedTimestamp * 60 * 1000
-    //   );
-    // }
 
     return true;
   });
