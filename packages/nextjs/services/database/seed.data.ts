@@ -78,6 +78,7 @@ export const seedChallenges: (typeof challenges.$inferInsert)[] = [
     sortOrder: 2,
     previewImage: `${BASE_IMAGE_URL}/assets/challenges/tokenVendor.svg`,
     dependencies: [],
+    icon: `${BASE_IMAGE_URL}/assets/key_icon.svg`,
   },
   {
     id: ChallengeId.DICE_GAME,

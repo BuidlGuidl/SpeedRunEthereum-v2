@@ -69,6 +69,7 @@ export const challenges = pgTable("challenges", {
   autograding: boolean().default(false), // Whether the challenge supports automatic grading
   disabled: boolean().default(false),
   previewImage: varchar({ length: 255 }),
+  icon: varchar({ length: 255 }),
   dependencies: challengeIdEnum().array(),
 });
 
