@@ -1,14 +1,12 @@
 "use client";
 
 // @refresh reset
-import { Balance } from "../Balance";
 import { AddressInfoDropdown } from "./AddressInfoDropdown";
 import { AddressQRCodeModal } from "./AddressQRCodeModal";
 import { WrongNetworkDropdown } from "./WrongNetworkDropdown";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { Address } from "viem";
 import { useAccount } from "wagmi";
-import { useNetworkColor } from "~~/hooks/scaffold-eth";
 import { useTargetNetwork } from "~~/hooks/scaffold-eth/useTargetNetwork";
 import { useUser } from "~~/hooks/useUser";
 import { useUserRegister } from "~~/hooks/useUserRegister";
@@ -18,7 +16,6 @@ import { getBlockExplorerAddressLink } from "~~/utils/scaffold-eth";
  * Custom Wagmi Connect Button (watch balance + custom design)
  */
 export const RainbowKitCustomConnectButton = () => {
-  const networkColor = useNetworkColor();
   const { targetNetwork } = useTargetNetwork();
   const { address: connectedAddress } = useAccount();
   const { handleRegister, isRegistering } = useUserRegister();
@@ -34,7 +31,11 @@ export const RainbowKitCustomConnectButton = () => {
 
         if (!connected) {
           return (
-            <button className="btn btn-primary btn-sm" onClick={openConnectModal} type="button">
+            <button
+              className="flex items-center py-1.5 lg:py-2 px-3 lg:px-4 border-2 border-primary rounded-full bg-base-300 hover:bg-base-200 transition-colors cursor-pointer"
+              onClick={openConnectModal}
+              type="button"
+            >
               Connect Wallet
             </button>
           );
@@ -50,7 +51,11 @@ export const RainbowKitCustomConnectButton = () => {
 
         if (!user) {
           return (
-            <button className="btn btn-primary btn-sm" onClick={handleRegister} disabled={isRegistering}>
+            <button
+              className="flex items-center py-1.5 lg:py-2 px-3 lg:px-4 border-2 border-primary rounded-full bg-base-300 hover:bg-base-200 transition-colors cursor-pointer"
+              onClick={handleRegister}
+              disabled={isRegistering}
+            >
               {isRegistering ? <span className="loading loading-spinner loading-sm"></span> : "Register"}
             </button>
           );
@@ -58,12 +63,6 @@ export const RainbowKitCustomConnectButton = () => {
 
         return (
           <>
-            <div className="flex flex-col items-center mr-1">
-              <Balance address={account.address as Address} className="min-h-0 h-auto" />
-              <span className="text-xs" style={{ color: networkColor }}>
-                {chain.name}
-              </span>
-            </div>
             <AddressInfoDropdown
               address={account.address as Address}
               displayName={account.displayName}

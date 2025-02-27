@@ -1,7 +1,9 @@
+import { EventType, ReviewAction, UserRole } from "./types";
 import { SQL, relations, sql } from "drizzle-orm";
 import {
   AnyPgColumn,
   boolean,
+  integer,
   jsonb,
   pgEnum,
   pgTable,
@@ -17,15 +19,23 @@ export function lower(address: AnyPgColumn): SQL {
   return sql`lower(${address})`;
 }
 
-export const reviewActionEnum = pgEnum("review_action_enum", ["REJECTED", "ACCEPTED", "SUBMITTED"]);
-export const eventTypeEnum = pgEnum("event_type_enum", ["CHALLENGE_SUBMIT", "CHALLENGE_AUTOGRADE", "USER_CREATE"]);
-export const userRoleEnum = pgEnum("user_role_enum", ["USER", "ADMIN"]);
+export const reviewActionEnum = pgEnum("review_action_enum", [
+  ReviewAction.REJECTED,
+  ReviewAction.ACCEPTED,
+  ReviewAction.SUBMITTED,
+]);
+export const eventTypeEnum = pgEnum("event_type_enum", [
+  EventType.CHALLENGE_SUBMIT,
+  EventType.CHALLENGE_AUTOGRADE,
+  EventType.USER_CREATE,
+]);
+export const userRoleEnum = pgEnum("user_role_enum", [UserRole.USER, UserRole.ADMIN]);
 
 export const users = pgTable(
   "users",
   {
     userAddress: varchar({ length: 42 }).primaryKey(), // Ethereum wallet address
-    role: userRoleEnum().default("USER"), // Using the enum and setting default
+    role: userRoleEnum().default(UserRole.USER), // Using the enum and setting default
     createdAt: timestamp().defaultNow(),
     socialTelegram: varchar({ length: 255 }),
     socialTwitter: varchar({ length: 255 }),
@@ -40,8 +50,11 @@ export const users = pgTable(
 export const challenges = pgTable("challenges", {
   id: varchar({ length: 255 }).primaryKey(), // Unique identifier for the challenge
   challengeName: varchar({ length: 255 }).notNull(),
+  description: text().notNull(),
+  sortOrder: integer().notNull(),
   github: varchar({ length: 255 }), // Repository reference for the challenge
   autograding: boolean().default(false), // Whether the challenge supports automatic grading
+  disabled: boolean().default(false),
 });
 
 export const userChallenges = pgTable(
