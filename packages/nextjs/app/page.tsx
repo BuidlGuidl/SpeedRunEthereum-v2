@@ -2,13 +2,12 @@ import { ChallengeExpandedCard } from "./_components/ChallengeExpandedCard";
 import { Hero } from "./_components/Hero";
 import { JoinBGCard } from "./_components/JoinBGCard";
 import { NextPage } from "next";
-import { getAllChallenges } from "~~/services/database/repositories/challenges";
+import { ChallengeId } from "~~/services/database/config/types";
 import { findUserChallengesByAddress } from "~~/services/database/repositories/userChallenges";
 import { findUserByAddress } from "~~/services/database/repositories/users";
 
 const Home: NextPage = async () => {
   const user = (await findUserByAddress("0x45334F41aAA464528CD5bc0F582acadC49Eb0Cd1"))[0];
-  const challenges = await getAllChallenges();
 
   const userChallenges = (await findUserChallengesByAddress(user.userAddress)).filter(
     userChallenge => userChallenge.reviewAction,
@@ -16,31 +15,51 @@ const Home: NextPage = async () => {
 
   return (
     <div>
-      <Hero firstChallengeId={challenges[0].id} />
+      <Hero firstChallengeId={ChallengeId.SIMPLE_NFT_EXAMPLE} />
       <div className="bg-base-200">
         <ChallengeExpandedCard
-          key="simple-nft-example"
-          challengeId="simple-nft-example"
+          key={ChallengeId.SIMPLE_NFT_EXAMPLE}
+          challengeId={ChallengeId.SIMPLE_NFT_EXAMPLE}
           userChallenges={userChallenges}
         />
         <ChallengeExpandedCard
-          key="decentralized-staking"
-          challengeId="decentralized-staking"
+          key={ChallengeId.DECENTRALIZED_STAKING}
+          challengeId={ChallengeId.DECENTRALIZED_STAKING}
           userChallenges={userChallenges}
         />
-        <ChallengeExpandedCard key="token-vendor" challengeId="token-vendor" userChallenges={userChallenges} />
-        <ChallengeExpandedCard key="dice-game" challengeId="dice-game" userChallenges={userChallenges} />
         <ChallengeExpandedCard
-          key="minimum-viable-exchange"
-          challengeId="minimum-viable-exchange"
+          key={ChallengeId.TOKEN_VENDOR}
+          challengeId={ChallengeId.TOKEN_VENDOR}
+          userChallenges={userChallenges}
+        />
+        <ChallengeExpandedCard
+          key={ChallengeId.DICE_GAME}
+          challengeId={ChallengeId.DICE_GAME}
+          userChallenges={userChallenges}
+        />
+        <ChallengeExpandedCard
+          key={ChallengeId.MINIMUM_VIABLE_EXCHANGE}
+          challengeId={ChallengeId.MINIMUM_VIABLE_EXCHANGE}
           userChallenges={userChallenges}
         />
 
         <JoinBGCard userChallenges={userChallenges} user={user} />
 
-        <ChallengeExpandedCard key="state-channels" challengeId="state-channels" userChallenges={userChallenges} />
-        <ChallengeExpandedCard key="multisig" challengeId="multisig" userChallenges={userChallenges} />
-        <ChallengeExpandedCard key="svg-nft" challengeId="svg-nft" userChallenges={userChallenges} />
+        <ChallengeExpandedCard
+          key={ChallengeId.STATE_CHANNELS}
+          challengeId={ChallengeId.STATE_CHANNELS}
+          userChallenges={userChallenges}
+        />
+        <ChallengeExpandedCard
+          key={ChallengeId.MULTISIG}
+          challengeId={ChallengeId.MULTISIG}
+          userChallenges={userChallenges}
+        />
+        <ChallengeExpandedCard
+          key={ChallengeId.SVG_NFT}
+          challengeId={ChallengeId.SVG_NFT}
+          userChallenges={userChallenges}
+        />
       </div>
     </div>
   );
