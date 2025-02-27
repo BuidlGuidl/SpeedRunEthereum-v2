@@ -1,6 +1,6 @@
 import Image from "next/image";
+import { getChallengeDependenciesInfo } from "../../utils/dependent-challenges";
 import JoinBGButton from "./JoinBGButton";
-import { getChallengeDependenciesInfo } from "./utils";
 import { UserChallenges } from "~~/services/database/repositories/userChallenges";
 import { UserByAddress } from "~~/services/database/repositories/users";
 
