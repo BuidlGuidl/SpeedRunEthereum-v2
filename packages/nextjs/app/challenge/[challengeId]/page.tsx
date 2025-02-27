@@ -29,9 +29,9 @@ export default async function ChallengePage({ params }: { params: { challengeId:
   const challengeReadme = await fetchGithubReadme(challenge.github);
 
   return (
-    <div className="flex flex-col gap-4 p-4 relative">
+    <div className="flex flex-col items-center p-4 xl:p-12 relative max-w-[100vw]">
       {challengeReadme ? (
-        <div className="prose dark:prose-invert max-w-none">
+        <div className="prose dark:prose-invert max-w-fit break-all xl:max-w-[850px]">
           <MDXRemote source={challengeReadme} />
         </div>
       ) : (
