@@ -2,12 +2,12 @@ import { UpdateSocialsPayload } from "~~/app/api/users/update-socials/route";
 import { UserByAddress } from "~~/services/database/repositories/users";
 
 export async function fetchUser(address: string | undefined) {
-  if (!address) return null;
+  if (!address) return;
 
   const response = await fetch(`/api/users/${address}`);
   if (!response.ok) {
     if (response.status === 404) {
-      return null;
+      return;
     }
     throw new Error("Failed to fetch user");
   }

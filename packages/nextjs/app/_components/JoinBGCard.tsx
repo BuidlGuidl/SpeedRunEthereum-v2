@@ -21,7 +21,13 @@ const JOIN_BG_DEPENDENCIES = [
   "minimum-viable-exchange",
 ];
 
-export const JoinBGCard = ({ userChallenges, user }: { userChallenges: UserChallenges; user: UserByAddress }) => {
+export const JoinBGCard = ({
+  userChallenges = [],
+  user,
+}: {
+  userChallenges?: UserChallenges;
+  user?: UserByAddress;
+}) => {
   const { completed: builderHasCompletedDependenciesChallenges, lockReasonToolTip } = getChallengeDependenciesInfo({
     dependencies: JOIN_BG_DEPENDENCIES,
     userChallenges,

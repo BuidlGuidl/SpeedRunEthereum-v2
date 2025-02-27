@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { findUserByAddress } from "~~/services/database/repositories/users";
+import { findUserChallengesByAddress } from "~~/services/database/repositories/userChallenges";
 
 export async function GET(_req: Request, { params }: { params: { address: string } }) {
   try {
@@ -9,14 +9,11 @@ export async function GET(_req: Request, { params }: { params: { address: string
       return NextResponse.json({ error: "Address is required" }, { status: 400 });
     }
 
-    const users = await findUserByAddress(address);
-    if (users.length === 0) {
-      return NextResponse.json({ user: undefined }, { status: 404 });
-    }
+    const challenges = await findUserChallengesByAddress(address);
 
-    return NextResponse.json({ user: users[0] });
+    return NextResponse.json({ challenges });
   } catch (error) {
-    console.error("Error fetching user:", error);
+    console.error("Error fetching user challenges:", error);
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
   }
 }
