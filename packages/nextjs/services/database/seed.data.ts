@@ -138,6 +138,10 @@ export const seedChallenges: (typeof challenges.$inferInsert)[] = [
       ChallengeId.TOKEN_VENDOR,
       ChallengeId.DICE_GAME,
     ],
+    externalLink: {
+      link: "https://t.me/+zKllN8OlGuxmYzFh",
+      claim: "Join the 👛 Multisig Build cohort",
+    },
   },
   {
     id: ChallengeId.SVG_NFT,
@@ -154,6 +158,10 @@ export const seedChallenges: (typeof challenges.$inferInsert)[] = [
       ChallengeId.TOKEN_VENDOR,
       ChallengeId.DICE_GAME,
     ],
+    externalLink: {
+      link: "https://t.me/+mUeITJ5u7Ig0ZWJh",
+      claim: "Join the 🎁 SVG NFT 🎫 Building Cohort",
+    },
   },
 ];
 

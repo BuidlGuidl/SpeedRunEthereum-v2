@@ -60,6 +60,11 @@ export const users = pgTable(
   table => [uniqueIndex("idUniqueIndex").on(lower(table.userAddress))],
 );
 
+type ExternalLink = {
+  link: string;
+  claim: string;
+};
+
 export const challenges = pgTable("challenges", {
   id: challengeIdEnum().primaryKey(), // Unique identifier for the challenge
   challengeName: varchar({ length: 255 }).notNull(),
@@ -71,6 +76,7 @@ export const challenges = pgTable("challenges", {
   previewImage: varchar({ length: 255 }),
   icon: varchar({ length: 255 }),
   dependencies: challengeIdEnum().array(),
+  externalLink: jsonb("external_link").$type<ExternalLink>(),
 });
 
 export const userChallenges = pgTable(
