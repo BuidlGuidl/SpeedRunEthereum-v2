@@ -85,7 +85,7 @@ export const userChallenges = pgTable(
     userAddress: varchar({ length: 42 })
       .notNull()
       .references(() => users.userAddress),
-    challengeId: varchar({ length: 255 })
+    challengeId: challengeIdEnum()
       .notNull()
       .references(() => challenges.id),
     frontendUrl: varchar({ length: 255 }),

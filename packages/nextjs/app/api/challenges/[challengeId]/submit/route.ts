@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { EventType, ReviewAction } from "~~/services/database/config/types";
+import { ChallengeId, EventType, ReviewAction } from "~~/services/database/config/types";
 import { createEvent } from "~~/services/database/repositories/events";
 import { upsertUserChallenge } from "~~/services/database/repositories/userChallenges";
 import { findUserByAddress } from "~~/services/database/repositories/users";
@@ -27,7 +27,7 @@ async function mockAutograding(contractUrl: string): Promise<AutogradingResult> 
   };
 }
 
-export async function POST(req: NextRequest, { params }: { params: { challengeId: string } }) {
+export async function POST(req: NextRequest, { params }: { params: { challengeId: ChallengeId } }) {
   try {
     const challengeId = params.challengeId;
     const { userAddress, frontendUrl, contractUrl, signature } = (await req.json()) as ChallengeSubmitPayload;

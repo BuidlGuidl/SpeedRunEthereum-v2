@@ -4,7 +4,6 @@ import { getChallengeDependenciesInfo } from "../../utils/dependent-challenges";
 import CrossedSwordsIcon from "../_assets/icons/CrossedSwordsIcon";
 import PadLockIcon from "../_assets/icons/PadLockIcon";
 import QuestionIcon from "../_assets/icons/QuestionIcon";
-import { ChallengeData, challengesData } from "../_data/_hardcoded";
 import { ChallengeId, ReviewAction } from "~~/services/database/config/types";
 import { getChallengeById } from "~~/services/database/repositories/challenges";
 import { UserChallenges } from "~~/services/database/repositories/userChallenges";
@@ -22,19 +21,14 @@ const ChallengeExpandedCard: React.FC<ChallengeExpandedCardProps> = async ({ cha
     return null;
   }
 
-  const additionalChallengeData = challengesData.find(c => c.id === challengeId);
-  // Define a merged type for better type safety
-  type FullChallenge = typeof fetchedChallenge & ChallengeData;
-  const challenge = { ...fetchedChallenge, ...additionalChallengeData } as FullChallenge;
-
-  const { sortOrder } = challenge;
+  const { sortOrder } = fetchedChallenge;
   const { completed: builderHasCompletedDependenciesChallenges, lockReasonToolTip } = getChallengeDependenciesInfo({
-    dependencies: challenge.dependencies || [],
+    dependencies: fetchedChallenge.dependencies || [],
     userChallenges,
   });
 
   const reviewAction = userChallenge?.reviewAction;
-  const isChallengeLocked = challenge.disabled || !builderHasCompletedDependenciesChallenges;
+  const isChallengeLocked = fetchedChallenge.disabled || !builderHasCompletedDependenciesChallenges;
 
   return (
     <div className="challenge-expanded-card flex justify-center group relative  ">
@@ -57,13 +51,11 @@ const ChallengeExpandedCard: React.FC<ChallengeExpandedCardProps> = async ({ cha
             )}
 
             <span className="text-xl lg:text-lg">Challenge #{sortOrder}</span>
-            <h2 className="text-3xl lg:text-2xl font-medium mt-0">
-              {challenge.label.split(": ")[1] ? challenge.label.split(": ")[1] : challenge.label}
-            </h2>
+            <h2 className="text-3xl lg:text-2xl font-medium mt-0">{fetchedChallenge.challengeName}</h2>
           </div>
           <div className="flex flex-col gap-8">
-            <span className="text-lg lg:text-base leading-[1.5]">{challenge.description}</span>
-            {challenge.externalLink?.link ? (
+            <span className="text-lg lg:text-base leading-[1.5]">{fetchedChallenge.description}</span>
+            {fetchedChallenge.externalLink?.link ? (
               // Redirect to externalLink if set (instead of challenge detail view)
               <div className="flex items-center">
                 <button
@@ -73,7 +65,7 @@ const ChallengeExpandedCard: React.FC<ChallengeExpandedCardProps> = async ({ cha
                   disabled={isChallengeLocked}
                 >
                   {builderHasCompletedDependenciesChallenges ? (
-                    <span>{challenge.externalLink.claim}</span>
+                    <span>{fetchedChallenge.externalLink.claim}</span>
                   ) : (
                     <div className="flex items-center">
                       <PadLockIcon className="w-6 h-6" />
@@ -120,10 +112,10 @@ const ChallengeExpandedCard: React.FC<ChallengeExpandedCardProps> = async ({ cha
           </div>
         </div>
         <div className="flex justify-center mb-6 lg:mb-0">
-          {challenge.previewImage ? (
+          {fetchedChallenge.previewImage ? (
             <Image
-              src={challenge.previewImage}
-              alt={challenge.label}
+              src={fetchedChallenge.previewImage}
+              alt={fetchedChallenge.challengeName}
               // workaround to avoid console warnings
               className="w-full max-w-[490px] h-auto lg:mr-12"
               width={0}
@@ -134,11 +126,11 @@ const ChallengeExpandedCard: React.FC<ChallengeExpandedCardProps> = async ({ cha
           )}
         </div>
         <span className="absolute h-5 w-5 rounded-full bg-base-300 border-primary border-4 top-[58%] lg:top-[50%] -left-[13px]" />
-        {challenge.icon && (
+        {fetchedChallenge.icon && (
           <Image
             className="absolute h-6 w-5 bg-no-repeat bg-[20px_auto] top-[58%] lg:top-[50%] -left-[40px]"
-            src={challenge.icon}
-            alt={challenge.icon}
+            src={fetchedChallenge.icon}
+            alt={fetchedChallenge.icon}
             width={24}
             height={20}
           />

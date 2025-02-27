@@ -168,7 +168,7 @@ export const seedChallenges: (typeof challenges.$inferInsert)[] = [
 export const seedUserChallenges: (typeof userChallenges.$inferInsert)[] = [
   {
     userAddress: "0xB4F53bd85c00EF22946d24Ae26BC38Ac64F5E7B1",
-    challengeId: "simple-nft-example",
+    challengeId: ChallengeId.SIMPLE_NFT_EXAMPLE,
     frontendUrl: "https://dreary-use.surge.sh/",
     contractUrl: "https://sepolia.etherscan.io/address/0x7f918d7b7d0fe0d3a8de3c0570ed4e154c0096e0",
     reviewComment: "Dummy review, nice work",
@@ -177,7 +177,7 @@ export const seedUserChallenges: (typeof userChallenges.$inferInsert)[] = [
   },
   {
     userAddress: "0xB4F53bd85c00EF22946d24Ae26BC38Ac64F5E7B1",
-    challengeId: "dice-game",
+    challengeId: ChallengeId.DICE_GAME,
     frontendUrl: "https://aggressive-party.surge.sh/",
     contractUrl: "https://sepolia.etherscan.io/address/0xd08b984c3ee4a880112d81de5a4a074c857b7f2f",
     reviewComment: "Dummy review, it's working great",
@@ -186,7 +186,7 @@ export const seedUserChallenges: (typeof userChallenges.$inferInsert)[] = [
   },
   {
     userAddress: "0xB4F53bd85c00EF22946d24Ae26BC38Ac64F5E7B1",
-    challengeId: "decentralized-staking",
+    challengeId: ChallengeId.DECENTRALIZED_STAKING,
     frontendUrl: "https://chunky-beam.surge.sh/",
     contractUrl: "https://sepolia.etherscan.io/address/0xbF35fC995A2Cc4F1508B5F769922623dE7f220d6",
     reviewComment: "Dummy review, it's working great",
@@ -195,7 +195,7 @@ export const seedUserChallenges: (typeof userChallenges.$inferInsert)[] = [
   },
   {
     userAddress: "0xB4F53bd85c00EF22946d24Ae26BC38Ac64F5E7B1",
-    challengeId: "token-vendor",
+    challengeId: ChallengeId.TOKEN_VENDOR,
     frontendUrl: "https://nonstop-fiction.surge.sh/",
     contractUrl: "https://sepolia.etherscan.io/address/0x57D312c3E4bF22F22d6A900Be8B38b5546b47C3f",
     reviewComment: "Dummy review, it's working great",
@@ -204,7 +204,7 @@ export const seedUserChallenges: (typeof userChallenges.$inferInsert)[] = [
   },
   {
     userAddress: "0x000084821704d731438d2D06f4295e1AB0ace7D8",
-    challengeId: "simple-nft-example",
+    challengeId: ChallengeId.SIMPLE_NFT_EXAMPLE,
     frontendUrl: "http://simple-nft-ryuufarhan.surge.sh/",
     contractUrl: "https://goerli.etherscan.io/address/0x861346d67b728949bcb69595638a78723a2adae3",
     reviewComment: "Dummy review, nice work",
@@ -213,7 +213,7 @@ export const seedUserChallenges: (typeof userChallenges.$inferInsert)[] = [
   },
   {
     userAddress: "0x014EC6296B3493f0f59a3FE90E0FFf377fb8826a",
-    challengeId: "simple-nft-example",
+    challengeId: ChallengeId.SIMPLE_NFT_EXAMPLE,
     frontendUrl: "http://clumsy-week.surge.sh",
     contractUrl: "https://goerli.etherscan.io/address/0xe3DF14f1482074916A8Aeb40d84898C879b2B5f6",
     reviewComment: "Dummy review, nice work",
@@ -222,7 +222,7 @@ export const seedUserChallenges: (typeof userChallenges.$inferInsert)[] = [
   },
   {
     userAddress: "0x014EC6296B3493f0f59a3FE90E0FFf377fb8826a",
-    challengeId: "state-channels",
+    challengeId: ChallengeId.STATE_CHANNELS,
     frontendUrl: "https://pumped-parcel.surge.sh",
     contractUrl: "https://goerli.etherscan.io/address/0x71F80197032c9a07b966D3f8eCAFE601Af244F35",
     reviewComment: "Dummy review, it's working great",
@@ -231,7 +231,7 @@ export const seedUserChallenges: (typeof userChallenges.$inferInsert)[] = [
   },
   {
     userAddress: "0x014EC6296B3493f0f59a3FE90E0FFf377fb8826a",
-    challengeId: "dice-game",
+    challengeId: ChallengeId.DICE_GAME,
     frontendUrl: "https://busy-pizzas.surge.sh",
     contractUrl: "https://goerli.etherscan.io/address/0xEd2aF24B1a657000C9b4509BC91FCfA5E76D3d33",
     reviewComment: "Dummy review, it's working great",
@@ -240,7 +240,7 @@ export const seedUserChallenges: (typeof userChallenges.$inferInsert)[] = [
   },
   {
     userAddress: "0x014EC6296B3493f0f59a3FE90E0FFf377fb8826a",
-    challengeId: "decentralized-staking",
+    challengeId: ChallengeId.DECENTRALIZED_STAKING,
     frontendUrl: "https://tasteful-plough.surge.sh",
     contractUrl: "https://goerli.etherscan.io/address/0xf3384118b56827271979A879e2d5A4d28569eb48",
     reviewComment: "Dummy review, it's working great",
@@ -249,7 +249,7 @@ export const seedUserChallenges: (typeof userChallenges.$inferInsert)[] = [
   },
   {
     userAddress: "0x014EC6296B3493f0f59a3FE90E0FFf377fb8826a",
-    challengeId: "minimum-viable-exchange",
+    challengeId: ChallengeId.MINIMUM_VIABLE_EXCHANGE,
     frontendUrl: "https://sour-snake.surge.sh",
     contractUrl: "https://goerli.etherscan.io/address/0x0752d3847601b506cBFB10330172821B495e6bB0",
     reviewComment: "Dummy review, it's working great",
@@ -258,7 +258,7 @@ export const seedUserChallenges: (typeof userChallenges.$inferInsert)[] = [
   },
   {
     userAddress: "0x014EC6296B3493f0f59a3FE90E0FFf377fb8826a",
-    challengeId: "token-vendor",
+    challengeId: ChallengeId.TOKEN_VENDOR,
     frontendUrl: "https://speedrunethereum.com/challenge/token-vendor",
     contractUrl: "https://goerli.etherscan.io/address/0x9626C68Dd8d000BBB7B06f0782266976dEB91c35",
     reviewComment: "Dummy review, it's working great",
@@ -267,7 +267,7 @@ export const seedUserChallenges: (typeof userChallenges.$inferInsert)[] = [
   },
   {
     userAddress: "0x01B2686Bd146bFc3F4B3DD6F7F86f26ac7c2f7Fd",
-    challengeId: "simple-nft-example",
+    challengeId: ChallengeId.SIMPLE_NFT_EXAMPLE,
     frontendUrl: "https://kind-fifth.surge.sh/",
     contractUrl: "https://goerli.etherscan.io/address/0xb9487f8d9E336a9468fcbb50dAF39587D0EBCA63",
     reviewComment: "Dummy review, nice work",
@@ -276,7 +276,7 @@ export const seedUserChallenges: (typeof userChallenges.$inferInsert)[] = [
   },
   {
     userAddress: "0x01B2686Bd146bFc3F4B3DD6F7F86f26ac7c2f7Fd",
-    challengeId: "decentralized-staking",
+    challengeId: ChallengeId.DECENTRALIZED_STAKING,
     frontendUrl: "https://stupid-beginner.surge.sh",
     contractUrl: "https://goerli.etherscan.io/address/0xd68edd04EbB81c6f187A526F3656C18dD0258cd8",
     reviewComment: "Dummy review, it's working great",
@@ -285,7 +285,7 @@ export const seedUserChallenges: (typeof userChallenges.$inferInsert)[] = [
   },
   {
     userAddress: "0x45334F41aAA464528CD5bc0F582acadC49Eb0Cd1",
-    challengeId: "token-vendor",
+    challengeId: ChallengeId.TOKEN_VENDOR,
     frontendUrl: "https://sepolia-optimism.etherscan.io/address/0xad5e878a62D5B77277aCDC321614a9727815B4C8#code",
     contractUrl: "https://sepolia-optimism.etherscan.io/address/0xad5e878a62D5B77277aCDC321614a9727815B4C8#code",
     submittedAt: new Date(1736441361988),
@@ -295,7 +295,7 @@ export const seedUserChallenges: (typeof userChallenges.$inferInsert)[] = [
   },
   {
     userAddress: "0x45334F41aAA464528CD5bc0F582acadC49Eb0Cd1",
-    challengeId: "simple-nft-example",
+    challengeId: ChallengeId.SIMPLE_NFT_EXAMPLE,
     frontendUrl: "https://sepolia-optimism.etherscan.io/address/0x82b4935ebe7a5d802cf465a3495da1aff96f1153#code",
     contractUrl: "https://sepolia-optimism.etherscan.io/address/0x82b4935ebe7a5d802cf465a3495da1aff96f1153#code",
     submittedAt: new Date(1736437841322),
@@ -304,7 +304,7 @@ export const seedUserChallenges: (typeof userChallenges.$inferInsert)[] = [
   },
   {
     userAddress: "0x45334F41aAA464528CD5bc0F582acadC49Eb0Cd1",
-    challengeId: "decentralized-staking",
+    challengeId: ChallengeId.DECENTRALIZED_STAKING,
     frontendUrl: "https://sepolia-optimism.etherscan.io/address/0x75CCfC494667c91F4926213A04619f93812885b2#code",
     contractUrl: "https://sepolia-optimism.etherscan.io/address/0x75CCfC494667c91F4926213A04619f93812885b2#code",
     submittedAt: new Date(1736440199150),
@@ -313,7 +313,7 @@ export const seedUserChallenges: (typeof userChallenges.$inferInsert)[] = [
   },
   {
     userAddress: "0x45334F41aAA464528CD5bc0F582acadC49Eb0Cd1",
-    challengeId: "dice-game",
+    challengeId: ChallengeId.DICE_GAME,
     frontendUrl: "https://sepolia-optimism.etherscan.io/address/0xB30b4D0AD811De445656FA49d3CbfD26f24Fa20f#code",
     contractUrl: "https://sepolia-optimism.etherscan.io/address/0xB30b4D0AD811De445656FA49d3CbfD26f24Fa20f#code",
     submittedAt: new Date(1736455465938),
@@ -323,7 +323,7 @@ export const seedUserChallenges: (typeof userChallenges.$inferInsert)[] = [
   },
   {
     userAddress: "0x45334F41aAA464528CD5bc0F582acadC49Eb0Cd1",
-    challengeId: "minimum-viable-exchange",
+    challengeId: ChallengeId.MINIMUM_VIABLE_EXCHANGE,
     frontendUrl: "https://sepolia-optimism.etherscan.io/address/0xFD893C93f44fdCd16D4673072D2a071578e6C7Ee#code",
     contractUrl: "https://sepolia-optimism.etherscan.io/address/0xFD893C93f44fdCd16D4673072D2a071578e6C7Ee#code",
     submittedAt: new Date(1736523426599),
@@ -332,7 +332,7 @@ export const seedUserChallenges: (typeof userChallenges.$inferInsert)[] = [
   },
   {
     userAddress: "0x45334F41aAA464528CD5bc0F582acadC49Eb0Cd1",
-    challengeId: "state-channels",
+    challengeId: ChallengeId.STATE_CHANNELS,
     frontendUrl: "https://sepolia-optimism.etherscan.io/address/0x1BC437381EC1A36Eb30A0F3AfEFF1Fd5E0078256#code",
     contractUrl: "https://sepolia-optimism.etherscan.io/address/0x1BC437381EC1A36Eb30A0F3AfEFF1Fd5E0078256#code",
     submittedAt: new Date(1736524737219),
@@ -349,7 +349,7 @@ export const seedEvents: (typeof events.$inferInsert)[] = [
       "0x7a808ee181d8655f38c48e0154903bea229b91e32f6062f6c23ad9da5fa25c3008238b07e367e7904200015157a43378b39244140c43ea35e5eea11c055a170500",
     userAddress: "0xB4F53bd85c00EF22946d24Ae26BC38Ac64F5E7B1",
     payload: {
-      challengeId: "simple-nft-example",
+      challengeId: ChallengeId.SIMPLE_NFT_EXAMPLE,
       contractUrl: "https://sepolia.etherscan.io/address/0x7f918d7b7d0fe0d3a8de3c0570ed4e154c0096e0",
       frontendUrl: "https://dreary-use.surge.sh/",
     },
@@ -362,7 +362,7 @@ export const seedEvents: (typeof events.$inferInsert)[] = [
     userAddress: "0xB4F53bd85c00EF22946d24Ae26BC38Ac64F5E7B1",
     payload: {
       autograding: true,
-      challengeId: "simple-nft-example",
+      challengeId: ChallengeId.SIMPLE_NFT_EXAMPLE,
       reviewAction: ReviewAction.ACCEPTED,
       reviewMessage: "Dummy review, nice work",
     },
@@ -384,7 +384,7 @@ export const seedEvents: (typeof events.$inferInsert)[] = [
       "0x4eca15955283c15c1f9565945c34638c9943a313a79301d73178b814e82e3e183e3d89aebdafa10a1012912cb820950fb6eea6ba76e58bf875f226bdc8257dc700",
     userAddress: "0x014EC6296B3493f0f59a3FE90E0FFf377fb8826a",
     payload: {
-      challengeId: "dice-game",
+      challengeId: ChallengeId.DICE_GAME,
       contractUrl: "https://goerli.etherscan.io/address/0xEd2aF24B1a657000C9b4509BC91FCfA5E76D3d33",
       frontendUrl: "https://busy-pizzas.surge.sh",
     },
@@ -397,7 +397,7 @@ export const seedEvents: (typeof events.$inferInsert)[] = [
     userAddress: "0xB4F53bd85c00EF22946d24Ae26BC38Ac64F5E7B1",
     payload: {
       autograding: true,
-      challengeId: "decentralized-staking",
+      challengeId: ChallengeId.DECENTRALIZED_STAKING,
       contractUrl: "https://sepolia.etherscan.io/address/0xbF35fC995A2Cc4F1508B5F769922623dE7f220d6",
       deployedUrl: "https://chunky-beam.surge.sh/",
     },
@@ -410,7 +410,7 @@ export const seedEvents: (typeof events.$inferInsert)[] = [
     userAddress: "0xB4F53bd85c00EF22946d24Ae26BC38Ac64F5E7B1",
     payload: {
       autograding: true,
-      challengeId: "decentralized-staking",
+      challengeId: ChallengeId.DECENTRALIZED_STAKING,
       reviewAction: ReviewAction.ACCEPTED,
       reviewMessage: "Dummy review, it's working great",
     },
@@ -423,7 +423,7 @@ export const seedEvents: (typeof events.$inferInsert)[] = [
     userAddress: "0xB4F53bd85c00EF22946d24Ae26BC38Ac64F5E7B1",
     payload: {
       autograding: true,
-      challengeId: "token-vendor",
+      challengeId: ChallengeId.TOKEN_VENDOR,
       reviewAction: ReviewAction.ACCEPTED,
       reviewMessage: "Dummy review, it's working great",
     },
@@ -436,7 +436,7 @@ export const seedEvents: (typeof events.$inferInsert)[] = [
     userAddress: "0xB4F53bd85c00EF22946d24Ae26BC38Ac64F5E7B1",
     payload: {
       autograding: true,
-      challengeId: "dice-game",
+      challengeId: ChallengeId.DICE_GAME,
       reviewAction: ReviewAction.ACCEPTED,
       reviewMessage: "Dummy review, it's working great",
     },
@@ -459,7 +459,7 @@ export const seedEvents: (typeof events.$inferInsert)[] = [
     userAddress: "0x000084821704d731438d2D06f4295e1AB0ace7D8",
     payload: {
       autograding: true,
-      challengeId: "simple-nft-example",
+      challengeId: ChallengeId.SIMPLE_NFT_EXAMPLE,
       reviewAction: ReviewAction.ACCEPTED,
       reviewMessage: "Dummy review, nice work",
     },
@@ -482,7 +482,7 @@ export const seedEvents: (typeof events.$inferInsert)[] = [
     userAddress: "0x01B2686Bd146bFc3F4B3DD6F7F86f26ac7c2f7Fd",
     payload: {
       autograding: true,
-      challengeId: "simple-nft-example",
+      challengeId: ChallengeId.SIMPLE_NFT_EXAMPLE,
       reviewAction: ReviewAction.ACCEPTED,
       reviewMessage: "Dummy review, nice work",
     },
@@ -495,7 +495,7 @@ export const seedEvents: (typeof events.$inferInsert)[] = [
     userAddress: "0x01B2686Bd146bFc3F4B3DD6F7F86f26ac7c2f7Fd",
     payload: {
       autograding: true,
-      challengeId: "decentralized-staking",
+      challengeId: ChallengeId.DECENTRALIZED_STAKING,
       reviewAction: ReviewAction.ACCEPTED,
       reviewMessage: "Dummy review, it's working great",
     },
