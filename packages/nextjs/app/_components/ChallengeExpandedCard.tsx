@@ -14,21 +14,21 @@ type ChallengeExpandedCardProps = {
 };
 
 const ChallengeExpandedCard: React.FC<ChallengeExpandedCardProps> = async ({ challengeId, userChallenges }) => {
-  const fetchedChallenge = await getChallengeById(challengeId);
+  const challenge = await getChallengeById(challengeId);
 
   const userChallenge = userChallenges.find(userChallenge => userChallenge.challengeId === challengeId);
-  if (!fetchedChallenge) {
+  if (!challenge) {
     return null;
   }
 
-  const { sortOrder } = fetchedChallenge;
+  const { sortOrder } = challenge;
   const { completed: builderHasCompletedDependenciesChallenges, lockReasonToolTip } = getChallengeDependenciesInfo({
-    dependencies: fetchedChallenge.dependencies || [],
+    dependencies: challenge.dependencies || [],
     userChallenges,
   });
 
   const reviewAction = userChallenge?.reviewAction;
-  const isChallengeLocked = fetchedChallenge.disabled || !builderHasCompletedDependenciesChallenges;
+  const isChallengeLocked = challenge.disabled || !builderHasCompletedDependenciesChallenges;
 
   return (
     <div className="challenge-expanded-card flex justify-center group relative  ">
@@ -51,11 +51,11 @@ const ChallengeExpandedCard: React.FC<ChallengeExpandedCardProps> = async ({ cha
             )}
 
             <span className="text-xl lg:text-lg">Challenge #{sortOrder}</span>
-            <h2 className="text-3xl lg:text-2xl font-medium mt-0">{fetchedChallenge.challengeName}</h2>
+            <h2 className="text-3xl lg:text-2xl font-medium mt-0">{challenge.challengeName}</h2>
           </div>
           <div className="flex flex-col gap-8">
-            <span className="text-lg lg:text-base leading-[1.5]">{fetchedChallenge.description}</span>
-            {fetchedChallenge.externalLink?.link ? (
+            <span className="text-lg lg:text-base leading-[1.5]">{challenge.description}</span>
+            {challenge.externalLink?.link ? (
               // Redirect to externalLink if set (instead of challenge detail view)
               <div className="flex items-center">
                 <button
@@ -65,7 +65,7 @@ const ChallengeExpandedCard: React.FC<ChallengeExpandedCardProps> = async ({ cha
                   disabled={isChallengeLocked}
                 >
                   {builderHasCompletedDependenciesChallenges ? (
-                    <span>{fetchedChallenge.externalLink.claim}</span>
+                    <span>{challenge.externalLink.claim}</span>
                   ) : (
                     <div className="flex items-center">
                       <PadLockIcon className="w-6 h-6" />
@@ -112,10 +112,10 @@ const ChallengeExpandedCard: React.FC<ChallengeExpandedCardProps> = async ({ cha
           </div>
         </div>
         <div className="flex justify-center mb-6 lg:mb-0">
-          {fetchedChallenge.previewImage ? (
+          {challenge.previewImage ? (
             <Image
-              src={fetchedChallenge.previewImage}
-              alt={fetchedChallenge.challengeName}
+              src={challenge.previewImage}
+              alt={challenge.challengeName}
               // workaround to avoid console warnings
               className="w-full max-w-[490px] h-auto lg:mr-12"
               width={0}
@@ -126,11 +126,11 @@ const ChallengeExpandedCard: React.FC<ChallengeExpandedCardProps> = async ({ cha
           )}
         </div>
         <span className="absolute h-5 w-5 rounded-full bg-base-300 border-primary border-4 top-[58%] lg:top-[50%] -left-[13px]" />
-        {fetchedChallenge.icon && (
+        {challenge.icon && (
           <Image
             className="absolute h-6 w-5 bg-no-repeat bg-[20px_auto] top-[58%] lg:top-[50%] -left-[40px]"
-            src={fetchedChallenge.icon}
-            alt={fetchedChallenge.icon}
+            src={challenge.icon}
+            alt={challenge.icon}
             width={24}
             height={20}
           />
