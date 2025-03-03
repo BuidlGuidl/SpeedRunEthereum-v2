@@ -12,7 +12,7 @@ import { UserChallenges } from "~~/services/database/repositories/userChallenges
 type ChallengeExpandedCardProps = {
   challengeId: string;
   userChallenges?: UserChallenges;
-  challenges?: Challenges;
+  challenges: Challenges;
 };
 
 const ChallengeExpandedCard = ({ challengeId, userChallenges = [], challenges = [] }: ChallengeExpandedCardProps) => {
