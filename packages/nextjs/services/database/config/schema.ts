@@ -1,4 +1,4 @@
-import { ChallengeId, EventType, ReviewAction, UserRole } from "./types";
+import { EventType, ReviewAction, UserRole } from "./types";
 import { SQL, relations, sql } from "drizzle-orm";
 import {
   AnyPgColumn,
@@ -33,17 +33,6 @@ export const eventTypeEnum = pgEnum("event_type_enum", [
 
 export const userRoleEnum = pgEnum("user_role_enum", [UserRole.USER, UserRole.ADMIN]);
 
-export const challengeIdEnum = pgEnum("challenge_id_enum", [
-  ChallengeId.SIMPLE_NFT_EXAMPLE,
-  ChallengeId.DECENTRALIZED_STAKING,
-  ChallengeId.TOKEN_VENDOR,
-  ChallengeId.DICE_GAME,
-  ChallengeId.MINIMUM_VIABLE_EXCHANGE,
-  ChallengeId.STATE_CHANNELS,
-  ChallengeId.MULTISIG,
-  ChallengeId.SVG_NFT,
-]);
-
 export const users = pgTable(
   "users",
   {
@@ -66,7 +55,7 @@ type ExternalLink = {
 };
 
 export const challenges = pgTable("challenges", {
-  id: challengeIdEnum().primaryKey(), // Unique identifier for the challenge
+  id: varchar({ length: 255 }).primaryKey(), // Unique identifier for the challenge
   challengeName: varchar({ length: 255 }).notNull(),
   description: text().notNull(),
   sortOrder: integer().notNull(),
@@ -75,7 +64,7 @@ export const challenges = pgTable("challenges", {
   disabled: boolean().default(false),
   previewImage: varchar({ length: 255 }),
   icon: varchar({ length: 255 }),
-  dependencies: challengeIdEnum().array(),
+  dependencies: varchar({ length: 255 }).notNull().array(),
   externalLink: jsonb("external_link").$type<ExternalLink>(),
 });
 
@@ -85,7 +74,7 @@ export const userChallenges = pgTable(
     userAddress: varchar({ length: 42 })
       .notNull()
       .references(() => users.userAddress),
-    challengeId: challengeIdEnum()
+    challengeId: varchar({ length: 255 })
       .notNull()
       .references(() => challenges.id),
     frontendUrl: varchar({ length: 255 }),
