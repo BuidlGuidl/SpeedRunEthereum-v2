@@ -15,11 +15,7 @@ type ChallengeExpandedCardProps = {
   challenges?: Challenges;
 };
 
-const ChallengeExpandedCard: React.FC<ChallengeExpandedCardProps> = ({
-  challengeId,
-  userChallenges = [],
-  challenges = [],
-}) => {
+const ChallengeExpandedCard = ({ challengeId, userChallenges = [], challenges = [] }: ChallengeExpandedCardProps) => {
   const fetchedChallenge = challenges.find(c => c.id === challengeId);
 
   const userChallenge = userChallenges.find(userChallenge => userChallenge.challengeId === challengeId);
