@@ -49,10 +49,10 @@ export const users = pgTable(
   table => [uniqueIndex("idUniqueIndex").on(lower(table.userAddress))],
 );
 
-type ExternalLink = {
+type ExternalLink = Partial<{
   link: string;
   claim: string;
-};
+}>;
 
 export const challenges = pgTable("challenges", {
   id: varchar({ length: 255 }).primaryKey(), // Unique identifier for the challenge
