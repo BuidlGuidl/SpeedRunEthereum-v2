@@ -11,7 +11,7 @@ import { getUserSocialsList } from "~~/utils/socials";
 
 type JoinBGProps = {
   isLocked: boolean;
-  user: UserByAddress;
+  user?: UserByAddress;
   lockReasonToolTip: string;
 };
 
@@ -27,6 +27,10 @@ const JoinBGButton: React.FC<JoinBGProps> = ({ isLocked, user, lockReasonToolTip
 
   const onJoin = async () => {
     // setIsJoining(true);
+
+    if (!user || !address) {
+      return;
+    }
 
     const socialsList = getUserSocialsList(user);
     if (socialsList.length === 0) {
@@ -145,7 +149,7 @@ const JoinBGButton: React.FC<JoinBGProps> = ({ isLocked, user, lockReasonToolTip
   return (
     <>
       <button
-        disabled={isLocked}
+        disabled={isLocked || !user}
         className="flex justify-center text-[#088484] bg-[#C8F5FF] items-center text-xl lg:text-lg px-4 py-1 border-2 border-[#088484] rounded-full disabled:opacity-70"
         onClick={onJoin}
       >
