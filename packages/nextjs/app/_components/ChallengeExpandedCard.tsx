@@ -4,17 +4,18 @@ import { getChallengeDependenciesInfo } from "../../utils/dependent-challenges";
 import CrossedSwordsIcon from "../_assets/icons/CrossedSwordsIcon";
 import PadLockIcon from "../_assets/icons/PadLockIcon";
 import QuestionIcon from "../_assets/icons/QuestionIcon";
-import { ChallengeId, ReviewAction } from "~~/services/database/config/types";
-import { getChallengeById } from "~~/services/database/repositories/challenges";
+import { ReviewAction } from "~~/services/database/config/types";
+import { Challenges } from "~~/services/database/repositories/challenges";
 import { UserChallenges } from "~~/services/database/repositories/userChallenges";
 
 type ChallengeExpandedCardProps = {
-  challengeId: ChallengeId;
-  userChallenges: UserChallenges;
+  challengeId: string;
+  userChallenges?: UserChallenges;
+  challenges: Challenges;
 };
 
-const ChallengeExpandedCard: React.FC<ChallengeExpandedCardProps> = async ({ challengeId, userChallenges }) => {
-  const challenge = await getChallengeById(challengeId);
+const ChallengeExpandedCard = ({ challengeId, userChallenges = [], challenges = [] }: ChallengeExpandedCardProps) => {
+  const challenge = challenges.find(c => c.id === challengeId);
 
   const userChallenge = userChallenges.find(userChallenge => userChallenge.challengeId === challengeId);
   if (!challenge) {
@@ -36,19 +37,21 @@ const ChallengeExpandedCard: React.FC<ChallengeExpandedCardProps> = async ({ cha
         <div className="hidden group-first:block absolute -left-3 z-10 top-0 w-[18px] h-[58%] lg:h-[50%] bg-base-200" />
         <div className="flex flex-col max-w-full lg:max-w-[40%] gap-18 lg:gap-20">
           <div className="flex flex-col items-start gap-0">
-            {reviewAction && (
-              <span
-                className={`rounded-xl py-0.5 px-2.5 text-sm capitalize ${
-                  reviewAction === ReviewAction.ACCEPTED
-                    ? "bg-base-300 text-base-content"
-                    : reviewAction === ReviewAction.REJECTED
-                      ? "bg-red-400 text-white"
-                      : "bg-gray-100 text-gray-800"
-                }`}
-              >
-                {reviewAction.toLowerCase()}
-              </span>
-            )}
+            <div className="h-6">
+              {reviewAction && (
+                <span
+                  className={`rounded-xl py-0.5 px-2.5 text-sm capitalize ${
+                    reviewAction === ReviewAction.ACCEPTED
+                      ? "bg-base-300 text-base-content"
+                      : reviewAction === ReviewAction.REJECTED
+                        ? "bg-red-400 text-white"
+                        : "bg-gray-100 text-gray-800"
+                  }`}
+                >
+                  {reviewAction.toLowerCase()}
+                </span>
+              )}
+            </div>
 
             <span className="text-xl lg:text-lg">Challenge #{sortOrder}</span>
             <h2 className="text-3xl lg:text-2xl font-medium mt-0">{challenge.challengeName}</h2>
