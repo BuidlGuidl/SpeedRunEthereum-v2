@@ -30,3 +30,50 @@ p {
 .btn.btn-ghost {
   @apply shadow-none;
 }
+
+/* Markdown Formatting */
+.prose h1,
+.prose h2,
+.prose h3,
+.prose h4,
+.prose h5,
+.prose h6 {
+  @apply break-words overflow-wrap-anywhere;
+}
+
+.prose pre,
+.prose code {
+  @apply overflow-x-auto whitespace-pre-wrap bg-[#edf2f7] text-primary dark:bg-[#171923] text-[0.5rem] sm:text-xs md:text-sm;
+}
+
+@layer utilities {
+  .overflow-wrap-anywhere {
+    overflow-wrap: anywhere;
+  }
+}
+
+.prose h1 {
+  @apply text-lg sm:text-3xl md:text-4xl;
+}
+
+.prose h2 {
+  @apply text-base sm:text-2xl md:text-3xl;
+}
+
+.prose h3 {
+  @apply text-sm sm:text-xl md:text-2xl;
+}
+
+.prose p,
+.prose li,
+.prose blockquote,
+.prose td,
+.prose th,
+.prose strong,
+.prose em,
+.prose ul,
+.prose ol,
+.prose dl,
+.prose figcaption {
+  @apply text-xs sm:text-sm md:text-base;
+}

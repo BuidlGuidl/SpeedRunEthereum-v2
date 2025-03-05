@@ -1,8 +1,9 @@
 import { SubmitChallengeButton } from "./_components/SubmitChallengeButton";
 import { MDXRemote } from "next-mdx-remote/rsc";
+import { ArrowTopRightOnSquareIcon } from "@heroicons/react/24/outline";
 import { ChallengeId } from "~~/services/database/config/types";
 import { getAllChallenges, getChallengeById } from "~~/services/database/repositories/challenges";
-import { fetchGithubReadme } from "~~/services/github";
+import { fetchGithubReadme, parseGithubUrl } from "~~/services/github";
 
 // TODO. Metadata
 
@@ -28,13 +29,27 @@ export default async function ChallengePage({ params }: { params: { challengeId:
   }
 
   const challengeReadme = await fetchGithubReadme(challenge.github);
+  const { owner, repo, branch } = parseGithubUrl(challenge.github);
 
   return (
-    <div className="flex flex-col gap-4 p-4 relative">
+    <div className="flex flex-col items-center p-8 xl:p-12 relative max-w-[100vw]">
       {challengeReadme ? (
-        <div className="prose dark:prose-invert max-w-none">
-          <MDXRemote source={challengeReadme} />
-        </div>
+        <>
+          <div className="prose dark:prose-invert max-w-fit break-all xl:max-w-[850px]">
+            <MDXRemote source={challengeReadme} />
+          </div>
+          <a
+            href={`https://github.com/${owner}/${repo}/tree/${branch}`}
+            className="block mt-2"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <button className="btn btn-outline">
+              View on GitHub
+              <ArrowTopRightOnSquareIcon className="w-4 h-4" />
+            </button>
+          </a>
+        </>
       ) : (
         <div>Failed to load challenge content</div>
       )}

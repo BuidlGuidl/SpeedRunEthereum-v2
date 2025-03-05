@@ -13,11 +13,11 @@ export const SubmitChallengeButton = ({ challengeId }: { challengeId: string }) 
   return (
     <>
       <button
-        className="btn btn-lg btn-primary mt-2 fixed bottom-8 inset-x-0 mx-auto w-fit"
+        className="btn btn-md btn-primary text-secondary px-4 mt-2 fixed bottom-8 inset-x-0 mx-auto w-fit"
         disabled={!user || isLoadingUser}
         onClick={() => submitChallengeModalRef && submitChallengeModalRef.current?.showModal()}
       >
-        Submit
+        Submit challenge
       </button>
       <SubmitChallengeModal
         challengeId={challengeId}
