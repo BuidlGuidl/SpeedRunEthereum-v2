@@ -4,28 +4,23 @@ import { getChallengeDependenciesInfo } from "../../utils/dependent-challenges";
 import CrossedSwordsIcon from "../_assets/icons/CrossedSwordsIcon";
 import PadLockIcon from "../_assets/icons/PadLockIcon";
 import QuestionIcon from "../_assets/icons/QuestionIcon";
-import { ChallengeData, challengesData } from "../_data/_hardcoded";
-import { ReviewAction } from "~~/services/database/config/types";
-import { getChallengeById } from "~~/services/database/repositories/challenges";
+import { ChallengeId, ReviewAction } from "~~/services/database/config/types";
+import { Challenges } from "~~/services/database/repositories/challenges";
 import { UserChallenges } from "~~/services/database/repositories/userChallenges";
 
 type ChallengeExpandedCardProps = {
-  challengeId: string;
-  userChallenges: UserChallenges;
+  challengeId: ChallengeId;
+  userChallenges?: UserChallenges;
+  challenges: Challenges;
 };
 
-const ChallengeExpandedCard: React.FC<ChallengeExpandedCardProps> = async ({ challengeId, userChallenges }) => {
-  const fetchedChallenge = await getChallengeById(challengeId);
+const ChallengeExpandedCard = ({ challengeId, userChallenges = [], challenges = [] }: ChallengeExpandedCardProps) => {
+  const challenge = challenges.find(c => c.id === challengeId);
 
   const userChallenge = userChallenges.find(userChallenge => userChallenge.challengeId === challengeId);
-  if (!fetchedChallenge) {
+  if (!challenge) {
     return null;
   }
-
-  const additionalChallengeData = challengesData.find(c => c.id === challengeId);
-  // Define a merged type for better type safety
-  type FullChallenge = typeof fetchedChallenge & ChallengeData;
-  const challenge = { ...fetchedChallenge, ...additionalChallengeData } as FullChallenge;
 
   const { sortOrder } = challenge;
   const { completed: builderHasCompletedDependenciesChallenges, lockReasonToolTip } = getChallengeDependenciesInfo({
@@ -42,24 +37,24 @@ const ChallengeExpandedCard: React.FC<ChallengeExpandedCardProps> = async ({ cha
         <div className="hidden group-first:block absolute -left-3 z-10 top-0 w-[18px] h-[58%] lg:h-[50%] bg-base-200" />
         <div className="flex flex-col max-w-full lg:max-w-[40%] gap-18 lg:gap-20">
           <div className="flex flex-col items-start gap-0">
-            {reviewAction && (
-              <span
-                className={`rounded-xl py-0.5 px-2.5 text-sm capitalize ${
-                  reviewAction === ReviewAction.ACCEPTED
-                    ? "bg-base-300 text-base-content"
-                    : reviewAction === ReviewAction.REJECTED
-                      ? "bg-red-400 text-white"
-                      : "bg-gray-100 text-gray-800"
-                }`}
-              >
-                {reviewAction.toLowerCase()}
-              </span>
-            )}
+            <div className="h-6">
+              {reviewAction && (
+                <span
+                  className={`rounded-xl py-0.5 px-2.5 text-sm capitalize ${
+                    reviewAction === ReviewAction.ACCEPTED
+                      ? "bg-base-300 text-base-content"
+                      : reviewAction === ReviewAction.REJECTED
+                        ? "bg-red-400 text-white"
+                        : "bg-gray-100 text-gray-800"
+                  }`}
+                >
+                  {reviewAction.toLowerCase()}
+                </span>
+              )}
+            </div>
 
             <span className="text-xl lg:text-lg">Challenge #{sortOrder}</span>
-            <h2 className="text-3xl lg:text-2xl font-medium mt-0">
-              {challenge.label.split(": ")[1] ? challenge.label.split(": ")[1] : challenge.label}
-            </h2>
+            <h2 className="text-3xl lg:text-2xl font-medium mt-0">{challenge.challengeName}</h2>
           </div>
           <div className="flex flex-col gap-8">
             <span className="text-lg lg:text-base leading-[1.5]">{challenge.description}</span>
@@ -123,7 +118,7 @@ const ChallengeExpandedCard: React.FC<ChallengeExpandedCardProps> = async ({ cha
           {challenge.previewImage ? (
             <Image
               src={challenge.previewImage}
-              alt={challenge.label}
+              alt={challenge.challengeName}
               // workaround to avoid console warnings
               className="w-full max-w-[490px] h-auto lg:mr-12"
               width={0}

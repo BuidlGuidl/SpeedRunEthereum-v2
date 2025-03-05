@@ -24,11 +24,13 @@ export const reviewActionEnum = pgEnum("review_action_enum", [
   ReviewAction.ACCEPTED,
   ReviewAction.SUBMITTED,
 ]);
+
 export const eventTypeEnum = pgEnum("event_type_enum", [
   EventType.CHALLENGE_SUBMIT,
   EventType.CHALLENGE_AUTOGRADE,
   EventType.USER_CREATE,
 ]);
+
 export const userRoleEnum = pgEnum("user_role_enum", [UserRole.USER, UserRole.ADMIN]);
 
 export const users = pgTable(
@@ -47,6 +49,11 @@ export const users = pgTable(
   table => [uniqueIndex("idUniqueIndex").on(lower(table.userAddress))],
 );
 
+type ExternalLink = Partial<{
+  link: string;
+  claim: string;
+}>;
+
 export const challenges = pgTable("challenges", {
   id: varchar({ length: 255 }).primaryKey(), // Unique identifier for the challenge
   challengeName: varchar({ length: 255 }).notNull(),
@@ -55,6 +62,10 @@ export const challenges = pgTable("challenges", {
   github: varchar({ length: 255 }), // Repository reference for the challenge
   autograding: boolean().default(false), // Whether the challenge supports automatic grading
   disabled: boolean().default(false),
+  previewImage: varchar({ length: 255 }),
+  icon: varchar({ length: 255 }),
+  dependencies: varchar({ length: 255 }).notNull().array(),
+  externalLink: jsonb("external_link").$type<ExternalLink>(),
 });
 
 export const userChallenges = pgTable(

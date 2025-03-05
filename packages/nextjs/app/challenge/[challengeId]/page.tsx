@@ -1,5 +1,6 @@
 import { SubmitChallengeButton } from "./_components/SubmitChallengeButton";
 import { MDXRemote } from "next-mdx-remote/rsc";
+import { ChallengeId } from "~~/services/database/config/types";
 import { getAllChallenges, getChallengeById } from "~~/services/database/repositories/challenges";
 import { fetchGithubReadme } from "~~/services/github";
 
@@ -16,7 +17,7 @@ export async function generateStaticParams() {
   }));
 }
 
-export default async function ChallengePage({ params }: { params: { challengeId: string } }) {
+export default async function ChallengePage({ params }: { params: { challengeId: ChallengeId } }) {
   const challenge = await getChallengeById(params.challengeId);
   if (!challenge) {
     return <div>Challenge not found</div>;
