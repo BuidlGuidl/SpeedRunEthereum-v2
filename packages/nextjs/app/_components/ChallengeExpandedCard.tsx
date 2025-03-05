@@ -4,29 +4,23 @@ import { getChallengeDependenciesInfo } from "../../utils/dependent-challenges";
 import CrossedSwordsIcon from "../_assets/icons/CrossedSwordsIcon";
 import PadLockIcon from "../_assets/icons/PadLockIcon";
 import QuestionIcon from "../_assets/icons/QuestionIcon";
-import { ChallengeData, challengesData } from "../_data/_hardcoded";
-import { ReviewAction } from "~~/services/database/config/types";
+import { ChallengeId, ReviewAction } from "~~/services/database/config/types";
 import { Challenges } from "~~/services/database/repositories/challenges";
 import { UserChallenges } from "~~/services/database/repositories/userChallenges";
 
 type ChallengeExpandedCardProps = {
-  challengeId: string;
+  challengeId: ChallengeId;
   userChallenges?: UserChallenges;
   challenges: Challenges;
 };
 
 const ChallengeExpandedCard = ({ challengeId, userChallenges = [], challenges = [] }: ChallengeExpandedCardProps) => {
-  const fetchedChallenge = challenges.find(c => c.id === challengeId);
+  const challenge = challenges.find(c => c.id === challengeId);
 
   const userChallenge = userChallenges.find(userChallenge => userChallenge.challengeId === challengeId);
-  if (!fetchedChallenge) {
+  if (!challenge) {
     return null;
   }
-
-  const additionalChallengeData = challengesData.find(c => c.id === challengeId);
-  // Define a merged type for better type safety
-  type FullChallenge = typeof fetchedChallenge & ChallengeData;
-  const challenge = { ...fetchedChallenge, ...additionalChallengeData } as FullChallenge;
 
   const { sortOrder } = challenge;
   const { completed: builderHasCompletedDependenciesChallenges, lockReasonToolTip } = getChallengeDependenciesInfo({
@@ -60,9 +54,7 @@ const ChallengeExpandedCard = ({ challengeId, userChallenges = [], challenges = 
             </div>
 
             <span className="text-xl lg:text-lg">Challenge #{sortOrder}</span>
-            <h2 className="text-3xl lg:text-2xl font-medium mt-0">
-              {challenge.label.split(": ")[1] ? challenge.label.split(": ")[1] : challenge.label}
-            </h2>
+            <h2 className="text-3xl lg:text-2xl font-medium mt-0">{challenge.challengeName}</h2>
           </div>
           <div className="flex flex-col gap-8">
             <span className="text-lg lg:text-base leading-[1.5]">{challenge.description}</span>
@@ -126,7 +118,7 @@ const ChallengeExpandedCard = ({ challengeId, userChallenges = [], challenges = 
           {challenge.previewImage ? (
             <Image
               src={challenge.previewImage}
-              alt={challenge.label}
+              alt={challenge.challengeName}
               // workaround to avoid console warnings
               className="w-full max-w-[490px] h-auto lg:mr-12"
               width={0}
