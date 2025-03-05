@@ -4,12 +4,12 @@ import { getChallengeDependenciesInfo } from "../../utils/dependent-challenges";
 import CrossedSwordsIcon from "../_assets/icons/CrossedSwordsIcon";
 import PadLockIcon from "../_assets/icons/PadLockIcon";
 import QuestionIcon from "../_assets/icons/QuestionIcon";
-import { ReviewAction } from "~~/services/database/config/types";
+import { ChallengeId, ReviewAction } from "~~/services/database/config/types";
 import { Challenges } from "~~/services/database/repositories/challenges";
 import { UserChallenges } from "~~/services/database/repositories/userChallenges";
 
 type ChallengeExpandedCardProps = {
-  challengeId: string;
+  challengeId: ChallengeId;
   userChallenges?: UserChallenges;
   challenges: Challenges;
 };
