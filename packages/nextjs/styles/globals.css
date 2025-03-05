@@ -43,7 +43,7 @@ p {
 
 .prose pre,
 .prose code {
-  @apply overflow-x-auto whitespace-pre-wrap bg-[#edf2f7] text-primary dark:bg-[#171923] dark:text-primary;
+  @apply overflow-x-auto whitespace-pre-wrap bg-[#edf2f7] text-primary dark:bg-[#171923] text-[0.5rem] sm:text-xs md:text-sm;
 }
 
 @layer utilities {
@@ -65,7 +65,6 @@ p {
 }
 
 .prose p,
-.prose code,
 .prose li,
 .prose blockquote,
 .prose td,
