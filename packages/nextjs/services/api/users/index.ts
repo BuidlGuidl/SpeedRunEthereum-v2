@@ -49,3 +49,21 @@ export async function updateSocials(payload: UpdateSocialsPayload) {
 
   return response.json();
 }
+
+export async function userJoinBg({ address, signature }: { address: string; signature: string }) {
+  const response = await fetch("/api/users/join-bg", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ address, signature }),
+  });
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw new Error(data.error || "Failed to join Build Guild");
+  }
+
+  return data.user as UserByAddress;
+}

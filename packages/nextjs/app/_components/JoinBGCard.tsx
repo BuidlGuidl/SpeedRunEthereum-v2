@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { getChallengeDependenciesInfo } from "../../utils/dependent-challenges";
 import JoinBGButton from "./JoinBGButton";
+import { ChallengeId } from "~~/services/database/config/types";
 import { UserChallenges } from "~~/services/database/repositories/userChallenges";
 import { UserByAddress } from "~~/services/database/repositories/users";
 
@@ -14,11 +15,11 @@ import { UserByAddress } from "~~/services/database/repositories/users";
 // },
 
 const JOIN_BG_DEPENDENCIES = [
-  "simple-nft-example",
-  "decentralized-staking",
-  "token-vendor",
-  "dice-game",
-  "minimum-viable-exchange",
+  ChallengeId.SIMPLE_NFT_EXAMPLE,
+  ChallengeId.DECENTRALIZED_STAKING,
+  ChallengeId.TOKEN_VENDOR,
+  ChallengeId.DICE_GAME,
+  ChallengeId.MINIMUM_VIABLE_EXCHANGE,
 ];
 
 export const JoinBGCard = ({

@@ -31,7 +31,7 @@ export const eventTypeEnum = pgEnum("event_type_enum", [
   EventType.USER_CREATE,
 ]);
 
-export const userRoleEnum = pgEnum("user_role_enum", [UserRole.USER, UserRole.ADMIN]);
+export const userRoleEnum = pgEnum("user_role_enum", [UserRole.USER, UserRole.BUILDER, UserRole.ADMIN]);
 
 export const users = pgTable(
   "users",

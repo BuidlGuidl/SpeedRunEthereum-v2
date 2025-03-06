@@ -1,3 +1,4 @@
+import { UserRole } from "../config/types";
 import { InferInsertModel } from "drizzle-orm";
 import { eq } from "drizzle-orm";
 import { db } from "~~/services/database/config/postgresClient";
@@ -33,6 +34,20 @@ export async function updateUserSocials(userAddress: string, socials: UserSocial
   return await db
     .update(users)
     .set(socialsToUpdate)
+    .where(eq(lower(users.userAddress), userAddress.toLowerCase()))
+    .returning();
+}
+
+export async function isUserJoinedBG(userAddress: string) {
+  return Boolean(
+    await db.$count(users, eq(lower(users.userAddress), userAddress.toLowerCase()) && eq(users.role, UserRole.BUILDER)),
+  );
+}
+
+export async function updateUserJoinBG(userAddress: string) {
+  return await db
+    .update(users)
+    .set({ role: UserRole.BUILDER })
     .where(eq(lower(users.userAddress), userAddress.toLowerCase()))
     .returning();
 }
