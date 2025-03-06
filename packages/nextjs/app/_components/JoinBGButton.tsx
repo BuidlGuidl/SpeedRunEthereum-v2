@@ -4,6 +4,7 @@ import React from "react";
 import Link from "next/link";
 import PadLockIcon from "../_assets/icons/PadLockIcon";
 import QuestionIcon from "../_assets/icons/QuestionIcon";
+import { useConnectModal } from "@rainbow-me/rainbowkit";
 import { useAccount, useWalletClient } from "wagmi";
 import { useJoinBg } from "~~/hooks/useJoinBg";
 import { ChallengeId, UserRole } from "~~/services/database/config/types";
@@ -28,6 +29,7 @@ const JoinBGButton = ({ user, userChallenges = [] }: JoinBGProps) => {
   const { address: connectedAddress } = useAccount();
   const { data: walletClient } = useWalletClient();
   const { handleJoinBg, isJoiningBg } = useJoinBg({ user });
+  const { openConnectModal } = useConnectModal();
   const { completed: dependenciesCompleted, lockReasonToolTip } = getChallengeDependenciesInfo({
     dependencies: JOIN_BG_DEPENDENCIES,
     userChallenges,
@@ -36,9 +38,11 @@ const JoinBGButton = ({ user, userChallenges = [] }: JoinBGProps) => {
   const builderAlreadyJoined = Boolean(user?.role === UserRole.BUILDER);
 
   if (!walletClient || !connectedAddress) {
-    // TODO: Add connect wallet functionality
     return (
-      <button className="flex justify-center text-[#088484] bg-[#C8F5FF] items-center text-xl lg:text-lg px-4 py-1 border-2 border-[#088484] rounded-full opacity-70">
+      <button
+        onClick={openConnectModal}
+        className="flex justify-center text-[#088484] bg-[#C8F5FF] items-center text-xl lg:text-lg px-4 py-1 border-2 border-[#088484] rounded-full opacity-70"
+      >
         <span>Connect Wallet</span>
       </button>
     );
