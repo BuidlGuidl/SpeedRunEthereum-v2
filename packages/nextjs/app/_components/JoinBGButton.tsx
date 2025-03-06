@@ -1,7 +1,6 @@
 "use client";
 
 import React from "react";
-import Link from "next/link";
 import PadLockIcon from "../_assets/icons/PadLockIcon";
 import QuestionIcon from "../_assets/icons/QuestionIcon";
 import { useConnectModal } from "@rainbow-me/rainbowkit";
@@ -48,17 +47,6 @@ const JoinBGButton = ({ user, userChallenges = [] }: JoinBGProps) => {
     );
   }
 
-  if (!user) {
-    return (
-      <Link
-        href="/apply"
-        className="flex justify-center text-[#088484] bg-[#C8F5FF] items-center text-xl lg:text-lg px-4 py-1 border-2 border-[#088484] rounded-full"
-      >
-        <span>Apply to 🏰️ BuidlGuidl</span>
-      </Link>
-    );
-  }
-
   return (
     <>
       <button
@@ -67,8 +55,8 @@ const JoinBGButton = ({ user, userChallenges = [] }: JoinBGProps) => {
         onClick={handleJoinBg}
       >
         {!dependenciesCompleted && <PadLockIcon className="w-6 h-6 mr-2" />}
-        {isJoiningBg && <span className="mr-2">Joining...</span>}
         {!isJoiningBg && !builderAlreadyJoined && <span>Join the 🏰️ BuidlGuidl</span>}
+        {isJoiningBg && <span className="mr-2">Joining...</span>}
         {builderAlreadyJoined && <span>Already joined</span>}
       </button>
       {!dependenciesCompleted && (
