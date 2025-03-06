@@ -44,13 +44,14 @@ export function useJoinBg({ user }: { user?: UserByAddress }) {
           <span className="font-medium">Can&apos;t join the BuidlGuidl.</span>
           <span>
             In order to join the BuildGuidl you need to set your socials in{" "}
-            <Link href="/portfolio" className="underline">
+            <Link href={`/builders/${user.userAddress}`} className="underline">
               your portfolio
             </Link>
             . It&apos;s our way to contact you.
           </span>
         </div>,
       );
+      return;
     }
 
     try {
