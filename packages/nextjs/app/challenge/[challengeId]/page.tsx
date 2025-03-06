@@ -1,5 +1,7 @@
 import { SubmitChallengeButton } from "./_components/SubmitChallengeButton";
 import { MDXRemote } from "next-mdx-remote/rsc";
+import rehypeRaw from "rehype-raw";
+import remarkGfm from "remark-gfm";
 import { ArrowTopRightOnSquareIcon } from "@heroicons/react/24/outline";
 import { ChallengeId } from "~~/services/database/config/types";
 import { getAllChallenges, getChallengeById } from "~~/services/database/repositories/challenges";
@@ -36,7 +38,16 @@ export default async function ChallengePage({ params }: { params: { challengeId:
       {challengeReadme ? (
         <>
           <div className="prose dark:prose-invert max-w-fit break-all xl:max-w-[850px]">
-            <MDXRemote source={challengeReadme} />
+            <MDXRemote
+              source={challengeReadme}
+              options={{
+                mdxOptions: {
+                  rehypePlugins: [rehypeRaw],
+                  remarkPlugins: [remarkGfm],
+                  format: "md",
+                },
+              }}
+            />
           </div>
           <a
             href={`https://github.com/${owner}/${repo}/tree/${branch}`}
