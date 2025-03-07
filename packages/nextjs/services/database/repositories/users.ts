@@ -1,6 +1,6 @@
 import { UserRole } from "../config/types";
 import { InferInsertModel } from "drizzle-orm";
-import { and, eq } from "drizzle-orm";
+import { and, eq, or } from "drizzle-orm";
 import { db } from "~~/services/database/config/postgresClient";
 import { lower, users } from "~~/services/database/config/schema";
 
@@ -42,7 +42,10 @@ export async function isUserJoinedBG(userAddress: string) {
   return Boolean(
     await db.$count(
       users,
-      and(eq(lower(users.userAddress), userAddress.toLowerCase()), eq(users.role, UserRole.BUILDER)),
+      and(
+        eq(lower(users.userAddress), userAddress.toLowerCase()),
+        or(eq(users.role, UserRole.BUILDER), eq(users.role, UserRole.ADMIN)),
+      ),
     ),
   );
 }
