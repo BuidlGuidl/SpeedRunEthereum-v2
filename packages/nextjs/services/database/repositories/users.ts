@@ -1,3 +1,4 @@
+import { ColumnSort, SortingState } from "@tanstack/react-table";
 import { InferInsertModel } from "drizzle-orm";
 import { eq } from "drizzle-orm";
 import { db } from "~~/services/database/config/postgresClient";
@@ -16,6 +17,25 @@ export async function findUserByAddress(address: string) {
     .select()
     .from(users)
     .where(eq(lower(users.userAddress), address.toLowerCase()));
+}
+
+export async function findSortedUsersGroup(start: number, size: number, sorting: SortingState) {
+  let query = db.select().from(users) as any;
+
+  if (sorting.length) {
+    const sort = sorting[0] as ColumnSort;
+    const { id, desc } = sort as { id: keyof typeof users; desc: boolean };
+    query = query.orderBy(users[id], desc ? "desc" : "asc");
+  }
+
+  const [users_data, total_count] = await Promise.all([query.limit(size).offset(start), db.$count(users)]);
+
+  return {
+    data: users_data,
+    meta: {
+      totalRowCount: total_count,
+    },
+  };
 }
 
 export async function isUserRegistered(address: string) {
