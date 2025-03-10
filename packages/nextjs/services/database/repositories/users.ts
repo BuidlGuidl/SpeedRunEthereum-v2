@@ -50,7 +50,7 @@ export async function isUserJoinedBG(userAddress: string) {
   );
 }
 
-export async function updateUserJoinBG(userAddress: string) {
+export async function updateUserRoleToBuilder(userAddress: string) {
   return await db
     .update(users)
     .set({ role: UserRole.BUILDER })

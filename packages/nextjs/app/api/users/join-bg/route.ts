@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { isUserJoinedBG, updateUserJoinBG } from "~~/services/database/repositories/users";
+import { isUserJoinedBG, updateUserRoleToBuilder } from "~~/services/database/repositories/users";
 import { isValidEIP712JoinBGSignature } from "~~/services/eip712/join-bg";
 
 type JoinBGPayload = {
@@ -27,7 +27,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Invalid signature" }, { status: 401 });
     }
 
-    const users = await updateUserJoinBG(address);
+    const users = await updateUserRoleToBuilder(address);
 
     return NextResponse.json({ user: users[0] }, { status: 200 });
   } catch (error) {
