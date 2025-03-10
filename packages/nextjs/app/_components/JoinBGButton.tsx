@@ -25,7 +25,7 @@ const JoinBGButton = ({ user, userChallenges = [] }: JoinBGProps) => {
     userChallenges,
   });
 
-  const builderAlreadyJoined = Boolean(user?.role === UserRole.BUILDER);
+  const builderAlreadyJoined = Boolean(user?.role === UserRole.BUILDER || user?.role === UserRole.ADMIN);
 
   if (!connectedAddress) {
     return (
