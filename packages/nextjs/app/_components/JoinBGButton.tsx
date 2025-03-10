@@ -4,7 +4,7 @@ import React from "react";
 import PadLockIcon from "../_assets/icons/PadLockIcon";
 import QuestionIcon from "../_assets/icons/QuestionIcon";
 import { useConnectModal } from "@rainbow-me/rainbowkit";
-import { useAccount, useWalletClient } from "wagmi";
+import { useAccount } from "wagmi";
 import { useJoinBg } from "~~/hooks/useJoinBg";
 import { ChallengeId, UserRole } from "~~/services/database/config/types";
 import { UserChallenges } from "~~/services/database/repositories/userChallenges";
@@ -26,7 +26,6 @@ type JoinBGProps = {
 
 const JoinBGButton = ({ user, userChallenges = [] }: JoinBGProps) => {
   const { address: connectedAddress } = useAccount();
-  const { data: walletClient } = useWalletClient();
   const { handleJoinBg, isJoiningBg } = useJoinBg({ user });
   const { openConnectModal } = useConnectModal();
   const { completed: dependenciesCompleted, lockReasonToolTip } = getChallengeDependenciesInfo({
@@ -36,7 +35,7 @@ const JoinBGButton = ({ user, userChallenges = [] }: JoinBGProps) => {
 
   const builderAlreadyJoined = Boolean(user?.role === UserRole.BUILDER);
 
-  if (!walletClient || !connectedAddress) {
+  if (!connectedAddress) {
     return (
       <button
         onClick={openConnectModal}
