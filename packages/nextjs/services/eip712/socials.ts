@@ -7,7 +7,7 @@ export const EIP_712_TYPED_DATA__UPDATE_SOCIALS = {
     Message: [
       { name: "action", type: "string" },
       { name: "socialTelegram", type: "string" },
-      { name: "socialTwitter", type: "string" },
+      { name: "socialX", type: "string" },
       { name: "socialGithub", type: "string" },
       { name: "socialInstagram", type: "string" },
       { name: "socialDiscord", type: "string" },
@@ -31,7 +31,7 @@ export const isValidEIP712UpdateSocialsSignature = async ({
 }) => {
   const socialsWithDefaults = {
     socialTelegram: "",
-    socialTwitter: "",
+    socialX: "",
     socialGithub: "",
     socialInstagram: "",
     socialDiscord: "",

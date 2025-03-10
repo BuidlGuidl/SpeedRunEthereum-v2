@@ -14,7 +14,7 @@ export const socials: Record<keyof UserSocials, Social> = {
     getLink: (value: string) => `https://telegram.me/${value}`,
     weight: 0,
   },
-  socialTwitter: {
+  socialX: {
     label: "Twitter",
     placeholder: "Your Twitter username without the @",
     getLink: (value: string) => `https://twitter.com/${value}`,

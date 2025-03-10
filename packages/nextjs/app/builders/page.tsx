@@ -1,6 +1,12 @@
 "use client";
 
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import DiscordIcon from "../_assets/icons/DiscordIcon";
+import EmailIcon from "../_assets/icons/EmailIcon";
+import GithubIcon from "../_assets/icons/GithubIcon";
+import InstagramIcon from "../_assets/icons/IntagramIcon";
+import TelegramIcon from "../_assets/icons/TelegramIcon";
+import XIcon from "../_assets/icons/XIcon";
 import { keepPreviousData, useInfiniteQuery } from "@tanstack/react-query";
 import {
   ColumnDef,
@@ -44,32 +50,56 @@ export default function BuildersPage() {
       },
       {
         accessorKey: "socialTelegram",
-        cell: info => info.getValue(),
+        cell: info => (
+          <div className="tooltip relative cursor-pointer" data-tip={info.getValue()}>
+            <TelegramIcon className="w-6 h-6" />
+          </div>
+        ),
         header: () => <span>Telegram</span>,
       },
       {
-        accessorKey: "socialTwitter",
-        cell: info => info.getValue(),
-        header: () => <span>Twitter</span>,
+        accessorKey: "socialX",
+        cell: info => (
+          <div className="tooltip relative cursor-pointer" data-tip={info.getValue()}>
+            <XIcon className="w-6 h-6" />
+          </div>
+        ),
+        header: () => <span>X</span>,
       },
       {
         accessorKey: "socialGithub",
-        cell: info => info.getValue(),
+        cell: info => (
+          <div className="tooltip relative cursor-pointer" data-tip={info.getValue()}>
+            <GithubIcon className="w-6 h-6" />
+          </div>
+        ),
         header: () => <span>Github</span>,
       },
       {
         accessorKey: "socialInstagram",
-        cell: info => info.getValue(),
+        cell: info => (
+          <div className="tooltip relative cursor-pointer" data-tip={info.getValue()}>
+            <InstagramIcon className="w-6 h-6" />
+          </div>
+        ),
         header: () => <span>Instagram</span>,
       },
       {
         accessorKey: "socialDiscord",
-        cell: info => info.getValue(),
+        cell: info => (
+          <div className="tooltip relative cursor-pointer" data-tip={info.getValue()}>
+            <DiscordIcon className="w-6 h-6" />
+          </div>
+        ),
         header: () => <span>Discord</span>,
       },
       {
         accessorKey: "socialEmail",
-        cell: info => info.getValue(),
+        cell: info => (
+          <div className="tooltip relative cursor-pointer" data-tip={info.getValue()}>
+            <EmailIcon className="w-6 h-6" />
+          </div>
+        ),
         header: () => <span>Email</span>,
       },
       {
@@ -103,8 +133,6 @@ export default function BuildersPage() {
   const flatData = useMemo(() => data?.pages?.flatMap(page => page.data) ?? [], [data]);
   const totalDBRowCount = data?.pages?.[0]?.meta?.totalRowCount ?? 0;
   const totalFetched = flatData.length;
-
-  console.log({ flatData, totalDBRowCount, totalFetched });
 
   //called on scroll and possibly on mount to fetch more data as the user scrolls and reaches bottom of table
   const fetchMoreOnBottomReached = useCallback(
