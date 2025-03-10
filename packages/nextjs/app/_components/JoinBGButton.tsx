@@ -6,18 +6,10 @@ import QuestionIcon from "../_assets/icons/QuestionIcon";
 import { useConnectModal } from "@rainbow-me/rainbowkit";
 import { useAccount } from "wagmi";
 import { useJoinBg } from "~~/hooks/useJoinBg";
-import { ChallengeId, UserRole } from "~~/services/database/config/types";
+import { UserRole } from "~~/services/database/config/types";
 import { UserChallenges } from "~~/services/database/repositories/userChallenges";
 import { UserByAddress } from "~~/services/database/repositories/users";
-import { getChallengeDependenciesInfo } from "~~/utils/dependent-challenges";
-
-const JOIN_BG_DEPENDENCIES = [
-  ChallengeId.SIMPLE_NFT_EXAMPLE,
-  ChallengeId.DECENTRALIZED_STAKING,
-  ChallengeId.TOKEN_VENDOR,
-  ChallengeId.DICE_GAME,
-  ChallengeId.MINIMUM_VIABLE_EXCHANGE,
-];
+import { JOIN_BG_DEPENDENCIES, getChallengeDependenciesInfo } from "~~/utils/dependent-challenges";
 
 type JoinBGProps = {
   user?: UserByAddress;

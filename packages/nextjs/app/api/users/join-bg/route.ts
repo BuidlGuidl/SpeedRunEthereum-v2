@@ -1,12 +1,16 @@
 import { NextResponse } from "next/server";
+import { ReviewAction } from "~~/services/database/config/types";
+import { findUserChallengesByAddress } from "~~/services/database/repositories/userChallenges";
 import { isUserJoinedBG, updateUserRoleToBuilder } from "~~/services/database/repositories/users";
 import { isValidEIP712JoinBGSignature } from "~~/services/eip712/join-bg";
+import { JOIN_BG_DEPENDENCIES } from "~~/utils/dependent-challenges";
 
 type JoinBGPayload = {
   address: string;
   signature: `0x${string}`;
 };
 
+// TODO: recheck later where to make requests
 export async function POST(req: Request) {
   try {
     const { address, signature } = (await req.json()) as JoinBGPayload;
@@ -19,6 +23,19 @@ export async function POST(req: Request) {
 
     if (userJoinedBG) {
       return NextResponse.json({ error: "User already joined Build Guild" }, { status: 401 });
+    }
+
+    const userChallenges = await findUserChallengesByAddress(address);
+
+    const completedJoinBgDependencies = JOIN_BG_DEPENDENCIES.every(joinBgDependency =>
+      userChallenges.find(
+        userChallenge =>
+          userChallenge.challengeId === joinBgDependency && userChallenge.reviewAction === ReviewAction.ACCEPTED,
+      ),
+    );
+
+    if (!completedJoinBgDependencies) {
+      return NextResponse.json({ error: "Required challenges have not been completed" }, { status: 400 });
     }
 
     const isValidSignature = isValidEIP712JoinBGSignature({ address, signature });

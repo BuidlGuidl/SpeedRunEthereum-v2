@@ -20,8 +20,8 @@ export function useJoinBg({ user }: { user?: UserByAddress }) {
           <span className="font-medium">Welcome to BuidlGuidl!</span>
           <span>
             Visit{" "}
-            <Link href="https://buidlguidl.com" className="underline" target="_blank">
-              BuidlGuidl
+            <Link href="https://buidlguidl.com" className="font-semibold" target="_blank">
+              BuidlGuidl.com
             </Link>{" "}
             and start crafting your Web3 portfolio by submitting your DEX, Multisig or SVG NFT build.
           </span>
