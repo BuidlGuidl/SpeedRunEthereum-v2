@@ -50,7 +50,7 @@ const ChallengeStatusModal = forwardRef<HTMLDialogElement, ChallengeStatusModalP
   ({ closeModal, comment }, ref) => {
     return (
       <dialog ref={ref} className="modal">
-        <div className="modal-box flex flex-col space-y-3">
+        <div className="modal-box max-w-[896px] w-[95%] flex flex-col space-y-3">
           <form method="dialog" className="bg-secondary -mx-6 -mt-6 px-6 py-4 flex items-center justify-between">
             <div className="flex justify-between items-center">
               <p className="font-bold text-xl m-0">Review Feedback</p>

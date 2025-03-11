@@ -14,8 +14,8 @@ const ChallengeRow = ({ challenge }: { challenge: UserChallenges[number] }) => {
   const badgeClass = REVIEW_ACTION_BADGE_CLASSES[challenge.reviewAction ?? ReviewAction.SUBMITTED];
 
   return (
-    <tr key={challenge.challengeId} className="hover">
-      <td>
+    <tr key={challenge.challengeId} className="hover py-4">
+      <td className="py-6">
         <Link href={`/challenge/${challenge.challengeId}`} className="hover:underline">
           🚩 Challenge {challenge.challenge.sortOrder}: {challenge.challenge.challengeName}
         </Link>
@@ -60,7 +60,7 @@ export const UserChallengesTable = ({ challenges }: { challenges: UserChallenges
         <h1 className="text-4xl font-bold mb-0">Challenges</h1>
       </div>
       <div className="w-full">
-        <table className="table table-zebra bg-base-100 shadow-lg">
+        <table className="table bg-base-100 shadow-lg">
           <thead>
             <tr className="text-sm">
               <th>NAME</th>
