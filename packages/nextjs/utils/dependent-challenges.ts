@@ -1,4 +1,4 @@
-import { ReviewAction } from "~~/services/database/config/types";
+import { ChallengeId, ReviewAction } from "~~/services/database/config/types";
 import { UserChallenges } from "~~/services/database/repositories/userChallenges";
 
 const getLockReasonTooltip = ({
@@ -36,3 +36,11 @@ export const getChallengeDependenciesInfo = ({
 
   return { completed: !lockReasonToolTip, lockReasonToolTip };
 };
+
+export const JOIN_BG_DEPENDENCIES = [
+  ChallengeId.SIMPLE_NFT_EXAMPLE,
+  ChallengeId.DECENTRALIZED_STAKING,
+  ChallengeId.TOKEN_VENDOR,
+  ChallengeId.DICE_GAME,
+  ChallengeId.MINIMUM_VIABLE_EXCHANGE,
+];
