@@ -1,9 +1,9 @@
 import React from "react";
 import moment from "moment";
 
-interface DateWithTooltipProps {
+type DateWithTooltipProps = {
   timestamp: string | number | Date;
-}
+};
 
 export const DateWithTooltip = ({ timestamp }: DateWithTooltipProps) => {
   const timestampMoment = moment(timestamp);
