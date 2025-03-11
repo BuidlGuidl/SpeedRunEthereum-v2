@@ -1,12 +1,13 @@
 "use client";
 
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import DiscordIcon from "../_assets/icons/DiscordIcon";
+import Link from "next/link";
 import EmailIcon from "../_assets/icons/EmailIcon";
 import GithubIcon from "../_assets/icons/GithubIcon";
 import InstagramIcon from "../_assets/icons/IntagramIcon";
 import TelegramIcon from "../_assets/icons/TelegramIcon";
 import XIcon from "../_assets/icons/XIcon";
+import { CopyDiscordToClipboard } from "./_component/CopyDiscordToClipboard";
 import { keepPreviousData, useInfiniteQuery } from "@tanstack/react-query";
 import {
   ColumnDef,
@@ -49,58 +50,42 @@ export default function BuildersPage() {
         cell: info => info.getValue(),
       },
       {
-        accessorKey: "socialTelegram",
-        cell: info => (
-          <div className="tooltip relative cursor-pointer" data-tip={info.getValue()}>
-            <TelegramIcon className="w-6 h-6" />
-          </div>
-        ),
-        header: () => <span>Telegram</span>,
-      },
-      {
-        accessorKey: "socialX",
-        cell: info => (
-          <div className="tooltip relative cursor-pointer" data-tip={info.getValue()}>
-            <XIcon className="w-6 h-6" />
-          </div>
-        ),
-        header: () => <span>X</span>,
-      },
-      {
-        accessorKey: "socialGithub",
-        cell: info => (
-          <div className="tooltip relative cursor-pointer" data-tip={info.getValue()}>
-            <GithubIcon className="w-6 h-6" />
-          </div>
-        ),
-        header: () => <span>Github</span>,
-      },
-      {
-        accessorKey: "socialInstagram",
-        cell: info => (
-          <div className="tooltip relative cursor-pointer" data-tip={info.getValue()}>
-            <InstagramIcon className="w-6 h-6" />
-          </div>
-        ),
-        header: () => <span>Instagram</span>,
-      },
-      {
-        accessorKey: "socialDiscord",
-        cell: info => (
-          <div className="tooltip relative cursor-pointer" data-tip={info.getValue()}>
-            <DiscordIcon className="w-6 h-6" />
-          </div>
-        ),
-        header: () => <span>Discord</span>,
-      },
-      {
-        accessorKey: "socialEmail",
-        cell: info => (
-          <div className="tooltip relative cursor-pointer" data-tip={info.getValue()}>
-            <EmailIcon className="w-6 h-6" />
-          </div>
-        ),
-        header: () => <span>Email</span>,
+        header: "Social Links",
+        size: 300,
+        cell: info => {
+          const row = info.row.original;
+
+          return (
+            <div className="flex gap-2">
+              {row.socialTelegram && (
+                <Link href={`https://t.me/${row.socialTelegram}`}>
+                  <TelegramIcon className="w-4 h-4" />
+                </Link>
+              )}
+              {row.socialX && (
+                <Link href={`https://x.com/${row.socialX}`}>
+                  <XIcon className="w-4 h-4" />
+                </Link>
+              )}
+              {row.socialGithub && (
+                <Link href={`https://github.com/${row.socialGithub}`}>
+                  <GithubIcon className="w-4 h-4" />
+                </Link>
+              )}
+              {row.socialInstagram && (
+                <Link href={`https://www.instagram.com/${row.socialInstagram}`}>
+                  <InstagramIcon className="w-4 h-4" />
+                </Link>
+              )}
+              {row.socialDiscord && <CopyDiscordToClipboard text={row.socialDiscord} />}
+              {row.socialEmail && (
+                <Link href={`mailto:${row.socialEmail}`}>
+                  <EmailIcon className="w-4 h-4" />
+                </Link>
+              )}
+            </div>
+          );
+        },
       },
       {
         accessorKey: "createdAt",
