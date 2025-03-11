@@ -156,9 +156,22 @@ export default function BuildersPage() {
     fetchMoreOnBottomReached(tableContainerRef.current);
   }, [fetchMoreOnBottomReached]);
 
+  const tableData = useMemo(() => (isLoading ? Array(30).fill({}) : flatData), [isLoading, flatData]);
+
+  const tableColumns = useMemo(
+    () =>
+      isLoading
+        ? columns.map(column => ({
+            ...column,
+            cell: () => <div className="skeleton h-4 w-full bg-accent" />,
+          }))
+        : columns,
+    [isLoading, columns],
+  );
+
   const table = useReactTable({
-    data: flatData,
-    columns,
+    data: tableData,
+    columns: tableColumns,
     state: {
       sorting,
     },
@@ -194,10 +207,6 @@ export default function BuildersPage() {
         : undefined,
     overscan: 5,
   });
-
-  if (isLoading) {
-    return <>Loading...</>;
-  }
 
   return (
     <div className="mx-4 text-center">
