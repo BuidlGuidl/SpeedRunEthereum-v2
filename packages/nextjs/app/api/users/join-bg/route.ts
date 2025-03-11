@@ -10,7 +10,7 @@ type JoinBGPayload = {
   signature: `0x${string}`;
 };
 
-// TODO: recheck later where to make requests
+// TODO: consider weather should we make request to buidlguidl.com or not
 export async function POST(req: Request) {
   try {
     const { address, signature } = (await req.json()) as JoinBGPayload;
