@@ -10,7 +10,7 @@ const REVIEW_ACTION_BADGE_CLASSES: Record<ReviewAction, string> = {
 } as const;
 
 const ChallengeRow = ({ challenge }: { challenge: UserChallenges[number] }) => {
-  const badgeClass = REVIEW_ACTION_BADGE_CLASSES[challenge.reviewAction];
+  const badgeClass = REVIEW_ACTION_BADGE_CLASSES[challenge.reviewAction ?? ReviewAction.SUBMITTED];
 
   return (
     <tr key={challenge.challengeId} className="hover">
