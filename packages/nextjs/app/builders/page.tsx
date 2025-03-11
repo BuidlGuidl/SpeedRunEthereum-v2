@@ -90,7 +90,8 @@ export default function BuildersPage() {
       {
         accessorKey: "createdAt",
         header: "Created At",
-        cell: info => info.getValue<Date>().toLocaleString(),
+        // TODO: use moment.fromNow() or similar?
+        cell: info => new Date(info.getValue<Date>()).toLocaleString(),
         size: 200,
       },
     ],
