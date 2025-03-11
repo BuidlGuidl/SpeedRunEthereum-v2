@@ -4,15 +4,7 @@ import { DateWithTooltip } from "~~/app/_components/DateWithTooltip";
 import { ReviewAction } from "~~/services/database/config/types";
 import { UserChallenges } from "~~/services/database/repositories/userChallenges";
 
-const REVIEW_ACTION_BADGE_CLASSES: Record<ReviewAction, string> = {
-  [ReviewAction.ACCEPTED]: "badge-success",
-  [ReviewAction.REJECTED]: "badge-error",
-  [ReviewAction.SUBMITTED]: "badge-warning",
-} as const;
-
 const ChallengeRow = ({ challenge }: { challenge: UserChallenges[number] }) => {
-  const badgeClass = REVIEW_ACTION_BADGE_CLASSES[challenge.reviewAction ?? ReviewAction.SUBMITTED];
-
   return (
     <tr key={challenge.challengeId} className="hover py-4">
       <td className="py-6">
