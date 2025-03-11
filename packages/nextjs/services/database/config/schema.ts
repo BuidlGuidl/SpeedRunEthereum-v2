@@ -80,7 +80,7 @@ export const userChallenges = pgTable(
     frontendUrl: varchar({ length: 255 }),
     contractUrl: varchar({ length: 255 }),
     reviewComment: text(), // Feedback provided during autograding
-    submittedAt: timestamp().defaultNow(),
+    submittedAt: timestamp().notNull().defaultNow(),
     reviewAction: reviewActionEnum().notNull(), // Final review decision from autograder (REJECTED or ACCEPTED). Initially set to SUBMITTED.
   },
   table => [primaryKey({ columns: [table.userAddress, table.challengeId] })],

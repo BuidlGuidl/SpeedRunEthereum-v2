@@ -1,4 +1,5 @@
 import { QuestionMarkCircleIcon } from "@heroicons/react/24/outline";
+import { DateWithTooltip } from "~~/app/_components/DateWithTooltip";
 import { ReviewAction } from "~~/services/database/config/types";
 import { UserChallenges } from "~~/services/database/repositories/userChallenges";
 
@@ -34,7 +35,9 @@ const ChallengeRow = ({ challenge }: { challenge: UserChallenges[number] }) => {
           "-"
         )}
       </td>
-      <td>{challenge.submittedAt ? challenge.submittedAt.toLocaleString() : "-"}</td>
+      <td>
+        <DateWithTooltip timestamp={challenge.submittedAt} />
+      </td>
       <td>
         <span className={`badge ${badgeClass}`}>{challenge.reviewAction?.toLowerCase()}</span>
       </td>
