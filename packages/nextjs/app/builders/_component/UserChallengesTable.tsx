@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { QuestionMarkCircleIcon } from "@heroicons/react/24/outline";
+import { ChallengeStatus } from "./ChallengeStatus";
 import { DateWithTooltip } from "~~/app/_components/DateWithTooltip";
 import { ReviewAction } from "~~/services/database/config/types";
 import { UserChallenges } from "~~/services/database/repositories/userChallenges";
@@ -42,14 +42,10 @@ const ChallengeRow = ({ challenge }: { challenge: UserChallenges[number] }) => {
         <DateWithTooltip timestamp={challenge.submittedAt} />
       </td>
       <td>
-        <span className={`badge ${badgeClass}`}>{challenge.reviewAction?.toLowerCase()}</span>
-      </td>
-      <td>
-        {challenge.reviewComment && (
-          <div className="tooltip" data-tip={challenge.reviewComment}>
-            <QuestionMarkCircleIcon className="h-4 w-4 cursor-help" />
-          </div>
-        )}
+        <ChallengeStatus
+          reviewAction={challenge.reviewAction ?? ReviewAction.SUBMITTED}
+          comment={challenge.reviewComment}
+        />
       </td>
     </tr>
   );
@@ -72,7 +68,6 @@ export const UserChallengesTable = ({ challenges }: { challenges: UserChallenges
               <th>LIVE DEMO</th>
               <th>UPDATED</th>
               <th>STATUS</th>
-              <th></th>
             </tr>
           </thead>
           <tbody>
