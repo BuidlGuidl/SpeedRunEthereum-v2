@@ -51,8 +51,13 @@ export async function updateSocials(payload: UpdateSocialsPayload) {
   return response.json();
 }
 
-export const getSortedUsersGroup = async (start: number, size: number, sorting: SortingState) => {
+export const getSortedUsersWithChallenges = async (start: number, size: number, sorting: SortingState) => {
   const response = await fetch(`/api/users/sorted?start=${start}&size=${size}&sorting=${JSON.stringify(sorting)}`);
+
+  if (!response.ok) {
+    throw new Error(`Failed to fetch sorted users: ${response.status} ${response.statusText}`);
+  }
+
   const usersData = (await response.json()) as {
     data: UserWithChallengesData[];
     meta: {

@@ -21,7 +21,7 @@ import {
 } from "@tanstack/react-table";
 import { useVirtualizer } from "@tanstack/react-virtual";
 import { Address } from "~~/components/scaffold-eth";
-import { getSortedUsersGroup } from "~~/services/api/users";
+import { getSortedUsersWithChallenges } from "~~/services/api/users";
 import { UserWithChallengesData } from "~~/services/database/repositories/users";
 
 export type UsersApiResponse = {
@@ -119,7 +119,7 @@ export default function BuildersPage() {
     ],
     queryFn: async ({ pageParam = 0 }) => {
       const start = (pageParam as number) * FETCH_SIZE;
-      const fetchedData = await getSortedUsersGroup(start, FETCH_SIZE, sorting); // pretend api call
+      const fetchedData = await getSortedUsersWithChallenges(start, FETCH_SIZE, sorting); // pretend api call
       return fetchedData;
     },
     initialPageParam: 0,

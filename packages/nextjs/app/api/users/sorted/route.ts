@@ -2,12 +2,17 @@ import { NextRequest } from "next/server";
 import { findSortedUsersWithChallenges } from "~~/services/database/repositories/users";
 
 export async function GET(request: NextRequest) {
-  const searchParams = request.nextUrl.searchParams;
-  const start = parseInt(searchParams.get("start") ?? "0");
-  const size = parseInt(searchParams.get("size") ?? "0");
-  const sorting = JSON.parse(searchParams.get("sorting") ?? "[]");
+  try {
+    const searchParams = request.nextUrl.searchParams;
+    const start = parseInt(searchParams.get("start") ?? "0");
+    const size = parseInt(searchParams.get("size") ?? "0");
+    const sorting = JSON.parse(searchParams.get("sorting") ?? "[]");
 
-  const data = await findSortedUsersWithChallenges(start, size, sorting);
+    const data = await findSortedUsersWithChallenges(start, size, sorting);
 
-  return Response.json(data);
+    return Response.json(data);
+  } catch (error) {
+    console.error("Error fetching sorted users:", error);
+    return Response.json({ error: "Internal Server Error" }, { status: 500 });
+  }
 }
