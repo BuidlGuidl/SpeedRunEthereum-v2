@@ -10,7 +10,7 @@ export const UserProfileCard = ({ user, address }: { user: UserByAddress; addres
         <div className="text-xl font-bold">
           {address.slice(0, 6)}...{address.slice(-4)}
         </div>
-        <div className="text-sm text-neutral-content">
+        <div className="text-sm">
           Joined {new Date(user.createdAt).toLocaleDateString("en-US", { month: "long", year: "numeric" })}
         </div>
         <UserSocials user={user} />

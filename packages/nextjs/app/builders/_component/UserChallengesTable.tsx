@@ -8,15 +8,15 @@ export const UserChallengesTable = ({ challenges }: { challenges: UserChallenges
         <h1 className="text-4xl font-bold mb-0">Challenges</h1>
       </div>
       <div className="w-full">
-        <table className="table table-zebra bg-base-100">
+        <table className="table table-zebra bg-base-100 shadow-lg">
           <thead>
             <tr className="text-sm">
-              <th className="bg-primary">NAME</th>
-              <th className="bg-primary">CONTRACT</th>
-              <th className="bg-primary">LIVE DEMO</th>
-              <th className="bg-primary">SUBMITED AT</th>
-              <th className="bg-primary">STATUS</th>
-              <th className="bg-primary"></th>
+              <th>NAME</th>
+              <th>CONTRACT</th>
+              <th>LIVE DEMO</th>
+              <th>SUBMITED AT</th>
+              <th>STATUS</th>
+              <th></th>
             </tr>
           </thead>
           <tbody>
