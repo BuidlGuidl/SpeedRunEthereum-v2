@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { QuestionMarkCircleIcon } from "@heroicons/react/24/outline";
 import { DateWithTooltip } from "~~/app/_components/DateWithTooltip";
 import { ReviewAction } from "~~/services/database/config/types";
@@ -15,7 +16,9 @@ const ChallengeRow = ({ challenge }: { challenge: UserChallenges[number] }) => {
   return (
     <tr key={challenge.challengeId} className="hover">
       <td>
-        🚩 Challenge {challenge.challenge.sortOrder}: {challenge.challenge.challengeName}
+        <Link href={`/challenge/${challenge.challengeId}`} className="hover:underline">
+          🚩 Challenge {challenge.challenge.sortOrder}: {challenge.challenge.challengeName}
+        </Link>
       </td>
       <td>
         {challenge.contractUrl ? (
@@ -53,8 +56,10 @@ const ChallengeRow = ({ challenge }: { challenge: UserChallenges[number] }) => {
 };
 
 export const UserChallengesTable = ({ challenges }: { challenges: UserChallenges }) => {
+  const sortedChallenges = challenges.sort((a, b) => a.challenge.sortOrder - b.challenge.sortOrder);
+
   return (
-    <div className="flex flex-col gap-8 py-8 px-4 lg:px-8">
+    <div className="flex flex-col gap-8 py-8">
       <div>
         <h1 className="text-4xl font-bold mb-0">Challenges</h1>
       </div>
@@ -71,7 +76,7 @@ export const UserChallengesTable = ({ challenges }: { challenges: UserChallenges
             </tr>
           </thead>
           <tbody>
-            {challenges.map(challenge => (
+            {sortedChallenges.map(challenge => (
               <ChallengeRow key={challenge.challengeId} challenge={challenge} />
             ))}
           </tbody>
