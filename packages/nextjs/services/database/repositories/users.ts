@@ -1,3 +1,4 @@
+import { ReviewAction } from "../config/types";
 import { ColumnSort, SortingState } from "@tanstack/react-table";
 import { InferInsertModel } from "drizzle-orm";
 import { eq } from "drizzle-orm";
@@ -11,6 +12,7 @@ type PickSocials<T> = {
 export type UserInsert = InferInsertModel<typeof users>;
 export type UserByAddress = Awaited<ReturnType<typeof findUserByAddress>>[0];
 export type UserSocials = PickSocials<UserByAddress>;
+export type UserWithChallengesData = Awaited<ReturnType<typeof findSortedUsersWithChallenges>>["data"][0];
 
 export async function findUserByAddress(address: string) {
   return await db
@@ -19,25 +21,54 @@ export async function findUserByAddress(address: string) {
     .where(eq(lower(users.userAddress), address.toLowerCase()));
 }
 
-export async function findSortedUsersGroup(start: number, size: number, sorting: SortingState) {
+export async function findSortedUsersWithChallenges(start: number, size: number, sorting: SortingState) {
   const sortingQuery = sorting[0] as ColumnSort;
   const query = db.query.users.findMany({
     limit: size,
     offset: start,
     orderBy: (users, { desc, asc }) =>
-      sortingQuery
+      sortingQuery && sortingQuery.id in users
         ? sortingQuery.desc
           ? desc(users[sortingQuery.id as keyof typeof users])
           : asc(users[sortingQuery.id as keyof typeof users])
         : [],
+    with: {
+      userChallenges: true,
+    },
   });
 
-  const [users_data, total_count] = await Promise.all([query, db.$count(users)]);
+  const [usersData, totalCount] = await Promise.all([query, db.$count(users)]);
+
+  // TODO: add these fields to users table for db level sorting?
+  const preparedUsersData = usersData.map(({ userChallenges, ...restUser }) => ({
+    ...restUser,
+    challengesCompleted: userChallenges.filter(userChallenge => userChallenge.reviewAction === ReviewAction.ACCEPTED)
+      .length,
+    lastActivity: userChallenges
+      .sort((a, b) => new Date(a.submittedAt as Date).getTime() - new Date(b.submittedAt as Date).getTime())
+      .at(0)?.submittedAt,
+  }));
+
+  if (sortingQuery?.id === "challengesCompleted") {
+    preparedUsersData.sort((a, b) =>
+      sortingQuery.desc ? b.challengesCompleted - a.challengesCompleted : a.challengesCompleted - b.challengesCompleted,
+    );
+  }
+  if (sortingQuery?.id === "lastActivity") {
+    preparedUsersData.sort((a, b) => {
+      const dateA = a.lastActivity || a.createdAt;
+      const dateB = b.lastActivity || b.createdAt;
+      return sortingQuery.desc
+        ? new Date(dateB as Date).getTime() - new Date(dateA as Date).getTime()
+        : new Date(dateA as Date).getTime() - new Date(dateB as Date).getTime();
+    });
+  }
+  // end of TODO
 
   return {
-    data: users_data,
+    data: preparedUsersData,
     meta: {
-      totalRowCount: total_count,
+      totalRowCount: totalCount,
     },
   };
 }

@@ -1,6 +1,6 @@
 import { SortingState } from "@tanstack/react-table";
 import { UpdateSocialsPayload } from "~~/app/api/users/update-socials/route";
-import { UserByAddress } from "~~/services/database/repositories/users";
+import { UserByAddress, UserWithChallengesData } from "~~/services/database/repositories/users";
 
 export async function fetchUser(address: string | undefined) {
   if (!address) return;
@@ -54,7 +54,7 @@ export async function updateSocials(payload: UpdateSocialsPayload) {
 export const getSortedUsersGroup = async (start: number, size: number, sorting: SortingState) => {
   const response = await fetch(`/api/users/sorted?start=${start}&size=${size}&sorting=${JSON.stringify(sorting)}`);
   const usersData = (await response.json()) as {
-    data: UserByAddress[];
+    data: UserWithChallengesData[];
     meta: {
       totalRowCount: number;
     };

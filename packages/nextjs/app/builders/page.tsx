@@ -22,17 +22,17 @@ import {
 import { useVirtualizer } from "@tanstack/react-virtual";
 import { Address } from "~~/components/scaffold-eth";
 import { getSortedUsersGroup } from "~~/services/api/users";
-import { UserByAddress } from "~~/services/database/repositories/users";
+import { UserWithChallengesData } from "~~/services/database/repositories/users";
 
 export type UsersApiResponse = {
-  data: UserByAddress[];
+  data: UserWithChallengesData[];
   meta: {
     totalRowCount: number;
   };
 };
 
-const FETCH_SIZE = 2;
-const ROW_HEIGHT_IN_PX = 500;
+const FETCH_SIZE = 20;
+const ROW_HEIGHT_IN_PX = 50;
 
 export default function BuildersPage() {
   // we need a reference to the scrolling element for logic down below
@@ -40,7 +40,7 @@ export default function BuildersPage() {
 
   const [sorting, setSorting] = useState<SortingState>([]);
 
-  const columns = useMemo<ColumnDef<UserByAddress>[]>(
+  const columns = useMemo<ColumnDef<UserWithChallengesData>[]>(
     () => [
       {
         accessorKey: "userAddress",
@@ -53,8 +53,8 @@ export default function BuildersPage() {
         },
       },
       {
-        header: "Role",
-        accessorKey: "role",
+        header: "Challenges",
+        accessorKey: "challengesCompleted",
         cell: info => info.getValue(),
         size: 100,
       },
@@ -97,10 +97,14 @@ export default function BuildersPage() {
         },
       },
       {
-        accessorKey: "createdAt",
-        header: "Created At",
-        // TODO: use moment.fromNow() or similar?
-        cell: info => new Date(info.getValue<Date>()).toLocaleString(),
+        header: "Last Activity",
+        accessorKey: "lastActivity",
+        cell: info => {
+          const row = info.row.original;
+
+          const date = row.lastActivity || (row.createdAt as Date);
+          return new Date(date).toLocaleString();
+        },
         size: 200,
       },
     ],
@@ -161,7 +165,6 @@ export default function BuildersPage() {
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
     manualSorting: true,
-    debugTable: true,
   });
 
   // scroll to top of table when sorting changes
@@ -267,7 +270,7 @@ export default function BuildersPage() {
             }}
           >
             {rowVirtualizer.getVirtualItems().map(virtualRow => {
-              const row = rows[virtualRow.index] as Row<UserByAddress>;
+              const row = rows[virtualRow.index] as Row<UserWithChallengesData>;
               return (
                 <tr
                   data-index={virtualRow.index} // needed for dynamic row height measurement

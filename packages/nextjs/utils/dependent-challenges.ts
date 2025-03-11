@@ -1,13 +1,6 @@
 import { ReviewAction } from "~~/services/database/config/types";
 import { UserChallenges } from "~~/services/database/repositories/userChallenges";
 
-// TODO: update deps later
-export const getIsDependencyChallengesCompleted = (deps: { dependencies: string[] }, userChallenges: UserChallenges) =>
-  deps.dependencies?.every(name => {
-    const userChallenge = userChallenges.find(uc => uc.challengeId === name);
-    return userChallenge?.reviewAction === ReviewAction.ACCEPTED;
-  });
-
 const getLockReasonTooltip = ({
   dependencies,
   userChallenges,
