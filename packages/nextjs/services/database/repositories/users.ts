@@ -1,9 +1,9 @@
 import { ReviewAction } from "../config/types";
 import { ColumnSort, SortingState } from "@tanstack/react-table";
 import { InferInsertModel } from "drizzle-orm";
-import { eq } from "drizzle-orm";
+import { eq, sql } from "drizzle-orm";
 import { db } from "~~/services/database/config/postgresClient";
-import { lower, users } from "~~/services/database/config/schema";
+import { lower, userChallenges, users } from "~~/services/database/config/schema";
 
 type PickSocials<T> = {
   [K in keyof T as K extends `social${string}` ? K : never]?: T[K] extends string | null ? string : never;
@@ -23,15 +23,39 @@ export async function findUserByAddress(address: string) {
 
 export async function findSortedUsersWithChallenges(start: number, size: number, sorting: SortingState) {
   const sortingQuery = sorting[0] as ColumnSort;
+
+  // Define SQL expressions once
+  const challengesCompletedExpr = sql`(SELECT COUNT(*) FROM ${userChallenges} uc WHERE uc.user_address = ${users.userAddress} AND uc.review_action = ${ReviewAction.ACCEPTED})`;
+  const lastActivityExpr = sql`(SELECT MAX(uc.submitted_at) FROM ${userChallenges} uc WHERE uc.user_address = ${users.userAddress})`;
+
   const query = db.query.users.findMany({
     limit: size,
     offset: start,
-    orderBy: (users, { desc, asc }) =>
-      sortingQuery && sortingQuery.id in users
-        ? sortingQuery.desc
-          ? desc(users[sortingQuery.id as keyof typeof users])
-          : asc(users[sortingQuery.id as keyof typeof users])
-        : [],
+    orderBy: (users, { desc, asc }) => {
+      if (!sortingQuery) return [];
+
+      const sortOrder = sortingQuery.desc ? desc : asc;
+      // Use the pre-defined SQL expressions for sorting
+      if (sortingQuery.id === "challengesCompleted") {
+        return sortOrder(challengesCompletedExpr);
+      }
+
+      if (sortingQuery.id === "lastActivity") {
+        return sortOrder(lastActivityExpr);
+      }
+
+      // For regular fields in the users table
+      if (sortingQuery.id in users) {
+        return sortOrder(users[sortingQuery.id as keyof typeof users]);
+      }
+
+      return [];
+    },
+    extras: {
+      // Reuse the same SQL expressions for the extras
+      challengesCompleted: challengesCompletedExpr.as("challengesCompleted"),
+      lastActivity: lastActivityExpr.as("lastActivity"),
+    },
     with: {
       userChallenges: true,
     },
@@ -39,31 +63,11 @@ export async function findSortedUsersWithChallenges(start: number, size: number,
 
   const [usersData, totalCount] = await Promise.all([query, db.$count(users)]);
 
-  // TODO: add these fields to users table for db level sorting?
   const preparedUsersData = usersData.map(({ userChallenges, ...restUser }) => ({
     ...restUser,
-    challengesCompleted: userChallenges.filter(userChallenge => userChallenge.reviewAction === ReviewAction.ACCEPTED)
-      .length,
-    lastActivity: userChallenges
-      .sort((a, b) => new Date(a.submittedAt as Date).getTime() - new Date(b.submittedAt as Date).getTime())
-      .at(0)?.submittedAt,
+    challengesCompleted: Number(restUser.challengesCompleted),
+    lastActivity: restUser.lastActivity as Date | undefined,
   }));
-
-  if (sortingQuery?.id === "challengesCompleted") {
-    preparedUsersData.sort((a, b) =>
-      sortingQuery.desc ? b.challengesCompleted - a.challengesCompleted : a.challengesCompleted - b.challengesCompleted,
-    );
-  }
-  if (sortingQuery?.id === "lastActivity") {
-    preparedUsersData.sort((a, b) => {
-      const dateA = a.lastActivity || a.createdAt;
-      const dateB = b.lastActivity || b.createdAt;
-      return sortingQuery.desc
-        ? new Date(dateB as Date).getTime() - new Date(dateA as Date).getTime()
-        : new Date(dateA as Date).getTime() - new Date(dateB as Date).getTime();
-    });
-  }
-  // end of TODO
 
   return {
     data: preparedUsersData,
