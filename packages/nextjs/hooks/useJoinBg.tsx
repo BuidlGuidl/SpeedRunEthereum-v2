@@ -20,9 +20,9 @@ export function useJoinBg({ user }: { user?: UserByAddress }) {
           <span className="font-medium">Welcome to BuidlGuidl!</span>
           <span>
             Visit{" "}
-            <Link href="https://buidlguidl.com" className="font-semibold" target="_blank">
+            <a href="https://buidlguidl.com" className="font-semibold link" target="_blank">
               BuidlGuidl.com
-            </Link>{" "}
+            </a>{" "}
             and start crafting your Web3 portfolio by submitting your DEX, Multisig or SVG NFT build.
           </span>
         </div>,
@@ -44,7 +44,7 @@ export function useJoinBg({ user }: { user?: UserByAddress }) {
           <span className="font-medium">Can&apos;t join the BuidlGuidl.</span>
           <span>
             In order to join the BuildGuidl you need to set your socials in{" "}
-            <Link href={`/builders/${user.userAddress}`} className="underline">
+            <Link href={`/builders/${user.userAddress}`} className="link">
               your portfolio
             </Link>
             . It&apos;s our way to contact you.
