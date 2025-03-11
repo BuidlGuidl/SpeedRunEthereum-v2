@@ -52,7 +52,7 @@ export async function updateSocials(payload: UpdateSocialsPayload) {
 }
 
 export const getSortedUsersGroup = async (start: number, size: number, sorting: SortingState) => {
-  const response = await fetch(`/api/users/sorted?start=${start}&size=${size}&sortBy=${sorting}`);
+  const response = await fetch(`/api/users/sorted?start=${start}&size=${size}&sorting=${JSON.stringify(sorting)}`);
   const usersData = (await response.json()) as {
     data: UserByAddress[];
     meta: {

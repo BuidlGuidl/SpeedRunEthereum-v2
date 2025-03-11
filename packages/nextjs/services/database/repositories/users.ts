@@ -20,15 +20,19 @@ export async function findUserByAddress(address: string) {
 }
 
 export async function findSortedUsersGroup(start: number, size: number, sorting: SortingState) {
-  let query = db.select().from(users) as any;
+  const sortingQuery = sorting[0] as ColumnSort;
+  const query = db.query.users.findMany({
+    limit: size,
+    offset: start,
+    orderBy: (users, { desc, asc }) =>
+      sortingQuery
+        ? sortingQuery.desc
+          ? desc(users[sortingQuery.id as keyof typeof users])
+          : asc(users[sortingQuery.id as keyof typeof users])
+        : [],
+  });
 
-  if (sorting.length) {
-    const sort = sorting[0] as ColumnSort;
-    const { id, desc } = sort as { id: keyof typeof users; desc: boolean };
-    query = query.orderBy(users[id], desc ? "desc" : "asc");
-  }
-
-  const [users_data, total_count] = await Promise.all([query.limit(size).offset(start), db.$count(users)]);
+  const [users_data, total_count] = await Promise.all([query, db.$count(users)]);
 
   return {
     data: users_data,

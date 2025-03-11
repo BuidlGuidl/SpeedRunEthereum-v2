@@ -9,10 +9,7 @@ export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
   const start = parseInt(searchParams.get("start") ?? DEFAULT_SEARCH_START);
   const size = parseInt(searchParams.get("size") ?? DEFAULT_SEARCH_SIZE);
-  const sortBy = searchParams.get("sortBy");
-  const desc = searchParams.get("desc") === "true";
-
-  const sorting: SortingState = sortBy ? [{ id: sortBy, desc }] : [];
+  const sorting = JSON.parse(searchParams.get("sorting") ?? "[]");
 
   const data = await findSortedUsersGroup(start, size, sorting);
 
