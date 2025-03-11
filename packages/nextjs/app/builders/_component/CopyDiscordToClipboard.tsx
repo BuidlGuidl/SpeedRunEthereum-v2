@@ -19,7 +19,7 @@ export const CopyDiscordToClipboard = ({ text }: { text: string }) => {
         className={`${copied ? "tooltip-open tooltip relative " : ""}  cursor-pointer`}
         data-tip="Copied to your clipboard!"
       >
-        <DiscordIcon className="w-4 h-4" />
+        <DiscordIcon className="w-4 h-4 fill-primary" />
       </div>
     </CopyToClipboard>
   );

@@ -65,31 +65,31 @@ export default function BuildersPage() {
           const row = info.row.original;
 
           return (
-            <div className="flex gap-2 fill-primary">
+            <div className="flex gap-2">
               {row.socialTelegram && (
-                <Link href={`https:// t.me/${row.socialTelegram}`}>
-                  <TelegramIcon className="w-4 h-4" />
+                <Link href={`https://t.me/${row.socialTelegram}`}>
+                  <TelegramIcon className="w-4 h-4 fill-primary" />
                 </Link>
               )}
               {row.socialX && (
-                <Link href={`https:// x.com/${row.socialX}`}>
-                  <XIcon className="w-4 h-4" />
+                <Link href={`https://x.com/${row.socialX}`}>
+                  <XIcon className="w-4 h-4 fill-primary" />
                 </Link>
               )}
               {row.socialGithub && (
-                <Link href={`https:// github.com/${row.socialGithub}`}>
-                  <GithubIcon className="w-4 h-4" />
+                <Link href={`https://github.com/${row.socialGithub}`}>
+                  <GithubIcon className="w-4 h-4 fill-primary" />
                 </Link>
               )}
               {row.socialInstagram && (
-                <Link href={`https:// www.instagram.com/${row.socialInstagram}`}>
-                  <InstagramIcon className="w-4 h-4" />
+                <Link href={`https://instagram.com/${row.socialInstagram}`}>
+                  <InstagramIcon className="w-4 h-4 fill-primary" />
                 </Link>
               )}
               {row.socialDiscord && <CopyDiscordToClipboard text={row.socialDiscord} />}
               {row.socialEmail && (
                 <Link href={`mailto:${row.socialEmail}`}>
-                  <EmailIcon className="w-4 h-4" />
+                  <EmailIcon className="w-4 h-4 fill-primary" />
                 </Link>
               )}
             </div>
