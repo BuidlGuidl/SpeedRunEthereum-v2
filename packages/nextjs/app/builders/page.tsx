@@ -20,6 +20,7 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import { useVirtualizer } from "@tanstack/react-virtual";
+import { Address } from "~~/components/scaffold-eth";
 import { getSortedUsersGroup } from "~~/services/api/users";
 import { UserByAddress } from "~~/services/database/repositories/users";
 
@@ -31,9 +32,10 @@ export type UsersApiResponse = {
 };
 
 const FETCH_SIZE = 2;
+const ROW_HEIGHT_IN_PX = 500;
 
 export default function BuildersPage() {
-  //we need a reference to the scrolling element for logic down below
+  // we need a reference to the scrolling element for logic down below
   const tableContainerRef = useRef<HTMLDivElement>(null);
 
   const [sorting, setSorting] = useState<SortingState>([]);
@@ -42,38 +44,45 @@ export default function BuildersPage() {
     () => [
       {
         accessorKey: "userAddress",
-        header: "Address",
-        size: 500,
+        header: "Builder",
+        size: 200,
+        cell: info => {
+          const row = info.row.original;
+
+          return <Address address={row.userAddress} />;
+        },
       },
       {
+        header: "Role",
         accessorKey: "role",
         cell: info => info.getValue(),
+        size: 100,
       },
       {
-        header: "Social Links",
-        size: 300,
+        header: "Socials",
+        size: 200,
         cell: info => {
           const row = info.row.original;
 
           return (
-            <div className="flex gap-2">
+            <div className="flex gap-2 fill-primary">
               {row.socialTelegram && (
-                <Link href={`https://t.me/${row.socialTelegram}`}>
+                <Link href={`https:// t.me/${row.socialTelegram}`}>
                   <TelegramIcon className="w-4 h-4" />
                 </Link>
               )}
               {row.socialX && (
-                <Link href={`https://x.com/${row.socialX}`}>
+                <Link href={`https:// x.com/${row.socialX}`}>
                   <XIcon className="w-4 h-4" />
                 </Link>
               )}
               {row.socialGithub && (
-                <Link href={`https://github.com/${row.socialGithub}`}>
+                <Link href={`https:// github.com/${row.socialGithub}`}>
                   <GithubIcon className="w-4 h-4" />
                 </Link>
               )}
               {row.socialInstagram && (
-                <Link href={`https://www.instagram.com/${row.socialInstagram}`}>
+                <Link href={`https:// www.instagram.com/${row.socialInstagram}`}>
                   <InstagramIcon className="w-4 h-4" />
                 </Link>
               )}
@@ -98,15 +107,15 @@ export default function BuildersPage() {
     [],
   );
 
-  //react-query has a useInfiniteQuery hook that is perfect for this use case
+  // react-query has a useInfiniteQuery hook that is perfect for this use case
   const { data, fetchNextPage, isFetching, isLoading } = useInfiniteQuery<UsersApiResponse>({
     queryKey: [
       "users",
-      sorting, //refetch when sorting changes
+      sorting, // refetch when sorting changes
     ],
     queryFn: async ({ pageParam = 0 }) => {
       const start = (pageParam as number) * FETCH_SIZE;
-      const fetchedData = await getSortedUsersGroup(start, FETCH_SIZE, sorting); //pretend api call
+      const fetchedData = await getSortedUsersGroup(start, FETCH_SIZE, sorting); // pretend api call
       return fetchedData;
     },
     initialPageParam: 0,
@@ -115,18 +124,22 @@ export default function BuildersPage() {
     placeholderData: keepPreviousData,
   });
 
-  //flatten the array of arrays from the useInfiniteQuery hook
+  // flatten the array of arrays from the useInfiniteQuery hook
   const flatData = useMemo(() => data?.pages?.flatMap(page => page.data) ?? [], [data]);
   const totalDBRowCount = data?.pages?.[0]?.meta?.totalRowCount ?? 0;
   const totalFetched = flatData.length;
 
-  //called on scroll and possibly on mount to fetch more data as the user scrolls and reaches bottom of table
+  // called on scroll and possibly on mount to fetch more data as the user scrolls and reaches bottom of table
   const fetchMoreOnBottomReached = useCallback(
     (containerRefElement?: HTMLDivElement | null) => {
       if (containerRefElement) {
         const { scrollHeight, scrollTop, clientHeight } = containerRefElement;
-        //once the user has scrolled within 500px of the bottom of the table, fetch more data if we can
-        if (scrollHeight - scrollTop - clientHeight < 500 && !isFetching && totalFetched < totalDBRowCount) {
+        // once the user has scrolled within ROW_HEIGHT_IN_PX px of the bottom of the table, fetch more data if we can
+        if (
+          scrollHeight - scrollTop - clientHeight < ROW_HEIGHT_IN_PX &&
+          !isFetching &&
+          totalFetched < totalDBRowCount
+        ) {
           fetchNextPage();
         }
       }
@@ -134,7 +147,7 @@ export default function BuildersPage() {
     [fetchNextPage, isFetching, totalFetched, totalDBRowCount],
   );
 
-  //a check on mount and after a fetch to see if the table is already scrolled to the bottom and immediately needs to fetch more data
+  // a check on mount and after a fetch to see if the table is already scrolled to the bottom and immediately needs to fetch more data
   useEffect(() => {
     fetchMoreOnBottomReached(tableContainerRef.current);
   }, [fetchMoreOnBottomReached]);
@@ -151,7 +164,7 @@ export default function BuildersPage() {
     debugTable: true,
   });
 
-  //scroll to top of table when sorting changes
+  // scroll to top of table when sorting changes
   const handleSortingChange: OnChangeFn<SortingState> = updater => {
     setSorting(updater);
     if (!!table.getRowModel().rows.length) {
@@ -159,7 +172,7 @@ export default function BuildersPage() {
     }
   };
 
-  //since this table option is derived from table row model state, we're using the table.setOptions utility
+  // since this table option is derived from table row model state, we're using the table.setOptions utility
   table.setOptions(prev => ({
     ...prev,
     onSortingChange: handleSortingChange,
@@ -169,9 +182,9 @@ export default function BuildersPage() {
 
   const rowVirtualizer = useVirtualizer({
     count: rows.length,
-    estimateSize: () => 500, //estimate row height for accurate scrollbar dragging
+    estimateSize: () => ROW_HEIGHT_IN_PX, // estimate row height for accurate scrollbar dragging
     getScrollElement: () => tableContainerRef.current,
-    //measure dynamic row height, except in firefox because it measures table border height incorrectly
+    // measure dynamic row height, except in firefox because it measures table border height incorrectly
     measureElement:
       typeof window !== "undefined" && navigator.userAgent.indexOf("Firefox") === -1
         ? element => element?.getBoundingClientRect().height
@@ -184,20 +197,30 @@ export default function BuildersPage() {
   }
 
   return (
-    <div className="app">
-      ({flatData.length} of {totalDBRowCount} rows fetched)
+    <div className="mx-4 text-center">
+      <h2 className="mt-10 mb-0 text-3xl">All Builders</h2>
+      <div className="text-base mt-4">
+        List of Ethereum builders creating products, prototypes, and tutorials with{" "}
+        <Link href="https://github.com/scaffold-eth/scaffold-eth-2" className="underline">
+          Scaffold-ETH 2
+        </Link>
+      </div>
+
+      <div className="text-base mt-4 font-medium">Total builders: {totalDBRowCount}</div>
       <div
-        className="container"
         onScroll={e => fetchMoreOnBottomReached(e.currentTarget)}
         ref={tableContainerRef}
         style={{
-          overflow: "auto", //our scrollable table container
-          position: "relative", //needed for sticky header
-          height: "600px", //should be a fixed height
+          overflow: "auto", // our scrollable table container
+          position: "relative", // needed for sticky header
+          // 4 is 2 * border-2
+          maxWidth: `${columns.reduce((acc, col) => acc + (col.size ?? 0), 4)}px`,
         }}
+        // needed fixed height to prevent layout shift
+        className="mt-4 border-2 border-base-300 rounded-lg mx-auto h-[calc(100vh-404px)] lg:h-[calc(100vh-340px)]"
       >
         {/* Even though we're still using sematic table tags, we must use CSS grid and flexbox for dynamic row heights */}
-        <table style={{ display: "grid" }}>
+        <table style={{ display: "grid" }} className="table table-zebra bg-base-100">
           <thead
             style={{
               display: "grid",
@@ -205,6 +228,7 @@ export default function BuildersPage() {
               top: 0,
               zIndex: 1,
             }}
+            className="bg-base-300"
           >
             {table.getHeaderGroups().map(headerGroup => (
               <tr key={headerGroup.id} style={{ display: "flex", width: "100%" }}>
@@ -238,23 +262,23 @@ export default function BuildersPage() {
           <tbody
             style={{
               display: "grid",
-              height: `${rowVirtualizer.getTotalSize()}px`, //tells scrollbar how big the table is
-              position: "relative", //needed for absolute positioning of rows
+              height: `${rowVirtualizer.getTotalSize()}px`, // tells scrollbar how big the table is
+              position: "relative", // needed for absolute positioning of rows
             }}
           >
             {rowVirtualizer.getVirtualItems().map(virtualRow => {
               const row = rows[virtualRow.index] as Row<UserByAddress>;
               return (
                 <tr
-                  data-index={virtualRow.index} //needed for dynamic row height measurement
-                  ref={node => rowVirtualizer.measureElement(node)} //measure dynamic row height
+                  data-index={virtualRow.index} // needed for dynamic row height measurement
+                  ref={node => rowVirtualizer.measureElement(node)} // measure dynamic row height
                   key={row.id}
                   style={{
                     display: "flex",
                     position: "absolute",
-                    transform: `translateY(${virtualRow.start}px)`, //this should always be a `style` as it changes on scroll
+                    transform: `translateY(${virtualRow.start}px)`, // this should always be a `style` as it changes on scroll
                     width: "100%",
-                    height: "500px",
+                    height: `${ROW_HEIGHT_IN_PX}px`,
                   }}
                 >
                   {row.getVisibleCells().map(cell => {
@@ -262,9 +286,9 @@ export default function BuildersPage() {
                       <td
                         key={cell.id}
                         style={{
-                          display: "flex",
                           width: cell.column.getSize(),
                         }}
+                        className="flex items-center"
                       >
                         {flexRender(cell.column.columnDef.cell, cell.getContext())}
                       </td>
