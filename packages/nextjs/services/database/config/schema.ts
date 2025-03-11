@@ -38,7 +38,7 @@ export const users = pgTable(
   {
     userAddress: varchar({ length: 42 }).primaryKey(), // Ethereum wallet address
     role: userRoleEnum().default(UserRole.USER), // Using the enum and setting default
-    createdAt: timestamp().defaultNow(),
+    createdAt: timestamp().defaultNow().notNull(),
     socialTelegram: varchar({ length: 255 }),
     socialTwitter: varchar({ length: 255 }),
     socialGithub: varchar({ length: 255 }),

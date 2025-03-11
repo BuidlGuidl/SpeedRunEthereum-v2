@@ -1,6 +1,6 @@
 import { UserChallengesTable } from "../_component/UserChallengesTable";
-import { UserSocials } from "../_component/UserSocials";
-import { PunkBlockie } from "~~/components/PunkBlockie";
+import { UserProfileCard } from "../_components/UserProfileCard";
+import { UserProfileHeader } from "../_components/UserProfileHeader";
 import { findUserChallengesByAddress } from "~~/services/database/repositories/userChallenges";
 import { findUserByAddress } from "~~/services/database/repositories/users";
 
@@ -15,10 +15,18 @@ export default async function BuilderPage({ params }: { params: { address: strin
   }
 
   return (
-    <div className="flex flex-col gap-8">
-      <PunkBlockie address={userAddress} scale={2} />
-      <UserSocials user={user} />
-      <UserChallengesTable challenges={challenges} />
+    <div className="container mx-auto px-4 py-8">
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+        <div className="md:col-span-1">
+          <UserProfileCard user={user} address={userAddress} />
+        </div>
+        <div className="md:col-span-3">
+          <div className="flex flex-col gap-8">
+            <UserProfileHeader challengesCount={challenges.length} />
+            <UserChallengesTable challenges={challenges} />
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
