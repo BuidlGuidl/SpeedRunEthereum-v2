@@ -13,6 +13,7 @@ export enum EventType {
 
 export enum UserRole {
   USER = "USER",
+  BUILDER = "BUILDER",
   ADMIN = "ADMIN",
 }
 
