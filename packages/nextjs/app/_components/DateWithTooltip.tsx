@@ -1,15 +1,14 @@
 import React from "react";
-import moment from "moment";
+import { formatDate, getRelativeTime } from "~~/utils/date";
 
 type DateWithTooltipProps = {
   timestamp: string | number | Date;
 };
 
 export const DateWithTooltip = ({ timestamp }: DateWithTooltipProps) => {
-  const timestampMoment = moment(timestamp);
   return (
-    <div className="tooltip" data-tip={timestampMoment.format("YYYY-MM-DD, HH:mm")}>
-      <span className="cursor-pointer">{timestampMoment.fromNow()}</span>
+    <div className="tooltip" data-tip={formatDate(timestamp)}>
+      <span className="cursor-pointer">{getRelativeTime(timestamp)}</span>
     </div>
   );
 };
