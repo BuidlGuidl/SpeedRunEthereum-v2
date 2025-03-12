@@ -1,25 +1,7 @@
 import Image from "next/image";
-import { getChallengeDependenciesInfo } from "../../utils/dependent-challenges";
 import JoinBGButton from "./JoinBGButton";
 import { UserChallenges } from "~~/services/database/repositories/userChallenges";
 import { UserByAddress } from "~~/services/database/repositories/users";
-
-// TODO: use later
-// "buidl-guidl": {,
-//   label: "Eligible to join 🏰️ BuidlGuidl",
-//   previewImage: "assets/bg.png",
-//   externalLink: {
-//     link: "https://buidlguidl.com/",
-//   },
-// },
-
-const JOIN_BG_DEPENDENCIES = [
-  "simple-nft-example",
-  "decentralized-staking",
-  "token-vendor",
-  "dice-game",
-  "minimum-viable-exchange",
-];
 
 export const JoinBGCard = ({
   userChallenges = [],
@@ -28,11 +10,6 @@ export const JoinBGCard = ({
   userChallenges?: UserChallenges;
   user?: UserByAddress;
 }) => {
-  const { completed: builderHasCompletedDependenciesChallenges, lockReasonToolTip } = getChallengeDependenciesInfo({
-    dependencies: JOIN_BG_DEPENDENCIES,
-    userChallenges,
-  });
-
   return (
     <div className="flex justify-center bg-[url(/assets/bgBanner_castlePlatform.svg)] bg-bottom bg-repeat-x bg-[length:150%_auto] lg:bg-auto relative overflow-hidden bg-accent">
       <Image
@@ -60,11 +37,7 @@ export const JoinBGCard = ({
             portfolio by submitting your DEX, Multisig or SVG NFT build.
           </p>
           <div className="flex items-center self-end">
-            <JoinBGButton
-              isLocked={!builderHasCompletedDependenciesChallenges}
-              user={user}
-              lockReasonToolTip={lockReasonToolTip}
-            />
+            <JoinBGButton user={user} userChallenges={userChallenges} />
           </div>
         </div>
         <span className="absolute h-5 w-5 rounded-full bg-base-300 border-primary border-4 top-[22%] lg:top-[30%] -left-[13px]" />
