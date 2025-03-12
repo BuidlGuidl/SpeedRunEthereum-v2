@@ -47,28 +47,23 @@ export const UserChallengesTable = ({ challenges }: { challenges: UserChallenges
   const sortedChallenges = challenges.sort((a, b) => a.challenge.sortOrder - b.challenge.sortOrder);
 
   return (
-    <div className="flex flex-col gap-8 py-8">
-      <div>
-        <h1 className="text-4xl font-bold mb-0">Challenges</h1>
-      </div>
-      <div className="w-full">
-        <table className="table bg-base-100 shadow-lg">
-          <thead>
-            <tr className="text-sm">
-              <th>NAME</th>
-              <th>CONTRACT</th>
-              <th>LIVE DEMO</th>
-              <th>UPDATED</th>
-              <th>STATUS</th>
-            </tr>
-          </thead>
-          <tbody>
-            {sortedChallenges.map(challenge => (
-              <ChallengeRow key={challenge.challengeId} challenge={challenge} />
-            ))}
-          </tbody>
-        </table>
-      </div>
+    <div className="flex flex-col gap-8">
+      <table className="table bg-base-100 shadow-lg">
+        <thead>
+          <tr className="text-sm">
+            <th>NAME</th>
+            <th>CONTRACT</th>
+            <th>LIVE DEMO</th>
+            <th>UPDATED</th>
+            <th>STATUS</th>
+          </tr>
+        </thead>
+        <tbody>
+          {sortedChallenges.map(challenge => (
+            <ChallengeRow key={challenge.challengeId} challenge={challenge} />
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 };

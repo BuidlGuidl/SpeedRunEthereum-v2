@@ -20,9 +20,14 @@ export default async function BuilderPage({ params }: { params: { address: strin
           <UserProfileCard user={user} address={userAddress} />
         </div>
         <div className="md:col-span-3">
-          <div className="flex flex-col gap-8">
+          <h2 className="text-2xl font-bold mb-0 text-neutral pb-4">Challenges</h2>
+          {challenges.length > 0 ? (
             <UserChallengesTable challenges={challenges} />
-          </div>
+          ) : (
+            <div className="bg-base-100 p-8 text-center rounded-lg text-neutral">
+              This builder hasn&apos;t completed any challenges.
+            </div>
+          )}
         </div>
       </div>
     </div>
