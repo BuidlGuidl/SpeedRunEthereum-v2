@@ -48,22 +48,24 @@ export const UserChallengesTable = ({ challenges }: { challenges: UserChallenges
 
   return (
     <div className="flex flex-col gap-8">
-      <table className="table bg-base-100 shadow-lg">
-        <thead>
-          <tr className="text-sm">
-            <th>NAME</th>
-            <th>CONTRACT</th>
-            <th>LIVE DEMO</th>
-            <th>UPDATED</th>
-            <th>STATUS</th>
-          </tr>
-        </thead>
-        <tbody>
-          {sortedChallenges.map(challenge => (
-            <ChallengeRow key={challenge.challengeId} challenge={challenge} />
-          ))}
-        </tbody>
-      </table>
+      <div className="overflow-x-auto md:overflow-x-visible">
+        <table className="table bg-base-100 shadow-lg min-w-full">
+          <thead>
+            <tr className="text-sm">
+              <th>NAME</th>
+              <th>CONTRACT</th>
+              <th>LIVE DEMO</th>
+              <th>UPDATED</th>
+              <th>STATUS</th>
+            </tr>
+          </thead>
+          <tbody>
+            {sortedChallenges.map(challenge => (
+              <ChallengeRow key={challenge.challengeId} challenge={challenge} />
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 };
