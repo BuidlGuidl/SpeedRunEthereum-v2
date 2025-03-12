@@ -1,6 +1,5 @@
 import { UserChallengesTable } from "../_component/UserChallengesTable";
 import { UserProfileCard } from "../_components/UserProfileCard";
-import { UserProfileHeader } from "../_components/UserProfileHeader";
 import { findUserChallengesByAddress } from "~~/services/database/repositories/userChallenges";
 import { findUserByAddress } from "~~/services/database/repositories/users";
 
@@ -22,7 +21,6 @@ export default async function BuilderPage({ params }: { params: { address: strin
         </div>
         <div className="md:col-span-3">
           <div className="flex flex-col gap-8">
-            <UserProfileHeader challengesCount={challenges.length} />
             <UserChallengesTable challenges={challenges} />
           </div>
         </div>
