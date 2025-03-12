@@ -43,7 +43,6 @@ export default function BuildersPage() {
   const columns = useMemo<ColumnDef<UserWithChallengesData>[]>(
     () => [
       {
-        accessorKey: "userAddress",
         header: "Builder",
         size: 200,
         cell: info => {
