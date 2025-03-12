@@ -14,10 +14,10 @@ export const socials: Record<keyof UserSocials, Social> = {
     getLink: (value: string) => `https://telegram.me/${value}`,
     weight: 0,
   },
-  socialTwitter: {
-    label: "Twitter",
-    placeholder: "Your Twitter username without the @",
-    getLink: (value: string) => `https://twitter.com/${value}`,
+  socialX: {
+    label: "X",
+    placeholder: "Your X username without the @",
+    getLink: (value: string) => `https://x.com/${value}`,
     weight: 1,
   },
   socialDiscord: {

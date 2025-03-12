@@ -40,7 +40,7 @@ export const users = pgTable(
     role: userRoleEnum().default(UserRole.USER), // Using the enum and setting default
     createdAt: timestamp().defaultNow().notNull(),
     socialTelegram: varchar({ length: 255 }),
-    socialTwitter: varchar({ length: 255 }),
+    socialX: varchar({ length: 255 }),
     socialGithub: varchar({ length: 255 }),
     socialInstagram: varchar({ length: 255 }),
     socialDiscord: varchar({ length: 255 }),
