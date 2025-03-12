@@ -19,7 +19,7 @@ export const getRelativeTime = (timestamp: string | number | Date) => {
 
 export const formatDate = (timestamp: string | number | Date) => {
   const date = new Date(timestamp);
-  const formatter = new Intl.DateTimeFormat("en", {
+  const formatter = new Intl.DateTimeFormat(undefined, {
     year: "numeric",
     month: "2-digit",
     day: "2-digit",
