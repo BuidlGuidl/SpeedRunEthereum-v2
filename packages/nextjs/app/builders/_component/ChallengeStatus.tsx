@@ -8,12 +8,7 @@ import rehypeRaw from "rehype-raw";
 import remarkGfm from "remark-gfm";
 import { QuestionMarkCircleIcon } from "@heroicons/react/24/outline";
 import { ReviewAction } from "~~/services/database/config/types";
-
-const REVIEW_ACTION_BADGE_CLASSES: Record<ReviewAction, string> = {
-  [ReviewAction.ACCEPTED]: "badge-success",
-  [ReviewAction.REJECTED]: "badge-error",
-  [ReviewAction.SUBMITTED]: "badge-warning",
-} as const;
+import { REVIEW_ACTION_BADGE_CLASSES } from "~~/utils/challenges";
 
 const ReviewMarkdownContent = ({ content }: { content: string }) => {
   const [mdxSource, setMdxSource] = useState<MDXRemoteProps>();
