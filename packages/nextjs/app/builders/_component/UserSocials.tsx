@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef } from "react";
+import { CopyValueToClipboard } from "./CopyValueToClipboard";
 import { UpdateSocialsModal } from "./UpdateSocialsModal";
 import { useAccount } from "wagmi";
 import { UserByAddress } from "~~/services/database/repositories/users";
@@ -24,7 +25,7 @@ export const UserSocials = ({ user }: { user: UserByAddress }) => {
           {userSocials
             .filter(social => social.value)
             .map(social => {
-              const link = social.getLink(social.value as string);
+              const link = social.getLink?.(social.value as string);
               return (
                 <div key={social.key} className="badge badge-outline gap-2 p-4">
                   <span className="font-bold">{social.label}:</span>
@@ -33,7 +34,7 @@ export const UserSocials = ({ user }: { user: UserByAddress }) => {
                       {social.value}
                     </a>
                   ) : (
-                    <span>{social.value}</span>
+                    <CopyValueToClipboard text={social.value as string} />
                   )}
                 </div>
               );

@@ -2,12 +2,7 @@
 
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
-import EmailIcon from "../_assets/icons/EmailIcon";
-import GithubIcon from "../_assets/icons/GithubIcon";
-import InstagramIcon from "../_assets/icons/IntagramIcon";
-import TelegramIcon from "../_assets/icons/TelegramIcon";
-import XIcon from "../_assets/icons/XIcon";
-import { CopyDiscordToClipboard } from "./_component/CopyDiscordToClipboard";
+import { CopyValueToClipboard } from "./_component/CopyValueToClipboard";
 import { keepPreviousData, useInfiniteQuery } from "@tanstack/react-query";
 import {
   ColumnDef,
@@ -23,6 +18,7 @@ import { useVirtualizer } from "@tanstack/react-virtual";
 import { Address } from "~~/components/scaffold-eth";
 import { getSortedUsersWithChallenges } from "~~/services/api/users";
 import { UserWithChallengesData } from "~~/services/database/repositories/users";
+import { getUserSocialsList } from "~~/utils/socials";
 
 export type UsersApiResponse = {
   data: UserWithChallengesData[];
@@ -61,11 +57,30 @@ export default function BuildersPage() {
         header: "Socials",
         size: 200,
         cell: info => {
-          const row = info.row.original;
+          const user = info.row.original;
+
+          const userSocials = getUserSocialsList(user);
 
           return (
-            <div className="flex w-full justify-center gap-2">
-              {row.socialTelegram && (
+            <div className="flex w-full items-center justify-center gap-2">
+              {userSocials
+                .filter(social => social.value)
+                .map(social => {
+                  const link = social.getLink?.(social.value as string);
+                  return (
+                    <div key={social.key} className="flex items-center">
+                      {link ? (
+                        <a href={link} target="_blank" rel="noopener noreferrer" className="link">
+                          <social.icon className="w-4 h-4" />
+                        </a>
+                      ) : (
+                        <CopyValueToClipboard text={social.value as string} Icon={social.icon} />
+                      )}
+                    </div>
+                  );
+                })}
+
+              {/* {row.socialTelegram && (
                 <Link href={`https://t.me/${row.socialTelegram}`}>
                   <TelegramIcon className="w-4 h-4 fill-primary" />
                 </Link>
@@ -90,7 +105,7 @@ export default function BuildersPage() {
                 <Link href={`mailto:${row.socialEmail}`}>
                   <EmailIcon className="w-4 h-4 fill-primary" />
                 </Link>
-              )}
+              )} */}
             </div>
           );
         },
