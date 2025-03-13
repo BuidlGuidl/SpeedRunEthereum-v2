@@ -81,7 +81,11 @@ export const ChallengeStatus = ({ reviewAction, comment }: ChallengeStatusProps)
       <span className={`badge ${badgeClass} w-[90px]`}>{reviewAction.toLowerCase()}</span>
       {comment && (
         <>
-          <div className="tooltip" data-tip="Click to see review" onClick={() => modalRef.current?.showModal()}>
+          <div
+            className="tooltip tooltip-left"
+            data-tip="Click to see review"
+            onClick={() => modalRef.current?.showModal()}
+          >
             <QuestionMarkCircleIcon className="h-4 w-4 cursor-pointer hover:opacity-80" />
           </div>
           <ChallengeStatusModal ref={modalRef} closeModal={() => modalRef.current?.close()} comment={comment} />
