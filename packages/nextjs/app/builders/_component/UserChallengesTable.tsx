@@ -1,68 +1,67 @@
-import { QuestionMarkCircleIcon } from "@heroicons/react/24/outline";
+import Link from "next/link";
+import { ChallengeStatus } from "./ChallengeStatus";
+import { DateWithTooltip } from "~~/app/_components/DateWithTooltip";
+import { ReviewAction } from "~~/services/database/config/types";
 import { UserChallenges } from "~~/services/database/repositories/userChallenges";
 
-export const UserChallengesTable = ({ challenges }: { challenges: UserChallenges }) => {
+const ChallengeRow = ({ challenge }: { challenge: UserChallenges[number] }) => {
   return (
-    <div className="flex flex-col gap-8 py-8 px-4 lg:px-8">
-      <div>
-        <h1 className="text-4xl font-bold mb-0">Challenges</h1>
-      </div>
-      <div className="w-full">
-        <table className="table table-zebra bg-base-100">
+    <tr key={challenge.challengeId} className="hover py-4">
+      <td className="py-6">
+        <Link href={`/challenge/${challenge.challengeId}`} className="hover:underline">
+          🚩 Challenge {challenge.challenge.sortOrder}: {challenge.challenge.challengeName}
+        </Link>
+      </td>
+      <td>
+        {challenge.contractUrl ? (
+          <a href={challenge.contractUrl} target="_blank" rel="noopener noreferrer" className="link">
+            Code
+          </a>
+        ) : (
+          "-"
+        )}
+      </td>
+      <td>
+        {challenge.frontendUrl ? (
+          <a href={challenge.frontendUrl} target="_blank" rel="noopener noreferrer" className="link">
+            Demo
+          </a>
+        ) : (
+          "-"
+        )}
+      </td>
+      <td>
+        <DateWithTooltip timestamp={challenge.submittedAt} />
+      </td>
+      <td>
+        <ChallengeStatus
+          reviewAction={challenge.reviewAction ?? ReviewAction.SUBMITTED}
+          comment={challenge.reviewComment}
+        />
+      </td>
+    </tr>
+  );
+};
+
+export const UserChallengesTable = ({ challenges }: { challenges: UserChallenges }) => {
+  const sortedChallenges = challenges.sort((a, b) => a.challenge.sortOrder - b.challenge.sortOrder);
+
+  return (
+    <div className="flex flex-col gap-8">
+      <div className="overflow-x-auto md:overflow-x-visible">
+        <table className="table bg-base-100 shadow-lg min-w-full">
           <thead>
             <tr className="text-sm">
-              <th className="bg-primary">NAME</th>
-              <th className="bg-primary">CONTRACT</th>
-              <th className="bg-primary">LIVE DEMO</th>
-              <th className="bg-primary">SUBMITED AT</th>
-              <th className="bg-primary">STATUS</th>
-              <th className="bg-primary"></th>
+              <th>NAME</th>
+              <th>CONTRACT</th>
+              <th>LIVE DEMO</th>
+              <th>UPDATED</th>
+              <th>STATUS</th>
             </tr>
           </thead>
           <tbody>
-            {challenges.map(challenge => (
-              <tr key={challenge.challengeId} className="hover">
-                <td>🏃‍♂️ Challenge {challenge.challengeId}</td>
-                <td>
-                  {challenge.contractUrl ? (
-                    <a href={challenge.contractUrl} target="_blank" rel="noopener noreferrer" className="link">
-                      Code
-                    </a>
-                  ) : (
-                    "-"
-                  )}
-                </td>
-                <td>
-                  {challenge.frontendUrl ? (
-                    <a href={challenge.frontendUrl} target="_blank" rel="noopener noreferrer" className="link">
-                      Demo
-                    </a>
-                  ) : (
-                    "-"
-                  )}
-                </td>
-                <td>{challenge.submittedAt ? challenge.submittedAt.toLocaleString() : "-"}</td>
-                <td>
-                  <span
-                    className={`badge ${
-                      challenge.reviewAction === "ACCEPTED"
-                        ? "badge-success"
-                        : challenge.reviewAction === "REJECTED"
-                          ? "badge-error"
-                          : "badge-warning"
-                    }`}
-                  >
-                    {challenge.reviewAction?.toLowerCase() || "pending"}
-                  </span>
-                </td>
-                <td>
-                  {challenge.reviewComment && (
-                    <div className="tooltip" data-tip={challenge.reviewComment}>
-                      <QuestionMarkCircleIcon className="h-4 w-4 cursor-help" />
-                    </div>
-                  )}
-                </td>
-              </tr>
+            {sortedChallenges.map(challenge => (
+              <ChallengeRow key={challenge.challengeId} challenge={challenge} />
             ))}
           </tbody>
         </table>
