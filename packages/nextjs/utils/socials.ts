@@ -23,9 +23,9 @@ export const socials: Record<keyof UserSocials, Social> = {
     icon: TelegramIcon,
   },
   socialX: {
-    label: "Twitter",
-    placeholder: "Your Twitter username without the @",
-    getLink: (value: string) => `https://twitter.com/${value}`,
+    label: "X",
+    placeholder: "Your X username without the @",
+    getLink: (value: string) => `https://x.com/${value}`,
     weight: 1,
     icon: XIcon,
   },

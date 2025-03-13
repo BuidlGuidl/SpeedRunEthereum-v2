@@ -6,7 +6,7 @@ export const CopyValueToClipboard = ({
   Icon,
 }: {
   text: string;
-  Icon?: React.ComponentType<{ className: string }>;
+  Icon: React.ComponentType<{ className: string }>;
 }) => {
   const [copied, setCopied] = useState(false);
 
@@ -24,7 +24,7 @@ export const CopyValueToClipboard = ({
         className={`${copied ? "tooltip-open tooltip relative" : ""} cursor-pointer`}
         data-tip="Copied to your clipboard!"
       >
-        {Icon ? <Icon className="w-4 h-4" /> : <span className="underline">{text}</span>}
+        <Icon className="w-4 h-4" />
       </div>
     </CopyToClipboard>
   );

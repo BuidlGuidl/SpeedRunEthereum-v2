@@ -73,6 +73,7 @@ type AddressProps = {
   format?: "short" | "long";
   size?: "xs" | "sm" | "base" | "lg" | "xl" | "2xl" | "3xl";
   onlyEnsOrAddress?: boolean;
+  hideAvatar?: boolean;
 };
 
 export const Address = ({
@@ -81,6 +82,7 @@ export const Address = ({
   format,
   size = "base",
   onlyEnsOrAddress = false,
+  hideAvatar = false,
 }: AddressProps) => {
   const checkSumAddress = address ? getAddress(address) : undefined;
 
@@ -144,13 +146,15 @@ export const Address = ({
 
   return (
     <div className="flex items-center flex-shrink-0">
-      <div className="flex-shrink-0">
-        <BlockieAvatar
-          address={checkSumAddress}
-          ensImage={ensAvatar}
-          size={(blockieSizeMap[blockieSize] * 24) / blockieSizeMap["base"]}
-        />
-      </div>
+      {hideAvatar ? null : (
+        <div className="flex-shrink-0">
+          <BlockieAvatar
+            address={checkSumAddress}
+            ensImage={ensAvatar}
+            size={(blockieSizeMap[blockieSize] * 24) / blockieSizeMap["base"]}
+          />
+        </div>
+      )}
       <div className="flex flex-col">
         {showSkeleton &&
           (isEnsNameLoading ? (
@@ -167,7 +171,7 @@ export const Address = ({
               </AddressLinkWrapper>
             </span>
           ))}
-        <div className="flex">
+        <div className={`flex ${hideAvatar ? "justify-center" : ""}`}>
           <span className={`ml-1.5 ${textSizeMap[addressSize]} font-normal`}>
             <AddressLinkWrapper
               disableAddressLink={disableAddressLink}
