@@ -110,12 +110,8 @@ export default function BuildersPage() {
     [],
   );
 
-  // react-query has a useInfiniteQuery hook that is perfect for this use case
   const { data, fetchNextPage, isFetching, isLoading } = useInfiniteQuery<UsersApiResponse>({
-    queryKey: [
-      "users",
-      sorting, // refetch when sorting changes
-    ],
+    queryKey: ["users", sorting],
     queryFn: async ({ pageParam = 0 }) => {
       const start = (pageParam as number) * FETCH_SIZE;
       const fetchedData = await getSortedUsersWithChallenges(start, FETCH_SIZE, sorting); // pretend api call
@@ -127,17 +123,14 @@ export default function BuildersPage() {
     placeholderData: keepPreviousData,
   });
 
-  // flatten the array of arrays from the useInfiniteQuery hook
   const flatData = useMemo(() => data?.pages?.flatMap(page => page.data) ?? [], [data]);
   const totalDBRowCount = data?.pages?.[0]?.meta?.totalRowCount ?? 0;
   const totalFetched = flatData.length;
 
-  // called on scroll and possibly on mount to fetch more data as the user scrolls and reaches bottom of table
   const fetchMoreOnBottomReached = useCallback(
     (containerRefElement?: HTMLDivElement | null) => {
       if (containerRefElement) {
         const { scrollHeight, scrollTop, clientHeight } = containerRefElement;
-        // once the user has scrolled within ROW_HEIGHT_IN_PX px of the bottom of the table, fetch more data if we can
         if (
           scrollHeight - scrollTop - clientHeight < ROW_HEIGHT_IN_PX &&
           !isFetching &&
@@ -222,41 +215,29 @@ export default function BuildersPage() {
         onScroll={e => fetchMoreOnBottomReached(e.currentTarget)}
         ref={tableContainerRef}
         style={{
-          overflow: "auto", // our scrollable table container
-          position: "relative", // needed for sticky header
           // 4 is 2 * border-2
           maxWidth: `${columns.reduce((acc, col) => acc + (col.size ?? 0), 4)}px`,
         }}
         // needed fixed height to prevent layout shift
-        className="mt-4 border-2 border-base-300 rounded-lg mx-auto h-[calc(100vh-404px)] lg:h-[calc(100vh-340px)]"
+        className="mt-4 relative overflow-auto border-2 border-base-300 rounded-lg mx-auto h-[calc(100vh-404px)] lg:h-[calc(100vh-340px)]"
       >
         {/* Even though we're still using sematic table tags, we must use CSS grid and flexbox for dynamic row heights */}
         <table style={{ display: "grid" }} className="table table-zebra bg-base-100">
-          <thead
-            style={{
-              display: "grid",
-              position: "sticky",
-              top: 0,
-              zIndex: 1,
-            }}
-            className="bg-base-300"
-          >
+          <thead className="grid sticky bg-base-300 top-0 z-10">
             {table.getHeaderGroups().map(headerGroup => (
-              <tr key={headerGroup.id} style={{ display: "flex", width: "100%" }}>
+              <tr key={headerGroup.id} className="flex w-full">
                 {headerGroup.headers.map(header => {
                   return (
                     <th
                       key={header.id}
                       style={{
-                        display: "flex",
                         width: header.getSize(),
                       }}
+                      className="flex"
                     >
                       <div
-                        {...{
-                          className: header.column.getCanSort() ? "cursor-pointer select-none" : "",
-                          onClick: header.column.getToggleSortingHandler(),
-                        }}
+                        onClick={header.column.getToggleSortingHandler()}
+                        className={header.column.getCanSort() ? "cursor-pointer select-none" : ""}
                       >
                         {flexRender(header.column.columnDef.header, header.getContext())}
                         {{
@@ -272,10 +253,10 @@ export default function BuildersPage() {
           </thead>
           <tbody
             style={{
-              display: "grid",
               height: `${rowVirtualizer.getTotalSize()}px`, // tells scrollbar how big the table is
               position: "relative", // needed for absolute positioning of rows
             }}
+            className="grid"
           >
             {rowVirtualizer.getVirtualItems().map(virtualRow => {
               const row = rows[virtualRow.index] as Row<UserWithChallengesData>;
