@@ -2,6 +2,7 @@
 
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
+import { DateWithTooltip } from "../_components/DateWithTooltip";
 import { CopyValueToClipboard } from "./_component/CopyValueToClipboard";
 import { keepPreviousData, useInfiniteQuery } from "@tanstack/react-query";
 import {
@@ -79,33 +80,6 @@ export default function BuildersPage() {
                     </div>
                   );
                 })}
-
-              {/* {row.socialTelegram && (
-                <Link href={`https://t.me/${row.socialTelegram}`}>
-                  <TelegramIcon className="w-4 h-4 fill-primary" />
-                </Link>
-              )}
-              {row.socialX && (
-                <Link href={`https://x.com/${row.socialX}`}>
-                  <XIcon className="w-4 h-4 fill-primary" />
-                </Link>
-              )}
-              {row.socialGithub && (
-                <Link href={`https://github.com/${row.socialGithub}`}>
-                  <GithubIcon className="w-4 h-4 fill-primary" />
-                </Link>
-              )}
-              {row.socialInstagram && (
-                <Link href={`https://instagram.com/${row.socialInstagram}`}>
-                  <InstagramIcon className="w-4 h-4 fill-primary" />
-                </Link>
-              )}
-              {row.socialDiscord && <CopyDiscordToClipboard text={row.socialDiscord} />}
-              {row.socialEmail && (
-                <Link href={`mailto:${row.socialEmail}`}>
-                  <EmailIcon className="w-4 h-4 fill-primary" />
-                </Link>
-              )} */}
             </div>
           );
         },
@@ -117,7 +91,11 @@ export default function BuildersPage() {
           const row = info.row.original;
 
           const date = row.lastActivity || (row.createdAt as Date);
-          return <div className="flex w-full justify-center">{new Date(date).toLocaleString()}</div>;
+          return (
+            <div className="flex w-full justify-center">
+              <DateWithTooltip timestamp={date} />
+            </div>
+          );
         },
         size: 300,
       },
