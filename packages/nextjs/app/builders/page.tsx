@@ -54,7 +54,7 @@ export default function BuildersPage() {
       {
         header: "Challenges",
         accessorKey: "challengesCompleted",
-        cell: info => info.getValue(),
+        cell: info => <div className="flex w-full justify-center">{info.getValue() as string}</div>,
         size: 100,
       },
       {
@@ -64,7 +64,7 @@ export default function BuildersPage() {
           const row = info.row.original;
 
           return (
-            <div className="flex gap-2">
+            <div className="flex w-full justify-center gap-2">
               {row.socialTelegram && (
                 <Link href={`https://t.me/${row.socialTelegram}`}>
                   <TelegramIcon className="w-4 h-4 fill-primary" />
@@ -102,7 +102,7 @@ export default function BuildersPage() {
           const row = info.row.original;
 
           const date = row.lastActivity || (row.createdAt as Date);
-          return new Date(date).toLocaleString();
+          return <div className="flex w-full justify-center">{new Date(date).toLocaleString()}</div>;
         },
         size: 200,
       },
@@ -233,7 +233,7 @@ export default function BuildersPage() {
                       style={{
                         width: header.getSize(),
                       }}
-                      className="flex"
+                      className="flex justify-center uppercase"
                     >
                       <div
                         onClick={header.column.getToggleSortingHandler()}
