@@ -44,7 +44,7 @@ export default function BuildersPage() {
     () => [
       {
         header: "Builder",
-        size: 200,
+        size: 300,
         cell: info => {
           const row = info.row.original;
 
@@ -55,7 +55,7 @@ export default function BuildersPage() {
         header: "Challenges",
         accessorKey: "challengesCompleted",
         cell: info => <div className="flex w-full justify-center">{info.getValue() as string}</div>,
-        size: 100,
+        size: 200,
       },
       {
         header: "Socials",
@@ -104,7 +104,7 @@ export default function BuildersPage() {
           const date = row.lastActivity || (row.createdAt as Date);
           return <div className="flex w-full justify-center">{new Date(date).toLocaleString()}</div>;
         },
-        size: 200,
+        size: 300,
       },
     ],
     [],
@@ -215,8 +215,8 @@ export default function BuildersPage() {
         onScroll={e => fetchMoreOnBottomReached(e.currentTarget)}
         ref={tableContainerRef}
         style={{
-          // 4 is 2 * border-2
-          maxWidth: `${columns.reduce((acc, col) => acc + (col.size ?? 0), 4)}px`,
+          // 32 is to prevent horizontal scrollbar from appearing
+          maxWidth: `${columns.reduce((acc, col) => acc + (col.size ?? 0), 32)}px`,
         }}
         // needed fixed height to prevent layout shift
         className="mt-4 relative overflow-auto border-2 border-base-300 rounded-lg mx-auto h-[calc(100vh-404px)] lg:h-[calc(100vh-340px)]"
