@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { ChallengeStatus } from "./ChallengeStatus";
-import { DateWithTooltip } from "~~/app/_components/DateWithTooltip";
+import { DateWithTooltip } from "~~/components/DateWithTooltip";
 import { ReviewAction } from "~~/services/database/config/types";
 import { UserChallenges } from "~~/services/database/repositories/userChallenges";
 

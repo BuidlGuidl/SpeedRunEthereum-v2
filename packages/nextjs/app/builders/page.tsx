@@ -2,8 +2,6 @@
 
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
-import { DateWithTooltip } from "../_components/DateWithTooltip";
-import { CopyValueToClipboard } from "./_component/CopyValueToClipboard";
 import { keepPreviousData, useInfiniteQuery } from "@tanstack/react-query";
 import {
   ColumnDef,
@@ -16,6 +14,8 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import { useVirtualizer } from "@tanstack/react-virtual";
+import { CopyValueToClipboard } from "~~/components/CopyValueToClipboard";
+import { DateWithTooltip } from "~~/components/DateWithTooltip";
 import { Address } from "~~/components/scaffold-eth";
 import { getSortedUsersWithChallenges } from "~~/services/api/users";
 import { UserWithChallengesData } from "~~/services/database/repositories/users";

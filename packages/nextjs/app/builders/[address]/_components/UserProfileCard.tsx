@@ -1,5 +1,5 @@
-import { UserSocials } from "../_component/UserSocials";
 import { PunkBlockie } from "~~/components/PunkBlockie";
+import { UserSocials } from "~~/components/UserSocials";
 import { Address } from "~~/components/scaffold-eth/Address/Address";
 import { UserByAddress } from "~~/services/database/repositories/users";
 

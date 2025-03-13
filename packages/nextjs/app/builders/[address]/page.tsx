@@ -1,5 +1,5 @@
-import { UserChallengesTable } from "../_component/UserChallengesTable";
-import { UserProfileCard } from "../_components/UserProfileCard";
+import { UserChallengesTable } from "./_components/UserChallengesTable";
+import { UserProfileCard } from "./_components/UserProfileCard";
 import { findUserChallengesByAddress } from "~~/services/database/repositories/userChallenges";
 import { findUserByAddress } from "~~/services/database/repositories/users";
 
