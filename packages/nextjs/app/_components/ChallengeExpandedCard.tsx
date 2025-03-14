@@ -13,9 +13,15 @@ type ChallengeExpandedCardProps = {
   challengeId: ChallengeId;
   userChallenges?: UserChallenges;
   challenges: Challenges;
+  comingSoon?: boolean;
 };
 
-const ChallengeExpandedCard = ({ challengeId, userChallenges = [], challenges = [] }: ChallengeExpandedCardProps) => {
+const ChallengeExpandedCard = ({
+  challengeId,
+  userChallenges = [],
+  challenges = [],
+  comingSoon,
+}: ChallengeExpandedCardProps) => {
   const challenge = challenges.find(c => c.id === challengeId);
 
   const userChallenge = userChallenges.find(userChallenge => userChallenge.challengeId === challengeId);
@@ -60,7 +66,7 @@ const ChallengeExpandedCard = ({ challengeId, userChallenges = [], challenges = 
           <div className="flex flex-col gap-8">
             <span className="text-lg lg:text-base leading-[1.5]">{challenge.description}</span>
             <div className="flex items-center">
-              {challenge.comingSoon && (
+              {comingSoon && (
                 <button
                   disabled
                   className="inline-flex items-center text-xl lg:text-lg px-4 py-1 border-2 border-primary rounded-full bg-base-300 opacity-50 cursor-not-allowed"
@@ -72,7 +78,7 @@ const ChallengeExpandedCard = ({ challengeId, userChallenges = [], challenges = 
                 </button>
               )}
 
-              {!challenge.comingSoon && challenge.externalLink?.link && (
+              {!comingSoon && challenge.externalLink?.link && (
                 // Redirect to externalLink if set (instead of challenge detail view)
                 <>
                   <button
@@ -98,7 +104,7 @@ const ChallengeExpandedCard = ({ challengeId, userChallenges = [], challenges = 
                 </>
               )}
 
-              {!challenge.comingSoon && !challenge.externalLink?.link && (
+              {!comingSoon && !challenge.externalLink?.link && (
                 <>
                   {isChallengeLocked ? (
                     <button
