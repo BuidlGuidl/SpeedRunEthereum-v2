@@ -107,7 +107,7 @@ export default function BuildersPage() {
     queryKey: ["users", sorting],
     queryFn: async ({ pageParam = 0 }) => {
       const start = (pageParam as number) * FETCH_SIZE;
-      const fetchedData = await getSortedUsersWithChallenges(start, FETCH_SIZE, sorting); // pretend api call
+      const fetchedData = await getSortedUsersWithChallenges(start, FETCH_SIZE, sorting);
       return fetchedData;
     },
     initialPageParam: 0,
