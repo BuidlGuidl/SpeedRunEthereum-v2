@@ -209,13 +209,13 @@ export default function BuildersPage() {
           maxWidth: `${columns.reduce((acc, col) => acc + (col.size ?? 0), 32)}px`,
         }}
         // needed fixed height to prevent layout shift
-        className="mt-4 relative overflow-auto border-2 border-base-300 rounded-lg mx-auto h-[calc(100vh-404px)] lg:h-[calc(100vh-340px)]"
+        className="mt-4 relative overflow-auto shadow-lg rounded-lg mx-auto h-[calc(100vh-404px)] lg:h-[calc(100vh-340px)]"
       >
         {/* Even though we're still using sematic table tags, we must use CSS grid and flexbox for dynamic row heights */}
-        <table style={{ display: "grid" }} className="table table-zebra bg-base-100">
-          <thead className="grid sticky bg-base-300 top-0 z-10">
+        <table style={{ display: "grid" }} className="table bg-base-100">
+          <thead className="grid sticky bg-base-100 top-0 z-10">
             {table.getHeaderGroups().map(headerGroup => (
-              <tr key={headerGroup.id} className="flex w-full">
+              <tr key={headerGroup.id} className="flex w-full text-sm">
                 {headerGroup.headers.map(header => {
                   return (
                     <th
@@ -256,12 +256,10 @@ export default function BuildersPage() {
                   ref={node => rowVirtualizer.measureElement(node)} // measure dynamic row height
                   key={row.id}
                   style={{
-                    display: "flex",
-                    position: "absolute",
                     transform: `translateY(${virtualRow.start}px)`, // this should always be a `style` as it changes on scroll
-                    width: "100%",
                     height: `${ROW_HEIGHT_IN_PX}px`,
                   }}
+                  className="flex absolute w-full hover"
                 >
                   {row.getVisibleCells().map(cell => {
                     return (
