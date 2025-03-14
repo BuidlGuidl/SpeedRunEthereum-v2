@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { waitUntil } from "@vercel/functions";
 import { ChallengeId, EventType, ReviewAction } from "~~/services/database/config/types";
 import { createEvent } from "~~/services/database/repositories/events";
 import { upsertUserChallenge } from "~~/services/database/repositories/userChallenges";
@@ -20,7 +21,7 @@ export type AutogradingResult = {
 // TODO: Remove this and make request to actual autograder
 async function mockAutograding(contractUrl: string): Promise<AutogradingResult> {
   console.log("Mock autograding for contract:", contractUrl);
-  await new Promise(resolve => setTimeout(resolve, 1000));
+  await new Promise(resolve => setTimeout(resolve, 10000));
   return {
     success: true,
     feedback: "All tests passed successfully! Great work!",
@@ -53,44 +54,67 @@ export async function POST(req: NextRequest, { params }: { params: { challengeId
       return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
 
-    // TODO: Create challenge submission only when autograder is turned on for that challenge
-    /* await createEvent({
-      eventType: "CHALLENGE_SUBMIT",
-      userAddress: lowerCasedUserAddress,
-      challengeCode: challengeId,
-    }); */
-
-    // TODO: Make request to actual autograder
-    // TODO: Think if we want to wait the autograder to finish or just return the result immediately
-    // - Check Vercel timeout limit and see if we return and have the function idle until the result is ready
-    // An alternative is have and endpoint that receives the autograder result and update the database
-    const gradingResult = await mockAutograding(contractUrl);
+    // Create a CHALLENGE_SUBMIT event
+    await createEvent({
+      eventType: EventType.CHALLENGE_SUBMIT,
+      userAddress: userAddress,
+      signature: signature,
+      payload: {
+        challengeId: challengeId,
+        frontendUrl: frontendUrl,
+        contractUrl: contractUrl,
+      },
+    });
 
     await upsertUserChallenge({
       userAddress: userAddress,
       challengeId,
       frontendUrl,
       contractUrl,
-      reviewAction: gradingResult.success ? ReviewAction.ACCEPTED : ReviewAction.REJECTED,
-      reviewComment: gradingResult.feedback,
+      reviewAction: ReviewAction.SUBMITTED,
+      reviewComment: "Your submission is being processed by the autograder...",
     });
 
-    await createEvent({
-      eventType: EventType.CHALLENGE_AUTOGRADE,
-      userAddress: userAddress,
-      signature: signature,
-      payload: {
-        autograding: true,
-        challengeId: challengeId,
-        reviewAction: gradingResult.success ? "ACCEPTED" : "REJECTED",
-        reviewMessage: gradingResult.feedback,
-      },
-    });
+    // Use waitUntil for background processing
+    waitUntil(
+      (async () => {
+        try {
+          // Run autograding
+          const gradingResult = await mockAutograding(contractUrl);
 
+          await upsertUserChallenge({
+            userAddress: userAddress,
+            challengeId,
+            frontendUrl,
+            contractUrl,
+            reviewAction: gradingResult.success ? ReviewAction.ACCEPTED : ReviewAction.REJECTED,
+            reviewComment: gradingResult.feedback,
+          });
+
+          await createEvent({
+            eventType: EventType.CHALLENGE_AUTOGRADE,
+            userAddress: userAddress,
+            signature: signature,
+            payload: {
+              autograding: true,
+              challengeId: challengeId,
+              reviewAction: gradingResult.success ? ReviewAction.ACCEPTED : ReviewAction.REJECTED,
+              reviewMessage: gradingResult.feedback,
+            },
+          });
+
+          console.log(`Background autograding completed for user ${userAddress}, challenge ${challengeId}`);
+        } catch (error) {
+          console.error("Error in background autograding:", error);
+        }
+      })(),
+    );
+
+    // Return response immediately
     return NextResponse.json({
       success: true,
-      message: "Challenge submitted and graded successfully",
-      autoGradingResult: gradingResult,
+      message: "Challenge submitted successfully. Autograding in progress...",
+      status: "SUBMITTED",
     });
   } catch (error) {
     console.error("Error submitting challenge:", error);

@@ -2633,6 +2633,7 @@ __metadata:
     "@typescript-eslint/eslint-plugin": ~5.40.0
     "@uniswap/sdk-core": ~5.8.2
     "@uniswap/v2-sdk": ~4.6.1
+    "@vercel/functions": ^2.0.0
     "@vercel/postgres": ^0.10.0
     abitype: 1.0.6
     autoprefixer: ~10.4.20
@@ -3964,6 +3965,18 @@ __metadata:
     xdg-app-paths: 5.1.0
     yauzl-promise: 2.1.3
   checksum: c67529db2c371b792f8bb0e8ddb6db11fe0a928ed600150f69a9273c4a132070b39bf6d414e465df4c36bf30bf8dc9515499e5e61fb5c061430e814418d06102
+  languageName: node
+  linkType: hard
+
+"@vercel/functions@npm:^2.0.0":
+  version: 2.0.0
+  resolution: "@vercel/functions@npm:2.0.0"
+  peerDependencies:
+    "@aws-sdk/credential-provider-web-identity": "*"
+  peerDependenciesMeta:
+    "@aws-sdk/credential-provider-web-identity":
+      optional: true
+  checksum: 90866bfbecec430b532b7ed39312dc69b388836ae945a9b1ac5fe44cb5ee1b6ea0e67925b3e366a9e7cca65b0284373aa778066b76123bc9ff4a7f2e30b1e53b
   languageName: node
   linkType: hard
 
