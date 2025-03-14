@@ -90,7 +90,7 @@ export default function BuildersPage() {
         cell: info => {
           return (
             <div className="flex w-full justify-center">
-              <DateWithTooltip timestamp={info.getValue() as Date} />
+              <DateWithTooltip timestamp={info.getValue() as Date} position="left" />
             </div>
           );
         },
