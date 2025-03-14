@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef } from "react";
+import { CopyValueToClipboard } from "../../../../components/CopyValueToClipboard";
 import { UpdateSocialsModal } from "./UpdateSocialsModal";
 import { useAccount } from "wagmi";
 import QuestionIcon from "~~/app/_assets/icons/QuestionIcon";
@@ -21,15 +22,15 @@ export const UserSocials = ({ user }: { user: UserByAddress }) => {
           {userSocials
             .filter(social => social.value)
             .map(social => {
-              const link = social.getLink(social.value as string);
+              const link = social.getLink?.(social.value as string);
               return (
-                <div key={social.key}>
+                <div key={social.key} className="flex items-center">
                   {link ? (
                     <a href={link} target="_blank" rel="noopener noreferrer" className="link">
                       <social.icon className="w-4 h-4" />
                     </a>
                   ) : (
-                    <span>{social.value}</span>
+                    <CopyValueToClipboard text={social.value as string} Icon={social.icon} />
                   )}
                 </div>
               );

@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { ChallengeStatus } from "./ChallengeStatus";
-import { DateWithTooltip } from "~~/app/_components/DateWithTooltip";
+import { DateWithTooltip } from "~~/components/DateWithTooltip";
 import { ReviewAction } from "~~/services/database/config/types";
 import { UserChallenges } from "~~/services/database/repositories/userChallenges";
 
@@ -49,7 +49,7 @@ export const UserChallengesTable = ({ challenges }: { challenges: UserChallenges
   return (
     <div className="flex flex-col gap-8">
       <div className="overflow-x-auto md:overflow-x-visible">
-        <table className="table bg-base-100 shadow-lg min-w-full">
+        <table className="table bg-base-100 shadow-lg min-w-full overflow-hidden">
           <thead>
             <tr className="text-sm">
               <th>NAME</th>

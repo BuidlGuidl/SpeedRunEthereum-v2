@@ -1,5 +1,6 @@
+import { SortingState } from "@tanstack/react-table";
 import { UpdateSocialsPayload } from "~~/app/api/users/update-socials/route";
-import { UserByAddress } from "~~/services/database/repositories/users";
+import { UserByAddress, UserWithChallengesData } from "~~/services/database/repositories/users";
 
 export async function fetchUser(address: string | undefined) {
   if (!address) return;
@@ -49,6 +50,23 @@ export async function updateSocials(payload: UpdateSocialsPayload) {
 
   return response.json();
 }
+
+export const getSortedUsersWithChallenges = async (start: number, size: number, sorting: SortingState) => {
+  const response = await fetch(`/api/users/sorted?start=${start}&size=${size}&sorting=${JSON.stringify(sorting)}`);
+
+  if (!response.ok) {
+    throw new Error(`Failed to fetch sorted users: ${response.status} ${response.statusText}`);
+  }
+
+  const usersData = (await response.json()) as {
+    data: UserWithChallengesData[];
+    meta: {
+      totalRowCount: number;
+    };
+  };
+
+  return usersData;
+};
 
 export async function userJoinBg({ address, signature }: { address: string; signature: string }) {
   const response = await fetch("/api/users/join-bg", {

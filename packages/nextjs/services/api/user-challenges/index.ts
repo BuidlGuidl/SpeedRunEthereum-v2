@@ -5,7 +5,7 @@ export async function fetchUserChallenges(address: string | undefined) {
 
   const response = await fetch(`/api/user-challenges/${address}`);
   if (!response.ok) {
-    throw new Error("Failed to fetch user challenges");
+    throw new Error(`Failed to fetch user challenges: ${response.status} ${response.statusText}`);
   }
   const data = await response.json();
   return data.challenges as UserChallenges;

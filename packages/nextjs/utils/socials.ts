@@ -9,7 +9,7 @@ import { UserByAddress, UserSocials } from "~~/services/database/repositories/us
 export type Social = {
   label: string;
   placeholder: string;
-  getLink: (value: string) => string | null;
+  getLink?: (value: string) => string | null;
   weight: number;
   icon: React.ComponentType<{ className: string }>;
 };
@@ -32,7 +32,6 @@ export const socials: Record<keyof UserSocials, Social> = {
   socialDiscord: {
     label: "Discord",
     placeholder: "Your Discord username#id",
-    getLink: (value: string) => `https://discord.com/users/${value}`,
     weight: 2,
     icon: DiscordIcon,
   },
