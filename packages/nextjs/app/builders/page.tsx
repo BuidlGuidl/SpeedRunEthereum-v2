@@ -223,7 +223,7 @@ export default function BuildersPage() {
                       style={{
                         width: header.getSize(),
                       }}
-                      className="flex justify-center uppercase"
+                      className="flex justify-center uppercase first:justify-start"
                     >
                       <div
                         onClick={header.column.getToggleSortingHandler()}
