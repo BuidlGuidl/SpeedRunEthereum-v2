@@ -106,6 +106,42 @@ export const seedChallenges: (typeof challenges.$inferInsert)[] = [
     ],
   },
   {
+    id: ChallengeId.STABLECOINS,
+    challengeName: "💰 Stablecoins",
+    github: "scaffold-eth/se-2-challenges:challenge-8-stablecoin",
+    autograding: false,
+    description:
+      "🪙 Build your own decentralized stablecoin. Let's write a contract that takes collateral and issues MyUSD tokens based on the value of the collateral. What happens when the collateral changes in value? If it is higher, we will be able to borrow more tokens. If it is lower, we will also build a system for liquidating the MyUSD.",
+    sortOrder: 8,
+    previewImage: "/assets/challenges/stablecoins.svg",
+    dependencies: [],
+    comingSoon: true,
+  },
+  {
+    id: ChallengeId.PREDICTION_MARKETS,
+    challengeName: "📈 Prediction Markets",
+    github: "scaffold-eth/se-2-challenges:challenge-9-prediction-markets",
+    autograding: false,
+    description:
+      "🔮 Build a prediction market where users can create questions about future outcomes for others to bet on. Users can also participate in existing markets to speculate on event results. 📊 Outcome shares can be traded, with prices adjusting dynamically based on market belief. This is possible because the smart contract acts as an automated market maker (like in the DEX challenge) and adjusts odds based on supply and demand.",
+    sortOrder: 9,
+    previewImage: "/assets/challenges/predictionMarkets.svg",
+    dependencies: [],
+    comingSoon: true,
+  },
+  {
+    id: ChallengeId.DEPLOY_TO_L2,
+    challengeName: "⚡ Deploy to Layer 2",
+    github: "scaffold-eth/se-2-challenges:challenge-10-deploy-to-l2",
+    autograding: false,
+    description:
+      "🚀 Ethereum L2s make blockchain apps fast and cheap, bringing us closer to mainstream adoption! Most L2s are EVM compatible, meaning your app should work seamlessly across them with little to no changes—just deploy and go! In this challenge, you will deploy an app across multiple chains, including Optimism, Base, and Arbitrum, and experience the snappy, low-cost transactions while exploring how they make building scalable apps and games easier than ever.",
+    sortOrder: 10,
+    previewImage: "/assets/challenges/deployToL2.svg",
+    dependencies: [],
+    comingSoon: true,
+  },
+  {
     id: ChallengeId.STATE_CHANNELS,
     challengeName: "A State Channel Application",
     github: "scaffold-eth/se-2-challenges:challenge-5-state-channels",
