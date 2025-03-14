@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef } from "react";
-import { CopyValueToClipboard } from "./CopyValueToClipboard";
+import { CopyValueToClipboard } from "../../../../components/CopyValueToClipboard";
 import { UpdateSocialsModal } from "./UpdateSocialsModal";
 import { useAccount } from "wagmi";
 import QuestionIcon from "~~/app/_assets/icons/QuestionIcon";
