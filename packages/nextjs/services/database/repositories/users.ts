@@ -27,7 +27,10 @@ export async function findSortedUsersWithChallenges(start: number, size: number,
 
   // Define SQL expressions once
   const challengesCompletedExpr = sql`(SELECT COUNT(*) FROM ${userChallenges} uc WHERE uc.user_address = ${users.userAddress} AND uc.review_action = ${ReviewAction.ACCEPTED})`;
-  const lastActivityExpr = sql`(SELECT MAX(uc.submitted_at) FROM ${userChallenges} uc WHERE uc.user_address = ${users.userAddress})`;
+  const lastActivityExpr = sql`COALESCE(
+    (SELECT MAX(uc.submitted_at) FROM ${userChallenges} uc WHERE uc.user_address = ${users.userAddress}),
+    ${users.createdAt}
+  )`;
 
   const query = db.query.users.findMany({
     limit: size,
@@ -64,10 +67,11 @@ export async function findSortedUsersWithChallenges(start: number, size: number,
 
   const [usersData, totalCount] = await Promise.all([query, db.$count(users)]);
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const preparedUsersData = usersData.map(({ userChallenges, ...restUser }) => ({
     ...restUser,
     challengesCompleted: Number(restUser.challengesCompleted),
-    lastActivity: restUser.lastActivity as Date | undefined,
+    lastActivity: restUser.lastActivity as Date,
   }));
 
   return {

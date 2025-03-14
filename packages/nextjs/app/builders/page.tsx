@@ -88,12 +88,9 @@ export default function BuildersPage() {
         header: "Last Activity",
         accessorKey: "lastActivity",
         cell: info => {
-          const row = info.row.original;
-
-          const date = row.lastActivity || (row.createdAt as Date);
           return (
             <div className="flex w-full justify-center">
-              <DateWithTooltip timestamp={date} />
+              <DateWithTooltip timestamp={info.getValue() as Date} />
             </div>
           );
         },
