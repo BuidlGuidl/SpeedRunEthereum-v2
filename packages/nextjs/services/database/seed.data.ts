@@ -112,7 +112,7 @@ export const seedChallenges: (typeof challenges.$inferInsert)[] = [
     autograding: false,
     description:
       "🪙 Build your own decentralized stablecoin. Let's write a contract that takes collateral and issues MyUSD tokens based on the value of the collateral. What happens when the collateral changes in value? If it is higher, we will be able to borrow more tokens. If it is lower, we will also build a system for liquidating the MyUSD.",
-    sortOrder: 8,
+    sortOrder: 5,
     previewImage: "/assets/challenges/stablecoins.svg",
     dependencies: [],
     comingSoon: true,
@@ -124,7 +124,7 @@ export const seedChallenges: (typeof challenges.$inferInsert)[] = [
     autograding: false,
     description:
       "🔮 Build a prediction market where users can create questions about future outcomes for others to bet on. Users can also participate in existing markets to speculate on event results. 📊 Outcome shares can be traded, with prices adjusting dynamically based on market belief. This is possible because the smart contract acts as an automated market maker (like in the DEX challenge) and adjusts odds based on supply and demand.",
-    sortOrder: 9,
+    sortOrder: 6,
     previewImage: "/assets/challenges/predictionMarkets.svg",
     dependencies: [],
     comingSoon: true,
@@ -136,7 +136,7 @@ export const seedChallenges: (typeof challenges.$inferInsert)[] = [
     autograding: false,
     description:
       "🚀 Ethereum L2s make blockchain apps fast and cheap, bringing us closer to mainstream adoption! Most L2s are EVM compatible, meaning your app should work seamlessly across them with little to no changes—just deploy and go! In this challenge, you will deploy an app across multiple chains, including Optimism, Base, and Arbitrum, and experience the snappy, low-cost transactions while exploring how they make building scalable apps and games easier than ever.",
-    sortOrder: 10,
+    sortOrder: 7,
     previewImage: "/assets/challenges/deployToL2.svg",
     dependencies: [],
     comingSoon: true,
@@ -148,7 +148,7 @@ export const seedChallenges: (typeof challenges.$inferInsert)[] = [
     autograding: true,
     description:
       "🛣️ The Ethereum blockchain has great decentralization & security properties but these properties come at a price: transaction throughput is low, and transactions can be expensive. This makes many traditional web applications infeasible on a blockchain... or does it?  State channels look to solve these problems by allowing participants to securely transact off-chain while keeping interaction with Ethereum Mainnet at a minimum.",
-    sortOrder: 5,
+    sortOrder: 8,
     previewImage: "/assets/challenges/state.svg",
     dependencies: [
       ChallengeId.SIMPLE_NFT_EXAMPLE,
@@ -164,7 +164,7 @@ export const seedChallenges: (typeof challenges.$inferInsert)[] = [
     autograding: false,
     description:
       '👩‍👩‍👧‍👧 Using a smart contract as a wallet we can secure assets by requiring multiple accounts to "vote" on transactions. The contract will keep track of transactions in an array of structs and owners will confirm or reject each one. Any transaction with enough confirmations can "execute".',
-    sortOrder: 6,
+    sortOrder: 9,
     previewImage: "/assets/challenges/multiSig.svg",
     dependencies: [
       ChallengeId.SIMPLE_NFT_EXAMPLE,
@@ -184,7 +184,7 @@ export const seedChallenges: (typeof challenges.$inferInsert)[] = [
     autograding: false,
     description:
       "🎨 Create a dynamic SVG NFT using a smart contract. Your contract will generate on-chain SVG images and allow users to mint their unique NFTs. ✨ Customize your SVG graphics and metadata directly within the smart contract. 🚀 Share the minting URL once your project is live!",
-    sortOrder: 7,
+    sortOrder: 10,
     previewImage: "/assets/challenges/dynamicSvgNFT.svg",
     dependencies: [
       ChallengeId.SIMPLE_NFT_EXAMPLE,
