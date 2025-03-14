@@ -29,7 +29,7 @@ export type UsersApiResponse = {
 };
 
 const FETCH_SIZE = 20;
-const ROW_HEIGHT_IN_PX = 50;
+const ROW_HEIGHT_IN_PX = 65;
 
 export default function BuildersPage() {
   // we need a reference to the scrolling element for logic down below
