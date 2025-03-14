@@ -75,7 +75,7 @@ export default function BuildersPage() {
                           <social.icon className="w-4 h-4" />
                         </a>
                       ) : (
-                        <CopyValueToClipboard text={social.value as string} Icon={social.icon} />
+                        <CopyValueToClipboard text={social.value as string} Icon={social.icon} position="left" />
                       )}
                     </div>
                   );
