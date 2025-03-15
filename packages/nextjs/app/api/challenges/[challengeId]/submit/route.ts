@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { ChallengeId, EventType, ReviewAction } from "~~/services/database/config/types";
-import { createEvent } from "~~/services/database/repositories/events";
-import { upsertUserChallenge } from "~~/services/database/repositories/userChallenges";
+import { ChallengeId, ReviewAction } from "~~/services/database/config/types";
+import { createUserChallenge, updateUserChallengeById } from "~~/services/database/repositories/userChallenges";
 import { findUserByAddress } from "~~/services/database/repositories/users";
 import { isValidEIP712ChallengeSubmitSignature } from "~~/services/eip712/challenge";
 
@@ -53,12 +52,22 @@ export async function POST(req: NextRequest, { params }: { params: { challengeId
       return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
 
-    // TODO: Create challenge submission only when autograder is turned on for that challenge
-    /* await createEvent({
-      eventType: "CHALLENGE_SUBMIT",
-      userAddress: lowerCasedUserAddress,
-      challengeCode: challengeId,
-    }); */
+    // Create the initial submission record
+    const submissionResult = await createUserChallenge({
+      userAddress: userAddress,
+      challengeId,
+      frontendUrl,
+      contractUrl,
+      signature,
+      // Initially set as SUBMITTED
+      reviewAction: ReviewAction.SUBMITTED,
+    });
+
+    // Get the ID of the newly created submission
+    const submissionId = submissionResult[0]?.id;
+    if (!submissionId) {
+      return NextResponse.json({ error: "Failed to create submission" }, { status: 500 });
+    }
 
     // TODO: Make request to actual autograder
     // TODO: Think if we want to wait the autograder to finish or just return the result immediately
@@ -66,26 +75,16 @@ export async function POST(req: NextRequest, { params }: { params: { challengeId
     // An alternative is have and endpoint that receives the autograder result and update the database
     const gradingResult = await mockAutograding(contractUrl);
 
-    await upsertUserChallenge({
-      userAddress: userAddress,
-      challengeId,
-      frontendUrl,
-      contractUrl,
+    // Update the existing submission with the grading result
+    const updateResult = await updateUserChallengeById(submissionId, {
       reviewAction: gradingResult.success ? ReviewAction.ACCEPTED : ReviewAction.REJECTED,
       reviewComment: gradingResult.feedback,
     });
 
-    await createEvent({
-      eventType: EventType.CHALLENGE_AUTOGRADE,
-      userAddress: userAddress,
-      signature: signature,
-      payload: {
-        autograding: true,
-        challengeId: challengeId,
-        reviewAction: gradingResult.success ? "ACCEPTED" : "REJECTED",
-        reviewMessage: gradingResult.feedback,
-      },
-    });
+    // Check if the update was successful
+    if (!updateResult || updateResult.length === 0) {
+      return NextResponse.json({ error: "Failed to update submission with grading result" }, { status: 500 });
+    }
 
     return NextResponse.json({
       success: true,
