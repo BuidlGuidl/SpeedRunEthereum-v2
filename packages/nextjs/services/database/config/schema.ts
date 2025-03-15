@@ -1,4 +1,4 @@
-import { EventType, ReviewAction, UserRole } from "./types";
+import { ReviewAction, UserRole } from "./types";
 import { SQL, relations, sql } from "drizzle-orm";
 import {
   AnyPgColumn,
@@ -13,6 +13,7 @@ import {
   timestamp,
   uniqueIndex,
   varchar,
+  index,
 } from "drizzle-orm/pg-core";
 
 export function lower(address: AnyPgColumn): SQL {
@@ -25,12 +26,6 @@ export const reviewActionEnum = pgEnum("review_action_enum", [
   ReviewAction.SUBMITTED,
 ]);
 
-export const eventTypeEnum = pgEnum("event_type_enum", [
-  EventType.CHALLENGE_SUBMIT,
-  EventType.CHALLENGE_AUTOGRADE,
-  EventType.USER_CREATE,
-]);
-
 export const userRoleEnum = pgEnum("user_role_enum", [UserRole.USER, UserRole.BUILDER, UserRole.ADMIN]);
 
 export const users = pgTable(
@@ -39,6 +34,7 @@ export const users = pgTable(
     userAddress: varchar({ length: 42 }).primaryKey(), // Ethereum wallet address
     role: userRoleEnum().default(UserRole.USER), // Using the enum and setting default
     createdAt: timestamp().defaultNow().notNull(),
+    lastUpdatedAt: timestamp().defaultNow().notNull(), // Added lastUpdatedAt field
     socialTelegram: varchar({ length: 255 }),
     socialX: varchar({ length: 255 }),
     socialGithub: varchar({ length: 255 }),
@@ -71,6 +67,7 @@ export const challenges = pgTable("challenges", {
 export const userChallenges = pgTable(
   "user_challenges",
   {
+    id: serial().primaryKey(),
     userAddress: varchar({ length: 42 })
       .notNull()
       .references(() => users.userAddress),
@@ -82,26 +79,16 @@ export const userChallenges = pgTable(
     reviewComment: text(), // Feedback provided during autograding
     submittedAt: timestamp().notNull().defaultNow(),
     reviewAction: reviewActionEnum(), // Final review decision from autograder (REJECTED or ACCEPTED). Initially set to SUBMITTED.
+    signature: varchar({ length: 255 }), // Added signature field from events table
   },
-  table => [primaryKey({ columns: [table.userAddress, table.challengeId] })],
+  table => [
+    index("user_challenge_lookup_idx").on(table.userAddress, table.challengeId),
+    index("user_completed_challenges_idx").on(table.userAddress, table.reviewAction)
+  ],
 );
-
-export const events = pgTable("events", {
-  eventId: serial().primaryKey(),
-  eventType: eventTypeEnum().notNull(), // Type of event (CHALLENGE_SUBMIT, CHALLENGE_AUTOGRADE, USER_CREATE)
-  eventAt: timestamp().defaultNow(),
-  signature: varchar({ length: 255 }), // Cryptographic signature of the event
-  userAddress: varchar({ length: 42 })
-    .notNull()
-    .references(() => users.userAddress),
-  payload: jsonb()
-    .notNull()
-    .$defaultFn(() => ({})), // Flexible event payload stored as JSONB
-});
 
 export const usersRelations = relations(users, ({ many }) => ({
   userChallenges: many(userChallenges),
-  events: many(events),
 }));
 
 export const challengesRelations = relations(challenges, ({ many }) => ({
@@ -119,9 +106,47 @@ export const userChallengesRelations = relations(userChallenges, ({ one }) => ({
   }),
 }));
 
-export const eventsRelations = relations(events, ({ one }) => ({
-  user: one(users, {
-    fields: [events.userAddress],
-    references: [users.userAddress],
-  }),
-}));
+// SQL for creating the latest_events_view
+export const latestEventsViewSQL = sql`
+CREATE OR REPLACE VIEW latest_events_view AS
+-- User creations
+SELECT
+  'USER_CREATE' as event_type,
+  user_address,
+  NULL as challenge_id,
+  created_at as event_at,
+  NULL as review_action,
+  NULL as id,
+  NULL as challenge_name
+FROM users
+
+UNION ALL
+
+-- User updates
+SELECT
+  'USER_UPDATE' as event_type,
+  user_address,
+  NULL as challenge_id,
+  last_updated_at as event_at,
+  NULL as review_action,
+  NULL as id,
+  NULL as challenge_name
+FROM users
+WHERE last_updated_at > created_at
+
+UNION ALL
+
+-- Challenge submissions
+SELECT
+  'CHALLENGE_SUBMIT' as event_type,
+  uc.user_address,
+  uc.challenge_id,
+  uc.submitted_at as event_at,
+  uc.review_action,
+  uc.id,
+  c.challenge_name
+FROM user_challenges uc
+LEFT JOIN challenges c ON uc.challenge_id = c.id
+
+ORDER BY event_at DESC;
+`;
