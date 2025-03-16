@@ -1,6 +1,7 @@
 "use client";
 
 import { AfterSreCard } from "./AfterSreCard";
+import { AfterSreLine } from "./AfterSreLine";
 import { ChallengeExpandedCard } from "./ChallengeExpandedCard";
 import { Hero } from "./Hero";
 import { JoinBGCard } from "./JoinBGCard";
@@ -74,7 +75,7 @@ export const HomepageClient = ({ challenges }: { challenges: Challenges }) => {
         />
 
         <div className="flex flex-col xl:flex-row justify-center mx-auto relative">
-          {/* <AfterSreLine /> */}
+          <AfterSreLine />
           <div className="hidden xl:flex flex-grow bg-[#96EAEA] dark:bg-[#3AACAD]" />
           <AfterSreCard
             title="ETH Tech Tree"
