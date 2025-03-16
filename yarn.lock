@@ -2624,6 +2624,8 @@ __metadata:
     "@rainbow-me/rainbowkit": 2.1.6
     "@tailwindcss/typography": ^0.5.16
     "@tanstack/react-query": ~5.59.15
+    "@tanstack/react-table": ^8.21.2
+    "@tanstack/react-virtual": ^3.13.2
     "@trivago/prettier-plugin-sort-imports": ~4.3.0
     "@types/node": ~18.19.50
     "@types/pg": ^8
@@ -2990,6 +2992,44 @@ __metadata:
   peerDependencies:
     react: ^18 || ^19
   checksum: 2f4740f13dc9cbbf3c4175ac2e4e2788d2df8643940dfd9cc62c8c3d7c8842b2aeda0f58b99cdd2d525c0c78d759a1adfb3118599ab64bd3ce7ce4f027ee6f6b
+  languageName: node
+  linkType: hard
+
+"@tanstack/react-table@npm:^8.21.2":
+  version: 8.21.2
+  resolution: "@tanstack/react-table@npm:8.21.2"
+  dependencies:
+    "@tanstack/table-core": 8.21.2
+  peerDependencies:
+    react: ">=16.8"
+    react-dom: ">=16.8"
+  checksum: 3cda97794c10777d48d01de29d087a33edd8af153b3096ac9798c7ebddd31bd34f2b7838ecf4bddaf469d661a777556bd8021e15a41f692eb2e3dd79dd0e5c3b
+  languageName: node
+  linkType: hard
+
+"@tanstack/react-virtual@npm:^3.13.2":
+  version: 3.13.2
+  resolution: "@tanstack/react-virtual@npm:3.13.2"
+  dependencies:
+    "@tanstack/virtual-core": 3.13.2
+  peerDependencies:
+    react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
+    react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
+  checksum: 7005b61f9d7d68c39d1023815360ed3917e7a38141d9c15cd2554c2d46cb083a2f0faec74181c9d1b0acd12c3fcca0cae6ba52256b59e8d787b030778d2701da
+  languageName: node
+  linkType: hard
+
+"@tanstack/table-core@npm:8.21.2":
+  version: 8.21.2
+  resolution: "@tanstack/table-core@npm:8.21.2"
+  checksum: 21573388b26cef9c6fcabe3785640c470ea072a6d6ec34543e7eaf54ee742bf5fb12f8a04b172d7e08bd828a35afd7133add5adb4729dd4f94eaf4745b1cab14
+  languageName: node
+  linkType: hard
+
+"@tanstack/virtual-core@npm:3.13.2":
+  version: 3.13.2
+  resolution: "@tanstack/virtual-core@npm:3.13.2"
+  checksum: e5820282b764b9851795e012a6245cf3bc71ba25dac8db2d200fc6dbb27325760956377f33df3981bc46f853952b3edbcd577d47520ec3ecdde373b3c2d3d934
   languageName: node
   linkType: hard
 

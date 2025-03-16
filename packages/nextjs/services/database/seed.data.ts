@@ -8,7 +8,7 @@ export const seedUsers: (typeof users.$inferInsert)[] = [
     userAddress: "0xB4F53bd85c00EF22946d24Ae26BC38Ac64F5E7B1",
     role: UserRole.USER,
     createdAt: new Date(1679063274534),
-    socialTwitter: "pabl0cks",
+    socialX: "pabl0cks",
     socialTelegram: "pabl0cks",
   },
   {
@@ -16,14 +16,14 @@ export const seedUsers: (typeof users.$inferInsert)[] = [
     role: UserRole.USER,
     createdAt: new Date(1664777161512),
     socialEmail: "ryuufarhan7@gmail.com",
-    socialTwitter: "FarhanRyuu",
+    socialX: "FarhanRyuu",
   },
   {
     userAddress: "0x014EC6296B3493f0f59a3FE90E0FFf377fb8826a",
     role: UserRole.USER,
     createdAt: new Date(1672731143934),
     socialEmail: "gokulkesavan5005@gmail.com",
-    socialTwitter: "meta_Goku",
+    socialX: "meta_Goku",
     socialGithub: "kesgokul",
   },
   {
@@ -31,14 +31,14 @@ export const seedUsers: (typeof users.$inferInsert)[] = [
     role: UserRole.USER,
     createdAt: new Date(1668050419502),
     socialEmail: "afo@wefa.app",
-    socialTwitter: "Time_Is_Oba",
+    socialX: "Time_Is_Oba",
     socialGithub: "Oba-One",
   },
   {
     userAddress: "0x45334F41aAA464528CD5bc0F582acadC49Eb0Cd1",
     role: UserRole.USER,
     createdAt: new Date(1679063274534),
-    socialTwitter: "rinat_eth",
+    socialX: "rinat_eth",
     socialTelegram: "rinat_eth",
   },
 ];

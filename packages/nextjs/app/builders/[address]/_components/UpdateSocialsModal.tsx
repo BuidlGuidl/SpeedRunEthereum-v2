@@ -13,7 +13,7 @@ export const UpdateSocialsModal = forwardRef<HTMLDialogElement, UpdateSocialsMod
   ({ closeModal, existingSocials }, ref) => {
     const [socialsData, setSocialsData] = useState({
       socialTelegram: existingSocials?.socialTelegram || "",
-      socialTwitter: existingSocials?.socialTwitter || "",
+      socialX: existingSocials?.socialX || "",
       socialGithub: existingSocials?.socialGithub || "",
       socialInstagram: existingSocials?.socialInstagram || "",
       socialDiscord: existingSocials?.socialDiscord || "",
