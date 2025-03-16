@@ -16,7 +16,7 @@ export const StartBuildingButton = ({ firstChallengeId }: { firstChallengeId: st
     <Link
       href={`/challenge/${firstChallengeId}`}
       onClick={handleCtaClick}
-      className="mt-4 px-6 py-3 text-lg font-medium text-white bg-primary rounded-full hover:bg-neutral dark:text-gray-800 transition-colors"
+      className="mt-4 px-6 py-3 text-lg font-medium text-white bg-primary rounded-full hover:bg-secondary-content dark:text-gray-800 transition-colors"
     >
       Start Building on Ethereum
     </Link>
