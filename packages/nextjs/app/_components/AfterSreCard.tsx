@@ -24,19 +24,19 @@ export const AfterSreCard = ({
           className={`absolute h-5 w-5 rounded-full bg-base-300 border-primary border-4 top-[58%] lg:top-1/2 -left-[13px] flex xl:hidden`}
         />
 
-        <div className="flex flex-col items-start max-w-full lg:max-w-[40%] space-y-4">
+        <div className="flex flex-col items-start max-w-full lg:max-w-[40%]">
           <div className="flex flex-col items-start mt-0 lg:mt-[100px]">
             <h2 className="text-3xl lg:text-2xl font-medium mt-0">{title}</h2>
           </div>
 
-          <div className="flex flex-col items-start space-y-8">
+          <div className="flex flex-col items-start space-y-4">
             <p className="text-lg lg:text-base leading-[1.5]">{description}</p>
 
             <Link
               href={externalLink}
               target="_blank"
               rel="noopener noreferrer"
-              className="mt-4 px-6 py-3 text-lg uppercase font-medium text-white bg-primary rounded-full hover:bg-secondary-content dark:text-gray-800 transition-colors"
+              className="mt-4 px-6 py-1.5 text-lg uppercase font-medium text-white bg-primary rounded-full hover:bg-secondary-content dark:text-gray-800 transition-colors"
             >
               {buttonText}
             </Link>
@@ -48,7 +48,7 @@ export const AfterSreCard = ({
             src={previewImage}
             alt={`${title} image`}
             // workaround to avoid console warnings
-            className={`w-full max-w-[490px] h-auto lg:mr-12 ${previewImage.includes("techTree") ? "p-9" : "p-0"}`}
+            className={`w-full max-w-[400px] h-auto lg:mr-12 ${previewImage.includes("techTree") ? "p-9" : "p-0"}`}
             width={0}
             height={0}
           />
