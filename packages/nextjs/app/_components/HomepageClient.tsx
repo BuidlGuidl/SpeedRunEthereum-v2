@@ -54,12 +54,26 @@ export const HomepageClient = ({ challenges }: { challenges: Challenges }) => {
         />
 
         <JoinBGCard userChallenges={userChallenges} user={user} />
-
         <ChallengeExpandedCard
-          key={ChallengeId.STATE_CHANNELS}
-          challengeId={ChallengeId.STATE_CHANNELS}
+          key={ChallengeId.STABLECOINS}
+          challengeId={ChallengeId.STABLECOINS}
           userChallenges={userChallenges}
           challenges={challenges}
+          comingSoon
+        />
+        <ChallengeExpandedCard
+          key={ChallengeId.PREDICTION_MARKETS}
+          challengeId={ChallengeId.PREDICTION_MARKETS}
+          userChallenges={userChallenges}
+          challenges={challenges}
+          comingSoon
+        />
+        <ChallengeExpandedCard
+          key={ChallengeId.DEPLOY_TO_L2}
+          challengeId={ChallengeId.DEPLOY_TO_L2}
+          userChallenges={userChallenges}
+          challenges={challenges}
+          comingSoon
         />
         <ChallengeExpandedCard
           key={ChallengeId.MULTISIG}
