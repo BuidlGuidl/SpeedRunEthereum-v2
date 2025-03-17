@@ -106,20 +106,34 @@ export const seedChallenges: (typeof challenges.$inferInsert)[] = [
     ],
   },
   {
-    id: ChallengeId.STATE_CHANNELS,
-    challengeName: "A State Channel Application",
-    github: "scaffold-eth/se-2-challenges:challenge-5-state-channels",
-    autograding: true,
+    id: ChallengeId.STABLECOINS,
+    challengeName: "💰 Stablecoins",
+    autograding: false,
     description:
-      "🛣️ The Ethereum blockchain has great decentralization & security properties but these properties come at a price: transaction throughput is low, and transactions can be expensive. This makes many traditional web applications infeasible on a blockchain... or does it?  State channels look to solve these problems by allowing participants to securely transact off-chain while keeping interaction with Ethereum Mainnet at a minimum.",
+      "🪙 Build your own decentralized stablecoin. Let's write a contract that takes collateral and issues MyUSD tokens based on the value of the collateral. What happens when the collateral changes in value? If it is higher, we will be able to borrow more tokens. If it is lower, we will also build a system for liquidating the MyUSD.",
     sortOrder: 5,
-    previewImage: "/assets/challenges/state.svg",
-    dependencies: [
-      ChallengeId.SIMPLE_NFT_EXAMPLE,
-      ChallengeId.DECENTRALIZED_STAKING,
-      ChallengeId.TOKEN_VENDOR,
-      ChallengeId.DICE_GAME,
-    ],
+    previewImage: "/assets/challenges/stablecoins.svg",
+    dependencies: [],
+  },
+  {
+    id: ChallengeId.PREDICTION_MARKETS,
+    challengeName: "📈 Prediction Markets",
+    autograding: false,
+    description:
+      "🔮 Build a prediction market where users can create questions about future outcomes for others to bet on. Users can also participate in existing markets to speculate on event results. 📊 Outcome shares can be traded, with prices adjusting dynamically based on market belief. This is possible because the smart contract acts as an automated market maker (like in the DEX challenge) and adjusts odds based on supply and demand.",
+    sortOrder: 6,
+    previewImage: "/assets/challenges/predictionMarkets.svg",
+    dependencies: [],
+  },
+  {
+    id: ChallengeId.DEPLOY_TO_L2,
+    challengeName: "⚡ Deploy to Layer 2",
+    autograding: false,
+    description:
+      "🚀 Ethereum L2s make blockchain apps fast and cheap, bringing us closer to mainstream adoption! Most L2s are EVM compatible, meaning your app should work seamlessly across them with little to no changes—just deploy and go! In this challenge, you will deploy an app across multiple chains, including Optimism, Base, and Arbitrum, and experience the snappy, low-cost transactions while exploring how they make building scalable apps and games easier than ever.",
+    sortOrder: 7,
+    previewImage: "/assets/challenges/deployToL2.svg",
+    dependencies: [],
   },
   {
     id: ChallengeId.MULTISIG,
@@ -128,7 +142,7 @@ export const seedChallenges: (typeof challenges.$inferInsert)[] = [
     autograding: false,
     description:
       '👩‍👩‍👧‍👧 Using a smart contract as a wallet we can secure assets by requiring multiple accounts to "vote" on transactions. The contract will keep track of transactions in an array of structs and owners will confirm or reject each one. Any transaction with enough confirmations can "execute".',
-    sortOrder: 6,
+    sortOrder: 8,
     previewImage: "/assets/challenges/multiSig.svg",
     dependencies: [
       ChallengeId.SIMPLE_NFT_EXAMPLE,
@@ -148,7 +162,7 @@ export const seedChallenges: (typeof challenges.$inferInsert)[] = [
     autograding: false,
     description:
       "🎨 Create a dynamic SVG NFT using a smart contract. Your contract will generate on-chain SVG images and allow users to mint their unique NFTs. ✨ Customize your SVG graphics and metadata directly within the smart contract. 🚀 Share the minting URL once your project is live!",
-    sortOrder: 7,
+    sortOrder: 9,
     previewImage: "/assets/challenges/dynamicSvgNFT.svg",
     dependencies: [
       ChallengeId.SIMPLE_NFT_EXAMPLE,
@@ -216,15 +230,6 @@ export const seedUserChallenges: (typeof userChallenges.$inferInsert)[] = [
     contractUrl: "https://goerli.etherscan.io/address/0xe3DF14f1482074916A8Aeb40d84898C879b2B5f6",
     reviewComment: "Dummy review, nice work",
     submittedAt: new Date(1672831270556),
-    reviewAction: ReviewAction.ACCEPTED,
-  },
-  {
-    userAddress: "0x014EC6296B3493f0f59a3FE90E0FFf377fb8826a",
-    challengeId: ChallengeId.STATE_CHANNELS,
-    frontendUrl: "https://pumped-parcel.surge.sh",
-    contractUrl: "https://goerli.etherscan.io/address/0x71F80197032c9a07b966D3f8eCAFE601Af244F35",
-    reviewComment: "Dummy review, it's working great",
-    submittedAt: new Date(1673150820763),
     reviewAction: ReviewAction.ACCEPTED,
   },
   {
@@ -326,15 +331,6 @@ export const seedUserChallenges: (typeof userChallenges.$inferInsert)[] = [
     contractUrl: "https://sepolia-optimism.etherscan.io/address/0xFD893C93f44fdCd16D4673072D2a071578e6C7Ee#code",
     submittedAt: new Date(1736523426599),
     reviewComment: "<p>You have successfully passed the Dex Challenge! Great work!</p>",
-    reviewAction: ReviewAction.ACCEPTED,
-  },
-  {
-    userAddress: "0x45334F41aAA464528CD5bc0F582acadC49Eb0Cd1",
-    challengeId: ChallengeId.STATE_CHANNELS,
-    frontendUrl: "https://sepolia-optimism.etherscan.io/address/0x1BC437381EC1A36Eb30A0F3AfEFF1Fd5E0078256#code",
-    contractUrl: "https://sepolia-optimism.etherscan.io/address/0x1BC437381EC1A36Eb30A0F3AfEFF1Fd5E0078256#code",
-    submittedAt: new Date(1736524737219),
-    reviewComment: "<p>You have successfully passed the State Channel Challenge! Great work!</p>",
     reviewAction: ReviewAction.ACCEPTED,
   },
 ];
