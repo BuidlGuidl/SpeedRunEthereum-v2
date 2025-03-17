@@ -94,12 +94,12 @@ export async function updateUserSocials(userAddress: string, socials: UserSocial
   // Non-values on socials should be saved as NULL
   const socialsToUpdate = Object.fromEntries(Object.entries(socials).map(([key, value]) => [key, value || null]));
 
-  // Update lastUpdatedAt whenever user data changes
+  // Update updatedAt whenever user data changes
   return await db
     .update(users)
     .set({
       ...socialsToUpdate,
-      lastUpdatedAt: new Date(),
+      updatedAt: new Date(),
     })
     .where(eq(lower(users.userAddress), userAddress.toLowerCase()))
     .returning();
@@ -122,7 +122,7 @@ export async function updateUserRoleToBuilder(userAddress: string) {
     .update(users)
     .set({
       role: UserRole.BUILDER,
-      lastUpdatedAt: new Date(),
+      updatedAt: new Date(),
     })
     .where(eq(lower(users.userAddress), userAddress.toLowerCase()))
     .returning();

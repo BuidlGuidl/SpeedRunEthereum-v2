@@ -3,17 +3,16 @@ import { SQL, relations, sql } from "drizzle-orm";
 import {
   AnyPgColumn,
   boolean,
+  index,
   integer,
   jsonb,
   pgEnum,
   pgTable,
-  primaryKey,
   serial,
   text,
   timestamp,
   uniqueIndex,
   varchar,
-  index,
 } from "drizzle-orm/pg-core";
 
 export function lower(address: AnyPgColumn): SQL {
@@ -34,7 +33,7 @@ export const users = pgTable(
     userAddress: varchar({ length: 42 }).primaryKey(), // Ethereum wallet address
     role: userRoleEnum().default(UserRole.USER), // Using the enum and setting default
     createdAt: timestamp().defaultNow().notNull(),
-    lastUpdatedAt: timestamp().defaultNow().notNull(), // Added lastUpdatedAt field
+    updatedAt: timestamp().defaultNow().notNull(),
     socialTelegram: varchar({ length: 255 }),
     socialX: varchar({ length: 255 }),
     socialGithub: varchar({ length: 255 }),
@@ -83,7 +82,7 @@ export const userChallenges = pgTable(
   },
   table => [
     index("user_challenge_lookup_idx").on(table.userAddress, table.challengeId),
-    index("user_completed_challenges_idx").on(table.userAddress, table.reviewAction)
+    index("user_completed_challenges_idx").on(table.userAddress, table.reviewAction),
   ],
 );
 
@@ -127,12 +126,12 @@ SELECT
   'USER_UPDATE' as event_type,
   user_address,
   NULL as challenge_id,
-  last_updated_at as event_at,
+  updated_at as event_at,
   NULL as review_action,
   NULL as id,
   NULL as challenge_name
 FROM users
-WHERE last_updated_at > created_at
+WHERE updated_at > created_at
 
 UNION ALL
 
