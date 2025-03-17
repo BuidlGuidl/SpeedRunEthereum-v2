@@ -38,9 +38,9 @@ export const users = pgTable(
   {
     userAddress: varchar({ length: 42 }).primaryKey(), // Ethereum wallet address
     role: userRoleEnum().default(UserRole.USER), // Using the enum and setting default
-    createdAt: timestamp().defaultNow(),
+    createdAt: timestamp().defaultNow().notNull(),
     socialTelegram: varchar({ length: 255 }),
-    socialTwitter: varchar({ length: 255 }),
+    socialX: varchar({ length: 255 }),
     socialGithub: varchar({ length: 255 }),
     socialInstagram: varchar({ length: 255 }),
     socialDiscord: varchar({ length: 255 }),
@@ -80,7 +80,7 @@ export const userChallenges = pgTable(
     frontendUrl: varchar({ length: 255 }),
     contractUrl: varchar({ length: 255 }),
     reviewComment: text(), // Feedback provided during autograding
-    submittedAt: timestamp().defaultNow(),
+    submittedAt: timestamp().notNull().defaultNow(),
     reviewAction: reviewActionEnum(), // Final review decision from autograder (REJECTED or ACCEPTED). Initially set to SUBMITTED.
   },
   table => [primaryKey({ columns: [table.userAddress, table.challengeId] })],

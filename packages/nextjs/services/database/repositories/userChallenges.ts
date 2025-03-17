@@ -6,10 +6,12 @@ export type UserChallengeInsert = InferInsertModel<typeof userChallenges>;
 export type UserChallenges = Awaited<ReturnType<typeof findUserChallengesByAddress>>;
 
 export async function findUserChallengesByAddress(userAddress: string) {
-  return await db
-    .select()
-    .from(userChallenges)
-    .where(eq(lower(userChallenges.userAddress), userAddress.toLowerCase()));
+  return await db.query.userChallenges.findMany({
+    where: eq(lower(userChallenges.userAddress), userAddress.toLowerCase()),
+    with: {
+      challenge: true,
+    },
+  });
 }
 
 export async function upsertUserChallenge(challenge: UserChallengeInsert) {

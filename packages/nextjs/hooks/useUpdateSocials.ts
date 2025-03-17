@@ -17,7 +17,7 @@ export const useUpdateSocials = ({ onSuccess }: { onSuccess?: () => void }) => {
 
       const socialsWithDefaults = {
         socialTelegram: "",
-        socialTwitter: "",
+        socialX: "",
         socialGithub: "",
         socialInstagram: "",
         socialDiscord: "",

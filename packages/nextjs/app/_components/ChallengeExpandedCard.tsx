@@ -5,9 +5,10 @@ import CrossedSwordsIcon from "../_assets/icons/CrossedSwordsIcon";
 import NewIcon from "../_assets/icons/NewIcon";
 import PadLockIcon from "../_assets/icons/PadLockIcon";
 import QuestionIcon from "../_assets/icons/QuestionIcon";
-import { ChallengeId, ReviewAction } from "~~/services/database/config/types";
+import { ChallengeId } from "~~/services/database/config/types";
 import { Challenges } from "~~/services/database/repositories/challenges";
 import { UserChallenges } from "~~/services/database/repositories/userChallenges";
+import { REVIEW_ACTION_BADGE_CLASSES } from "~~/utils/challenges";
 
 type ChallengeExpandedCardProps = {
   challengeId: ChallengeId;
@@ -46,15 +47,7 @@ const ChallengeExpandedCard = ({
           <div className="flex flex-col items-start gap-0">
             <div className="h-6">
               {reviewAction && (
-                <span
-                  className={`rounded-xl py-0.5 px-2.5 text-sm capitalize ${
-                    reviewAction === ReviewAction.ACCEPTED
-                      ? "bg-base-300 text-base-content"
-                      : reviewAction === ReviewAction.REJECTED
-                        ? "bg-red-400 text-white"
-                        : "bg-gray-100 text-gray-800"
-                  }`}
-                >
+                <span className={`badge ${REVIEW_ACTION_BADGE_CLASSES[reviewAction]}`}>
                   {reviewAction.toLowerCase()}
                 </span>
               )}
