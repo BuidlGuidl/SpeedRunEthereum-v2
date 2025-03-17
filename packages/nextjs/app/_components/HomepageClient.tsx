@@ -73,13 +73,6 @@ export const HomepageClient = ({ challenges }: { challenges: Challenges }) => {
           challenges={challenges}
           comingSoon
         />
-
-        <ChallengeExpandedCard
-          key={ChallengeId.STATE_CHANNELS}
-          challengeId={ChallengeId.STATE_CHANNELS}
-          userChallenges={userChallenges}
-          challenges={challenges}
-        />
         <ChallengeExpandedCard
           key={ChallengeId.MULTISIG}
           challengeId={ChallengeId.MULTISIG}
