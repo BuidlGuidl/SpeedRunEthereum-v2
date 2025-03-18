@@ -81,8 +81,8 @@ export const userChallenges = pgTable(
     signature: varchar({ length: 255 }), // Added signature field from events table
   },
   table => [
-    index("user_challenge_lookup_idx").on(table.userAddress, table.challengeId),
-    index("user_completed_challenges_idx").on(table.userAddress, table.reviewAction),
+    index("user_challenge_lookup_idx").on(table.userAddress),
+    index("user_challenge_review_idx").on(table.userAddress, table.reviewAction),
   ],
 );
 
