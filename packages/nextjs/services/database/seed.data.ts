@@ -186,7 +186,8 @@ export const seedUserChallenges: (typeof userChallenges.$inferInsert)[] = [
     reviewComment: "Dummy review, nice work",
     submittedAt: new Date(1679063312936),
     reviewAction: ReviewAction.ACCEPTED,
-    signature: "0x7a808ee181d8655f38c48e0154903bea229b91e32f6062f6c23ad9da5fa25c3008238b07e367e7904200015157a43378b39244140c43ea35e5eea11c055a170500",
+    signature:
+      "0x7a808ee181d8655f38c48e0154903bea229b91e32f6062f6c23ad9da5fa25c3008238b07e367e7904200015157a43378b39244140c43ea35e5eea11c055a170500",
   },
   {
     userAddress: "0xB4F53bd85c00EF22946d24Ae26BC38Ac64F5E7B1",
@@ -196,7 +197,8 @@ export const seedUserChallenges: (typeof userChallenges.$inferInsert)[] = [
     reviewComment: "Dummy review, it's working great",
     submittedAt: new Date(1679359244796),
     reviewAction: ReviewAction.ACCEPTED,
-    signature: "0x4eca15955283c15c1f9565945c34638c9943a313a79301d73178b814e82e3e183e3d89aebdafa10a1012912cb820950fb6eea6ba76e58bf875f226bdc8257dc700",
+    signature:
+      "0x4eca15955283c15c1f9565945c34638c9943a313a79301d73178b814e82e3e183e3d89aebdafa10a1012912cb820950fb6eea6ba76e58bf875f226bdc8257dc700",
   },
   {
     userAddress: "0xB4F53bd85c00EF22946d24Ae26BC38Ac64F5E7B1",
