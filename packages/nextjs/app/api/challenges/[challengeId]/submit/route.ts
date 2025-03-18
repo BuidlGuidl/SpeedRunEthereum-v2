@@ -59,7 +59,6 @@ export async function POST(req: NextRequest, { params }: { params: { challengeId
       frontendUrl,
       contractUrl,
       signature,
-      // Initially set as SUBMITTED
       reviewAction: ReviewAction.SUBMITTED,
     });
 
