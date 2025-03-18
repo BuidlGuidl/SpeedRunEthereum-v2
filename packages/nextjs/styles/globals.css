@@ -48,8 +48,9 @@ p {
 
 .prose pre,
 .prose code {
-  @apply overflow-x-auto whitespace-pre-wrap bg-[#edf2f7] text-primary dark:bg-[#171923] text-[0.5rem] sm:text-xs md:text-sm;
+  @apply overflow-x-auto whitespace-pre-wrap bg-[#edf2f7] text-primary dark:bg-[#171923] text-[10px] sm:text-xs md:text-sm;
 }
+
 .prose hr {
   @apply my-4 sm:my-7;
 }
