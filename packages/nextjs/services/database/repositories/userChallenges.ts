@@ -14,7 +14,7 @@ export async function findLatestSubmissionPerChallengeByUser(userAddress: string
     orderBy: (userChallenges, { desc }) => [desc(userChallenges.id)],
   });
 
-  const latestChallenges = new Map();
+  const latestChallenges = new Map<string, (typeof allChallenges)[number]>();
 
   for (const challenge of allChallenges) {
     if (!latestChallenges.has(challenge.challengeId)) {
