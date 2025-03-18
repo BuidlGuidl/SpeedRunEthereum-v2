@@ -1,5 +1,5 @@
-import { challenges, events, userChallenges, users } from "./config/schema";
-import { seedChallenges, seedEvents, seedUserChallenges, seedUsers } from "./seed.data";
+import { challenges, userChallenges, users } from "./config/schema";
+import { seedChallenges, seedUserChallenges, seedUsers } from "./seed.data";
 import * as dotenv from "dotenv";
 import { drizzle } from "drizzle-orm/node-postgres";
 import * as path from "path";
@@ -13,7 +13,7 @@ async function seed() {
   });
   await client.connect();
   const db = drizzle(client, {
-    schema: { challenges, events, userChallenges, users },
+    schema: { challenges, userChallenges, users },
     casing: "snake_case",
   });
 
@@ -21,7 +21,6 @@ async function seed() {
     // Clear existing data in a transaction
     await db.transaction(async tx => {
       console.log("Clearing existing data...");
-      await tx.delete(events).execute();
       await tx.delete(userChallenges).execute();
       await tx.delete(challenges).execute();
       await tx.delete(users).execute();
@@ -36,9 +35,6 @@ async function seed() {
 
     console.log("Inserting user challenges...");
     await db.insert(userChallenges).values(seedUserChallenges).execute();
-
-    console.log("Inserting events...");
-    await db.insert(events).values(seedEvents).execute();
 
     console.log("Database seeded successfully");
   } catch (error) {

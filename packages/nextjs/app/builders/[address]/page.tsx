@@ -1,11 +1,11 @@
 import { UserChallengesTable } from "./_components/UserChallengesTable";
 import { UserProfileCard } from "./_components/UserProfileCard";
-import { findUserChallengesByAddress } from "~~/services/database/repositories/userChallenges";
+import { findLatestSubmissionPerChallengeByUser } from "~~/services/database/repositories/userChallenges";
 import { findUserByAddress } from "~~/services/database/repositories/users";
 
 export default async function BuilderPage({ params }: { params: { address: string } }) {
   const { address: userAddress } = params;
-  const challenges = await findUserChallengesByAddress(userAddress);
+  const challenges = await findLatestSubmissionPerChallengeByUser(userAddress);
   const users = await findUserByAddress(userAddress);
   const user = users[0];
 
