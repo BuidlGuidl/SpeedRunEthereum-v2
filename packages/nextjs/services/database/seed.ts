@@ -21,7 +21,6 @@ async function seed() {
     // Clear existing data in a transaction
     await db.transaction(async tx => {
       console.log("Clearing existing data...");
-      // events table has been removed
       await tx.delete(userChallenges).execute();
       await tx.delete(challenges).execute();
       await tx.delete(users).execute();
