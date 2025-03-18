@@ -30,12 +30,5 @@ export async function createUserChallenge(challenge: UserChallengeInsert) {
 }
 
 export async function updateUserChallengeById(id: number, updates: Partial<UserChallengeInsert>) {
-  return await db
-    .update(userChallenges)
-    .set({
-      ...updates,
-      ...(updates.submittedAt ? {} : { submittedAt: new Date() }),
-    })
-    .where(eq(userChallenges.id, id))
-    .returning();
+  return await db.update(userChallenges).set(updates).where(eq(userChallenges.id, id)).returning();
 }
