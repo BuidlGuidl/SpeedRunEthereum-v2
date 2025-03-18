@@ -41,6 +41,11 @@ p {
   @apply break-words overflow-wrap-anywhere;
 }
 
+.prose img {
+  @apply max-w-full h-auto my-4 mx-auto rounded-lg;
+  max-height: 90vh;
+}
+
 .prose pre,
 .prose code {
   @apply overflow-x-auto whitespace-pre-wrap bg-[#edf2f7] text-primary dark:bg-[#171923] text-[0.5rem] sm:text-xs md:text-sm;
