@@ -25,11 +25,13 @@ export async function findUserByAddress(address: string) {
 export async function findSortedUsersWithChallenges(start: number, size: number, sorting: SortingState) {
   const sortingQuery = sorting[0] as ColumnSort;
 
-  // Define SQL expressions once
   const challengesCompletedExpr = sql`(SELECT COUNT(DISTINCT uc.challenge_id) FROM ${userChallenges} uc WHERE uc.user_address = ${users.userAddress} AND uc.review_action = ${ReviewAction.ACCEPTED})`;
-  const lastActivityExpr = sql`COALESCE(
-    (SELECT MAX(uc.submitted_at) FROM ${userChallenges} uc WHERE uc.user_address = ${users.userAddress}),
-    ${users.createdAt}
+  const lastActivityIsoExpr = sql`to_char(
+    COALESCE(
+      (SELECT MAX(uc.submitted_at) FROM ${userChallenges} uc WHERE uc.user_address = ${users.userAddress}),
+      ${users.createdAt}
+    ),
+    'YYYY-MM-DD"T"HH24:MI:SS.MS"Z"'
   )`;
 
   const query = db.query.users.findMany({
@@ -45,7 +47,7 @@ export async function findSortedUsersWithChallenges(start: number, size: number,
       }
 
       if (sortingQuery.id === "lastActivity") {
-        return sortOrder(lastActivityExpr);
+        return sortOrder(lastActivityIsoExpr);
       }
 
       // For regular fields in the users table
@@ -58,7 +60,7 @@ export async function findSortedUsersWithChallenges(start: number, size: number,
     extras: {
       // Reuse the same SQL expressions for the extras
       challengesCompleted: challengesCompletedExpr.as("challengesCompleted"),
-      lastActivity: lastActivityExpr.as("lastActivity"),
+      lastActivity: lastActivityIsoExpr.as("lastActivity"),
     },
     with: {
       userChallenges: true,
