@@ -1,8 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { waitUntil } from "@vercel/functions";
-import { ChallengeId, EventType, ReviewAction } from "~~/services/database/config/types";
-import { createEvent } from "~~/services/database/repositories/events";
-import { upsertUserChallenge } from "~~/services/database/repositories/userChallenges";
+import { ChallengeId, ReviewAction } from "~~/services/database/config/types";
+import { createUserChallenge, updateUserChallengeById } from "~~/services/database/repositories/userChallenges";
 import { findUserByAddress } from "~~/services/database/repositories/users";
 import { isValidEIP712ChallengeSubmitSignature } from "~~/services/eip712/challenge";
 
@@ -54,54 +53,39 @@ export async function POST(req: NextRequest, { params }: { params: { challengeId
       return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
 
-    // Create a CHALLENGE_SUBMIT event
-    await createEvent({
-      eventType: EventType.CHALLENGE_SUBMIT,
-      userAddress: userAddress,
-      signature: signature,
-      payload: {
-        challengeId: challengeId,
-        frontendUrl: frontendUrl,
-        contractUrl: contractUrl,
-      },
-    });
-
-    await upsertUserChallenge({
+    const submissionResult = await createUserChallenge({
       userAddress: userAddress,
       challengeId,
       frontendUrl,
       contractUrl,
+      signature,
       reviewAction: ReviewAction.SUBMITTED,
       reviewComment: "Your submission is being processed by the autograder...",
     });
+
+    // Get the ID of the newly created submission
+    const submissionId = submissionResult[0]?.id;
+    if (!submissionId) {
+      return NextResponse.json({ error: "Failed to create submission" }, { status: 500 });
+    }
 
     // Use waitUntil for background processing
     waitUntil(
       (async () => {
         try {
-          // Run autograding
+          // TODO: Make request to actual autograder
           const gradingResult = await mockAutograding(contractUrl);
 
-          await upsertUserChallenge({
-            userAddress: userAddress,
-            challengeId,
-            frontendUrl,
-            contractUrl,
+          // Update the existing submission with the grading result
+          const updateResult = await updateUserChallengeById(submissionId, {
             reviewAction: gradingResult.success ? ReviewAction.ACCEPTED : ReviewAction.REJECTED,
             reviewComment: gradingResult.feedback,
           });
 
-          await createEvent({
-            eventType: EventType.CHALLENGE_AUTOGRADE,
-            userAddress: userAddress,
-            signature: signature,
-            payload: {
-              autograding: true,
-              challengeId: challengeId,
-              reviewAction: gradingResult.success ? ReviewAction.ACCEPTED : ReviewAction.REJECTED,
-              reviewMessage: gradingResult.feedback,
-            },
-          });
+          // Check if the update was successful
+          if (!updateResult || updateResult.length === 0) {
+            return NextResponse.json({ error: "Failed to update submission with grading result" }, { status: 500 });
+          }
 
           console.log(`Background autograding completed for user ${userAddress}, challenge ${challengeId}`);
         } catch (error) {

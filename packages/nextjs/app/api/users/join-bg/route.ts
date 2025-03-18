@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { ReviewAction } from "~~/services/database/config/types";
-import { findUserChallengesByAddress } from "~~/services/database/repositories/userChallenges";
+import { findLatestSubmissionPerChallengeByUser } from "~~/services/database/repositories/userChallenges";
 import { isUserJoinedBG, updateUserRoleToBuilder } from "~~/services/database/repositories/users";
 import { isValidEIP712JoinBGSignature } from "~~/services/eip712/join-bg";
 import { JOIN_BG_DEPENDENCIES } from "~~/utils/dependent-challenges";
@@ -25,7 +25,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "User already joined Build Guild" }, { status: 401 });
     }
 
-    const userChallenges = await findUserChallengesByAddress(address);
+    const userChallenges = await findLatestSubmissionPerChallengeByUser(address);
 
     const completedJoinBgDependencies = JOIN_BG_DEPENDENCIES.every(joinBgDependency =>
       userChallenges.find(

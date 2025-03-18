@@ -26,7 +26,7 @@ export async function findSortedUsersWithChallenges(start: number, size: number,
   const sortingQuery = sorting[0] as ColumnSort;
 
   // Define SQL expressions once
-  const challengesCompletedExpr = sql`(SELECT COUNT(*) FROM ${userChallenges} uc WHERE uc.user_address = ${users.userAddress} AND uc.review_action = ${ReviewAction.ACCEPTED})`;
+  const challengesCompletedExpr = sql`(SELECT COUNT(DISTINCT uc.challenge_id) FROM ${userChallenges} uc WHERE uc.user_address = ${users.userAddress} AND uc.review_action = ${ReviewAction.ACCEPTED})`;
   const lastActivityExpr = sql`COALESCE(
     (SELECT MAX(uc.submitted_at) FROM ${userChallenges} uc WHERE uc.user_address = ${users.userAddress}),
     ${users.createdAt}
@@ -94,9 +94,13 @@ export async function updateUserSocials(userAddress: string, socials: UserSocial
   // Non-values on socials should be saved as NULL
   const socialsToUpdate = Object.fromEntries(Object.entries(socials).map(([key, value]) => [key, value || null]));
 
+  // Update updatedAt whenever user data changes
   return await db
     .update(users)
-    .set(socialsToUpdate)
+    .set({
+      ...socialsToUpdate,
+      updatedAt: new Date(),
+    })
     .where(eq(lower(users.userAddress), userAddress.toLowerCase()))
     .returning();
 }
@@ -116,7 +120,10 @@ export async function isUserJoinedBG(userAddress: string) {
 export async function updateUserRoleToBuilder(userAddress: string) {
   return await db
     .update(users)
-    .set({ role: UserRole.BUILDER })
+    .set({
+      role: UserRole.BUILDER,
+      updatedAt: new Date(),
+    })
     .where(eq(lower(users.userAddress), userAddress.toLowerCase()))
     .returning();
 }
