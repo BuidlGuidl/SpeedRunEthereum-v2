@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { getChallengeDependenciesInfo } from "../../utils/dependent-challenges";
 import CrossedSwordsIcon from "../_assets/icons/CrossedSwordsIcon";
+import NewIcon from "../_assets/icons/NewIcon";
 import PadLockIcon from "../_assets/icons/PadLockIcon";
 import QuestionIcon from "../_assets/icons/QuestionIcon";
 import { ChallengeId } from "~~/services/database/config/types";
@@ -13,9 +14,15 @@ type ChallengeExpandedCardProps = {
   challengeId: ChallengeId;
   userChallenges?: UserChallenges;
   challenges: Challenges;
+  comingSoon?: boolean;
 };
 
-const ChallengeExpandedCard = ({ challengeId, userChallenges = [], challenges = [] }: ChallengeExpandedCardProps) => {
+const ChallengeExpandedCard = ({
+  challengeId,
+  userChallenges = [],
+  challenges = [],
+  comingSoon,
+}: ChallengeExpandedCardProps) => {
   const challenge = challenges.find(c => c.id === challengeId);
 
   const userChallenge = userChallenges.find(userChallenge => userChallenge.challengeId === challengeId);
@@ -50,65 +57,83 @@ const ChallengeExpandedCard = ({ challengeId, userChallenges = [], challenges = 
             <h2 className="text-xl lg:text-2xl font-medium mt-0">{challenge.challengeName}</h2>
           </div>
           <div className="flex flex-col gap-8">
-            <span className="text-base leading-[1.5]">{challenge.description}</span>
-            {challenge.externalLink?.link ? (
-              // Redirect to externalLink if set (instead of challenge detail view)
-              <div className="flex items-center">
+            <span className="text-lg lg:text-base leading-[1.5]">{challenge.description}</span>
+            <div className="flex items-center">
+              {comingSoon && (
                 <button
-                  className={`flex items-center text-xl lg:text-lg px-4 py-1 border-2 border-primary rounded-full bg-base-300 ${
-                    isChallengeLocked ? "opacity-50" : ""
-                  }`}
-                  disabled={isChallengeLocked}
+                  disabled
+                  className="inline-flex items-center text-xl lg:text-lg px-4 py-1 border-2 border-primary rounded-full bg-base-300 opacity-50 cursor-not-allowed"
                 >
-                  {builderHasCompletedDependenciesChallenges ? (
-                    <span>{challenge.externalLink.claim}</span>
-                  ) : (
-                    <div className="flex items-center">
-                      <PadLockIcon className="w-4 h-4 sm:w-6 sm:h-6 mr-2" />
-                      <span className="ml-1 uppercase text-sm sm:text-lg">Locked</span>
+                  <div className="flex items-center">
+                    <NewIcon className="w-6 h-6" />
+                    <span className="ml-2 uppercase font-medium">Coming soon</span>
+                  </div>
+                </button>
+              )}
+
+              {!comingSoon && challenge.externalLink?.link && (
+                // Redirect to externalLink if set (instead of challenge detail view)
+                <>
+                  <button
+                    className={`flex items-center text-xl lg:text-lg px-4 py-1 border-2 border-primary rounded-full bg-base-300 ${
+                      isChallengeLocked ? "opacity-50" : ""
+                    }`}
+                    disabled={isChallengeLocked}
+                  >
+                    {builderHasCompletedDependenciesChallenges ? (
+                      <span>{challenge.externalLink.claim}</span>
+                    ) : (
+                      <div className="flex items-center">
+                        <PadLockIcon className="w-4 h-4 sm:w-6 sm:h-6 mr-2" />
+                        <span className="ml-1 uppercase text-sm sm:text-lg">Locked</span>
+                      </div>
+                    )}
+                  </button>
+                  {!builderHasCompletedDependenciesChallenges && (
+                    <div
+                      className="tooltip tooltip-top tooltip-auto relative cursor-pointer ml-1 before:max-w-[min(calc(100vw-96px),300px)] before:whitespace-normal before:break-words before:text-sm"
+                      data-tip={lockReasonToolTip}
+                    >
+                      <QuestionIcon className="h-5 w-5 sm:w-8 sm:h-8" />
                     </div>
                   )}
-                </button>
-                {!builderHasCompletedDependenciesChallenges && (
-                  <div
-                    className="tooltip tooltip-top tooltip-auto relative cursor-pointer ml-1 before:max-w-[min(calc(100vw-96px),300px)] before:whitespace-normal before:break-words before:text-sm"
-                    data-tip={lockReasonToolTip}
-                  >
-                    <QuestionIcon className="h-5 w-5 sm:w-8 sm:h-8" />
-                  </div>
-                )}
-              </div>
-            ) : (
-              <div className="flex items-center">
-                {isChallengeLocked ? (
-                  <button
-                    disabled
-                    className="flex items-center text-xl lg:text-lg px-4 py-1 border-2 border-primary rounded-full bg-base-300 opacity-50 cursor-not-allowed whitespace-nowrap"
-                  >
-                    <PadLockIcon className="w-4 h-4 sm:w-6 sm:h-6 mr-2" />
-                    <span className="uppercase font-medium text-sm sm:text-lg">Locked</span>
-                  </button>
-                ) : (
-                  <Link
-                    href={`/challenge/${challengeId}`}
-                    className="flex items-center text-xl lg:text-lg px-4 py-1 border-2 border-primary rounded-full bg-base-300 cursor-pointer"
-                  >
-                    <div className="flex items-center">
-                      <CrossedSwordsIcon className="w-4 h-4 sm:h-6 sm:w-6" />
-                      <span className="ml-2 uppercase font-medium text-sm sm:text-lg">Quest</span>
+                </>
+              )}
+
+              {!comingSoon && !challenge.externalLink?.link && (
+                <>
+                  {isChallengeLocked ? (
+                    <button
+                      disabled
+                      className="flex items-center text-xl lg:text-lg px-4 py-1 border-2 border-primary rounded-full bg-base-300 opacity-50 cursor-not-allowed whitespace-nowrap"
+                    >
+                      <div className="flex items-center">
+                        <PadLockIcon className="w-4 h-4 sm:w-6 sm:h-6 mr-2" />
+                        <span className="uppercase font-medium text-sm sm:text-lg">Locked</span>
+                      </div>
+                    </button>
+                  ) : (
+                    <Link
+                      href={`/challenge/${challengeId}`}
+                      className="flex items-center text-xl lg:text-lg px-4 py-1 border-2 border-primary rounded-full bg-base-300 cursor-pointer"
+                    >
+                      <div className="flex items-center">
+                        <CrossedSwordsIcon className="w-4 h-4 sm:h-6 sm:w-6" />
+                        <span className="ml-2 uppercase font-medium text-sm sm:text-lg">Quest</span>
+                      </div>
+                    </Link>
+                  )}
+                  {!builderHasCompletedDependenciesChallenges && (
+                    <div
+                      className="tooltip tooltip-top tooltip-auto relative cursor-pointer ml-1 before:max-w-[min(calc(100vw-96px),300px)] before:whitespace-normal before:break-words before:text-sm"
+                      data-tip={lockReasonToolTip}
+                    >
+                      <QuestionIcon className="h-5 w-5 sm:w-8 sm:h-8" />
                     </div>
-                  </Link>
-                )}
-                {!builderHasCompletedDependenciesChallenges && (
-                  <div
-                    className="tooltip tooltip-top tooltip-auto relative cursor-pointer ml-1 before:max-w-[min(calc(100vw-96px),300px)] before:whitespace-normal before:break-words before:text-sm"
-                    data-tip={lockReasonToolTip}
-                  >
-                    <QuestionIcon className="h-5 w-5 sm:w-8 sm:h-8" />
-                  </div>
-                )}
-              </div>
-            )}
+                  )}
+                </>
+              )}
+            </div>
           </div>
         </div>
         <div className="flex justify-center mb-0 lg:mb-0">

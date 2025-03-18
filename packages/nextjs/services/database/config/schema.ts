@@ -1,13 +1,13 @@
-import { EventType, ReviewAction, UserRole } from "./types";
+import { ReviewAction, UserRole } from "./types";
 import { SQL, relations, sql } from "drizzle-orm";
 import {
   AnyPgColumn,
   boolean,
+  index,
   integer,
   jsonb,
   pgEnum,
   pgTable,
-  primaryKey,
   serial,
   text,
   timestamp,
@@ -25,12 +25,6 @@ export const reviewActionEnum = pgEnum("review_action_enum", [
   ReviewAction.SUBMITTED,
 ]);
 
-export const eventTypeEnum = pgEnum("event_type_enum", [
-  EventType.CHALLENGE_SUBMIT,
-  EventType.CHALLENGE_AUTOGRADE,
-  EventType.USER_CREATE,
-]);
-
 export const userRoleEnum = pgEnum("user_role_enum", [UserRole.USER, UserRole.BUILDER, UserRole.ADMIN]);
 
 export const users = pgTable(
@@ -39,6 +33,7 @@ export const users = pgTable(
     userAddress: varchar({ length: 42 }).primaryKey(), // Ethereum wallet address
     role: userRoleEnum().default(UserRole.USER), // Using the enum and setting default
     createdAt: timestamp().defaultNow().notNull(),
+    updatedAt: timestamp().defaultNow().notNull(),
     socialTelegram: varchar({ length: 255 }),
     socialX: varchar({ length: 255 }),
     socialGithub: varchar({ length: 255 }),
@@ -71,6 +66,7 @@ export const challenges = pgTable("challenges", {
 export const userChallenges = pgTable(
   "user_challenges",
   {
+    id: serial().primaryKey(),
     userAddress: varchar({ length: 42 })
       .notNull()
       .references(() => users.userAddress),
@@ -82,26 +78,16 @@ export const userChallenges = pgTable(
     reviewComment: text(), // Feedback provided during autograding
     submittedAt: timestamp().notNull().defaultNow(),
     reviewAction: reviewActionEnum(), // Final review decision from autograder (REJECTED or ACCEPTED). Initially set to SUBMITTED.
+    signature: varchar({ length: 255 }), // Added signature field from events table
   },
-  table => [primaryKey({ columns: [table.userAddress, table.challengeId] })],
+  table => [
+    index("user_challenge_lookup_idx").on(table.userAddress),
+    index("user_challenge_review_idx").on(table.userAddress, table.reviewAction),
+  ],
 );
-
-export const events = pgTable("events", {
-  eventId: serial().primaryKey(),
-  eventType: eventTypeEnum().notNull(), // Type of event (CHALLENGE_SUBMIT, CHALLENGE_AUTOGRADE, USER_CREATE)
-  eventAt: timestamp().defaultNow(),
-  signature: varchar({ length: 255 }), // Cryptographic signature of the event
-  userAddress: varchar({ length: 42 })
-    .notNull()
-    .references(() => users.userAddress),
-  payload: jsonb()
-    .notNull()
-    .$defaultFn(() => ({})), // Flexible event payload stored as JSONB
-});
 
 export const usersRelations = relations(users, ({ many }) => ({
   userChallenges: many(userChallenges),
-  events: many(events),
 }));
 
 export const challengesRelations = relations(challenges, ({ many }) => ({
@@ -116,12 +102,5 @@ export const userChallengesRelations = relations(userChallenges, ({ one }) => ({
   challenge: one(challenges, {
     fields: [userChallenges.challengeId],
     references: [challenges.id],
-  }),
-}));
-
-export const eventsRelations = relations(events, ({ one }) => ({
-  user: one(users, {
-    fields: [events.userAddress],
-    references: [users.userAddress],
   }),
 }));
