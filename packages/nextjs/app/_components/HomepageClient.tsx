@@ -5,7 +5,7 @@ import { Hero } from "./Hero";
 import { JoinBGCard } from "./JoinBGCard";
 import { useAccount } from "wagmi";
 import { useUser } from "~~/hooks/useUser";
-import { useUserChallenges } from "~~/hooks/useUserChallenges";
+import { useUserChallengeSubmissions } from "~~/hooks/useUserChallengeSubmissions";
 import { ChallengeId } from "~~/services/database/config/types";
 import { Challenges } from "~~/services/database/repositories/challenges";
 
@@ -14,7 +14,7 @@ export const HomepageClient = ({ challenges }: { challenges: Challenges }) => {
 
   const { data: user } = useUser(connectedAddress);
 
-  const { data: userChallenges } = useUserChallenges(connectedAddress);
+  const { data: userChallengeSubmissions } = useUserChallengeSubmissions(connectedAddress);
 
   return (
     <div>
@@ -23,52 +23,52 @@ export const HomepageClient = ({ challenges }: { challenges: Challenges }) => {
         <ChallengeExpandedCard
           key={ChallengeId.SIMPLE_NFT_EXAMPLE}
           challengeId={ChallengeId.SIMPLE_NFT_EXAMPLE}
-          userChallenges={userChallenges}
+          userChallenges={userChallengeSubmissions}
           challenges={challenges}
         />
         <ChallengeExpandedCard
           key={ChallengeId.DECENTRALIZED_STAKING}
           challengeId={ChallengeId.DECENTRALIZED_STAKING}
-          userChallenges={userChallenges}
+          userChallenges={userChallengeSubmissions}
           challenges={challenges}
         />
         <ChallengeExpandedCard
           key={ChallengeId.TOKEN_VENDOR}
           challengeId={ChallengeId.TOKEN_VENDOR}
-          userChallenges={userChallenges}
+          userChallenges={userChallengeSubmissions}
           challenges={challenges}
         />
         <ChallengeExpandedCard
           key={ChallengeId.DICE_GAME}
           challengeId={ChallengeId.DICE_GAME}
-          userChallenges={userChallenges}
+          userChallenges={userChallengeSubmissions}
           challenges={challenges}
         />
         <ChallengeExpandedCard
           key={ChallengeId.MINIMUM_VIABLE_EXCHANGE}
           challengeId={ChallengeId.MINIMUM_VIABLE_EXCHANGE}
-          userChallenges={userChallenges}
+          userChallenges={userChallengeSubmissions}
           challenges={challenges}
         />
 
-        <JoinBGCard userChallenges={userChallenges} user={user} />
+        <JoinBGCard userChallenges={userChallengeSubmissions} user={user} />
 
         <ChallengeExpandedCard
           key={ChallengeId.STATE_CHANNELS}
           challengeId={ChallengeId.STATE_CHANNELS}
-          userChallenges={userChallenges}
+          userChallenges={userChallengeSubmissions}
           challenges={challenges}
         />
         <ChallengeExpandedCard
           key={ChallengeId.MULTISIG}
           challengeId={ChallengeId.MULTISIG}
-          userChallenges={userChallenges}
+          userChallenges={userChallengeSubmissions}
           challenges={challenges}
         />
         <ChallengeExpandedCard
           key={ChallengeId.SVG_NFT}
           challengeId={ChallengeId.SVG_NFT}
-          userChallenges={userChallenges}
+          userChallenges={userChallengeSubmissions}
           challenges={challenges}
         />
       </div>

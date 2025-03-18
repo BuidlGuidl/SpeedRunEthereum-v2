@@ -1,13 +1,13 @@
 import Image from "next/image";
 import JoinBGButton from "./JoinBGButton";
-import { UserChallenges } from "~~/services/database/repositories/userChallenges";
+import { UserChallengeSubmissions } from "~~/services/database/repositories/userChallengeSubmissions";
 import { UserByAddress } from "~~/services/database/repositories/users";
 
 export const JoinBGCard = ({
   userChallenges = [],
   user,
 }: {
-  userChallenges?: UserChallenges;
+  userChallenges?: UserChallengeSubmissions;
   user?: UserByAddress;
 }) => {
   return (

@@ -7,13 +7,13 @@ import { useConnectModal } from "@rainbow-me/rainbowkit";
 import { useAccount } from "wagmi";
 import { useJoinBg } from "~~/hooks/useJoinBg";
 import { UserRole } from "~~/services/database/config/types";
-import { UserChallenges } from "~~/services/database/repositories/userChallenges";
+import { UserChallengeSubmissions } from "~~/services/database/repositories/userChallengeSubmissions";
 import { UserByAddress } from "~~/services/database/repositories/users";
 import { JOIN_BG_DEPENDENCIES, getChallengeDependenciesInfo } from "~~/utils/dependent-challenges";
 
 type JoinBGProps = {
   user?: UserByAddress;
-  userChallenges?: UserChallenges;
+  userChallenges?: UserChallengeSubmissions;
 };
 
 const JoinBGButton = ({ user, userChallenges = [] }: JoinBGProps) => {

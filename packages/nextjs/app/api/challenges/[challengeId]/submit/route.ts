@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { ChallengeId, ReviewAction } from "~~/services/database/config/types";
-import { createUserChallenge, updateUserChallengeById } from "~~/services/database/repositories/userChallenges";
+import {
+  createUserChallengeSubmission,
+  updateUserChallengeSubmissionById,
+} from "~~/services/database/repositories/userChallengeSubmissions";
 import { findUserByAddress } from "~~/services/database/repositories/users";
 import { isValidEIP712ChallengeSubmitSignature } from "~~/services/eip712/challenge";
 
@@ -53,7 +56,7 @@ export async function POST(req: NextRequest, { params }: { params: { challengeId
     }
 
     // Create the initial submission record
-    const submissionResult = await createUserChallenge({
+    const submissionResult = await createUserChallengeSubmission({
       userAddress: userAddress,
       challengeId,
       frontendUrl,
@@ -76,7 +79,7 @@ export async function POST(req: NextRequest, { params }: { params: { challengeId
     const gradingResult = await mockAutograding(contractUrl);
 
     // Update the existing submission with the grading result
-    const updateResult = await updateUserChallengeById(submissionId, {
+    const updateResult = await updateUserChallengeSubmissionById(submissionId, {
       reviewAction: gradingResult.success ? ReviewAction.ACCEPTED : ReviewAction.REJECTED,
       reviewComment: gradingResult.feedback,
     });

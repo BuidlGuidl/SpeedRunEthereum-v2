@@ -6,12 +6,12 @@ import PadLockIcon from "../_assets/icons/PadLockIcon";
 import QuestionIcon from "../_assets/icons/QuestionIcon";
 import { ChallengeId, ReviewAction } from "~~/services/database/config/types";
 import { Challenges } from "~~/services/database/repositories/challenges";
-import { UserChallenges } from "~~/services/database/repositories/userChallenges";
+import { UserChallengeSubmissions } from "~~/services/database/repositories/userChallengeSubmissions";
 import { REVIEW_ACTION_BADGE_CLASSES } from "~~/utils/challenges";
 
 type ChallengeExpandedCardProps = {
   challengeId: ChallengeId;
-  userChallenges?: UserChallenges;
+  userChallenges?: UserChallengeSubmissions;
   challenges: Challenges;
 };
 

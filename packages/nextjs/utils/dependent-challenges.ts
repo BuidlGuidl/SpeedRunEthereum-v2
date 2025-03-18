@@ -1,18 +1,17 @@
 import { ChallengeId, ReviewAction } from "~~/services/database/config/types";
-import { UserChallenges } from "~~/services/database/repositories/userChallenges";
+import { UserChallengeSubmissions } from "~~/services/database/repositories/userChallengeSubmissions";
 
 const getLockReasonTooltip = ({
   dependencies,
   userChallenges,
 }: {
   dependencies?: string[];
-  userChallenges: UserChallenges;
+  userChallenges: UserChallengeSubmissions;
 }) => {
   const pendingDependenciesChallenges = dependencies?.filter(dependency => {
     return (
-      !userChallenges.find(userChallenge => userChallenge.challengeId === dependency)?.reviewAction ||
-      userChallenges.find(userChallenge => userChallenge.challengeId === dependency)?.reviewAction !==
-        ReviewAction.ACCEPTED
+      !userChallenges.find(submission => submission.challengeId === dependency)?.reviewAction ||
+      userChallenges.find(submission => submission.challengeId === dependency)?.reviewAction !== ReviewAction.ACCEPTED
     );
   });
 
@@ -27,7 +26,7 @@ export const getChallengeDependenciesInfo = ({
   userChallenges,
 }: {
   dependencies: string[];
-  userChallenges: UserChallenges;
+  userChallenges: UserChallengeSubmissions;
 }) => {
   const lockReasonToolTip = getLockReasonTooltip({
     dependencies,

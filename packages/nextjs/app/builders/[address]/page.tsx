@@ -1,11 +1,11 @@
-import { UserChallengesTable } from "./_components/UserChallengesTable";
+import { ChallengeSubmissionsTable } from "./_components/ChallengeSubmissionsTable";
 import { UserProfileCard } from "./_components/UserProfileCard";
-import { findLatestSubmissionPerChallengeByUser } from "~~/services/database/repositories/userChallenges";
+import { findLatestSubmissionsPerChallengeByUser } from "~~/services/database/repositories/userChallengeSubmissions";
 import { findUserByAddress } from "~~/services/database/repositories/users";
 
 export default async function BuilderPage({ params }: { params: { address: string } }) {
   const { address: userAddress } = params;
-  const challenges = await findLatestSubmissionPerChallengeByUser(userAddress);
+  const submissions = await findLatestSubmissionsPerChallengeByUser(userAddress);
   const users = await findUserByAddress(userAddress);
   const user = users[0];
 
@@ -21,8 +21,8 @@ export default async function BuilderPage({ params }: { params: { address: strin
         </div>
         <div className="lg:col-span-3">
           <h2 className="text-2xl font-bold mb-0 text-neutral pb-4">Challenges</h2>
-          {challenges.length > 0 ? (
-            <UserChallengesTable challenges={challenges} />
+          {submissions.length > 0 ? (
+            <ChallengeSubmissionsTable submissions={submissions} />
           ) : (
             <div className="bg-base-100 p-8 text-center rounded-lg text-neutral">
               This builder hasn&apos;t completed any challenges.

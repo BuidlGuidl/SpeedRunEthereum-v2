@@ -63,8 +63,8 @@ export const challenges = pgTable("challenges", {
   externalLink: jsonb("external_link").$type<ExternalLink>(),
 });
 
-export const userChallenges = pgTable(
-  "user_challenges",
+export const userChallengeSubmissions = pgTable(
+  "user_challenge_submissions",
   {
     id: serial().primaryKey(),
     userAddress: varchar({ length: 42 })
@@ -87,20 +87,20 @@ export const userChallenges = pgTable(
 );
 
 export const usersRelations = relations(users, ({ many }) => ({
-  userChallenges: many(userChallenges),
+  userChallengeSubmissions: many(userChallengeSubmissions),
 }));
 
 export const challengesRelations = relations(challenges, ({ many }) => ({
-  userChallenges: many(userChallenges),
+  userChallengeSubmissions: many(userChallengeSubmissions),
 }));
 
-export const userChallengesRelations = relations(userChallenges, ({ one }) => ({
+export const userChallengeSubmissionsRelations = relations(userChallengeSubmissions, ({ one }) => ({
   user: one(users, {
-    fields: [userChallenges.userAddress],
+    fields: [userChallengeSubmissions.userAddress],
     references: [users.userAddress],
   }),
   challenge: one(challenges, {
-    fields: [userChallenges.challengeId],
+    fields: [userChallengeSubmissions.challengeId],
     references: [challenges.id],
   }),
 }));

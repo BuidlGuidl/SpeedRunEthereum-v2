@@ -4,7 +4,7 @@ import { ColumnSort, SortingState } from "@tanstack/react-table";
 import { InferInsertModel } from "drizzle-orm";
 import { and, eq, or, sql } from "drizzle-orm";
 import { db } from "~~/services/database/config/postgresClient";
-import { lower, userChallenges, users } from "~~/services/database/config/schema";
+import { lower, userChallengeSubmissions, users } from "~~/services/database/config/schema";
 
 type PickSocials<T> = {
   [K in keyof T as K extends `social${string}` ? K : never]?: T[K] extends string | null ? string : never;
@@ -26,9 +26,9 @@ export async function findSortedUsersWithChallenges(start: number, size: number,
   const sortingQuery = sorting[0] as ColumnSort;
 
   // Define SQL expressions once
-  const challengesCompletedExpr = sql`(SELECT COUNT(DISTINCT uc.challenge_id) FROM ${userChallenges} uc WHERE uc.user_address = ${users.userAddress} AND uc.review_action = ${ReviewAction.ACCEPTED})`;
+  const challengesCompletedExpr = sql`(SELECT COUNT(DISTINCT ucs.challenge_id) FROM ${userChallengeSubmissions} ucs WHERE ucs.user_address = ${users.userAddress} AND ucs.review_action = ${ReviewAction.ACCEPTED})`;
   const lastActivityExpr = sql`COALESCE(
-    (SELECT MAX(uc.submitted_at) FROM ${userChallenges} uc WHERE uc.user_address = ${users.userAddress}),
+    (SELECT MAX(ucs.submitted_at) FROM ${userChallengeSubmissions} ucs WHERE ucs.user_address = ${users.userAddress}),
     ${users.createdAt}
   )`;
 
@@ -61,14 +61,14 @@ export async function findSortedUsersWithChallenges(start: number, size: number,
       lastActivity: lastActivityExpr.as("lastActivity"),
     },
     with: {
-      userChallenges: true,
+      userChallengeSubmissions: true,
     },
   });
 
   const [usersData, totalCount] = await Promise.all([query, db.$count(users)]);
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const preparedUsersData = usersData.map(({ userChallenges, ...restUser }) => ({
+  const preparedUsersData = usersData.map(({ userChallengeSubmissions, ...restUser }) => ({
     ...restUser,
     challengesCompleted: Number(restUser.challengesCompleted),
     lastActivity: restUser.lastActivity as Date,
