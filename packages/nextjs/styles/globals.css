@@ -86,3 +86,8 @@ p {
 .prose figcaption {
   @apply text-xs sm:text-sm md:text-base;
 }
+
+.prose a {
+  @apply break-words overflow-wrap-anywhere;
+  word-break: break-word;
+}
