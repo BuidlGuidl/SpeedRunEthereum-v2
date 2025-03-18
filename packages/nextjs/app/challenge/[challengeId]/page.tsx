@@ -37,7 +37,7 @@ export default async function ChallengePage({ params }: { params: { challengeId:
     <div className="flex flex-col items-center p-8 xl:p-12 relative max-w-[100vw]">
       {challengeReadme ? (
         <>
-          <div className="prose dark:prose-invert max-w-fit break-words xl:max-w-[850px]">
+          <div className="prose dark:prose-invert max-w-fit break-words lg:max-w-[850px]">
             <MDXRemote
               source={challengeReadme}
               options={{
