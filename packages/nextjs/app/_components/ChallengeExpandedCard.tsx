@@ -33,8 +33,8 @@ const ChallengeExpandedCard = ({ challengeId, userChallenges = [], challenges = 
   const isChallengeLocked = challenge.disabled || !builderHasCompletedDependenciesChallenges;
 
   return (
-    <div className="challenge-expanded-card flex justify-center group relative  ">
-      <div className="flex justify-between max-w-7xl py-8 mx-14 pl-10 border-primary border-l-[5px] relative flex-col-reverse lg:flex-row border-b-2 group-[:not(:has(+.challenge-expanded-card))]:border-b-0">
+    <div className="challenge-expanded-card flex justify-center group relative">
+      <div className="flex justify-between max-w-7xl py-8 mx-10 sm:mx-14 pl-10 border-primary border-l-[3px] sm:border-l-[5px] relative flex-col-reverse lg:flex-row border-b-2 group-[:not(:has(+.challenge-expanded-card))]:border-b-0">
         <div className="hidden group-first:block absolute -left-3 z-10 top-0 w-[18px] h-[58%] lg:h-[50%] bg-base-200" />
         <div className="flex flex-col max-w-full lg:max-w-[40%] gap-18 lg:gap-20">
           <div className="flex flex-col items-start gap-0">
@@ -46,11 +46,11 @@ const ChallengeExpandedCard = ({ challengeId, userChallenges = [], challenges = 
               )}
             </div>
 
-            <span className="text-xl lg:text-lg">Challenge #{sortOrder}</span>
-            <h2 className="text-3xl lg:text-2xl font-medium mt-0">{challenge.challengeName}</h2>
+            <span className="text-lg">Challenge #{sortOrder}</span>
+            <h2 className="text-xl lg:text-2xl font-medium mt-0">{challenge.challengeName}</h2>
           </div>
           <div className="flex flex-col gap-8">
-            <span className="text-lg lg:text-base leading-[1.5]">{challenge.description}</span>
+            <span className="text-base leading-[1.5]">{challenge.description}</span>
             {challenge.externalLink?.link ? (
               // Redirect to externalLink if set (instead of challenge detail view)
               <div className="flex items-center">
@@ -64,14 +64,17 @@ const ChallengeExpandedCard = ({ challengeId, userChallenges = [], challenges = 
                     <span>{challenge.externalLink.claim}</span>
                   ) : (
                     <div className="flex items-center">
-                      <PadLockIcon className="w-6 h-6" />
-                      <span className="ml-2 uppercase">Locked</span>
+                      <PadLockIcon className="w-4 h-4 sm:w-6 sm:h-6 mr-2" />
+                      <span className="ml-1 uppercase text-sm sm:text-lg">Locked</span>
                     </div>
                   )}
                 </button>
                 {!builderHasCompletedDependenciesChallenges && (
-                  <div className="tooltip relative cursor-pointer ml-2" data-tip={lockReasonToolTip}>
-                    <QuestionIcon className="h-8 w-8" />
+                  <div
+                    className="tooltip tooltip-top tooltip-auto relative cursor-pointer ml-1 before:max-w-[min(calc(100vw-96px),300px)] before:whitespace-normal before:break-words before:text-sm"
+                    data-tip={lockReasonToolTip}
+                  >
+                    <QuestionIcon className="h-5 w-5 sm:w-8 sm:h-8" />
                   </div>
                 )}
               </div>
@@ -80,12 +83,10 @@ const ChallengeExpandedCard = ({ challengeId, userChallenges = [], challenges = 
                 {isChallengeLocked ? (
                   <button
                     disabled
-                    className="flex items-center text-xl lg:text-lg px-4 py-1 border-2 border-primary rounded-full bg-base-300 opacity-50 cursor-not-allowed"
+                    className="flex items-center text-xl lg:text-lg px-4 py-1 border-2 border-primary rounded-full bg-base-300 opacity-50 cursor-not-allowed whitespace-nowrap"
                   >
-                    <div className="flex items-center">
-                      <PadLockIcon className="w-6 h-6" />
-                      <span className="ml-2 uppercase font-medium">Locked</span>
-                    </div>
+                    <PadLockIcon className="w-4 h-4 sm:w-6 sm:h-6 mr-2" />
+                    <span className="uppercase font-medium text-sm sm:text-lg">Locked</span>
                   </button>
                 ) : (
                   <Link
@@ -93,21 +94,24 @@ const ChallengeExpandedCard = ({ challengeId, userChallenges = [], challenges = 
                     className="flex items-center text-xl lg:text-lg px-4 py-1 border-2 border-primary rounded-full bg-base-300 cursor-pointer"
                   >
                     <div className="flex items-center">
-                      <CrossedSwordsIcon className="w-6 h-6" />
-                      <span className="ml-2 uppercase font-medium">Quest</span>
+                      <CrossedSwordsIcon className="w-4 h-4 sm:h-6 sm:w-6" />
+                      <span className="ml-2 uppercase font-medium text-sm sm:text-lg">Quest</span>
                     </div>
                   </Link>
                 )}
                 {!builderHasCompletedDependenciesChallenges && (
-                  <div className="tooltip relative cursor-pointer ml-2" data-tip={lockReasonToolTip}>
-                    <QuestionIcon className="h-8 w-8" />
+                  <div
+                    className="tooltip tooltip-top tooltip-auto relative cursor-pointer ml-1 before:max-w-[min(calc(100vw-96px),300px)] before:whitespace-normal before:break-words before:text-sm"
+                    data-tip={lockReasonToolTip}
+                  >
+                    <QuestionIcon className="h-5 w-5 sm:w-8 sm:h-8" />
                   </div>
                 )}
               </div>
             )}
           </div>
         </div>
-        <div className="flex justify-center mb-6 lg:mb-0">
+        <div className="flex justify-center mb-0 lg:mb-0">
           {challenge.previewImage ? (
             <Image
               src={challenge.previewImage}
@@ -121,10 +125,10 @@ const ChallengeExpandedCard = ({ challengeId, userChallenges = [], challenges = 
             <p className="p-3 text-center">{challengeId} image</p>
           )}
         </div>
-        <span className="absolute h-5 w-5 rounded-full bg-base-300 border-primary border-4 top-[58%] lg:top-[50%] -left-[13px]" />
+        <span className="absolute h-5 w-5 rounded-full bg-base-300 border-primary border-4 top-[58%] lg:top-[50%] -left-[11px] sm:-left-[13px]" />
         {challenge.icon && (
           <Image
-            className="absolute h-6 w-5 bg-no-repeat bg-[20px_auto] top-[58%] lg:top-[50%] -left-[40px]"
+            className="absolute h-6 w-5 bg-no-repeat bg-[20px_auto] top-[58%] lg:top-[50%] -left-[38px] sm:-left-[40px]"
             src={challenge.icon}
             alt={challenge.icon}
             width={24}

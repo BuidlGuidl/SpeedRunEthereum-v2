@@ -31,7 +31,7 @@ const JoinBGButton = ({ user, userChallenges = [] }: JoinBGProps) => {
     return (
       <button
         onClick={openConnectModal}
-        className="flex justify-center text-[#088484] bg-[#C8F5FF] items-center text-xl lg:text-lg px-4 py-1 border-2 border-[#088484] rounded-full opacity-70"
+        className="flex justify-center text-[#088484] bg-[#C8F5FF] items-center text-xs sm:text-lg px-4 py-1 border-2 border-[#088484] rounded-full opacity-70"
       >
         <span>Connect Wallet</span>
       </button>
@@ -42,17 +42,22 @@ const JoinBGButton = ({ user, userChallenges = [] }: JoinBGProps) => {
     <>
       <button
         disabled={!dependenciesCompleted || builderAlreadyJoined}
-        className="flex justify-center text-[#088484] bg-[#C8F5FF] items-center text-xl lg:text-lg px-4 py-1 border-2 border-[#088484] rounded-full disabled:opacity-70"
+        className="flex justify-center text-[#088484] bg-[#C8F5FF] items-center text-xs sm:text-lg px-4 py-1 border-2 border-[#088484] rounded-full disabled:opacity-70"
         onClick={handleJoinBg}
       >
-        {!dependenciesCompleted && <PadLockIcon className="w-6 h-6 mr-2" />}
-        {!isJoiningBg && !builderAlreadyJoined && <span>Join the 🏰️ BuidlGuidl</span>}
+        {!dependenciesCompleted && (
+          <>
+            <PadLockIcon className="w-4 h-4 mr-2" />
+            <span className="uppercase text-xs sm:text-lg">Locked</span>
+          </>
+        )}
+        {dependenciesCompleted && !isJoiningBg && !builderAlreadyJoined && <span>Join the 🏰️ BuidlGuidl</span>}
         {isJoiningBg && <span className="mr-2">Joining...</span>}
         {builderAlreadyJoined && <span>Already joined</span>}
       </button>
       {!dependenciesCompleted && (
-        <div className="tooltip relative cursor-pointer ml-2 text-[#088484]" data-tip={lockReasonToolTip}>
-          <QuestionIcon className="h-8 w-8" />
+        <div className="tooltip tooltip-left relative cursor-pointer ml-2 text-[#088484]" data-tip={lockReasonToolTip}>
+          <QuestionIcon className="w-5 h-5 sm:h-8 sm:w-8" />
         </div>
       )}
     </>
