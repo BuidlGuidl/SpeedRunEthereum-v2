@@ -1,9 +1,9 @@
 "use client";
 
 import React, { useCallback, useRef, useState } from "react";
-import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import Logo from "./Logo";
 import { Bars3Icon } from "@heroicons/react/24/outline";
 import { RainbowKitCustomConnectButton } from "~~/components/scaffold-eth";
 import { useOutsideClick } from "~~/hooks/scaffold-eth";
@@ -90,7 +90,7 @@ export const Header = () => {
         <div className="hidden lg:flex items-center">
           {!isHomepage && (
             <Link href="/" passHref className="ml-6 mr-4 my-2">
-              <Image src="/logo.svg" alt="Logo" width={200} height={100} />
+              <Logo width={200} height={100} className="h-10" />
             </Link>
           )}
           <ul className="flex flex-nowrap menu menu-horizontal px-1 gap-2">
