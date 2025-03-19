@@ -94,7 +94,7 @@ const ChallengeExpandedCard = ({
                       className="tooltip tooltip-top tooltip-auto relative cursor-pointer ml-1 before:max-w-[min(calc(100vw-96px),300px)] before:whitespace-normal before:break-words before:text-sm"
                       data-tip={lockReasonToolTip}
                     >
-                      <QuestionIcon className="h-5 w-5 sm:w-8 sm:h-8" />
+                      <QuestionIcon className="ml-1 h-5 w-5 sm:w-8 sm:h-8" />
                     </div>
                   )}
                 </>
@@ -128,7 +128,7 @@ const ChallengeExpandedCard = ({
                       className="tooltip tooltip-top tooltip-auto relative cursor-pointer ml-1 before:max-w-[min(calc(100vw-96px),300px)] before:whitespace-normal before:break-words before:text-sm"
                       data-tip={lockReasonToolTip}
                     >
-                      <QuestionIcon className="h-5 w-5 sm:w-8 sm:h-8" />
+                      <QuestionIcon className="ml-1 h-5 w-5 sm:w-8 sm:h-8" />
                     </div>
                   )}
                 </>
