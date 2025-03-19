@@ -43,7 +43,6 @@ p {
 
 .prose img {
   @apply max-w-full h-auto my-4 mx-auto rounded-lg;
-  max-height: 90vh;
 }
 
 .prose pre,
