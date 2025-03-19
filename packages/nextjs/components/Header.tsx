@@ -1,41 +1,80 @@
 "use client";
 
-import React, { useCallback, useRef, useState } from "react";
+import React, { useCallback, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Logo from "./Logo";
+import { useAccount } from "wagmi";
 import { Bars3Icon } from "@heroicons/react/24/outline";
 import { RainbowKitCustomConnectButton } from "~~/components/scaffold-eth";
 import { useOutsideClick } from "~~/hooks/scaffold-eth";
+import { useUser } from "~~/hooks/useUser";
+import { UserRole } from "~~/services/database/config/types";
+import { UserByAddress } from "~~/services/database/repositories/users";
 
 type HeaderMenuLink = {
   label: string;
   href: string;
   icon?: React.ReactNode;
+  availableForRoles?: UserRole[];
 };
 
-// TODO: Hardcoded. Fix later
-export const menuLinks: HeaderMenuLink[] = [
-  {
-    label: "Home",
-    href: "/",
-  },
-  {
-    label: "Portfolio",
-    href: "/portfolio",
-  },
-];
-
-export const HeaderMenuLinks = ({ hideItemsByLabel }: { hideItemsByLabel?: string[] }) => {
+export const HeaderMenuLinks = ({ hideItemsByLabel, user }: { hideItemsByLabel?: string[]; user?: UserByAddress }) => {
   const pathname = usePathname();
+
+  const filteredMenuLinks: HeaderMenuLink[] = useMemo(() => {
+    const alwaysVisibleMenuLinks: HeaderMenuLink[] = [
+      {
+        label: "Home",
+        href: "/",
+      },
+    ];
+
+    const userMenuLinks: HeaderMenuLink[] = [
+      {
+        label: "Portfolio",
+        href: user ? `/builders/${user.userAddress}` : "/",
+        availableForRoles: [UserRole.USER, UserRole.BUILDER, UserRole.ADMIN],
+      },
+      {
+        label: "Builders",
+        href: "/builders",
+        availableForRoles: [UserRole.USER, UserRole.BUILDER, UserRole.ADMIN],
+      },
+      {
+        label: "Review Submissions",
+        href: "/submission-review",
+        availableForRoles: [UserRole.ADMIN],
+      },
+      {
+        label: "Activity",
+        href: "/activity",
+        availableForRoles: [UserRole.ADMIN],
+      },
+    ];
+
+    let menuLinks = [...alwaysVisibleMenuLinks];
+
+    if (user) {
+      menuLinks = [...menuLinks, ...userMenuLinks];
+    }
+
+    return menuLinks.filter(({ label, availableForRoles }) => {
+      if (hideItemsByLabel?.includes(label)) {
+        return false;
+      }
+
+      if (availableForRoles && (!user?.role || !availableForRoles.includes(user.role))) {
+        return false;
+      }
+
+      return true;
+    });
+  }, [user, hideItemsByLabel]);
 
   return (
     <>
-      {menuLinks.map(({ label, href, icon }) => {
-        if (hideItemsByLabel?.includes(label)) {
-          return null;
-        }
-
+      {filteredMenuLinks.map(({ label, href, icon }) => {
         const isActive = pathname === href;
 
         return (
@@ -66,6 +105,9 @@ export const Header = () => {
   const pathname = usePathname();
   const isHomepage = pathname === "/";
 
+  const { address: connectedAddress } = useAccount();
+  const { data: user } = useUser(connectedAddress);
+
   useOutsideClick(
     burgerMenuRef,
     useCallback(() => setIsDrawerOpen(false), []),
@@ -92,7 +134,7 @@ export const Header = () => {
                 setIsDrawerOpen(false);
               }}
             >
-              <HeaderMenuLinks />
+              <HeaderMenuLinks user={user} />
             </ul>
           )}
         </div>
@@ -103,7 +145,7 @@ export const Header = () => {
             </Link>
           )}
           <ul className="flex flex-nowrap menu menu-horizontal px-1 gap-2">
-            <HeaderMenuLinks hideItemsByLabel={["Home"]} />
+            <HeaderMenuLinks hideItemsByLabel={["Home"]} user={user} />
           </ul>
         </div>
       </div>
