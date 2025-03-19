@@ -19,7 +19,7 @@ export const JoinBGCard = ({
         width={820}
         height={400}
       />
-      <div className="max-w-7xl py-8 mx-14 pl-10 border-l-[5px] border-primary relative space-y-16 lg:space-y-32 min-h-[28rem] lg:min-h-[32rem]">
+      <div className="max-w-7xl py-8 mx-10 sm:mx-14 pl-10 border-l-[3px] sm:border-l-[5px] border-primary relative space-y-16 lg:space-y-32 min-h-[28rem] lg:min-h-[32rem]">
         <div className="flex justify-center relative mt-2 lg:mt-8">
           <Image
             src="/assets/bgBanner_JoinBG.svg"
@@ -40,10 +40,10 @@ export const JoinBGCard = ({
             <JoinBGButton user={user} userChallenges={userChallenges} />
           </div>
         </div>
-        <span className="absolute h-5 w-5 rounded-full bg-base-300 border-primary border-4 top-[22%] lg:top-[30%] -left-[13px]" />
+        <span className="absolute h-5 w-5 rounded-full bg-base-300 border-primary border-4 top-[22%] lg:top-[30%] -left-[11px] sm:-left-[13px]" />
 
         <Image
-          className="absolute h-6 w-5 bg-no-repeat bg-[20px_auto] top-[22%] lg:top-[30%] -left-[40px]"
+          className="absolute h-6 w-5 bg-no-repeat bg-[20px_auto] top-[22%] lg:top-[30%] -left-[38px] sm:-left-[40px]"
           src="/assets/vault_icon.svg"
           alt="/assets/vault_icon.svg"
           width={24}

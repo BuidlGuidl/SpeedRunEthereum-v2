@@ -37,7 +37,7 @@ export default async function ChallengePage({ params }: { params: { challengeId:
     <div className="flex flex-col items-center p-8 xl:p-12 relative max-w-[100vw]">
       {challengeReadme ? (
         <>
-          <div className="prose dark:prose-invert max-w-fit break-all xl:max-w-[850px]">
+          <div className="prose dark:prose-invert max-w-fit break-words lg:max-w-[850px]">
             <MDXRemote
               source={challengeReadme}
               options={{
@@ -55,9 +55,9 @@ export default async function ChallengePage({ params }: { params: { challengeId:
             target="_blank"
             rel="noopener noreferrer"
           >
-            <button className="btn btn-outline">
-              View on GitHub
-              <ArrowTopRightOnSquareIcon className="w-4 h-4" />
+            <button className="btn btn-outline btn-sm sm:btn-md">
+              <span className="text-xs sm:text-sm">View on GitHub</span>
+              <ArrowTopRightOnSquareIcon className="w-3 h-3 sm:w-4 sm:h-4" />
             </button>
           </a>
         </>

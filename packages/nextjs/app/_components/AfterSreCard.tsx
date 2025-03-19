@@ -19,9 +19,9 @@ export const AfterSreCard = ({
 }) => {
   return (
     <div className={`flex justify-center ${bgClassName}`}>
-      <div className="relative flex w-full justify-between py-8 max-w-7xl xl:max-w-3xl mx-14 xl:mx-0 2xl:mx-14 pl-10 flex-col-reverse lg:flex-row border-l-[5px] xl:border-l-0 border-dashed border-primary">
+      <div className="relative flex w-full justify-between py-8 max-w-7xl xl:max-w-3xl mx-10 sm:mx-14 xl:mx-0 2xl:mx-14 pl-10 flex-col-reverse lg:flex-row border-l-[3px] sm:border-l-[5px] xl:border-l-0 border-dashed border-primary">
         <span
-          className={`absolute h-5 w-5 rounded-full bg-base-300 border-primary border-4 top-[58%] lg:top-1/2 -left-[13px] flex xl:hidden`}
+          className={`absolute h-3 w-3 sm:h-5 sm:w-5 rounded-full bg-base-300 border-primary border-[3px] sm:border-4 top-[58%] lg:top-1/2 -left-[8px] sm:-left-[13px] flex xl:hidden`}
         />
 
         <div className="flex flex-col items-start max-w-full lg:max-w-[40%]">
@@ -30,7 +30,7 @@ export const AfterSreCard = ({
           </div>
 
           <div className="flex flex-col items-start space-y-4">
-            <p className="text-lg lg:text-base leading-[1.5]">{description}</p>
+            <p className="text-sm lg:text-base leading-[1.5]">{description}</p>
 
             <Link
               href={externalLink}
@@ -48,7 +48,7 @@ export const AfterSreCard = ({
             src={previewImage}
             alt={`${title} image`}
             // workaround to avoid console warnings
-            className={`w-full max-w-[400px] h-auto lg:mr-12 ${previewImage.includes("techTree") ? "p-9" : "p-0"}`}
+            className={`w-full max-w-[400px] h-auto lg:mr-12 ${previewImage.includes("techTree") ? "p-4 sm:p-9" : "p-0"}`}
             width={0}
             height={0}
           />
