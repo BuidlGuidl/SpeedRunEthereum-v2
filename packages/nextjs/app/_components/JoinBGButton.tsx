@@ -42,13 +42,13 @@ const JoinBGButton = ({ user, userChallenges = [] }: JoinBGProps) => {
     <>
       <button
         disabled={!dependenciesCompleted || builderAlreadyJoined}
-        className={`flex justify-center text-[#088484] bg-[#C8F5FF] items-center text-xs sm:text-lg px-4 py-1 border-2 border-[#088484] rounded-full disabled:opacity-70 ${!dependenciesCompleted ? "cursor-not-allowed" : ""}`}
+        className={`flex justify-center text-[#088484] bg-[#C8F5FF] items-center text-sm sm:text-lg px-4 py-1 border-2 border-[#088484] rounded-full disabled:opacity-70 ${!dependenciesCompleted ? "cursor-not-allowed" : ""}`}
         onClick={handleJoinBg}
       >
         {!dependenciesCompleted && (
           <>
             <PadLockIcon className="w-4 h-4 sm:w-6 sm:h-6 mr-2" />
-            <span className="uppercase text-xs sm:text-lg">Locked</span>
+            <span className="uppercase">Locked</span>
           </>
         )}
         {dependenciesCompleted && !isJoiningBg && !builderAlreadyJoined && <span>Join the 🏰️ BuidlGuidl</span>}
