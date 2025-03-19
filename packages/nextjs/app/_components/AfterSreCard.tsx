@@ -19,9 +19,9 @@ export const AfterSreCard = ({
 }) => {
   return (
     <div className={`flex justify-center ${bgClassName}`}>
-      <div className="relative flex w-full justify-between py-8 max-w-7xl xl:max-w-3xl mx-14 xl:mx-0 2xl:mx-14 pl-10 flex-col-reverse lg:flex-row border-l-[5px] xl:border-l-0 border-dashed border-primary">
+      <div className="relative flex w-full justify-between py-8 max-w-7xl xl:max-w-3xl mx-10 sm:mx-14 xl:mx-0 2xl:mx-14 pl-10 flex-col-reverse lg:flex-row border-l-[3px] sm:border-l-[5px] xl:border-l-0 border-dashed border-primary">
         <span
-          className={`absolute h-5 w-5 rounded-full bg-base-300 border-primary border-4 top-[58%] lg:top-1/2 -left-[13px] flex xl:hidden`}
+          className={`absolute h-4 w-4 sm:h-5 sm:w-5 rounded-full bg-base-300 border-primary border-[3px] sm:border-4 top-[58%] lg:top-1/2 -left-[9px] sm:-left-[13px] flex xl:hidden`}
         />
 
         <div className="flex flex-col items-start max-w-full lg:max-w-[40%]">
