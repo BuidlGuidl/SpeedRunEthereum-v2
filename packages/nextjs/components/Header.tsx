@@ -17,18 +17,27 @@ type HeaderMenuLink = {
 // TODO: Hardcoded. Fix later
 export const menuLinks: HeaderMenuLink[] = [
   {
+    label: "Home",
+    href: "/",
+  },
+  {
     label: "Portfolio",
     href: "/portfolio",
   },
 ];
 
-export const HeaderMenuLinks = () => {
+export const HeaderMenuLinks = ({ hideItemsByLabel }: { hideItemsByLabel?: string[] }) => {
   const pathname = usePathname();
 
   return (
     <>
       {menuLinks.map(({ label, href, icon }) => {
+        if (hideItemsByLabel?.includes(label)) {
+          return null;
+        }
+
         const isActive = pathname === href;
+
         return (
           <li key={href}>
             <Link
@@ -94,7 +103,7 @@ export const Header = () => {
             </Link>
           )}
           <ul className="flex flex-nowrap menu menu-horizontal px-1 gap-2">
-            <HeaderMenuLinks />
+            <HeaderMenuLinks hideItemsByLabel={["Home"]} />
           </ul>
         </div>
       </div>
