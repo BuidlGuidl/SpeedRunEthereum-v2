@@ -57,7 +57,7 @@ const ChallengeExpandedCard = ({
             <h2 className="text-xl lg:text-2xl font-medium mt-0">{challenge.challengeName}</h2>
           </div>
           <div className="flex flex-col gap-8">
-            <span className="text-lg lg:text-base leading-[1.5]">{challenge.description}</span>
+            <span className="text-base leading-[1.5]">{challenge.description}</span>
             <div className="flex items-center">
               {comingSoon && (
                 <button
