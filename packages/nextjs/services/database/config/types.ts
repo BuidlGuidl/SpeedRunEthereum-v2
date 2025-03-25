@@ -5,12 +5,6 @@ export enum ReviewAction {
   SUBMITTED = "SUBMITTED",
 }
 
-export enum EventType {
-  CHALLENGE_SUBMIT = "CHALLENGE_SUBMIT",
-  CHALLENGE_AUTOGRADE = "CHALLENGE_AUTOGRADE",
-  USER_CREATE = "USER_CREATE",
-}
-
 export enum UserRole {
   USER = "USER",
   BUILDER = "BUILDER",
@@ -23,7 +17,9 @@ export enum ChallengeId {
   TOKEN_VENDOR = "token-vendor",
   DICE_GAME = "dice-game",
   MINIMUM_VIABLE_EXCHANGE = "minimum-viable-exchange",
-  STATE_CHANNELS = "state-channels",
+  STABLECOINS = "stablecoins",
+  PREDICTION_MARKETS = "prediction-markets",
+  DEPLOY_TO_L2 = "deploy-to-l2",
   MULTISIG = "multisig",
   SVG_NFT = "svg-nft",
 }

@@ -25,11 +25,13 @@ export async function findUserByAddress(address: string) {
 export async function findSortedUsersWithChallenges(start: number, size: number, sorting: SortingState) {
   const sortingQuery = sorting[0] as ColumnSort;
 
-  // Define SQL expressions once
-  const challengesCompletedExpr = sql`(SELECT COUNT(*) FROM ${userChallenges} uc WHERE uc.user_address = ${users.userAddress} AND uc.review_action = ${ReviewAction.ACCEPTED})`;
-  const lastActivityExpr = sql`COALESCE(
-    (SELECT MAX(uc.submitted_at) FROM ${userChallenges} uc WHERE uc.user_address = ${users.userAddress}),
-    ${users.createdAt}
+  const challengesCompletedExpr = sql`(SELECT COUNT(DISTINCT uc.challenge_id) FROM ${userChallenges} uc WHERE uc.user_address = ${users.userAddress} AND uc.review_action = ${ReviewAction.ACCEPTED})`;
+  const lastActivityIsoExpr = sql`to_char(
+    COALESCE(
+      (SELECT MAX(uc.submitted_at) FROM ${userChallenges} uc WHERE uc.user_address = ${users.userAddress}),
+      ${users.createdAt}
+    ),
+    'YYYY-MM-DD"T"HH24:MI:SS.MS"Z"'
   )`;
 
   const query = db.query.users.findMany({
@@ -45,7 +47,7 @@ export async function findSortedUsersWithChallenges(start: number, size: number,
       }
 
       if (sortingQuery.id === "lastActivity") {
-        return sortOrder(lastActivityExpr);
+        return sortOrder(lastActivityIsoExpr);
       }
 
       // For regular fields in the users table
@@ -58,7 +60,7 @@ export async function findSortedUsersWithChallenges(start: number, size: number,
     extras: {
       // Reuse the same SQL expressions for the extras
       challengesCompleted: challengesCompletedExpr.as("challengesCompleted"),
-      lastActivity: lastActivityExpr.as("lastActivity"),
+      lastActivity: lastActivityIsoExpr.as("lastActivity"),
     },
     with: {
       userChallenges: true,
@@ -94,9 +96,13 @@ export async function updateUserSocials(userAddress: string, socials: UserSocial
   // Non-values on socials should be saved as NULL
   const socialsToUpdate = Object.fromEntries(Object.entries(socials).map(([key, value]) => [key, value || null]));
 
+  // Update updatedAt whenever user data changes
   return await db
     .update(users)
-    .set(socialsToUpdate)
+    .set({
+      ...socialsToUpdate,
+      updatedAt: new Date(),
+    })
     .where(eq(lower(users.userAddress), userAddress.toLowerCase()))
     .returning();
 }
@@ -116,7 +122,10 @@ export async function isUserJoinedBG(userAddress: string) {
 export async function updateUserRoleToBuilder(userAddress: string) {
   return await db
     .update(users)
-    .set({ role: UserRole.BUILDER })
+    .set({
+      role: UserRole.BUILDER,
+      updatedAt: new Date(),
+    })
     .where(eq(lower(users.userAddress), userAddress.toLowerCase()))
     .returning();
 }

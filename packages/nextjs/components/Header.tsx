@@ -3,6 +3,7 @@
 import React, { useCallback, useRef, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import Logo from "./Logo";
 import { Bars3Icon } from "@heroicons/react/24/outline";
 import { RainbowKitCustomConnectButton } from "~~/components/scaffold-eth";
 import { useOutsideClick } from "~~/hooks/scaffold-eth";
@@ -53,6 +54,9 @@ export const HeaderMenuLinks = () => {
 export const Header = () => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const burgerMenuRef = useRef<HTMLDivElement>(null);
+  const pathname = usePathname();
+  const isHomepage = pathname === "/";
+
   useOutsideClick(
     burgerMenuRef,
     useCallback(() => setIsDrawerOpen(false), []),
@@ -83,9 +87,16 @@ export const Header = () => {
             </ul>
           )}
         </div>
-        <ul className="hidden lg:flex lg:flex-nowrap menu menu-horizontal px-1 gap-2">
-          <HeaderMenuLinks />
-        </ul>
+        <div className="hidden lg:flex items-center">
+          {!isHomepage && (
+            <Link href="/" passHref className="ml-6 mr-4 my-2">
+              <Logo width={200} height={100} className="h-10" />
+            </Link>
+          )}
+          <ul className="flex flex-nowrap menu menu-horizontal px-1 gap-2">
+            <HeaderMenuLinks />
+          </ul>
+        </div>
       </div>
       <div className="navbar-end flex-grow mr-4">
         <RainbowKitCustomConnectButton />
