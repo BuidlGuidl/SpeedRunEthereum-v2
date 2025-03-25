@@ -20,6 +20,7 @@ export enum ChallengeId {
   STABLECOINS = "stablecoins",
   PREDICTION_MARKETS = "prediction-markets",
   DEPLOY_TO_L2 = "deploy-to-l2",
+  STATE_CHANNELS = "state-channels",
   MULTISIG = "multisig",
   SVG_NFT = "svg-nft",
 }
