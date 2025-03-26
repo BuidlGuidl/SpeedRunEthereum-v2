@@ -78,8 +78,8 @@ export const HeaderMenuLinks = ({ hideItemsByLabel, user }: { hideItemsByLabel?:
               href={href}
               passHref
               className={`${
-                isActive ? "bg-base-200 shadow-md" : ""
-              } hover:bg-base-200 hover:shadow-md focus:!bg-base-200 active:!text-neutral py-1.5 lg:py-2 px-3 lg:px-4 text-sm rounded-full gap-2 grid grid-flow-col`}
+                isActive ? "underline" : ""
+              } hover:underline py-1.5 lg:py-2 px-3 lg:px-4 text-base font-medium rounded-full gap-2 grid grid-flow-col`}
             >
               {icon}
               <span>{label}</span>
@@ -109,7 +109,7 @@ export const Header = () => {
   );
 
   return (
-    <div className="sticky lg:static top-0 navbar bg-base-300 min-h-0 flex-shrink-0 justify-between z-20 px-0 sm:px-2">
+    <div className="sticky lg:static top-0 navbar bg-base-300 min-h-0 flex-shrink-0 justify-between z-20 pt-4   px-0 sm:px-2">
       <div className="navbar-start w-auto lg:w-1/2">
         <div className="lg:hidden dropdown" ref={burgerMenuRef}>
           <label
@@ -139,7 +139,7 @@ export const Header = () => {
               <Logo width={200} height={100} className="h-10" />
             </Link>
           )}
-          <ul className="flex flex-nowrap menu menu-horizontal px-1 gap-2">
+          <ul className="flex flex-nowrap px-1 gap-2">
             <HeaderMenuLinks hideItemsByLabel={["Home"]} user={user} />
           </ul>
         </div>
