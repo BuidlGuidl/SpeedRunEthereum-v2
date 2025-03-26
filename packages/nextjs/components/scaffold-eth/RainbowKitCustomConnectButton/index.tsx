@@ -10,7 +10,6 @@ import { useAccount } from "wagmi";
 import RegisterTooltipBox from "~~/app/_components/RegisterTooltipBox";
 import { useTargetNetwork } from "~~/hooks/scaffold-eth/useTargetNetwork";
 import { useUser } from "~~/hooks/useUser";
-import { useUserRegister } from "~~/hooks/useUserRegister";
 import { getBlockExplorerAddressLink } from "~~/utils/scaffold-eth";
 
 /**
@@ -19,7 +18,6 @@ import { getBlockExplorerAddressLink } from "~~/utils/scaffold-eth";
 export const RainbowKitCustomConnectButton = () => {
   const { targetNetwork } = useTargetNetwork();
   const { address: connectedAddress } = useAccount();
-  const { handleRegister, isRegistering } = useUserRegister();
   const { data: user, isLoading: isLoadingUser } = useUser(connectedAddress);
 
   return (
@@ -51,7 +49,7 @@ export const RainbowKitCustomConnectButton = () => {
         }
 
         if (!user) {
-          return <RegisterTooltipBox handleRegister={handleRegister} isRegistering={isRegistering} />;
+          return <RegisterTooltipBox />;
         }
 
         return (

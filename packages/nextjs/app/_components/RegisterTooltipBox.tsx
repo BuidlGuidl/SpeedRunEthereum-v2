@@ -3,15 +3,12 @@ import { useAccount } from "wagmi";
 import { UserIcon } from "@heroicons/react/24/outline";
 import { PunkBlockie } from "~~/components/PunkBlockie";
 import { Address } from "~~/components/scaffold-eth";
+import { useUserRegister } from "~~/hooks/useUserRegister";
 
-type RegisterTooltipBoxProps = {
-  handleRegister: () => void;
-  isRegistering: boolean;
-};
-
-export const RegisterTooltipBox = ({ handleRegister, isRegistering }: RegisterTooltipBoxProps) => {
+export const RegisterTooltipBox = () => {
   const { address } = useAccount();
   const [showTooltip, setShowTooltip] = useState(false);
+  const { handleRegister, isRegistering } = useUserRegister();
   const tooltipRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
 
