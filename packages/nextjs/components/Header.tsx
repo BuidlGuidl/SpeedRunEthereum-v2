@@ -39,12 +39,7 @@ export const HeaderMenuLinks = ({ hideItemsByLabel, user }: { hideItemsByLabel?:
       {
         label: "Builders",
         href: "/builders",
-        availableForRoles: [UserRole.USER, UserRole.BUILDER, UserRole.ADMIN],
-      },
-      {
-        label: "Review Submissions",
-        href: "/submission-review",
-        availableForRoles: [UserRole.ADMIN],
+        availableForRoles: [UserRole.BUILDER, UserRole.ADMIN],
       },
       {
         label: "Activity",
