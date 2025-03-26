@@ -6,10 +6,11 @@ import { AddressQRCodeModal } from "./AddressQRCodeModal";
 import { WrongNetworkDropdown } from "./WrongNetworkDropdown";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { Address } from "viem";
-import { useAccount } from "wagmi";
+import { useAccount, useDisconnect } from "wagmi";
+import { XMarkIcon } from "@heroicons/react/24/outline";
+import RegisterUser from "~~/app/_components/RegisterUser";
 import { useTargetNetwork } from "~~/hooks/scaffold-eth/useTargetNetwork";
 import { useUser } from "~~/hooks/useUser";
-import { useUserRegister } from "~~/hooks/useUserRegister";
 import { getBlockExplorerAddressLink } from "~~/utils/scaffold-eth";
 
 /**
@@ -18,8 +19,8 @@ import { getBlockExplorerAddressLink } from "~~/utils/scaffold-eth";
 export const RainbowKitCustomConnectButton = () => {
   const { targetNetwork } = useTargetNetwork();
   const { address: connectedAddress } = useAccount();
-  const { handleRegister, isRegistering } = useUserRegister();
   const { data: user, isLoading: isLoadingUser } = useUser(connectedAddress);
+  const { disconnect } = useDisconnect();
 
   return (
     <ConnectButton.Custom>
@@ -51,13 +52,12 @@ export const RainbowKitCustomConnectButton = () => {
 
         if (!user) {
           return (
-            <button
-              className="flex items-center py-1.5 lg:py-2 px-3 lg:px-4 border-2 border-primary rounded-full bg-base-300 hover:bg-base-200 transition-colors cursor-pointer"
-              onClick={handleRegister}
-              disabled={isRegistering}
-            >
-              {isRegistering ? <span className="loading loading-spinner loading-sm"></span> : "Register"}
-            </button>
+            <div className="flex items-baseline gap-4">
+              <RegisterUser />
+              <button className="flex items-center rounded-full bg-base-300" onClick={() => disconnect()}>
+                <XMarkIcon className="w-6 h-6" />
+              </button>
+            </div>
           );
         }
 
