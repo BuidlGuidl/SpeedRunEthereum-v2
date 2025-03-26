@@ -9,34 +9,24 @@ export const RegisterTooltipBox = () => {
   const { address } = useAccount();
   const [showTooltip, setShowTooltip] = useState(false);
   const { handleRegister, isRegistering } = useUserRegister();
-  const tooltipRef = useRef<HTMLDivElement>(null);
-  const buttonRef = useRef<HTMLButtonElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    if (!showTooltip) return;
     const handleClickOutside = (event: MouseEvent) => {
-      if (
-        tooltipRef.current &&
-        !tooltipRef.current.contains(event.target as Node) &&
-        buttonRef.current &&
-        !buttonRef.current.contains(event.target as Node)
-      ) {
+      if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
         setShowTooltip(false);
       }
     };
-
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, []);
+  }, [showTooltip]);
 
   return (
-    <div className="relative">
-      <button
-        ref={buttonRef}
-        className="flex items-center rounded-full bg-base-300"
-        onClick={() => setShowTooltip(!showTooltip)}
-      >
+    <div className="relative" ref={containerRef}>
+      <button className="flex items-center rounded-full bg-base-300" onClick={() => setShowTooltip(!showTooltip)}>
         {isRegistering ? (
           <span className="loading loading-spinner loading-sm"></span>
         ) : (
@@ -45,10 +35,7 @@ export const RegisterTooltipBox = () => {
       </button>
 
       {showTooltip && (
-        <div
-          ref={tooltipRef}
-          className="absolute top-full left-[-250px] mt-2 p-8 w-64 bg-base-200 rounded-xl shadow-lg border border-base-300 z-10 flex flex-col items-center text-center"
-        >
+        <div className="absolute top-full left-[-250px] mt-2 p-8 w-64 bg-base-200 rounded-xl shadow-lg border border-base-300 z-10 flex flex-col items-center text-center">
           <h3 className="text-sm font-medium mb-2">Register as a builder</h3>
           <p className="m-0 mb-4 text-xs font-light">Sign a message with your wallet to create a builder profile.</p>
           {address && (
