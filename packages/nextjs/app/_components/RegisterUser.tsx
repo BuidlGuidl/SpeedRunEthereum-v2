@@ -5,7 +5,7 @@ import { PunkBlockie } from "~~/components/PunkBlockie";
 import { Address } from "~~/components/scaffold-eth";
 import { useUserRegister } from "~~/hooks/useUserRegister";
 
-export const RegisterTooltipBox = () => {
+export const RegisterUser = () => {
   const { address } = useAccount();
   const [showTooltip, setShowTooltip] = useState(false);
   const { handleRegister, isRegistering } = useUserRegister();
@@ -66,4 +66,4 @@ export const RegisterTooltipBox = () => {
   );
 };
 
-export default RegisterTooltipBox;
+export default RegisterUser;

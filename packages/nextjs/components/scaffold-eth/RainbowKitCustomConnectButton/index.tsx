@@ -8,7 +8,7 @@ import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { Address } from "viem";
 import { useAccount, useDisconnect } from "wagmi";
 import { XMarkIcon } from "@heroicons/react/24/outline";
-import RegisterTooltipBox from "~~/app/_components/RegisterTooltipBox";
+import RegisterUser from "~~/app/_components/RegisterUser";
 import { useTargetNetwork } from "~~/hooks/scaffold-eth/useTargetNetwork";
 import { useUser } from "~~/hooks/useUser";
 import { getBlockExplorerAddressLink } from "~~/utils/scaffold-eth";
@@ -53,7 +53,7 @@ export const RainbowKitCustomConnectButton = () => {
         if (!user) {
           return (
             <div className="flex items-baseline gap-4">
-              <RegisterTooltipBox />
+              <RegisterUser />
               <button className="flex items-center rounded-full bg-base-300" onClick={() => disconnect()}>
                 <XMarkIcon className="w-6 h-6" />
               </button>
