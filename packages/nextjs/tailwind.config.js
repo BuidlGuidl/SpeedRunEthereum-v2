@@ -47,7 +47,7 @@ module.exports = {
           info: "#67DDDE",
           success: "#22797b",
           warning: "#717326",
-          error: "#6e2a2a",
+          error: "#ff8863",
           "--rounded-btn": "9999rem",
           ".tooltip": { "--tooltip-tail": "6px", "--tooltip-color": "oklch(var(--p))" },
           ".link": { textUnderlineOffset: "2px" },
