@@ -6,7 +6,8 @@ import { AddressQRCodeModal } from "./AddressQRCodeModal";
 import { WrongNetworkDropdown } from "./WrongNetworkDropdown";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { Address } from "viem";
-import { useAccount } from "wagmi";
+import { useAccount, useDisconnect } from "wagmi";
+import { XMarkIcon } from "@heroicons/react/24/outline";
 import RegisterTooltipBox from "~~/app/_components/RegisterTooltipBox";
 import { useTargetNetwork } from "~~/hooks/scaffold-eth/useTargetNetwork";
 import { useUser } from "~~/hooks/useUser";
@@ -19,6 +20,7 @@ export const RainbowKitCustomConnectButton = () => {
   const { targetNetwork } = useTargetNetwork();
   const { address: connectedAddress } = useAccount();
   const { data: user, isLoading: isLoadingUser } = useUser(connectedAddress);
+  const { disconnect } = useDisconnect();
 
   return (
     <ConnectButton.Custom>
@@ -49,7 +51,14 @@ export const RainbowKitCustomConnectButton = () => {
         }
 
         if (!user) {
-          return <RegisterTooltipBox />;
+          return (
+            <div className="flex items-baseline gap-4">
+              <RegisterTooltipBox />
+              <button className="flex items-center rounded-full bg-base-300" onClick={() => disconnect()}>
+                <XMarkIcon className="w-6 h-6" />
+              </button>
+            </div>
+          );
         }
 
         return (

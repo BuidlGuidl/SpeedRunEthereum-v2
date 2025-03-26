@@ -26,6 +26,7 @@ export const RegisterTooltipBox = () => {
 
   return (
     <div className="relative" ref={containerRef}>
+      <span className="absolute top-[-5px] right-[-5px] bg-red-600 rounded-full w-2 h-2 "></span>
       <button className="flex items-center rounded-full bg-base-300" onClick={() => setShowTooltip(!showTooltip)}>
         {isRegistering ? (
           <span className="loading loading-spinner loading-sm"></span>
