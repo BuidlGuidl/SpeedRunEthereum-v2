@@ -36,7 +36,7 @@ export const RegisterTooltipBox = () => {
 
       {showTooltip && (
         <div className="absolute top-full left-[-250px] mt-2 p-8 w-64 bg-base-200 rounded-xl shadow-lg border border-base-300 z-10 flex flex-col items-center text-center">
-          <h3 className="text-sm font-medium mb-2">Register as a builder</h3>
+          <h3 className="text-base font-medium mb-1">Register as a builder</h3>
           <p className="m-0 mb-4 text-xs font-light">Sign a message with your wallet to create a builder profile.</p>
           {address && (
             <div className="flex flex-col items-center justify-center gap-2">
