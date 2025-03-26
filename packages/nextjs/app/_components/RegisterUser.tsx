@@ -7,7 +7,7 @@ import { useUserRegister } from "~~/hooks/useUserRegister";
 
 export const RegisterUser = () => {
   const { address } = useAccount();
-  const [showTooltip, setShowTooltip] = useState(false);
+  const [showTooltip, setShowTooltip] = useState(true);
   const { handleRegister, isRegistering } = useUserRegister();
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -36,9 +36,11 @@ export const RegisterUser = () => {
       </button>
 
       {showTooltip && (
-        <div className="absolute top-full left-[-250px] mt-2 p-8 w-64 bg-base-200 rounded-xl shadow-lg border border-base-300 z-10 flex flex-col items-center text-center">
-          <h3 className="text-base font-medium mb-1">Register as a builder</h3>
-          <p className="m-0 mb-4 text-xs font-light">Sign a message with your wallet to create a builder profile.</p>
+        <div className="absolute top-full left-[-250px] mt-2 p-8 w-64 md:w-[290px] bg-base-200 rounded-xl shadow-lg border border-base-300 z-10 flex flex-col items-center text-center">
+          <h3 className="text-lg font-bold mb-1">Register as a builder</h3>
+          <p className="m-0 mb-4 text-sm font-light text-neutral">
+            Sign a message with your wallet to create a builder profile.
+          </p>
           {address && (
             <div className="flex flex-col items-center justify-center gap-2">
               <div className="rounded-md border-primary border">
