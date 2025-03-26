@@ -7,6 +7,7 @@ import { WrongNetworkDropdown } from "./WrongNetworkDropdown";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { Address } from "viem";
 import { useAccount } from "wagmi";
+import RegisterTooltipBox from "~~/app/_components/RegisterTooltipBox";
 import { useTargetNetwork } from "~~/hooks/scaffold-eth/useTargetNetwork";
 import { useUser } from "~~/hooks/useUser";
 import { useUserRegister } from "~~/hooks/useUserRegister";
@@ -50,15 +51,7 @@ export const RainbowKitCustomConnectButton = () => {
         }
 
         if (!user) {
-          return (
-            <button
-              className="flex items-center py-1.5 lg:py-2 px-3 lg:px-4 border-2 border-primary rounded-full bg-base-300 hover:bg-base-200 transition-colors cursor-pointer"
-              onClick={handleRegister}
-              disabled={isRegistering}
-            >
-              {isRegistering ? <span className="loading loading-spinner loading-sm"></span> : "Register"}
-            </button>
-          );
+          return <RegisterTooltipBox handleRegister={handleRegister} isRegistering={isRegistering} />;
         }
 
         return (
