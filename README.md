@@ -1,6 +1,14 @@
-# SpeedRunEthereum v2
+# SpeedRunEthereum
 
-The new SpeedRunEthereum!
+![SRE Thumbnail](./packages/nextjs/public/thumbnail.png)
+
+New version of [SpeedRunEthereum](https://github.com/BuidlGuidl/SpeedRunEthereum) built with [Scaffold-ETH 2](https://github.com/scaffold-eth/scaffold-eth-2). An expanded experience for builders where you'll be able to unlock your builder profile after completing a few challenges. This will open the gates to:
+
+- Interact with other BuidlGuidl curriculums like [ETH Tech Tree](https://www.ethtechtree.com/) and [BuidlGuidl CTF](https://ctf.buidlguidl.com/)
+- Share your builds and discover what other builders are up to
+- Earn badges
+
+You can find the repository containing the challenges [here](https://github.com/scaffold-eth/se-2-challenges).
 
 ## Requirements
 
@@ -43,7 +51,7 @@ To iterate on the database:
 
 - Tweak the schema in `schema.ts`
 - Run `yarn drizzle-kit push` to apply the changes.
-- Tweak `seed.js` if needed + run `yarn seed` (will delete existing data)
+- Tweak `seed.js` if needed + run `yarn db:seed` (will delete existing data)
 - You can explore the database with `yarn drizzle-kit studio`
 
 After the initial iterations, we'll start using migrations (`yarn drizzle-kit generate` & `yarn drizzle-kit migrate`)
