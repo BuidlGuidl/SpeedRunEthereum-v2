@@ -7,6 +7,7 @@ import { useVirtualizer } from "@tanstack/react-virtual";
 import { DateWithTooltip } from "~~/components/DateWithTooltip";
 import { Address } from "~~/components/scaffold-eth";
 import { ActivityItem, ActivityResponse, ActivityType, getActivities } from "~~/services/api/activities";
+import { ReviewAction } from "~~/services/database/config/types";
 
 const FETCH_SIZE = 20;
 const ROW_HEIGHT_IN_PX = 65;
@@ -52,7 +53,11 @@ export default function ActivityPage() {
               return (
                 <div className="text-left">
                   The submitted &ldquo;{details.challengeName}&rdquo; challenge has been{" "}
-                  {details.reviewAction.toLowerCase()}
+                  <span
+                    className={`${details.reviewAction === ReviewAction.ACCEPTED ? "text-primary font-semibold" : details.reviewAction === ReviewAction.REJECTED ? "text-error" : "text-warning"}`}
+                  >
+                    {details.reviewAction.toLowerCase()}
+                  </span>
                 </div>
               );
             } else {
