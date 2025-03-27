@@ -157,14 +157,14 @@ export const Address = ({
             </div>
           ) : (
             <span className={`ml-1.5 ${textSizeMap[ensSize]} font-bold`}>
-              <AddressLinkWrapper disableAddressLink={disableAddressLink} address={address}>
+              <AddressLinkWrapper disableAddressLink={disableAddressLink} address={checkSumAddress}>
                 {ens}
               </AddressLinkWrapper>
             </span>
           ))}
         <div className={`flex ${hideAvatar ? "justify-center" : ""}`}>
           <span className={`ml-1.5 ${textSizeMap[addressSize]} font-normal`}>
-            <AddressLinkWrapper disableAddressLink={disableAddressLink} address={address}>
+            <AddressLinkWrapper disableAddressLink={disableAddressLink} address={checkSumAddress}>
               {onlyEnsOrAddress ? displayEnsOrAddress : displayAddress}
             </AddressLinkWrapper>
           </span>

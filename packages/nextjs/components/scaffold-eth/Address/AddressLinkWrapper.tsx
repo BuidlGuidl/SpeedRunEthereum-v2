@@ -3,7 +3,7 @@ import Link from "next/link";
 type AddressLinkWrapperProps = {
   children: React.ReactNode;
   disableAddressLink?: boolean;
-  address?: string;
+  address: string;
 };
 
 export const AddressLinkWrapper = ({ children, disableAddressLink, address }: AddressLinkWrapperProps) => {
