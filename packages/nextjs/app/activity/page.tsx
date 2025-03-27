@@ -152,21 +152,19 @@ export default function ActivityPage() {
   return (
     <div className="mx-4 text-center">
       <h2 className="mt-10 mb-0 text-3xl">Activity Feed</h2>
-      <div className="text-base mt-4">Track all activities happening on the Scaffold-ETH 2 platform</div>
+      <div className="text-base mt-2">Latest activities on SRE</div>
 
-      <div className="mt-8 w-full max-w-lg mx-auto">
+      <div className="mt-4 w-full max-w-lg mx-auto">
         <select
           className="select select-bordered w-full max-w-xs mx-auto"
           value={activityType}
           onChange={handleActivityTypeChange}
         >
-          <option value="ALL">All Activities</option>
+          <option value="ALL">All</option>
           <option value="CHALLENGE_SUBMISSIONS">Challenge Submissions</option>
-          <option value="USER_CREATE">New Users</option>
+          <option value="USER_CREATE">New Builders</option>
         </select>
       </div>
-
-      <div className="text-base mt-4 font-medium">Total: {totalDBRowCount}</div>
       <div
         onScroll={e => fetchMoreOnBottomReached(e.currentTarget)}
         ref={tableContainerRef}
