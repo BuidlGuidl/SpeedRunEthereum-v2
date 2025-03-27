@@ -5,7 +5,6 @@ import { challenges, userChallenges, users } from "~~/services/database/config/s
 
 export async function findActivities(start: number, size: number, activityType: ActivityType = "ALL") {
   let query;
-  let countQuery;
 
   // Query for CHALLENGE_SUBMISSIONS (all user challenges)
   if (activityType === "CHALLENGE_SUBMISSIONS") {
@@ -18,8 +17,6 @@ export async function findActivities(start: number, size: number, activityType: 
         challenge: true,
       },
     });
-
-    countQuery = db.select({ count: sql<number>`count(*)` }).from(userChallenges);
   }
   // Query for USER_CREATE (user registrations)
   else if (activityType === "USER_CREATE") {
@@ -28,9 +25,9 @@ export async function findActivities(start: number, size: number, activityType: 
       offset: start,
       orderBy: [desc(users.createdAt)],
     });
-
-    countQuery = db.select({ count: sql<number>`count(*)` }).from(users);
-  } else {
+  }
+  // Query for ALL (combine user challenges and user creations)
+  else {
     // Direct SQL approach for combining user challenges and user registrations
     const sqlQuery = sql`
       WITH all_activities AS (
@@ -67,23 +64,7 @@ export async function findActivities(start: number, size: number, activityType: 
       OFFSET ${start}
     `;
 
-    const countSqlQuery = sql`
-      WITH all_activities AS (
-        SELECT 
-          CONCAT('uc_', uc.id) as id
-        FROM ${userChallenges} uc
-        
-        UNION ALL
-        
-        SELECT 
-          CONCAT('u_', u.user_address) as id
-        FROM ${users} u
-      )
-      SELECT COUNT(*) as count FROM all_activities
-    `;
-
     const result = await db.execute(sqlQuery);
-    const countResult = await db.execute(countSqlQuery);
 
     return {
       data: result.rows.map((item: any) => ({
@@ -99,16 +80,11 @@ export async function findActivities(start: number, size: number, activityType: 
           contractUrl: item.contract_url,
         },
       })),
-      meta: {
-        totalRowCount: Number(countResult.rows[0]?.count || 0),
-      },
     };
   }
 
   // For non-ALL types
-  const [activities, countResult] = await Promise.all([query, countQuery]);
-
-  const totalCount = countResult[0]?.count ?? 0;
+  const activities = await query;
 
   if (activityType === "CHALLENGE_SUBMISSIONS") {
     return {
@@ -125,9 +101,6 @@ export async function findActivities(start: number, size: number, activityType: 
           contractUrl: item.contractUrl,
         },
       })),
-      meta: {
-        totalRowCount: totalCount,
-      },
     };
   } else if (activityType === "USER_CREATE") {
     return {
@@ -138,17 +111,11 @@ export async function findActivities(start: number, size: number, activityType: 
         timestamp: item.createdAt,
         details: {},
       })),
-      meta: {
-        totalRowCount: totalCount,
-      },
     };
   }
 
   // This should never happen but TypeScript needs it
   return {
     data: [],
-    meta: {
-      totalRowCount: 0,
-    },
   };
 }
