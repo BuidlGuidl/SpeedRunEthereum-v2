@@ -2,6 +2,9 @@ export type ActivityType = "ALL" | "CHALLENGE_SUBMISSIONS" | "USER_CREATE";
 
 export type ActivityResponse = {
   data: ActivityItem[];
+  meta: {
+    totalRowCount: number;
+  };
 };
 
 export type ActivityItem = {

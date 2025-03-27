@@ -7,7 +7,6 @@ import { useVirtualizer } from "@tanstack/react-virtual";
 import { DateWithTooltip } from "~~/components/DateWithTooltip";
 import { Address } from "~~/components/scaffold-eth";
 import { ActivityItem, ActivityResponse, ActivityType, getActivities } from "~~/services/api/activities";
-import { ReviewAction } from "~~/services/database/config/types";
 
 const FETCH_SIZE = 20;
 const ROW_HEIGHT_IN_PX = 65;
@@ -53,11 +52,7 @@ export default function ActivityPage() {
               return (
                 <div className="text-left">
                   The submitted &ldquo;{details.challengeName}&rdquo; challenge has been{" "}
-                  <span
-                    className={`${details.reviewAction === ReviewAction.ACCEPTED ? "text-primary font-semibold" : "text-error"}`}
-                  >
-                    {details.reviewAction.toLowerCase()}
-                  </span>
+                  {details.reviewAction.toLowerCase()}
                 </div>
               );
             } else {
@@ -86,17 +81,23 @@ export default function ActivityPage() {
   });
 
   const flatData = useMemo(() => data?.pages?.flatMap(page => page.data) ?? [], [data]);
+  const totalDBRowCount = data?.pages?.[0]?.meta?.totalRowCount ?? 0;
+  const totalFetched = flatData.length;
 
   const fetchMoreOnBottomReached = useCallback(
     (containerRefElement?: HTMLDivElement | null) => {
       if (containerRefElement) {
         const { scrollHeight, scrollTop, clientHeight } = containerRefElement;
-        if (scrollHeight - scrollTop - clientHeight < ROW_HEIGHT_IN_PX && !isFetching) {
+        if (
+          scrollHeight - scrollTop - clientHeight < ROW_HEIGHT_IN_PX &&
+          !isFetching &&
+          totalFetched < totalDBRowCount
+        ) {
           fetchNextPage();
         }
       }
     },
-    [fetchNextPage, isFetching],
+    [fetchNextPage, isFetching, totalFetched, totalDBRowCount],
   );
 
   // a check on mount and after a fetch to see if the table is already scrolled to the bottom and immediately needs to fetch more data
@@ -165,6 +166,7 @@ export default function ActivityPage() {
         </select>
       </div>
 
+      <div className="text-base mt-4 font-medium">Total: {totalDBRowCount}</div>
       <div
         onScroll={e => fetchMoreOnBottomReached(e.currentTarget)}
         ref={tableContainerRef}
@@ -173,7 +175,7 @@ export default function ActivityPage() {
           maxWidth: `${columns.reduce((acc, col) => acc + (col.size ?? 0), 32)}px`,
         }}
         // needed fixed height to prevent layout shift
-        className="mt-8 relative overflow-auto shadow-lg rounded-lg mx-auto h-[calc(100vh-404px)] lg:h-[calc(100vh-340px)]"
+        className="mt-4 relative overflow-auto shadow-lg rounded-lg mx-auto h-[calc(100vh-404px)] lg:h-[calc(100vh-340px)]"
       >
         {/* Even though we're still using sematic table tags, we must use CSS grid and flexbox for dynamic row heights */}
         <table style={{ display: "grid" }} className="table bg-base-100">
