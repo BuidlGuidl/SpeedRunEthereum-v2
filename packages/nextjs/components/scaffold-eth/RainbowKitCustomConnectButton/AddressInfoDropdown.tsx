@@ -1,4 +1,5 @@
 import { useRef, useState } from "react";
+import Link from "next/link";
 import { NetworkOptions } from "./NetworkOptions";
 import CopyToClipboard from "react-copy-to-clipboard";
 import { getAddress } from "viem";
@@ -11,6 +12,7 @@ import {
   ChevronDownIcon,
   DocumentDuplicateIcon,
   QrCodeIcon,
+  UserIcon,
 } from "@heroicons/react/24/outline";
 import { BlockieAvatar, isENS } from "~~/components/scaffold-eth";
 import { useOutsideClick } from "~~/hooks/scaffold-eth";
@@ -63,6 +65,12 @@ export const AddressInfoDropdown = ({
           className="dropdown-content menu z-[2] p-2 mt-2 shadow-center shadow-accent bg-base-200 rounded-box gap-1"
         >
           <NetworkOptions hidden={!selectingNetwork} />
+          <li>
+            <Link href={`/builders/${address}`} className="btn-sm !rounded-xl flex gap-3 py-3" onClick={closeDropdown}>
+              <UserIcon className="h-6 w-4 ml-2 sm:ml-0" />
+              <span className="whitespace-nowrap">My Portfolio</span>
+            </Link>
+          </li>
           <li className={selectingNetwork ? "hidden" : ""}>
             {addressCopied ? (
               <div className="btn-sm !rounded-xl flex gap-3 py-3">

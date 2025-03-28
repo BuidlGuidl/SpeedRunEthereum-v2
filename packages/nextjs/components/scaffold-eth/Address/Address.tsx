@@ -6,8 +6,6 @@ import { Address as AddressType, getAddress, isAddress } from "viem";
 import { normalize } from "viem/ens";
 import { useEnsAvatar, useEnsName } from "wagmi";
 import { BlockieAvatar } from "~~/components/scaffold-eth";
-import { useTargetNetwork } from "~~/hooks/scaffold-eth/useTargetNetwork";
-import { getBlockExplorerAddressLink } from "~~/utils/scaffold-eth";
 
 const textSizeMap = {
   "3xs": "text-[10px]",
@@ -86,8 +84,6 @@ export const Address = ({
 }: AddressProps) => {
   const checkSumAddress = address ? getAddress(address) : undefined;
 
-  const { targetNetwork } = useTargetNetwork();
-
   const { data: ens, isLoading: isEnsNameLoading } = useEnsName({
     address: checkSumAddress,
     chainId: 1,
@@ -142,8 +138,6 @@ export const Address = ({
     return <span className="text-error">Wrong address</span>;
   }
 
-  const blockExplorerAddressLink = getBlockExplorerAddressLink(targetNetwork, checkSumAddress);
-
   return (
     <div className="flex items-center flex-shrink-0">
       {hideAvatar ? null : (
@@ -163,20 +157,14 @@ export const Address = ({
             </div>
           ) : (
             <span className={`ml-1.5 ${textSizeMap[ensSize]} font-bold`}>
-              <AddressLinkWrapper
-                disableAddressLink={disableAddressLink}
-                blockExplorerAddressLink={blockExplorerAddressLink}
-              >
+              <AddressLinkWrapper disableAddressLink={disableAddressLink} address={checkSumAddress}>
                 {ens}
               </AddressLinkWrapper>
             </span>
           ))}
         <div className={`flex ${hideAvatar ? "justify-center" : ""}`}>
           <span className={`ml-1.5 ${textSizeMap[addressSize]} font-normal`}>
-            <AddressLinkWrapper
-              disableAddressLink={disableAddressLink}
-              blockExplorerAddressLink={blockExplorerAddressLink}
-            >
+            <AddressLinkWrapper disableAddressLink={disableAddressLink} address={checkSumAddress}>
               {onlyEnsOrAddress ? displayEnsOrAddress : displayAddress}
             </AddressLinkWrapper>
           </span>
