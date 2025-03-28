@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { waitUntil } from "@vercel/functions";
 import { ChallengeId, ReviewAction } from "~~/services/database/config/types";
+import { getChallengeById } from "~~/services/database/repositories/challenges";
 import { createUserChallenge, updateUserChallengeById } from "~~/services/database/repositories/userChallenges";
 import { findUserByAddress } from "~~/services/database/repositories/users";
 import { isValidEIP712ChallengeSubmitSignature } from "~~/services/eip712/challenge";
@@ -17,14 +18,26 @@ export type AutogradingResult = {
   feedback: string;
 };
 
-// TODO: Remove this and make request to actual autograder
-async function mockAutograding(contractUrl: string): Promise<AutogradingResult> {
-  console.log("Mock autograding for contract:", contractUrl);
-  await new Promise(resolve => setTimeout(resolve, 10000));
-  return {
-    success: true,
-    feedback: "All tests passed successfully! Great work!",
-  };
+async function submitToAutograder({
+  challengeId,
+  contractAddress,
+  blockExplorer,
+}: {
+  challengeId: string;
+  contractAddress: string;
+  blockExplorer: string;
+}): Promise<AutogradingResult> {
+  console.log("Autograder server", process.env.AUTOGRADING_SERVER);
+  const response = await fetch(`${process.env.AUTOGRADING_SERVER}`, {
+    method: "POST",
+    body: JSON.stringify({ challenge: challengeId, address: contractAddress, blockExplorer }),
+  });
+
+  if (!response.ok) {
+    throw new Error(`Failed to submit to autograder: ${response.status} ${response.statusText}`);
+  }
+
+  return response.json();
 }
 
 export async function POST(req: NextRequest, { params }: { params: { challengeId: ChallengeId } }) {
@@ -73,8 +86,18 @@ export async function POST(req: NextRequest, { params }: { params: { challengeId
     waitUntil(
       (async () => {
         try {
-          // TODO: Make request to actual autograder
-          const gradingResult = await mockAutograding(contractUrl);
+          const challenge = await getChallengeById(challengeId);
+          const autoGraderChallengeId = challenge.sortOrder;
+          const contractUrlObject = new URL(contractUrl);
+          const blockExplorer = contractUrlObject.host;
+          const contractAddress = contractUrlObject.pathname.replace("/address/", "");
+          console.log("Submitted to the autograder waiting for result");
+          const gradingResult = await submitToAutograder({
+            challengeId: autoGraderChallengeId.toString(),
+            contractAddress,
+            blockExplorer,
+          });
+          console.log("Grader result:", gradingResult);
 
           // Update the existing submission with the grading result
           const updateResult = await updateUserChallengeById(submissionId, {
@@ -90,6 +113,17 @@ export async function POST(req: NextRequest, { params }: { params: { challengeId
           console.log(`Background autograding completed for user ${userAddress}, challenge ${challengeId}`);
         } catch (error) {
           console.error("Error in background autograding:", error);
+          // Update the existing submission with the grading result
+          const updateResult = await updateUserChallengeById(submissionId, {
+            reviewAction: ReviewAction.REJECTED,
+            reviewComment: "There was an error while grading your submission. Please try again later.",
+          });
+          if (!updateResult || updateResult.length === 0) {
+            return NextResponse.json(
+              { error: "Failed to update submission with grading result in error" },
+              { status: 500 },
+            );
+          }
         }
       })(),
     );
