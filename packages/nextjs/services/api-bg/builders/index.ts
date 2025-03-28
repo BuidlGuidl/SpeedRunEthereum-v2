@@ -13,7 +13,7 @@ async function fetchBgMember(address: string | undefined) {
   return data;
 }
 
-export async function isBgMemberExists(address: string | undefined) {
+export async function isBgMember(address: string | undefined) {
   try {
     const builder = await fetchBgMember(address);
     return Boolean(builder);

@@ -1,7 +1,7 @@
 import { UpgradedToBGCard } from "./_components/UpgradedToBGCard";
 import { UserChallengesTable } from "./_components/UserChallengesTable";
 import { UserProfileCard } from "./_components/UserProfileCard";
-import { isBgMemberExists } from "~~/services/api-bg/builders";
+import { isBgMember } from "~~/services/api-bg/builders";
 import { findLatestSubmissionPerChallengeByUser } from "~~/services/database/repositories/userChallenges";
 import { findUserByAddress } from "~~/services/database/repositories/users";
 
@@ -10,7 +10,7 @@ export default async function BuilderPage({ params }: { params: { address: strin
   const challenges = await findLatestSubmissionPerChallengeByUser(userAddress);
   const users = await findUserByAddress(userAddress);
   const user = users[0];
-  const bgMemberExists = await isBgMemberExists(userAddress);
+  const bgMemberExists = await isBgMember(userAddress);
 
   if (!user) {
     return <div>User not found</div>;
