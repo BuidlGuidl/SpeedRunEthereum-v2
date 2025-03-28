@@ -1,4 +1,4 @@
-async function fetchV1Builder(address: string | undefined) {
+async function fetchBgMember(address: string | undefined) {
   if (!address) return;
 
   const response = await fetch(`${process.env.NEXT_PUBLIC_BG_BACKEND}/builders/${address}`);
@@ -13,9 +13,9 @@ async function fetchV1Builder(address: string | undefined) {
   return data;
 }
 
-export async function isV1BuilderExists(address: string | undefined) {
+export async function isBgMemberExists(address: string | undefined) {
   try {
-    const builder = await fetchV1Builder(address);
+    const builder = await fetchBgMember(address);
     return Boolean(builder);
   } catch (error) {
     console.error(error);
