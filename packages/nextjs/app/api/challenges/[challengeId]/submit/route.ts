@@ -21,11 +21,11 @@ export type AutogradingResult = {
 async function submitToAutograder({
   challengeId,
   contractAddress,
-  network,
+  blockExplorer,
 }: {
-  challengeId: string;
+  challengeId: number;
   contractAddress: string;
-  network: string;
+  blockExplorer: string;
 }): Promise<AutogradingResult> {
   console.log("Autograder server", process.env.AUTOGRADING_SERVER);
   const response = await fetch(`${process.env.AUTOGRADING_SERVER}`, {
@@ -33,7 +33,7 @@ async function submitToAutograder({
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ challenge: challengeId, address: contractAddress, network }),
+    body: JSON.stringify({ challenge: challengeId, address: contractAddress, blockExplorer }),
   });
 
   if (!response.ok) {
@@ -92,15 +92,13 @@ export async function POST(req: NextRequest, { params }: { params: { challengeId
           const challenge = await getChallengeById(challengeId);
           const autoGraderChallengeId = challenge.sortOrder;
           const contractUrlObject = new URL(contractUrl);
-          const network = contractUrlObject.host.split(".")[0];
+          const blockExplorer = contractUrlObject.host;
           const contractAddress = contractUrlObject.pathname.replace("/address/", "");
-          console.log("Submitted to the autograder waiting for result");
           const gradingResult = await submitToAutograder({
-            challengeId: autoGraderChallengeId.toString(),
+            challengeId: autoGraderChallengeId,
             contractAddress,
-            network,
+            blockExplorer,
           });
-          console.log("Grader result:", gradingResult);
 
           // Update the existing submission with the grading result
           const updateResult = await updateUserChallengeById(submissionId, {
