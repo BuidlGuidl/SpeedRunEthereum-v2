@@ -7,6 +7,9 @@ import { createUserChallenge, updateUserChallengeById } from "~~/services/databa
 import { findUserByAddress } from "~~/services/database/repositories/users";
 import { isValidEIP712ChallengeSubmitSignature } from "~~/services/eip712/challenge";
 
+// This function can run for a maximum of 30 seconds in Vercel
+export const maxDuration = 30;
+
 export type ChallengeSubmitPayload = {
   userAddress: string;
   frontendUrl: string;
