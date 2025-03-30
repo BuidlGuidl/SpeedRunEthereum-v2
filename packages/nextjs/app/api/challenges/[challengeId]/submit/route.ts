@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { waitUntil } from "@vercel/functions";
+import { submitToAutograder } from "~~/services/autograder";
 import { ChallengeId, ReviewAction } from "~~/services/database/config/types";
 import { getChallengeById } from "~~/services/database/repositories/challenges";
 import { createUserChallenge, updateUserChallengeById } from "~~/services/database/repositories/userChallenges";
@@ -12,36 +13,6 @@ export type ChallengeSubmitPayload = {
   contractUrl: string;
   signature: `0x${string}`;
 };
-
-export type AutogradingResult = {
-  success: boolean;
-  feedback: string;
-};
-
-async function submitToAutograder({
-  challengeId,
-  contractAddress,
-  blockExplorer,
-}: {
-  challengeId: number;
-  contractAddress: string;
-  blockExplorer: string;
-}): Promise<AutogradingResult> {
-  console.log("Autograder server", process.env.AUTOGRADING_SERVER);
-  const response = await fetch(`${process.env.AUTOGRADING_SERVER}`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ challenge: challengeId, address: contractAddress, blockExplorer }),
-  });
-
-  if (!response.ok) {
-    throw new Error(`Failed to submit to autograder: ${response.status} ${response.statusText}`);
-  }
-
-  return response.json();
-}
 
 export async function POST(req: NextRequest, { params }: { params: { challengeId: ChallengeId } }) {
   try {
@@ -91,13 +62,10 @@ export async function POST(req: NextRequest, { params }: { params: { challengeId
         try {
           const challenge = await getChallengeById(challengeId);
           const autoGraderChallengeId = challenge.sortOrder;
-          const contractUrlObject = new URL(contractUrl);
-          const blockExplorer = contractUrlObject.host;
-          const contractAddress = contractUrlObject.pathname.replace("/address/", "");
+
           const gradingResult = await submitToAutograder({
             challengeId: autoGraderChallengeId,
-            contractAddress,
-            blockExplorer,
+            contractUrl,
           });
 
           // Update the existing submission with the grading result
