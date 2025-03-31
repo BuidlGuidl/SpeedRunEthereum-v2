@@ -1,9 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
 import { waitUntil } from "@vercel/functions";
+import { submitToAutograder } from "~~/services/autograder";
 import { ChallengeId, ReviewAction } from "~~/services/database/config/types";
+import { getChallengeById } from "~~/services/database/repositories/challenges";
 import { createUserChallenge, updateUserChallengeById } from "~~/services/database/repositories/userChallenges";
 import { findUserByAddress } from "~~/services/database/repositories/users";
 import { isValidEIP712ChallengeSubmitSignature } from "~~/services/eip712/challenge";
+
+// This function can run for a maximum of 60 seconds in Vercel
+export const maxDuration = 60;
 
 export type ChallengeSubmitPayload = {
   userAddress: string;
@@ -11,21 +16,6 @@ export type ChallengeSubmitPayload = {
   contractUrl: string;
   signature: `0x${string}`;
 };
-
-export type AutogradingResult = {
-  success: boolean;
-  feedback: string;
-};
-
-// TODO: Remove this and make request to actual autograder
-async function mockAutograding(contractUrl: string): Promise<AutogradingResult> {
-  console.log("Mock autograding for contract:", contractUrl);
-  await new Promise(resolve => setTimeout(resolve, 10000));
-  return {
-    success: true,
-    feedback: "All tests passed successfully! Great work!",
-  };
-}
 
 export async function POST(req: NextRequest, { params }: { params: { challengeId: ChallengeId } }) {
   try {
@@ -73,8 +63,13 @@ export async function POST(req: NextRequest, { params }: { params: { challengeId
     waitUntil(
       (async () => {
         try {
-          // TODO: Make request to actual autograder
-          const gradingResult = await mockAutograding(contractUrl);
+          const challenge = await getChallengeById(challengeId);
+          const autoGraderChallengeId = challenge.sortOrder;
+
+          const gradingResult = await submitToAutograder({
+            challengeId: autoGraderChallengeId,
+            contractUrl,
+          });
 
           // Update the existing submission with the grading result
           const updateResult = await updateUserChallengeById(submissionId, {
@@ -90,6 +85,17 @@ export async function POST(req: NextRequest, { params }: { params: { challengeId
           console.log(`Background autograding completed for user ${userAddress}, challenge ${challengeId}`);
         } catch (error) {
           console.error("Error in background autograding:", error);
+          // Update the existing submission with the grading result
+          const updateResult = await updateUserChallengeById(submissionId, {
+            reviewAction: ReviewAction.REJECTED,
+            reviewComment: "There was an error while grading your submission. Please try again later.",
+          });
+          if (!updateResult || updateResult.length === 0) {
+            return NextResponse.json(
+              { error: "Failed to update submission with grading result in error" },
+              { status: 500 },
+            );
+          }
         }
       })(),
     );
