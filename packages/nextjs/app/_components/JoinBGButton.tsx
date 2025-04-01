@@ -33,7 +33,7 @@ const JoinBGButton = ({ user, userChallenges = [] }: JoinBGProps) => {
       setBuilderAlreadyJoined(exists);
     };
     checkBgMemberExists();
-  }, [connectedAddress]);
+  }, [connectedAddress, isJoiningBg]);
 
   if (!connectedAddress) {
     return (
