@@ -1,4 +1,5 @@
 import { forwardRef, useState } from "react";
+import { Toaster } from "react-hot-toast";
 import { QuestionMarkCircleIcon } from "@heroicons/react/24/outline";
 import { InputBase } from "~~/components/scaffold-eth";
 import { useSubmitChallenge } from "~~/hooks/useSubmitChallenge";
@@ -81,6 +82,7 @@ export const SubmitChallengeModal = forwardRef<HTMLDialogElement, SubmitChalleng
         <form method="dialog" className="modal-backdrop">
           <button onClick={closeModal}>close</button>
         </form>
+        <Toaster />
       </dialog>
     );
   },
