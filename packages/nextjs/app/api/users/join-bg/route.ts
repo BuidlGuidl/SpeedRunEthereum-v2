@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { createBgMember, isBgMember } from "~~/services/api-bg/builders";
+import { isBgMember } from "~~/services/api-bg/builders";
 import { ReviewAction } from "~~/services/database/config/types";
 import { findLatestSubmissionPerChallengeByUser } from "~~/services/database/repositories/userChallenges";
 import { updateUserRoleToBuilder } from "~~/services/database/repositories/users";
@@ -45,7 +45,8 @@ export async function POST(req: Request) {
     }
 
     const users = await updateUserRoleToBuilder(address);
-    await createBgMember(users[0]);
+    // TODO: uncomment this on release
+    // await createBgMember(users[0]);
 
     return NextResponse.json({ user: users[0] }, { status: 200 });
   } catch (error) {
