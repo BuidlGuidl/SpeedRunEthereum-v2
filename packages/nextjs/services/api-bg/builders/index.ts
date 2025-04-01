@@ -26,10 +26,11 @@ export async function isBgMember(address: string | undefined) {
   }
 }
 
-// convert "socialSomething" key to "something" to BG style
+// convert "socialSomething" key to "something" to match BG style
 const convertSocialKeys = (key: string) => {
   if (key.startsWith("social")) {
-    return key.slice(6).toLowerCase();
+    const socialKey = key.slice(6).toLowerCase();
+    return socialKey === "x" ? "twitter" : socialKey;
   }
   return key;
 };
