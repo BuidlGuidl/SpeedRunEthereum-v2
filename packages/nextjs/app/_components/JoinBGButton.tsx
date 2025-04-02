@@ -1,12 +1,12 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import PadLockIcon from "../_assets/icons/PadLockIcon";
 import QuestionIcon from "../_assets/icons/QuestionIcon";
 import { useConnectModal } from "@rainbow-me/rainbowkit";
 import { useAccount } from "wagmi";
 import { useJoinBg } from "~~/hooks/useJoinBg";
-import { UserRole } from "~~/services/database/config/types";
+import { isBgMember } from "~~/services/api-bg/builders";
 import { UserChallenges } from "~~/services/database/repositories/userChallenges";
 import { UserByAddress } from "~~/services/database/repositories/users";
 import { JOIN_BG_DEPENDENCIES, getChallengeDependenciesInfo } from "~~/utils/dependent-challenges";
@@ -25,7 +25,15 @@ const JoinBGButton = ({ user, userChallenges = [] }: JoinBGProps) => {
     userChallenges,
   });
 
-  const builderAlreadyJoined = Boolean(user?.role === UserRole.BUILDER || user?.role === UserRole.ADMIN);
+  const [builderAlreadyJoined, setBuilderAlreadyJoined] = useState(false);
+
+  useEffect(() => {
+    const checkBgMemberExists = async () => {
+      const exists = await isBgMember(connectedAddress);
+      setBuilderAlreadyJoined(exists);
+    };
+    checkBgMemberExists();
+  }, [connectedAddress, isJoiningBg]);
 
   if (!connectedAddress) {
     return (

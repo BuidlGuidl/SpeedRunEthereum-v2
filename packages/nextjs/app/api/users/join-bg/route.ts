@@ -1,7 +1,9 @@
 import { NextResponse } from "next/server";
+import { isBgMember } from "~~/services/api-bg/builders";
+import { createBgMember } from "~~/services/api-bg/builders";
 import { ReviewAction } from "~~/services/database/config/types";
 import { findLatestSubmissionPerChallengeByUser } from "~~/services/database/repositories/userChallenges";
-import { isUserJoinedBG, updateUserRoleToBuilder } from "~~/services/database/repositories/users";
+import { findUserByAddress } from "~~/services/database/repositories/users";
 import { isValidEIP712JoinBGSignature } from "~~/services/eip712/join-bg";
 import { JOIN_BG_DEPENDENCIES } from "~~/utils/dependent-challenges";
 
@@ -10,7 +12,6 @@ type JoinBGPayload = {
   signature: `0x${string}`;
 };
 
-// TODO: consider weather should we make request to buidlguidl.com or not
 export async function POST(req: Request) {
   try {
     const { address, signature } = (await req.json()) as JoinBGPayload;
@@ -19,10 +20,10 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Address and signature are required" }, { status: 400 });
     }
 
-    const userJoinedBG = await isUserJoinedBG(address);
+    const userJoinedBG = await isBgMember(address);
 
     if (userJoinedBG) {
-      return NextResponse.json({ error: "User already joined Build Guild" }, { status: 401 });
+      return NextResponse.json({ error: "User already joined BuidlGuidl" }, { status: 401 });
     }
 
     const userChallenges = await findLatestSubmissionPerChallengeByUser(address);
@@ -44,7 +45,8 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Invalid signature" }, { status: 401 });
     }
 
-    const users = await updateUserRoleToBuilder(address);
+    const users = await findUserByAddress(address);
+    await createBgMember(users[0]);
 
     return NextResponse.json({ user: users[0] }, { status: 200 });
   } catch (error) {

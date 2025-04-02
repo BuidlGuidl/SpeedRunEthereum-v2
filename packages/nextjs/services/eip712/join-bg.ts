@@ -10,8 +10,8 @@ export const EIP_712_TYPED_DATA__JOIN_BG = {
   },
   primaryType: "Message",
   message: {
-    action: "Join Build Guild",
-    description: "I would like to join the Build Guild signing this offchain message",
+    action: "Join BuidlGuidl",
+    description: "I would like to join the BuidlGuidl signing this offchain message",
   },
 } as const;
 
