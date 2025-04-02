@@ -29,8 +29,8 @@ export function useJoinBg({ user }: { user?: UserByAddress }) {
       );
     },
     onError: (error: Error) => {
-      console.error("Join Build Guild error:", error);
-      notification.error(error.message || "Failed to join Build Guild. Please try again.");
+      console.error("Join BuidlGuidl error:", error);
+      notification.error(error.message || "Failed to join BuidlGuidl. Please try again.");
     },
   });
 

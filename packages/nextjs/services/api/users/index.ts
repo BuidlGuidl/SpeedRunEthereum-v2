@@ -80,7 +80,7 @@ export async function userJoinBg({ address, signature }: { address: string; sign
   const data = await response.json();
 
   if (!response.ok) {
-    throw new Error(data.error || "Failed to join Build Guild");
+    throw new Error(data.error || "Failed to join BuidlGuidl");
   }
 
   return data.user as UserByAddress;
