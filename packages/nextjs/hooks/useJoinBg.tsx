@@ -3,7 +3,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useSignTypedData } from "wagmi";
 import { userJoinBg } from "~~/services/api/users";
 import { UserByAddress } from "~~/services/database/repositories/users";
-import { EIP_712_TYPED_DATA__USER_REGISTER } from "~~/services/eip712/register";
+import { EIP_712_TYPED_DATA__JOIN_BG } from "~~/services/eip712/join-bg";
 import { notification } from "~~/utils/scaffold-eth";
 import { getUserSocialsList } from "~~/utils/socials";
 
@@ -55,7 +55,7 @@ export function useJoinBg({ user }: { user?: UserByAddress }) {
     }
 
     try {
-      const signature = await signTypedDataAsync(EIP_712_TYPED_DATA__USER_REGISTER);
+      const signature = await signTypedDataAsync(EIP_712_TYPED_DATA__JOIN_BG);
       joinBg({ address: user.userAddress, signature });
     } catch (error) {
       console.error("Error during signature:", error);
