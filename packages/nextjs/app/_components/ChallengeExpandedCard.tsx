@@ -115,7 +115,7 @@ const ChallengeExpandedCard = ({
                   ) : (
                     <Link
                       href={`/challenge/${challengeId}`}
-                      className="flex items-center text-xl lg:text-lg px-4 py-1 border-2 border-primary rounded-full bg-base-300 cursor-pointer"
+                      className="flex items-center text-xl lg:text-lg px-4 py-1 border-2 border-primary rounded-full bg-base-300 cursor-pointer hover:bg-accent/50"
                     >
                       <div className="flex items-center">
                         <CrossedSwordsIcon className="w-4 h-4 sm:h-6 sm:w-6" />
