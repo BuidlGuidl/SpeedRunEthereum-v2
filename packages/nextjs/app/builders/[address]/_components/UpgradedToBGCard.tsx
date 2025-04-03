@@ -26,7 +26,7 @@ export const UpgradedToBGCard = ({ user }: { user: UserByAddress }) => {
           className="flex gap-2 items-center text-sm sm:text-lg px-4 py-1 border-2 border-primary rounded-full bg-base-300 dark:bg-primary dark:text-secondary dark:border-secondary cursor-pointer hover:bg-base-200 dark:hover:bg-accent transition-colors hover:underline"
         >
           <span className="w-5 h-5 flex items-center justify-center">🏰</span>
-          View their profile on BuidlGuidl
+          View profile on BuidlGuidl
         </Link>
       </div>
     </div>
