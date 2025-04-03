@@ -39,7 +39,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Required challenges have not been completed" }, { status: 400 });
     }
 
-    const isValidSignature = isValidEIP712JoinBGSignature({ address, signature });
+    const isValidSignature = await isValidEIP712JoinBGSignature({ address, signature });
 
     if (!isValidSignature) {
       return NextResponse.json({ error: "Invalid signature" }, { status: 401 });

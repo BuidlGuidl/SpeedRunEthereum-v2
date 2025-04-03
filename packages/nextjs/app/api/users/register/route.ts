@@ -21,7 +21,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "User already registered" }, { status: 401 });
     }
 
-    const isValidSignature = isValidEIP712UserRegisterSignature({ address, signature });
+    const isValidSignature = await isValidEIP712UserRegisterSignature({ address, signature });
 
     if (!isValidSignature) {
       return NextResponse.json({ error: "Invalid signature" }, { status: 401 });
