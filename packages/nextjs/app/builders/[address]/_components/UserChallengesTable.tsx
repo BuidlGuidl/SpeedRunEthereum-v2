@@ -5,12 +5,18 @@ import { ReviewAction } from "~~/services/database/config/types";
 import { UserChallenges } from "~~/services/database/repositories/userChallenges";
 
 const ChallengeRow = ({ challenge }: { challenge: UserChallenges[number] }) => {
+  const isDisabled = challenge.challenge.disabled;
+
   return (
-    <tr key={challenge.challengeId} className="hover py-4">
+    <tr key={challenge.challengeId} className={`hover py-4 ${isDisabled ? "opacity-60" : ""}`}>
       <td className="py-6">
-        <Link href={`/challenge/${challenge.challengeId}`} className="hover:underline">
-          🚩 Challenge {challenge.challenge.sortOrder}: {challenge.challenge.challengeName}
-        </Link>
+        {isDisabled ? (
+          <span>{challenge.challenge.challengeName}</span>
+        ) : (
+          <Link href={`/challenge/${challenge.challengeId}`} className="hover:underline">
+            🚩 Challenge {challenge.challenge.sortOrder}: {challenge.challenge.challengeName}
+          </Link>
+        )}
       </td>
       <td>
         {challenge.contractUrl ? (
