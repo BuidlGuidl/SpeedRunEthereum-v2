@@ -1,3 +1,4 @@
+import { redirect } from "next/navigation";
 import { SubmitChallengeButton } from "./_components/SubmitChallengeButton";
 import { MDXRemote } from "next-mdx-remote/rsc";
 import rehypeRaw from "rehype-raw";
@@ -24,6 +25,10 @@ export default async function ChallengePage({ params }: { params: { challengeId:
   const challenge = await getChallengeById(params.challengeId);
   if (!challenge) {
     return <div>Challenge not found</div>;
+  }
+
+  if (challenge.disabled) {
+    redirect("/");
   }
 
   if (!challenge.github) {
