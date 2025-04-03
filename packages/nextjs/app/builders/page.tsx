@@ -35,7 +35,7 @@ export default function BuildersPage() {
   // we need a reference to the scrolling element for logic down below
   const tableContainerRef = useRef<HTMLDivElement>(null);
 
-  const [sorting, setSorting] = useState<SortingState>([]);
+  const [sorting, setSorting] = useState<SortingState>([{ id: "lastActivity", desc: true }]);
 
   const columns = useMemo<ColumnDef<UserWithChallengesData>[]>(
     () => [
