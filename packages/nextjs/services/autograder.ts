@@ -22,9 +22,14 @@ export async function submitToAutograder({
     body: JSON.stringify({ challenge: challengeId, address, blockExplorer }),
   });
 
+  const data = await response.json();
+
   if (!response.ok) {
-    throw new Error(`Failed to submit to autograder: ${response.status} ${response.statusText}`);
+    return {
+      success: false,
+      feedback: data.error || `Autograder error: ${response.status} ${response.statusText}`,
+    };
   }
 
-  return response.json();
+  return data;
 }
