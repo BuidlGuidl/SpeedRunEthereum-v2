@@ -3,7 +3,7 @@ import { ActivityType } from "~~/services/api/activities";
 import { db } from "~~/services/database/config/postgresClient";
 import { challenges, userChallenges, users } from "~~/services/database/config/schema";
 
-export async function findActivities(start: number, size: number, activityType: ActivityType = "ALL") {
+export async function getActivities(start: number, size: number, activityType: ActivityType = "ALL") {
   let query;
   let countQuery;
 

@@ -3,9 +3,9 @@ import { db } from "~~/services/database/config/postgresClient";
 import { lower, userChallenges } from "~~/services/database/config/schema";
 
 export type UserChallengeInsert = InferInsertModel<typeof userChallenges>;
-export type UserChallenges = Awaited<ReturnType<typeof findLatestSubmissionPerChallengeByUser>>;
+export type UserChallenges = Awaited<ReturnType<typeof getLatestSubmissionPerChallengeByUser>>;
 
-export async function findLatestSubmissionPerChallengeByUser(userAddress: string) {
+export async function getLatestSubmissionPerChallengeByUser(userAddress: string) {
   const allChallenges = await db.query.userChallenges.findMany({
     where: eq(lower(userChallenges.userAddress), userAddress.toLowerCase()),
     with: {

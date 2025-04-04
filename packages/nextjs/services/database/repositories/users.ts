@@ -11,18 +11,18 @@ type PickSocials<T> = {
 };
 
 export type UserInsert = InferInsertModel<typeof users>;
-export type UserByAddress = Awaited<ReturnType<typeof findUserByAddress>>[0];
+export type UserByAddress = Awaited<ReturnType<typeof getUserByAddress>>[0];
 export type UserSocials = PickSocials<UserByAddress>;
-export type UserWithChallengesData = Awaited<ReturnType<typeof findSortedUsersWithChallenges>>["data"][0];
+export type UserWithChallengesData = Awaited<ReturnType<typeof getSortedUsersWithChallenges>>["data"][0];
 
-export async function findUserByAddress(address: string) {
+export async function getUserByAddress(address: string) {
   return await db
     .select()
     .from(users)
     .where(eq(lower(users.userAddress), address.toLowerCase()));
 }
 
-export async function findSortedUsersWithChallenges(start: number, size: number, sorting: SortingState) {
+export async function getSortedUsersWithChallenges(start: number, size: number, sorting: SortingState) {
   const sortingQuery = sorting[0] as ColumnSort;
 
   const challengesCompletedExpr = sql`(SELECT COUNT(DISTINCT uc.challenge_id) FROM ${userChallenges} uc WHERE uc.user_address = ${users.userAddress} AND uc.review_action = ${ReviewAction.ACCEPTED})`;

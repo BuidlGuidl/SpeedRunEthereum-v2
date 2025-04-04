@@ -2,8 +2,8 @@ import { NextResponse } from "next/server";
 import { isBgMember } from "~~/services/api-bg/builders";
 import { createBgMember } from "~~/services/api-bg/builders";
 import { ReviewAction } from "~~/services/database/config/types";
-import { findLatestSubmissionPerChallengeByUser } from "~~/services/database/repositories/userChallenges";
-import { findUserByAddress } from "~~/services/database/repositories/users";
+import { getLatestSubmissionPerChallengeByUser } from "~~/services/database/repositories/userChallenges";
+import { getUserByAddress } from "~~/services/database/repositories/users";
 import { isValidEIP712JoinBGSignature } from "~~/services/eip712/join-bg";
 import { JOIN_BG_DEPENDENCIES } from "~~/utils/dependent-challenges";
 
@@ -26,7 +26,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "User already joined BuidlGuidl" }, { status: 401 });
     }
 
-    const userChallenges = await findLatestSubmissionPerChallengeByUser(address);
+    const userChallenges = await getLatestSubmissionPerChallengeByUser(address);
 
     const completedJoinBgDependencies = JOIN_BG_DEPENDENCIES.every(joinBgDependency =>
       userChallenges.find(
@@ -45,7 +45,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Invalid signature" }, { status: 401 });
     }
 
-    const users = await findUserByAddress(address);
+    const users = await getUserByAddress(address);
     await createBgMember(users[0]);
 
     return NextResponse.json({ user: users[0] }, { status: 200 });

@@ -4,7 +4,7 @@ import { submitToAutograder } from "~~/services/autograder";
 import { ChallengeId, ReviewAction } from "~~/services/database/config/types";
 import { getChallengeById } from "~~/services/database/repositories/challenges";
 import { createUserChallenge, updateUserChallengeById } from "~~/services/database/repositories/userChallenges";
-import { findUserByAddress } from "~~/services/database/repositories/users";
+import { getUserByAddress } from "~~/services/database/repositories/users";
 import { isValidEIP712ChallengeSubmitSignature } from "~~/services/eip712/challenge";
 
 // This function can run for a maximum of 60 seconds in Vercel
@@ -38,7 +38,7 @@ export async function POST(req: NextRequest, { params }: { params: { challengeId
       return NextResponse.json({ error: "Invalid signature" }, { status: 401 });
     }
 
-    const user = await findUserByAddress(userAddress);
+    const user = await getUserByAddress(userAddress);
     if (user.length === 0) {
       return NextResponse.json({ error: "User not found" }, { status: 404 });
     }

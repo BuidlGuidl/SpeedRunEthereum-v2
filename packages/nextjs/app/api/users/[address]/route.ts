@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { findUserByAddress } from "~~/services/database/repositories/users";
+import { getUserByAddress } from "~~/services/database/repositories/users";
 
 export async function GET(_req: Request, { params }: { params: { address: string } }) {
   try {
@@ -9,7 +9,7 @@ export async function GET(_req: Request, { params }: { params: { address: string
       return NextResponse.json({ error: "Address is required" }, { status: 400 });
     }
 
-    const users = await findUserByAddress(address);
+    const users = await getUserByAddress(address);
     if (users.length === 0) {
       return NextResponse.json({ user: undefined }, { status: 404 });
     }
