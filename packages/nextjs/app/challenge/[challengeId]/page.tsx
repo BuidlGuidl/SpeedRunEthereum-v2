@@ -1,3 +1,4 @@
+import { notFound } from "next/navigation";
 import { SubmitChallengeButton } from "./_components/SubmitChallengeButton";
 import { MDXRemote } from "next-mdx-remote/rsc";
 import rehypeRaw from "rehype-raw";
@@ -22,8 +23,8 @@ export async function generateStaticParams() {
 
 export default async function ChallengePage({ params }: { params: { challengeId: ChallengeId } }) {
   const challenge = await getChallengeById(params.challengeId);
-  if (!challenge) {
-    return <div>Challenge not found</div>;
+  if (!challenge || challenge.disabled) {
+    notFound();
   }
 
   if (!challenge.github) {
