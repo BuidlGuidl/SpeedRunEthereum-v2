@@ -44,11 +44,8 @@ export async function POST(req: NextRequest, { params }: { params: { challengeId
     }
 
     const challenge = await getChallengeById(challengeId);
-    if (!challenge) {
+    if (!challenge || challenge.disabled) {
       return NextResponse.json({ error: "Challenge not found" }, { status: 404 });
-    }
-    if (challenge.disabled) {
-      return NextResponse.json({ error: "This challenge has been disabled" }, { status: 403 });
     }
 
     const submissionResult = await createUserChallenge({
