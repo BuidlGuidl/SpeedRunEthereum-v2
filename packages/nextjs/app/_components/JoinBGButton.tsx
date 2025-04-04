@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import PadLockIcon from "../_assets/icons/PadLockIcon";
 import QuestionIcon from "../_assets/icons/QuestionIcon";
 import { useConnectModal } from "@rainbow-me/rainbowkit";
@@ -39,7 +39,7 @@ const JoinBGButton = ({ user, userChallenges = [] }: JoinBGProps) => {
     return (
       <button
         onClick={openConnectModal}
-        className="flex justify-center text-[#088484] bg-[#C8F5FF] items-center text-xs sm:text-lg px-4 py-1 border-2 border-[#088484] rounded-full opacity-70"
+        className="flex justify-center text-[#088484] bg-[#C8F5FF] items-center text-xs sm:text-lg px-4 py-1 border-2 border-[#088484] rounded-full opacity-70 hover:bg-white/80"
       >
         <span>Connect Wallet</span>
       </button>
@@ -50,7 +50,7 @@ const JoinBGButton = ({ user, userChallenges = [] }: JoinBGProps) => {
     <>
       <button
         disabled={!dependenciesCompleted || builderAlreadyJoined}
-        className={`flex justify-center text-[#088484] bg-[#C8F5FF] items-center text-sm sm:text-lg px-4 py-1 border-2 border-[#088484] rounded-full disabled:opacity-70 ${!dependenciesCompleted ? "cursor-not-allowed" : ""}`}
+        className={`flex justify-center text-[#088484] bg-[#C8F5FF] items-center text-sm sm:text-lg px-4 py-1 border-2 border-[#088484] rounded-full hover:bg-white/80 disabled:opacity-70 ${!dependenciesCompleted ? "cursor-not-allowed hover:bg-[#C8F5FF]" : ""}`}
         onClick={handleJoinBg}
       >
         {!dependenciesCompleted && !builderAlreadyJoined && (
