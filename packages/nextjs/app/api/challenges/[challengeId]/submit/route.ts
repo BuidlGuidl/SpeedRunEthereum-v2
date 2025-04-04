@@ -43,6 +43,14 @@ export async function POST(req: NextRequest, { params }: { params: { challengeId
       return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
 
+    const challenge = await getChallengeById(challengeId);
+    if (!challenge) {
+      return NextResponse.json({ error: "Challenge not found" }, { status: 404 });
+    }
+    if (challenge.disabled) {
+      return NextResponse.json({ error: "This challenge has been disabled" }, { status: 403 });
+    }
+
     const submissionResult = await createUserChallenge({
       userAddress: userAddress,
       challengeId,
@@ -63,7 +71,6 @@ export async function POST(req: NextRequest, { params }: { params: { challengeId
     waitUntil(
       (async () => {
         try {
-          const challenge = await getChallengeById(challengeId);
           const autoGraderChallengeId = challenge.sortOrder;
 
           const gradingResult = await submitToAutograder({
