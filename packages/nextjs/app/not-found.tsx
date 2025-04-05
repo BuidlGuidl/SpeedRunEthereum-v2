@@ -7,7 +7,7 @@ export default function NotFound() {
         <div className="absolute inset-0 bg-[url('/assets/home_header_clouds.svg')] bg-top bg-repeat-x bg-[length:auto_200px] sm:bg-[length:auto_300px]" />
         <div className="relative container mx-auto px-5 mb-11 flex flex-col items-center">
           <h1 className="mt-16 text-2xl font-semibold md:mt-32 md:text-5xl">Sorry! Page Not Found</h1>
-          <Link className="mt-4 btn btn-primary md:mt-8 md:btn-lg" href="/">
+          <Link className="mt-4 btn btn-primary btn-lg md:mt-8" href="/">
             Return Home
           </Link>
         </div>
