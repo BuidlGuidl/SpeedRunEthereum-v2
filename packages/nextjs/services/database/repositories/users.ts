@@ -88,7 +88,8 @@ export async function isUserRegistered(address: string) {
 }
 
 export async function createUser(user: UserInsert) {
-  return await db.insert(users).values(user).returning();
+  const result = await db.insert(users).values(user).returning();
+  return result[0];
 }
 
 export async function updateUserSocials(userAddress: string, socials: UserSocials) {
@@ -96,7 +97,7 @@ export async function updateUserSocials(userAddress: string, socials: UserSocial
   const socialsToUpdate = Object.fromEntries(Object.entries(socials).map(([key, value]) => [key, value || null]));
 
   // Update updatedAt whenever user data changes
-  return await db
+  const result = await db
     .update(users)
     .set({
       ...socialsToUpdate,
@@ -104,10 +105,12 @@ export async function updateUserSocials(userAddress: string, socials: UserSocial
     })
     .where(eq(lower(users.userAddress), userAddress.toLowerCase()))
     .returning();
+
+  return result[0];
 }
 
 export async function updateUserRoleToBuilder(userAddress: string) {
-  return await db
+  const result = await db
     .update(users)
     .set({
       role: UserRole.BUILDER,
@@ -115,4 +118,6 @@ export async function updateUserRoleToBuilder(userAddress: string) {
     })
     .where(eq(lower(users.userAddress), userAddress.toLowerCase()))
     .returning();
+
+  return result[0];
 }

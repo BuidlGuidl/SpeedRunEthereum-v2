@@ -26,9 +26,11 @@ export async function getLatestSubmissionPerChallengeByUser(userAddress: string)
 }
 
 export async function createUserChallenge(challenge: UserChallengeInsert) {
-  return await db.insert(userChallenges).values(challenge).returning();
+  const result = await db.insert(userChallenges).values(challenge).returning();
+  return result[0];
 }
 
 export async function updateUserChallengeById(id: number, updates: Partial<UserChallengeInsert>) {
-  return await db.update(userChallenges).set(updates).where(eq(userChallenges.id, id)).returning();
+  const result = await db.update(userChallenges).set(updates).where(eq(userChallenges.id, id)).returning();
+  return result[0];
 }

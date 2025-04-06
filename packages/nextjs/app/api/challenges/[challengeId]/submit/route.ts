@@ -59,7 +59,7 @@ export async function POST(req: NextRequest, { params }: { params: { challengeId
     });
 
     // Get the ID of the newly created submission
-    const submissionId = submissionResult[0]?.id;
+    const submissionId = submissionResult?.id;
     if (!submissionId) {
       return NextResponse.json({ error: "Failed to create submission" }, { status: 500 });
     }
@@ -82,7 +82,7 @@ export async function POST(req: NextRequest, { params }: { params: { challengeId
           });
 
           // Check if the update was successful
-          if (!updateResult || updateResult.length === 0) {
+          if (!updateResult) {
             return NextResponse.json({ error: "Failed to update submission with grading result" }, { status: 500 });
           }
 
@@ -94,7 +94,7 @@ export async function POST(req: NextRequest, { params }: { params: { challengeId
             reviewAction: ReviewAction.REJECTED,
             reviewComment: "There was an error while grading your submission. Please try again later.",
           });
-          if (!updateResult || updateResult.length === 0) {
+          if (!updateResult) {
             return NextResponse.json(
               { error: "Failed to update submission with grading result in error" },
               { status: 500 },

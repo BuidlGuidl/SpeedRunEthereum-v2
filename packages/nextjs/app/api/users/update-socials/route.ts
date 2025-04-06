@@ -28,14 +28,14 @@ export async function POST(req: NextRequest) {
     }
 
     const updatedUser = await updateUserSocials(userAddress, socials);
-    if (!updatedUser || updatedUser.length === 0) {
+    if (!updatedUser) {
       return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
 
     return NextResponse.json({
       success: true,
       message: "Socials updated successfully",
-      user: updatedUser[0],
+      user: updatedUser,
     });
   } catch (error) {
     console.error("Error updating socials:", error);

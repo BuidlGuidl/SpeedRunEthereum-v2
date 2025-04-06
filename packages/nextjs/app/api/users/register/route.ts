@@ -27,9 +27,9 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Invalid signature" }, { status: 401 });
     }
 
-    const users = await createUser({ userAddress: address });
+    const user = await createUser({ userAddress: address });
 
-    return NextResponse.json({ user: users[0] }, { status: 200 });
+    return NextResponse.json({ user }, { status: 200 });
   } catch (error) {
     console.log("Error during authentication:", error);
     console.error("Error during authentication:", error);
