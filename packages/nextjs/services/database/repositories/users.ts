@@ -11,15 +11,14 @@ type PickSocials<T> = {
 };
 
 export type UserInsert = InferInsertModel<typeof users>;
-export type UserByAddress = Awaited<ReturnType<typeof getUserByAddress>>[0];
-export type UserSocials = PickSocials<UserByAddress>;
+export type UserByAddress = Awaited<ReturnType<typeof getUserByAddress>>;
+export type UserSocials = PickSocials<NonNullable<UserByAddress>>;
 export type UserWithChallengesData = Awaited<ReturnType<typeof getSortedUsersWithChallenges>>["data"][0];
 
 export async function getUserByAddress(address: string) {
-  return await db
-    .select()
-    .from(users)
-    .where(eq(lower(users.userAddress), address.toLowerCase()));
+  return await db.query.users.findFirst({
+    where: eq(lower(users.userAddress), address.toLowerCase()),
+  });
 }
 
 export async function getSortedUsersWithChallenges(start: number, size: number, sorting: SortingState) {

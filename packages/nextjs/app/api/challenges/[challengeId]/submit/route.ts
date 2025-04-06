@@ -39,7 +39,7 @@ export async function POST(req: NextRequest, { params }: { params: { challengeId
     }
 
     const user = await getUserByAddress(userAddress);
-    if (user.length === 0) {
+    if (!user) {
       return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
 

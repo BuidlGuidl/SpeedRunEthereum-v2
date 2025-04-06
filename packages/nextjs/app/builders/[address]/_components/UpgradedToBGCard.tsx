@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { UserByAddress } from "~~/services/database/repositories/users";
 
-export const UpgradedToBGCard = ({ user }: { user: UserByAddress }) => {
+export const UpgradedToBGCard = ({ user }: { user: NonNullable<UserByAddress> }) => {
   return (
     <div className="flex flex-col mb-8 items-center bg-[url(/assets/bgBanner_castlePlatform.svg)] bg-bottom bg-repeat-x bg-[length:150%_auto] lg:bg-[length:120%_auto] relative overflow-hidden bg-secondary dark:bg-accent min-h-[28rem] rounded-lg">
       <Image

@@ -83,5 +83,5 @@ export async function userJoinBg({ address, signature }: { address: string; sign
     throw new Error(data.error || "Failed to join BuidlGuidl");
   }
 
-  return data.user as UserByAddress;
+  return data.user as NonNullable<UserByAddress>;
 }

@@ -3,7 +3,7 @@ import { PunkBlockie } from "~~/components/PunkBlockie";
 import { Address } from "~~/components/scaffold-eth/Address/Address";
 import { UserByAddress } from "~~/services/database/repositories/users";
 
-export const UserProfileCard = ({ user, address }: { user: UserByAddress; address: string }) => {
+export const UserProfileCard = ({ user, address }: { user: NonNullable<UserByAddress>; address: string }) => {
   return (
     <div className="bg-base-100 rounded-xl p-6 shadow-lg">
       <div className="flex flex-col md:flex-row justify-around lg:flex-col items-center gap-4">

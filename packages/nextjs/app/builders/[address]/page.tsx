@@ -9,8 +9,7 @@ import { getUserByAddress } from "~~/services/database/repositories/users";
 export default async function BuilderPage({ params }: { params: { address: string } }) {
   const { address: userAddress } = params;
   const challenges = await getLatestSubmissionPerChallengeByUser(userAddress);
-  const users = await getUserByAddress(userAddress);
-  const user = users[0];
+  const user = await getUserByAddress(userAddress);
   const bgMemberExists = await isBgMember(userAddress);
 
   if (!user) {
