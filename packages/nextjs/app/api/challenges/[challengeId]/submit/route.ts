@@ -59,10 +59,7 @@ export async function POST(req: NextRequest, { params }: { params: { challengeId
     });
 
     // Get the ID of the newly created submission
-    const submissionId = submissionResult?.id;
-    if (!submissionId) {
-      return NextResponse.json({ error: "Failed to create submission" }, { status: 500 });
-    }
+    const submissionId = submissionResult.id;
 
     // Use waitUntil for background processing
     waitUntil(
@@ -76,29 +73,23 @@ export async function POST(req: NextRequest, { params }: { params: { challengeId
           });
 
           // Update the existing submission with the grading result
-          const updateResult = await updateUserChallengeById(submissionId, {
+          await updateUserChallengeById(submissionId, {
             reviewAction: gradingResult.success ? ReviewAction.ACCEPTED : ReviewAction.REJECTED,
             reviewComment: gradingResult.feedback,
           });
-
-          // Check if the update was successful
-          if (!updateResult) {
-            return NextResponse.json({ error: "Failed to update submission with grading result" }, { status: 500 });
-          }
 
           console.log(`Background autograding completed for user ${userAddress}, challenge ${challengeId}`);
         } catch (error) {
           console.error("Error in background autograding:", error);
           // Update the existing submission with the grading result
-          const updateResult = await updateUserChallengeById(submissionId, {
-            reviewAction: ReviewAction.REJECTED,
-            reviewComment: "There was an error while grading your submission. Please try again later.",
-          });
-          if (!updateResult) {
-            return NextResponse.json(
-              { error: "Failed to update submission with grading result in error" },
-              { status: 500 },
-            );
+          try {
+            await updateUserChallengeById(submissionId, {
+              reviewAction: ReviewAction.REJECTED,
+              reviewComment: "There was an error while grading your submission. Please try again later.",
+            });
+          } catch (error) {
+            // throwing custom error for specific case
+            throw new Error("Failed to update submission with grading result in error");
           }
         }
       })(),
@@ -110,8 +101,9 @@ export async function POST(req: NextRequest, { params }: { params: { challengeId
       message: "Challenge submitted successfully. Autograding in progress...",
       status: "SUBMITTED",
     });
-  } catch (error) {
+  } catch (error: unknown) {
     console.error("Error submitting challenge:", error);
-    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
+    const errorMessage = error instanceof Error ? error.message : "An unknown error occurred during submission";
+    return NextResponse.json({ error: errorMessage }, { status: 500 });
   }
 }

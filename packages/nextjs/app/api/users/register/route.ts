@@ -30,9 +30,9 @@ export async function POST(req: Request) {
     const user = await createUser({ userAddress: address });
 
     return NextResponse.json({ user }, { status: 200 });
-  } catch (error) {
-    console.log("Error during authentication:", error);
-    console.error("Error during authentication:", error);
-    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
+  } catch (error: unknown) {
+    console.error("Error during registration:", error);
+    const errorMessage = error instanceof Error ? error.message : "An unknown error occurred during registration";
+    return NextResponse.json({ error: errorMessage }, { status: 500 });
   }
 }

@@ -59,7 +59,7 @@ export const socials: Record<keyof UserSocials, Social> = {
 };
 
 // Get the user socials from the database
-export const getUserSocials = (user: NonNullable<UserByAddress>): UserSocials => {
+export const getUserSocials = (user: UserByAddress): UserSocials => {
   return Object.fromEntries(
     Object.entries(socials)
       .map(([key]) => [key, user[key as keyof UserSocials]])
@@ -68,7 +68,7 @@ export const getUserSocials = (user: NonNullable<UserByAddress>): UserSocials =>
 };
 
 // Transforms a user's social media data into a sorted, display-ready list
-export const getUserSocialsList = (user: NonNullable<UserByAddress>) => {
+export const getUserSocialsList = (user: UserByAddress) => {
   const definedSocials = getUserSocials(user);
   return Object.entries(definedSocials)
     .map(([key, value]) => ({

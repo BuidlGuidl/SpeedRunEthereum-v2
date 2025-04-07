@@ -27,10 +27,16 @@ export async function getLatestSubmissionPerChallengeByUser(userAddress: string)
 
 export async function createUserChallenge(challenge: UserChallengeInsert) {
   const result = await db.insert(userChallenges).values(challenge).returning();
+  if (!result?.[0]) {
+    throw new Error("Failed to create submission. Try again later.");
+  }
   return result[0];
 }
 
 export async function updateUserChallengeById(id: number, updates: Partial<UserChallengeInsert>) {
   const result = await db.update(userChallenges).set(updates).where(eq(userChallenges.id, id)).returning();
+  if (!result?.[0]) {
+    throw new Error("Failed to update submission with grading result. Try again later.");
+  }
   return result[0];
 }
