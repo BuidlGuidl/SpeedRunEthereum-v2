@@ -10,11 +10,13 @@ export async function GET(_req: Request, { params }: { params: { address: string
     }
 
     const user = await getUserByAddress(address);
+    if (!user) {
+      return NextResponse.json({ user: undefined }, { status: 404 });
+    }
 
     return NextResponse.json({ user });
-  } catch (error: unknown) {
+  } catch (error) {
     console.error("Error fetching user:", error);
-    const errorMessage = error instanceof Error ? error.message : "An unknown error occurred during fetching user";
-    return NextResponse.json({ error: errorMessage }, { status: 500 });
+    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
   }
 }

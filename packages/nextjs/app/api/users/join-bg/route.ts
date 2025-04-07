@@ -47,12 +47,16 @@ export async function POST(req: Request) {
 
     const user = await getUserByAddress(address);
 
+    if (!user) {
+      return NextResponse.json({ error: "User not found" }, { status: 400 });
+    }
+
     await createBgMember(user);
 
     return NextResponse.json({ user }, { status: 200 });
-  } catch (error: unknown) {
-    console.error("Error during joining BuidlGuidl:", error);
-    const errorMessage = error instanceof Error ? error.message : "An unknown error occurred during joining BuidlGuidl";
-    return NextResponse.json({ error: errorMessage }, { status: 500 });
+  } catch (error) {
+    console.log("Error during authentication:", error);
+    console.error("Error during authentication:", error);
+    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
   }
 }

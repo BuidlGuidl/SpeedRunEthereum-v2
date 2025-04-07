@@ -28,15 +28,17 @@ export async function POST(req: NextRequest) {
     }
 
     const updatedUser = await updateUserSocials(userAddress, socials);
+    if (!updatedUser) {
+      return NextResponse.json({ error: "User not found" }, { status: 404 });
+    }
 
     return NextResponse.json({
       success: true,
       message: "Socials updated successfully",
       user: updatedUser,
     });
-  } catch (error: unknown) {
+  } catch (error) {
     console.error("Error updating socials:", error);
-    const errorMessage = error instanceof Error ? error.message : "An unknown error occurred during updating socials";
-    return NextResponse.json({ error: errorMessage }, { status: 500 });
+    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
   }
 }

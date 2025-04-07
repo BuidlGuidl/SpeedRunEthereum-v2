@@ -35,7 +35,7 @@ const convertSocialKeys = (key: string) => {
   return key;
 };
 
-export async function createBgMember(user: UserByAddress) {
+export async function createBgMember(user: NonNullable<UserByAddress>) {
   const socialLinks = Object.fromEntries(
     Object.entries(getUserSocials(user)).map(([key, value]) => [convertSocialKeys(key), value]),
   );

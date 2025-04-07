@@ -12,19 +12,13 @@ type PickSocials<T> = {
 
 export type UserInsert = InferInsertModel<typeof users>;
 export type UserByAddress = Awaited<ReturnType<typeof getUserByAddress>>;
-export type UserSocials = PickSocials<UserByAddress>;
+export type UserSocials = PickSocials<NonNullable<UserByAddress>>;
 export type UserWithChallengesData = Awaited<ReturnType<typeof getSortedUsersWithChallenges>>["data"][0];
 
 export async function getUserByAddress(address: string) {
-  const result = await db.query.users.findFirst({
+  return await db.query.users.findFirst({
     where: eq(lower(users.userAddress), address.toLowerCase()),
   });
-
-  if (!result) {
-    throw new Error("User is not found");
-  }
-
-  return result;
 }
 
 export async function getSortedUsersWithChallenges(start: number, size: number, sorting: SortingState) {
@@ -95,9 +89,6 @@ export async function isUserRegistered(address: string) {
 
 export async function createUser(user: UserInsert) {
   const result = await db.insert(users).values(user).returning();
-  if (!result?.[0]) {
-    throw new Error("Failed to create a user. Try again later.");
-  }
   return result[0];
 }
 
@@ -115,14 +106,9 @@ export async function updateUserSocials(userAddress: string, socials: UserSocial
     .where(eq(lower(users.userAddress), userAddress.toLowerCase()))
     .returning();
 
-  if (!result?.[0]) {
-    throw new Error("Failed to update socials. Try again later.");
-  }
-
   return result[0];
 }
 
-// Not used yet
 export async function updateUserRoleToBuilder(userAddress: string) {
   const result = await db
     .update(users)
@@ -132,10 +118,6 @@ export async function updateUserRoleToBuilder(userAddress: string) {
     })
     .where(eq(lower(users.userAddress), userAddress.toLowerCase()))
     .returning();
-
-  if (!result?.[0]) {
-    throw new Error("Failed to update user role to builder. Try again later.");
-  }
 
   return result[0];
 }
