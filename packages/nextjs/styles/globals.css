@@ -31,6 +31,10 @@ p {
   @apply shadow-none;
 }
 
+.btn.btn-lg {
+  @apply px-6 py-2 text-lg font-medium min-h-0 h-[3.25rem];
+}
+
 /* Markdown Formatting */
 .prose h1,
 .prose h2,
