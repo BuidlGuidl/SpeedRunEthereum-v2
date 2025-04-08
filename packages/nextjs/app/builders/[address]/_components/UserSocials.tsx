@@ -8,7 +8,7 @@ import QuestionIcon from "~~/app/_assets/icons/QuestionIcon";
 import { UserByAddress } from "~~/services/database/repositories/users";
 import { getUserSocials, getUserSocialsList } from "~~/utils/socials";
 
-export const UserSocials = ({ user }: { user: UserByAddress }) => {
+export const UserSocials = ({ user }: { user: NonNullable<UserByAddress> }) => {
   const { address } = useAccount();
   const modalRef = useRef<HTMLDialogElement>(null);
   const isProfileOwner = address?.toLowerCase() === user.userAddress.toLowerCase();

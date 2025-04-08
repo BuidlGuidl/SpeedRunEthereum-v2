@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { ActivityType } from "~~/services/api/activities";
-import { findActivities } from "~~/services/database/repositories/activities";
+import { getActivities } from "~~/services/database/repositories/activities";
 
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
@@ -9,7 +9,7 @@ export async function GET(request: NextRequest) {
   const type = (searchParams.get("type") as ActivityType) || "ALL";
 
   try {
-    const activities = await findActivities(start, size, type);
+    const activities = await getActivities(start, size, type);
     return NextResponse.json(activities);
   } catch (error: any) {
     console.error("Error fetching activities:", error);

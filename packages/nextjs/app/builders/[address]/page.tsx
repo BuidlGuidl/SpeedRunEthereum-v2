@@ -3,14 +3,13 @@ import { UserChallengesTable } from "./_components/UserChallengesTable";
 import { UserProfileCard } from "./_components/UserProfileCard";
 import { RouteRefresher } from "~~/components/RouteRefresher";
 import { isBgMember } from "~~/services/api-bg/builders";
-import { findLatestSubmissionPerChallengeByUser } from "~~/services/database/repositories/userChallenges";
-import { findUserByAddress } from "~~/services/database/repositories/users";
+import { getLatestSubmissionPerChallengeByUser } from "~~/services/database/repositories/userChallenges";
+import { getUserByAddress } from "~~/services/database/repositories/users";
 
 export default async function BuilderPage({ params }: { params: { address: string } }) {
   const { address: userAddress } = params;
-  const challenges = await findLatestSubmissionPerChallengeByUser(userAddress);
-  const users = await findUserByAddress(userAddress);
-  const user = users[0];
+  const challenges = await getLatestSubmissionPerChallengeByUser(userAddress);
+  const user = await getUserByAddress(userAddress);
   const bgMemberExists = await isBgMember(userAddress);
 
   if (!user) {

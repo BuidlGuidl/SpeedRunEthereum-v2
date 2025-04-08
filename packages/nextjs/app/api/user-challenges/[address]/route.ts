@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { findLatestSubmissionPerChallengeByUser } from "~~/services/database/repositories/userChallenges";
+import { getLatestSubmissionPerChallengeByUser } from "~~/services/database/repositories/userChallenges";
 
 export async function GET(_req: Request, { params }: { params: { address: string } }) {
   try {
@@ -9,7 +9,7 @@ export async function GET(_req: Request, { params }: { params: { address: string
       return NextResponse.json({ error: "Address is required" }, { status: 400 });
     }
 
-    const challenges = await findLatestSubmissionPerChallengeByUser(address);
+    const challenges = await getLatestSubmissionPerChallengeByUser(address);
 
     return NextResponse.json({ challenges });
   } catch (error) {

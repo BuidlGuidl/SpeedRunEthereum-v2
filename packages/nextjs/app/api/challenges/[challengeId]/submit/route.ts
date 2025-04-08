@@ -4,7 +4,7 @@ import { submitToAutograder } from "~~/services/autograder";
 import { ChallengeId, ReviewAction } from "~~/services/database/config/types";
 import { getChallengeById } from "~~/services/database/repositories/challenges";
 import { createUserChallenge, updateUserChallengeById } from "~~/services/database/repositories/userChallenges";
-import { findUserByAddress } from "~~/services/database/repositories/users";
+import { getUserByAddress } from "~~/services/database/repositories/users";
 import { isValidEIP712ChallengeSubmitSignature } from "~~/services/eip712/challenge";
 
 // This function can run for a maximum of 60 seconds in Vercel
@@ -38,8 +38,8 @@ export async function POST(req: NextRequest, { params }: { params: { challengeId
       return NextResponse.json({ error: "Invalid signature" }, { status: 401 });
     }
 
-    const user = await findUserByAddress(userAddress);
-    if (user.length === 0) {
+    const user = await getUserByAddress(userAddress);
+    if (!user) {
       return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
 
@@ -59,7 +59,7 @@ export async function POST(req: NextRequest, { params }: { params: { challengeId
     });
 
     // Get the ID of the newly created submission
-    const submissionId = submissionResult[0]?.id;
+    const submissionId = submissionResult?.id;
     if (!submissionId) {
       return NextResponse.json({ error: "Failed to create submission" }, { status: 500 });
     }
@@ -82,7 +82,7 @@ export async function POST(req: NextRequest, { params }: { params: { challengeId
           });
 
           // Check if the update was successful
-          if (!updateResult || updateResult.length === 0) {
+          if (!updateResult) {
             return NextResponse.json({ error: "Failed to update submission with grading result" }, { status: 500 });
           }
 
@@ -94,7 +94,7 @@ export async function POST(req: NextRequest, { params }: { params: { challengeId
             reviewAction: ReviewAction.REJECTED,
             reviewComment: "There was an error while grading your submission. Please try again later.",
           });
-          if (!updateResult || updateResult.length === 0) {
+          if (!updateResult) {
             return NextResponse.json(
               { error: "Failed to update submission with grading result in error" },
               { status: 500 },

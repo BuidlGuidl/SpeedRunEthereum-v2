@@ -11,18 +11,17 @@ type PickSocials<T> = {
 };
 
 export type UserInsert = InferInsertModel<typeof users>;
-export type UserByAddress = Awaited<ReturnType<typeof findUserByAddress>>[0];
-export type UserSocials = PickSocials<UserByAddress>;
-export type UserWithChallengesData = Awaited<ReturnType<typeof findSortedUsersWithChallenges>>["data"][0];
+export type UserByAddress = Awaited<ReturnType<typeof getUserByAddress>>;
+export type UserSocials = PickSocials<NonNullable<UserByAddress>>;
+export type UserWithChallengesData = Awaited<ReturnType<typeof getSortedUsersWithChallenges>>["data"][0];
 
-export async function findUserByAddress(address: string) {
-  return await db
-    .select()
-    .from(users)
-    .where(eq(lower(users.userAddress), address.toLowerCase()));
+export async function getUserByAddress(address: string) {
+  return await db.query.users.findFirst({
+    where: eq(lower(users.userAddress), address.toLowerCase()),
+  });
 }
 
-export async function findSortedUsersWithChallenges(start: number, size: number, sorting: SortingState) {
+export async function getSortedUsersWithChallenges(start: number, size: number, sorting: SortingState) {
   const sortingQuery = sorting[0] as ColumnSort;
 
   const challengesCompletedExpr = sql`(SELECT COUNT(DISTINCT uc.challenge_id) FROM ${userChallenges} uc WHERE uc.user_address = ${users.userAddress} AND uc.review_action = ${ReviewAction.ACCEPTED})`;
@@ -89,7 +88,8 @@ export async function isUserRegistered(address: string) {
 }
 
 export async function createUser(user: UserInsert) {
-  return await db.insert(users).values(user).returning();
+  const result = await db.insert(users).values(user).returning();
+  return result[0];
 }
 
 export async function updateUserSocials(userAddress: string, socials: UserSocials) {
@@ -97,7 +97,7 @@ export async function updateUserSocials(userAddress: string, socials: UserSocial
   const socialsToUpdate = Object.fromEntries(Object.entries(socials).map(([key, value]) => [key, value || null]));
 
   // Update updatedAt whenever user data changes
-  return await db
+  const result = await db
     .update(users)
     .set({
       ...socialsToUpdate,
@@ -105,10 +105,12 @@ export async function updateUserSocials(userAddress: string, socials: UserSocial
     })
     .where(eq(lower(users.userAddress), userAddress.toLowerCase()))
     .returning();
+
+  return result[0];
 }
 
 export async function updateUserRoleToBuilder(userAddress: string) {
-  return await db
+  const result = await db
     .update(users)
     .set({
       role: UserRole.BUILDER,
@@ -116,4 +118,6 @@ export async function updateUserRoleToBuilder(userAddress: string) {
     })
     .where(eq(lower(users.userAddress), userAddress.toLowerCase()))
     .returning();
+
+  return result[0];
 }

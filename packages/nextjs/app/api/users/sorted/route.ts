@@ -1,5 +1,5 @@
 import { NextRequest } from "next/server";
-import { findSortedUsersWithChallenges } from "~~/services/database/repositories/users";
+import { getSortedUsersWithChallenges } from "~~/services/database/repositories/users";
 
 export async function GET(request: NextRequest) {
   try {
@@ -8,7 +8,7 @@ export async function GET(request: NextRequest) {
     const size = parseInt(searchParams.get("size") ?? "0");
     const sorting = JSON.parse(searchParams.get("sorting") ?? "[]");
 
-    const data = await findSortedUsersWithChallenges(start, size, sorting);
+    const data = await getSortedUsersWithChallenges(start, size, sorting);
 
     return Response.json(data);
   } catch (error) {
