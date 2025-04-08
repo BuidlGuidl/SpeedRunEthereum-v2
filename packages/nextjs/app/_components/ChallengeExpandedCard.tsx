@@ -76,12 +76,14 @@ const ChallengeExpandedCard = ({
                 <>
                   <button
                     className={`flex items-center text-xl lg:text-lg px-4 py-1 border-2 border-primary rounded-full bg-base-300 ${
-                      isChallengeLocked ? "opacity-50" : ""
+                      isChallengeLocked ? "opacity-50 cursor-not-allowed" : "hover:bg-accent/50 transition-colors"
                     }`}
                     disabled={isChallengeLocked}
                   >
                     {builderHasCompletedDependenciesChallenges ? (
-                      <span>{challenge.externalLink.claim}</span>
+                      <a href={challenge.externalLink.link} target="_blank" rel="noopener noreferrer">
+                        {challenge.externalLink.claim}
+                      </a>
                     ) : (
                       <div className="flex items-center">
                         <PadLockIcon className="w-4 h-4 sm:w-6 sm:h-6 mr-2" />
