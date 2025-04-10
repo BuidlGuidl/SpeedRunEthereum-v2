@@ -1,6 +1,7 @@
 import { UpgradedToBGCard } from "./_components/UpgradedToBGCard";
 import { UserChallengesTable } from "./_components/UserChallengesTable";
 import { UserProfileCard } from "./_components/UserProfileCard";
+import { NotFound } from "~~/components/NotFound";
 import { RouteRefresher } from "~~/components/RouteRefresher";
 import { isBgMember } from "~~/services/api-bg/builders";
 import { getLatestSubmissionPerChallengeByUser } from "~~/services/database/repositories/userChallenges";
@@ -13,7 +14,17 @@ export default async function BuilderPage({ params }: { params: { address: strin
   const bgMemberExists = await isBgMember(userAddress);
 
   if (!user) {
-    return <div>User not found</div>;
+    return (
+      <NotFound
+        heading="User Not Found"
+        extraElement={
+          <>
+            <p className="mb-0">Double check the Ethereum address is correct in the URL</p>
+            <p className="m-0">Make sure not to use an ENS address in the URL</p>
+          </>
+        }
+      />
+    );
   }
 
   return (
