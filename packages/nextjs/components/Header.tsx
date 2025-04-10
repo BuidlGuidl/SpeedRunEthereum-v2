@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useCallback, useMemo, useRef, useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Logo from "./Logo";
@@ -109,33 +110,16 @@ export const Header = () => {
   );
 
   return (
-    <div className="sticky lg:static top-0 navbar bg-base-300 min-h-0 flex-shrink-0 justify-between z-20 pt-4   px-0 sm:px-2">
+    <div className="sticky lg:static top-0 navbar bg-base-300 min-h-0 flex-shrink-0 justify-between z-20 px-0 sm:px-2">
       <div className="navbar-start w-auto lg:w-1/2">
-        <div className="lg:hidden dropdown" ref={burgerMenuRef}>
-          <label
-            tabIndex={0}
-            className={`ml-1 btn btn-ghost ${isDrawerOpen ? "hover:bg-base-200" : "hover:bg-transparent"}`}
-            onClick={() => {
-              setIsDrawerOpen(prevIsOpenState => !prevIsOpenState);
-            }}
-          >
-            <Bars3Icon className="h-1/2" />
-          </label>
-          {isDrawerOpen && (
-            <ul
-              tabIndex={0}
-              className="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-300 rounded-box w-52"
-              onClick={() => {
-                setIsDrawerOpen(false);
-              }}
-            >
-              <HeaderMenuLinks user={user} />
-            </ul>
-          )}
-        </div>
+        {!isHomepage && (
+          <Link className="lg:hidden" href="/">
+            <Image className="ml-4 w-6" src="/assets/logo-girl.svg" alt="" width={110} height={150} />
+          </Link>
+        )}
         <div className="hidden lg:flex items-center">
           {!isHomepage && (
-            <Link href="/" passHref className="ml-6 mr-4 my-2">
+            <Link href="/" className="ml-6 mr-4 my-2">
               <Logo width={200} height={100} className="h-10" />
             </Link>
           )}
@@ -145,6 +129,28 @@ export const Header = () => {
         </div>
       </div>
       <div className="navbar-end flex-grow mr-4">
+        <div className="lg:hidden dropdown" ref={burgerMenuRef}>
+          <label
+            tabIndex={0}
+            className={`mr-2 btn btn-ghost ${isDrawerOpen ? "hover:bg-base-200" : "hover:bg-transparent"}`}
+            onClick={() => {
+              setIsDrawerOpen(prevIsOpenState => !prevIsOpenState);
+            }}
+          >
+            <Bars3Icon className="h-1/2" />
+          </label>
+          {isDrawerOpen && (
+            <ul
+              tabIndex={0}
+              className="menu dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-36"
+              onClick={() => {
+                setIsDrawerOpen(false);
+              }}
+            >
+              <HeaderMenuLinks user={user} />
+            </ul>
+          )}
+        </div>
         <RainbowKitCustomConnectButton />
       </div>
     </div>
