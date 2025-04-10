@@ -7,6 +7,12 @@ import { Client } from "pg";
 
 dotenv.config({ path: path.resolve(__dirname, "../../.env.development") });
 
+const connectionUrl = new URL(process.env.POSTGRES_URL || "");
+if (connectionUrl.hostname !== "localhost") {
+  console.error("Skipping seed: Database host is not localhost");
+  process.exit(0);
+}
+
 async function seed() {
   const client = new Client({
     connectionString: process.env.POSTGRES_URL,
