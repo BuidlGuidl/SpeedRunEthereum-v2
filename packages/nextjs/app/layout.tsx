@@ -20,7 +20,7 @@ const ScaffoldEthApp = ({ children }: { children: React.ReactNode }) => {
   return (
     <html suppressHydrationWarning className={spaceGrotesk.className}>
       <head>
-        <PlausibleProvider domain="https://speedrunethereum.com" />
+        <PlausibleProvider domain="speedrunethereum.com" />
       </head>
       <body>
         <ThemeProvider enableSystem>
