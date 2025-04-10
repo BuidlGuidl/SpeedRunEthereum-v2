@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { usePlausible } from "next-plausible";
 import { useSignTypedData } from "wagmi";
 import { userJoinBg } from "~~/services/api/users";
 import { UserByAddress } from "~~/services/database/repositories/users";
@@ -10,10 +11,13 @@ import { getUserSocialsList } from "~~/utils/socials";
 export function useJoinBg({ user }: { user?: UserByAddress }) {
   const queryClient = useQueryClient();
   const { signTypedDataAsync } = useSignTypedData();
+  const plausible = usePlausible();
 
   const { mutate: joinBg, isPending: isJoiningBg } = useMutation({
     mutationFn: userJoinBg,
     onSuccess: user => {
+      plausible("joinBG");
+
       queryClient.setQueryData(["user", user.userAddress], user);
       notification.success(
         <div className="flex flex-col gap-2">
