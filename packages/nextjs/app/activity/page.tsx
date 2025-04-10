@@ -21,7 +21,7 @@ export default function ActivityPage() {
     () => [
       {
         header: "BUILDER",
-        size: 300,
+        size: 200,
         cell: info => {
           const row = info.row.original;
           return <Address address={row.userAddress} />;
@@ -29,7 +29,7 @@ export default function ActivityPage() {
       },
       {
         header: "TIME",
-        size: 200,
+        size: 150,
         cell: info => {
           return (
             <div className="flex w-full justify-center">
@@ -40,7 +40,7 @@ export default function ActivityPage() {
       },
       {
         header: "ACTION",
-        size: 500,
+        size: 600,
         cell: info => {
           const item = info.row.original;
           const { details } = item;

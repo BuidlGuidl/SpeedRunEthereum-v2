@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { keepPreviousData, useInfiniteQuery } from "@tanstack/react-query";
 import {
@@ -41,7 +41,7 @@ export default function BuildersPage() {
     () => [
       {
         header: "Builder",
-        size: 300,
+        size: 200,
         cell: info => {
           const row = info.row.original;
 
