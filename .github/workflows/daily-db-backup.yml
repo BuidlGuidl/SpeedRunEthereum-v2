@@ -13,7 +13,7 @@ jobs:
       id-token: write
 
     env:
-      RETENTION: 7
+      RETENTION: 30
       DATABASE_URL: ${{ secrets.DATABASE_URL }}
       IAM_ROLE: ${{ secrets.IAM_ROLE }}
       AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
