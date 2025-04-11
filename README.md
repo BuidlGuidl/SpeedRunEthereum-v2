@@ -55,3 +55,19 @@ To iterate on the database:
 - You can explore the database with `yarn drizzle-kit studio`
 
 After the initial iterations, we'll start using migrations (`yarn drizzle-kit generate` & `yarn drizzle-kit migrate`)
+
+## Database Migration:
+
+After we update the schema in `packages/nextjs/services/database/config/schema.ts`, we can generate a migration with:
+
+```
+yarn drizzle-kit generate
+```
+
+Then we can apply the migration with:
+
+```
+yarn drizzle-kit migrate
+```
+
+We also need to make sure we commit the migration to the repo.
