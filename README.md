@@ -51,7 +51,7 @@ To iterate on the database:
 
 - Tweak the schema in `schema.ts`
 - Run `yarn drizzle-kit push` to apply the changes.
-- Tweak `seed.js` if needed + run `yarn db:seed` (will delete existing data)
+- Copy `seed.data.example.ts` to `seed.data.ts`, tweak as needed and run `yarn db:seed` (will delete existing data)
 - You can explore the database with `yarn drizzle-kit studio`
 
 After the initial iterations, we'll start using migrations (`yarn drizzle-kit generate` & `yarn drizzle-kit migrate`)
