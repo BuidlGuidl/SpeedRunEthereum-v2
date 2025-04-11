@@ -7,6 +7,13 @@ import { Client } from "pg";
 
 dotenv.config({ path: path.resolve(__dirname, "../../.env.development") });
 
+type SeedData = {
+  SEED_DATA_VERSION?: string;
+  seedUsers?: (typeof users.$inferInsert)[];
+  seedChallenges?: (typeof challenges.$inferInsert)[];
+  seedUserChallenges?: (typeof userChallenges.$inferInsert)[];
+};
+
 async function loadSeedData() {
   try {
     const seedDataPath = path.join(__dirname, "seed.data.ts");
@@ -18,8 +25,8 @@ async function loadSeedData() {
     }
 
     // @ts-ignore: seed.data.ts is gitignored and may not exist
-    const seedData = await import("./seed.data");
-    const exampleData = await import("./seed.data.example");
+    const seedData = (await import("./seed.data")) as SeedData;
+    const exampleData = (await import("./seed.data.example")) as SeedData;
 
     if (seedData.SEED_DATA_VERSION !== exampleData.SEED_DATA_VERSION) {
       console.error(
@@ -47,6 +54,11 @@ if (connectionUrl.hostname !== "localhost") {
 
 async function seed() {
   const { seedUsers, seedChallenges, seedUserChallenges } = await loadSeedData();
+
+  if (!seedUsers || !seedChallenges || !seedUserChallenges) {
+    console.error("Error: Required seed data is missing");
+    process.exit(1);
+  }
 
   const client = new Client({
     connectionString: process.env.POSTGRES_URL,
