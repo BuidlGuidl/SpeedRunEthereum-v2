@@ -31,7 +31,7 @@ yarn install
 
 ```
 docker compose up -d
-yarn drizzle-kit push
+yarn drizzle-kit migrate
 yarn db:seed
 ```
 
@@ -43,22 +43,17 @@ yarn start
 
 Visit your app on: `http://localhost:3000`.
 
-## Database (dev info)
+4. You can explore the database with:
 
-We are using Drizzle with Postgres. You can run `drizzle-kit` from the root with `yarn drizzle-kit`
-
-To iterate on the database:
-
-- Tweak the schema in `schema.ts`
-- Run `yarn drizzle-kit push` to apply the changes.
-- Copy `seed.data.example.ts` to `seed.data.ts`, tweak as needed and run `yarn db:seed` (will delete existing data)
-- You can explore the database with `yarn drizzle-kit studio`
-
-After the initial iterations, we'll start using migrations (`yarn drizzle-kit generate` & `yarn drizzle-kit migrate`)
+```
+yarn drizzle-kit studio
+```
 
 ## Database Migration:
 
-After we update the schema in `packages/nextjs/services/database/config/schema.ts`, we can generate a migration with:
+We are using Drizzle with Postgres. You can run `drizzle-kit` from the root with `yarn drizzle-kit`
+
+Anytime we update the schema in `packages/nextjs/services/database/config/schema.ts`, we can generate a migration with:
 
 ```
 yarn drizzle-kit generate
@@ -71,3 +66,11 @@ yarn drizzle-kit migrate
 ```
 
 We also need to make sure we commit the migration to the repo.
+
+## Database (dev info)
+
+To iterate fast on the database locally:
+
+- Tweak the schema in `schema.ts`
+- Run `yarn drizzle-kit push` to apply the changes.
+- Copy `seed.data.example.ts` to `seed.data.ts`, tweak as needed and run `yarn db:seed` (will delete existing data)
