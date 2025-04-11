@@ -2,11 +2,10 @@ import { useRef, useState } from "react";
 import Link from "next/link";
 import { NetworkOptions } from "./NetworkOptions";
 import CopyToClipboard from "react-copy-to-clipboard";
-import { getAddress } from "viem";
-import { Address } from "viem";
+import { Address, getAddress } from "viem";
 import { useDisconnect } from "wagmi";
 import {
-  ArrowLeftOnRectangleIcon,
+  ArrowLeftEndOnRectangleIcon,
   ArrowsRightLeftIcon,
   CheckCircleIcon,
   ChevronDownIcon,
@@ -52,13 +51,13 @@ export const AddressInfoDropdown = ({
       <details ref={dropdownRef} className="dropdown dropdown-end leading-3">
         <summary
           tabIndex={0}
-          className="btn btn-secondary py-1.5 lg:py-2 px-3 border-2 !border-primary shadow-md dropdown-toggle gap-0 !h-auto"
+          className="btn btn-secondary min-h-0 py-1 lg:py-2 px-2 border-2 !border-primary shadow-md dropdown-toggle gap-0 !h-auto"
         >
           <BlockieAvatar address={checkSumAddress} size={30} ensImage={ensAvatar} />
-          <span className="ml-2 mr-1 lg:text-base font-medium">
+          <span className="ml-2 mr-1 text-sm lg:text-base font-medium">
             {isENS(displayName) ? displayName : checkSumAddress?.slice(0, 6) + "..." + checkSumAddress?.slice(-4)}
           </span>
-          <ChevronDownIcon className="h-6 w-4 ml-2 sm:ml-0" />
+          <ChevronDownIcon className="h-6 w-4" />
         </summary>
         <ul
           tabIndex={0}
@@ -67,17 +66,14 @@ export const AddressInfoDropdown = ({
           <NetworkOptions hidden={!selectingNetwork} />
           <li>
             <Link href={`/builders/${address}`} className="btn-sm !rounded-xl flex gap-3 py-3" onClick={closeDropdown}>
-              <UserIcon className="h-6 w-4 ml-2 sm:ml-0" />
+              <UserIcon className="h-6 w-4" />
               <span className="whitespace-nowrap">My Portfolio</span>
             </Link>
           </li>
           <li className={selectingNetwork ? "hidden" : ""}>
             {addressCopied ? (
               <div className="btn-sm !rounded-xl flex gap-3 py-3">
-                <CheckCircleIcon
-                  className="text-xl font-normal h-6 w-4 cursor-pointer ml-2 sm:ml-0"
-                  aria-hidden="true"
-                />
+                <CheckCircleIcon className="text-xl font-normal h-6 w-4 cursor-pointer" aria-hidden="true" />
                 <span className=" whitespace-nowrap">Copy address</span>
               </div>
             ) : (
@@ -91,10 +87,7 @@ export const AddressInfoDropdown = ({
                 }}
               >
                 <div className="btn-sm !rounded-xl flex gap-3 py-3">
-                  <DocumentDuplicateIcon
-                    className="text-xl font-normal h-6 w-4 cursor-pointer ml-2 sm:ml-0"
-                    aria-hidden="true"
-                  />
+                  <DocumentDuplicateIcon className="text-xl font-normal h-6 w-4 cursor-pointer" aria-hidden="true" />
                   <span className=" whitespace-nowrap">Copy address</span>
                 </div>
               </CopyToClipboard>
@@ -102,7 +95,7 @@ export const AddressInfoDropdown = ({
           </li>
           <li className={selectingNetwork ? "hidden" : ""}>
             <label htmlFor="qrcode-modal" className="btn-sm !rounded-xl flex gap-3 py-3">
-              <QrCodeIcon className="h-6 w-4 ml-2 sm:ml-0" />
+              <QrCodeIcon className="h-6 w-4" />
               <span className="whitespace-nowrap">View QR Code</span>
             </label>
           </li>
@@ -115,7 +108,7 @@ export const AddressInfoDropdown = ({
                   setSelectingNetwork(true);
                 }}
               >
-                <ArrowsRightLeftIcon className="h-6 w-4 ml-2 sm:ml-0" /> <span>Switch Network</span>
+                <ArrowsRightLeftIcon className="h-6 w-4" /> <span>Switch Network</span>
               </button>
             </li>
           ) : null}
@@ -125,7 +118,7 @@ export const AddressInfoDropdown = ({
               type="button"
               onClick={() => disconnect()}
             >
-              <ArrowLeftOnRectangleIcon className="h-6 w-4 ml-2 sm:ml-0" /> <span>Disconnect</span>
+              <ArrowLeftEndOnRectangleIcon className="h-6 w-4" /> <span>Disconnect</span>
             </button>
           </li>
         </ul>

@@ -37,7 +37,7 @@ export const RainbowKitCustomConnectButton = () => {
               onClick={openConnectModal}
               type="button"
             >
-              Connect Wallet
+              Connect <span className="hidden md:inline-block md:ml-1">Wallet</span>
             </button>
           );
         }

@@ -1,13 +1,11 @@
 "use client";
 
-import React, { useCallback, useMemo, useRef, useState } from "react";
+import React, { useMemo } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Logo from "./Logo";
 import { useAccount } from "wagmi";
-import { Bars3Icon } from "@heroicons/react/24/outline";
 import { RainbowKitCustomConnectButton } from "~~/components/scaffold-eth";
-import { useOutsideClick } from "~~/hooks/scaffold-eth";
 import { useUser } from "~~/hooks/useUser";
 import { UserRole } from "~~/services/database/config/types";
 import { UserByAddress } from "~~/services/database/repositories/users";
@@ -95,56 +93,27 @@ export const HeaderMenuLinks = ({ hideItemsByLabel, user }: { hideItemsByLabel?:
  * Site header
  */
 export const Header = () => {
-  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-  const burgerMenuRef = useRef<HTMLDivElement>(null);
   const pathname = usePathname();
   const isHomepage = pathname === "/";
 
   const { address: connectedAddress } = useAccount();
   const { data: user } = useUser(connectedAddress);
 
-  useOutsideClick(
-    burgerMenuRef,
-    useCallback(() => setIsDrawerOpen(false), []),
-  );
-
   return (
-    <div className="sticky lg:static top-0 navbar bg-base-300 min-h-0 flex-shrink-0 justify-between z-20 pt-4   px-0 sm:px-2">
+    <div className="sticky lg:static top-0 navbar bg-base-300 min-h-0 flex-shrink-0 justify-between z-20 px-0 sm:px-2">
       <div className="navbar-start w-auto lg:w-1/2">
-        <div className="lg:hidden dropdown" ref={burgerMenuRef}>
-          <label
-            tabIndex={0}
-            className={`ml-1 btn btn-ghost ${isDrawerOpen ? "hover:bg-base-200" : "hover:bg-transparent"}`}
-            onClick={() => {
-              setIsDrawerOpen(prevIsOpenState => !prevIsOpenState);
-            }}
-          >
-            <Bars3Icon className="h-1/2" />
-          </label>
-          {isDrawerOpen && (
-            <ul
-              tabIndex={0}
-              className="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-300 rounded-box w-52"
-              onClick={() => {
-                setIsDrawerOpen(false);
-              }}
-            >
-              <HeaderMenuLinks user={user} />
-            </ul>
-          )}
-        </div>
-        <div className="hidden lg:flex items-center">
+        <div className="flex items-center">
           {!isHomepage && (
-            <Link href="/" passHref className="ml-6 mr-4 my-2">
-              <Logo width={200} height={100} className="h-10" />
+            <Link href="/" className="ml-2 lg:ml-6 lg:mr-4 lg:my-2">
+              <Logo className="w-36 lg:w-48" />
             </Link>
           )}
-          <ul className="flex flex-nowrap px-1 gap-2">
+          <ul className="hidden lg:flex flex-nowrap px-1 gap-2">
             <HeaderMenuLinks hideItemsByLabel={["Home"]} user={user} />
           </ul>
         </div>
       </div>
-      <div className="navbar-end flex-grow mr-4">
+      <div className="navbar-end flex-grow mr-2">
         <RainbowKitCustomConnectButton />
       </div>
     </div>
