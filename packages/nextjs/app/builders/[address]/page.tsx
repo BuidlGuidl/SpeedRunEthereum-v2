@@ -20,9 +20,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const isValidAddress = isAddress(address);
 
   // Default title and description
-  const title = isValidAddress
-    ? `Send ETH to ${address.slice(0, 6)}...${address.slice(-4)}`
-    : "Invalid Ethereum Address";
+  const title = "Builder Profile | Speed Run Ethereum";
 
   // Base URL - replace with your actual domain in production
   const baseUrl = process.env.VERCEL_PROJECT_PRODUCTION_URL
