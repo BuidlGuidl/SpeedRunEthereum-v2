@@ -6,6 +6,7 @@ import { getChallengeById } from "~~/services/database/repositories/challenges";
 import { createUserChallenge, updateUserChallengeById } from "~~/services/database/repositories/userChallenges";
 import { getUserByAddress } from "~~/services/database/repositories/users";
 import { isValidEIP712ChallengeSubmitSignature } from "~~/services/eip712/challenge";
+import { trackPlausibleEvent } from "~~/services/plausible";
 
 // This function can run for a maximum of 60 seconds in Vercel
 export const maxDuration = 60;
@@ -63,6 +64,8 @@ export async function POST(req: NextRequest, { params }: { params: { challengeId
     if (!submissionId) {
       return NextResponse.json({ error: "Failed to create submission" }, { status: 500 });
     }
+
+    await trackPlausibleEvent("challengeSubmission", { challengeId }, req);
 
     // Use waitUntil for background processing
     waitUntil(
