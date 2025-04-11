@@ -1,6 +1,8 @@
 import { challenges, userChallenges, users } from "./config/schema";
 import { ChallengeId, ReviewAction, UserRole } from "./config/types";
 
+export const SEED_DATA_VERSION = "1.0.0";
+
 // Using Drizzle's inferred insert types to ensure seed data
 // matches database schema requirements
 export const seedUsers: (typeof users.$inferInsert)[] = [

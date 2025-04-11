@@ -1,11 +1,50 @@
 import { challenges, userChallenges, users } from "./config/schema";
-import { seedChallenges, seedUserChallenges, seedUsers } from "./seed.data";
 import * as dotenv from "dotenv";
 import { drizzle } from "drizzle-orm/node-postgres";
+import * as fs from "fs";
 import * as path from "path";
 import { Client } from "pg";
 
 dotenv.config({ path: path.resolve(__dirname, "../../.env.development") });
+
+type SeedData = {
+  SEED_DATA_VERSION?: string;
+  seedUsers?: (typeof users.$inferInsert)[];
+  seedChallenges?: (typeof challenges.$inferInsert)[];
+  seedUserChallenges?: (typeof userChallenges.$inferInsert)[];
+};
+
+async function loadSeedData() {
+  try {
+    const seedDataPath = path.join(__dirname, "seed.data.ts");
+    if (!fs.existsSync(seedDataPath)) {
+      console.error(
+        "Error: seed.data.ts not found. Please copy seed.data.example.ts to seed.data.ts and update it with your data.",
+      );
+      process.exit(1);
+    }
+
+    // @ts-ignore: seed.data.ts is gitignored and may not exist
+    const seedData = (await import("./seed.data")) as SeedData;
+    const exampleData = (await import("./seed.data.example")) as SeedData;
+
+    if (seedData.SEED_DATA_VERSION !== exampleData.SEED_DATA_VERSION) {
+      console.error(
+        `Error: Version mismatch between seed.data.ts (${seedData.SEED_DATA_VERSION}) and seed.data.example.ts (${exampleData.SEED_DATA_VERSION})`,
+      );
+      process.exit(1);
+    }
+
+    return {
+      seedUsers: seedData.seedUsers,
+      seedChallenges: seedData.seedChallenges,
+      seedUserChallenges: seedData.seedUserChallenges,
+    };
+  } catch (error) {
+    console.error("Error: cannot load seed data");
+    process.exit(1);
+  }
+}
 
 const connectionUrl = new URL(process.env.POSTGRES_URL || "");
 if (connectionUrl.hostname !== "localhost") {
@@ -14,6 +53,13 @@ if (connectionUrl.hostname !== "localhost") {
 }
 
 async function seed() {
+  const { seedUsers, seedChallenges, seedUserChallenges } = await loadSeedData();
+
+  if (!seedUsers || !seedChallenges || !seedUserChallenges) {
+    console.error("Error: Required seed data is missing");
+    process.exit(1);
+  }
+
   const client = new Client({
     connectionString: process.env.POSTGRES_URL,
   });
