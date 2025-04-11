@@ -49,9 +49,11 @@ Visit your app on: `http://localhost:3000`.
 yarn drizzle-kit studio
 ```
 
-## Database Migration:
+### Database Information
 
-We are using Drizzle with Postgres. You can run `drizzle-kit` from the root with `yarn drizzle-kit`
+We are using Drizzle with Postgres for database management. You can run `drizzle-kit` commands from the root with `yarn drizzle-kit`.
+
+### Database Migration
 
 Anytime we update the schema in `packages/nextjs/services/database/config/schema.ts`, we can generate a migration with:
 
@@ -67,7 +69,7 @@ yarn drizzle-kit migrate
 
 We also need to make sure we commit the migration to the repo.
 
-## Database (dev info)
+### Database (dev info)
 
 To iterate fast on the database locally:
 
