@@ -1,5 +1,4 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { usePlausible } from "next-plausible";
 import { useAccount, useSignTypedData } from "wagmi";
 import { registerUser } from "~~/services/api/users";
 import { EIP_712_TYPED_DATA__USER_REGISTER } from "~~/services/eip712/register";
@@ -9,13 +8,10 @@ export function useUserRegister() {
   const { address } = useAccount();
   const queryClient = useQueryClient();
   const { signTypedDataAsync } = useSignTypedData();
-  const plausible = usePlausible();
 
   const { mutate: register, isPending: isRegistering } = useMutation({
     mutationFn: registerUser,
     onSuccess: user => {
-      plausible("signupSRE");
-
       queryClient.setQueryData(["user", address], user);
       notification.success("Successfully registered!");
     },

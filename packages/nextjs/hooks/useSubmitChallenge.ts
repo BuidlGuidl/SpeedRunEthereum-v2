@@ -1,6 +1,5 @@
 import { useRouter } from "next/navigation";
 import { useMutation } from "@tanstack/react-query";
-import { usePlausible } from "next-plausible";
 import { useAccount, useSignTypedData } from "wagmi";
 import { submitChallenge } from "~~/services/api/challenges";
 import { EIP_712_TYPED_DATA__CHALLENGE_SUBMIT } from "~~/services/eip712/challenge";
@@ -32,7 +31,6 @@ export const useSubmitChallenge = ({ onSuccess }: { onSuccess?: () => void }) =>
   const router = useRouter();
   const { address } = useAccount();
   const { signTypedDataAsync } = useSignTypedData();
-  const plausible = usePlausible();
 
   const { mutate: submitChallengeMutation, isPending } = useMutation({
     mutationFn: async (submitChallengeParams: SubmitChallengeParams) => {
@@ -56,13 +54,7 @@ export const useSubmitChallenge = ({ onSuccess }: { onSuccess?: () => void }) =>
         ...submitChallengeParams,
       });
     },
-    onSuccess: (_, variables) => {
-      plausible("challengeSubmission", {
-        props: {
-          challengeId: variables.challengeId,
-        },
-      });
-
+    onSuccess: () => {
       notification.success("Challenge submitted successfully!");
       router.push(`/builders/${address}`);
       router.refresh();
