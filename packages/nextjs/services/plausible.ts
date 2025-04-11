@@ -1,7 +1,15 @@
+import { waitUntil } from "@vercel/functions";
+
+export enum PlausibleEvent {
+  JOIN_BG = "joinBG",
+  SIGNUP_SRE = "signupSRE",
+  CHALLENGE_SUBMISSION = "challengeSubmission",
+}
+
 const PLAUSIBLE_EVENT_ENDPOINT = "https://plausible.io/api/event";
 
 export async function trackPlausibleEvent(
-  eventName: string,
+  eventName: PlausibleEvent,
   props?: Record<string, string | number | boolean>,
   request?: Request,
 ) {
@@ -21,13 +29,13 @@ export async function trackPlausibleEvent(
     headers["X-Forwarded-For"] = request.headers.get("x-forwarded-for") || "";
   }
 
-  try {
-    await fetch(PLAUSIBLE_EVENT_ENDPOINT, {
+  waitUntil(
+    fetch(PLAUSIBLE_EVENT_ENDPOINT, {
       method: "POST",
       headers,
       body: JSON.stringify(payload),
-    });
-  } catch (error) {
-    console.error("Error tracking Plausible event:", error);
-  }
+    }).catch(error => {
+      console.error("Error tracking Plausible event:", error);
+    }),
+  );
 }

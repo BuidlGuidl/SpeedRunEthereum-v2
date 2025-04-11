@@ -5,7 +5,7 @@ import { ReviewAction } from "~~/services/database/config/types";
 import { getLatestSubmissionPerChallengeByUser } from "~~/services/database/repositories/userChallenges";
 import { getUserByAddress } from "~~/services/database/repositories/users";
 import { isValidEIP712JoinBGSignature } from "~~/services/eip712/join-bg";
-import { trackPlausibleEvent } from "~~/services/plausible";
+import { PlausibleEvent, trackPlausibleEvent } from "~~/services/plausible";
 import { JOIN_BG_DEPENDENCIES } from "~~/utils/dependent-challenges";
 
 type JoinBGPayload = {
@@ -53,7 +53,7 @@ export async function POST(req: Request) {
     }
 
     await createBgMember(user);
-    await trackPlausibleEvent("joinBG", {}, req);
+    trackPlausibleEvent(PlausibleEvent.JOIN_BG, {}, req);
 
     return NextResponse.json({ user }, { status: 200 });
   } catch (error) {
