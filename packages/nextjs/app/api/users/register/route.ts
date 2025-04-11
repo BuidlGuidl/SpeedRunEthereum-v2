@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { createUser, isUserRegistered } from "~~/services/database/repositories/users";
 import { isValidEIP712UserRegisterSignature } from "~~/services/eip712/register";
+import { trackPlausibleEvent } from "~~/services/plausible";
 
 type RegisterPayload = {
   address: string;
@@ -28,6 +29,7 @@ export async function POST(req: Request) {
     }
 
     const user = await createUser({ userAddress: address });
+    await trackPlausibleEvent("signupSRE", {}, req);
 
     return NextResponse.json({ user }, { status: 200 });
   } catch (error) {
