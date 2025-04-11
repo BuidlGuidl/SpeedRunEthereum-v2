@@ -1,3 +1,4 @@
+import { notFound } from "next/navigation";
 import { UpgradedToBGCard } from "./_components/UpgradedToBGCard";
 import { UserChallengesTable } from "./_components/UserChallengesTable";
 import { UserProfileCard } from "./_components/UserProfileCard";
@@ -13,7 +14,7 @@ export default async function BuilderPage({ params }: { params: { address: strin
   const bgMemberExists = await isBgMember(userAddress);
 
   if (!user) {
-    return <div>User not found</div>;
+    notFound();
   }
 
   return (

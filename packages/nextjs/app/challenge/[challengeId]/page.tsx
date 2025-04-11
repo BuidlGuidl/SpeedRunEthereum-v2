@@ -35,7 +35,7 @@ export default async function ChallengePage({ params }: { params: { challengeId:
   const { owner, repo, branch } = parseGithubUrl(challenge.github);
 
   return (
-    <div className="flex flex-col items-center p-8 xl:p-12 relative max-w-[100vw]">
+    <div className="flex flex-col items-center py-8 px-5 xl:p-12 relative max-w-[100vw]">
       {challengeReadme ? (
         <>
           <div className="prose dark:prose-invert max-w-fit break-words lg:max-w-[850px]">
