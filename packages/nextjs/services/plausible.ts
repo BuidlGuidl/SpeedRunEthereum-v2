@@ -1,5 +1,3 @@
-import { waitUntil } from "@vercel/functions";
-
 export enum PlausibleEvent {
   JOIN_BG = "joinBG",
   SIGNUP_SRE = "signupSRE",
@@ -29,13 +27,12 @@ export async function trackPlausibleEvent(
     headers["X-Forwarded-For"] = request.headers.get("x-forwarded-for") || "";
   }
 
-  waitUntil(
-    fetch(PLAUSIBLE_EVENT_ENDPOINT, {
-      method: "POST",
-      headers,
-      body: JSON.stringify(payload),
-    }).catch(error => {
-      console.error("Error tracking Plausible event:", error);
-    }),
-  );
+  return fetch(PLAUSIBLE_EVENT_ENDPOINT, {
+    method: "POST",
+    headers,
+    body: JSON.stringify(payload),
+  }).catch(error => {
+    console.error("Error tracking Plausible event:", error);
+    throw error;
+  });
 }

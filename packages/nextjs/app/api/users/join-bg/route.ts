@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { waitUntil } from "@vercel/functions";
 import { isBgMember } from "~~/services/api-bg/builders";
 import { createBgMember } from "~~/services/api-bg/builders";
 import { ReviewAction } from "~~/services/database/config/types";
@@ -53,7 +54,8 @@ export async function POST(req: Request) {
     }
 
     await createBgMember(user);
-    trackPlausibleEvent(PlausibleEvent.JOIN_BG, {}, req);
+
+    waitUntil(trackPlausibleEvent(PlausibleEvent.JOIN_BG, {}, req));
 
     return NextResponse.json({ user }, { status: 200 });
   } catch (error) {
