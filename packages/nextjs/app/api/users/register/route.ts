@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
+import { waitUntil } from "@vercel/functions";
 import { createUser, isUserRegistered } from "~~/services/database/repositories/users";
 import { isValidEIP712UserRegisterSignature } from "~~/services/eip712/register";
+import { PlausibleEvent, trackPlausibleEvent } from "~~/services/plausible";
 
 type RegisterPayload = {
   address: string;
@@ -28,6 +30,8 @@ export async function POST(req: Request) {
     }
 
     const user = await createUser({ userAddress: address });
+
+    waitUntil(trackPlausibleEvent(PlausibleEvent.SIGNUP_SRE, {}, req));
 
     return NextResponse.json({ user }, { status: 200 });
   } catch (error) {
