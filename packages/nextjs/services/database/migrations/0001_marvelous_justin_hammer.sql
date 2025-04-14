@@ -5,6 +5,7 @@ CREATE TABLE "batches" (
 	"name" varchar(255) NOT NULL,
 	"start_date" timestamp NOT NULL,
 	"status" "batch_status_enum" NOT NULL,
+	"contract_address" varchar(42),
 	"telegram_link" varchar(255)
 );
 --> statement-breakpoint

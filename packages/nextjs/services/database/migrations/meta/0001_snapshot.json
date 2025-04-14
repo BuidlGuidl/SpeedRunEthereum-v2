@@ -1,5 +1,5 @@
 {
-  "id": "ee605f5f-5bf5-45d1-a177-86f13e56db29",
+  "id": "f84a3b45-c16d-4345-9c88-124a5d5d7b25",
   "prevId": "34986481-8e84-4c0b-9a7f-6a2f70350f02",
   "version": "7",
   "dialect": "postgresql",
@@ -32,6 +32,12 @@
           "typeSchema": "public",
           "primaryKey": false,
           "notNull": true
+        },
+        "contract_address": {
+          "name": "contract_address",
+          "type": "varchar(42)",
+          "primaryKey": false,
+          "notNull": false
         },
         "telegram_link": {
           "name": "telegram_link",

@@ -76,6 +76,7 @@ export const batches = pgTable("batches", {
   name: varchar({ length: 255 }).notNull(),
   startDate: timestamp().notNull(),
   status: batchStatusEnum().notNull(),
+  contractAddress: varchar({ length: 42 }),
   telegramLink: varchar({ length: 255 }),
 });
 

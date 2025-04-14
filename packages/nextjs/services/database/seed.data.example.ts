@@ -371,6 +371,7 @@ export const seedBatches: (typeof batches.$inferInsert)[] = [
     startDate: new Date(1705315180000),
     status: BatchStatus.CLOSED,
     telegramLink: "https://t.me/joinchat/1",
+    contractAddress: "0x0000000000000000000000000000000000000000",
   },
   {
     id: 2,
@@ -378,6 +379,7 @@ export const seedBatches: (typeof batches.$inferInsert)[] = [
     startDate: new Date(1707820780000),
     status: BatchStatus.CLOSED,
     telegramLink: "https://t.me/joinchat/2",
+    contractAddress: "0x0000000000000000000000000000000000000000",
   },
   {
     id: 3,
@@ -385,5 +387,6 @@ export const seedBatches: (typeof batches.$inferInsert)[] = [
     startDate: new Date(1705315180000),
     status: BatchStatus.OPEN,
     telegramLink: "https://t.me/joinchat/3",
+    contractAddress: "0x0000000000000000000000000000000000000000",
   },
 ];
