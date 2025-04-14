@@ -65,12 +65,11 @@ export async function POST(req: NextRequest, { params }: { params: { challengeId
       return NextResponse.json({ error: "Failed to create submission" }, { status: 500 });
     }
 
-    waitUntil(trackPlausibleEvent(PlausibleEvent.CHALLENGE_SUBMISSION, { challengeId }, req));
-
     // Use waitUntil for background processing
     waitUntil(
       (async () => {
         try {
+          await trackPlausibleEvent(PlausibleEvent.CHALLENGE_SUBMISSION, { challengeId }, req);
           const autoGraderChallengeId = challenge.sortOrder;
 
           const gradingResult = await submitToAutograder({
