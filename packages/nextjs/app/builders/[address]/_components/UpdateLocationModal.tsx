@@ -1,4 +1,4 @@
-import { forwardRef, useState } from "react";
+import { forwardRef, useEffect, useState } from "react";
 import ReactFlagsSelect from "react-flags-select";
 
 type UpdateLocationModalProps = {
@@ -11,13 +11,26 @@ export const UpdateLocationModal = forwardRef<HTMLDivElement, UpdateLocationModa
   ({ closeModal, existingLocation, isOpen }, ref) => {
     const [selectedCountry, setSelectedCountry] = useState(existingLocation || "");
 
-    if (!isOpen) return null;
+    useEffect(() => {
+      if (!isOpen) return;
+      const handleKeyDown = (e: KeyboardEvent) => {
+        if (e.key === "Escape") {
+          closeModal();
+        }
+      };
+      window.addEventListener("keydown", handleKeyDown);
+      return () => {
+        window.removeEventListener("keydown", handleKeyDown);
+      };
+    }, [isOpen, closeModal]);
 
     const handleUpdateLocation = () => {
       // TODO: Implement the update location logic
       console.log("Selected country:", selectedCountry);
       closeModal();
     };
+
+    if (!isOpen) return null;
 
     return (
       <div className="fixed inset-0 flex items-center justify-center z-50">
