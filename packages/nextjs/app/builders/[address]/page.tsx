@@ -8,6 +8,7 @@ import { RouteRefresher } from "~~/components/RouteRefresher";
 import { isBgMember } from "~~/services/api-bg/builders";
 import { getLatestSubmissionPerChallengeByUser } from "~~/services/database/repositories/userChallenges";
 import { getUserByAddress } from "~~/services/database/repositories/users";
+import { getEnsOrAddress } from "~~/utils/ens-or-address";
 
 type Props = {
   params: {
@@ -19,8 +20,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const address = params.address;
   const isValidAddress = isAddress(address);
 
+  const { ensName, shortAddress } = await getEnsOrAddress(address);
+
   // Default title and description
-  const title = "Builder Profile | Speed Run Ethereum";
+  const title = `${ensName || shortAddress} | Speed Run Ethereum`;
 
   // Base URL - replace with your actual domain in production
   const baseUrl = process.env.VERCEL_PROJECT_PRODUCTION_URL
