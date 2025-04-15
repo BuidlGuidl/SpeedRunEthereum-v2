@@ -39,7 +39,10 @@ export async function GET(request: Request) {
 
     let challenges: UserChallenges = [];
     try {
-      challenges = await getLatestSubmissionPerChallengeByUser(address);
+      const allChallenges = await getLatestSubmissionPerChallengeByUser(address);
+      challenges = allChallenges.filter(challenge => {
+        return challenge.reviewAction === "ACCEPTED";
+      });
     } catch (error) {
       console.error("Error fetching builder challenges", error);
     }
@@ -230,7 +233,7 @@ export async function GET(request: Request) {
             <div
               style={{
                 marginTop: 10,
-                fontSize: 44,
+                fontSize: 52,
                 fontWeight: "bold",
                 color: colors.text,
                 textAlign: "center",
@@ -244,8 +247,7 @@ export async function GET(request: Request) {
                 marginTop: 5,
                 marginBottom: 16,
                 display: "flex",
-                fontSize: 36,
-                fontWeight: "bold",
+                fontSize: 28,
                 color: colors.text,
                 textAlign: "center",
               }}
