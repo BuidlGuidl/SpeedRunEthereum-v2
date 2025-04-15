@@ -3,7 +3,7 @@ import { defineConfig } from "drizzle-kit";
 
 dotenv.config({ path: ".env.development" });
 
-export const PRODUCTION_DATABASE_HOSTNAME = "cold-resonance";
+const PRODUCTION_DATABASE_HOSTNAME = "cold-resonance";
 
 if (process.env.POSTGRES_URL?.includes(PRODUCTION_DATABASE_HOSTNAME) && !process.argv.includes("--force")) {
   console.log("\n⚠️ You are pointing to the production database. Use `--force` if you want to continue.\n");
