@@ -5,6 +5,7 @@ import { promises as fs } from "fs";
 import { Address, createPublicClient, getAddress, http, isAddress } from "viem";
 import { mainnet } from "viem/chains";
 import { normalize } from "viem/ens";
+import { ReviewAction } from "~~/services/database/config/types";
 import {
   UserChallenges,
   getLatestSubmissionPerChallengeByUser,
@@ -40,9 +41,7 @@ export async function GET(request: Request) {
     let challenges: UserChallenges = [];
     try {
       const allChallenges = await getLatestSubmissionPerChallengeByUser(address);
-      challenges = allChallenges.filter(challenge => {
-        return challenge.reviewAction === "ACCEPTED";
-      });
+      challenges = allChallenges.filter(challenge => challenge.reviewAction === ReviewAction.ACCEPTED);
     } catch (error) {
       console.error("Error fetching builder challenges", error);
     }
