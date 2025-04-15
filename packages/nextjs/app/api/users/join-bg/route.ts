@@ -1,10 +1,12 @@
 import { NextResponse } from "next/server";
+import { waitUntil } from "@vercel/functions";
 import { isBgMember } from "~~/services/api-bg/builders";
 import { createBgMember } from "~~/services/api-bg/builders";
 import { ReviewAction } from "~~/services/database/config/types";
 import { getLatestSubmissionPerChallengeByUser } from "~~/services/database/repositories/userChallenges";
 import { getUserByAddress } from "~~/services/database/repositories/users";
 import { isValidEIP712JoinBGSignature } from "~~/services/eip712/join-bg";
+import { PlausibleEvent, trackPlausibleEvent } from "~~/services/plausible";
 import { JOIN_BG_DEPENDENCIES } from "~~/utils/dependent-challenges";
 
 type JoinBGPayload = {
@@ -52,6 +54,8 @@ export async function POST(req: Request) {
     }
 
     await createBgMember(user);
+
+    waitUntil(trackPlausibleEvent(PlausibleEvent.JOIN_BG, {}, req));
 
     return NextResponse.json({ user }, { status: 200 });
   } catch (error) {
