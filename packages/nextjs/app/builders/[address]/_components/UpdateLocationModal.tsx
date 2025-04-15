@@ -59,16 +59,19 @@ export const UpdateLocationModal = forwardRef<HTMLDivElement, UpdateLocationModa
                 className="w-full"
               />
             </div>
-            <div className="flex justify-end">
-              <button className="btn btn-primary" onClick={() => updateLocation(selectedCountry)}>
-                {isPending ? (
-                  <>
-                    <span className="loading loading-spinner loading-xs"></span>
-                    Updating...
-                  </>
-                ) : (
-                  "Update Location"
-                )}
+            <div className="flex justify-end gap-2">
+              <button className="btn btn-primary" onClick={() => updateLocation(selectedCountry)} disabled={isPending}>
+                Update Location
+              </button>
+              <button
+                className="btn btn-outline"
+                disabled={isPending}
+                onClick={async () => {
+                  await updateLocation(null);
+                  setSelectedCountry("");
+                }}
+              >
+                Reset
               </button>
             </div>
           </div>

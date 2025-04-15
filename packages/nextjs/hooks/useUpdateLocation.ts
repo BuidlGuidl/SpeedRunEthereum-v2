@@ -11,7 +11,7 @@ export const useUpdateLocation = ({ onSuccess }: { onSuccess?: () => void }) => 
   const { address } = useAccount();
   const { signTypedDataAsync } = useSignTypedData();
 
-  const { mutate: updateLocationMutation, isPending } = useMutation({
+  const { mutateAsync: updateLocationMutation, isPending } = useMutation({
     mutationFn: async (location: UserLocation) => {
       if (!address) throw new Error("Wallet not connected");
 
