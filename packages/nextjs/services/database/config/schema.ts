@@ -121,3 +121,10 @@ export const userChallengesRelations = relations(userChallenges, ({ one }) => ({
     references: [challenges.id],
   }),
 }));
+
+export const batchesRelations = relations(batches, ({ one }) => ({
+  users: one(users, {
+    fields: [batches.id],
+    references: [users.batchId],
+  }),
+}));
