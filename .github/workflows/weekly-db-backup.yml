@@ -1,8 +1,8 @@
-name: daily-db-backup
+name: weekly-db-backup
 
 on:
   schedule:
-    - cron: "0 5 * * *" # Runs at 5 am ET (us-east-1)
+    - cron: "0 5 * * 0" # Weekly backup: Runs at 5 am ET (us-east-1) every Sunday
   workflow_dispatch:
 
 jobs:
@@ -13,7 +13,7 @@ jobs:
       id-token: write
 
     env:
-      RETENTION: 30
+      RETENTION: 180 # 6 months of backups
       DATABASE_URL: ${{ secrets.DATABASE_URL }}
       IAM_ROLE: ${{ secrets.IAM_ROLE }}
       AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
