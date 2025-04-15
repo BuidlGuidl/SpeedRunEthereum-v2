@@ -40,6 +40,7 @@ export const users = pgTable(
     socialInstagram: varchar({ length: 255 }),
     socialDiscord: varchar({ length: 255 }),
     socialEmail: varchar({ length: 255 }),
+    location: varchar({ length: 255 }),
   },
   table => [uniqueIndex("idUniqueIndex").on(lower(table.userAddress))],
 );

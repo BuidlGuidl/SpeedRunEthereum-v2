@@ -18,7 +18,12 @@ export const UserLocation = ({ user }: { user: NonNullable<UserByAddress> }) => 
           Update Location
         </button>
       )}
-      <UpdateLocationModal ref={modalRef} isOpen={isModalOpen} closeModal={() => setIsModalOpen(false)} />
+      <UpdateLocationModal
+        ref={modalRef}
+        isOpen={isModalOpen}
+        closeModal={() => setIsModalOpen(false)}
+        existingLocation={user.location}
+      />
     </div>
   );
 };

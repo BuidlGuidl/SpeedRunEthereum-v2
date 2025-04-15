@@ -1,15 +1,20 @@
 import { forwardRef, useEffect, useState } from "react";
 import ReactFlagsSelect from "react-flags-select";
+import { useUpdateLocation } from "~~/hooks/useUpdateLocation";
+import { UserLocation } from "~~/services/database/repositories/users";
 
 type UpdateLocationModalProps = {
   closeModal: () => void;
-  existingLocation?: string;
+  existingLocation: UserLocation;
   isOpen: boolean;
 };
 
 export const UpdateLocationModal = forwardRef<HTMLDivElement, UpdateLocationModalProps>(
   ({ closeModal, existingLocation, isOpen }, ref) => {
     const [selectedCountry, setSelectedCountry] = useState(existingLocation || "");
+    const { updateLocation, isPending } = useUpdateLocation({
+      onSuccess: closeModal,
+    });
 
     useEffect(() => {
       if (!isOpen) return;
@@ -23,12 +28,6 @@ export const UpdateLocationModal = forwardRef<HTMLDivElement, UpdateLocationModa
         window.removeEventListener("keydown", handleKeyDown);
       };
     }, [isOpen, closeModal]);
-
-    const handleUpdateLocation = () => {
-      // TODO: Implement the update location logic
-      console.log("Selected country:", selectedCountry);
-      closeModal();
-    };
 
     if (!isOpen) return null;
 
@@ -61,8 +60,15 @@ export const UpdateLocationModal = forwardRef<HTMLDivElement, UpdateLocationModa
               />
             </div>
             <div className="flex justify-end">
-              <button className="btn btn-primary" onClick={handleUpdateLocation}>
-                Update Location
+              <button className="btn btn-primary" onClick={() => updateLocation(selectedCountry)}>
+                {isPending ? (
+                  <>
+                    <span className="loading loading-spinner loading-xs"></span>
+                    Updating...
+                  </>
+                ) : (
+                  "Update Location"
+                )}
               </button>
             </div>
           </div>
