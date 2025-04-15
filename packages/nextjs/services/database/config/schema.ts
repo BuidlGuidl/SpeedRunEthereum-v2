@@ -1,4 +1,4 @@
-import { ReviewAction, UserRole } from "./types";
+import { BatchStatus, BatchUserStatus, ReviewAction, UserRole } from "./types";
 import { SQL, relations, sql } from "drizzle-orm";
 import {
   AnyPgColumn,
@@ -27,11 +27,17 @@ export const reviewActionEnum = pgEnum("review_action_enum", [
 
 export const userRoleEnum = pgEnum("user_role_enum", [UserRole.USER, UserRole.BUILDER, UserRole.ADMIN]);
 
+export const batchStatusEnum = pgEnum("batch_status_enum", [BatchStatus.CLOSED, BatchStatus.OPEN]);
+export const batchUserStatusEnum = pgEnum("batch_user_status_enum", [
+  BatchUserStatus.GRADUATE,
+  BatchUserStatus.CANDIDATE,
+]);
+
 export const users = pgTable(
   "users",
   {
     userAddress: varchar({ length: 42 }).primaryKey(), // Ethereum wallet address
-    role: userRoleEnum().default(UserRole.USER), // Using the enum and setting default
+    role: userRoleEnum().default(UserRole.USER),
     createdAt: timestamp().defaultNow().notNull(),
     updatedAt: timestamp().defaultNow().notNull(),
     socialTelegram: varchar({ length: 255 }),
@@ -40,6 +46,8 @@ export const users = pgTable(
     socialInstagram: varchar({ length: 255 }),
     socialDiscord: varchar({ length: 255 }),
     socialEmail: varchar({ length: 255 }),
+    batchId: integer().references(() => batches.id),
+    batchStatus: batchUserStatusEnum(),
   },
   table => [uniqueIndex("idUniqueIndex").on(lower(table.userAddress))],
 );
@@ -50,17 +58,26 @@ type ExternalLink = Partial<{
 }>;
 
 export const challenges = pgTable("challenges", {
-  id: varchar({ length: 255 }).primaryKey(), // Unique identifier for the challenge
+  id: varchar({ length: 255 }).primaryKey(),
   challengeName: varchar({ length: 255 }).notNull(),
   description: text().notNull(),
   sortOrder: integer().notNull(),
-  github: varchar({ length: 255 }), // Repository reference for the challenge
-  autograding: boolean().default(false), // Whether the challenge supports automatic grading
+  github: varchar({ length: 255 }),
+  autograding: boolean().default(false),
   disabled: boolean().default(false),
   previewImage: varchar({ length: 255 }),
   icon: varchar({ length: 255 }),
   dependencies: varchar({ length: 255 }).notNull().array(),
   externalLink: jsonb("external_link").$type<ExternalLink>(),
+});
+
+export const batches = pgTable("batches", {
+  id: serial().primaryKey(),
+  name: varchar({ length: 255 }).notNull(),
+  startDate: timestamp().notNull(),
+  status: batchStatusEnum().notNull(),
+  contractAddress: varchar({ length: 42 }),
+  telegramLink: varchar({ length: 255 }),
 });
 
 export const userChallenges = pgTable(
@@ -77,8 +94,8 @@ export const userChallenges = pgTable(
     contractUrl: varchar({ length: 255 }),
     reviewComment: text(), // Feedback provided during autograding
     submittedAt: timestamp().notNull().defaultNow(),
-    reviewAction: reviewActionEnum(), // Final review decision from autograder (REJECTED or ACCEPTED). Initially set to SUBMITTED.
-    signature: varchar({ length: 255 }), // Added signature field from events table
+    reviewAction: reviewActionEnum(),
+    signature: varchar({ length: 255 }),
   },
   table => [
     index("user_challenge_lookup_idx").on(table.userAddress),
@@ -102,5 +119,12 @@ export const userChallengesRelations = relations(userChallenges, ({ one }) => ({
   challenge: one(challenges, {
     fields: [userChallenges.challengeId],
     references: [challenges.id],
+  }),
+}));
+
+export const batchesRelations = relations(batches, ({ one }) => ({
+  users: one(users, {
+    fields: [batches.id],
+    references: [users.batchId],
   }),
 }));

@@ -1,7 +1,7 @@
-import { challenges, userChallenges, users } from "./config/schema";
-import { ChallengeId, ReviewAction, UserRole } from "./config/types";
+import { batches, challenges, userChallenges, users } from "./config/schema";
+import { BatchStatus, BatchUserStatus, ChallengeId, ReviewAction, UserRole } from "./config/types";
 
-export const SEED_DATA_VERSION = "1.0.0";
+export const SEED_DATA_VERSION = "1.1.0";
 
 // Using Drizzle's inferred insert types to ensure seed data
 // matches database schema requirements
@@ -12,6 +12,8 @@ export const seedUsers: (typeof users.$inferInsert)[] = [
     createdAt: new Date(1679063274534),
     socialX: "pabl0cks",
     socialTelegram: "pabl0cks",
+    batchId: 1,
+    batchStatus: BatchUserStatus.GRADUATE,
   },
   {
     userAddress: "0x000084821704d731438d2D06f4295e1AB0ace7D8",
@@ -19,6 +21,8 @@ export const seedUsers: (typeof users.$inferInsert)[] = [
     createdAt: new Date(1664777161512),
     socialEmail: "ryuufarhan7@gmail.com",
     socialX: "FarhanRyuu",
+    batchId: 1,
+    batchStatus: BatchUserStatus.CANDIDATE,
   },
   {
     userAddress: "0x014EC6296B3493f0f59a3FE90E0FFf377fb8826a",
@@ -27,6 +31,8 @@ export const seedUsers: (typeof users.$inferInsert)[] = [
     socialEmail: "gokulkesavan5005@gmail.com",
     socialX: "meta_Goku",
     socialGithub: "kesgokul",
+    batchId: 3,
+    batchStatus: BatchUserStatus.CANDIDATE,
   },
   {
     userAddress: "0x01B2686Bd146bFc3F4B3DD6F7F86f26ac7c2f7Fd",
@@ -355,5 +361,32 @@ export const seedUserChallenges: (typeof userChallenges.$inferInsert)[] = [
     submittedAt: new Date(1736523426599),
     reviewComment: "<p>You have successfully passed the Dex Challenge! Great work!</p>",
     reviewAction: ReviewAction.ACCEPTED,
+  },
+];
+
+export const seedBatches: (typeof batches.$inferInsert)[] = [
+  {
+    id: 1,
+    name: "Batch 1",
+    startDate: new Date(1705315180000),
+    status: BatchStatus.CLOSED,
+    telegramLink: "https://t.me/joinchat/1",
+    contractAddress: "0x0000000000000000000000000000000000000000",
+  },
+  {
+    id: 2,
+    name: "Batch 2",
+    startDate: new Date(1707820780000),
+    status: BatchStatus.CLOSED,
+    telegramLink: "https://t.me/joinchat/2",
+    contractAddress: "0x0000000000000000000000000000000000000000",
+  },
+  {
+    id: 3,
+    name: "Batch 3",
+    startDate: new Date(1705315180000),
+    status: BatchStatus.OPEN,
+    telegramLink: "https://t.me/joinchat/3",
+    contractAddress: "0x0000000000000000000000000000000000000000",
   },
 ];

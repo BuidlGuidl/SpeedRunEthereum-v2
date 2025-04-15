@@ -24,3 +24,13 @@ export enum ChallengeId {
   SVG_NFT = "svg-nft",
   STATE_CHANNELS = "state-channels",
 }
+
+export enum BatchStatus {
+  CLOSED = "closed",
+  OPEN = "open",
+}
+
+export enum BatchUserStatus {
+  GRADUATE = "graduate",
+  CANDIDATE = "candidate",
+}
