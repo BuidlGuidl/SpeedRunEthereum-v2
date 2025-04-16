@@ -1,16 +1,20 @@
 "use client";
 
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
+import SearchIcon from "../_assets/icons/SearchIcon";
 import TelegramIcon from "../_assets/icons/TelegramIcon";
 import { useQuery } from "@tanstack/react-query";
 import { ColumnDef } from "@tanstack/react-table";
 import { DateWithTooltip } from "~~/components/DateWithTooltip";
 import InfiniteTable from "~~/components/InfiniteTable";
+import { InputBase } from "~~/components/scaffold-eth";
 import { getSortedBatches } from "~~/services/api/batches";
 import { BatchStatus } from "~~/services/database/config/types";
 import { Batch } from "~~/services/database/repositories/batches";
 
 export default function BuildersPage() {
+  const [filter, setFilter] = useState("");
+
   const { data: batches } = useQuery({
     queryKey: ["batches-count"],
     queryFn: () => getSortedBatches(0, 0, []),
@@ -82,11 +86,23 @@ export default function BuildersPage() {
   return (
     <div className="mx-4 text-center">
       <div className="text-base mt-4 font-medium">Total batches: {batches?.meta.totalRowCount ?? "Loading..."}</div>
+
+      <div className="flex items-center justify-center max-w-md mt-4 mx-auto">
+        <InputBase
+          name="filter"
+          value={filter}
+          onChange={setFilter}
+          placeholder="Search for batch"
+          suffix={<SearchIcon className="w-7 h-6 pr-2 fill-primary/60 self-center" />}
+        />
+      </div>
+
       <InfiniteTable<Batch>
         columns={columns}
         queryKey={"batches"}
         queryFn={getSortedBatches}
         initialSorting={useMemo(() => [{ id: "startDate", desc: true }], [])}
+        filter={filter}
       />
     </div>
   );

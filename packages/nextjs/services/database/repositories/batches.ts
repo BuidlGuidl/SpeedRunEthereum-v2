@@ -1,6 +1,7 @@
 import { ColumnSort, SortingState } from "@tanstack/react-table";
-import { InferInsertModel } from "drizzle-orm";
+import { InferInsertModel, like } from "drizzle-orm";
 import { eq } from "drizzle-orm";
+import { sql } from "drizzle-orm";
 import { db } from "~~/services/database/config/postgresClient";
 import { batches, users } from "~~/services/database/config/schema";
 
@@ -13,12 +14,13 @@ export async function getBatchById(id: number) {
   });
 }
 
-export async function getSortedBatchesInfo(start: number, size: number, sorting: SortingState) {
+export async function getSortedBatchesInfo(start: number, size: number, sorting: SortingState, filter?: string) {
   const sortingQuery = sorting[0] as ColumnSort;
 
   const query = db.query.batches.findMany({
     limit: size,
     offset: start,
+    where: filter ? like(batches.name, `%${filter}%`) : undefined,
     orderBy: (batches, { desc, asc }) => {
       if (!sortingQuery) return [];
 
@@ -32,7 +34,17 @@ export async function getSortedBatchesInfo(start: number, size: number, sorting:
     },
   });
 
-  const [batchesData, totalCount] = await Promise.all([query, db.$count(batches)]);
+  const [batchesData, countResult] = await Promise.all([
+    query,
+    filter
+      ? db
+          .select({ count: sql<number>`count(*)` })
+          .from(batches)
+          .where(like(batches.name, `%${filter}%`))
+      : db.$count(batches),
+  ]);
+
+  const totalCount = filter ? Number((countResult as { count: number }[])[0].count) : (countResult as number);
 
   return {
     data: batchesData,

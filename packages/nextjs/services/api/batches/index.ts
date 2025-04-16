@@ -1,8 +1,10 @@
 import { SortingState } from "@tanstack/react-table";
 import { Batch } from "~~/services/database/repositories/batches";
 
-export const getSortedBatches = async (start: number, size: number, sorting: SortingState) => {
-  const response = await fetch(`/api/batches/sorted?start=${start}&size=${size}&sorting=${JSON.stringify(sorting)}`);
+export const getSortedBatches = async (start: number, size: number, sorting: SortingState, filter?: string) => {
+  const response = await fetch(
+    `/api/batches/sorted?start=${start}&size=${size}&sorting=${JSON.stringify(sorting)}&filter=${filter || ""}`,
+  );
 
   if (!response.ok) {
     throw new Error(`Failed to fetch sorted batches: ${response.status} ${response.statusText}`);
