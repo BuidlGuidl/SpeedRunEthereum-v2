@@ -1,4 +1,4 @@
-import { challenges, userChallenges, users } from "./config/schema";
+import { batches, challenges, userChallenges, users } from "./config/schema";
 import * as dotenv from "dotenv";
 import { drizzle } from "drizzle-orm/node-postgres";
 import * as fs from "fs";
@@ -12,6 +12,7 @@ type SeedData = {
   seedUsers?: (typeof users.$inferInsert)[];
   seedChallenges?: (typeof challenges.$inferInsert)[];
   seedUserChallenges?: (typeof userChallenges.$inferInsert)[];
+  seedBatches?: (typeof batches.$inferInsert)[];
 };
 
 async function loadSeedData() {
@@ -39,6 +40,7 @@ async function loadSeedData() {
       seedUsers: seedData.seedUsers,
       seedChallenges: seedData.seedChallenges,
       seedUserChallenges: seedData.seedUserChallenges,
+      seedBatches: seedData.seedBatches,
     };
   } catch (error) {
     console.error("Error: cannot load seed data");
@@ -53,9 +55,9 @@ if (connectionUrl.hostname !== "localhost") {
 }
 
 async function seed() {
-  const { seedUsers, seedChallenges, seedUserChallenges } = await loadSeedData();
+  const { seedUsers, seedChallenges, seedUserChallenges, seedBatches } = await loadSeedData();
 
-  if (!seedUsers || !seedChallenges || !seedUserChallenges) {
+  if (!seedUsers || !seedChallenges || !seedUserChallenges || !seedBatches) {
     console.error("Error: Required seed data is missing");
     process.exit(1);
   }
@@ -65,7 +67,7 @@ async function seed() {
   });
   await client.connect();
   const db = drizzle(client, {
-    schema: { challenges, userChallenges, users },
+    schema: { challenges, userChallenges, users, batches },
     casing: "snake_case",
   });
 
@@ -76,9 +78,13 @@ async function seed() {
       await tx.delete(userChallenges).execute();
       await tx.delete(challenges).execute();
       await tx.delete(users).execute();
+      await tx.delete(batches).execute();
     });
 
     // Insert fresh data
+    console.log("Inserting batches...");
+    await db.insert(batches).values(seedBatches).execute();
+
     console.log("Inserting users...");
     await db.insert(users).values(seedUsers).execute();
 

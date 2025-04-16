@@ -1,9 +1,59 @@
 {
-  "id": "c9bcbc2e-5eaf-4acb-84fb-1bddbafd6625",
+  "id": "f84a3b45-c16d-4345-9c88-124a5d5d7b25",
   "prevId": "34986481-8e84-4c0b-9a7f-6a2f70350f02",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
+    "public.batches": {
+      "name": "batches",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "start_date": {
+          "name": "start_date",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "status": {
+          "name": "status",
+          "type": "batch_status_enum",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "contract_address": {
+          "name": "contract_address",
+          "type": "varchar(42)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "telegram_link": {
+          "name": "telegram_link",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
     "public.challenges": {
       "name": "challenges",
       "schema": "",
@@ -189,12 +239,8 @@
           "name": "user_challenges_user_address_users_user_address_fk",
           "tableFrom": "user_challenges",
           "tableTo": "users",
-          "columnsFrom": [
-            "user_address"
-          ],
-          "columnsTo": [
-            "user_address"
-          ],
+          "columnsFrom": ["user_address"],
+          "columnsTo": ["user_address"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -202,12 +248,8 @@
           "name": "user_challenges_challenge_id_challenges_id_fk",
           "tableFrom": "user_challenges",
           "tableTo": "challenges",
-          "columnsFrom": [
-            "challenge_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["challenge_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -286,9 +328,16 @@
           "primaryKey": false,
           "notNull": false
         },
-        "location": {
-          "name": "location",
-          "type": "varchar(255)",
+        "batch_id": {
+          "name": "batch_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "batch_status": {
+          "name": "batch_status",
+          "type": "batch_user_status_enum",
+          "typeSchema": "public",
           "primaryKey": false,
           "notNull": false
         }
@@ -310,7 +359,17 @@
           "with": {}
         }
       },
-      "foreignKeys": {},
+      "foreignKeys": {
+        "users_batch_id_batches_id_fk": {
+          "name": "users_batch_id_batches_id_fk",
+          "tableFrom": "users",
+          "tableTo": "batches",
+          "columnsFrom": ["batch_id"],
+          "columnsTo": ["id"],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {},
       "policies": {},
@@ -319,23 +378,25 @@
     }
   },
   "enums": {
+    "public.batch_status_enum": {
+      "name": "batch_status_enum",
+      "schema": "public",
+      "values": ["closed", "open"]
+    },
+    "public.batch_user_status_enum": {
+      "name": "batch_user_status_enum",
+      "schema": "public",
+      "values": ["graduate", "candidate"]
+    },
     "public.review_action_enum": {
       "name": "review_action_enum",
       "schema": "public",
-      "values": [
-        "REJECTED",
-        "ACCEPTED",
-        "SUBMITTED"
-      ]
+      "values": ["REJECTED", "ACCEPTED", "SUBMITTED"]
     },
     "public.user_role_enum": {
       "name": "user_role_enum",
       "schema": "public",
-      "values": [
-        "USER",
-        "BUILDER",
-        "ADMIN"
-      ]
+      "values": ["USER", "BUILDER", "ADMIN"]
     }
   },
   "schemas": {},
