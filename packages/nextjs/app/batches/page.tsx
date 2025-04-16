@@ -56,7 +56,7 @@ export default function BuildersPage() {
 
           return (
             <div
-              className={`flex w-full justify-center ${status === BatchStatus.OPEN ? "text-success" : "text-error"}`}
+              className={`flex w-full justify-center ${status === BatchStatus.OPEN ? "text-green-500" : "text-primary/60"}`}
             >
               {status}
             </div>
