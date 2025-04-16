@@ -24,12 +24,10 @@ export default function BuildersPage() {
     () => [
       {
         header: "Batch",
+        accessorKey: "name",
         size: 200,
         cell: info => {
-          const row = info.row.original;
-
-          // TODO: update
-          return <div className="flex w-full justify-center">{row?.name}</div>;
+          return <div className="flex w-full justify-center">{info.getValue() as string}</div>;
         },
       },
       {
