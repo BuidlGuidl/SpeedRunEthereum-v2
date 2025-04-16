@@ -1,3 +1,4 @@
+import { ColumnSort, SortingState } from "@tanstack/react-table";
 import { InferInsertModel } from "drizzle-orm";
 import { eq } from "drizzle-orm";
 import { db } from "~~/services/database/config/postgresClient";
@@ -10,6 +11,35 @@ export async function getBatchById(id: number) {
   return await db.query.batches.findFirst({
     where: eq(batches.id, id),
   });
+}
+
+export async function getSortedBatchesInfo(start: number, size: number, sorting: SortingState) {
+  const sortingQuery = sorting[0] as ColumnSort;
+
+  const query = db.query.batches.findMany({
+    limit: size,
+    offset: start,
+    orderBy: (batches, { desc, asc }) => {
+      if (!sortingQuery) return [];
+
+      const sortOrder = sortingQuery.desc ? desc : asc;
+
+      if (sortingQuery.id in batches) {
+        return sortOrder(batches[sortingQuery.id as keyof typeof batches]);
+      }
+
+      return [];
+    },
+  });
+
+  const [batchesData, totalCount] = await Promise.all([query, db.$count(batches)]);
+
+  return {
+    data: batchesData,
+    meta: {
+      totalRowCount: totalCount,
+    },
+  };
 }
 
 export async function createBatch(batch: BatchInsert) {

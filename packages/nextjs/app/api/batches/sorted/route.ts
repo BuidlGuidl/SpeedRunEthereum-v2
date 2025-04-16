@@ -1,5 +1,5 @@
 import { NextRequest } from "next/server";
-import { getSortedUsersWithChallengesInfo } from "~~/services/database/repositories/users";
+import { getSortedBatchesInfo } from "~~/services/database/repositories/batches";
 
 export async function GET(request: NextRequest) {
   try {
@@ -8,11 +8,11 @@ export async function GET(request: NextRequest) {
     const size = parseInt(searchParams.get("size") ?? "0");
     const sorting = JSON.parse(searchParams.get("sorting") ?? "[]");
 
-    const data = await getSortedUsersWithChallengesInfo(start, size, sorting);
+    const data = await getSortedBatchesInfo(start, size, sorting);
 
     return Response.json(data);
   } catch (error) {
-    console.error("Error fetching sorted users:", error);
+    console.error("Error fetching sorted batches:", error);
     return Response.json({ error: "Internal Server Error" }, { status: 500 });
   }
 }
