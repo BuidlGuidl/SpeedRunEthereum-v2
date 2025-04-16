@@ -104,8 +104,12 @@ export const userChallenges = pgTable(
   ],
 );
 
-export const usersRelations = relations(users, ({ many }) => ({
+export const usersRelations = relations(users, ({ many, one }) => ({
   userChallenges: many(userChallenges),
+  batch: one(batches, {
+    fields: [users.batchId],
+    references: [batches.id],
+  }),
 }));
 
 export const challengesRelations = relations(challenges, ({ many }) => ({
@@ -123,9 +127,6 @@ export const userChallengesRelations = relations(userChallenges, ({ one }) => ({
   }),
 }));
 
-export const batchesRelations = relations(batches, ({ one }) => ({
-  users: one(users, {
-    fields: [batches.id],
-    references: [users.batchId],
-  }),
+export const batchesRelations = relations(batches, ({ many }) => ({
+  users: many(users),
 }));
