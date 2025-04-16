@@ -1,5 +1,5 @@
 import { SortingState } from "@tanstack/react-table";
-import { Batch } from "~~/services/database/repositories/batches";
+import { BatchWithCounts } from "~~/services/database/repositories/batches";
 
 export const getSortedBatches = async (start: number, size: number, sorting: SortingState, filter?: string) => {
   const response = await fetch(
@@ -11,7 +11,7 @@ export const getSortedBatches = async (start: number, size: number, sorting: Sor
   }
 
   const batchesData = (await response.json()) as {
-    data: Batch[];
+    data: BatchWithCounts[];
     meta: {
       totalRowCount: number;
     };

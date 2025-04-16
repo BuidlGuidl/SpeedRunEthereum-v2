@@ -10,7 +10,7 @@ import InfiniteTable from "~~/components/InfiniteTable";
 import { InputBase } from "~~/components/scaffold-eth";
 import { getSortedBatches } from "~~/services/api/batches";
 import { BatchStatus } from "~~/services/database/config/types";
-import { Batch } from "~~/services/database/repositories/batches";
+import { BatchWithCounts } from "~~/services/database/repositories/batches";
 
 export default function BuildersPage() {
   const [filter, setFilter] = useState("");
@@ -20,7 +20,7 @@ export default function BuildersPage() {
     queryFn: () => getSortedBatches(0, 0, []),
   });
 
-  const columns = useMemo<ColumnDef<Batch>[]>(
+  const columns = useMemo<ColumnDef<BatchWithCounts>[]>(
     () => [
       {
         header: "Batch",
@@ -55,6 +55,24 @@ export default function BuildersPage() {
           return (
             <div className="flex w-full justify-center">
               <DateWithTooltip timestamp={info.getValue() as Date} position="left" />
+            </div>
+          );
+        },
+        size: 300,
+      },
+      {
+        header: "Graduates / Participants",
+        accessorKey: "graduateCount",
+        enableSorting: true,
+        cell: info => {
+          const row = info.row.original;
+
+          const graduates = row.graduateCount || 0;
+          const candidates = row.candidateCount || 0;
+
+          return (
+            <div className="flex w-full justify-center">
+              {graduates} / {graduates + candidates}
             </div>
           );
         },
@@ -97,7 +115,7 @@ export default function BuildersPage() {
         />
       </div>
 
-      <InfiniteTable<Batch>
+      <InfiniteTable<BatchWithCounts>
         columns={columns}
         queryKey={"batches"}
         queryFn={getSortedBatches}

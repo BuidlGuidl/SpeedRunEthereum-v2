@@ -7,6 +7,7 @@ import { batches, users } from "~~/services/database/config/schema";
 
 export type BatchInsert = InferInsertModel<typeof batches>;
 export type Batch = Awaited<ReturnType<typeof getBatchById>>;
+export type BatchWithCounts = Awaited<ReturnType<typeof getSortedBatchesInfo>>["data"][0];
 
 export async function getBatchById(id: number) {
   return await db.query.batches.findFirst({
@@ -34,7 +35,7 @@ export async function getSortedBatchesInfo(start: number, size: number, sorting:
     },
   });
 
-  const [batchesData, countResult] = await Promise.all([
+  const [batchesData, countResult, userCounts] = await Promise.all([
     query,
     filter
       ? db
@@ -42,12 +43,40 @@ export async function getSortedBatchesInfo(start: number, size: number, sorting:
           .from(batches)
           .where(like(batches.name, `%${filter}%`))
       : db.$count(batches),
+    db
+      .select({
+        batchId: users.batchId,
+        candidateCount: sql<number>`count(*) filter (where ${users.batchStatus} = 'candidate')`,
+        graduateCount: sql<number>`count(*) filter (where ${users.batchStatus} = 'graduate')`,
+      })
+      .from(users)
+      .groupBy(users.batchId),
   ]);
 
   const totalCount = filter ? Number((countResult as { count: number }[])[0].count) : (countResult as number);
 
+  const batchesWithCounts = batchesData.map(batch => {
+    const counts = userCounts.find(count => count.batchId === batch.id) || {
+      candidateCount: 0,
+      graduateCount: 0,
+    };
+    return {
+      ...batch,
+      candidateCount: Number(counts.candidateCount),
+      graduateCount: Number(counts.graduateCount),
+    };
+  });
+
+  if (sortingQuery?.id === "graduateCount") {
+    batchesWithCounts.sort((a, b) => {
+      const aCount = a.graduateCount || 0;
+      const bCount = b.graduateCount || 0;
+      return sortingQuery.desc ? bCount - aCount : aCount - bCount;
+    });
+  }
+
   return {
-    data: batchesData,
+    data: batchesWithCounts,
     meta: {
       totalRowCount: totalCount,
     },
