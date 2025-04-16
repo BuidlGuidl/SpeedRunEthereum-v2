@@ -1,14 +1,15 @@
 import * as schema from "./schema";
-import { sql } from "@vercel/postgres";
+import { neon } from "@neondatabase/serverless";
+import { drizzle as drizzleNeon } from "drizzle-orm/neon-http";
 import { drizzle } from "drizzle-orm/node-postgres";
-import { drizzle as drizzleVercel } from "drizzle-orm/vercel-postgres";
 import { Pool } from "pg";
 
-let db: ReturnType<typeof drizzle<typeof schema>> | ReturnType<typeof drizzleVercel<typeof schema>>;
+let db: ReturnType<typeof drizzle<typeof schema>> | ReturnType<typeof drizzleNeon<typeof schema>>;
 
-const VERCEL_DB_STRING = "verceldb";
-if (process.env.POSTGRES_URL?.includes(VERCEL_DB_STRING)) {
-  db = drizzleVercel(sql, { schema, casing: "snake_case" });
+const NEON_DB_STRING = "neondb";
+if (process.env.POSTGRES_URL?.includes(NEON_DB_STRING)) {
+  const sql = neon(process.env.POSTGRES_URL as string);
+  db = drizzleNeon({ schema, casing: "snake_case", client: sql });
 } else {
   const pool = new Pool({
     connectionString: process.env.POSTGRES_URL,
