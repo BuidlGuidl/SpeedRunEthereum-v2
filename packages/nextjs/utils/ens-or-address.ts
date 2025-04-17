@@ -2,11 +2,9 @@ import { Address, createPublicClient, http } from "viem";
 import { mainnet } from "viem/chains";
 import { getAlchemyHttpUrl } from "~~/utils/scaffold-eth";
 
-const alchemyHttpUrl = getAlchemyHttpUrl(mainnet.id);
-const rpcUrl = alchemyHttpUrl;
 export const publicClient = createPublicClient({
   chain: mainnet,
-  transport: http(rpcUrl),
+  transport: http(getAlchemyHttpUrl(mainnet.id)),
 });
 
 export async function getEnsOrAddress(address: Address) {
