@@ -15,6 +15,10 @@ export const UserSocials = ({ user }: { user: NonNullable<UserByAddress> }) => {
 
   const userSocials = getUserSocialsList(user);
 
+  if (!userSocials.length && !isProfileOwner) {
+    return null;
+  }
+
   return (
     <div className="flex flex-col gap-4 w-full">
       {userSocials.length > 0 ? (

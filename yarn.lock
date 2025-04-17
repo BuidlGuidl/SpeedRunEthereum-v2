@@ -1852,12 +1852,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@neondatabase/serverless@npm:^0.9.3":
-  version: 0.9.5
-  resolution: "@neondatabase/serverless@npm:0.9.5"
+"@neondatabase/serverless@npm:^1.0.0":
+  version: 1.0.0
+  resolution: "@neondatabase/serverless@npm:1.0.0"
   dependencies:
-    "@types/pg": 8.11.6
-  checksum: b53c4b21c6eaf995a12bd84adf2c839022b7eb8b216cb07319a784a6f60965cf9ae497560a2aa767f5f8a407f1a45783f13b9f9e8f5c2078118a6a5ae174fdb2
+    "@types/node": ^22.10.2
+    "@types/pg": ^8.8.0
+  checksum: 3fabf0d5dd0dc42fb559d21de1f2cb87a636eb050a7fa21a6000139e8d4370ff94302f69bba37a1b52ac9af0d256274431c2b2b5899786bb5538fa3018f326eb
   languageName: node
   linkType: hard
 
@@ -2348,6 +2349,150 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@parcel/watcher-android-arm64@npm:2.5.1":
+  version: 2.5.1
+  resolution: "@parcel/watcher-android-arm64@npm:2.5.1"
+  conditions: os=android & cpu=arm64
+  languageName: node
+  linkType: hard
+
+"@parcel/watcher-darwin-arm64@npm:2.5.1":
+  version: 2.5.1
+  resolution: "@parcel/watcher-darwin-arm64@npm:2.5.1"
+  conditions: os=darwin & cpu=arm64
+  languageName: node
+  linkType: hard
+
+"@parcel/watcher-darwin-x64@npm:2.5.1":
+  version: 2.5.1
+  resolution: "@parcel/watcher-darwin-x64@npm:2.5.1"
+  conditions: os=darwin & cpu=x64
+  languageName: node
+  linkType: hard
+
+"@parcel/watcher-freebsd-x64@npm:2.5.1":
+  version: 2.5.1
+  resolution: "@parcel/watcher-freebsd-x64@npm:2.5.1"
+  conditions: os=freebsd & cpu=x64
+  languageName: node
+  linkType: hard
+
+"@parcel/watcher-linux-arm-glibc@npm:2.5.1":
+  version: 2.5.1
+  resolution: "@parcel/watcher-linux-arm-glibc@npm:2.5.1"
+  conditions: os=linux & cpu=arm & libc=glibc
+  languageName: node
+  linkType: hard
+
+"@parcel/watcher-linux-arm-musl@npm:2.5.1":
+  version: 2.5.1
+  resolution: "@parcel/watcher-linux-arm-musl@npm:2.5.1"
+  conditions: os=linux & cpu=arm & libc=musl
+  languageName: node
+  linkType: hard
+
+"@parcel/watcher-linux-arm64-glibc@npm:2.5.1":
+  version: 2.5.1
+  resolution: "@parcel/watcher-linux-arm64-glibc@npm:2.5.1"
+  conditions: os=linux & cpu=arm64 & libc=glibc
+  languageName: node
+  linkType: hard
+
+"@parcel/watcher-linux-arm64-musl@npm:2.5.1":
+  version: 2.5.1
+  resolution: "@parcel/watcher-linux-arm64-musl@npm:2.5.1"
+  conditions: os=linux & cpu=arm64 & libc=musl
+  languageName: node
+  linkType: hard
+
+"@parcel/watcher-linux-x64-glibc@npm:2.5.1":
+  version: 2.5.1
+  resolution: "@parcel/watcher-linux-x64-glibc@npm:2.5.1"
+  conditions: os=linux & cpu=x64 & libc=glibc
+  languageName: node
+  linkType: hard
+
+"@parcel/watcher-linux-x64-musl@npm:2.5.1":
+  version: 2.5.1
+  resolution: "@parcel/watcher-linux-x64-musl@npm:2.5.1"
+  conditions: os=linux & cpu=x64 & libc=musl
+  languageName: node
+  linkType: hard
+
+"@parcel/watcher-win32-arm64@npm:2.5.1":
+  version: 2.5.1
+  resolution: "@parcel/watcher-win32-arm64@npm:2.5.1"
+  conditions: os=win32 & cpu=arm64
+  languageName: node
+  linkType: hard
+
+"@parcel/watcher-win32-ia32@npm:2.5.1":
+  version: 2.5.1
+  resolution: "@parcel/watcher-win32-ia32@npm:2.5.1"
+  conditions: os=win32 & cpu=ia32
+  languageName: node
+  linkType: hard
+
+"@parcel/watcher-win32-x64@npm:2.5.1":
+  version: 2.5.1
+  resolution: "@parcel/watcher-win32-x64@npm:2.5.1"
+  conditions: os=win32 & cpu=x64
+  languageName: node
+  linkType: hard
+
+"@parcel/watcher@npm:^2.4.1":
+  version: 2.5.1
+  resolution: "@parcel/watcher@npm:2.5.1"
+  dependencies:
+    "@parcel/watcher-android-arm64": 2.5.1
+    "@parcel/watcher-darwin-arm64": 2.5.1
+    "@parcel/watcher-darwin-x64": 2.5.1
+    "@parcel/watcher-freebsd-x64": 2.5.1
+    "@parcel/watcher-linux-arm-glibc": 2.5.1
+    "@parcel/watcher-linux-arm-musl": 2.5.1
+    "@parcel/watcher-linux-arm64-glibc": 2.5.1
+    "@parcel/watcher-linux-arm64-musl": 2.5.1
+    "@parcel/watcher-linux-x64-glibc": 2.5.1
+    "@parcel/watcher-linux-x64-musl": 2.5.1
+    "@parcel/watcher-win32-arm64": 2.5.1
+    "@parcel/watcher-win32-ia32": 2.5.1
+    "@parcel/watcher-win32-x64": 2.5.1
+    detect-libc: ^1.0.3
+    is-glob: ^4.0.3
+    micromatch: ^4.0.5
+    node-addon-api: ^7.0.0
+    node-gyp: latest
+  dependenciesMeta:
+    "@parcel/watcher-android-arm64":
+      optional: true
+    "@parcel/watcher-darwin-arm64":
+      optional: true
+    "@parcel/watcher-darwin-x64":
+      optional: true
+    "@parcel/watcher-freebsd-x64":
+      optional: true
+    "@parcel/watcher-linux-arm-glibc":
+      optional: true
+    "@parcel/watcher-linux-arm-musl":
+      optional: true
+    "@parcel/watcher-linux-arm64-glibc":
+      optional: true
+    "@parcel/watcher-linux-arm64-musl":
+      optional: true
+    "@parcel/watcher-linux-x64-glibc":
+      optional: true
+    "@parcel/watcher-linux-x64-musl":
+      optional: true
+    "@parcel/watcher-win32-arm64":
+      optional: true
+    "@parcel/watcher-win32-ia32":
+      optional: true
+    "@parcel/watcher-win32-x64":
+      optional: true
+  checksum: c6444cd20212929ef2296d5620c0d41343a1719232cb0c947ced51155b8afc1e470c09d238b92f6c3a589e0320048badf5b73cb41790229521be224cbf89e0f4
+  languageName: node
+  linkType: hard
+
 "@pkgjs/parseargs@npm:^0.11.0":
   version: 0.11.0
   resolution: "@pkgjs/parseargs@npm:0.11.0"
@@ -2621,6 +2766,7 @@ __metadata:
   resolution: "@se-2/nextjs@workspace:packages/nextjs"
   dependencies:
     "@heroicons/react": ~2.1.5
+    "@neondatabase/serverless": ^1.0.0
     "@rainbow-me/rainbowkit": 2.1.6
     "@tailwindcss/typography": ^0.5.16
     "@tanstack/react-query": ~5.59.15
@@ -2634,7 +2780,6 @@ __metadata:
     "@uniswap/sdk-core": ~5.8.2
     "@uniswap/v2-sdk": ~4.6.1
     "@vercel/functions": ^2.0.0
-    "@vercel/postgres": ^0.10.0
     abitype: 1.0.6
     autoprefixer: ~10.4.20
     blo: ~1.2.0
@@ -2642,7 +2787,7 @@ __metadata:
     daisyui: 4.12.10
     dotenv: ^16.4.7
     drizzle-kit: ^0.30.4
-    drizzle-orm: ^0.39.1
+    drizzle-orm: ^0.42.0
     eslint: ~8.57.1
     eslint-config-next: ~14.2.15
     eslint-config-prettier: ~8.10.0
@@ -2658,7 +2803,9 @@ __metadata:
     qrcode.react: ~4.0.1
     react: ~18.3.1
     react-copy-to-clipboard: ~5.1.0
+    react-country-flag: ^3.1.0
     react-dom: ~18.3.1
+    react-flags-select: ^2.4.0
     react-hot-toast: ~2.4.0
     rehype-raw: ^7.0.0
     remark-gfm: ^4.0.1
@@ -3334,6 +3481,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/node@npm:^22.10.2":
+  version: 22.14.1
+  resolution: "@types/node@npm:22.14.1"
+  dependencies:
+    undici-types: ~6.21.0
+  checksum: e22363f40ac8290da2bb5261c2b348241fd93b000908cefd3c56575df9d4f6b8d102fc8631275eac7ec4a9e0ac4f38f01c9d8104ebbda76c936aef96fd1e55f3
+  languageName: node
+  linkType: hard
+
 "@types/node@npm:~18.19.50":
   version: 18.19.75
   resolution: "@types/node@npm:18.19.75"
@@ -3352,17 +3508,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/pg@npm:8.11.6":
-  version: 8.11.6
-  resolution: "@types/pg@npm:8.11.6"
-  dependencies:
-    "@types/node": "*"
-    pg-protocol: "*"
-    pg-types: ^4.0.1
-  checksum: 231f7e5bfe8b4d14cca398d24cd55f4f14f582f815b62059e6f3ee74108cf92089fbd946568ebc35fa402f238ed9c8a8c1e10e7084e83e4ca3aff75957243014
-  languageName: node
-  linkType: hard
-
 "@types/pg@npm:^8":
   version: 8.11.11
   resolution: "@types/pg@npm:8.11.11"
@@ -3371,6 +3516,17 @@ __metadata:
     pg-protocol: "*"
     pg-types: ^4.0.1
   checksum: 50c4a803484610388eed64b1339aab55f6f6493be6798fe560105a216e517a1ec23d4a7792ae2f963f3848b19d5071297d5dbed75f7457f4caa6790b9537c681
+  languageName: node
+  linkType: hard
+
+"@types/pg@npm:^8.8.0":
+  version: 8.11.13
+  resolution: "@types/pg@npm:8.11.13"
+  dependencies:
+    "@types/node": "*"
+    pg-protocol: "*"
+    pg-types: ^4.0.1
+  checksum: c2a5186d730d4a4db129aedc56d9d72892095b30f2c5b64cbc16302d622c9c7a490000f7d370ee41576834dcac6f2e91424da8153e0fb840ce3ba64ba99b2b5d
   languageName: node
   linkType: hard
 
@@ -4076,17 +4232,6 @@ __metadata:
     typescript: 4.9.5
     undici: 5.28.4
   checksum: c56ee070d18c34fbe3cb0a574a95a50dc19b2084d66a55edc0a35647796587db5f6e9c91637f1f0cec73f0cb709dc223267fc739e5e679c8f410102fc2f2e395
-  languageName: node
-  linkType: hard
-
-"@vercel/postgres@npm:^0.10.0":
-  version: 0.10.0
-  resolution: "@vercel/postgres@npm:0.10.0"
-  dependencies:
-    "@neondatabase/serverless": ^0.9.3
-    bufferutil: ^4.0.8
-    ws: ^8.17.1
-  checksum: 45c29baa73bed4b07a5c06ae283647d43c89d843ebd3cb4864b59ec4217ef5d24832e569cd08d61f8b7875522fc207bb364547ea7e9423dd37521fba24ccec20
   languageName: node
   linkType: hard
 
@@ -5779,6 +5924,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"classnames@npm:^2.2.6":
+  version: 2.5.1
+  resolution: "classnames@npm:2.5.1"
+  checksum: da424a8a6f3a96a2e87d01a432ba19315503294ac7e025f9fece656db6b6a0f7b5003bb1fbb51cbb0d9624d964f1b9bb35a51c73af9b2434c7b292c42231c1e5
+  languageName: node
+  linkType: hard
+
 "clean-stack@npm:^2.0.0":
   version: 2.2.0
   resolution: "clean-stack@npm:2.2.0"
@@ -6489,6 +6641,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"detect-libc@npm:^1.0.3":
+  version: 1.0.3
+  resolution: "detect-libc@npm:1.0.3"
+  bin:
+    detect-libc: ./bin/detect-libc.js
+  checksum: daaaed925ffa7889bd91d56e9624e6c8033911bb60f3a50a74a87500680652969dbaab9526d1e200a4c94acf80fc862a22131841145a0a8482d60a99c24f4a3e
+  languageName: node
+  linkType: hard
+
 "detect-libc@npm:^2.0.0":
   version: 2.0.3
   resolution: "detect-libc@npm:2.0.3"
@@ -6604,9 +6765,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"drizzle-orm@npm:^0.39.1":
-  version: 0.39.1
-  resolution: "drizzle-orm@npm:0.39.1"
+"drizzle-orm@npm:^0.42.0":
+  version: 0.42.0
+  resolution: "drizzle-orm@npm:0.42.0"
   peerDependencies:
     "@aws-sdk/client-rds-data": ">=3"
     "@cloudflare/workers-types": ">=4"
@@ -6616,24 +6777,23 @@ __metadata:
     "@neondatabase/serverless": ">=0.10.0"
     "@op-engineering/op-sqlite": ">=2"
     "@opentelemetry/api": ^1.4.1
-    "@planetscale/database": ">=1"
+    "@planetscale/database": ">=1.13"
     "@prisma/client": "*"
     "@tidbcloud/serverless": "*"
     "@types/better-sqlite3": "*"
     "@types/pg": "*"
-    "@types/react": ">=18"
     "@types/sql.js": "*"
     "@vercel/postgres": ">=0.8.0"
     "@xata.io/client": "*"
     better-sqlite3: ">=7"
     bun-types: "*"
     expo-sqlite: ">=14.0.0"
+    gel: ">=2"
     knex: "*"
     kysely: "*"
     mysql2: ">=2"
     pg: ">=8"
     postgres: ">=3"
-    react: ">=18"
     sql.js: ">=1"
     sqlite3: ">=5"
   peerDependenciesMeta:
@@ -6663,8 +6823,6 @@ __metadata:
       optional: true
     "@types/pg":
       optional: true
-    "@types/react":
-      optional: true
     "@types/sql.js":
       optional: true
     "@vercel/postgres":
@@ -6676,6 +6834,8 @@ __metadata:
     bun-types:
       optional: true
     expo-sqlite:
+      optional: true
+    gel:
       optional: true
     knex:
       optional: true
@@ -6689,13 +6849,11 @@ __metadata:
       optional: true
     prisma:
       optional: true
-    react:
-      optional: true
     sql.js:
       optional: true
     sqlite3:
       optional: true
-  checksum: 3361a085347908c0aaa9f1784550465a34f0a4eabfe00821c81faf2e31e277a25caac0715b825359b0a9ef24572f291cf385ededb5e77c8fe171a82d70082a05
+  checksum: 1545f879a43b9cd73ef1af51fa18fdbbcfafc28cd469d4cd09817439a9c7183e83dccf67c2731bbfcab8311793aa19e4228bfacecd4cc5db477c09d092302801
   languageName: node
   linkType: hard
 
@@ -9690,6 +9848,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"immutable@npm:^5.0.2":
+  version: 5.1.1
+  resolution: "immutable@npm:5.1.1"
+  checksum: 02f8c8a106710827cf349426901257d8437c535c463f7e8680edc95c6e0c8a9720aa6fedeb09eac560ec0dad5a38e7e1d17f696bdd91c0c5c9758c53ada38fc0
+  languageName: node
+  linkType: hard
+
 "import-fresh@npm:^3.2.1":
   version: 3.3.1
   resolution: "import-fresh@npm:3.3.1"
@@ -12113,6 +12278,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"node-addon-api@npm:^7.0.0":
+  version: 7.1.1
+  resolution: "node-addon-api@npm:7.1.1"
+  dependencies:
+    node-gyp: latest
+  checksum: 46051999e3289f205799dfaf6bcb017055d7569090f0004811110312e2db94cb4f8654602c7eb77a60a1a05142cc2b96e1b5c56ca4622c41a5c6370787faaf30
+  languageName: node
+  linkType: hard
+
 "node-emoji@npm:^1.10.0":
   version: 1.11.0
   resolution: "node-emoji@npm:1.11.0"
@@ -13551,6 +13725,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-country-flag@npm:^3.1.0":
+  version: 3.1.0
+  resolution: "react-country-flag@npm:3.1.0"
+  peerDependencies:
+    react: ">=16"
+  checksum: d032dac7d342b6aab8efc77552acc91939a8f78edc158a54972180834ff591e4c01f1f3ecced7eeaabd98cbb26db9ea7ce64892facade3157380a91f226e9161
+  languageName: node
+  linkType: hard
+
 "react-dom@npm:~18.3.1":
   version: 18.3.1
   resolution: "react-dom@npm:18.3.1"
@@ -13560,6 +13743,19 @@ __metadata:
   peerDependencies:
     react: ^18.3.1
   checksum: 298954ecd8f78288dcaece05e88b570014d8f6dce5db6f66e6ee91448debeb59dcd31561dddb354eee47e6c1bb234669459060deb238ed0213497146e555a0b9
+  languageName: node
+  linkType: hard
+
+"react-flags-select@npm:^2.4.0":
+  version: 2.4.0
+  resolution: "react-flags-select@npm:2.4.0"
+  dependencies:
+    classnames: ^2.2.6
+    sass: ^1.49.7
+  peerDependencies:
+    react: ">=16.8.0"
+    react-dom: ">=16.8.0"
+  checksum: 7814f5133329dd89df7cdf7b5664bb430eb12986279ea2edc41fade50b27371db43dfbc2e15958b6e7ea52ddb2d86e57c29fd125cdaf671f97e0463eb8dd62e1
   languageName: node
   linkType: hard
 
@@ -14231,6 +14427,23 @@ __metadata:
   languageName: node
   linkType: hard
 
+"sass@npm:^1.49.7":
+  version: 1.86.3
+  resolution: "sass@npm:1.86.3"
+  dependencies:
+    "@parcel/watcher": ^2.4.1
+    chokidar: ^4.0.0
+    immutable: ^5.0.2
+    source-map-js: ">=0.6.2 <2.0.0"
+  dependenciesMeta:
+    "@parcel/watcher":
+      optional: true
+  bin:
+    sass: sass.js
+  checksum: 743091217d4f72d261177409d2aa592ca6be49e95c84c8bd06c3ff06ee0113b8532ad6b30c95d923cc1b3470241989983bdeb3b0710b1570ffed0768aa4e5227
+  languageName: node
+  linkType: hard
+
 "sc-istanbul@npm:^0.4.5":
   version: 0.4.6
   resolution: "sc-istanbul@npm:0.4.6"
@@ -14670,7 +14883,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"source-map-js@npm:^1.0.2, source-map-js@npm:^1.2.1":
+"source-map-js@npm:>=0.6.2 <2.0.0, source-map-js@npm:^1.0.2, source-map-js@npm:^1.2.1":
   version: 1.2.1
   resolution: "source-map-js@npm:1.2.1"
   checksum: 4eb0cd997cdf228bc253bcaff9340afeb706176e64868ecd20efbe6efea931465f43955612346d6b7318789e5265bdc419bc7669c1cebe3db0eb255f57efa76b
@@ -15900,6 +16113,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"undici-types@npm:~6.21.0":
+  version: 6.21.0
+  resolution: "undici-types@npm:6.21.0"
+  checksum: 46331c7d6016bf85b3e8f20c159d62f5ae471aba1eb3dc52fff35a0259d58dcc7d592d4cc4f00c5f9243fa738a11cfa48bd20203040d4a9e6bc25e807fab7ab3
+  languageName: node
+  linkType: hard
+
 "undici@npm:5.28.4":
   version: 5.28.4
   resolution: "undici@npm:5.28.4"
@@ -16800,7 +17020,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ws@npm:8.18.0, ws@npm:^8.17.1":
+"ws@npm:8.18.0":
   version: 8.18.0
   resolution: "ws@npm:8.18.0"
   peerDependencies:
