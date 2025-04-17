@@ -15,6 +15,12 @@ export async function getBatchById(id: number) {
   });
 }
 
+export async function getBatchByName(name: string) {
+  return await db.query.batches.findFirst({
+    where: eq(batches.name, name),
+  });
+}
+
 export async function getSortedBatchesInfo(start: number, size: number, sorting: SortingState, filter?: string) {
   const sortingQuery = sorting[0] as ColumnSort;
 

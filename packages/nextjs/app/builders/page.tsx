@@ -95,7 +95,7 @@ export default function BuildersPage() {
 
       <InfiniteTable<UserWithChallengesData>
         columns={columns}
-        queryKey={"users"}
+        queryKey={useMemo(() => ["users"], [])}
         queryFn={getSortedUsersWithChallenges}
         initialSorting={useMemo(() => [{ id: "lastActivity", desc: true }], [])}
       />

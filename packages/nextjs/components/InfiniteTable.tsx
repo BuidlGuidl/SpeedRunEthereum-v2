@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { keepPreviousData, useInfiniteQuery } from "@tanstack/react-query";
+import { QueryKey, keepPreviousData, useInfiniteQuery } from "@tanstack/react-query";
 import {
   ColumnDef,
   OnChangeFn,
@@ -26,7 +26,7 @@ type InfiniteTableApiResponse<T> = {
 
 type InfiniteTableProps<T> = {
   columns: ColumnDef<T>[];
-  queryKey: string;
+  queryKey: QueryKey;
   queryFn: (
     pageParam: number,
     fetchSize: number,
@@ -55,7 +55,7 @@ export default function InfiniteTable<T>({
   const [sorting, setSorting] = useState<SortingState>(initialSorting);
 
   const { data, fetchNextPage, isFetching, isLoading } = useInfiniteQuery<InfiniteTableApiResponse<T>>({
-    queryKey: [queryKey, sorting, filter],
+    queryKey: [...queryKey, sorting, filter],
     queryFn: async ({ pageParam = 0 }) => {
       const start = (pageParam as number) * fetchSize;
       const fetchedData = await queryFn(start, fetchSize, sorting, filter);

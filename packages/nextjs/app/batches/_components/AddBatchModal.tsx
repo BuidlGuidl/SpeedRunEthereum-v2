@@ -1,26 +1,43 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { InputBase } from "~~/components/scaffold-eth";
+import { useCreateBatch } from "~~/hooks/useCreateBatch";
 import { BatchStatus } from "~~/services/database/config/types";
 
-export const AddBatchModal = () => {
+export const AddBatchModal = ({ refreshQueries }: { refreshQueries: () => void }) => {
+  const modalRef = useRef<HTMLInputElement>(null);
   const [newBatchName, setNewBatchName] = useState("");
   const [newBatchStatus, setNewBatchStatus] = useState<BatchStatus>(BatchStatus.CLOSED);
   const [newBatchStartDate, setNewBatchStartDate] = useState("");
   const [newBatchTelegramLink, setNewBatchTelegramLink] = useState("");
   const [newBatchRegistryAddress, setNewBatchRegistryAddress] = useState("");
 
+  const { createBatch, isPending } = useCreateBatch({
+    onSuccess: () => {
+      setNewBatchName("");
+      setNewBatchStatus(BatchStatus.CLOSED);
+      setNewBatchStartDate("");
+      setNewBatchTelegramLink("");
+      setNewBatchRegistryAddress("");
+      if (modalRef.current) {
+        modalRef.current.checked = false;
+      }
+      refreshQueries();
+    },
+  });
+
   const handleAddBatch = () => {
-    // TODO: Implement batch creation logic
-    setNewBatchName("");
-    setNewBatchStatus(BatchStatus.CLOSED);
-    setNewBatchStartDate("");
-    setNewBatchTelegramLink("");
-    setNewBatchRegistryAddress("");
+    createBatch({
+      name: newBatchName,
+      status: newBatchStatus,
+      startDate: newBatchStartDate,
+      telegramLink: newBatchTelegramLink,
+      contractAddress: newBatchRegistryAddress,
+    });
   };
 
   return (
     <>
-      <input type="checkbox" id="add-batch-modal" className="modal-toggle" />
+      <input ref={modalRef} type="checkbox" id="add-batch-modal" className="modal-toggle" />
       <label htmlFor="add-batch-modal" className="modal cursor-pointer">
         <label className="modal-box relative">
           {/* dummy input to capture event onclick on modal box */}
@@ -62,7 +79,7 @@ export const AddBatchModal = () => {
                     type="radio"
                     name="status"
                     className="radio"
-                    checked={newBatchStatus === BatchStatus.CLOSED}
+                    checked={newBatchStatus === BatchStatus.OPEN}
                     onChange={() => setNewBatchStatus(BatchStatus.OPEN)}
                   />
                   <span>open</span>
@@ -112,8 +129,8 @@ export const AddBatchModal = () => {
           </div>
 
           <div className="mt-6">
-            <button className="btn btn-primary w-full" onClick={handleAddBatch}>
-              Add Batch
+            <button className="btn btn-primary w-full" disabled={isPending} onClick={handleAddBatch}>
+              {isPending ? "Adding..." : "Add Batch"}
             </button>
           </div>
         </label>

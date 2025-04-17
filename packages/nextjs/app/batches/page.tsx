@@ -13,11 +13,15 @@ import { getSortedBatches } from "~~/services/api/batches";
 import { BatchStatus } from "~~/services/database/config/types";
 import { BatchWithCounts } from "~~/services/database/repositories/batches";
 
-export default function BuildersPage() {
+export default function BatchesPage() {
   const [filter, setFilter] = useState("");
+  const [batchesUpdatesCount, setBatchesUpdatesCount] = useState(0);
+  const refreshQueries = () => {
+    setBatchesUpdatesCount(prev => prev + 1);
+  };
 
   const { data: batches } = useQuery({
-    queryKey: ["batches-count"],
+    queryKey: ["batches-count", batchesUpdatesCount],
     queryFn: () => getSortedBatches(0, 0, []),
   });
 
@@ -119,13 +123,13 @@ export default function BuildersPage() {
 
       <InfiniteTable<BatchWithCounts>
         columns={columns}
-        queryKey={"batches"}
+        queryKey={useMemo(() => ["batches", batchesUpdatesCount], [batchesUpdatesCount])}
         queryFn={getSortedBatches}
         initialSorting={useMemo(() => [{ id: "startDate", desc: true }], [])}
         filter={filter}
       />
 
-      <AddBatchModal />
+      <AddBatchModal refreshQueries={refreshQueries} />
     </div>
   );
 }

@@ -121,3 +121,8 @@ export async function updateUserRoleToBuilder(userAddress: string) {
 
   return result[0];
 }
+
+export async function isUserAdmin(userAddress: string): Promise<boolean> {
+  const user = await getUserByAddress(userAddress);
+  return user?.role === UserRole.ADMIN;
+}

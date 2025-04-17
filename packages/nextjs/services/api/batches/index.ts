@@ -1,5 +1,5 @@
 import { SortingState } from "@tanstack/react-table";
-import { BatchWithCounts } from "~~/services/database/repositories/batches";
+import { Batch, BatchWithCounts } from "~~/services/database/repositories/batches";
 
 export const getSortedBatches = async (start: number, size: number, sorting: SortingState, filter?: string) => {
   const response = await fetch(
@@ -19,3 +19,37 @@ export const getSortedBatches = async (start: number, size: number, sorting: Sor
 
   return batchesData;
 };
+
+export async function createBatch({
+  address,
+  signature,
+  name,
+  startDate,
+  status,
+  contractAddress,
+  telegramLink,
+}: {
+  address: string;
+  signature: string;
+  name: string;
+  startDate: string;
+  status: string;
+  contractAddress?: string;
+  telegramLink: string;
+}) {
+  const response = await fetch("/api/batches/create", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ address, signature, name, startDate, status, contractAddress, telegramLink }),
+  });
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw new Error(data.error || "Batch creation failed");
+  }
+
+  return data.batch as Batch;
+}
