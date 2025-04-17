@@ -13,6 +13,10 @@ export const UserLocation = ({ user }: { user: NonNullable<UserByAddress> }) => 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const isProfileOwner = address?.toLowerCase() === user.userAddress.toLowerCase();
 
+  if (!user.location && !isProfileOwner) {
+    return null;
+  }
+
   return (
     <div className="flex flex-col w-full">
       <div className="self-center">
