@@ -13,6 +13,7 @@ type PickSocials<T> = {
 export type UserInsert = InferInsertModel<typeof users>;
 export type UserByAddress = Awaited<ReturnType<typeof getUserByAddress>>;
 export type UserSocials = PickSocials<NonNullable<UserByAddress>>;
+export type UserLocation = NonNullable<UserByAddress>["location"];
 export type UserWithChallengesData = Awaited<ReturnType<typeof getSortedUsersWithChallenges>>["data"][0];
 
 export async function getUserByAddress(address: string) {
@@ -101,6 +102,19 @@ export async function updateUserSocials(userAddress: string, socials: UserSocial
     .update(users)
     .set({
       ...socialsToUpdate,
+      updatedAt: new Date(),
+    })
+    .where(eq(lower(users.userAddress), userAddress.toLowerCase()))
+    .returning();
+
+  return result[0];
+}
+
+export async function updateUserLocation(userAddress: string, location: UserLocation) {
+  const result = await db
+    .update(users)
+    .set({
+      location,
       updatedAt: new Date(),
     })
     .where(eq(lower(users.userAddress), userAddress.toLowerCase()))

@@ -1,4 +1,5 @@
 import { SortingState } from "@tanstack/react-table";
+import { UpdateLocationPayload } from "~~/app/api/users/update-location/route";
 import { UpdateSocialsPayload } from "~~/app/api/users/update-socials/route";
 import { UserByAddress, UserWithChallengesData } from "~~/services/database/repositories/users";
 
@@ -46,6 +47,23 @@ export async function updateSocials(payload: UpdateSocialsPayload) {
   if (!response.ok) {
     const error = await response.json();
     throw new Error(error.error || "Failed to update socials");
+  }
+
+  return response.json();
+}
+
+export async function updateLocation(payload: UpdateLocationPayload) {
+  const response = await fetch("/api/users/update-location", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(payload),
+  });
+
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error.error || "Failed to update location");
   }
 
   return response.json();

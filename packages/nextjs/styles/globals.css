@@ -94,3 +94,11 @@ p {
   @apply break-words overflow-wrap-anywhere;
   word-break: break-word;
 }
+
+.flag-selector ul,
+.flag-selector #rfs-btn,
+.flag-selector ul > div,
+.flag-selector input {
+  background-color: oklch(var(--s));
+  color: oklch(var(--sc));
+}
