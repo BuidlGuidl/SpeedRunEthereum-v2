@@ -15,6 +15,13 @@
       "when": 1744653270616,
       "tag": "0001_marvelous_justin_hammer",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1744898484625,
+      "tag": "0002_lovely_agent_brand",
+      "breakpoints": true
     }
   ]
 }
