@@ -12,6 +12,7 @@ if (process.env.POSTGRES_URL?.includes(PRODUCTION_DATABASE_HOSTNAME)) {
 
   const result = spawnSync("tsx", [join(__dirname, "utils/prompt-confirm.ts")], {
     stdio: "inherit",
+    shell: process.platform === "win32",
   });
 
   if (result.status !== 0) {
