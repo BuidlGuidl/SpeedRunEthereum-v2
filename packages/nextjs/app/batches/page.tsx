@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react";
 import SearchIcon from "../_assets/icons/SearchIcon";
 import TelegramIcon from "../_assets/icons/TelegramIcon";
+import { AddBatchModal } from "./_components/AddBatchModal";
 import { useQuery } from "@tanstack/react-query";
 import { ColumnDef } from "@tanstack/react-table";
 import { DateWithTooltip } from "~~/components/DateWithTooltip";
@@ -103,7 +104,7 @@ export default function BuildersPage() {
     <div className="mx-4 text-center">
       <div className="text-base mt-4 font-medium">Total batches: {batches?.meta.totalRowCount ?? "Loading..."}</div>
 
-      <div className="flex items-center justify-center max-w-md mt-4 mx-auto">
+      <div className="flex items-center justify-center max-w-md mt-4 mx-auto gap-2">
         <InputBase
           name="filter"
           value={filter}
@@ -111,6 +112,9 @@ export default function BuildersPage() {
           placeholder="Search for batch"
           suffix={<SearchIcon className="w-7 h-6 pr-2 fill-primary/60 self-center" />}
         />
+        <label htmlFor="add-batch-modal" className="btn btn-primary h-[40px] min-h-[40px]">
+          + Add Batch
+        </label>
       </div>
 
       <InfiniteTable<BatchWithCounts>
@@ -120,6 +124,8 @@ export default function BuildersPage() {
         initialSorting={useMemo(() => [{ id: "startDate", desc: true }], [])}
         filter={filter}
       />
+
+      <AddBatchModal />
     </div>
   );
 }
