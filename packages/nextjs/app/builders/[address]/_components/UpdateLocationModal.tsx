@@ -69,7 +69,11 @@ export const UpdateLocationModal = forwardRef<HTMLDivElement, UpdateLocationModa
               >
                 Reset
               </button>
-              <button className="btn btn-primary" onClick={() => updateLocation(selectedCountry)} disabled={isPending}>
+              <button
+                className="btn btn-primary"
+                onClick={() => updateLocation(selectedCountry)}
+                disabled={isPending || selectedCountry === (existingLocation ?? "")}
+              >
                 Update Location
               </button>
             </div>
