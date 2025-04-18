@@ -43,7 +43,15 @@ export default function BatchesPage() {
         accessorKey: "name",
         size: 200,
         cell: info => {
-          return <div className="flex w-full justify-center">{info.getValue() as string}</div>;
+          const row = info.row.original;
+
+          return (
+            <div
+              className={`flex rounded-sm px-2 py-0.5 font-semibold ${row.status === BatchStatus.OPEN ? "bg-green-500/30" : ""}`}
+            >
+              {(info.getValue() as string).toUpperCase()}
+            </div>
+          );
         },
       },
       {
