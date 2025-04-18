@@ -8,14 +8,19 @@ import { ADD_BATCH_MODAL_ID, AddBatchModal } from "./_components/AddBatchModal";
 import { EDIT_BATCH_MODAL_ID, EditBatchModal } from "./_components/EditBatchModal";
 import { useQuery } from "@tanstack/react-query";
 import { ColumnDef } from "@tanstack/react-table";
+import { useAccount } from "wagmi";
 import { DateWithTooltip } from "~~/components/DateWithTooltip";
 import InfiniteTable from "~~/components/InfiniteTable";
 import { InputBase } from "~~/components/scaffold-eth";
+import { useUser } from "~~/hooks/useUser";
 import { getSortedBatches } from "~~/services/api/batches";
-import { BatchStatus } from "~~/services/database/config/types";
+import { BatchStatus, UserRole } from "~~/services/database/config/types";
 import { BatchWithCounts } from "~~/services/database/repositories/batches";
 
 export default function BatchesPage() {
+  const { address: connectedAddress } = useAccount();
+  const { data: user } = useUser(connectedAddress);
+
   const [filter, setFilter] = useState("");
   const [batchesUpdatesCount, setBatchesUpdatesCount] = useState(0);
   const [selectedBatch, setSelectedBatch] = useState<BatchWithCounts | null>(null);
@@ -27,6 +32,9 @@ export default function BatchesPage() {
     queryKey: ["batches-count", batchesUpdatesCount],
     queryFn: () => getSortedBatches(0, 0, []),
   });
+
+  const tableQueryKey = useMemo(() => ["batches", batchesUpdatesCount], [batchesUpdatesCount]);
+  const tableInitialSorting = useMemo(() => [{ id: "startDate", desc: true }], []);
 
   const columns = useMemo<ColumnDef<BatchWithCounts>[]>(
     () => [
@@ -123,6 +131,11 @@ export default function BatchesPage() {
     [],
   );
 
+  // TODO: update this logic later
+  if (user?.role !== UserRole.ADMIN) {
+    return null;
+  }
+
   return (
     <div className="mx-4 text-center">
       <div className="text-base mt-4 font-medium">Total batches: {batches?.meta.totalRowCount ?? "Loading..."}</div>
@@ -142,9 +155,9 @@ export default function BatchesPage() {
 
       <InfiniteTable<BatchWithCounts>
         columns={columns}
-        queryKey={useMemo(() => ["batches", batchesUpdatesCount], [batchesUpdatesCount])}
+        queryKey={tableQueryKey}
         queryFn={getSortedBatches}
-        initialSorting={useMemo(() => [{ id: "startDate", desc: true }], [])}
+        initialSorting={tableInitialSorting}
         filter={filter}
       />
 
