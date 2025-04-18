@@ -1,9 +1,11 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import EditIcon from "../_assets/icons/EditIcon";
 import SearchIcon from "../_assets/icons/SearchIcon";
 import TelegramIcon from "../_assets/icons/TelegramIcon";
-import { AddBatchModal } from "./_components/AddBatchModal";
+import { ADD_BATCH_MODAL_ID, AddBatchModal } from "./_components/AddBatchModal";
+import { EDIT_BATCH_MODAL_ID, EditBatchModal } from "./_components/EditBatchModal";
 import { useQuery } from "@tanstack/react-query";
 import { ColumnDef } from "@tanstack/react-table";
 import { DateWithTooltip } from "~~/components/DateWithTooltip";
@@ -16,6 +18,7 @@ import { BatchWithCounts } from "~~/services/database/repositories/batches";
 export default function BatchesPage() {
   const [filter, setFilter] = useState("");
   const [batchesUpdatesCount, setBatchesUpdatesCount] = useState(0);
+  const [selectedBatch, setSelectedBatch] = useState<BatchWithCounts | null>(null);
   const refreshQueries = () => {
     setBatchesUpdatesCount(prev => prev + 1);
   };
@@ -100,6 +103,22 @@ export default function BatchesPage() {
           );
         },
       },
+      {
+        header: "Edit",
+        size: 200,
+        cell: info => {
+          const batch = info.row.original;
+          return (
+            <label
+              htmlFor={EDIT_BATCH_MODAL_ID}
+              className="btn btn-ghost btn-sm btn-circle"
+              onClick={() => setSelectedBatch(batch)}
+            >
+              <EditIcon className="w-4 h-4" />
+            </label>
+          );
+        },
+      },
     ],
     [],
   );
@@ -116,7 +135,7 @@ export default function BatchesPage() {
           placeholder="Search for batch"
           suffix={<SearchIcon className="w-7 h-6 pr-2 fill-primary/60 self-center" />}
         />
-        <label htmlFor="add-batch-modal" className="btn btn-primary h-[40px] min-h-[40px]">
+        <label htmlFor={ADD_BATCH_MODAL_ID} className="btn btn-primary h-[40px] min-h-[40px]">
           + Add Batch
         </label>
       </div>
@@ -130,6 +149,18 @@ export default function BatchesPage() {
       />
 
       <AddBatchModal refreshQueries={refreshQueries} />
+      {selectedBatch && (
+        <EditBatchModal
+          batchId={selectedBatch.id.toString()}
+          defaultName={selectedBatch.name}
+          defaultStatus={selectedBatch.status}
+          defaultStartDate={new Date(selectedBatch.startDate)}
+          defaultTelegramLink={selectedBatch.telegramLink}
+          defaultRegistryAddress={selectedBatch.contractAddress || ""}
+          refreshQueries={refreshQueries}
+          setSelectedBatch={setSelectedBatch}
+        />
+      )}
     </div>
   );
 }

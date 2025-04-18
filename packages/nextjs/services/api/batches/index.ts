@@ -53,3 +53,40 @@ export async function createBatch({
 
   return data.batch as Batch;
 }
+
+export async function editBatch(
+  batchId: string,
+  {
+    address,
+    signature,
+    name,
+    startDate,
+    status,
+    contractAddress,
+    telegramLink,
+  }: {
+    address: string;
+    signature: string;
+    name: string;
+    startDate: string;
+    status: string;
+    contractAddress?: string;
+    telegramLink: string;
+  },
+) {
+  const response = await fetch(`/api/batches/${batchId}/update`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ address, signature, name, startDate, status, contractAddress, telegramLink }),
+  });
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw new Error(data.error || "Batch update failed");
+  }
+
+  return data.batch as Batch;
+}
