@@ -2,8 +2,11 @@
 
 import { useMemo, useState } from "react";
 import EditIcon from "../_assets/icons/EditIcon";
+import EthereumIcon from "../_assets/icons/EthereumIcon";
+import GithubIcon from "../_assets/icons/GithubIcon";
 import SearchIcon from "../_assets/icons/SearchIcon";
 import TelegramIcon from "../_assets/icons/TelegramIcon";
+import WebsiteIcon from "../_assets/icons/WebsiteIcon";
 import { ADD_BATCH_MODAL_ID, AddBatchModal } from "./_components/AddBatchModal";
 import { EDIT_BATCH_MODAL_ID, EditBatchModal } from "./_components/EditBatchModal";
 import { useQuery } from "@tanstack/react-query";
@@ -107,14 +110,41 @@ export default function BatchesPage() {
           const batch = info.row.original;
 
           const telegramLink = batch?.telegramLink;
+          const contractAddress = batch?.contractAddress;
+          const batchId = batch?.id;
 
           return (
-            <div className="flex w-full items-center justify-center gap-2">
-              {telegramLink && (
-                <a href={telegramLink} target="_blank" rel="noopener noreferrer" className="link">
-                  <TelegramIcon className="w-4 h-4" />
+            <div className="flex w-full items-center gap-3">
+              {contractAddress && (
+                <a
+                  href={`https://optimistic.etherscan.io/address/${contractAddress}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="link"
+                >
+                  <EthereumIcon className="w-4 h-4" />
                 </a>
               )}
+
+              <a href={telegramLink} target="_blank" rel="noopener noreferrer" className="link">
+                <TelegramIcon className="w-4 h-4" />
+              </a>
+              <a
+                href={`https://batch${batchId}.buidlguidl.com/`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="link"
+              >
+                <WebsiteIcon className="w-4 h-4" />
+              </a>
+              <a
+                href={`https://github.com/BuidlGuidl/batch${batchId}.buidlguidl.com`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="link"
+              >
+                <GithubIcon className="w-4 h-4" />
+              </a>
             </div>
           );
         },
