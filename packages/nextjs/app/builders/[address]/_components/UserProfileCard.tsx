@@ -1,3 +1,4 @@
+import { UserLocation } from "./UserLocation";
 import { UserSocials } from "./UserSocials";
 import { PunkBlockie } from "~~/components/PunkBlockie";
 import { Address } from "~~/components/scaffold-eth/Address/Address";
@@ -13,6 +14,7 @@ export const UserProfileCard = ({ user, address }: { user: NonNullable<UserByAdd
             <Address address={address} hideAvatar size="xl" />
           </div>
           <hr className="w-full border-base-200 mb-2" />
+          <UserLocation user={user} />
           <UserSocials user={user} />
           <div className="text-sm text-neutral">
             Joined {new Date(user.createdAt).toLocaleDateString("en-US", { month: "long", year: "numeric" })}

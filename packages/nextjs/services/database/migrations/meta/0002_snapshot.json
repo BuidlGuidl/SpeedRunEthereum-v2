@@ -1,5 +1,5 @@
 {
-  "id": "f9ee41f6-ae15-4e2c-943e-01f2906df6c7",
+  "id": "9c5331d3-f890-49c2-9c37-cd28d054ab7e",
   "prevId": "f84a3b45-c16d-4345-9c88-124a5d5d7b25",
   "version": "7",
   "dialect": "postgresql",
@@ -43,7 +43,7 @@
           "name": "telegram_link",
           "type": "varchar(255)",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false
         }
       },
       "indexes": {},
@@ -239,12 +239,8 @@
           "name": "user_challenges_user_address_users_user_address_fk",
           "tableFrom": "user_challenges",
           "tableTo": "users",
-          "columnsFrom": [
-            "user_address"
-          ],
-          "columnsTo": [
-            "user_address"
-          ],
+          "columnsFrom": ["user_address"],
+          "columnsTo": ["user_address"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -252,12 +248,8 @@
           "name": "user_challenges_challenge_id_challenges_id_fk",
           "tableFrom": "user_challenges",
           "tableTo": "challenges",
-          "columnsFrom": [
-            "challenge_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["challenge_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -336,6 +328,12 @@
           "primaryKey": false,
           "notNull": false
         },
+        "location": {
+          "name": "location",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false
+        },
         "batch_id": {
           "name": "batch_id",
           "type": "integer",
@@ -372,12 +370,8 @@
           "name": "users_batch_id_batches_id_fk",
           "tableFrom": "users",
           "tableTo": "batches",
-          "columnsFrom": [
-            "batch_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["batch_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -393,36 +387,22 @@
     "public.batch_status_enum": {
       "name": "batch_status_enum",
       "schema": "public",
-      "values": [
-        "closed",
-        "open"
-      ]
+      "values": ["closed", "open"]
     },
     "public.batch_user_status_enum": {
       "name": "batch_user_status_enum",
       "schema": "public",
-      "values": [
-        "graduate",
-        "candidate"
-      ]
+      "values": ["graduate", "candidate"]
     },
     "public.review_action_enum": {
       "name": "review_action_enum",
       "schema": "public",
-      "values": [
-        "REJECTED",
-        "ACCEPTED",
-        "SUBMITTED"
-      ]
+      "values": ["REJECTED", "ACCEPTED", "SUBMITTED"]
     },
     "public.user_role_enum": {
       "name": "user_role_enum",
       "schema": "public",
-      "values": [
-        "USER",
-        "BUILDER",
-        "ADMIN"
-      ]
+      "values": ["USER", "BUILDER", "ADMIN"]
     }
   },
   "schemas": {},

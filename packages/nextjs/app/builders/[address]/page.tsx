@@ -2,10 +2,61 @@ import { notFound } from "next/navigation";
 import { UpgradedToBGCard } from "./_components/UpgradedToBGCard";
 import { UserChallengesTable } from "./_components/UserChallengesTable";
 import { UserProfileCard } from "./_components/UserProfileCard";
+import { Metadata } from "next";
+import { isAddress } from "viem";
 import { RouteRefresher } from "~~/components/RouteRefresher";
 import { isBgMember } from "~~/services/api-bg/builders";
 import { getLatestSubmissionPerChallengeByUser } from "~~/services/database/repositories/userChallenges";
 import { getUserByAddress } from "~~/services/database/repositories/users";
+import { getEnsOrAddress } from "~~/utils/ens-or-address";
+
+type Props = {
+  params: {
+    address: string;
+  };
+};
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const address = params.address;
+  const isValidAddress = isAddress(address);
+
+  const { ensName, shortAddress } = await getEnsOrAddress(address);
+
+  // Default title and description
+  const title = `${ensName || shortAddress} | Speed Run Ethereum`;
+
+  // Base URL - replace with your actual domain in production
+  const baseUrl = process.env.VERCEL_PROJECT_PRODUCTION_URL
+    ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
+    : "http://localhost:3000";
+
+  // OG image URL
+  const ogImageUrl = isValidAddress
+    ? `${baseUrl}/api/og?address=${address}`
+    : `${baseUrl}/api/og?address=0x0000000000000000000000000000000000000000`;
+
+  return {
+    metadataBase: new URL(baseUrl),
+    title,
+    openGraph: {
+      title,
+      type: "website",
+      images: [
+        {
+          url: ogImageUrl,
+          width: 1200,
+          height: 630,
+          alt: `QR Code for ${address}`,
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      images: [ogImageUrl],
+    },
+  };
+}
 
 export default async function BuilderPage({ params }: { params: { address: string } }) {
   const { address: userAddress } = params;
