@@ -114,7 +114,7 @@ export default function BatchesPage() {
           const batchId = batch?.id;
 
           return (
-            <div className="flex w-full items-center gap-3">
+            <div className="flex w-full items-center justify-center gap-3">
               {contractAddress && (
                 <a
                   href={`https://optimistic.etherscan.io/address/${contractAddress}`}
@@ -155,13 +155,15 @@ export default function BatchesPage() {
         cell: info => {
           const batch = info.row.original;
           return (
-            <label
-              htmlFor={EDIT_BATCH_MODAL_ID}
-              className="btn btn-ghost btn-sm btn-circle"
-              onClick={() => setSelectedBatch(batch)}
-            >
-              <EditIcon className="w-4 h-4" />
-            </label>
+            <div className="flex w-full justify-center">
+              <label
+                htmlFor={EDIT_BATCH_MODAL_ID}
+                className="btn btn-ghost btn-sm btn-circle"
+                onClick={() => setSelectedBatch(batch)}
+              >
+                <EditIcon className="w-4 h-4" />
+              </label>
+            </div>
           );
         },
       },
