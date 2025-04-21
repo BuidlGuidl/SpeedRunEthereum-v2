@@ -104,12 +104,54 @@ export const userChallenges = pgTable(
   ],
 );
 
+export const builds = pgTable(
+  "builds",
+  {
+    id: serial().primaryKey(),
+    name: varchar({ length: 255 }).notNull(),
+    desc: text(),
+    buildType: varchar({ length: 50 }),
+    builderAddress: varchar({ length: 42 })
+      .notNull()
+      .references(() => users.userAddress),
+    coBuilderAddresses: varchar({ length: 42 }).array(),
+    demoUrl: varchar({ length: 255 }),
+    videoUrl: varchar({ length: 255 }),
+    imageUrl: varchar({ length: 255 }),
+    githubUrl: varchar({ length: 255 }),
+    submittedTimestamp: timestamp().notNull().defaultNow(),
+  },
+  table => [
+    index("build_builder_idx").on(table.builderAddress),
+    // Regular index for now - if we see performance issues with array queries later,
+    // we can explore adding a GIN index, would need to verify Neon/Drizzle support for GIN indexes before implementing
+    index("build_co_builders_idx").on(table.coBuilderAddresses),
+  ],
+);
+
+export const buildLikes = pgTable(
+  "build_likes",
+  {
+    id: serial().primaryKey(),
+    buildId: integer()
+      .notNull()
+      .references(() => builds.id),
+    likerAddress: varchar({ length: 42 })
+      .notNull()
+      .references(() => users.userAddress),
+    likedAt: timestamp().notNull().defaultNow(),
+  },
+  table => [uniqueIndex("build_like_unique_idx").on(table.buildId, table.likerAddress)],
+);
+
 export const usersRelations = relations(users, ({ many, one }) => ({
   userChallenges: many(userChallenges),
   batch: one(batches, {
     fields: [users.batchId],
     references: [batches.id],
   }),
+  builds: many(builds),
+  buildLikes: many(buildLikes),
 }));
 
 export const challengesRelations = relations(challenges, ({ many }) => ({
@@ -129,4 +171,23 @@ export const userChallengesRelations = relations(userChallenges, ({ one }) => ({
 
 export const batchesRelations = relations(batches, ({ many }) => ({
   users: many(users),
+}));
+
+export const buildsRelations = relations(builds, ({ one, many }) => ({
+  builder: one(users, {
+    fields: [builds.builderAddress],
+    references: [users.userAddress],
+  }),
+  likes: many(buildLikes),
+}));
+
+export const buildLikesRelations = relations(buildLikes, ({ one }) => ({
+  build: one(builds, {
+    fields: [buildLikes.buildId],
+    references: [builds.id],
+  }),
+  liker: one(users, {
+    fields: [buildLikes.likerAddress],
+    references: [users.userAddress],
+  }),
 }));
