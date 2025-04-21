@@ -1,1 +1,0 @@
-ALTER TABLE "batches" ALTER COLUMN "telegram_link" SET NOT NULL;
