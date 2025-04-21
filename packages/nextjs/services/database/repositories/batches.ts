@@ -1,9 +1,9 @@
 import { ColumnSort, SortingState } from "@tanstack/react-table";
-import { InferInsertModel, like } from "drizzle-orm";
+import { InferInsertModel, ilike } from "drizzle-orm";
 import { eq } from "drizzle-orm";
 import { sql } from "drizzle-orm";
 import { db } from "~~/services/database/config/postgresClient";
-import { batches, users } from "~~/services/database/config/schema";
+import { batches, lower, users } from "~~/services/database/config/schema";
 
 export type BatchInsert = InferInsertModel<typeof batches>;
 export type Batch = Awaited<ReturnType<typeof getBatchById>>;
@@ -17,7 +17,7 @@ export async function getBatchById(id: number) {
 
 export async function getBatchByName(name: string) {
   return await db.query.batches.findFirst({
-    where: eq(batches.name, name),
+    where: eq(lower(batches.name), name.toLowerCase()),
   });
 }
 
@@ -27,7 +27,7 @@ export async function getSortedBatchesInfo(start: number, size: number, sorting:
   const query = db.query.batches.findMany({
     limit: size,
     offset: start,
-    where: filter ? like(batches.name, `%${filter}%`) : undefined,
+    where: filter ? ilike(batches.name, `%${filter}%`) : undefined,
     orderBy: (batches, { desc, asc }) => {
       if (!sortingQuery) return [];
 
@@ -47,7 +47,7 @@ export async function getSortedBatchesInfo(start: number, size: number, sorting:
       ? db
           .select({ count: sql<number>`count(*)` })
           .from(batches)
-          .where(like(batches.name, `%${filter}%`))
+          .where(ilike(batches.name, `%${filter}%`))
       : db.$count(batches),
     db
       .select({
