@@ -1,4 +1,4 @@
-import { batches, challenges, userChallenges, users } from "./config/schema";
+import { batches, buildLikes, builds, challenges, userChallenges, users } from "./config/schema";
 import { BatchStatus, BatchUserStatus, ChallengeId, ReviewAction, UserRole } from "./config/types";
 
 export const SEED_DATA_VERSION = "1.1.0";
@@ -390,3 +390,88 @@ export const seedBatches: (typeof batches.$inferInsert)[] = [
     contractAddress: "0x0000000000000000000000000000000000000000",
   },
 ];
+
+export const seedBuilds: (typeof builds.$inferInsert)[] = [
+  {
+    name: "DynOS 95",
+    desc: "Platform to improve the onboarding experience to web3, providing a friendly environment where users can connect to any DApps with email and social accounts, powered by Dynamic and ERC4337 Account Abstraction. ETHGlobal London 2024 Hackathon finalist.",
+    buildType: "dapp",
+    builderAddress: "0xB4F53bd85c00EF22946d24Ae26BC38Ac64F5E7B1",
+    coBuilderAddresses: [
+      "0x000084821704d731438d2D06f4295e1AB0ace7D8",
+      "0x014EC6296B3493f0f59a3FE90E0FFf377fb8826a",
+      "0x01B2686Bd146bFc3F4B3DD6F7F86f26ac7c2f7Fd",
+    ],
+    demoUrl: "https://dynos95.vercel.app/",
+    videoUrl: "https://www.youtube.com/watch?v=iBX2zjECesU",
+    imageUrl: "https://storage.googleapis.com/buidlguidl-v3.appspot.com/builds/b651fcb278a4cf392309b1101.png",
+    githubUrl: "https://github.com/carletex/DynOS-95",
+    submittedTimestamp: new Date("2023-05-15"),
+  },
+  {
+    name: "ABI Ninja",
+    desc: "Interact with any contract on Ethereum. Just need the Contract address (if it's verified) or its ABI + Contract address.",
+    buildType: "dapp",
+    builderAddress: "0x000084821704d731438d2D06f4295e1AB0ace7D8",
+    coBuilderAddresses: [],
+    demoUrl: "https://abi.ninja/",
+    videoUrl: null,
+    imageUrl: "https://storage.googleapis.com/buidlguidl-v3.appspot.com/builds/c7329e266108aec34c81a0200.png",
+    githubUrl: "https://github.com/BuidlGuidl/abi.ninja",
+    submittedTimestamp: new Date("2023-06-20"),
+  },
+  {
+    name: "ETH Man",
+    desc: "ETH Man reacts to live ETH price using Chainlink oracles! He is happy 🙂 when it's up 📈 and sad 🙁 when it's down 📉 than the previous value. (Dynamic face, colors on chain SVG NFT). 100+ already minted!",
+    buildType: "dapp",
+    builderAddress: "0x014EC6296B3493f0f59a3FE90E0FFf377fb8826a",
+    coBuilderAddresses: ["0xB4F53bd85c00EF22946d24Ae26BC38Ac64F5E7B1"],
+    demoUrl: "https://ethman-sb.surge.sh/",
+    videoUrl: null,
+    imageUrl: "https://storage.googleapis.com/buidlguidl-v3.appspot.com/builds/3c09940f8645e7dfd053b7a00.jpeg",
+    githubUrl: "https://github.com/technophile-04/ethMan",
+    submittedTimestamp: new Date("2023-07-10"),
+  },
+  {
+    name: "Smart-Chain",
+    desc: "A basic/minimal supply chain DApp for solving issues in Luxury goods supply chain",
+    buildType: "dapp",
+    builderAddress: "0x01B2686Bd146bFc3F4B3DD6F7F86f26ac7c2f7Fd",
+    coBuilderAddresses: ["0xB4F53bd85c00EF22946d24Ae26BC38Ac64F5E7B1", "0x000084821704d731438d2D06f4295e1AB0ace7D8"],
+    demoUrl: "https://nextjs-blond-nine-41.vercel.app/",
+    videoUrl: "https://youtu.be/N13b0mEgo3I",
+    imageUrl: "https://storage.googleapis.com/buidlguidl-v3.appspot.com/builds/6c5b8cdbdf678bd7af4b31e01.jpeg",
+    githubUrl: "https://github.com/technophile-04/Spaghetti_Coders_1337_LOC5.0",
+    submittedTimestamp: new Date("2023-08-05"),
+  },
+];
+
+export const seedBuildLikes: Array<Omit<typeof buildLikes.$inferInsert, "buildId"> & { buildName: string }> = [
+  {
+    buildName: "DynOS 95",
+    likerAddress: "0x014EC6296B3493f0f59a3FE90E0FFf377fb8826a",
+    likedAt: new Date("2023-05-14"),
+  },
+  {
+    buildName: "DynOS 95",
+    likerAddress: "0x01B2686Bd146bFc3F4B3DD6F7F86f26ac7c2f7Fd",
+    likedAt: new Date("2023-05-14"),
+  },
+  {
+    buildName: "ABI Ninja",
+    likerAddress: "0xB4F53bd85c00EF22946d24Ae26BC38Ac64F5E7B1",
+    likedAt: new Date("2023-05-16"),
+  },
+  {
+    buildName: "ETH Man",
+    likerAddress: "0x000084821704d731438d2D06f4295e1AB0ace7D8",
+    likedAt: new Date("2023-05-18"),
+  },
+  {
+    buildName: "Smart-Chain",
+    likerAddress: "0x014EC6296B3493f0f59a3FE90E0FFf377fb8826a",
+    likedAt: new Date("2023-05-20"),
+  },
+];
+
+export const buildsData = [];
