@@ -1,7 +1,6 @@
 import { db } from "../config/postgresClient";
-import { users } from "../config/schema";
+import { batches, users } from "../config/schema";
 import { BatchStatus, BatchUserStatus } from "../config/types";
-import { createBatch } from "../repositories/batches";
 import * as dotenv from "dotenv";
 import { eq } from "drizzle-orm";
 import * as path from "path";
@@ -43,54 +42,76 @@ export async function importData() {
 
     console.log(`Found ${batchesData.length} batches and ${usersData.length} users belonging to a batch`);
 
-    // Save the mapping between Firebase ID and our database ID
-    const batchIdMap = new Map<string, number>();
+    // Start a transaction
+    await db.transaction(async tx => {
+      // Save the mapping between Firebase ID and our database ID
+      const batchIdMap = new Map<string, number>();
 
-    // Import batches
-    for (const batch of batchesData) {
-      const newBatch = {
-        name: `Batch ${batch.name}`,
-        startDate: new Date(batch.startDate),
-        status: batch.status.toLowerCase() as BatchStatus,
-        contractAddress: batch.contractAddress,
-        telegramLink: batch.telegramLink,
-      };
+      // Preload existing batches
+      const existingBatches = await tx.select().from(batches);
+      const existingBatchesByTelegramLink: Record<string, (typeof existingBatches)[0]> = {};
+      existingBatches.forEach(batch => {
+        if (batch.telegramLink) {
+          existingBatchesByTelegramLink[batch.telegramLink] = batch;
+        }
+      });
 
-      const createdBatch = await createBatch(newBatch);
-      console.log(`Imported batch: ${createdBatch.name} (ID: ${createdBatch.id})`);
+      // Import batches
+      for (const batch of batchesData) {
+        const newBatch = {
+          name: `Batch ${batch.name}`,
+          startDate: new Date(batch.startDate),
+          status: batch.status.toLowerCase() as BatchStatus,
+          contractAddress: batch.contractAddress,
+          telegramLink: batch.telegramLink,
+        };
 
-      // Store the mapping between Firebase ID and our database ID
-      batchIdMap.set(batch.name, createdBatch.id);
-    }
+        let createdBatch;
+        if (batch.telegramLink && batch.telegramLink in existingBatchesByTelegramLink) {
+          // Skip if the batch already exists in the database
+          createdBatch = existingBatchesByTelegramLink[batch.telegramLink];
+          console.log(`Found existing batch: ${createdBatch.name} (ID: ${createdBatch.id})`);
+        } else {
+          const result = await tx.insert(batches).values(newBatch).returning();
+          createdBatch = result[0];
+          console.log(`Imported batch: ${createdBatch.name} (ID: ${createdBatch.id})`);
+        }
 
-    // Update users with batch information
-    for (const user of usersData) {
-      const batchId = batchIdMap.get(user.batch.number);
-
-      if (!batchId) {
-        console.warn(`Batch ${user.batch.number} not found for user ${user.id}`);
-        continue;
+        // Store the mapping between Firebase ID and our database ID
+        batchIdMap.set(batch.name, createdBatch.id);
       }
 
-      const result = await db
-        .update(users)
-        .set({
-          batchId: batchId,
-          batchStatus: user.batch.status.toLowerCase() as BatchUserStatus,
-        })
-        .where(eq(users.userAddress, user.id));
+      // Update users with batch information
+      for (const user of usersData) {
+        const batchId = batchIdMap.get(user.batch.number);
 
-      if (result.rowCount === 0) {
-        console.warn(`User ${user.id} not found in database`);
-        continue;
+        if (!batchId) {
+          console.warn(`Batch ${user.batch.number} not found for user ${user.id}`);
+          continue;
+        }
+
+        // Use transaction for update
+        const result = await tx
+          .update(users)
+          .set({
+            batchId: batchId,
+            batchStatus: user.batch.status.toLowerCase() as BatchUserStatus,
+          })
+          .where(eq(users.userAddress, user.id));
+
+        if (result.rowCount === 0) {
+          console.warn(`User ${user.id} not found in database`);
+          continue;
+        }
+
+        console.log(`Updated user: ${user.id} with batch ${user.batch.number}`);
       }
-
-      console.log(`Updated user: ${user.id} with batch ${user.batch.number}`);
-    }
+    });
 
     console.log("Data import completed successfully!");
   } catch (error) {
     console.error("Error during data import:", error);
+    console.log("Transaction rolled back due to error.");
   } finally {
     await db.close();
     process.exit(0);
