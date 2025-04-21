@@ -68,9 +68,11 @@ export async function importData() {
 
         let createdBatch;
         if (batch.telegramLink && batch.telegramLink in existingBatchesByTelegramLink) {
-          // Skip if the batch already exists in the database
-          createdBatch = existingBatchesByTelegramLink[batch.telegramLink];
-          console.log(`Found existing batch: ${createdBatch.name} (ID: ${createdBatch.id})`);
+          // Update existing batch with any new information
+          const existingBatch = existingBatchesByTelegramLink[batch.telegramLink];
+          const result = await tx.update(batches).set(newBatch).where(eq(batches.id, existingBatch.id)).returning();
+          createdBatch = result[0];
+          console.log(`Updated existing batch: ${createdBatch.name} (ID: ${createdBatch.id})`);
         } else {
           const result = await tx.insert(batches).values(newBatch).returning();
           createdBatch = result[0];
