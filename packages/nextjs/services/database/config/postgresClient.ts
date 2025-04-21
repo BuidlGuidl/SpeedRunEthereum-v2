@@ -66,4 +66,4 @@ type DbProxy = DbInstance & {
   close: () => Promise<void>;
 };
 
-export const db = dbProxy as unknown as DbProxy;
+export const db = dbProxy as DbProxy;
