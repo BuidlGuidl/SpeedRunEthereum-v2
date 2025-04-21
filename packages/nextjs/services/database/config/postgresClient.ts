@@ -7,7 +7,7 @@ import { Pool } from "pg";
 type DbInstance = ReturnType<typeof drizzle<typeof schema>> | ReturnType<typeof drizzleNeon<typeof schema>>;
 
 let dbInstance: DbInstance | null = null;
-let poolInstance: Pool | null = null;
+let poolInstance: Pool | NeonPool | null = null;
 
 function getDb(): DbInstance {
   if (dbInstance) {
@@ -16,8 +16,8 @@ function getDb(): DbInstance {
 
   const NEON_DB_STRING = "neondb";
   if (process.env.POSTGRES_URL?.includes(NEON_DB_STRING)) {
-    const neonPool = new NeonPool({ connectionString: process.env.POSTGRES_URL as string });
-    dbInstance = drizzleNeon(neonPool, { schema, casing: "snake_case" });
+    poolInstance = new NeonPool({ connectionString: process.env.POSTGRES_URL as string });
+    dbInstance = drizzleNeon(poolInstance as NeonPool, { schema, casing: "snake_case" });
   } else {
     const pool = new Pool({
       connectionString: process.env.POSTGRES_URL,
