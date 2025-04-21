@@ -51,13 +51,13 @@ export async function closeDb(): Promise<void> {
 const dbProxy = new Proxy(
   {},
   {
-    get: (target, prop) => {
+    get: (target, prop: keyof DbProxy) => {
       if (prop === "close") {
         return closeDb;
       }
 
       const db = getDb();
-      return (db as any)[prop];
+      return db[prop];
     },
   },
 );
