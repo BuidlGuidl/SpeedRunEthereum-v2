@@ -1,7 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 import { ImageResponse } from "next/og";
 import { blo } from "blo";
-import { promises as fs } from "fs";
 import { getAddress, isAddress } from "viem";
 import { normalize } from "viem/ens";
 import { ReviewAction } from "~~/services/database/config/types";
@@ -55,8 +54,11 @@ export async function GET(request: Request) {
 
     const computedScale = 1;
 
-    const imageBuffer = await fs.readFile(`${process.cwd()}/public/punks.png`);
-    const imageData = `data:image/png;base64,${imageBuffer.toString("base64")}`;
+    // Get the Punks image from the live site
+    const baseUrl = process.env.VERCEL_PROJECT_PRODUCTION_URL
+      ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
+      : "http://localhost:3000";
+    const punksImageUrl = `${baseUrl}/punks.png`;
 
     return new ImageResponse(
       (
@@ -181,7 +183,7 @@ export async function GET(request: Request) {
                 <img
                   width={`${2400 * PUNK_SIZE_RATIO * computedScale}`}
                   height={`${2400 * PUNK_SIZE_RATIO * computedScale}`}
-                  src={imageData}
+                  src={punksImageUrl}
                   alt="Punks Image"
                   style={{
                     position: "absolute",
