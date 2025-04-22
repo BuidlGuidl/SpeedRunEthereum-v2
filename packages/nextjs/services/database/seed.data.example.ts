@@ -1,7 +1,7 @@
 import { batches, challenges, userChallenges, users } from "./config/schema";
 import { BatchStatus, BatchUserStatus, ChallengeId, ReviewAction, UserRole } from "./config/types";
 
-export const SEED_DATA_VERSION = "1.1.0";
+export const SEED_DATA_VERSION = "1.1.1";
 
 // Using Drizzle's inferred insert types to ensure seed data
 // matches database schema requirements
