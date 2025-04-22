@@ -55,7 +55,7 @@ export const isValidEIP712CreateBatchSignature = async ({
   return await isValidEip712Signature({ typedData, address });
 };
 
-export const EIP_712_TYPED_DATA__EDIT_BATCH = {
+export const EIP_712_TYPED_DATA__UPDATE_BATCH = {
   domain: EIP_712_DOMAIN,
   types: {
     Message: [
@@ -74,7 +74,7 @@ export const EIP_712_TYPED_DATA__EDIT_BATCH = {
   },
 } as const;
 
-export const isValidEIP712EditBatchSignature = async ({
+export const isValidEIP712UpdateBatchSignature = async ({
   address,
   signature,
   name,
@@ -94,9 +94,9 @@ export const isValidEIP712EditBatchSignature = async ({
   bgSubdomain: string;
 }) => {
   const typedData = {
-    ...EIP_712_TYPED_DATA__EDIT_BATCH,
+    ...EIP_712_TYPED_DATA__UPDATE_BATCH,
     message: {
-      ...EIP_712_TYPED_DATA__EDIT_BATCH.message,
+      ...EIP_712_TYPED_DATA__UPDATE_BATCH.message,
       name,
       startDate,
       status,

@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { BatchStatus } from "~~/services/database/config/types";
 import { getBatchByBgSubdomain, getBatchById, updateBatch } from "~~/services/database/repositories/batches";
 import { isUserAdmin } from "~~/services/database/repositories/users";
-import { isValidEIP712EditBatchSignature } from "~~/services/eip712/batches";
+import { isValidEIP712UpdateBatchSignature } from "~~/services/eip712/batches";
 
 export type UpdateBatchPayload = {
   name: string;
@@ -49,7 +49,7 @@ export async function PUT(request: Request, { params }: { params: { batchId: str
       return NextResponse.json({ error: "Batch not found" }, { status: 404 });
     }
 
-    const isValidSignature = await isValidEIP712EditBatchSignature({
+    const isValidSignature = await isValidEIP712UpdateBatchSignature({
       address,
       signature,
       name,

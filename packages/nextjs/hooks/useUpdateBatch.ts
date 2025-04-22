@@ -1,17 +1,17 @@
 import { useRouter } from "next/navigation";
 import { useMutation } from "@tanstack/react-query";
 import { useAccount, useSignTypedData } from "wagmi";
-import { editBatch } from "~~/services/api/batches";
+import { updateBatch } from "~~/services/api/batches";
 import { BatchInsert } from "~~/services/database/repositories/batches";
-import { EIP_712_TYPED_DATA__EDIT_BATCH } from "~~/services/eip712/batches";
+import { EIP_712_TYPED_DATA__UPDATE_BATCH } from "~~/services/eip712/batches";
 import { notification } from "~~/utils/scaffold-eth";
 
-export const useEditBatch = ({ onSuccess }: { onSuccess?: () => void }) => {
+export const useUpdateBatch = ({ onSuccess }: { onSuccess?: () => void }) => {
   const router = useRouter();
   const { address } = useAccount();
   const { signTypedDataAsync } = useSignTypedData();
 
-  const { mutate: editBatchMutation, isPending } = useMutation({
+  const { mutate: updateBatchMutation, isPending } = useMutation({
     mutationFn: async ({
       batchId,
       ...batch
@@ -19,7 +19,7 @@ export const useEditBatch = ({ onSuccess }: { onSuccess?: () => void }) => {
       if (!address) throw new Error("Wallet not connected");
 
       const message = {
-        ...EIP_712_TYPED_DATA__EDIT_BATCH.message,
+        ...EIP_712_TYPED_DATA__UPDATE_BATCH.message,
         name: batch.name,
         startDate: batch.startDate,
         status: batch.status,
@@ -29,11 +29,11 @@ export const useEditBatch = ({ onSuccess }: { onSuccess?: () => void }) => {
       };
 
       const signature = await signTypedDataAsync({
-        ...EIP_712_TYPED_DATA__EDIT_BATCH,
+        ...EIP_712_TYPED_DATA__UPDATE_BATCH,
         message,
       });
 
-      return editBatch(batchId, {
+      return updateBatch(batchId, {
         address,
         signature,
         name: batch.name,
@@ -55,7 +55,7 @@ export const useEditBatch = ({ onSuccess }: { onSuccess?: () => void }) => {
   });
 
   return {
-    editBatch: editBatchMutation,
+    updateBatch: updateBatchMutation,
     isPending,
   };
 };

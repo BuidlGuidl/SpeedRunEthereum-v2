@@ -5,7 +5,7 @@ import { notification } from "~~/utils/scaffold-eth";
 
 export type BatchOperation = "add" | "edit";
 
-type UpdateBatchModalContentProps = {
+type BatchModalContentProps = {
   modalId: string;
   defaultName?: string;
   defaultStatus?: BatchStatus;
@@ -24,7 +24,7 @@ type UpdateBatchModalContentProps = {
   }) => void;
 };
 
-export const UpdateBatchModalContent = forwardRef<HTMLInputElement, UpdateBatchModalContentProps>(
+export const BatchModalContent = forwardRef<HTMLInputElement, BatchModalContentProps>(
   (
     {
       defaultName = "",
@@ -36,7 +36,7 @@ export const UpdateBatchModalContent = forwardRef<HTMLInputElement, UpdateBatchM
       modalId,
       batchOperation,
       isPending,
-    }: UpdateBatchModalContentProps,
+    }: BatchModalContentProps,
     ref: React.Ref<HTMLInputElement>,
   ) => {
     const [name, setName] = useState(defaultName);
@@ -188,4 +188,4 @@ export const UpdateBatchModalContent = forwardRef<HTMLInputElement, UpdateBatchM
   },
 );
 
-UpdateBatchModalContent.displayName = "UpdateBatchModalContent";
+BatchModalContent.displayName = "BatchModalContent";

@@ -1,12 +1,12 @@
 import { useRef } from "react";
-import { UpdateBatchModalContent } from "./UpdateBatchModalContent";
-import { useEditBatch } from "~~/hooks/useEditBatch";
+import { BatchModalContent } from "./BatchModalContent";
+import { useUpdateBatch } from "~~/hooks/useUpdateBatch";
 import { BatchStatus } from "~~/services/database/config/types";
 import { BatchWithCounts } from "~~/services/database/repositories/batches";
 
-export const EDIT_BATCH_MODAL_ID = "edit-batch-modal";
+export const UPDATE_BATCH_MODAL_ID = "edit-batch-modal";
 
-type EditBatchModalProps = {
+type UpdateBatchModalProps = {
   batchId: string;
   defaultName: string;
   defaultStatus: BatchStatus;
@@ -17,7 +17,7 @@ type EditBatchModalProps = {
   setSelectedBatch: (batch: BatchWithCounts | null) => void;
 };
 
-export const EditBatchModal = ({
+export const UpdateBatchModal = ({
   batchId,
   defaultName,
   defaultStatus,
@@ -26,10 +26,10 @@ export const EditBatchModal = ({
   defaultRegistryAddress,
   refreshQueries,
   setSelectedBatch,
-}: EditBatchModalProps) => {
+}: UpdateBatchModalProps) => {
   const modalRef = useRef<HTMLInputElement>(null);
 
-  const { editBatch, isPending } = useEditBatch({
+  const { updateBatch, isPending } = useUpdateBatch({
     onSuccess: () => {
       if (modalRef.current) {
         modalRef.current.checked = false;
@@ -40,7 +40,7 @@ export const EditBatchModal = ({
   });
 
   return (
-    <UpdateBatchModalContent
+    <BatchModalContent
       // force new modal for each batch
       key={batchId}
       ref={modalRef}
@@ -49,8 +49,8 @@ export const EditBatchModal = ({
       defaultStartDate={defaultStartDate}
       defaultTelegramLink={defaultTelegramLink}
       defaultRegistryAddress={defaultRegistryAddress}
-      updateBatch={data => editBatch({ batchId, ...data })}
-      modalId={EDIT_BATCH_MODAL_ID}
+      updateBatch={data => updateBatch({ batchId, ...data })}
+      modalId={UPDATE_BATCH_MODAL_ID}
       batchOperation="edit"
       isPending={isPending}
     />

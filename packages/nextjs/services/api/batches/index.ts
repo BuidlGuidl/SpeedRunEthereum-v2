@@ -49,7 +49,7 @@ export async function createBatch({
   return data.batch as Batch;
 }
 
-export async function editBatch(
+export async function updateBatch(
   batchId: string,
   { address, signature, name, startDate, status, contractAddress, telegramLink, bgSubdomain }: UpdateBatchPayload,
 ) {

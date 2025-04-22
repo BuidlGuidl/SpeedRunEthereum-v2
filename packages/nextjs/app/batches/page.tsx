@@ -8,7 +8,7 @@ import SearchIcon from "../_assets/icons/SearchIcon";
 import TelegramIcon from "../_assets/icons/TelegramIcon";
 import WebsiteIcon from "../_assets/icons/WebsiteIcon";
 import { ADD_BATCH_MODAL_ID, AddBatchModal } from "./_components/AddBatchModal";
-import { EDIT_BATCH_MODAL_ID, EditBatchModal } from "./_components/EditBatchModal";
+import { UPDATE_BATCH_MODAL_ID, UpdateBatchModal } from "./_components/UpdateBatchModal";
 import { useQuery } from "@tanstack/react-query";
 import { ColumnDef } from "@tanstack/react-table";
 import { useAccount } from "wagmi";
@@ -155,7 +155,7 @@ export default function BatchesPage() {
           return (
             <div className="flex w-full justify-center">
               <label
-                htmlFor={EDIT_BATCH_MODAL_ID}
+                htmlFor={UPDATE_BATCH_MODAL_ID}
                 className="btn btn-ghost btn-sm btn-circle"
                 onClick={() => setSelectedBatch(batch)}
               >
@@ -201,7 +201,7 @@ export default function BatchesPage() {
 
       <AddBatchModal refreshQueries={refreshQueries} />
       {selectedBatch && (
-        <EditBatchModal
+        <UpdateBatchModal
           batchId={selectedBatch.id.toString()}
           defaultName={selectedBatch.name}
           defaultStatus={selectedBatch.status}

@@ -1,5 +1,5 @@
 import { useRef, useState } from "react";
-import { UpdateBatchModalContent } from "./UpdateBatchModalContent";
+import { BatchModalContent } from "./BatchModalContent";
 import { useCreateBatch } from "~~/hooks/useCreateBatch";
 
 export const ADD_BATCH_MODAL_ID = "add-batch-modal";
@@ -20,7 +20,7 @@ export const AddBatchModal = ({ refreshQueries }: { refreshQueries: () => void }
   });
 
   return (
-    <UpdateBatchModalContent
+    <BatchModalContent
       // force new modal after success to reset state
       key={resetModalId}
       ref={modalRef}
