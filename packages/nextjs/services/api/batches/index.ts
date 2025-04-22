@@ -1,4 +1,6 @@
 import { SortingState } from "@tanstack/react-table";
+import { UpdateBatchPayload } from "~~/app/api/batches/[batchId]/update/route";
+import { CreateBatchPayload } from "~~/app/api/batches/create/route";
 import { Batch, BatchWithCounts } from "~~/services/database/repositories/batches";
 
 export const getSortedBatches = async (start: number, size: number, sorting: SortingState, filter?: string) => {
@@ -29,16 +31,7 @@ export async function createBatch({
   contractAddress,
   telegramLink,
   bgSubdomain,
-}: {
-  address: string;
-  signature: string;
-  name: string;
-  startDate: string;
-  status: string;
-  contractAddress?: string;
-  telegramLink: string;
-  bgSubdomain: string;
-}) {
+}: CreateBatchPayload) {
   const response = await fetch("/api/batches/create", {
     method: "POST",
     headers: {
@@ -58,25 +51,7 @@ export async function createBatch({
 
 export async function editBatch(
   batchId: string,
-  {
-    address,
-    signature,
-    name,
-    startDate,
-    status,
-    contractAddress,
-    telegramLink,
-    bgSubdomain,
-  }: {
-    address: string;
-    signature: string;
-    name: string;
-    startDate: string;
-    status: string;
-    contractAddress?: string;
-    telegramLink: string;
-    bgSubdomain: string;
-  },
+  { address, signature, name, startDate, status, contractAddress, telegramLink, bgSubdomain }: UpdateBatchPayload,
 ) {
   const response = await fetch(`/api/batches/${batchId}/update`, {
     method: "PUT",
