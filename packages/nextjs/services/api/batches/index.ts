@@ -28,6 +28,7 @@ export async function createBatch({
   status,
   contractAddress,
   telegramLink,
+  websiteUrl,
 }: {
   address: string;
   signature: string;
@@ -36,13 +37,14 @@ export async function createBatch({
   status: string;
   contractAddress?: string;
   telegramLink: string;
+  websiteUrl: string;
 }) {
   const response = await fetch("/api/batches/create", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ address, signature, name, startDate, status, contractAddress, telegramLink }),
+    body: JSON.stringify({ address, signature, name, startDate, status, contractAddress, telegramLink, websiteUrl }),
   });
 
   const data = await response.json();
@@ -64,6 +66,7 @@ export async function editBatch(
     status,
     contractAddress,
     telegramLink,
+    websiteUrl,
   }: {
     address: string;
     signature: string;
@@ -72,6 +75,7 @@ export async function editBatch(
     status: string;
     contractAddress?: string;
     telegramLink: string;
+    websiteUrl: string;
   },
 ) {
   const response = await fetch(`/api/batches/${batchId}/update`, {
@@ -79,7 +83,7 @@ export async function editBatch(
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ address, signature, name, startDate, status, contractAddress, telegramLink }),
+    body: JSON.stringify({ address, signature, name, startDate, status, contractAddress, telegramLink, websiteUrl }),
   });
 
   const data = await response.json();

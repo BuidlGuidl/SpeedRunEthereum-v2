@@ -12,6 +12,7 @@ import {
   text,
   timestamp,
   uniqueIndex,
+  uuid,
   varchar,
 } from "drizzle-orm/pg-core";
 
@@ -47,7 +48,7 @@ export const users = pgTable(
     socialDiscord: varchar({ length: 255 }),
     socialEmail: varchar({ length: 255 }),
     location: varchar({ length: 255 }),
-    batchId: integer().references(() => batches.id),
+    batchId: uuid().references(() => batches.id),
     batchStatus: batchUserStatusEnum(),
   },
   table => [uniqueIndex("idUniqueIndex").on(lower(table.userAddress))],
@@ -73,12 +74,13 @@ export const challenges = pgTable("challenges", {
 });
 
 export const batches = pgTable("batches", {
-  id: serial().primaryKey(),
+  id: uuid("id").defaultRandom().primaryKey(),
   name: varchar({ length: 255 }).notNull(),
   startDate: timestamp().notNull(),
   status: batchStatusEnum().notNull(),
   contractAddress: varchar({ length: 42 }),
   telegramLink: varchar({ length: 255 }).notNull(),
+  websiteUrl: varchar({ length: 255 }).notNull(),
 });
 
 export const userChallenges = pgTable(

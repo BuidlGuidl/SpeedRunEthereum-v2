@@ -1,5 +1,5 @@
 {
-  "id": "0a6cc8ba-f399-4838-91ea-dc5705fa3108",
+  "id": "5ebb9b90-2392-403a-b991-bc1e3ce093f2",
   "prevId": "9c5331d3-f890-49c2-9c37-cd28d054ab7e",
   "version": "7",
   "dialect": "postgresql",
@@ -10,9 +10,10 @@
       "columns": {
         "id": {
           "name": "id",
-          "type": "serial",
+          "type": "uuid",
           "primaryKey": true,
-          "notNull": true
+          "notNull": true,
+          "default": "gen_random_uuid()"
         },
         "name": {
           "name": "name",
@@ -41,6 +42,12 @@
         },
         "telegram_link": {
           "name": "telegram_link",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "website_url": {
+          "name": "website_url",
           "type": "varchar(255)",
           "primaryKey": false,
           "notNull": true
@@ -344,7 +351,7 @@
         },
         "batch_id": {
           "name": "batch_id",
-          "type": "integer",
+          "type": "uuid",
           "primaryKey": false,
           "notNull": false
         },

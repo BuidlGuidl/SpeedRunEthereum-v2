@@ -12,15 +12,24 @@ export type UpdateBatchPayload = {
   status: BatchStatus;
   contractAddress?: string;
   telegramLink: string;
+  websiteUrl: string;
 };
 
 export async function PUT(request: Request, { params }: { params: { batchId: string } }) {
   try {
     const { batchId } = params;
-    const { name, address, signature, startDate, status, contractAddress, telegramLink }: UpdateBatchPayload =
-      await request.json();
+    const {
+      name,
+      address,
+      signature,
+      startDate,
+      status,
+      contractAddress,
+      telegramLink,
+      websiteUrl,
+    }: UpdateBatchPayload = await request.json();
 
-    if (!name || !startDate || !status || !telegramLink) {
+    if (!name || !startDate || !status || !telegramLink || !websiteUrl) {
       return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
     }
 
@@ -29,7 +38,7 @@ export async function PUT(request: Request, { params }: { params: { batchId: str
       return NextResponse.json({ error: "Only admins can update batches" }, { status: 403 });
     }
 
-    const batch = await getBatchById(parseInt(batchId));
+    const batch = await getBatchById(batchId);
     if (!batch) {
       return NextResponse.json({ error: "Batch not found" }, { status: 404 });
     }
@@ -37,24 +46,25 @@ export async function PUT(request: Request, { params }: { params: { batchId: str
     const isValidSignature = await isValidEIP712EditBatchSignature({
       address,
       signature,
-      batchId,
       name,
       startDate,
       status,
       contractAddress: contractAddress || "",
       telegramLink,
+      websiteUrl,
     });
 
     if (!isValidSignature) {
       return NextResponse.json({ error: "Invalid signature" }, { status: 401 });
     }
 
-    const updatedBatch = await updateBatch(parseInt(batchId), {
+    const updatedBatch = await updateBatch(batchId, {
       name,
       startDate: new Date(startDate),
       status,
       contractAddress,
       telegramLink,
+      websiteUrl,
     });
 
     return NextResponse.json({ batch: updatedBatch });

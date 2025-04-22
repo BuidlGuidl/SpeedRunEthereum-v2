@@ -12,14 +12,15 @@ export type CreateBatchPayload = {
   status: BatchStatus;
   contractAddress?: string;
   telegramLink: string;
+  websiteUrl: string;
 };
 
 export async function POST(req: Request) {
   try {
-    const { address, signature, name, startDate, status, contractAddress, telegramLink } =
+    const { address, signature, name, startDate, status, contractAddress, telegramLink, websiteUrl } =
       (await req.json()) as CreateBatchPayload;
 
-    if (!address || !signature || !name || !startDate || !status || !telegramLink) {
+    if (!address || !signature || !name || !startDate || !status || !telegramLink || !websiteUrl) {
       return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
     }
 
@@ -42,6 +43,7 @@ export async function POST(req: Request) {
       status,
       contractAddress: contractAddress || "",
       telegramLink,
+      websiteUrl,
     });
 
     if (!isValidSignature) {
@@ -54,6 +56,7 @@ export async function POST(req: Request) {
       status,
       contractAddress: contractAddress || null,
       telegramLink,
+      websiteUrl,
     });
 
     return NextResponse.json({ batch }, { status: 200 });

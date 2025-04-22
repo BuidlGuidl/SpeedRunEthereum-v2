@@ -9,7 +9,7 @@ export type BatchInsert = InferInsertModel<typeof batches>;
 export type Batch = Awaited<ReturnType<typeof getBatchById>>;
 export type BatchWithCounts = Awaited<ReturnType<typeof getSortedBatchesInfo>>["data"][0];
 
-export async function getBatchById(id: number) {
+export async function getBatchById(id: string) {
   return await db.query.batches.findFirst({
     where: eq(batches.id, id),
   });
@@ -90,25 +90,16 @@ export async function getSortedBatchesInfo(start: number, size: number, sorting:
 }
 
 export async function createBatch(batch: BatchInsert) {
-  const countResult = await db.select({ count: sql<number>`count(*)` }).from(batches);
-  const currentCount = Number(countResult[0].count);
-
-  const result = await db
-    .insert(batches)
-    .values({
-      ...batch,
-      id: currentCount + 1,
-    })
-    .returning();
+  const result = await db.insert(batches).values(batch).returning();
   return result[0];
 }
 
-export async function updateBatch(id: number, data: Partial<BatchInsert>) {
+export async function updateBatch(id: string, data: Partial<BatchInsert>) {
   const result = await db.update(batches).set(data).where(eq(batches.id, id)).returning();
   return result[0];
 }
 
-export async function getUsersFromBatch(batchId: number) {
+export async function getUsersFromBatch(batchId: string) {
   return await db.query.users.findMany({
     where: eq(users.batchId, batchId),
   });

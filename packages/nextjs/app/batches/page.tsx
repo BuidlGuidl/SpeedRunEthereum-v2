@@ -109,9 +109,9 @@ export default function BatchesPage() {
         cell: info => {
           const batch = info.row.original;
 
-          const telegramLink = batch?.telegramLink;
-          const contractAddress = batch?.contractAddress;
-          const batchId = batch?.id;
+          const telegramLink = batch.telegramLink;
+          const contractAddress = batch.contractAddress;
+          const websiteUrl = batch.websiteUrl;
 
           return (
             <div className="flex w-full items-center justify-center gap-3">
@@ -129,16 +129,11 @@ export default function BatchesPage() {
               <a href={telegramLink} target="_blank" rel="noopener noreferrer" className="link">
                 <TelegramIcon className="w-4 h-4" />
               </a>
-              <a
-                href={`https://batch${batchId}.buidlguidl.com/`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="link"
-              >
+              <a href={`https://${websiteUrl}`} target="_blank" rel="noopener noreferrer" className="link">
                 <WebsiteIcon className="w-4 h-4" />
               </a>
               <a
-                href={`https://github.com/BuidlGuidl/batch${batchId}.buidlguidl.com`}
+                href={`https://github.com/BuidlGuidl/${websiteUrl}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="link"

@@ -1,4 +1,4 @@
-import { forwardRef, useState } from "react";
+import { forwardRef, useMemo, useState } from "react";
 import { InputBase } from "~~/components/scaffold-eth";
 import { BatchStatus } from "~~/services/database/config/types";
 import { notification } from "~~/utils/scaffold-eth";
@@ -20,6 +20,7 @@ type UpdateBatchModalContentProps = {
     startDate: string;
     telegramLink: string;
     contractAddress: string;
+    websiteUrl: string;
   }) => void;
 };
 
@@ -44,6 +45,10 @@ export const UpdateBatchModalContent = forwardRef<HTMLInputElement, UpdateBatchM
     const [telegramLink, setTelegramLink] = useState(defaultTelegramLink);
     const [registryAddress, setRegistryAddress] = useState(defaultRegistryAddress);
 
+    const generatedWebsiteUrl = useMemo(() => {
+      return `${name.toLowerCase().replace(/[^a-zA-Z0-9]/g, "")}.buidlguidl.com`;
+    }, [name]);
+
     const title = batchOperation === "add" ? "Add New Batch" : "Edit Batch";
 
     const buttonDefaultText = batchOperation === "add" ? "Add Batch" : "Update Batch";
@@ -56,11 +61,12 @@ export const UpdateBatchModalContent = forwardRef<HTMLInputElement, UpdateBatchM
         return;
       }
       updateBatch({
-        name: name,
-        status: status,
-        startDate: startDate,
-        telegramLink: telegramLink,
+        name,
+        status,
+        startDate,
+        telegramLink,
         contractAddress: registryAddress,
+        websiteUrl: generatedWebsiteUrl,
       });
     };
 

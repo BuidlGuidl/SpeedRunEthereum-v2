@@ -20,12 +20,12 @@ export const useEditBatch = ({ onSuccess }: { onSuccess?: () => void }) => {
 
       const message = {
         ...EIP_712_TYPED_DATA__EDIT_BATCH.message,
-        batchId,
         name: batch.name,
         startDate: batch.startDate,
         status: batch.status,
         contractAddress: batch.contractAddress || "",
         telegramLink: batch.telegramLink,
+        websiteUrl: batch.websiteUrl,
       };
 
       const signature = await signTypedDataAsync({
@@ -41,6 +41,7 @@ export const useEditBatch = ({ onSuccess }: { onSuccess?: () => void }) => {
         status: batch.status,
         contractAddress: batch.contractAddress || "",
         telegramLink: batch.telegramLink,
+        websiteUrl: batch.websiteUrl,
       });
     },
     onSuccess: () => {

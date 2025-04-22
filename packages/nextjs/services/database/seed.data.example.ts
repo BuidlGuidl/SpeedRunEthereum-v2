@@ -1,7 +1,7 @@
 import { batches, challenges, userChallenges, users } from "./config/schema";
 import { BatchStatus, BatchUserStatus, ChallengeId, ReviewAction, UserRole } from "./config/types";
 
-export const SEED_DATA_VERSION = "1.1.0";
+export const SEED_DATA_VERSION = "1.2.0";
 
 // Using Drizzle's inferred insert types to ensure seed data
 // matches database schema requirements
@@ -12,7 +12,7 @@ export const seedUsers: (typeof users.$inferInsert)[] = [
     createdAt: new Date(1679063274534),
     socialX: "pabl0cks",
     socialTelegram: "pabl0cks",
-    batchId: 1,
+    batchId: "123e4567-e89b-12d3-a456-426614174000",
     batchStatus: BatchUserStatus.GRADUATE,
   },
   {
@@ -21,7 +21,7 @@ export const seedUsers: (typeof users.$inferInsert)[] = [
     createdAt: new Date(1664777161512),
     socialEmail: "ryuufarhan7@gmail.com",
     socialX: "FarhanRyuu",
-    batchId: 1,
+    batchId: "123e4567-e89b-12d3-a456-426614174000",
     batchStatus: BatchUserStatus.CANDIDATE,
   },
   {
@@ -31,7 +31,7 @@ export const seedUsers: (typeof users.$inferInsert)[] = [
     socialEmail: "gokulkesavan5005@gmail.com",
     socialX: "meta_Goku",
     socialGithub: "kesgokul",
-    batchId: 3,
+    batchId: "123e4567-e89b-12d3-a456-426614174002",
     batchStatus: BatchUserStatus.CANDIDATE,
   },
   {
@@ -366,27 +366,30 @@ export const seedUserChallenges: (typeof userChallenges.$inferInsert)[] = [
 
 export const seedBatches: (typeof batches.$inferInsert)[] = [
   {
-    id: 1,
+    id: "123e4567-e89b-12d3-a456-426614174000",
     name: "Batch 1",
     startDate: new Date(1705315180000),
     status: BatchStatus.CLOSED,
     telegramLink: "https://t.me/joinchat/1",
     contractAddress: "0x0000000000000000000000000000000000000000",
+    websiteUrl: "batch1.buidlguidl.com",
   },
   {
-    id: 2,
+    id: "123e4567-e89b-12d3-a456-426614174001",
     name: "Batch 2",
     startDate: new Date(1707820780000),
     status: BatchStatus.CLOSED,
     telegramLink: "https://t.me/joinchat/2",
     contractAddress: "0x0000000000000000000000000000000000000000",
+    websiteUrl: "batch2.buidlguidl.com",
   },
   {
-    id: 3,
+    id: "123e4567-e89b-12d3-a456-426614174002",
     name: "Batch 3",
     startDate: new Date(1705315180000),
     status: BatchStatus.OPEN,
     telegramLink: "https://t.me/joinchat/3",
     contractAddress: "0x0000000000000000000000000000000000000000",
+    websiteUrl: "batch3.buidlguidl.com",
   },
 ];

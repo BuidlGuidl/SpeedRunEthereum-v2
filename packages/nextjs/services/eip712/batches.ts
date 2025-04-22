@@ -10,6 +10,7 @@ export const EIP_712_TYPED_DATA__CREATE_BATCH = {
       { name: "status", type: "string" },
       { name: "contractAddress", type: "string" },
       { name: "telegramLink", type: "string" },
+      { name: "websiteUrl", type: "string" },
     ],
   },
   primaryType: "Message",
@@ -26,6 +27,7 @@ export const isValidEIP712CreateBatchSignature = async ({
   status,
   contractAddress,
   telegramLink,
+  websiteUrl,
 }: {
   address: string;
   signature: `0x${string}`;
@@ -34,6 +36,7 @@ export const isValidEIP712CreateBatchSignature = async ({
   status: string;
   contractAddress: string;
   telegramLink: string;
+  websiteUrl: string;
 }) => {
   const typedData = {
     ...EIP_712_TYPED_DATA__CREATE_BATCH,
@@ -44,6 +47,7 @@ export const isValidEIP712CreateBatchSignature = async ({
       status,
       contractAddress,
       telegramLink,
+      websiteUrl,
     },
     signature,
   };
@@ -56,12 +60,12 @@ export const EIP_712_TYPED_DATA__EDIT_BATCH = {
   types: {
     Message: [
       { name: "action", type: "string" },
-      { name: "batchId", type: "string" },
       { name: "name", type: "string" },
       { name: "startDate", type: "string" },
       { name: "status", type: "string" },
       { name: "contractAddress", type: "string" },
       { name: "telegramLink", type: "string" },
+      { name: "websiteUrl", type: "string" },
     ],
   },
   primaryType: "Message",
@@ -73,32 +77,32 @@ export const EIP_712_TYPED_DATA__EDIT_BATCH = {
 export const isValidEIP712EditBatchSignature = async ({
   address,
   signature,
-  batchId,
   name,
   startDate,
   status,
   contractAddress,
   telegramLink,
+  websiteUrl,
 }: {
   address: string;
   signature: `0x${string}`;
-  batchId: string;
   name: string;
   startDate: string;
   status: string;
   contractAddress: string;
   telegramLink: string;
+  websiteUrl: string;
 }) => {
   const typedData = {
     ...EIP_712_TYPED_DATA__EDIT_BATCH,
     message: {
       ...EIP_712_TYPED_DATA__EDIT_BATCH.message,
-      batchId,
       name,
       startDate,
       status,
       contractAddress,
       telegramLink,
+      websiteUrl,
     },
     signature,
   };
