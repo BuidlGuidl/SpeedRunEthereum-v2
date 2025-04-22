@@ -83,10 +83,19 @@ async function seed() {
 
     // Insert fresh data
     console.log("Inserting batches...");
-    await db.insert(batches).values(seedBatches).execute();
+    // Insert batches and get their generated IDs
+    const insertedBatches = await db.insert(batches).values(seedBatches).returning();
+
+    // Assign each batch to a starting user in order
+    const updatedSeedUsers = seedUsers.map((user, idx) => {
+      if (idx < insertedBatches.length) {
+        return { ...user, batchId: insertedBatches[idx].id };
+      }
+      return user;
+    });
 
     console.log("Inserting users...");
-    await db.insert(users).values(seedUsers).execute();
+    await db.insert(users).values(updatedSeedUsers).execute();
 
     console.log("Inserting challenges...");
     await db.insert(challenges).values(seedChallenges).execute();

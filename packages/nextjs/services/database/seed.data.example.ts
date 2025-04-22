@@ -12,7 +12,6 @@ export const seedUsers: (typeof users.$inferInsert)[] = [
     createdAt: new Date(1679063274534),
     socialX: "pabl0cks",
     socialTelegram: "pabl0cks",
-    batchId: 1,
     batchStatus: BatchUserStatus.GRADUATE,
   },
   {
@@ -21,7 +20,6 @@ export const seedUsers: (typeof users.$inferInsert)[] = [
     createdAt: new Date(1664777161512),
     socialEmail: "ryuufarhan7@gmail.com",
     socialX: "FarhanRyuu",
-    batchId: 1,
     batchStatus: BatchUserStatus.CANDIDATE,
   },
   {
@@ -31,7 +29,6 @@ export const seedUsers: (typeof users.$inferInsert)[] = [
     socialEmail: "gokulkesavan5005@gmail.com",
     socialX: "meta_Goku",
     socialGithub: "kesgokul",
-    batchId: 3,
     batchStatus: BatchUserStatus.CANDIDATE,
   },
   {
@@ -366,7 +363,6 @@ export const seedUserChallenges: (typeof userChallenges.$inferInsert)[] = [
 
 export const seedBatches: (typeof batches.$inferInsert)[] = [
   {
-    id: 1,
     name: "Batch 1",
     startDate: new Date(1705315180000),
     status: BatchStatus.CLOSED,
@@ -374,7 +370,6 @@ export const seedBatches: (typeof batches.$inferInsert)[] = [
     contractAddress: "0x0000000000000000000000000000000000000000",
   },
   {
-    id: 2,
     name: "Batch 2",
     startDate: new Date(1707820780000),
     status: BatchStatus.CLOSED,
@@ -382,7 +377,6 @@ export const seedBatches: (typeof batches.$inferInsert)[] = [
     contractAddress: "0x0000000000000000000000000000000000000000",
   },
   {
-    id: 3,
     name: "Batch 3",
     startDate: new Date(1705315180000),
     status: BatchStatus.OPEN,
