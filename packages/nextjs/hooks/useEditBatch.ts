@@ -25,7 +25,7 @@ export const useEditBatch = ({ onSuccess }: { onSuccess?: () => void }) => {
         status: batch.status,
         contractAddress: batch.contractAddress || "",
         telegramLink: batch.telegramLink,
-        websiteUrl: batch.websiteUrl,
+        bgSubdomain: batch.bgSubdomain,
       };
 
       const signature = await signTypedDataAsync({
@@ -41,7 +41,7 @@ export const useEditBatch = ({ onSuccess }: { onSuccess?: () => void }) => {
         status: batch.status,
         contractAddress: batch.contractAddress || "",
         telegramLink: batch.telegramLink,
-        websiteUrl: batch.websiteUrl,
+        bgSubdomain: batch.bgSubdomain,
       });
     },
     onSuccess: () => {

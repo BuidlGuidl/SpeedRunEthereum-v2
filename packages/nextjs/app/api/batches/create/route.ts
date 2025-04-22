@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { BatchStatus } from "~~/services/database/config/types";
-import { createBatch, getBatchByName } from "~~/services/database/repositories/batches";
+import { createBatch, getBatchByBgSubdomain } from "~~/services/database/repositories/batches";
 import { isUserAdmin } from "~~/services/database/repositories/users";
 import { isValidEIP712CreateBatchSignature } from "~~/services/eip712/batches";
 
@@ -12,15 +12,15 @@ export type CreateBatchPayload = {
   status: BatchStatus;
   contractAddress?: string;
   telegramLink: string;
-  websiteUrl: string;
+  bgSubdomain: string;
 };
 
 export async function POST(req: Request) {
   try {
-    const { address, signature, name, startDate, status, contractAddress, telegramLink, websiteUrl } =
+    const { address, signature, name, startDate, status, contractAddress, telegramLink, bgSubdomain } =
       (await req.json()) as CreateBatchPayload;
 
-    if (!address || !signature || !name || !startDate || !status || !telegramLink || !websiteUrl) {
+    if (!address || !signature || !name || !startDate || !status || !telegramLink || !bgSubdomain) {
       return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
     }
 
@@ -29,10 +29,10 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Only admins can create batches" }, { status: 403 });
     }
 
-    const batchExist = await getBatchByName(name);
+    const batchExist = await getBatchByBgSubdomain(bgSubdomain);
 
     if (batchExist) {
-      return NextResponse.json({ error: "Batch with this name already exists" }, { status: 401 });
+      return NextResponse.json({ error: "Batch with this website url already exists" }, { status: 401 });
     }
 
     const isValidSignature = await isValidEIP712CreateBatchSignature({
@@ -43,7 +43,7 @@ export async function POST(req: Request) {
       status,
       contractAddress: contractAddress || "",
       telegramLink,
-      websiteUrl,
+      bgSubdomain,
     });
 
     if (!isValidSignature) {
@@ -56,7 +56,7 @@ export async function POST(req: Request) {
       status,
       contractAddress: contractAddress || null,
       telegramLink,
-      websiteUrl,
+      bgSubdomain,
     });
 
     return NextResponse.json({ batch }, { status: 200 });

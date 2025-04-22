@@ -10,7 +10,7 @@ export const EIP_712_TYPED_DATA__CREATE_BATCH = {
       { name: "status", type: "string" },
       { name: "contractAddress", type: "string" },
       { name: "telegramLink", type: "string" },
-      { name: "websiteUrl", type: "string" },
+      { name: "bgSubdomain", type: "string" },
     ],
   },
   primaryType: "Message",
@@ -27,7 +27,7 @@ export const isValidEIP712CreateBatchSignature = async ({
   status,
   contractAddress,
   telegramLink,
-  websiteUrl,
+  bgSubdomain,
 }: {
   address: string;
   signature: `0x${string}`;
@@ -36,7 +36,7 @@ export const isValidEIP712CreateBatchSignature = async ({
   status: string;
   contractAddress: string;
   telegramLink: string;
-  websiteUrl: string;
+  bgSubdomain: string;
 }) => {
   const typedData = {
     ...EIP_712_TYPED_DATA__CREATE_BATCH,
@@ -47,7 +47,7 @@ export const isValidEIP712CreateBatchSignature = async ({
       status,
       contractAddress,
       telegramLink,
-      websiteUrl,
+      bgSubdomain,
     },
     signature,
   };
@@ -65,7 +65,7 @@ export const EIP_712_TYPED_DATA__EDIT_BATCH = {
       { name: "status", type: "string" },
       { name: "contractAddress", type: "string" },
       { name: "telegramLink", type: "string" },
-      { name: "websiteUrl", type: "string" },
+      { name: "bgSubdomain", type: "string" },
     ],
   },
   primaryType: "Message",
@@ -82,7 +82,7 @@ export const isValidEIP712EditBatchSignature = async ({
   status,
   contractAddress,
   telegramLink,
-  websiteUrl,
+  bgSubdomain,
 }: {
   address: string;
   signature: `0x${string}`;
@@ -91,7 +91,7 @@ export const isValidEIP712EditBatchSignature = async ({
   status: string;
   contractAddress: string;
   telegramLink: string;
-  websiteUrl: string;
+  bgSubdomain: string;
 }) => {
   const typedData = {
     ...EIP_712_TYPED_DATA__EDIT_BATCH,
@@ -102,7 +102,7 @@ export const isValidEIP712EditBatchSignature = async ({
       status,
       contractAddress,
       telegramLink,
-      websiteUrl,
+      bgSubdomain,
     },
     signature,
   };

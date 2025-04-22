@@ -80,7 +80,7 @@ export const batches = pgTable("batches", {
   status: batchStatusEnum().notNull(),
   contractAddress: varchar({ length: 42 }),
   telegramLink: varchar({ length: 255 }).notNull(),
-  websiteUrl: varchar({ length: 255 }).notNull(),
+  bgSubdomain: varchar({ length: 255 }).notNull(),
 });
 
 export const userChallenges = pgTable(

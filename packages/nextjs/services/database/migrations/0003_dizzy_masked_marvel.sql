@@ -27,5 +27,5 @@ ALTER TABLE "users" RENAME COLUMN "batch_id_new" TO "batch_id";--> statement-bre
 ALTER TABLE "batches" ADD PRIMARY KEY ("id");--> statement-breakpoint
 ALTER TABLE "users" ADD CONSTRAINT "users_batch_id_batches_id_fk" FOREIGN KEY ("batch_id") REFERENCES "public"."batches"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 
--- Add the new website_url column
-ALTER TABLE "batches" ADD COLUMN "website_url" varchar(255) NOT NULL;
+-- Add the new bg_subdomain column
+ALTER TABLE "batches" ADD COLUMN "bg_subdomain" varchar(255) NOT NULL;

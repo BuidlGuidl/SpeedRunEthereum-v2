@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { BatchStatus } from "~~/services/database/config/types";
-import { getBatchById, updateBatch } from "~~/services/database/repositories/batches";
+import { getBatchByBgSubdomain, getBatchById, updateBatch } from "~~/services/database/repositories/batches";
 import { isUserAdmin } from "~~/services/database/repositories/users";
 import { isValidEIP712EditBatchSignature } from "~~/services/eip712/batches";
 
@@ -12,7 +12,7 @@ export type UpdateBatchPayload = {
   status: BatchStatus;
   contractAddress?: string;
   telegramLink: string;
-  websiteUrl: string;
+  bgSubdomain: string;
 };
 
 export async function PUT(request: Request, { params }: { params: { batchId: string } }) {
@@ -26,16 +26,22 @@ export async function PUT(request: Request, { params }: { params: { batchId: str
       status,
       contractAddress,
       telegramLink,
-      websiteUrl,
+      bgSubdomain,
     }: UpdateBatchPayload = await request.json();
 
-    if (!name || !startDate || !status || !telegramLink || !websiteUrl) {
+    if (!name || !startDate || !status || !telegramLink || !bgSubdomain) {
       return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
     }
 
     const isAdmin = await isUserAdmin(address);
     if (!isAdmin) {
       return NextResponse.json({ error: "Only admins can update batches" }, { status: 403 });
+    }
+
+    const batchExist = await getBatchByBgSubdomain(bgSubdomain);
+
+    if (batchExist) {
+      return NextResponse.json({ error: "Batch with this website url already exists" }, { status: 401 });
     }
 
     const batch = await getBatchById(batchId);
@@ -51,7 +57,7 @@ export async function PUT(request: Request, { params }: { params: { batchId: str
       status,
       contractAddress: contractAddress || "",
       telegramLink,
-      websiteUrl,
+      bgSubdomain,
     });
 
     if (!isValidSignature) {
@@ -64,7 +70,7 @@ export async function PUT(request: Request, { params }: { params: { batchId: str
       status,
       contractAddress,
       telegramLink,
-      websiteUrl,
+      bgSubdomain,
     });
 
     return NextResponse.json({ batch: updatedBatch });

@@ -20,7 +20,7 @@ type UpdateBatchModalContentProps = {
     startDate: string;
     telegramLink: string;
     contractAddress: string;
-    websiteUrl: string;
+    bgSubdomain: string;
   }) => void;
 };
 
@@ -45,8 +45,8 @@ export const UpdateBatchModalContent = forwardRef<HTMLInputElement, UpdateBatchM
     const [telegramLink, setTelegramLink] = useState(defaultTelegramLink);
     const [registryAddress, setRegistryAddress] = useState(defaultRegistryAddress);
 
-    const generatedWebsiteUrl = useMemo(() => {
-      return `${name.toLowerCase().replace(/[^a-zA-Z0-9]/g, "")}.buidlguidl.com`;
+    const generatedBgSubdomain = useMemo(() => {
+      return `${name.toLowerCase().replace(/[^a-zA-Z0-9]/g, "")}`;
     }, [name]);
 
     const title = batchOperation === "add" ? "Add New Batch" : "Edit Batch";
@@ -60,13 +60,19 @@ export const UpdateBatchModalContent = forwardRef<HTMLInputElement, UpdateBatchM
         notification.error("Please fill in all required fields");
         return;
       }
+
+      if (!generatedBgSubdomain) {
+        notification.error("Please change the name to generate valid website url");
+        return;
+      }
+
       updateBatch({
         name,
         status,
         startDate,
         telegramLink,
         contractAddress: registryAddress,
-        websiteUrl: generatedWebsiteUrl,
+        bgSubdomain: generatedBgSubdomain,
       });
     };
 
@@ -90,6 +96,10 @@ export const UpdateBatchModalContent = forwardRef<HTMLInputElement, UpdateBatchM
                   </span>
                 </label>
                 <InputBase name="batchName" placeholder="Batch Name" value={name} onChange={setName} />
+                <div className="text-sm text-left font-medium">
+                  Generated website url: <span className="text-red-500">*</span>{" "}
+                  <span className="font-bold">{generatedBgSubdomain}.buidlguidl.com</span>
+                </div>
               </div>
 
               <div className="form-control w-full">

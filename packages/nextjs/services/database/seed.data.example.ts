@@ -372,7 +372,7 @@ export const seedBatches: (typeof batches.$inferInsert)[] = [
     status: BatchStatus.CLOSED,
     telegramLink: "https://t.me/joinchat/1",
     contractAddress: "0x0000000000000000000000000000000000000000",
-    websiteUrl: "batch1.buidlguidl.com",
+    bgSubdomain: "batch1",
   },
   {
     id: "123e4567-e89b-12d3-a456-426614174001",
@@ -381,7 +381,7 @@ export const seedBatches: (typeof batches.$inferInsert)[] = [
     status: BatchStatus.CLOSED,
     telegramLink: "https://t.me/joinchat/2",
     contractAddress: "0x0000000000000000000000000000000000000000",
-    websiteUrl: "batch2.buidlguidl.com",
+    bgSubdomain: "batch2",
   },
   {
     id: "123e4567-e89b-12d3-a456-426614174002",
@@ -390,6 +390,6 @@ export const seedBatches: (typeof batches.$inferInsert)[] = [
     status: BatchStatus.OPEN,
     telegramLink: "https://t.me/joinchat/3",
     contractAddress: "0x0000000000000000000000000000000000000000",
-    websiteUrl: "batch3.buidlguidl.com",
+    bgSubdomain: "batch3",
   },
 ];

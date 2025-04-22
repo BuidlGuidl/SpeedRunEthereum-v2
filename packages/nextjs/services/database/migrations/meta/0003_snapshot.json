@@ -46,8 +46,8 @@
           "primaryKey": false,
           "notNull": true
         },
-        "website_url": {
-          "name": "website_url",
+        "bg_subdomain": {
+          "name": "bg_subdomain",
           "type": "varchar(255)",
           "primaryKey": false,
           "notNull": true
@@ -246,12 +246,8 @@
           "name": "user_challenges_user_address_users_user_address_fk",
           "tableFrom": "user_challenges",
           "tableTo": "users",
-          "columnsFrom": [
-            "user_address"
-          ],
-          "columnsTo": [
-            "user_address"
-          ],
+          "columnsFrom": ["user_address"],
+          "columnsTo": ["user_address"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -259,12 +255,8 @@
           "name": "user_challenges_challenge_id_challenges_id_fk",
           "tableFrom": "user_challenges",
           "tableTo": "challenges",
-          "columnsFrom": [
-            "challenge_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["challenge_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -385,12 +377,8 @@
           "name": "users_batch_id_batches_id_fk",
           "tableFrom": "users",
           "tableTo": "batches",
-          "columnsFrom": [
-            "batch_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["batch_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -406,36 +394,22 @@
     "public.batch_status_enum": {
       "name": "batch_status_enum",
       "schema": "public",
-      "values": [
-        "closed",
-        "open"
-      ]
+      "values": ["closed", "open"]
     },
     "public.batch_user_status_enum": {
       "name": "batch_user_status_enum",
       "schema": "public",
-      "values": [
-        "graduate",
-        "candidate"
-      ]
+      "values": ["graduate", "candidate"]
     },
     "public.review_action_enum": {
       "name": "review_action_enum",
       "schema": "public",
-      "values": [
-        "REJECTED",
-        "ACCEPTED",
-        "SUBMITTED"
-      ]
+      "values": ["REJECTED", "ACCEPTED", "SUBMITTED"]
     },
     "public.user_role_enum": {
       "name": "user_role_enum",
       "schema": "public",
-      "values": [
-        "USER",
-        "BUILDER",
-        "ADMIN"
-      ]
+      "values": ["USER", "BUILDER", "ADMIN"]
     }
   },
   "schemas": {},

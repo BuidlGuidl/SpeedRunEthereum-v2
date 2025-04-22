@@ -15,9 +15,9 @@ export async function getBatchById(id: string) {
   });
 }
 
-export async function getBatchByName(name: string) {
+export async function getBatchByBgSubdomain(bgSubdomain: string) {
   return await db.query.batches.findFirst({
-    where: eq(lower(batches.name), name.toLowerCase()),
+    where: eq(lower(batches.bgSubdomain), bgSubdomain.toLowerCase()),
   });
 }
 
