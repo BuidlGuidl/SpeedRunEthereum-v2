@@ -49,6 +49,7 @@
     "usehooks-ts": "~3.1.0",
     "viem": "2.21.32",
     "wagmi": "2.12.23",
+    "ws": "^8.18.1",
     "zustand": "~5.0.0"
   },
   "devDependencies": {
@@ -57,6 +58,7 @@
     "@types/node": "~18.19.50",
     "@types/pg": "^8",
     "@types/react": "~18.3.5",
+    "@types/ws": "^8",
     "@typescript-eslint/eslint-plugin": "~5.40.0",
     "abitype": "1.0.6",
     "autoprefixer": "~10.4.20",

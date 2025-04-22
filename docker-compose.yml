@@ -1,10 +1,28 @@
-version: "3"
 services:
-  db:
-    image: postgres:16
-    environment:
-      POSTGRES_PASSWORD: mysecretpassword
+  postgres:
+    image: postgres:15
+    command: "-d 1"
+    volumes:
+      - data:/var/lib/postgresql/data
     ports:
       - "5432:5432"
-    volumes:
-      - ./data/db:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=mysecretpassword
+      - POSTGRES_DB=postgres
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+  neon-proxy:
+    image: ghcr.io/timowilhelm/local-neon-http-proxy:main
+    environment:
+      - PG_CONNECTION_STRING=postgres://postgres:mysecretpassword@localhost:5432/postgres
+    ports:
+      - "4444:4444"
+    depends_on:
+      postgres:
+        condition: service_healthy
+volumes:
+  data:
