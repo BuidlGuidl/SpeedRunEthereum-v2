@@ -82,14 +82,14 @@ async function seed() {
       await tx.delete(batches).execute();
     });
 
-    // Insert fresh data
-    console.log("Inserting batches...");
-    const batchesToInsert = seedBatches.map(batch => {
+    // remove userAddresses from seedBatches
+    const batchesToInsert = seedBatches.map(seedBatch => {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const { userAddresses, ...rest } = batch;
-      return rest;
+      const { userAddresses, ...batch } = seedBatch;
+      return batch;
     });
 
+    console.log("Inserting batches...");
     // Insert batches and get their generated IDs
     const insertedBatches = await db.insert(batches).values(batchesToInsert).returning();
 
