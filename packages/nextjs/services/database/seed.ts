@@ -1,5 +1,6 @@
-import { batches, challenges, userChallenges, users } from "./config/schema";
+import { batches, challenges, lower, userChallenges, users } from "./config/schema";
 import * as dotenv from "dotenv";
+import { eq } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/node-postgres";
 import * as fs from "fs";
 import * as path from "path";
@@ -12,7 +13,7 @@ type SeedData = {
   seedUsers?: (typeof users.$inferInsert)[];
   seedChallenges?: (typeof challenges.$inferInsert)[];
   seedUserChallenges?: (typeof userChallenges.$inferInsert)[];
-  seedBatches?: (typeof batches.$inferInsert)[];
+  seedBatches?: (typeof batches.$inferInsert & { userAddresses?: string[] })[];
 };
 
 async function loadSeedData() {
@@ -83,19 +84,30 @@ async function seed() {
 
     // Insert fresh data
     console.log("Inserting batches...");
-    // Insert batches and get their generated IDs
-    const insertedBatches = await db.insert(batches).values(seedBatches).returning();
-
-    // Assign each batch to a starting user in order
-    const updatedSeedUsers = seedUsers.map((user, idx) => {
-      if (idx < insertedBatches.length) {
-        return { ...user, batchId: insertedBatches[idx].id };
-      }
-      return user;
+    const batchesToInsert = seedBatches.map(batch => {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { userAddresses, ...rest } = batch;
+      return rest;
     });
 
+    // Insert batches and get their generated IDs
+    const insertedBatches = await db.insert(batches).values(batchesToInsert).returning();
+
     console.log("Inserting users...");
-    await db.insert(users).values(updatedSeedUsers).execute();
+    await db.insert(users).values(seedUsers).execute();
+
+    console.log("Updating users with batch IDs...");
+    seedBatches.forEach(async (batch, idx) => {
+      const insertedBatch = insertedBatches[idx];
+      if (batch.userAddresses) {
+        batch.userAddresses.forEach(async userAddress => {
+          await db
+            .update(users)
+            .set({ batchId: insertedBatch.id })
+            .where(eq(lower(users.userAddress), userAddress.toLowerCase()));
+        });
+      }
+    });
 
     console.log("Inserting challenges...");
     await db.insert(challenges).values(seedChallenges).execute();

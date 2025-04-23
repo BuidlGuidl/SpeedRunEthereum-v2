@@ -361,13 +361,15 @@ export const seedUserChallenges: (typeof userChallenges.$inferInsert)[] = [
   },
 ];
 
-export const seedBatches: (typeof batches.$inferInsert)[] = [
+// userAddresses denotes the user addresses that will be added to the batch
+export const seedBatches: (typeof batches.$inferInsert & { userAddresses?: string[] })[] = [
   {
     name: "Batch 1",
     startDate: new Date(1705315180000),
     status: BatchStatus.CLOSED,
     telegramLink: "https://t.me/joinchat/1",
     contractAddress: "0x0000000000000000000000000000000000000000",
+    userAddresses: [seedUsers?.[0]?.userAddress, seedUsers?.[1]?.userAddress],
   },
   {
     name: "Batch 2",
@@ -375,6 +377,7 @@ export const seedBatches: (typeof batches.$inferInsert)[] = [
     status: BatchStatus.CLOSED,
     telegramLink: "https://t.me/joinchat/2",
     contractAddress: "0x0000000000000000000000000000000000000000",
+    userAddresses: [seedUsers?.[2]?.userAddress, seedUsers?.[3]?.userAddress],
   },
   {
     name: "Batch 3",
