@@ -200,9 +200,9 @@ export default function BuildersPage() {
         </Link>
       </div>
 
-      <div className="text-base mt-4 font-medium flex justify-center gap-2">
-        Total Builders:{" "}
-        {isLoading ? <span className="loading loading-spinner loading-xs ml-1"></span> : totalDBRowCount}
+      <div className="text-base mt-4 font-medium flex justify-center gap-1">
+        <span>Total Builders:</span>
+        {isLoading ? <span className="loading loading-spinner loading-xs"></span> : totalDBRowCount}
       </div>
       <div
         onScroll={e => fetchMoreOnBottomReached(e.currentTarget)}
