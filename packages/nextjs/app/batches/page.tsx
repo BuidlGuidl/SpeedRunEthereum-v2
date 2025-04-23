@@ -11,6 +11,7 @@ import { ADD_BATCH_MODAL_ID, AddBatchModal } from "./_components/AddBatchModal";
 import { UPDATE_BATCH_MODAL_ID, UpdateBatchModal } from "./_components/UpdateBatchModal";
 import { useQuery } from "@tanstack/react-query";
 import { ColumnDef } from "@tanstack/react-table";
+import { useDebounceValue } from "usehooks-ts";
 import { useAccount } from "wagmi";
 import { DateWithTooltip } from "~~/components/DateWithTooltip";
 import InfiniteTable from "~~/components/InfiniteTable";
@@ -30,6 +31,8 @@ export default function BatchesPage() {
   const refreshQueries = () => {
     setBatchesUpdatesCount(prev => prev + 1);
   };
+
+  const [debouncedFilter] = useDebounceValue(filter, 500);
 
   const { data: batches } = useQuery({
     queryKey: ["batches-count", batchesUpdatesCount],
@@ -196,7 +199,7 @@ export default function BatchesPage() {
         queryKey={tableQueryKey}
         queryFn={getSortedBatches}
         initialSorting={tableInitialSorting}
-        filter={filter}
+        filter={debouncedFilter}
       />
 
       <AddBatchModal refreshQueries={refreshQueries} />
