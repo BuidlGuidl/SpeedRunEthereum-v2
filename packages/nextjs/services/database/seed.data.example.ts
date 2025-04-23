@@ -38,6 +38,7 @@ export const seedUsers: (typeof users.$inferInsert)[] = [
     socialEmail: "afo@wefa.app",
     socialX: "Time_Is_Oba",
     socialGithub: "Oba-One",
+    batchStatus: BatchUserStatus.CANDIDATE,
   },
   {
     userAddress: "0x45334F41aAA464528CD5bc0F582acadC49Eb0Cd1",
