@@ -1,7 +1,7 @@
 import { batches, challenges, userChallenges, users } from "./config/schema";
 import { BatchStatus, BatchUserStatus, ChallengeId, ReviewAction, UserRole } from "./config/types";
 
-export const SEED_DATA_VERSION = "1.2.0";
+export const SEED_DATA_VERSION = "1.1.2";
 
 // Using Drizzle's inferred insert types to ensure seed data
 // matches database schema requirements
@@ -12,7 +12,6 @@ export const seedUsers: (typeof users.$inferInsert)[] = [
     createdAt: new Date(1679063274534),
     socialX: "pabl0cks",
     socialTelegram: "pabl0cks",
-    batchId: 1,
     batchStatus: BatchUserStatus.GRADUATE,
   },
   {
@@ -21,7 +20,6 @@ export const seedUsers: (typeof users.$inferInsert)[] = [
     createdAt: new Date(1664777161512),
     socialEmail: "ryuufarhan7@gmail.com",
     socialX: "FarhanRyuu",
-    batchId: 1,
     batchStatus: BatchUserStatus.CANDIDATE,
   },
   {
@@ -31,7 +29,6 @@ export const seedUsers: (typeof users.$inferInsert)[] = [
     socialEmail: "gokulkesavan5005@gmail.com",
     socialX: "meta_Goku",
     socialGithub: "kesgokul",
-    batchId: 3,
     batchStatus: BatchUserStatus.CANDIDATE,
   },
   {
@@ -41,6 +38,7 @@ export const seedUsers: (typeof users.$inferInsert)[] = [
     socialEmail: "afo@wefa.app",
     socialX: "Time_Is_Oba",
     socialGithub: "Oba-One",
+    batchStatus: BatchUserStatus.CANDIDATE,
   },
   {
     userAddress: "0x45334F41aAA464528CD5bc0F582acadC49Eb0Cd1",
@@ -204,7 +202,7 @@ export const seedChallenges: (typeof challenges.$inferInsert)[] = [
 
 export const seedUserChallenges: (typeof userChallenges.$inferInsert)[] = [
   {
-    userAddress: "0xB4F53bd85c00EF22946d24Ae26BC38Ac64F5E7B1",
+    userAddress: seedUsers?.[0]?.userAddress,
     challengeId: ChallengeId.SIMPLE_NFT_EXAMPLE,
     frontendUrl: "https://dreary-use.surge.sh/",
     contractUrl: "https://sepolia.etherscan.io/address/0x7f918d7b7d0fe0d3a8de3c0570ed4e154c0096e0",
@@ -215,7 +213,7 @@ export const seedUserChallenges: (typeof userChallenges.$inferInsert)[] = [
       "0x7a808ee181d8655f38c48e0154903bea229b91e32f6062f6c23ad9da5fa25c3008238b07e367e7904200015157a43378b39244140c43ea35e5eea11c055a170500",
   },
   {
-    userAddress: "0xB4F53bd85c00EF22946d24Ae26BC38Ac64F5E7B1",
+    userAddress: seedUsers?.[0]?.userAddress,
     challengeId: ChallengeId.DICE_GAME,
     frontendUrl: "https://aggressive-party.surge.sh/",
     contractUrl: "https://sepolia.etherscan.io/address/0xd08b984c3ee4a880112d81de5a4a074c857b7f2f",
@@ -226,7 +224,7 @@ export const seedUserChallenges: (typeof userChallenges.$inferInsert)[] = [
       "0x4eca15955283c15c1f9565945c34638c9943a313a79301d73178b814e82e3e183e3d89aebdafa10a1012912cb820950fb6eea6ba76e58bf875f226bdc8257dc700",
   },
   {
-    userAddress: "0xB4F53bd85c00EF22946d24Ae26BC38Ac64F5E7B1",
+    userAddress: seedUsers?.[0]?.userAddress,
     challengeId: ChallengeId.DECENTRALIZED_STAKING,
     frontendUrl: "https://chunky-beam.surge.sh/",
     contractUrl: "https://sepolia.etherscan.io/address/0xbF35fC995A2Cc4F1508B5F769922623dE7f220d6",
@@ -235,7 +233,7 @@ export const seedUserChallenges: (typeof userChallenges.$inferInsert)[] = [
     reviewAction: ReviewAction.ACCEPTED,
   },
   {
-    userAddress: "0xB4F53bd85c00EF22946d24Ae26BC38Ac64F5E7B1",
+    userAddress: seedUsers?.[0]?.userAddress,
     challengeId: ChallengeId.TOKEN_VENDOR,
     frontendUrl: "https://nonstop-fiction.surge.sh/",
     contractUrl: "https://sepolia.etherscan.io/address/0x57D312c3E4bF22F22d6A900Be8B38b5546b47C3f",
@@ -244,7 +242,7 @@ export const seedUserChallenges: (typeof userChallenges.$inferInsert)[] = [
     reviewAction: ReviewAction.ACCEPTED,
   },
   {
-    userAddress: "0x000084821704d731438d2D06f4295e1AB0ace7D8",
+    userAddress: seedUsers?.[1]?.userAddress,
     challengeId: ChallengeId.SIMPLE_NFT_EXAMPLE,
     frontendUrl: "http://simple-nft-ryuufarhan.surge.sh/",
     contractUrl: "https://goerli.etherscan.io/address/0x861346d67b728949bcb69595638a78723a2adae3",
@@ -253,7 +251,7 @@ export const seedUserChallenges: (typeof userChallenges.$inferInsert)[] = [
     reviewAction: ReviewAction.ACCEPTED,
   },
   {
-    userAddress: "0x014EC6296B3493f0f59a3FE90E0FFf377fb8826a",
+    userAddress: seedUsers?.[1]?.userAddress,
     challengeId: ChallengeId.SIMPLE_NFT_EXAMPLE,
     frontendUrl: "http://clumsy-week.surge.sh",
     contractUrl: "https://goerli.etherscan.io/address/0xe3DF14f1482074916A8Aeb40d84898C879b2B5f6",
@@ -262,7 +260,7 @@ export const seedUserChallenges: (typeof userChallenges.$inferInsert)[] = [
     reviewAction: ReviewAction.ACCEPTED,
   },
   {
-    userAddress: "0x014EC6296B3493f0f59a3FE90E0FFf377fb8826a",
+    userAddress: seedUsers?.[2]?.userAddress,
     challengeId: ChallengeId.DICE_GAME,
     frontendUrl: "https://busy-pizzas.surge.sh",
     contractUrl: "https://goerli.etherscan.io/address/0xEd2aF24B1a657000C9b4509BC91FCfA5E76D3d33",
@@ -271,7 +269,7 @@ export const seedUserChallenges: (typeof userChallenges.$inferInsert)[] = [
     reviewAction: ReviewAction.ACCEPTED,
   },
   {
-    userAddress: "0x014EC6296B3493f0f59a3FE90E0FFf377fb8826a",
+    userAddress: seedUsers?.[2]?.userAddress,
     challengeId: ChallengeId.DECENTRALIZED_STAKING,
     frontendUrl: "https://tasteful-plough.surge.sh",
     contractUrl: "https://goerli.etherscan.io/address/0xf3384118b56827271979A879e2d5A4d28569eb48",
@@ -280,7 +278,7 @@ export const seedUserChallenges: (typeof userChallenges.$inferInsert)[] = [
     reviewAction: ReviewAction.ACCEPTED,
   },
   {
-    userAddress: "0x014EC6296B3493f0f59a3FE90E0FFf377fb8826a",
+    userAddress: seedUsers?.[2]?.userAddress,
     challengeId: ChallengeId.MINIMUM_VIABLE_EXCHANGE,
     frontendUrl: "https://sour-snake.surge.sh",
     contractUrl: "https://goerli.etherscan.io/address/0x0752d3847601b506cBFB10330172821B495e6bB0",
@@ -289,7 +287,7 @@ export const seedUserChallenges: (typeof userChallenges.$inferInsert)[] = [
     reviewAction: ReviewAction.ACCEPTED,
   },
   {
-    userAddress: "0x014EC6296B3493f0f59a3FE90E0FFf377fb8826a",
+    userAddress: seedUsers?.[2]?.userAddress,
     challengeId: ChallengeId.TOKEN_VENDOR,
     frontendUrl: "https://speedrunethereum.com/challenge/token-vendor",
     contractUrl: "https://goerli.etherscan.io/address/0x9626C68Dd8d000BBB7B06f0782266976dEB91c35",
@@ -298,7 +296,7 @@ export const seedUserChallenges: (typeof userChallenges.$inferInsert)[] = [
     reviewAction: ReviewAction.ACCEPTED,
   },
   {
-    userAddress: "0x01B2686Bd146bFc3F4B3DD6F7F86f26ac7c2f7Fd",
+    userAddress: seedUsers?.[3]?.userAddress,
     challengeId: ChallengeId.SIMPLE_NFT_EXAMPLE,
     frontendUrl: "https://kind-fifth.surge.sh/",
     contractUrl: "https://goerli.etherscan.io/address/0xb9487f8d9E336a9468fcbb50dAF39587D0EBCA63",
@@ -307,7 +305,7 @@ export const seedUserChallenges: (typeof userChallenges.$inferInsert)[] = [
     reviewAction: ReviewAction.ACCEPTED,
   },
   {
-    userAddress: "0x01B2686Bd146bFc3F4B3DD6F7F86f26ac7c2f7Fd",
+    userAddress: seedUsers?.[3]?.userAddress,
     challengeId: ChallengeId.DECENTRALIZED_STAKING,
     frontendUrl: "https://stupid-beginner.surge.sh",
     contractUrl: "https://goerli.etherscan.io/address/0xd68edd04EbB81c6f187A526F3656C18dD0258cd8",
@@ -316,7 +314,7 @@ export const seedUserChallenges: (typeof userChallenges.$inferInsert)[] = [
     reviewAction: ReviewAction.ACCEPTED,
   },
   {
-    userAddress: "0x45334F41aAA464528CD5bc0F582acadC49Eb0Cd1",
+    userAddress: seedUsers?.[4]?.userAddress,
     challengeId: ChallengeId.TOKEN_VENDOR,
     frontendUrl: "https://sepolia-optimism.etherscan.io/address/0xad5e878a62D5B77277aCDC321614a9727815B4C8#code",
     contractUrl: "https://sepolia-optimism.etherscan.io/address/0xad5e878a62D5B77277aCDC321614a9727815B4C8#code",
@@ -326,7 +324,7 @@ export const seedUserChallenges: (typeof userChallenges.$inferInsert)[] = [
     reviewAction: ReviewAction.REJECTED,
   },
   {
-    userAddress: "0x45334F41aAA464528CD5bc0F582acadC49Eb0Cd1",
+    userAddress: seedUsers?.[4]?.userAddress,
     challengeId: ChallengeId.SIMPLE_NFT_EXAMPLE,
     frontendUrl: "https://sepolia-optimism.etherscan.io/address/0x82b4935ebe7a5d802cf465a3495da1aff96f1153#code",
     contractUrl: "https://sepolia-optimism.etherscan.io/address/0x82b4935ebe7a5d802cf465a3495da1aff96f1153#code",
@@ -335,7 +333,7 @@ export const seedUserChallenges: (typeof userChallenges.$inferInsert)[] = [
     reviewAction: ReviewAction.ACCEPTED,
   },
   {
-    userAddress: "0x45334F41aAA464528CD5bc0F582acadC49Eb0Cd1",
+    userAddress: seedUsers?.[4]?.userAddress,
     challengeId: ChallengeId.DECENTRALIZED_STAKING,
     frontendUrl: "https://sepolia-optimism.etherscan.io/address/0x75CCfC494667c91F4926213A04619f93812885b2#code",
     contractUrl: "https://sepolia-optimism.etherscan.io/address/0x75CCfC494667c91F4926213A04619f93812885b2#code",
@@ -344,7 +342,7 @@ export const seedUserChallenges: (typeof userChallenges.$inferInsert)[] = [
     reviewAction: ReviewAction.SUBMITTED,
   },
   {
-    userAddress: "0x45334F41aAA464528CD5bc0F582acadC49Eb0Cd1",
+    userAddress: seedUsers?.[4]?.userAddress,
     challengeId: ChallengeId.DICE_GAME,
     frontendUrl: "https://sepolia-optimism.etherscan.io/address/0xB30b4D0AD811De445656FA49d3CbfD26f24Fa20f#code",
     contractUrl: "https://sepolia-optimism.etherscan.io/address/0xB30b4D0AD811De445656FA49d3CbfD26f24Fa20f#code",
@@ -354,7 +352,7 @@ export const seedUserChallenges: (typeof userChallenges.$inferInsert)[] = [
     reviewAction: ReviewAction.ACCEPTED,
   },
   {
-    userAddress: "0x45334F41aAA464528CD5bc0F582acadC49Eb0Cd1",
+    userAddress: seedUsers?.[4]?.userAddress,
     challengeId: ChallengeId.MINIMUM_VIABLE_EXCHANGE,
     frontendUrl: "https://sepolia-optimism.etherscan.io/address/0xFD893C93f44fdCd16D4673072D2a071578e6C7Ee#code",
     contractUrl: "https://sepolia-optimism.etherscan.io/address/0xFD893C93f44fdCd16D4673072D2a071578e6C7Ee#code",
@@ -364,27 +362,27 @@ export const seedUserChallenges: (typeof userChallenges.$inferInsert)[] = [
   },
 ];
 
-export const seedBatches: (typeof batches.$inferInsert)[] = [
+// userAddresses denotes the user addresses that will be added to the batch
+export const seedBatches: (typeof batches.$inferInsert & { userAddresses?: string[] })[] = [
   {
-    id: 1,
     name: "Batch 1",
     startDate: new Date(1705315180000),
     status: BatchStatus.CLOSED,
     telegramLink: "https://t.me/joinchat/1",
     contractAddress: "0x0000000000000000000000000000000000000000",
     bgSubdomain: "batch1",
+    userAddresses: [seedUsers?.[0]?.userAddress, seedUsers?.[1]?.userAddress],
   },
   {
-    id: 2,
     name: "Batch 2",
     startDate: new Date(1707820780000),
     status: BatchStatus.CLOSED,
     telegramLink: "https://t.me/joinchat/2",
     contractAddress: "0x0000000000000000000000000000000000000000",
     bgSubdomain: "batch2",
+    userAddresses: [seedUsers?.[2]?.userAddress, seedUsers?.[3]?.userAddress],
   },
   {
-    id: 3,
     name: "Batch 3",
     startDate: new Date(1705315180000),
     status: BatchStatus.OPEN,
