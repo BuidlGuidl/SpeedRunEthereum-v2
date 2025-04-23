@@ -145,7 +145,7 @@ export default function InfiniteTable<T>({
       <div
         onScroll={e => fetchMoreOnBottomReached(e.currentTarget)}
         ref={tableContainerRef}
-        className="mt-4 relative overflow-auto shadow-lg rounded-lg mx-auto"
+        className="mt-4 relative overflow-auto shadow-lg rounded-lg mx-auto bg-base-100"
         style={{
           // 32 is to prevent horizontal scrollbar from appearing
           maxWidth: `${columns.reduce((acc, col) => acc + (col.size ?? 0), 32)}px`,
@@ -154,8 +154,8 @@ export default function InfiniteTable<T>({
         }}
       >
         {/* Even though we're still using sematic table tags, we must use CSS grid and flexbox for dynamic row heights */}
-        <table style={{ display: "grid" }} className="table bg-base-100">
-          <thead className="grid sticky bg-base-100 top-0 z-10" ref={tableHeader}>
+        <table style={{ display: "grid" }} className="table">
+          <thead className="grid sticky top-0 z-10" ref={tableHeader}>
             {table.getHeaderGroups().map(headerGroup => (
               <tr key={headerGroup.id} className="flex w-full text-sm">
                 {headerGroup.headers.map(header => {
