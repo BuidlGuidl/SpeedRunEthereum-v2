@@ -1,4 +1,4 @@
-import { forwardRef, useMemo, useState } from "react";
+import { forwardRef, useEffect, useMemo, useState } from "react";
 import { InputBase } from "~~/components/scaffold-eth";
 import { BatchStatus } from "~~/services/database/config/types";
 import { notification } from "~~/utils/scaffold-eth";
@@ -44,10 +44,15 @@ export const BatchModalContent = forwardRef<HTMLInputElement, BatchModalContentP
     const [startDate, setStartDate] = useState(defaultStartDate?.toISOString().split("T")[0] ?? "");
     const [telegramLink, setTelegramLink] = useState(defaultTelegramLink);
     const [registryAddress, setRegistryAddress] = useState(defaultRegistryAddress);
+    const [bgSubdomain, setBgSubdomain] = useState("");
 
     const generatedBgSubdomain = useMemo(() => {
       return `${name.toLowerCase().replace(/[^a-zA-Z0-9]/g, "")}`;
     }, [name]);
+
+    useEffect(() => {
+      setBgSubdomain(generatedBgSubdomain);
+    }, [generatedBgSubdomain]);
 
     const title = batchOperation === "add" ? "Add New Batch" : "Edit Batch";
 
@@ -61,7 +66,7 @@ export const BatchModalContent = forwardRef<HTMLInputElement, BatchModalContentP
         return;
       }
 
-      if (!generatedBgSubdomain) {
+      if (!bgSubdomain) {
         notification.error("Please change the name to generate valid website url");
         return;
       }
@@ -72,7 +77,7 @@ export const BatchModalContent = forwardRef<HTMLInputElement, BatchModalContentP
         startDate,
         telegramLink,
         contractAddress: registryAddress,
-        bgSubdomain: generatedBgSubdomain,
+        bgSubdomain,
       });
     };
 
@@ -96,10 +101,25 @@ export const BatchModalContent = forwardRef<HTMLInputElement, BatchModalContentP
                   </span>
                 </label>
                 <InputBase name="batchName" placeholder="Batch Name" value={name} onChange={setName} />
-                <div className="text-sm text-left font-medium">
-                  Generated website url: <span className="text-red-500">*</span>{" "}
-                  <span className="font-bold">{generatedBgSubdomain}.buidlguidl.com</span>
-                </div>
+              </div>
+
+              <div className="form-control w-full">
+                <label className="label">
+                  <span className="label-text font-medium">
+                    Generated website url: <span className="text-red-500">*</span>
+                  </span>
+                </label>
+                <InputBase
+                  name="batchName"
+                  placeholder="Subdomain"
+                  value={bgSubdomain}
+                  onChange={setBgSubdomain}
+                  suffix={
+                    <div className="flex bg-base-300 dark:bg-[#22797b] rounded-r-full items-center">
+                      <span className="text-primary px-2">.buidlguidl.com</span>
+                    </div>
+                  }
+                />
               </div>
 
               <div className="form-control w-full">
