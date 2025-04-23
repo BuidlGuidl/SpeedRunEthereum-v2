@@ -58,12 +58,12 @@ export async function importLocationAndSocials() {
 
         // Prepare socials mapping
         const socials = {
-          socialTelegram: builder.socialLinks?.telegram || undefined,
-          socialX: builder.socialLinks?.twitter || undefined,
-          socialGithub: builder.socialLinks?.github || undefined,
-          socialInstagram: builder.socialLinks?.instagram || undefined,
-          socialDiscord: builder.socialLinks?.discord || undefined,
-          socialEmail: builder.socialLinks?.email || undefined,
+          socialTelegram: builder.socialLinks?.telegram,
+          socialX: builder.socialLinks?.twitter,
+          socialGithub: builder.socialLinks?.github,
+          socialInstagram: builder.socialLinks?.instagram,
+          socialDiscord: builder.socialLinks?.discord,
+          socialEmail: builder.socialLinks?.email,
         };
 
         if (!existingUser) {
