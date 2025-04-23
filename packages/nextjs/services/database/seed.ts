@@ -1,5 +1,6 @@
-import { batches, challenges, userChallenges, users } from "./config/schema";
+import { batches, challenges, lower, userChallenges, users } from "./config/schema";
 import * as dotenv from "dotenv";
+import { inArray } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/node-postgres";
 import * as fs from "fs";
 import * as path from "path";
@@ -12,7 +13,7 @@ type SeedData = {
   seedUsers?: (typeof users.$inferInsert)[];
   seedChallenges?: (typeof challenges.$inferInsert)[];
   seedUserChallenges?: (typeof userChallenges.$inferInsert)[];
-  seedBatches?: (typeof batches.$inferInsert)[];
+  seedBatches?: (typeof batches.$inferInsert & { userAddresses?: string[] })[];
 };
 
 async function loadSeedData() {
@@ -81,12 +82,36 @@ async function seed() {
       await tx.delete(batches).execute();
     });
 
-    // Insert fresh data
+    // remove userAddresses from seedBatches
+    const batchesToInsert = seedBatches.map(seedBatch => {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { userAddresses, ...batch } = seedBatch;
+      return batch;
+    });
+
     console.log("Inserting batches...");
-    await db.insert(batches).values(seedBatches).execute();
+    // Insert batches and get their generated IDs
+    const insertedBatches = await db.insert(batches).values(batchesToInsert).returning();
 
     console.log("Inserting users...");
     await db.insert(users).values(seedUsers).execute();
+
+    console.log("Updating users with batch IDs...");
+    for (let i = 0; i < insertedBatches.length; i++) {
+      const seedBatch = seedBatches[i];
+      const insertedBatch = insertedBatches[i];
+      if (seedBatch.userAddresses && seedBatch.userAddresses.length > 0) {
+        await db
+          .update(users)
+          .set({ batchId: insertedBatch.id })
+          .where(
+            inArray(
+              lower(users.userAddress),
+              seedBatch.userAddresses.map(addr => addr.toLowerCase()),
+            ),
+          );
+      }
+    }
 
     console.log("Inserting challenges...");
     await db.insert(challenges).values(seedChallenges).execute();
