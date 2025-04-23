@@ -13,8 +13,8 @@ import { UserWithChallengesData } from "~~/services/database/repositories/users"
 import { getUserSocialsList } from "~~/utils/socials";
 
 export default function BuildersPage() {
-  const { data: users } = useQuery({
-    queryKey: ["users-count"],
+  const { data: builders, isLoading } = useQuery({
+    queryKey: ["builders-count"],
     queryFn: () => getSortedUsersWithChallenges(0, 0, []),
   });
 
@@ -91,8 +91,14 @@ export default function BuildersPage() {
         </Link>
       </div>
 
-      <div className="text-base mt-4 font-medium">Total builders: {users?.meta.totalRowCount ?? "Loading..."}</div>
-
+      <div className="text-base mt-4 font-medium flex justify-center gap-1">
+        <span>Total Builders:</span>
+        {isLoading ? (
+          <span className="loading loading-spinner loading-xs"></span>
+        ) : (
+          <span>{builders?.meta.totalRowCount ?? 0}</span>
+        )}
+      </div>
       <InfiniteTable<UserWithChallengesData>
         columns={columns}
         queryKey={useMemo(() => ["users"], [])}

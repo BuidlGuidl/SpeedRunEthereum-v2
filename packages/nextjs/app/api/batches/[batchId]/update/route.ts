@@ -44,7 +44,7 @@ export async function PUT(request: Request, { params }: { params: { batchId: str
       return NextResponse.json({ error: "Batch with this website url already exists" }, { status: 401 });
     }
 
-    const batch = await getBatchById(batchId);
+    const batch = await getBatchById(Number(batchId));
     if (!batch) {
       return NextResponse.json({ error: "Batch not found" }, { status: 404 });
     }
@@ -64,7 +64,7 @@ export async function PUT(request: Request, { params }: { params: { batchId: str
       return NextResponse.json({ error: "Invalid signature" }, { status: 401 });
     }
 
-    const updatedBatch = await updateBatch(batchId, {
+    const updatedBatch = await updateBatch(Number(batchId), {
       name,
       startDate: new Date(startDate),
       status,

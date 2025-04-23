@@ -12,7 +12,7 @@ export const seedUsers: (typeof users.$inferInsert)[] = [
     createdAt: new Date(1679063274534),
     socialX: "pabl0cks",
     socialTelegram: "pabl0cks",
-    batchId: "123e4567-e89b-12d3-a456-426614174000",
+    batchId: 1,
     batchStatus: BatchUserStatus.GRADUATE,
   },
   {
@@ -21,7 +21,7 @@ export const seedUsers: (typeof users.$inferInsert)[] = [
     createdAt: new Date(1664777161512),
     socialEmail: "ryuufarhan7@gmail.com",
     socialX: "FarhanRyuu",
-    batchId: "123e4567-e89b-12d3-a456-426614174000",
+    batchId: 1,
     batchStatus: BatchUserStatus.CANDIDATE,
   },
   {
@@ -31,7 +31,7 @@ export const seedUsers: (typeof users.$inferInsert)[] = [
     socialEmail: "gokulkesavan5005@gmail.com",
     socialX: "meta_Goku",
     socialGithub: "kesgokul",
-    batchId: "123e4567-e89b-12d3-a456-426614174002",
+    batchId: 3,
     batchStatus: BatchUserStatus.CANDIDATE,
   },
   {
@@ -366,7 +366,7 @@ export const seedUserChallenges: (typeof userChallenges.$inferInsert)[] = [
 
 export const seedBatches: (typeof batches.$inferInsert)[] = [
   {
-    id: "123e4567-e89b-12d3-a456-426614174000",
+    id: 1,
     name: "Batch 1",
     startDate: new Date(1705315180000),
     status: BatchStatus.CLOSED,
@@ -375,7 +375,7 @@ export const seedBatches: (typeof batches.$inferInsert)[] = [
     bgSubdomain: "batch1",
   },
   {
-    id: "123e4567-e89b-12d3-a456-426614174001",
+    id: 2,
     name: "Batch 2",
     startDate: new Date(1707820780000),
     status: BatchStatus.CLOSED,
@@ -384,7 +384,7 @@ export const seedBatches: (typeof batches.$inferInsert)[] = [
     bgSubdomain: "batch2",
   },
   {
-    id: "123e4567-e89b-12d3-a456-426614174002",
+    id: 3,
     name: "Batch 3",
     startDate: new Date(1705315180000),
     status: BatchStatus.OPEN,
