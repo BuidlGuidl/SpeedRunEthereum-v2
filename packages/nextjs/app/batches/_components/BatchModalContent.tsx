@@ -3,6 +3,19 @@ import { InputBase } from "~~/components/scaffold-eth";
 import { BatchStatus } from "~~/services/database/config/types";
 import { notification } from "~~/utils/scaffold-eth";
 
+const isSubdomainValid = (subdomain: string): boolean => {
+  if (!subdomain) return false;
+
+  // Check length (DNS limit is 63 characters)
+  if (subdomain.length > 63) return false;
+
+  if (subdomain.startsWith("-") || subdomain.endsWith("-")) return false;
+
+  // Check if contains only valid characters
+  const validSubdomainRegex = /^[a-z0-9-]+$/;
+  return validSubdomainRegex.test(subdomain);
+};
+
 export type BatchOperation = "add" | "edit";
 
 type BatchModalContentProps = {
@@ -47,7 +60,7 @@ export const BatchModalContent = forwardRef<HTMLInputElement, BatchModalContentP
     const [bgSubdomain, setBgSubdomain] = useState("");
 
     const generatedBgSubdomain = useMemo(() => {
-      return `${name.toLowerCase().replace(/[^a-zA-Z0-9]/g, "")}`;
+      return `${name.toLowerCase().replace(/[^a-z0-9-]/g, "")}`;
     }, [name]);
 
     useEffect(() => {
@@ -66,8 +79,10 @@ export const BatchModalContent = forwardRef<HTMLInputElement, BatchModalContentP
         return;
       }
 
-      if (!bgSubdomain) {
-        notification.error("Please change the name to generate valid website url");
+      if (!isSubdomainValid(bgSubdomain)) {
+        notification.error(
+          "Please enter a valid subdomain (only lowercase letters, numbers, and hyphens allowed, cannot start or end with hyphen)",
+        );
         return;
       }
 
@@ -106,14 +121,14 @@ export const BatchModalContent = forwardRef<HTMLInputElement, BatchModalContentP
               <div className="form-control w-full">
                 <label className="label">
                   <span className="label-text font-medium">
-                    Generated website url: <span className="text-red-500">*</span>
+                    Bg subdomain: <span className="text-red-500">*</span>
                   </span>
                 </label>
                 <InputBase
                   name="batchName"
                   placeholder="Subdomain"
                   value={bgSubdomain}
-                  onChange={setBgSubdomain}
+                  onChange={newValue => setBgSubdomain(newValue.toLowerCase())}
                   suffix={
                     <div className="flex bg-base-300 dark:bg-[#22797b] rounded-r-full items-center">
                       <span className="text-primary px-2">.buidlguidl.com</span>
