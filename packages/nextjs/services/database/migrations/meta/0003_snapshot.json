@@ -1,5 +1,5 @@
 {
-  "id": "d12f6801-a2f6-4355-9da4-807f7289de70",
+  "id": "8ba25631-297d-4981-8dfe-ee3dd0eadb3a",
   "prevId": "9c5331d3-f890-49c2-9c37-cd28d054ab7e",
   "version": "7",
   "dialect": "postgresql",
@@ -29,7 +29,6 @@
         "status": {
           "name": "status",
           "type": "batch_status_enum",
-          "typeSchema": "public",
           "primaryKey": false,
           "notNull": true
         },
@@ -54,6 +53,104 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
+    "public.build_builders": {
+      "name": "build_builders",
+      "schema": "",
+      "columns": {
+        "build_id": {
+          "name": "build_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "user_address": {
+          "name": "user_address",
+          "type": "varchar(42)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "is_owner": {
+          "name": "is_owner",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        }
+      },
+      "indexes": {
+        "build_builder_build_idx": {
+          "name": "build_builder_build_idx",
+          "columns": [
+            {
+              "expression": "build_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "build_builder_user_idx": {
+          "name": "build_builder_user_idx",
+          "columns": [
+            {
+              "expression": "user_address",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "build_builders_build_id_builds_id_fk": {
+          "name": "build_builders_build_id_builds_id_fk",
+          "tableFrom": "build_builders",
+          "tableTo": "builds",
+          "columnsFrom": [
+            "build_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "build_builders_user_address_users_user_address_fk": {
+          "name": "build_builders_user_address_users_user_address_fk",
+          "tableFrom": "build_builders",
+          "tableTo": "users",
+          "columnsFrom": [
+            "user_address"
+          ],
+          "columnsTo": [
+            "user_address"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "build_builders_build_id_user_address_pk": {
+          "name": "build_builders_build_id_user_address_pk",
+          "columns": [
+            "build_id",
+            "user_address"
+          ]
+        }
+      },
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
     "public.build_likes": {
       "name": "build_likes",
       "schema": "",
@@ -66,7 +163,7 @@
         },
         "build_id": {
           "name": "build_id",
-          "type": "integer",
+          "type": "text",
           "primaryKey": false,
           "notNull": true
         },
@@ -147,9 +244,10 @@
       "columns": {
         "id": {
           "name": "id",
-          "type": "serial",
+          "type": "text",
           "primaryKey": true,
-          "notNull": true
+          "notNull": true,
+          "default": "gen_random_uuid()::text"
         },
         "name": {
           "name": "name",
@@ -165,19 +263,13 @@
         },
         "build_type": {
           "name": "build_type",
-          "type": "varchar(50)",
+          "type": "build_type_enum",
           "primaryKey": false,
           "notNull": false
         },
-        "builder_address": {
-          "name": "builder_address",
-          "type": "varchar(42)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "co_builder_addresses": {
-          "name": "co_builder_addresses",
-          "type": "varchar(42)[]",
+        "build_category": {
+          "name": "build_category",
+          "type": "build_category_enum",
           "primaryKey": false,
           "notNull": false
         },
@@ -214,11 +306,11 @@
         }
       },
       "indexes": {
-        "build_builder_idx": {
-          "name": "build_builder_idx",
+        "build_name_idx": {
+          "name": "build_name_idx",
           "columns": [
             {
-              "expression": "builder_address",
+              "expression": "name",
               "isExpression": false,
               "asc": true,
               "nulls": "last"
@@ -229,11 +321,26 @@
           "method": "btree",
           "with": {}
         },
-        "build_co_builders_idx": {
-          "name": "build_co_builders_idx",
+        "build_type_idx": {
+          "name": "build_type_idx",
           "columns": [
             {
-              "expression": "co_builder_addresses",
+              "expression": "build_type",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "build_category_idx": {
+          "name": "build_category_idx",
+          "columns": [
+            {
+              "expression": "build_category",
               "isExpression": false,
               "asc": true,
               "nulls": "last"
@@ -245,21 +352,7 @@
           "with": {}
         }
       },
-      "foreignKeys": {
-        "builds_builder_address_users_user_address_fk": {
-          "name": "builds_builder_address_users_user_address_fk",
-          "tableFrom": "builds",
-          "tableTo": "users",
-          "columnsFrom": [
-            "builder_address"
-          ],
-          "columnsTo": [
-            "user_address"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        }
-      },
+      "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {},
       "policies": {},
@@ -397,7 +490,6 @@
         "review_action": {
           "name": "review_action",
           "type": "review_action_enum",
-          "typeSchema": "public",
           "primaryKey": false,
           "notNull": false
         },
@@ -493,7 +585,6 @@
         "role": {
           "name": "role",
           "type": "user_role_enum",
-          "typeSchema": "public",
           "primaryKey": false,
           "notNull": false,
           "default": "'USER'"
@@ -563,7 +654,6 @@
         "batch_status": {
           "name": "batch_status",
           "type": "batch_user_status_enum",
-          "typeSchema": "public",
           "primaryKey": false,
           "notNull": false
         }
@@ -622,6 +712,34 @@
       "values": [
         "graduate",
         "candidate"
+      ]
+    },
+    "public.build_category_enum": {
+      "name": "build_category_enum",
+      "schema": "public",
+      "values": [
+        "DeFi",
+        "Gaming",
+        "NFTs",
+        "Social",
+        "DAOs & Governance",
+        "Dev Tooling",
+        "Identity & Reputation",
+        "RWA & Supply Chain",
+        "AI Agents",
+        "Prediction Markets"
+      ]
+    },
+    "public.build_type_enum": {
+      "name": "build_type_enum",
+      "schema": "public",
+      "values": [
+        "Dapp",
+        "Infrastructure",
+        "Challenge submission",
+        "Content",
+        "Design",
+        "Other"
       ]
     },
     "public.review_action_enum": {
