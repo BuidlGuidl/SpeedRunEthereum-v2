@@ -1,5 +1,6 @@
 import { db } from "../config/postgresClient";
 import { lower, users as schemaUsers } from "../config/schema";
+import { BGBuilder } from "./types";
 import * as dotenv from "dotenv";
 import { eq } from "drizzle-orm";
 import * as path from "path";
@@ -8,44 +9,12 @@ dotenv.config({ path: path.resolve(__dirname, "../../../.env.development") });
 
 const BG_USERS_ENDPOINT = `${process.env.NEXT_PUBLIC_BG_BACKEND}/builders`;
 
-export type BGBuildersApiResponse = {
-  id: string;
-  socialLinks?: {
-    twitter?: string;
-    github?: string;
-    telegram?: string;
-    discord?: string;
-    instagram?: string;
-    email?: string;
-  };
-  role?: string;
-  function?: string;
-  creationTimestamp?: number;
-  builds?: { submittedTimestamp: number; id: string }[];
-  ens?: string;
-  status?: { text?: string; timestamp?: number };
-  reachedOut?: boolean;
-  scholarship?: boolean;
-  batch?: { number?: string; status?: string };
-  location?: string;
-  builderCohort?: { name?: string; id?: string; url?: string }[];
-  stream?: {
-    lastContract?: number;
-    cap?: string;
-    lastIndexedBlock?: number;
-    balance?: string;
-    streamAddress?: string;
-    frequency?: number;
-  };
-  [key: string]: any;
-}[];
-
 async function importLocationAndSocials() {
   try {
     console.log("==== Importing Location and Socials ====");
     console.log("Fetching data from BG firebase...");
     const response = await fetch(BG_USERS_ENDPOINT);
-    const data: BGBuildersApiResponse = await response.json();
+    const data: BGBuilder[] = await response.json();
     console.log(`Fetched ${data.length} users`);
 
     await db.transaction(async tx => {

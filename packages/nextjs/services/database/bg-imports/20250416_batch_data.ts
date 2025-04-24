@@ -1,6 +1,7 @@
 import { db } from "../config/postgresClient";
 import { batches, users } from "../config/schema";
 import { BatchStatus, BatchUserStatus } from "../config/types";
+import { BgBatch, BgBatchUser } from "./types";
 import * as dotenv from "dotenv";
 import { eq } from "drizzle-orm";
 import * as path from "path";
@@ -9,25 +10,6 @@ dotenv.config({ path: path.resolve(__dirname, "../../../.env.development") });
 
 const BG_BATCHES_ENDPOINT = `${process.env.NEXT_PUBLIC_BG_BACKEND}/batches`;
 const BG_USERS_WITH_BATCHES_ENDPOINT = `${process.env.NEXT_PUBLIC_BG_BACKEND}/builders/batches`;
-
-type BgBatch = {
-  id: string;
-  name: string;
-  status: string;
-  startDate: number;
-  telegramLink: string;
-  contractAddress: string;
-  totalParticipants: number;
-  graduates: number;
-};
-
-type BgBatchUser = {
-  id: string;
-  batch: {
-    number: string;
-    status: string;
-  };
-};
 
 async function importData() {
   try {
