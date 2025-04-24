@@ -1,18 +1,18 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import EditIcon from "../_assets/icons/EditIcon";
-import EthereumIcon from "../_assets/icons/EthereumIcon";
-import GithubIcon from "../_assets/icons/GithubIcon";
-import SearchIcon from "../_assets/icons/SearchIcon";
-import TelegramIcon from "../_assets/icons/TelegramIcon";
-import WebsiteIcon from "../_assets/icons/WebsiteIcon";
 import { ADD_BATCH_MODAL_ID, AddBatchModal } from "./_components/AddBatchModal";
 import { UPDATE_BATCH_MODAL_ID, UpdateBatchModal } from "./_components/UpdateBatchModal";
 import { useQuery } from "@tanstack/react-query";
 import { ColumnDef } from "@tanstack/react-table";
 import { useDebounceValue } from "usehooks-ts";
 import { useAccount } from "wagmi";
+import EditIcon from "~~/app/_assets/icons/EditIcon";
+import EthereumIcon from "~~/app/_assets/icons/EthereumIcon";
+import GithubIcon from "~~/app/_assets/icons/GithubIcon";
+import SearchIcon from "~~/app/_assets/icons/SearchIcon";
+import TelegramIcon from "~~/app/_assets/icons/TelegramIcon";
+import WebsiteIcon from "~~/app/_assets/icons/WebsiteIcon";
 import { DateWithTooltip } from "~~/components/DateWithTooltip";
 import InfiniteTable from "~~/components/InfiniteTable";
 import { InputBase } from "~~/components/scaffold-eth";
