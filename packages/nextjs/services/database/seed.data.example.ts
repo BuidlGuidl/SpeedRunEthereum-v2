@@ -1,7 +1,7 @@
 import { batches, builds, challenges, userChallenges, users } from "./config/schema";
 import { BatchStatus, BatchUserStatus, ChallengeId, ReviewAction, UserRole } from "./config/types";
 
-export const SEED_DATA_VERSION = "1.1.0";
+export const SEED_DATA_VERSION = "1.1.1";
 
 // Using Drizzle's inferred insert types to ensure seed data
 // matches database schema requirements
@@ -12,7 +12,6 @@ export const seedUsers: (typeof users.$inferInsert)[] = [
     createdAt: new Date(1679063274534),
     socialX: "pabl0cks",
     socialTelegram: "pabl0cks",
-    batchId: 1,
     batchStatus: BatchUserStatus.GRADUATE,
   },
   {
@@ -21,7 +20,6 @@ export const seedUsers: (typeof users.$inferInsert)[] = [
     createdAt: new Date(1664777161512),
     socialEmail: "ryuufarhan7@gmail.com",
     socialX: "FarhanRyuu",
-    batchId: 1,
     batchStatus: BatchUserStatus.CANDIDATE,
   },
   {
@@ -31,7 +29,6 @@ export const seedUsers: (typeof users.$inferInsert)[] = [
     socialEmail: "gokulkesavan5005@gmail.com",
     socialX: "meta_Goku",
     socialGithub: "kesgokul",
-    batchId: 3,
     batchStatus: BatchUserStatus.CANDIDATE,
   },
   {
@@ -41,6 +38,7 @@ export const seedUsers: (typeof users.$inferInsert)[] = [
     socialEmail: "afo@wefa.app",
     socialX: "Time_Is_Oba",
     socialGithub: "Oba-One",
+    batchStatus: BatchUserStatus.CANDIDATE,
   },
   {
     userAddress: "0x45334F41aAA464528CD5bc0F582acadC49Eb0Cd1",
@@ -253,7 +251,7 @@ export const seedUserChallenges: (typeof userChallenges.$inferInsert)[] = [
     reviewAction: ReviewAction.ACCEPTED,
   },
   {
-    userAddress: seedUsers?.[2]?.userAddress,
+    userAddress: seedUsers?.[1]?.userAddress,
     challengeId: ChallengeId.SIMPLE_NFT_EXAMPLE,
     frontendUrl: "http://clumsy-week.surge.sh",
     contractUrl: "https://goerli.etherscan.io/address/0xe3DF14f1482074916A8Aeb40d84898C879b2B5f6",
@@ -364,25 +362,25 @@ export const seedUserChallenges: (typeof userChallenges.$inferInsert)[] = [
   },
 ];
 
-export const seedBatches: (typeof batches.$inferInsert)[] = [
+// userAddresses denotes the user addresses that will be added to the batch
+export const seedBatches: (typeof batches.$inferInsert & { userAddresses?: string[] })[] = [
   {
-    id: 1,
     name: "Batch 1",
     startDate: new Date(1705315180000),
     status: BatchStatus.CLOSED,
     telegramLink: "https://t.me/joinchat/1",
     contractAddress: "0x0000000000000000000000000000000000000000",
+    userAddresses: [seedUsers?.[0]?.userAddress, seedUsers?.[1]?.userAddress],
   },
   {
-    id: 2,
     name: "Batch 2",
     startDate: new Date(1707820780000),
     status: BatchStatus.CLOSED,
     telegramLink: "https://t.me/joinchat/2",
     contractAddress: "0x0000000000000000000000000000000000000000",
+    userAddresses: [seedUsers?.[2]?.userAddress, seedUsers?.[3]?.userAddress],
   },
   {
-    id: 3,
     name: "Batch 3",
     startDate: new Date(1705315180000),
     status: BatchStatus.OPEN,
