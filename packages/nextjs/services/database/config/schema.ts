@@ -1,4 +1,4 @@
-import { BatchStatus, BatchUserStatus, ReviewAction, UserRole } from "./types";
+import { BatchStatus, BatchUserStatus, BuildCategory, BuildType, ReviewAction, UserRole } from "./types";
 import { SQL, relations, sql } from "drizzle-orm";
 import {
   AnyPgColumn,
@@ -32,6 +32,28 @@ export const batchStatusEnum = pgEnum("batch_status_enum", [BatchStatus.CLOSED, 
 export const batchUserStatusEnum = pgEnum("batch_user_status_enum", [
   BatchUserStatus.GRADUATE,
   BatchUserStatus.CANDIDATE,
+]);
+
+export const buildTypeEnum = pgEnum("build_type_enum", [
+  BuildType.DAPP,
+  BuildType.INFRASTRUCTURE,
+  BuildType.CHALLENGE_SUBMISSION,
+  BuildType.CONTENT,
+  BuildType.DESIGN,
+  BuildType.OTHER,
+]);
+
+export const buildCategoryEnum = pgEnum("build_category_enum", [
+  BuildCategory.DEFI,
+  BuildCategory.GAMING,
+  BuildCategory.NFTS,
+  BuildCategory.SOCIAL,
+  BuildCategory.DAOS_GOVERNANCE,
+  BuildCategory.DEV_TOOLING,
+  BuildCategory.IDENTITY_REPUTATION,
+  BuildCategory.RWA_SUPPLY_CHAIN,
+  BuildCategory.AI_AGENTS,
+  BuildCategory.PREDICTION_MARKETS,
 ]);
 
 export const users = pgTable(
@@ -114,14 +136,19 @@ export const builds = pgTable(
       .default(sql`gen_random_uuid()::text`),
     name: varchar({ length: 255 }).notNull(),
     desc: text(),
-    buildType: varchar({ length: 50 }),
+    buildType: buildTypeEnum(),
+    buildCategory: buildCategoryEnum(),
     demoUrl: varchar({ length: 255 }),
     videoUrl: varchar({ length: 255 }),
     imageUrl: varchar({ length: 255 }),
     githubUrl: varchar({ length: 255 }),
     submittedTimestamp: timestamp().notNull().defaultNow(),
   },
-  table => [index("build_name_idx").on(table.name), index("build_type_idx").on(table.buildType)],
+  table => [
+    index("build_name_idx").on(table.name),
+    index("build_type_idx").on(table.buildType),
+    index("build_category_idx").on(table.buildCategory),
+  ],
 );
 
 export const buildBuilders = pgTable(

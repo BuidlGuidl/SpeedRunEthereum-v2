@@ -1,7 +1,15 @@
 import { batches, builds, challenges, userChallenges, users } from "./config/schema";
-import { BatchStatus, BatchUserStatus, ChallengeId, ReviewAction, UserRole } from "./config/types";
+import {
+  BatchStatus,
+  BatchUserStatus,
+  BuildCategory,
+  BuildType,
+  ChallengeId,
+  ReviewAction,
+  UserRole,
+} from "./config/types";
 
-export const SEED_DATA_VERSION = "1.1.1";
+export const SEED_DATA_VERSION = "1.1.2";
 
 // Using Drizzle's inferred insert types to ensure seed data
 // matches database schema requirements
@@ -397,7 +405,8 @@ export const seedBuilds: (typeof builds.$inferInsert & {
     id: "klYxgJVcWOYhyyZ5ceyo",
     name: "DynOS 95",
     desc: "Platform to improve the onboarding experience to web3, providing a friendly environment where users can connect to any DApps with email and social accounts, powered by Dynamic and ERC4337 Account Abstraction. ETHGlobal London 2024 Hackathon finalist.",
-    buildType: "dapp",
+    buildType: BuildType.DAPP,
+    buildCategory: BuildCategory.IDENTITY_REPUTATION,
     demoUrl: "https://dynos95.vercel.app/",
     videoUrl: "https://www.youtube.com/watch?v=iBX2zjECesU",
     imageUrl: "https://storage.googleapis.com/buidlguidl-v3.appspot.com/builds/b651fcb278a4cf392309b1101.png",
@@ -417,7 +426,8 @@ export const seedBuilds: (typeof builds.$inferInsert & {
   {
     name: "ABI Ninja",
     desc: "Interact with any contract on Ethereum. Just need the Contract address (if it's verified) or its ABI + Contract address.",
-    buildType: "dapp",
+    buildType: BuildType.DAPP,
+    buildCategory: BuildCategory.DEV_TOOLING,
     demoUrl: "https://abi.ninja/",
     videoUrl: null,
     imageUrl: "https://storage.googleapis.com/buidlguidl-v3.appspot.com/builds/c7329e266108aec34c81a0200.png",
@@ -429,7 +439,8 @@ export const seedBuilds: (typeof builds.$inferInsert & {
   {
     name: "ETH Man",
     desc: "ETH Man reacts to live ETH price using Chainlink oracles! He is happy 🙂 when it's up 📈 and sad 🙁 when it's down 📉 than the previous value. (Dynamic face, colors on chain SVG NFT). 100+ already minted!",
-    buildType: "dapp",
+    buildType: BuildType.DAPP,
+    buildCategory: BuildCategory.NFTS,
     demoUrl: "https://ethman-sb.surge.sh/",
     videoUrl: null,
     imageUrl: "https://storage.googleapis.com/buidlguidl-v3.appspot.com/builds/3c09940f8645e7dfd053b7a00.jpeg",
@@ -444,7 +455,8 @@ export const seedBuilds: (typeof builds.$inferInsert & {
   {
     name: "Smart-Chain",
     desc: "A basic/minimal supply chain DApp for solving issues in Luxury goods supply chain",
-    buildType: "dapp",
+    buildType: BuildType.DAPP,
+    buildCategory: BuildCategory.RWA_SUPPLY_CHAIN,
     demoUrl: "https://nextjs-blond-nine-41.vercel.app/",
     videoUrl: "https://youtu.be/N13b0mEgo3I",
     imageUrl: "https://storage.googleapis.com/buidlguidl-v3.appspot.com/builds/6c5b8cdbdf678bd7af4b31e01.jpeg",
