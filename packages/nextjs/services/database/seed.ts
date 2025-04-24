@@ -1,6 +1,6 @@
-import { batches, buildLikes, builds, challenges, lower, userChallenges, users } from "./config/schema";
+import { batches, buildBuilders, buildLikes, builds, challenges, lower, userChallenges, users } from "./config/schema";
 import * as dotenv from "dotenv";
-import { eq, inArray } from "drizzle-orm";
+import { inArray } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/node-postgres";
 import * as fs from "fs";
 import * as path from "path";
@@ -14,8 +14,10 @@ type SeedData = {
   seedChallenges?: (typeof challenges.$inferInsert)[];
   seedUserChallenges?: (typeof userChallenges.$inferInsert)[];
   seedBatches?: (typeof batches.$inferInsert & { userAddresses?: string[] })[];
-  seedBuilds?: (typeof builds.$inferInsert)[];
-  seedBuildLikes?: Array<Omit<typeof buildLikes.$inferInsert, "buildId"> & { buildName: string }>;
+  seedBuilds?: (typeof builds.$inferInsert & {
+    builderAddresses?: { address: string; isOwner: boolean }[];
+    likerAddresses?: { address: string; likedAt: Date }[];
+  })[];
 };
 
 async function loadSeedData() {
@@ -45,7 +47,6 @@ async function loadSeedData() {
       seedUserChallenges: seedData.seedUserChallenges,
       seedBatches: seedData.seedBatches,
       seedBuilds: seedData.seedBuilds,
-      seedBuildLikes: seedData.seedBuildLikes,
     };
   } catch (error) {
     console.error("Error: cannot load seed data");
@@ -60,8 +61,7 @@ if (connectionUrl.hostname !== "localhost") {
 }
 
 async function seed() {
-  const { seedUsers, seedChallenges, seedUserChallenges, seedBatches, seedBuilds, seedBuildLikes } =
-    await loadSeedData();
+  const { seedUsers, seedChallenges, seedUserChallenges, seedBatches, seedBuilds } = await loadSeedData();
 
   if (!seedUsers || !seedChallenges || !seedUserChallenges || !seedBatches) {
     console.error("Error: Required seed data is missing");
@@ -73,7 +73,7 @@ async function seed() {
   });
   await client.connect();
   const db = drizzle(client, {
-    schema: { challenges, userChallenges, users, batches, builds, buildLikes },
+    schema: { challenges, userChallenges, users, batches, builds, buildLikes, buildBuilders },
     casing: "snake_case",
   });
 
@@ -84,6 +84,7 @@ async function seed() {
       await tx.delete(userChallenges).execute();
       await tx.delete(challenges).execute();
       await tx.delete(buildLikes).execute();
+      await tx.delete(buildBuilders).execute();
       await tx.delete(builds).execute();
       await tx.delete(users).execute();
       await tx.delete(batches).execute();
@@ -126,32 +127,51 @@ async function seed() {
     console.log("Inserting user challenges...");
     await db.insert(userChallenges).values(seedUserChallenges).execute();
 
-    console.log("Inserting builds...");
     if (seedBuilds) {
-      await db.insert(builds).values(seedBuilds).execute();
-    }
+      console.log("Inserting builds...");
+      const buildsToInsert = seedBuilds.map(seedBuild => {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const { builderAddresses, likerAddresses, ...build } = seedBuild;
+        return build;
+      });
 
-    console.log("Inserting build likes...");
-    if (seedBuildLikes) {
-      for (const like of seedBuildLikes) {
-        const buildResult = await db
-          .select({ id: builds.id })
-          .from(builds)
-          .where(eq(builds.name, like.buildName))
-          .execute();
+      const insertedBuilds = await db.insert(builds).values(buildsToInsert).returning();
 
-        if (buildResult.length > 0) {
-          const buildId = buildResult[0].id;
-          await db
-            .insert(buildLikes)
-            .values({
-              buildId,
-              likerAddress: like.likerAddress,
-              likedAt: like.likedAt,
-            })
-            .execute();
-        } else {
-          console.warn(`Warning: Build with name "${like.buildName}" not found. Skipping this like.`);
+      console.log("Inserting build builders...");
+      for (let i = 0; i < insertedBuilds.length; i++) {
+        const seedBuild = seedBuilds[i];
+        const insertedBuild = insertedBuilds[i];
+
+        if (seedBuild.builderAddresses && seedBuild.builderAddresses.length > 0) {
+          for (const builder of seedBuild.builderAddresses) {
+            await db
+              .insert(buildBuilders)
+              .values({
+                buildId: insertedBuild.id,
+                userAddress: builder.address,
+                isOwner: builder.isOwner,
+              })
+              .execute();
+          }
+        }
+      }
+
+      console.log("Inserting build likes...");
+      for (let i = 0; i < insertedBuilds.length; i++) {
+        const seedBuild = seedBuilds[i];
+        const insertedBuild = insertedBuilds[i];
+
+        if (seedBuild.likerAddresses && seedBuild.likerAddresses.length > 0) {
+          for (const liker of seedBuild.likerAddresses) {
+            await db
+              .insert(buildLikes)
+              .values({
+                buildId: insertedBuild.id,
+                likerAddress: liker.address,
+                likedAt: liker.likedAt,
+              })
+              .execute();
+          }
         }
       }
     }
