@@ -8,6 +8,7 @@ import {
   jsonb,
   pgEnum,
   pgTable,
+  primaryKey,
   serial,
   text,
   timestamp,
@@ -107,25 +108,37 @@ export const userChallenges = pgTable(
 export const builds = pgTable(
   "builds",
   {
-    id: serial().primaryKey(),
+    // Using text type for legacy imported IDs, with a default of gen_random_uuid() for auto-generation if not specified
+    id: text("id")
+      .primaryKey()
+      .default(sql`gen_random_uuid()::text`),
     name: varchar({ length: 255 }).notNull(),
     desc: text(),
     buildType: varchar({ length: 50 }),
-    builderAddress: varchar({ length: 42 })
-      .notNull()
-      .references(() => users.userAddress),
-    coBuilderAddresses: varchar({ length: 42 }).array(),
     demoUrl: varchar({ length: 255 }),
     videoUrl: varchar({ length: 255 }),
     imageUrl: varchar({ length: 255 }),
     githubUrl: varchar({ length: 255 }),
     submittedTimestamp: timestamp().notNull().defaultNow(),
   },
+  table => [index("build_name_idx").on(table.name), index("build_type_idx").on(table.buildType)],
+);
+
+export const buildBuilders = pgTable(
+  "build_builders",
+  {
+    buildId: text()
+      .notNull()
+      .references(() => builds.id),
+    userAddress: varchar({ length: 42 })
+      .notNull()
+      .references(() => users.userAddress),
+    isOwner: boolean().default(false).notNull(),
+  },
   table => [
-    index("build_builder_idx").on(table.builderAddress),
-    // Regular index for now - if we see performance issues with array queries later,
-    // we can explore adding a GIN index, would need to verify Neon/Drizzle support for GIN indexes before implementing
-    index("build_co_builders_idx").on(table.coBuilderAddresses),
+    primaryKey({ columns: [table.buildId, table.userAddress] }),
+    index("build_builder_build_idx").on(table.buildId),
+    index("build_builder_user_idx").on(table.userAddress),
   ],
 );
 
@@ -133,7 +146,7 @@ export const buildLikes = pgTable(
   "build_likes",
   {
     id: serial().primaryKey(),
-    buildId: integer()
+    buildId: text()
       .notNull()
       .references(() => builds.id),
     likerAddress: varchar({ length: 42 })
@@ -150,7 +163,7 @@ export const usersRelations = relations(users, ({ many, one }) => ({
     fields: [users.batchId],
     references: [batches.id],
   }),
-  builds: many(builds),
+  buildBuilders: many(buildBuilders),
   buildLikes: many(buildLikes),
 }));
 
@@ -173,12 +186,9 @@ export const batchesRelations = relations(batches, ({ many }) => ({
   users: many(users),
 }));
 
-export const buildsRelations = relations(builds, ({ one, many }) => ({
-  builder: one(users, {
-    fields: [builds.builderAddress],
-    references: [users.userAddress],
-  }),
+export const buildsRelations = relations(builds, ({ many }) => ({
   likes: many(buildLikes),
+  builders: many(buildBuilders),
 }));
 
 export const buildLikesRelations = relations(buildLikes, ({ one }) => ({
@@ -188,6 +198,17 @@ export const buildLikesRelations = relations(buildLikes, ({ one }) => ({
   }),
   liker: one(users, {
     fields: [buildLikes.likerAddress],
+    references: [users.userAddress],
+  }),
+}));
+
+export const buildBuildersRelations = relations(buildBuilders, ({ one }) => ({
+  build: one(builds, {
+    fields: [buildBuilders.buildId],
+    references: [builds.id],
+  }),
+  user: one(users, {
+    fields: [buildBuilders.userAddress],
     references: [users.userAddress],
   }),
 }));
