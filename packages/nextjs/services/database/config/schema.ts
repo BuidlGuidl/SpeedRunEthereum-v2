@@ -20,41 +20,12 @@ export function lower(address: AnyPgColumn): SQL {
   return sql`lower(${address})`;
 }
 
-export const reviewActionEnum = pgEnum("review_action_enum", [
-  ReviewAction.REJECTED,
-  ReviewAction.ACCEPTED,
-  ReviewAction.SUBMITTED,
-]);
-
-export const userRoleEnum = pgEnum("user_role_enum", [UserRole.USER, UserRole.BUILDER, UserRole.ADMIN]);
-
-export const batchStatusEnum = pgEnum("batch_status_enum", [BatchStatus.CLOSED, BatchStatus.OPEN]);
-export const batchUserStatusEnum = pgEnum("batch_user_status_enum", [
-  BatchUserStatus.GRADUATE,
-  BatchUserStatus.CANDIDATE,
-]);
-
-export const buildTypeEnum = pgEnum("build_type_enum", [
-  BuildType.DAPP,
-  BuildType.INFRASTRUCTURE,
-  BuildType.CHALLENGE_SUBMISSION,
-  BuildType.CONTENT,
-  BuildType.DESIGN,
-  BuildType.OTHER,
-]);
-
-export const buildCategoryEnum = pgEnum("build_category_enum", [
-  BuildCategory.DEFI,
-  BuildCategory.GAMING,
-  BuildCategory.NFTS,
-  BuildCategory.SOCIAL,
-  BuildCategory.DAOS_GOVERNANCE,
-  BuildCategory.DEV_TOOLING,
-  BuildCategory.IDENTITY_REPUTATION,
-  BuildCategory.RWA_SUPPLY_CHAIN,
-  BuildCategory.AI_AGENTS,
-  BuildCategory.PREDICTION_MARKETS,
-]);
+export const reviewActionEnum = pgEnum("review_action_enum", ReviewAction);
+export const userRoleEnum = pgEnum("user_role_enum", UserRole);
+export const batchStatusEnum = pgEnum("batch_status_enum", BatchStatus);
+export const batchUserStatusEnum = pgEnum("batch_user_status_enum", BatchUserStatus);
+export const buildTypeEnum = pgEnum("build_type_enum", BuildType);
+export const buildCategoryEnum = pgEnum("build_category_enum", BuildCategory);
 
 export const users = pgTable(
   "users",
