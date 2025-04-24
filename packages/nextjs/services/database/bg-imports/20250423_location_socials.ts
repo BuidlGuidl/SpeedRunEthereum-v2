@@ -40,7 +40,7 @@ export type BGBuildersApiResponse = {
   [key: string]: any;
 }[];
 
-export async function importLocationAndSocials() {
+async function importLocationAndSocials() {
   try {
     console.log("==== Importing Location and Socials ====");
     console.log("Fetching data from BG firebase...");

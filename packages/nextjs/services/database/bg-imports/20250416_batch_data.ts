@@ -29,7 +29,7 @@ type BgBatchUser = {
   };
 };
 
-export async function importData() {
+async function importData() {
   try {
     console.log("==== Importing BATCH DATA ====");
     console.log("Fetching data from BG firebase...");
