@@ -1,7 +1,7 @@
 import { SortingState } from "@tanstack/react-table";
 import { UpdateLocationPayload } from "~~/app/api/users/update-location/route";
 import { UpdateSocialsPayload } from "~~/app/api/users/update-socials/route";
-import { UserByAddress, UserWithChallengesData } from "~~/services/database/repositories/users";
+import { BatchBuilder, UserByAddress, UserWithChallengesData } from "~~/services/database/repositories/users";
 
 export async function fetchUser(address: string | undefined) {
   if (!address) return;
@@ -84,6 +84,25 @@ export const getSortedUsersWithChallenges = async (start: number, size: number, 
   };
 
   return usersData;
+};
+
+export const getSortedBatchBuilders = async (start: number, size: number, sorting: SortingState, filter?: string) => {
+  const response = await fetch(
+    `/api/users/in-batches?start=${start}&size=${size}&sorting=${JSON.stringify(sorting)}&filter=${filter ?? ""}`,
+  );
+
+  if (!response.ok) {
+    throw new Error(`Failed to fetch sorted batch builders: ${response.status} ${response.statusText}`);
+  }
+
+  const batchBuildersData = (await response.json()) as {
+    data: BatchBuilder[];
+    meta: {
+      totalRowCount: number;
+    };
+  };
+
+  return batchBuildersData;
 };
 
 export async function userJoinBg({ address, signature }: { address: string; signature: string }) {
