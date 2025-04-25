@@ -17,7 +17,7 @@ import { getUserSocialsList } from "~~/utils/socials";
 export default function BatchBuildersPage() {
   const { data: builders, isLoading } = useQuery({
     queryKey: ["builders-count"],
-    queryFn: () => getSortedBatchBuilders(0, 20, []),
+    queryFn: () => getSortedBatchBuilders(0, 0, []),
   });
 
   const [filter, setFilter] = useState("");
