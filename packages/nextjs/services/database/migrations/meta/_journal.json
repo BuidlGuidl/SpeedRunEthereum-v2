@@ -29,6 +29,13 @@
       "when": 1745398822879,
       "tag": "0003_busy_black_cat",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1745581088018,
+      "tag": "0004_hesitant_red_ghost",
+      "breakpoints": true
     }
   ]
 }
