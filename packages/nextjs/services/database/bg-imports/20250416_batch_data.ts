@@ -64,6 +64,7 @@ export async function importData() {
           status: batch.status.toLowerCase() as BatchStatus,
           contractAddress: batch.contractAddress,
           telegramLink: batch.telegramLink,
+          bgSubdomain: `batch${batch.name}`,
         };
 
         let createdBatch;
