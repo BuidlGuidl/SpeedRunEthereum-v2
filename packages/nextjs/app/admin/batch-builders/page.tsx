@@ -10,6 +10,7 @@ import { DateWithTooltip } from "~~/components/DateWithTooltip";
 import InfiniteTable from "~~/components/InfiniteTable";
 import { Address, InputBase } from "~~/components/scaffold-eth";
 import { getSortedBatchBuilders } from "~~/services/api/users";
+import { BatchStatus } from "~~/services/database/config/types";
 import { BatchBuilder } from "~~/services/database/repositories/users";
 import { getUserSocialsList } from "~~/utils/socials";
 
@@ -48,7 +49,19 @@ export default function BatchBuildersPage() {
         cell: info => {
           const row = info.row.original;
 
-          return <div className="flex w-full justify-center">{row.batch?.name.toString()}</div>;
+          return (
+            <div className="flex w-full justify-center items-center">
+              <div
+                className={`rounded-sm px-2 py-0.5 font-semibold ${
+                  row.batch?.status === BatchStatus.OPEN
+                    ? "bg-green-500/30"
+                    : "text-yellow-600 dark:text-yellow-400 bg-warning/30"
+                }`}
+              >
+                {row.batch?.name.toString().toUpperCase()}
+              </div>
+            </div>
+          );
         },
       },
       {
