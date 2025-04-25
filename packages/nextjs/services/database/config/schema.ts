@@ -102,8 +102,8 @@ export const userChallenges = pgTable(
 export const builds = pgTable(
   "builds",
   {
-    // Using text type for legacy imported IDs, with a default of gen_random_uuid() for auto-generation if not specified
-    id: text("id")
+    // Using varchar type for legacy imported IDs, with a default of gen_random_uuid() for auto-generation if not specified
+    id: varchar({ length: 40 })
       .primaryKey()
       .default(sql`gen_random_uuid()::text`),
     name: varchar({ length: 255 }).notNull(),
@@ -126,7 +126,7 @@ export const builds = pgTable(
 export const buildBuilders = pgTable(
   "build_builders",
   {
-    buildId: text()
+    buildId: varchar({ length: 40 })
       .notNull()
       .references(() => builds.id),
     userAddress: varchar({ length: 42 })
@@ -145,7 +145,7 @@ export const buildLikes = pgTable(
   "build_likes",
   {
     id: serial().primaryKey(),
-    buildId: text()
+    buildId: varchar({ length: 40 })
       .notNull()
       .references(() => builds.id),
     likerAddress: varchar({ length: 42 })

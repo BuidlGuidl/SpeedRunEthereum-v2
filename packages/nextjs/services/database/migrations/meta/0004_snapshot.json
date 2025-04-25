@@ -1,5 +1,5 @@
 {
-  "id": "9966f33d-ca23-4d67-9b70-8344ce657a48",
+  "id": "4736ed79-6f6f-4bff-9edc-f3c4702d9b87",
   "prevId": "676e8941-3c30-45b6-8520-c1769b774532",
   "version": "7",
   "dialect": "postgresql",
@@ -65,7 +65,7 @@
       "columns": {
         "build_id": {
           "name": "build_id",
-          "type": "text",
+          "type": "varchar(40)",
           "primaryKey": false,
           "notNull": true
         },
@@ -169,7 +169,7 @@
         },
         "build_id": {
           "name": "build_id",
-          "type": "text",
+          "type": "varchar(40)",
           "primaryKey": false,
           "notNull": true
         },
@@ -250,7 +250,7 @@
       "columns": {
         "id": {
           "name": "id",
-          "type": "text",
+          "type": "varchar(40)",
           "primaryKey": true,
           "notNull": true,
           "default": "gen_random_uuid()::text"

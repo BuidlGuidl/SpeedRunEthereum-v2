@@ -1,7 +1,7 @@
 CREATE TYPE "public"."build_category_enum" AS ENUM('DeFi', 'Gaming', 'NFTs', 'Social', 'DAOs & Governance', 'Dev Tooling', 'Identity & Reputation', 'RWA & Supply Chain', 'AI Agents', 'Prediction Markets');--> statement-breakpoint
 CREATE TYPE "public"."build_type_enum" AS ENUM('Dapp', 'Infrastructure', 'Challenge submission', 'Content', 'Design', 'Other');--> statement-breakpoint
 CREATE TABLE "build_builders" (
-	"build_id" text NOT NULL,
+	"build_id" varchar(40) NOT NULL,
 	"user_address" varchar(42) NOT NULL,
 	"is_owner" boolean DEFAULT false NOT NULL,
 	CONSTRAINT "build_builders_build_id_user_address_pk" PRIMARY KEY("build_id","user_address")
@@ -9,13 +9,13 @@ CREATE TABLE "build_builders" (
 --> statement-breakpoint
 CREATE TABLE "build_likes" (
 	"id" serial PRIMARY KEY NOT NULL,
-	"build_id" text NOT NULL,
+	"build_id" varchar(40) NOT NULL,
 	"liker_address" varchar(42) NOT NULL,
 	"liked_at" timestamp DEFAULT now() NOT NULL
 );
 --> statement-breakpoint
 CREATE TABLE "builds" (
-	"id" text PRIMARY KEY DEFAULT gen_random_uuid()::text NOT NULL,
+	"id" varchar(40) PRIMARY KEY DEFAULT gen_random_uuid()::text NOT NULL,
 	"name" varchar(255) NOT NULL,
 	"desc" text,
 	"build_type" "build_type_enum",
