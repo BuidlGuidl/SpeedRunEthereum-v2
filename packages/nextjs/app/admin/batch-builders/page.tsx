@@ -58,7 +58,7 @@ export default function BatchBuildersPage() {
     [debouncedFilter, selectedBatchId],
   );
 
-  const tableInitialSorting = useMemo(() => [{ id: "batch_name", desc: true }], []);
+  const tableInitialSorting = useMemo(() => [{ id: "batch_start", desc: true }], []);
 
   const columns = useMemo<ColumnDef<BatchBuilder>[]>(
     () => [
@@ -82,7 +82,7 @@ export default function BatchBuildersPage() {
       {
         header: "Batch",
         size: 200,
-        accessorKey: "batch.name",
+        accessorKey: "batch.start",
         cell: info => {
           const row = info.row.original;
 

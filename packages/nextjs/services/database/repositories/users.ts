@@ -116,6 +116,10 @@ export async function getSortedBatchBuilders({
 
       const sortOrder = sortingQuery.desc ? desc : asc;
 
+      if (sortingQuery.id === "batch_start") {
+        return sortOrder(sql`(SELECT "start_date" FROM "batches" WHERE "batches"."id" = "users"."batch_id")`);
+      }
+
       if (sortingQuery.id in users) {
         return sortOrder(users[sortingQuery.id as keyof typeof users]);
       }
@@ -125,14 +129,6 @@ export async function getSortedBatchBuilders({
   });
 
   const [buildersData] = await Promise.all([query]);
-
-  if (sortingQuery?.id === "batch_name") {
-    buildersData.sort((a, b) => {
-      const aName = a.batch?.name.toString() ?? "";
-      const bName = b.batch?.name.toString() ?? "";
-      return sortingQuery.desc ? bName.localeCompare(aName) : aName.localeCompare(bName);
-    });
-  }
 
   const totalRowCount = await db.$count(
     users,
