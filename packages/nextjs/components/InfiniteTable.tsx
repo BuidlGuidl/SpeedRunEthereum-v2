@@ -148,7 +148,7 @@ export default function InfiniteTable<T>({
       >
         {/* Even though we're still using sematic table tags, we must use CSS grid and flexbox for dynamic row heights */}
         <table style={{ display: "grid" }} className="table">
-          <thead className="grid sticky top-0 z-10" ref={tableHeader}>
+          <thead className="grid sticky top-0 z-10 bg-base-100" ref={tableHeader}>
             {table.getHeaderGroups().map(headerGroup => (
               <tr key={headerGroup.id} className="flex w-full text-sm">
                 {headerGroup.headers.map(header => {
