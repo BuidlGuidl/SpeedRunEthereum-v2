@@ -1,27 +1,52 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { ColumnDef } from "@tanstack/react-table";
 import { useDebounceValue } from "usehooks-ts";
+import { ChevronDownIcon } from "@heroicons/react/24/outline";
 import SearchIcon from "~~/app/_assets/icons/SearchIcon";
 import { CopyValueToClipboard } from "~~/components/CopyValueToClipboard";
 import { DateWithTooltip } from "~~/components/DateWithTooltip";
 import InfiniteTable from "~~/components/InfiniteTable";
 import { Address, InputBase } from "~~/components/scaffold-eth";
+import { useOutsideClick } from "~~/hooks/scaffold-eth";
+import { getSortedBatches } from "~~/services/api/batches";
 import { getSortedBatchBuilders } from "~~/services/api/users";
 import { BatchStatus } from "~~/services/database/config/types";
 import { BatchBuilder } from "~~/services/database/repositories/users";
 import { getUserSocialsList } from "~~/utils/socials";
 
+const ALL_BATCHES_TEXT = "All batches";
+
 export default function BatchBuildersPage() {
+  const dropdownRef = useRef<HTMLDetailsElement>(null);
   const { data: builders, isLoading } = useQuery({
     queryKey: ["builders-count"],
     queryFn: () => getSortedBatchBuilders({ start: 0, size: 0, sorting: [] }),
   });
 
+  const { data: batches } = useQuery({
+    queryKey: ["batches-count"],
+    // note: 1000 is to be sure that we have all batches
+    queryFn: () => getSortedBatches({ start: 0, size: 1000, sorting: [] }),
+  });
+
   const [filter, setFilter] = useState("");
+  const [batchFilter, setBatchFilter] = useState("");
+  const [selectedBatchId, setSelectedBatchId] = useState<number>();
   const [debouncedFilter] = useDebounceValue(filter, 500);
+
+  const closeDropdown = () => {
+    dropdownRef.current?.removeAttribute("open");
+  };
+
+  useOutsideClick(dropdownRef, closeDropdown);
+
+  const handleBatchSelect = (batchId?: number) => {
+    setSelectedBatchId(batchId);
+    closeDropdown();
+  };
 
   const columns = useMemo<ColumnDef<BatchBuilder>[]>(
     () => [
@@ -128,13 +153,56 @@ export default function BatchBuildersPage() {
           placeholder="Search builder"
           suffix={<SearchIcon className="w-7 h-6 pr-2 fill-primary/60 self-center" />}
         />
-        <button className="btn btn-primary h-[40px] min-h-[40px]">All batches</button>
+        <details ref={dropdownRef} className="dropdown">
+          <summary className="btn btn-primary h-10 min-h-10">
+            {selectedBatchId ? batches?.data.find(batch => batch.id === selectedBatchId)?.name : ALL_BATCHES_TEXT}
+            <ChevronDownIcon className="h-6 w-4" />
+          </summary>
+          <ul className="dropdown-content menu mt-2 bg-base-100 rounded-box z-20 w-52 p-2 shadow">
+            <li>
+              <div className="flex items-center gap-2 !p-0">
+                <InputBase
+                  name="batch-filter"
+                  value={batchFilter}
+                  onChange={setBatchFilter}
+                  placeholder="Search batch"
+                  suffix={<SearchIcon className="w-7 h-6 pr-2 fill-primary/60 self-center" />}
+                />
+              </div>
+            </li>
+            {ALL_BATCHES_TEXT.toLowerCase().includes(batchFilter.toLowerCase()) && (
+              <li>
+                <button onClick={() => handleBatchSelect(undefined)} className="w-full text-left">
+                  {ALL_BATCHES_TEXT}
+                </button>
+              </li>
+            )}
+            {batches?.data
+              .filter(batch => batch.name.toLowerCase().includes(batchFilter.toLowerCase()))
+              .map(batch => (
+                <li key={batch.id}>
+                  <button onClick={() => handleBatchSelect(batch.id)} className="w-full text-left">
+                    {batch.name}
+                  </button>
+                </li>
+              ))}
+          </ul>
+        </details>
       </div>
       <InfiniteTable<BatchBuilder>
         columns={columns}
-        queryKey={useMemo(() => ["batch-builders", debouncedFilter], [debouncedFilter])}
-        queryFn={({ start, fetchSize, sorting }) =>
-          getSortedBatchBuilders({ start, size: fetchSize, sorting, filter: debouncedFilter })
+        queryKey={useMemo(
+          () => ["batch-builders", debouncedFilter, selectedBatchId],
+          [debouncedFilter, selectedBatchId],
+        )}
+        queryFn={({ start, size, sorting }) =>
+          getSortedBatchBuilders({
+            start,
+            size,
+            sorting,
+            filter: debouncedFilter,
+            batchId: selectedBatchId,
+          })
         }
         initialSorting={useMemo(() => [{ id: "batch_name", desc: true }], [])}
       />

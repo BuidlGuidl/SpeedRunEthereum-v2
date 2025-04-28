@@ -200,9 +200,7 @@ export default function BatchesPage() {
       <InfiniteTable<BatchWithCounts>
         columns={columns}
         queryKey={tableQueryKey}
-        queryFn={({ start, fetchSize, sorting }) =>
-          getSortedBatches({ start, size: fetchSize, sorting, filter: debouncedFilter })
-        }
+        queryFn={({ start, size, sorting }) => getSortedBatches({ start, size, sorting, filter: debouncedFilter })}
         initialSorting={tableInitialSorting}
       />
 

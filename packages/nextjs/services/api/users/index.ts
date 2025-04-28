@@ -71,14 +71,14 @@ export async function updateLocation(payload: UpdateLocationPayload) {
 
 export const getSortedUsersWithChallenges = async ({
   start,
-  fetchSize,
+  size,
   sorting,
 }: {
   start: number;
-  fetchSize: number;
+  size: number;
   sorting: SortingState;
 }) => {
-  const response = await fetch(`/api/users/sorted?start=${start}&size=${fetchSize}&sorting=${JSON.stringify(sorting)}`);
+  const response = await fetch(`/api/users/sorted?start=${start}&size=${size}&sorting=${JSON.stringify(sorting)}`);
 
   if (!response.ok) {
     throw new Error(`Failed to fetch sorted users: ${response.status} ${response.statusText}`);
@@ -99,14 +99,16 @@ export const getSortedBatchBuilders = async ({
   size,
   sorting,
   filter,
+  batchId,
 }: {
   start: number;
   size: number;
   sorting: SortingState;
   filter?: string;
+  batchId?: number;
 }) => {
   const response = await fetch(
-    `/api/users/in-batches?start=${start}&size=${size}&sorting=${JSON.stringify(sorting)}&filter=${filter ?? ""}`,
+    `/api/users/in-batches?start=${start}&size=${size}&sorting=${JSON.stringify(sorting)}&filter=${filter ?? ""}&batchId=${batchId ?? ""}`,
   );
 
   if (!response.ok) {

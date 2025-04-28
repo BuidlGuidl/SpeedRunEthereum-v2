@@ -85,7 +85,19 @@ export async function getSortedUsersWithChallengesInfo(start: number, size: numb
   };
 }
 
-export async function getSortedBatchBuilders(start: number, size: number, sorting: SortingState, filter?: string) {
+export async function getSortedBatchBuilders({
+  start,
+  size,
+  sorting,
+  filter,
+  batchId,
+}: {
+  start: number;
+  size: number;
+  sorting: SortingState;
+  filter?: string;
+  batchId?: number;
+}) {
   const sortingQuery = sorting[0] as ColumnSort;
   const query = db.query.users.findMany({
     limit: size,
@@ -93,7 +105,12 @@ export async function getSortedBatchBuilders(start: number, size: number, sortin
     with: {
       batch: true,
     },
-    where: users => and(isNotNull(users.batchId), filter ? ilike(users.userAddress, `%${filter}%`) : undefined),
+    where: users =>
+      and(
+        isNotNull(users.batchId),
+        filter ? ilike(users.userAddress, `%${filter}%`) : undefined,
+        batchId ? eq(users.batchId, batchId) : undefined,
+      ),
     orderBy: (users, { desc, asc }) => {
       if (!sortingQuery) return [];
 
@@ -117,12 +134,14 @@ export async function getSortedBatchBuilders(start: number, size: number, sortin
     });
   }
 
-  let totalRowCount = buildersData.length;
-
-  if (!filter) {
-    const totalBatchBuilders = await db.$count(users, isNotNull(users.batchId));
-    totalRowCount = totalBatchBuilders;
-  }
+  const totalRowCount = await db.$count(
+    users,
+    and(
+      isNotNull(users.batchId),
+      filter ? ilike(users.userAddress, `%${filter}%`) : undefined,
+      batchId ? eq(users.batchId, batchId) : undefined,
+    ),
+  );
 
   return {
     data: buildersData,

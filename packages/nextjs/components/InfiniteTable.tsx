@@ -27,11 +27,7 @@ type InfiniteTableApiResponse<T> = {
 type InfiniteTableProps<T> = {
   columns: ColumnDef<T>[];
   queryKey: QueryKey;
-  queryFn: (params: {
-    start: number;
-    fetchSize: number;
-    sorting: SortingState;
-  }) => Promise<InfiniteTableApiResponse<T>>;
+  queryFn: (params: { start: number; size: number; sorting: SortingState }) => Promise<InfiniteTableApiResponse<T>>;
   fetchSize?: number;
   rowHeightInPx?: number;
   initialSorting?: SortingState;
@@ -55,7 +51,7 @@ export default function InfiniteTable<T>({
     queryKey: [...queryKey, sorting],
     queryFn: async ({ pageParam = 0 }) => {
       const start = (pageParam as number) * fetchSize;
-      const fetchedData = await queryFn({ start, fetchSize, sorting });
+      const fetchedData = await queryFn({ start, size: fetchSize, sorting });
       return fetchedData;
     },
     initialPageParam: 0,

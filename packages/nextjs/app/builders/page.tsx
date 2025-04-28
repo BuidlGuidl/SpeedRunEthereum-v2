@@ -15,7 +15,7 @@ import { getUserSocialsList } from "~~/utils/socials";
 export default function BuildersPage() {
   const { data: builders, isLoading } = useQuery({
     queryKey: ["builders-count"],
-    queryFn: () => getSortedUsersWithChallenges({ start: 0, fetchSize: 0, sorting: [] }),
+    queryFn: () => getSortedUsersWithChallenges({ start: 0, size: 0, sorting: [] }),
   });
 
   const columns = useMemo<ColumnDef<UserWithChallengesData>[]>(

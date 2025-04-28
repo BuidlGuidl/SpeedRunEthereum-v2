@@ -41,14 +41,9 @@ export async function getSortedBatchesInfo(start: number, size: number, sorting:
     },
   });
 
-  const [batchesData, countResult, userCounts] = await Promise.all([
+  const [batchesData, totalCount, userCounts] = await Promise.all([
     query,
-    filter
-      ? db
-          .select({ count: sql<number>`count(*)` })
-          .from(batches)
-          .where(ilike(batches.name, `%${filter}%`))
-      : db.$count(batches),
+    db.$count(batches, filter ? ilike(batches.name, `%${filter}%`) : undefined),
     db
       .select({
         batchId: users.batchId,
@@ -58,8 +53,6 @@ export async function getSortedBatchesInfo(start: number, size: number, sorting:
       .from(users)
       .groupBy(users.batchId),
   ]);
-
-  const totalCount = filter ? Number((countResult as { count: number }[])[0].count) : (countResult as number);
 
   const batchesWithCounts = batchesData.map(batch => {
     const counts = userCounts.find(count => count.batchId === batch.id) || {
