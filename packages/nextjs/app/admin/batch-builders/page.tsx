@@ -133,6 +133,7 @@ export default function BatchBuildersPage() {
       },
       {
         header: "User created",
+        // TODO: change to creationTimestamp after imported?
         accessorKey: "createdAt",
         cell: info => {
           return (
@@ -175,9 +176,9 @@ export default function BatchBuildersPage() {
             {selectedBatchId ? batches?.data.find(batch => batch.id === selectedBatchId)?.name : ALL_BATCHES_TEXT}
             <ChevronDownIcon className="h-6 w-4" />
           </summary>
-          <ul className="dropdown-content menu mt-2 bg-base-100 rounded-box z-20 w-52 p-2 shadow">
+          <ul className="dropdown-content menu mt-2 bg-base-100 rounded-box z-20 w-52 p-2 shadow flex-nowrap max-h-64 overflow-y-auto">
             <li>
-              <div className="flex items-center gap-2 !p-0">
+              <div className="!p-0 mb-1">
                 <InputBase
                   name="batch-filter"
                   value={batchFilter}
@@ -196,6 +197,7 @@ export default function BatchBuildersPage() {
             )}
             {batches?.data
               .filter(batch => batch.name.toLowerCase().includes(batchFilter.toLowerCase()))
+              .sort((a, b) => new Date(b.startDate).getTime() - new Date(a.startDate).getTime())
               .map(batch => (
                 <li key={batch.id}>
                   <button onClick={() => handleBatchSelect(batch.id)} className="w-full text-left">
