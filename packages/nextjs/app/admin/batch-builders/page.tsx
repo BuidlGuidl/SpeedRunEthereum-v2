@@ -4,6 +4,7 @@ import { useMemo, useRef, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { ColumnDef } from "@tanstack/react-table";
 import { useDebounceValue } from "usehooks-ts";
+import { useAccount } from "wagmi";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
 import SearchIcon from "~~/app/_assets/icons/SearchIcon";
 import { CopyValueToClipboard } from "~~/components/CopyValueToClipboard";
@@ -11,15 +12,19 @@ import { DateWithTooltip } from "~~/components/DateWithTooltip";
 import InfiniteTable from "~~/components/InfiniteTable";
 import { Address, InputBase } from "~~/components/scaffold-eth";
 import { useOutsideClick } from "~~/hooks/scaffold-eth";
+import { useUser } from "~~/hooks/useUser";
 import { getSortedBatches } from "~~/services/api/batches";
 import { getSortedBatchBuilders } from "~~/services/api/users";
-import { BatchStatus } from "~~/services/database/config/types";
+import { BatchStatus, UserRole } from "~~/services/database/config/types";
 import { BatchBuilder } from "~~/services/database/repositories/users";
 import { getUserSocialsList } from "~~/utils/socials";
 
 const ALL_BATCHES_TEXT = "All batches";
 
 export default function BatchBuildersPage() {
+  const { address: connectedAddress } = useAccount();
+  const { data: user } = useUser(connectedAddress);
+
   const dropdownRef = useRef<HTMLDetailsElement>(null);
   const { data: builders, isLoading } = useQuery({
     queryKey: ["builders-count"],
@@ -47,6 +52,13 @@ export default function BatchBuildersPage() {
     setSelectedBatchId(batchId);
     closeDropdown();
   };
+
+  const tableQueryKey = useMemo(
+    () => ["batch-builders", debouncedFilter, selectedBatchId],
+    [debouncedFilter, selectedBatchId],
+  );
+
+  const tableInitialSorting = useMemo(() => [{ id: "batch_name", desc: true }], []);
 
   const columns = useMemo<ColumnDef<BatchBuilder>[]>(
     () => [
@@ -135,6 +147,11 @@ export default function BatchBuildersPage() {
     [],
   );
 
+  // TODO: update this logic later
+  if (user?.role !== UserRole.ADMIN) {
+    return null;
+  }
+
   return (
     <div className="mx-4 text-center">
       <div className="text-base mt-4 font-medium flex justify-center gap-1">
@@ -191,10 +208,7 @@ export default function BatchBuildersPage() {
       </div>
       <InfiniteTable<BatchBuilder>
         columns={columns}
-        queryKey={useMemo(
-          () => ["batch-builders", debouncedFilter, selectedBatchId],
-          [debouncedFilter, selectedBatchId],
-        )}
+        queryKey={tableQueryKey}
         queryFn={({ start, size, sorting }) =>
           getSortedBatchBuilders({
             start,
@@ -204,7 +218,7 @@ export default function BatchBuildersPage() {
             batchId: selectedBatchId,
           })
         }
-        initialSorting={useMemo(() => [{ id: "batch_name", desc: true }], [])}
+        initialSorting={tableInitialSorting}
       />
     </div>
   );
