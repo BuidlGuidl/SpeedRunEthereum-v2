@@ -17,7 +17,7 @@ import { getUserSocialsList } from "~~/utils/socials";
 export default function BatchBuildersPage() {
   const { data: builders, isLoading } = useQuery({
     queryKey: ["builders-count"],
-    queryFn: () => getSortedBatchBuilders(0, 0, []),
+    queryFn: () => getSortedBatchBuilders({ start: 0, size: 0, sorting: [] }),
   });
 
   const [filter, setFilter] = useState("");
@@ -132,10 +132,11 @@ export default function BatchBuildersPage() {
       </div>
       <InfiniteTable<BatchBuilder>
         columns={columns}
-        queryKey={useMemo(() => ["batch-builders"], [])}
-        queryFn={getSortedBatchBuilders}
+        queryKey={useMemo(() => ["batch-builders", debouncedFilter], [debouncedFilter])}
+        queryFn={({ start, fetchSize, sorting }) =>
+          getSortedBatchBuilders({ start, size: fetchSize, sorting, filter: debouncedFilter })
+        }
         initialSorting={useMemo(() => [{ id: "batch_name", desc: true }], [])}
-        filter={debouncedFilter}
       />
     </div>
   );

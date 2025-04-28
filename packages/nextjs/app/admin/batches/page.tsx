@@ -36,10 +36,13 @@ export default function BatchesPage() {
 
   const { data: batches } = useQuery({
     queryKey: ["batches-count", batchesUpdatesCount],
-    queryFn: () => getSortedBatches(0, 0, []),
+    queryFn: () => getSortedBatches({ start: 0, size: 0, sorting: [] }),
   });
 
-  const tableQueryKey = useMemo(() => ["batches", batchesUpdatesCount], [batchesUpdatesCount]);
+  const tableQueryKey = useMemo(
+    () => ["batches", debouncedFilter, batchesUpdatesCount],
+    [debouncedFilter, batchesUpdatesCount],
+  );
   const tableInitialSorting = useMemo(() => [{ id: "startDate", desc: true }], []);
 
   const columns = useMemo<ColumnDef<BatchWithCounts>[]>(
@@ -197,9 +200,10 @@ export default function BatchesPage() {
       <InfiniteTable<BatchWithCounts>
         columns={columns}
         queryKey={tableQueryKey}
-        queryFn={getSortedBatches}
+        queryFn={({ start, fetchSize, sorting }) =>
+          getSortedBatches({ start, size: fetchSize, sorting, filter: debouncedFilter })
+        }
         initialSorting={tableInitialSorting}
-        filter={debouncedFilter}
       />
 
       <AddBatchModal refreshQueries={refreshQueries} />
