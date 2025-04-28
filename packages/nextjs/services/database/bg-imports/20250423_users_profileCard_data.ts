@@ -17,7 +17,7 @@ async function importLocationAndSocials() {
     const data: BGBuilder[] = await response.json();
     console.log(`Fetched ${data.length} users`);
 
-    // Deduplicate input by lowercased address
+    // Deduplicate input by lowercased address (since user "0xc863dfee737c803c93af4b6b27029294f6a56eb5" has multiple casing profiles)
     const seen = new Set<string>();
     const dedupedData = data.filter(builder => {
       const addr = builder.id?.toLowerCase();
