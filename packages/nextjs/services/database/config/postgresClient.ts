@@ -1,5 +1,6 @@
 import * as schema from "./schema";
 import { Pool as NeonPool, neon } from "@neondatabase/serverless";
+import { BatchItem } from "drizzle-orm/batch";
 import { drizzle as drizzleNeonHttp } from "drizzle-orm/neon-http";
 import { drizzle as drizzleNeon } from "drizzle-orm/neon-serverless";
 import { drizzle } from "drizzle-orm/node-postgres";
@@ -62,6 +63,23 @@ export async function closeDb(): Promise<void> {
   }
 }
 
+type QueryType = readonly [BatchItem<"pg">, ...BatchItem<"pg">[]];
+
+async function executeQueries(queries: QueryType): Promise<void> {
+  const db = getDb();
+  if ("batch" in db && db.constructor.name === "NeonHttpDatabase") {
+    if (queries.length > 0) {
+      await db.batch(queries);
+    }
+    console.log("Batch execution complete.");
+  } else {
+    for (const query of queries) {
+      await query;
+    }
+    console.log("Sequential execution complete.");
+  }
+}
+
 // Create a proxy to intercept all property accesses and method calls
 const dbProxy = new Proxy(
   {},
@@ -69,6 +87,10 @@ const dbProxy = new Proxy(
     get: (target, prop: keyof DbProxy) => {
       if (prop === "close") {
         return closeDb;
+      }
+
+      if (prop === "executeQueries") {
+        return executeQueries;
       }
 
       const db = getDb();
@@ -83,6 +105,7 @@ const dbProxy = new Proxy(
 
 type DbProxy = DbInstance & {
   close: () => Promise<void>;
+  executeQueries: (queries: QueryType) => Promise<void>;
 };
 
 export const db = dbProxy as DbProxy;

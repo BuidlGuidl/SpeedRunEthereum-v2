@@ -64,16 +64,8 @@ async function importLocationAndSocials() {
       })
       .filter(Boolean);
 
-    if ("batch" in db && db.constructor.name === "NeonHttpDatabase") {
-      if (upsertQueries.length > 0) {
-        await db.batch(upsertQueries as any);
-      }
-      console.log("Batch upsert complete.");
-    } else {
-      for (const query of upsertQueries) {
-        await query;
-      }
-      console.log("Sequential upsert complete.");
+    if (upsertQueries.length > 0) {
+      await db.executeQueries(upsertQueries as any);
     }
   } catch (error) {
     console.error("Error during data import:", error);
