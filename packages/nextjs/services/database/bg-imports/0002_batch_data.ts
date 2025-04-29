@@ -24,74 +24,70 @@ async function importData() {
 
     console.log(`Found ${batchesData.length} batches and ${usersData.length} users belonging to a batch`);
 
-    // Start a transaction
-    await db.transaction(async tx => {
-      // Save the mapping between Firebase ID and our database ID
-      const batchIdMap = new Map<string, number>();
+    // Save the mapping between Firebase ID and our database ID
+    const batchIdMap = new Map<string, number>();
 
-      // Preload existing batches
-      const existingBatches = await tx.select().from(batches);
-      const existingBatchesByTelegramLink: Record<string, (typeof existingBatches)[0]> = {};
-      existingBatches.forEach(batch => {
-        if (batch.telegramLink) {
-          existingBatchesByTelegramLink[batch.telegramLink] = batch;
-        }
-      });
-
-      // Import batches
-      for (const batch of batchesData) {
-        const newBatch = {
-          name: `Batch ${batch.name}`,
-          startDate: new Date(batch.startDate),
-          status: batch.status.toLowerCase() as BatchStatus,
-          contractAddress: batch.contractAddress,
-          telegramLink: batch.telegramLink,
-          bgSubdomain: `batch${batch.name}`,
-        };
-
-        let createdBatch;
-        if (batch.telegramLink && batch.telegramLink in existingBatchesByTelegramLink) {
-          // Update existing batch with any new information
-          const existingBatch = existingBatchesByTelegramLink[batch.telegramLink];
-          const result = await tx.update(batches).set(newBatch).where(eq(batches.id, existingBatch.id)).returning();
-          createdBatch = result[0];
-          console.log(`Updated existing batch: ${createdBatch.name} (ID: ${createdBatch.id})`);
-        } else {
-          const result = await tx.insert(batches).values(newBatch).returning();
-          createdBatch = result[0];
-          console.log(`Imported batch: ${createdBatch.name} (ID: ${createdBatch.id})`);
-        }
-
-        // Store the mapping between Firebase ID and our database ID
-        batchIdMap.set(batch.name, createdBatch.id);
-      }
-
-      // Update users with batch information
-      for (const user of usersData) {
-        const batchId = batchIdMap.get(user.batch.number);
-
-        if (!batchId) {
-          console.warn(`Batch ${user.batch.number} not found for user ${user.id}`);
-          continue;
-        }
-
-        // Use transaction for update
-        const result = await tx
-          .update(users)
-          .set({
-            batchId: batchId,
-            batchStatus: user.batch.status.toLowerCase() as BatchUserStatus,
-          })
-          .where(eq(users.userAddress, user.id));
-
-        if (result.rowCount === 0) {
-          console.warn(`User ${user.id} not found in database`);
-          continue;
-        }
-
-        console.log(`Updated user: ${user.id} with batch ${user.batch.number}`);
+    // Preload existing batches
+    const existingBatches = await db.select().from(batches);
+    const existingBatchesByTelegramLink: Record<string, (typeof existingBatches)[0]> = {};
+    existingBatches.forEach(batch => {
+      if (batch.telegramLink) {
+        existingBatchesByTelegramLink[batch.telegramLink] = batch;
       }
     });
+
+    // Import batches
+    for (const batch of batchesData) {
+      const newBatch = {
+        name: `Batch ${batch.name}`,
+        startDate: new Date(batch.startDate),
+        status: batch.status.toLowerCase() as BatchStatus,
+        contractAddress: batch.contractAddress,
+        telegramLink: batch.telegramLink,
+        bgSubdomain: `batch${batch.name}`,
+      };
+
+      let createdBatch;
+      if (batch.telegramLink && batch.telegramLink in existingBatchesByTelegramLink) {
+        // Update existing batch with any new information
+        const existingBatch = existingBatchesByTelegramLink[batch.telegramLink];
+        const result = await db.update(batches).set(newBatch).where(eq(batches.id, existingBatch.id)).returning();
+        createdBatch = result[0];
+        console.log(`Updated existing batch: ${createdBatch.name} (ID: ${createdBatch.id})`);
+      } else {
+        const result = await db.insert(batches).values(newBatch).returning();
+        createdBatch = result[0];
+        console.log(`Imported batch: ${createdBatch.name} (ID: ${createdBatch.id})`);
+      }
+
+      // Store the mapping between Firebase ID and our database ID
+      batchIdMap.set(batch.name, createdBatch.id);
+    }
+
+    // Update users with batch information
+    const userUpdateQueries = [];
+    for (const user of usersData) {
+      const batchId = batchIdMap.get(user.batch.number);
+
+      if (!batchId) {
+        console.warn(`Batch ${user.batch.number} not found for user ${user.id}`);
+        continue;
+      }
+
+      // Prepare update query
+      const query = db
+        .update(users)
+        .set({
+          batchId: batchId,
+          batchStatus: user.batch.status.toLowerCase() as BatchUserStatus,
+        })
+        .where(eq(users.userAddress, user.id));
+      userUpdateQueries.push(query);
+    }
+
+    if (userUpdateQueries.length > 0) {
+      await db.executeQueries(userUpdateQueries as any);
+    }
 
     console.log("Data import completed successfully!");
   } catch (error) {
