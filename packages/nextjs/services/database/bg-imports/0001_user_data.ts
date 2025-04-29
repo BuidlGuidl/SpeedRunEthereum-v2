@@ -59,6 +59,7 @@ async function importData() {
             userAddress,
             ...socials,
             location: builder.location || null,
+            ...(builder.creationTimestamp && { createdAt: new Date(builder.creationTimestamp) }),
           });
         }
       })
