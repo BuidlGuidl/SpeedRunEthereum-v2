@@ -9,7 +9,7 @@ dotenv.config({ path: path.resolve(__dirname, "../../../.env.development") });
 
 const BG_USERS_ENDPOINT = `${process.env.NEXT_PUBLIC_BG_BACKEND}/builders`;
 
-async function importLocationAndSocials() {
+async function importData() {
   try {
     console.log("==== Importing Location and Socials ====");
     console.log("Fetching data from BG firebase...");
@@ -75,4 +75,4 @@ async function importLocationAndSocials() {
   }
 }
 
-importLocationAndSocials();
+importData();
