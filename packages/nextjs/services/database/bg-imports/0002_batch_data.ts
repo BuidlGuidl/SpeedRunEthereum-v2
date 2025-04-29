@@ -18,11 +18,14 @@ async function importData() {
 
     const batchesResponse = await fetch(BG_BATCHES_ENDPOINT);
     const batchesData: BgBatch[] = await batchesResponse.json();
+    const batchesDataSortedByStartDate = batchesData.sort((a, b) => a.startDate - b.startDate);
 
     const usersResponse = await fetch(BG_USERS_WITH_BATCHES_ENDPOINT);
     const usersData: BgBatchUser[] = await usersResponse.json();
 
-    console.log(`Found ${batchesData.length} batches and ${usersData.length} users belonging to a batch`);
+    console.log(
+      `Found ${batchesDataSortedByStartDate.length} batches and ${usersData.length} users belonging to a batch`,
+    );
 
     // Save the mapping between Firebase ID and our database ID
     const batchIdMap = new Map<string, number>();
@@ -37,7 +40,7 @@ async function importData() {
     });
 
     // Import batches
-    for (const batch of batchesData) {
+    for (const batch of batchesDataSortedByStartDate) {
       const newBatch = {
         name: `Batch ${batch.name}`,
         startDate: new Date(batch.startDate),
