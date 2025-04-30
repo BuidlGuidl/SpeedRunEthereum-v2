@@ -133,7 +133,6 @@ export default function BatchBuildersPage() {
       },
       {
         header: "User created",
-        // TODO: change to creationTimestamp after imported?
         accessorKey: "createdAt",
         cell: info => {
           return (
