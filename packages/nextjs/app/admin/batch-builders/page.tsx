@@ -71,14 +71,6 @@ export default function BatchBuildersPage() {
           return <Address address={row.userAddress} />;
         },
       },
-      // TODO: Add status column
-      // {
-      //   header: "Status",
-      // },
-      // TODO: Add builds column
-      // {
-      //   header: "Builds",
-      // },
       {
         header: "Batch",
         size: 200,
