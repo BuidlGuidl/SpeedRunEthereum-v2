@@ -405,7 +405,6 @@ export const seedBuilds: (typeof builds.$inferInsert & {
   userAddresses?: { address: string; likedAt: Date }[];
 })[] = [
   {
-    id: "klYxgJVcWOYhyyZ5ceyo",
     name: "DynOS 95",
     desc: "Platform to improve the onboarding experience to web3, providing a friendly environment where users can connect to any DApps with email and social accounts, powered by Dynamic and ERC4337 Account Abstraction. ETHGlobal London 2024 Hackathon finalist.",
     buildType: BuildType.DAPP,
