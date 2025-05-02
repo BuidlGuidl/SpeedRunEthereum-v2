@@ -9,6 +9,7 @@ export type ScaffoldConfig = {
 };
 
 export const DEFAULT_ALCHEMY_API_KEY = "oKxs-03sij-U_N0iOlrSsZFr29-IqbuF";
+export const BG_MAINNET_RPC_URL = "https://mainnet.rpc.buidlguidl.com";
 
 const scaffoldConfig = {
   // The networks on which your DApp is live
