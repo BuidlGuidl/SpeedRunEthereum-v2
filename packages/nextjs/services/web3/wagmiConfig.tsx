@@ -22,9 +22,7 @@ export const wagmiConfig = createConfig({
     const alchemyHttpUrl = getAlchemyHttpUrl(chain.id);
     if (alchemyHttpUrl) {
       const isMainnet = chain.id === 1;
-      rpcFallbacks = isMainnet
-        ? [http(BG_MAINNET_RPC_URL), http(alchemyHttpUrl), http()]
-        : [http(alchemyHttpUrl), http()];
+      rpcFallbacks = isMainnet ? [http(BG_MAINNET_RPC_URL), http(alchemyHttpUrl)] : [http(alchemyHttpUrl)];
     }
 
     return createClient({
