@@ -1,7 +1,15 @@
-import { batches, challenges, userChallenges, users } from "./config/schema";
-import { BatchStatus, BatchUserStatus, ChallengeId, ReviewAction, UserRole } from "./config/types";
+import { batches, builds, challenges, userChallenges, users } from "./config/schema";
+import {
+  BatchStatus,
+  BatchUserStatus,
+  BuildCategory,
+  BuildType,
+  ChallengeId,
+  ReviewAction,
+  UserRole,
+} from "./config/types";
 
-export const SEED_DATA_VERSION = "1.1.2";
+export const SEED_DATA_VERSION = "1.1.3";
 
 // Using Drizzle's inferred insert types to ensure seed data
 // matches database schema requirements
@@ -389,5 +397,78 @@ export const seedBatches: (typeof batches.$inferInsert & { userAddresses?: strin
     telegramLink: "https://t.me/joinchat/3",
     contractAddress: "0x0000000000000000000000000000000000000000",
     bgSubdomain: "batch3",
+  },
+];
+
+export const seedBuilds: (typeof builds.$inferInsert & {
+  builderAddresses?: { address: string; isOwner: boolean }[];
+  userAddresses?: { address: string; likedAt: Date }[];
+})[] = [
+  {
+    name: "DynOS 95",
+    desc: "Platform to improve the onboarding experience to web3, providing a friendly environment where users can connect to any DApps with email and social accounts, powered by Dynamic and ERC4337 Account Abstraction. ETHGlobal London 2024 Hackathon finalist.",
+    buildType: BuildType.DAPP,
+    buildCategory: BuildCategory.IDENTITY_REPUTATION,
+    demoUrl: "https://dynos95.vercel.app/",
+    videoUrl: "https://www.youtube.com/watch?v=iBX2zjECesU",
+    imageUrl: "https://storage.googleapis.com/buidlguidl-v3.appspot.com/builds/b651fcb278a4cf392309b1101.png",
+    githubUrl: "https://github.com/carletex/DynOS-95",
+    submittedTimestamp: new Date("2023-05-15"),
+    builderAddresses: [
+      { address: seedUsers?.[0]?.userAddress, isOwner: true },
+      { address: seedUsers?.[1]?.userAddress, isOwner: false },
+      { address: seedUsers?.[2]?.userAddress, isOwner: false },
+      { address: seedUsers?.[3]?.userAddress, isOwner: false },
+    ],
+    userAddresses: [
+      { address: seedUsers?.[2]?.userAddress, likedAt: new Date("2023-05-14") },
+      { address: seedUsers?.[3]?.userAddress, likedAt: new Date("2023-05-14") },
+    ],
+  },
+  {
+    name: "ABI Ninja",
+    desc: "Interact with any contract on Ethereum. Just need the Contract address (if it's verified) or its ABI + Contract address.",
+    buildType: BuildType.DAPP,
+    buildCategory: BuildCategory.DEV_TOOLING,
+    demoUrl: "https://abi.ninja/",
+    videoUrl: null,
+    imageUrl: "https://storage.googleapis.com/buidlguidl-v3.appspot.com/builds/c7329e266108aec34c81a0200.png",
+    githubUrl: "https://github.com/BuidlGuidl/abi.ninja",
+    submittedTimestamp: new Date("2023-06-20"),
+    builderAddresses: [{ address: seedUsers?.[1]?.userAddress, isOwner: true }],
+    userAddresses: [{ address: seedUsers?.[0]?.userAddress, likedAt: new Date("2023-05-16") }],
+  },
+  {
+    name: "ETH Man",
+    desc: "ETH Man reacts to live ETH price using Chainlink oracles! He is happy 🙂 when it's up 📈 and sad 🙁 when it's down 📉 than the previous value. (Dynamic face, colors on chain SVG NFT). 100+ already minted!",
+    buildType: BuildType.DAPP,
+    buildCategory: BuildCategory.NFTS,
+    demoUrl: "https://ethman-sb.surge.sh/",
+    videoUrl: null,
+    imageUrl: "https://storage.googleapis.com/buidlguidl-v3.appspot.com/builds/3c09940f8645e7dfd053b7a00.jpeg",
+    githubUrl: "https://github.com/technophile-04/ethMan",
+    submittedTimestamp: new Date("2023-07-10"),
+    builderAddresses: [
+      { address: seedUsers?.[2]?.userAddress, isOwner: true },
+      { address: seedUsers?.[0]?.userAddress, isOwner: false },
+    ],
+    userAddresses: [{ address: seedUsers?.[1]?.userAddress, likedAt: new Date("2023-05-18") }],
+  },
+  {
+    name: "Smart-Chain",
+    desc: "A basic/minimal supply chain DApp for solving issues in Luxury goods supply chain",
+    buildType: BuildType.DAPP,
+    buildCategory: BuildCategory.RWA_SUPPLY_CHAIN,
+    demoUrl: "https://nextjs-blond-nine-41.vercel.app/",
+    videoUrl: "https://youtu.be/N13b0mEgo3I",
+    imageUrl: "https://storage.googleapis.com/buidlguidl-v3.appspot.com/builds/6c5b8cdbdf678bd7af4b31e01.jpeg",
+    githubUrl: "https://github.com/technophile-04/Spaghetti_Coders_1337_LOC5.0",
+    submittedTimestamp: new Date("2023-08-05"),
+    builderAddresses: [
+      { address: seedUsers?.[3]?.userAddress, isOwner: true },
+      { address: seedUsers?.[0]?.userAddress, isOwner: false },
+      { address: seedUsers?.[1]?.userAddress, isOwner: false },
+    ],
+    userAddresses: [{ address: seedUsers?.[2]?.userAddress, likedAt: new Date("2023-05-20") }],
   },
 ];
