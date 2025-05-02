@@ -13,6 +13,7 @@ import {
   text,
   timestamp,
   uniqueIndex,
+  uuid,
   varchar,
 } from "drizzle-orm/pg-core";
 
@@ -102,10 +103,10 @@ export const userChallenges = pgTable(
 export const builds = pgTable(
   "builds",
   {
-    // Using varchar type for legacy imported IDs, with a default of gen_random_uuid() for auto-generation if not specified
-    id: varchar({ length: 40 })
+    // Legacy Firebase IDs are deterministically converted to UUIDs during import.
+    id: uuid()
       .primaryKey()
-      .default(sql`gen_random_uuid()::text`),
+      .default(sql`gen_random_uuid()`),
     name: varchar({ length: 255 }).notNull(),
     desc: text(),
     buildType: buildTypeEnum(),
@@ -126,7 +127,7 @@ export const builds = pgTable(
 export const buildBuilders = pgTable(
   "build_builders",
   {
-    buildId: varchar({ length: 40 })
+    buildId: uuid()
       .notNull()
       .references(() => builds.id),
     userAddress: varchar({ length: 42 })
@@ -145,7 +146,7 @@ export const buildLikes = pgTable(
   "build_likes",
   {
     id: serial().primaryKey(),
-    buildId: varchar({ length: 40 })
+    buildId: uuid()
       .notNull()
       .references(() => builds.id),
     userAddress: varchar({ length: 42 })
