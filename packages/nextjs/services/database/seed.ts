@@ -1,4 +1,4 @@
-import { batches, challenges, lower, userChallenges, users } from "./config/schema";
+import { batches, buildBuilders, buildLikes, builds, challenges, lower, userChallenges, users } from "./config/schema";
 import * as dotenv from "dotenv";
 import { inArray } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/node-postgres";
@@ -14,6 +14,10 @@ type SeedData = {
   seedChallenges?: (typeof challenges.$inferInsert)[];
   seedUserChallenges?: (typeof userChallenges.$inferInsert)[];
   seedBatches?: (typeof batches.$inferInsert & { userAddresses?: string[] })[];
+  seedBuilds?: (typeof builds.$inferInsert & {
+    builderAddresses?: { address: string; isOwner: boolean }[];
+    likerAddresses?: { address: string; likedAt: Date }[];
+  })[];
 };
 
 async function loadSeedData() {
@@ -42,6 +46,7 @@ async function loadSeedData() {
       seedChallenges: seedData.seedChallenges,
       seedUserChallenges: seedData.seedUserChallenges,
       seedBatches: seedData.seedBatches,
+      seedBuilds: seedData.seedBuilds,
     };
   } catch (error) {
     console.error("Error: cannot load seed data");
@@ -56,7 +61,7 @@ if (connectionUrl.hostname !== "localhost") {
 }
 
 async function seed() {
-  const { seedUsers, seedChallenges, seedUserChallenges, seedBatches } = await loadSeedData();
+  const { seedUsers, seedChallenges, seedUserChallenges, seedBatches, seedBuilds } = await loadSeedData();
 
   if (!seedUsers || !seedChallenges || !seedUserChallenges || !seedBatches) {
     console.error("Error: Required seed data is missing");
@@ -68,7 +73,7 @@ async function seed() {
   });
   await client.connect();
   const db = drizzle(client, {
-    schema: { challenges, userChallenges, users, batches },
+    schema: { challenges, userChallenges, users, batches, builds, buildLikes, buildBuilders },
     casing: "snake_case",
   });
 
@@ -78,6 +83,9 @@ async function seed() {
       console.log("Clearing existing data...");
       await tx.delete(userChallenges).execute();
       await tx.delete(challenges).execute();
+      await tx.delete(buildLikes).execute();
+      await tx.delete(buildBuilders).execute();
+      await tx.delete(builds).execute();
       await tx.delete(users).execute();
       await tx.delete(batches).execute();
     });
@@ -118,6 +126,55 @@ async function seed() {
 
     console.log("Inserting user challenges...");
     await db.insert(userChallenges).values(seedUserChallenges).execute();
+
+    if (seedBuilds) {
+      console.log("Inserting builds...");
+      const buildsToInsert = seedBuilds.map(seedBuild => {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const { builderAddresses, likerAddresses, ...build } = seedBuild;
+        return build;
+      });
+
+      const insertedBuilds = await db.insert(builds).values(buildsToInsert).returning();
+
+      console.log("Inserting build builders...");
+      for (let i = 0; i < insertedBuilds.length; i++) {
+        const seedBuild = seedBuilds[i];
+        const insertedBuild = insertedBuilds[i];
+
+        if (seedBuild.builderAddresses && seedBuild.builderAddresses.length > 0) {
+          for (const builder of seedBuild.builderAddresses) {
+            await db
+              .insert(buildBuilders)
+              .values({
+                buildId: insertedBuild.id,
+                userAddress: builder.address,
+                isOwner: builder.isOwner,
+              })
+              .execute();
+          }
+        }
+      }
+
+      console.log("Inserting build likes...");
+      for (let i = 0; i < insertedBuilds.length; i++) {
+        const seedBuild = seedBuilds[i];
+        const insertedBuild = insertedBuilds[i];
+
+        if (seedBuild.likerAddresses && seedBuild.likerAddresses.length > 0) {
+          for (const liker of seedBuild.likerAddresses) {
+            await db
+              .insert(buildLikes)
+              .values({
+                buildId: insertedBuild.id,
+                userAddress: liker.address,
+                likedAt: liker.likedAt,
+              })
+              .execute();
+          }
+        }
+      }
+    }
 
     console.log("Database seeded successfully");
   } catch (error) {
