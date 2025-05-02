@@ -15,7 +15,7 @@ import { useOutsideClick } from "~~/hooks/scaffold-eth";
 import { useUser } from "~~/hooks/useUser";
 import { getSortedBatches } from "~~/services/api/batches";
 import { getSortedBatchBuilders } from "~~/services/api/users";
-import { BatchStatus, UserRole } from "~~/services/database/config/types";
+import { BatchUserStatus, UserRole } from "~~/services/database/config/types";
 import { BatchBuilder } from "~~/services/database/repositories/users";
 import { getUserSocialsList } from "~~/utils/socials";
 
@@ -82,7 +82,7 @@ export default function BatchBuildersPage() {
             <div className="flex w-full justify-center items-center">
               <div
                 className={`rounded-sm px-2 py-0.5 font-semibold ${
-                  row.batch?.status === BatchStatus.OPEN
+                  row.batchStatus === BatchUserStatus.GRADUATE
                     ? "bg-green-500/30"
                     : "text-yellow-600 dark:text-yellow-400 bg-warning/30"
                 }`}
