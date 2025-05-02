@@ -1,5 +1,5 @@
 {
-  "id": "4736ed79-6f6f-4bff-9edc-f3c4702d9b87",
+  "id": "f0e27f44-592c-490a-9301-66d45de47533",
   "prevId": "676e8941-3c30-45b6-8520-c1769b774532",
   "version": "7",
   "dialect": "postgresql",
@@ -65,7 +65,7 @@
       "columns": {
         "build_id": {
           "name": "build_id",
-          "type": "varchar(40)",
+          "type": "uuid",
           "primaryKey": false,
           "notNull": true
         },
@@ -84,21 +84,6 @@
         }
       },
       "indexes": {
-        "build_builder_build_idx": {
-          "name": "build_builder_build_idx",
-          "columns": [
-            {
-              "expression": "build_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        },
         "build_builder_user_idx": {
           "name": "build_builder_user_idx",
           "columns": [
@@ -169,12 +154,12 @@
         },
         "build_id": {
           "name": "build_id",
-          "type": "varchar(40)",
+          "type": "uuid",
           "primaryKey": false,
           "notNull": true
         },
-        "liker_address": {
-          "name": "liker_address",
+        "user_address": {
+          "name": "user_address",
           "type": "varchar(42)",
           "primaryKey": false,
           "notNull": true
@@ -198,7 +183,7 @@
               "nulls": "last"
             },
             {
-              "expression": "liker_address",
+              "expression": "user_address",
               "isExpression": false,
               "asc": true,
               "nulls": "last"
@@ -224,12 +209,12 @@
           "onDelete": "no action",
           "onUpdate": "no action"
         },
-        "build_likes_liker_address_users_user_address_fk": {
-          "name": "build_likes_liker_address_users_user_address_fk",
+        "build_likes_user_address_users_user_address_fk": {
+          "name": "build_likes_user_address_users_user_address_fk",
           "tableFrom": "build_likes",
           "tableTo": "users",
           "columnsFrom": [
-            "liker_address"
+            "user_address"
           ],
           "columnsTo": [
             "user_address"
@@ -250,10 +235,10 @@
       "columns": {
         "id": {
           "name": "id",
-          "type": "varchar(40)",
+          "type": "uuid",
           "primaryKey": true,
           "notNull": true,
-          "default": "gen_random_uuid()::text"
+          "default": "gen_random_uuid()"
         },
         "name": {
           "name": "name",
@@ -312,21 +297,6 @@
         }
       },
       "indexes": {
-        "build_name_idx": {
-          "name": "build_name_idx",
-          "columns": [
-            {
-              "expression": "name",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        },
         "build_type_idx": {
           "name": "build_type_idx",
           "columns": [
