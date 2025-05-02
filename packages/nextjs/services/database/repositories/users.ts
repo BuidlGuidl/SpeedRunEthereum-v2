@@ -1,8 +1,8 @@
 import { ReviewAction } from "../config/types";
 import { UserRole } from "../config/types";
 import { ColumnSort, SortingState } from "@tanstack/react-table";
-import { InferInsertModel } from "drizzle-orm";
-import { eq, sql } from "drizzle-orm";
+import { InferInsertModel, and, isNotNull } from "drizzle-orm";
+import { eq, ilike, sql } from "drizzle-orm";
 import { db } from "~~/services/database/config/postgresClient";
 import { lower, userChallenges, users } from "~~/services/database/config/schema";
 
@@ -14,6 +14,7 @@ export type UserInsert = InferInsertModel<typeof users>;
 export type UserByAddress = Awaited<ReturnType<typeof getUserByAddress>>;
 export type UserSocials = PickSocials<NonNullable<UserByAddress>>;
 export type UserWithChallengesData = Awaited<ReturnType<typeof getSortedUsersWithChallengesInfo>>["data"][0];
+export type BatchBuilder = Awaited<ReturnType<typeof getSortedBatchBuilders>>["data"][0];
 export type UserLocation = NonNullable<UserByAddress>["location"];
 
 export async function getUserByAddress(address: string) {
@@ -80,6 +81,68 @@ export async function getSortedUsersWithChallengesInfo(start: number, size: numb
     data: preparedUsersData,
     meta: {
       totalRowCount: totalCount,
+    },
+  };
+}
+
+export async function getSortedBatchBuilders({
+  start,
+  size,
+  sorting,
+  filter,
+  batchId,
+}: {
+  start: number;
+  size: number;
+  sorting: SortingState;
+  filter?: string;
+  batchId?: number;
+}) {
+  const sortingQuery = sorting[0] as ColumnSort;
+  const query = db.query.users.findMany({
+    limit: size,
+    offset: start,
+    with: {
+      batch: true,
+    },
+    where: users =>
+      and(
+        isNotNull(users.batchId),
+        filter ? ilike(users.userAddress, `%${filter}%`) : undefined,
+        batchId ? eq(users.batchId, batchId) : undefined,
+      ),
+    orderBy: (users, { desc, asc }) => {
+      if (!sortingQuery) return [];
+
+      const sortOrder = sortingQuery.desc ? desc : asc;
+
+      if (sortingQuery.id === "batch_start") {
+        return sortOrder(sql`(SELECT "start_date" FROM "batches" WHERE "batches"."id" = "users"."batch_id")`);
+      }
+
+      if (sortingQuery.id in users) {
+        return sortOrder(users[sortingQuery.id as keyof typeof users]);
+      }
+
+      return [];
+    },
+  });
+
+  const [buildersData] = await Promise.all([query]);
+
+  const totalRowCount = await db.$count(
+    users,
+    and(
+      isNotNull(users.batchId),
+      filter ? ilike(users.userAddress, `%${filter}%`) : undefined,
+      batchId ? eq(users.batchId, batchId) : undefined,
+    ),
+  );
+
+  return {
+    data: buildersData,
+    meta: {
+      totalRowCount,
     },
   };
 }

@@ -3,7 +3,17 @@ import { UpdateBatchPayload } from "~~/app/api/batches/[batchId]/update/route";
 import { CreateBatchPayload } from "~~/app/api/batches/create/route";
 import { Batch, BatchWithCounts } from "~~/services/database/repositories/batches";
 
-export const getSortedBatches = async (start: number, size: number, sorting: SortingState, filter?: string) => {
+export const getSortedBatches = async ({
+  start,
+  size,
+  sorting,
+  filter,
+}: {
+  start: number;
+  size: number;
+  sorting: SortingState;
+  filter?: string;
+}) => {
   const response = await fetch(
     `/api/batches/sorted?start=${start}&size=${size}&sorting=${JSON.stringify(sorting)}&filter=${filter || ""}`,
   );
