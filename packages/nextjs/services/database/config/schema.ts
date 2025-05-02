@@ -117,11 +117,7 @@ export const builds = pgTable(
     githubUrl: varchar({ length: 255 }),
     submittedTimestamp: timestamp().notNull().defaultNow(),
   },
-  table => [
-    index("build_name_idx").on(table.name),
-    index("build_type_idx").on(table.buildType),
-    index("build_category_idx").on(table.buildCategory),
-  ],
+  table => [index("build_type_idx").on(table.buildType), index("build_category_idx").on(table.buildCategory)],
 );
 
 export const buildBuilders = pgTable(
@@ -137,7 +133,6 @@ export const buildBuilders = pgTable(
   },
   table => [
     primaryKey({ columns: [table.buildId, table.userAddress] }),
-    index("build_builder_build_idx").on(table.buildId),
     index("build_builder_user_idx").on(table.userAddress),
   ],
 );
