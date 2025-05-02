@@ -182,9 +182,9 @@ export default function BatchesPage() {
 
   return (
     <div className="mx-4 text-center">
-      <div className="text-base mt-4 font-medium">Total batches: {batches?.meta.totalRowCount ?? "Loading..."}</div>
+      <div className="text-base mt-8 font-medium">Total batches: {batches?.meta.totalRowCount ?? "Loading..."}</div>
 
-      <div className="flex items-center justify-center max-w-md mt-4 mx-auto gap-2">
+      <div className="flex items-center justify-center max-w-md mt-4 mb-8 mx-auto gap-2">
         <InputBase
           name="filter"
           value={filter}

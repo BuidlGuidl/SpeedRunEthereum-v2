@@ -146,7 +146,7 @@ export default function BatchBuildersPage() {
 
   return (
     <div className="mx-4 text-center">
-      <div className="text-base mt-4 font-medium flex justify-center gap-1">
+      <div className="text-base mt-8 font-medium flex justify-center gap-1">
         <span>Total Builders:</span>
         {isLoading ? (
           <span className="loading loading-spinner loading-xs"></span>
@@ -154,7 +154,7 @@ export default function BatchBuildersPage() {
           <span>{builders?.meta.totalRowCount ?? 0}</span>
         )}
       </div>
-      <div className="flex items-center justify-center max-w-md mt-4 mx-auto gap-2">
+      <div className="flex items-center justify-center max-w-md mt-4 mx-auto gap-2 mb-8">
         <InputBase
           name="filter"
           value={filter}
