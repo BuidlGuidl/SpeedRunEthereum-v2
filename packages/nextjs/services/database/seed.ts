@@ -167,7 +167,7 @@ async function seed() {
               .insert(buildLikes)
               .values({
                 buildId: insertedBuild.id,
-                likerAddress: liker.address,
+                userAddress: liker.address,
                 likedAt: liker.likedAt,
               })
               .execute();

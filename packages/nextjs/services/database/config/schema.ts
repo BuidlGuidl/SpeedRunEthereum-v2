@@ -148,12 +148,12 @@ export const buildLikes = pgTable(
     buildId: varchar({ length: 40 })
       .notNull()
       .references(() => builds.id),
-    likerAddress: varchar({ length: 42 })
+    userAddress: varchar({ length: 42 })
       .notNull()
       .references(() => users.userAddress),
     likedAt: timestamp().notNull().defaultNow(),
   },
-  table => [uniqueIndex("build_like_unique_idx").on(table.buildId, table.likerAddress)],
+  table => [uniqueIndex("build_like_unique_idx").on(table.buildId, table.userAddress)],
 );
 
 export const usersRelations = relations(users, ({ many, one }) => ({
@@ -196,7 +196,7 @@ export const buildLikesRelations = relations(buildLikes, ({ one }) => ({
     references: [builds.id],
   }),
   liker: one(users, {
-    fields: [buildLikes.likerAddress],
+    fields: [buildLikes.userAddress],
     references: [users.userAddress],
   }),
 }));
