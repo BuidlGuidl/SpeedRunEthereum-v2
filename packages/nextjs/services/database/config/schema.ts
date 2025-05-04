@@ -72,7 +72,8 @@ export const batches = pgTable("batches", {
   startDate: timestamp().notNull(),
   status: batchStatusEnum().notNull(),
   contractAddress: varchar({ length: 42 }),
-  telegramLink: varchar({ length: 255 }),
+  telegramLink: varchar({ length: 255 }).notNull(),
+  bgSubdomain: varchar({ length: 255 }).notNull(),
 });
 
 export const userChallenges = pgTable(
