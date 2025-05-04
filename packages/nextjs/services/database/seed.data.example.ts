@@ -9,7 +9,7 @@ import {
   UserRole,
 } from "./config/types";
 
-export const SEED_DATA_VERSION = "1.1.2";
+export const SEED_DATA_VERSION = "1.1.3";
 
 // Using Drizzle's inferred insert types to ensure seed data
 // matches database schema requirements
@@ -402,10 +402,9 @@ export const seedBatches: (typeof batches.$inferInsert & { userAddresses?: strin
 
 export const seedBuilds: (typeof builds.$inferInsert & {
   builderAddresses?: { address: string; isOwner: boolean }[];
-  likerAddresses?: { address: string; likedAt: Date }[];
+  userAddresses?: { address: string; likedAt: Date }[];
 })[] = [
   {
-    id: "klYxgJVcWOYhyyZ5ceyo",
     name: "DynOS 95",
     desc: "Platform to improve the onboarding experience to web3, providing a friendly environment where users can connect to any DApps with email and social accounts, powered by Dynamic and ERC4337 Account Abstraction. ETHGlobal London 2024 Hackathon finalist.",
     buildType: BuildType.DAPP,
@@ -421,7 +420,7 @@ export const seedBuilds: (typeof builds.$inferInsert & {
       { address: seedUsers?.[2]?.userAddress, isOwner: false },
       { address: seedUsers?.[3]?.userAddress, isOwner: false },
     ],
-    likerAddresses: [
+    userAddresses: [
       { address: seedUsers?.[2]?.userAddress, likedAt: new Date("2023-05-14") },
       { address: seedUsers?.[3]?.userAddress, likedAt: new Date("2023-05-14") },
     ],
@@ -437,7 +436,7 @@ export const seedBuilds: (typeof builds.$inferInsert & {
     githubUrl: "https://github.com/BuidlGuidl/abi.ninja",
     submittedTimestamp: new Date("2023-06-20"),
     builderAddresses: [{ address: seedUsers?.[1]?.userAddress, isOwner: true }],
-    likerAddresses: [{ address: seedUsers?.[0]?.userAddress, likedAt: new Date("2023-05-16") }],
+    userAddresses: [{ address: seedUsers?.[0]?.userAddress, likedAt: new Date("2023-05-16") }],
   },
   {
     name: "ETH Man",
@@ -453,7 +452,7 @@ export const seedBuilds: (typeof builds.$inferInsert & {
       { address: seedUsers?.[2]?.userAddress, isOwner: true },
       { address: seedUsers?.[0]?.userAddress, isOwner: false },
     ],
-    likerAddresses: [{ address: seedUsers?.[1]?.userAddress, likedAt: new Date("2023-05-18") }],
+    userAddresses: [{ address: seedUsers?.[1]?.userAddress, likedAt: new Date("2023-05-18") }],
   },
   {
     name: "Smart-Chain",
@@ -470,6 +469,6 @@ export const seedBuilds: (typeof builds.$inferInsert & {
       { address: seedUsers?.[0]?.userAddress, isOwner: false },
       { address: seedUsers?.[1]?.userAddress, isOwner: false },
     ],
-    likerAddresses: [{ address: seedUsers?.[2]?.userAddress, likedAt: new Date("2023-05-20") }],
+    userAddresses: [{ address: seedUsers?.[2]?.userAddress, likedAt: new Date("2023-05-20") }],
   },
 ];

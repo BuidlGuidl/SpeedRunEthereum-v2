@@ -13,6 +13,7 @@ import {
   text,
   timestamp,
   uniqueIndex,
+  uuid,
   varchar,
 } from "drizzle-orm/pg-core";
 
@@ -102,10 +103,10 @@ export const userChallenges = pgTable(
 export const builds = pgTable(
   "builds",
   {
-    // Using text type for legacy imported IDs, with a default of gen_random_uuid() for auto-generation if not specified
-    id: text("id")
+    // Legacy Firebase IDs are deterministically converted to UUIDs during import.
+    id: uuid()
       .primaryKey()
-      .default(sql`gen_random_uuid()::text`),
+      .default(sql`gen_random_uuid()`),
     name: varchar({ length: 255 }).notNull(),
     desc: text(),
     buildType: buildTypeEnum(),
@@ -116,17 +117,13 @@ export const builds = pgTable(
     githubUrl: varchar({ length: 255 }),
     submittedTimestamp: timestamp().notNull().defaultNow(),
   },
-  table => [
-    index("build_name_idx").on(table.name),
-    index("build_type_idx").on(table.buildType),
-    index("build_category_idx").on(table.buildCategory),
-  ],
+  table => [index("build_type_idx").on(table.buildType), index("build_category_idx").on(table.buildCategory)],
 );
 
 export const buildBuilders = pgTable(
   "build_builders",
   {
-    buildId: text()
+    buildId: uuid()
       .notNull()
       .references(() => builds.id),
     userAddress: varchar({ length: 42 })
@@ -136,7 +133,6 @@ export const buildBuilders = pgTable(
   },
   table => [
     primaryKey({ columns: [table.buildId, table.userAddress] }),
-    index("build_builder_build_idx").on(table.buildId),
     index("build_builder_user_idx").on(table.userAddress),
   ],
 );
@@ -145,15 +141,15 @@ export const buildLikes = pgTable(
   "build_likes",
   {
     id: serial().primaryKey(),
-    buildId: text()
+    buildId: uuid()
       .notNull()
       .references(() => builds.id),
-    likerAddress: varchar({ length: 42 })
+    userAddress: varchar({ length: 42 })
       .notNull()
       .references(() => users.userAddress),
     likedAt: timestamp().notNull().defaultNow(),
   },
-  table => [uniqueIndex("build_like_unique_idx").on(table.buildId, table.likerAddress)],
+  table => [uniqueIndex("build_like_unique_idx").on(table.buildId, table.userAddress)],
 );
 
 export const usersRelations = relations(users, ({ many, one }) => ({
@@ -196,7 +192,7 @@ export const buildLikesRelations = relations(buildLikes, ({ one }) => ({
     references: [builds.id],
   }),
   liker: one(users, {
-    fields: [buildLikes.likerAddress],
+    fields: [buildLikes.userAddress],
     references: [users.userAddress],
   }),
 }));
