@@ -1,11 +1,16 @@
+"use client";
+
 import { UserLocation } from "./UserLocation";
 import { UserSocials } from "./UserSocials";
 import { UpdateUserModal } from "~~/app/_components/UpdateUserModal";
 import { PunkBlockie } from "~~/components/PunkBlockie";
 import { Address } from "~~/components/scaffold-eth/Address/Address";
+import { useAuthSession } from "~~/hooks/useAuthSession";
 import { UserByAddress } from "~~/services/database/repositories/users";
 
 export const UserProfileCard = ({ user, address }: { user: NonNullable<UserByAddress>; address: string }) => {
+  const { isAdmin } = useAuthSession();
+
   return (
     <div className="bg-base-100 rounded-xl p-6 shadow-lg">
       <div className="flex flex-col md:flex-row justify-around lg:flex-col items-center gap-4">
@@ -14,7 +19,7 @@ export const UserProfileCard = ({ user, address }: { user: NonNullable<UserByAdd
           <div className="text-neutral">
             <Address address={address} hideAvatar size="xl" />
           </div>
-          <UpdateUserModal user={user} />
+          {isAdmin && <UpdateUserModal user={user} />}
           <hr className="w-full border-base-200 mb-2" />
           <UserLocation user={user} />
           <UserSocials user={user} />
