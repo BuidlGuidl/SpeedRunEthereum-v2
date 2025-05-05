@@ -2,7 +2,6 @@
 
 // @refresh reset
 import { useEffect } from "react";
-import { useRouter } from "next/navigation";
 import { AddressInfoDropdown } from "./AddressInfoDropdown";
 import { AddressQRCodeModal } from "./AddressQRCodeModal";
 import { WrongNetworkDropdown } from "./WrongNetworkDropdown";
@@ -25,14 +24,7 @@ export const RainbowKitCustomConnectButton = () => {
   const { address: connectedAddress } = useAccount();
   const { data: user, isLoading: isLoadingUser } = useUser(connectedAddress);
   const { disconnect } = useDisconnect();
-  const router = useRouter();
-  const { isAuthenticated, userAddress: sessionUserAddress } = useAuthSession();
-
-  useEffect(() => {
-    if (isAuthenticated) {
-      router.refresh();
-    }
-  }, [router, isAuthenticated]);
+  const { userAddress: sessionUserAddress } = useAuthSession();
 
   useEffect(() => {
     if (sessionUserAddress && connectedAddress && connectedAddress !== sessionUserAddress) {
