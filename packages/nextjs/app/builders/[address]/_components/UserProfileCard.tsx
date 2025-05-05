@@ -1,5 +1,6 @@
 import { UserLocation } from "./UserLocation";
 import { UserSocials } from "./UserSocials";
+import { UpdateUserModal } from "~~/app/_components/UpdateUserModal";
 import { PunkBlockie } from "~~/components/PunkBlockie";
 import { Address } from "~~/components/scaffold-eth/Address/Address";
 import { UserByAddress } from "~~/services/database/repositories/users";
@@ -13,6 +14,7 @@ export const UserProfileCard = ({ user, address }: { user: NonNullable<UserByAdd
           <div className="text-neutral">
             <Address address={address} hideAvatar size="xl" />
           </div>
+          <UpdateUserModal user={user} />
           <hr className="w-full border-base-200 mb-2" />
           <UserLocation user={user} />
           <UserSocials user={user} />
