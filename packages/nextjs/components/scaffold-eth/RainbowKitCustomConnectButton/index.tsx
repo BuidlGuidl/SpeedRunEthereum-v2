@@ -35,7 +35,7 @@ export const RainbowKitCustomConnectButton = () => {
   }, [router, isAuthenticated]);
 
   useEffect(() => {
-    if (sessionUserAddress && connectedAddress !== sessionUserAddress) {
+    if (sessionUserAddress && connectedAddress && connectedAddress !== sessionUserAddress) {
       disconnect();
       signOut({ redirect: true, callbackUrl: "/" });
     }
