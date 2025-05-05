@@ -4,7 +4,6 @@ import { useMemo, useRef, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { ColumnDef } from "@tanstack/react-table";
 import { useDebounceValue } from "usehooks-ts";
-import { useAccount } from "wagmi";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
 import SearchIcon from "~~/app/_assets/icons/SearchIcon";
 import { CopyValueToClipboard } from "~~/components/CopyValueToClipboard";
@@ -13,18 +12,14 @@ import InfiniteTable from "~~/components/InfiniteTable";
 import { Address, InputBase } from "~~/components/scaffold-eth";
 import { useOutsideClick } from "~~/hooks/scaffold-eth";
 import { useBatchList } from "~~/hooks/useBatchList";
-import { useUser } from "~~/hooks/useUser";
 import { getSortedBatchBuilders } from "~~/services/api/users";
-import { BatchUserStatus, UserRole } from "~~/services/database/config/types";
+import { BatchUserStatus } from "~~/services/database/config/types";
 import { BatchBuilder } from "~~/services/database/repositories/users";
 import { getUserSocialsList } from "~~/utils/socials";
 
 const ALL_BATCHES_TEXT = "All batches";
 
 export default function BatchBuildersPage() {
-  const { address: connectedAddress } = useAccount();
-  const { data: user } = useUser(connectedAddress);
-
   const dropdownRef = useRef<HTMLDetailsElement>(null);
   const { data: builders, isLoading } = useQuery({
     queryKey: ["builders-count"],
@@ -134,11 +129,6 @@ export default function BatchBuildersPage() {
     ],
     [],
   );
-
-  // TODO: update this logic later
-  if (user?.role !== UserRole.ADMIN) {
-    return null;
-  }
 
   return (
     <div className="mx-4 text-center">
