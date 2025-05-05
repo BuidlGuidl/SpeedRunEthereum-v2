@@ -7,6 +7,7 @@ import { AddressInfoDropdown } from "./AddressInfoDropdown";
 import { AddressQRCodeModal } from "./AddressQRCodeModal";
 import { WrongNetworkDropdown } from "./WrongNetworkDropdown";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
+import { signOut } from "next-auth/react";
 import { Address } from "viem";
 import { useAccount, useDisconnect } from "wagmi";
 import { XMarkIcon } from "@heroicons/react/24/outline";
@@ -25,13 +26,20 @@ export const RainbowKitCustomConnectButton = () => {
   const { data: user, isLoading: isLoadingUser } = useUser(connectedAddress);
   const { disconnect } = useDisconnect();
   const router = useRouter();
-  const { isAuthenticated } = useAuthSession();
+  const { isAuthenticated, userAddress: sessionUserAddress } = useAuthSession();
 
   useEffect(() => {
     if (isAuthenticated) {
       router.refresh();
     }
   }, [router, isAuthenticated]);
+
+  useEffect(() => {
+    if (sessionUserAddress && connectedAddress !== sessionUserAddress) {
+      disconnect();
+      signOut({ redirect: true, callbackUrl: "/" });
+    }
+  }, [connectedAddress, sessionUserAddress, disconnect]);
 
   return (
     <ConnectButton.Custom>
