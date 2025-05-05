@@ -1,8 +1,14 @@
-import { NextRequest } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { getSortedBatchesInfo } from "~~/services/database/repositories/batches";
+import { isAdminSession } from "~~/utils/auth";
 
 export async function GET(request: NextRequest) {
   try {
+    const isAdmin = await isAdminSession();
+    if (!isAdmin) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
     const searchParams = request.nextUrl.searchParams;
     const start = parseInt(searchParams.get("start") ?? "0");
     const size = parseInt(searchParams.get("size") ?? "0");

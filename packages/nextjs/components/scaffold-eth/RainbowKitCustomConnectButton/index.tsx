@@ -1,15 +1,18 @@
 "use client";
 
 // @refresh reset
+import { useEffect } from "react";
 import { AddressInfoDropdown } from "./AddressInfoDropdown";
 import { AddressQRCodeModal } from "./AddressQRCodeModal";
 import { WrongNetworkDropdown } from "./WrongNetworkDropdown";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
+import { signOut } from "next-auth/react";
 import { Address } from "viem";
 import { useAccount, useDisconnect } from "wagmi";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import RegisterUser from "~~/app/_components/RegisterUser";
 import { useTargetNetwork } from "~~/hooks/scaffold-eth/useTargetNetwork";
+import { useAuthSession } from "~~/hooks/useAuthSession";
 import { useUser } from "~~/hooks/useUser";
 import { getBlockExplorerAddressLink } from "~~/utils/scaffold-eth";
 
@@ -21,6 +24,14 @@ export const RainbowKitCustomConnectButton = () => {
   const { address: connectedAddress } = useAccount();
   const { data: user, isLoading: isLoadingUser } = useUser(connectedAddress);
   const { disconnect } = useDisconnect();
+  const { userAddress: sessionUserAddress } = useAuthSession();
+
+  useEffect(() => {
+    if (sessionUserAddress && connectedAddress && connectedAddress !== sessionUserAddress) {
+      disconnect();
+      signOut({ redirect: true, callbackUrl: "/" });
+    }
+  }, [connectedAddress, sessionUserAddress, disconnect]);
 
   return (
     <ConnectButton.Custom>
