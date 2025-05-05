@@ -1,10 +1,11 @@
 import { cookies } from "next/headers";
-import { AuthOptions, JWT, Session, User } from "next-auth";
+import { AuthOptions, JWT, Session, User, getServerSession } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { getCsrfToken } from "next-auth/react";
 import { createPublicClient, http } from "viem";
 import { mainnet } from "viem/chains";
 import { type SiweMessage, parseSiweMessage, validateSiweMessage } from "viem/siwe";
+import { UserRole } from "~~/services/database/config/types";
 import { getUserByAddress } from "~~/services/database/repositories/users";
 
 export const publicClient = createPublicClient({
@@ -110,3 +111,17 @@ export const authOptions: AuthOptions = {
     },
   },
 } as const;
+
+export const isAdminSession = async () => {
+  try {
+    const session = await getServerSession(authOptions);
+    if (!session?.user) {
+      return false;
+    }
+
+    return session.user.role === UserRole.ADMIN;
+  } catch (error) {
+    console.error("Error checking if user is admin:", error);
+    return false;
+  }
+};
