@@ -32,6 +32,15 @@ export const getSortedBatches = async ({
   return batchesData;
 };
 
+export async function getBatchNameList() {
+  const response = await fetch("/api/batches/name-list");
+  if (!response.ok) {
+    throw new Error("Failed to fetch batch name list");
+  }
+  const data = await response.json();
+  return data.batches as Pick<NonNullable<Batch>, "id" | "name">[];
+}
+
 export async function createBatch({
   address,
   signature,

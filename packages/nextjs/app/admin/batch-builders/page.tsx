@@ -12,8 +12,8 @@ import { DateWithTooltip } from "~~/components/DateWithTooltip";
 import InfiniteTable from "~~/components/InfiniteTable";
 import { Address, InputBase } from "~~/components/scaffold-eth";
 import { useOutsideClick } from "~~/hooks/scaffold-eth";
+import { useBatchList } from "~~/hooks/useBatchList";
 import { useUser } from "~~/hooks/useUser";
-import { getSortedBatches } from "~~/services/api/batches";
 import { getSortedBatchBuilders } from "~~/services/api/users";
 import { BatchUserStatus, UserRole } from "~~/services/database/config/types";
 import { BatchBuilder } from "~~/services/database/repositories/users";
@@ -31,11 +31,7 @@ export default function BatchBuildersPage() {
     queryFn: () => getSortedBatchBuilders({ start: 0, size: 0, sorting: [] }),
   });
 
-  const { data: batches } = useQuery({
-    queryKey: ["batches-count"],
-    // note: 1000 is to be sure that we have all batches
-    queryFn: () => getSortedBatches({ start: 0, size: 1000, sorting: [] }),
-  });
+  const { data: batches } = useBatchList();
 
   const [filter, setFilter] = useState("");
   const [batchFilter, setBatchFilter] = useState("");
@@ -164,7 +160,7 @@ export default function BatchBuildersPage() {
         />
         <details ref={dropdownRef} className="dropdown">
           <summary className="btn btn-primary h-10 min-h-10">
-            {selectedBatchId ? batches?.data.find(batch => batch.id === selectedBatchId)?.name : ALL_BATCHES_TEXT}
+            {selectedBatchId ? batches?.find(batch => batch.id === selectedBatchId)?.name : ALL_BATCHES_TEXT}
             <ChevronDownIcon className="h-6 w-4" />
           </summary>
           <ul className="dropdown-content menu mt-2 bg-base-100 rounded-box z-20 w-52 p-2 shadow flex-nowrap max-h-64 overflow-y-auto">
@@ -186,9 +182,8 @@ export default function BatchBuildersPage() {
                 </button>
               </li>
             )}
-            {batches?.data
-              .filter(batch => batch.name.toLowerCase().includes(batchFilter.toLowerCase()))
-              .sort((a, b) => new Date(b.startDate).getTime() - new Date(a.startDate).getTime())
+            {batches
+              ?.filter(batch => batch.name.toLowerCase().includes(batchFilter.toLowerCase()))
               .map(batch => (
                 <li key={batch.id}>
                   <button onClick={() => handleBatchSelect(batch.id)} className="w-full text-left">

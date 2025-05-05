@@ -82,6 +82,16 @@ export async function getSortedBatchesInfo(start: number, size: number, sorting:
   };
 }
 
+export async function getBatchNameList() {
+  return await db.query.batches.findMany({
+    columns: {
+      id: true,
+      name: true,
+    },
+    orderBy: (batches, { desc }) => desc(batches.startDate),
+  });
+}
+
 export async function createBatch(batch: BatchInsert) {
   const result = await db.insert(batches).values(batch).returning();
   return result[0];
