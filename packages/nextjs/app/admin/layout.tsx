@@ -1,4 +1,4 @@
-import { redirect } from "next/navigation";
+import { AccessDenied } from "./_components/AccessDenied";
 import { SignIn } from "./_components/SignIn";
 import { getServerSession } from "next-auth";
 import { UserRole } from "~~/services/database/config/types";
@@ -12,7 +12,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
   }
 
   if (session.user.role !== UserRole.ADMIN) {
-    return redirect("/");
+    return <AccessDenied />;
   }
 
   return <>{children}</>;
