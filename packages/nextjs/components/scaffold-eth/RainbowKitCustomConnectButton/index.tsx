@@ -1,6 +1,8 @@
 "use client";
 
 // @refresh reset
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { AddressInfoDropdown } from "./AddressInfoDropdown";
 import { AddressQRCodeModal } from "./AddressQRCodeModal";
 import { WrongNetworkDropdown } from "./WrongNetworkDropdown";
@@ -10,6 +12,7 @@ import { useAccount, useDisconnect } from "wagmi";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import RegisterUser from "~~/app/_components/RegisterUser";
 import { useTargetNetwork } from "~~/hooks/scaffold-eth/useTargetNetwork";
+import { useAuthSession } from "~~/hooks/useAuthSession";
 import { useUser } from "~~/hooks/useUser";
 import { getBlockExplorerAddressLink } from "~~/utils/scaffold-eth";
 
@@ -21,6 +24,14 @@ export const RainbowKitCustomConnectButton = () => {
   const { address: connectedAddress } = useAccount();
   const { data: user, isLoading: isLoadingUser } = useUser(connectedAddress);
   const { disconnect } = useDisconnect();
+  const router = useRouter();
+  const { isAuthenticated } = useAuthSession();
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      router.refresh();
+    }
+  }, [router, isAuthenticated]);
 
   return (
     <ConnectButton.Custom>
