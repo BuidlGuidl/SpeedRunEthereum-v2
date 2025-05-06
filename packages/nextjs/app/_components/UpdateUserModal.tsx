@@ -1,25 +1,20 @@
 "use client";
 
-import { ReactNode, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { useBatchList } from "~~/hooks/useBatchList";
 import { useUpdateUser } from "~~/hooks/useUpdateUser";
 import { BatchUserStatus, UserRole } from "~~/services/database/config/types";
 import { UserByAddress } from "~~/services/database/repositories/users";
 import { notification } from "~~/utils/scaffold-eth";
 
-export const UPDATE_USER_MODAL_ID = "edit-user-modal";
+export const UPDATE_USER_MODAL_ID = "update-user-modal";
 
 type UpdateUserModalProps = {
   user: NonNullable<UserByAddress>;
-  labelClassName?: string;
-  labelContent?: ReactNode;
+  onSuccess?: () => void;
 };
 
-export const UpdateUserModal = ({
-  user,
-  labelClassName = "btn btn-xs btn-outline w-full",
-  labelContent = "Edit Profile",
-}: UpdateUserModalProps) => {
+export const UpdateUserModal = ({ user, onSuccess }: UpdateUserModalProps) => {
   const modalRef = useRef<HTMLInputElement>(null);
   const [formValues, setFormValues] = useState({
     role: user.role,
@@ -32,6 +27,7 @@ export const UpdateUserModal = ({
       if (modalRef.current) {
         modalRef.current.checked = false;
       }
+      onSuccess?.();
     },
   });
 
@@ -53,10 +49,6 @@ export const UpdateUserModal = ({
 
   return (
     <div className="w-full">
-      <label htmlFor={UPDATE_USER_MODAL_ID} className={labelClassName}>
-        {labelContent}
-      </label>
-
       <input ref={modalRef} type="checkbox" id={UPDATE_USER_MODAL_ID} className="modal-toggle" />
       <div className="modal">
         <div className="modal-box relative">
