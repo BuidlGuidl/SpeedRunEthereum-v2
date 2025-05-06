@@ -135,9 +135,7 @@ export const UpdateUserModal = ({ user, onSuccess }: UpdateUserModalProps) => {
             </div>
           </div>
         </div>
-        <label className="modal-backdrop" htmlFor={UPDATE_USER_MODAL_ID}>
-          <button>close</button>
-        </label>
+        <label className="modal-backdrop" htmlFor={UPDATE_USER_MODAL_ID}></label>
       </div>
     </div>
   );

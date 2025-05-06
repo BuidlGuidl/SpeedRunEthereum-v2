@@ -214,9 +214,7 @@ export const BatchModalContent = forwardRef<HTMLInputElement, BatchModalContentP
               </button>
             </div>
           </div>
-          <label className="modal-backdrop" htmlFor={modalId}>
-            <button>close</button>
-          </label>
+          <label className="modal-backdrop" htmlFor={modalId}></label>
         </div>
       </div>
     );
