@@ -51,14 +51,15 @@ export const UpdateUserModal = ({ user, onSuccess }: UpdateUserModalProps) => {
     <div className="w-full">
       <input ref={modalRef} type="checkbox" id={UPDATE_USER_MODAL_ID} className="modal-toggle" />
       <div className="modal">
-        <div className="modal-box relative">
-          <input className="h-0 w-0 absolute top-0 left-0" />
-          <h3 className="text-xl font-bold mb-3 text-center">Edit User</h3>
-          <label htmlFor={UPDATE_USER_MODAL_ID} className="btn btn-ghost btn-sm btn-circle absolute right-3 top-3">
-            ✕
-          </label>
+        <div className="modal-box relative space-y-3">
+          <div className="bg-secondary -mx-6 -mt-6 px-6 py-4 rounded-t-xl flex items-center justify-between">
+            <h3 className="text-xl font-semibold m-0">Edit User</h3>
+            <label htmlFor={UPDATE_USER_MODAL_ID} className="btn btn-sm btn-circle btn-ghost text-xl h-auto">
+              ✕
+            </label>
+          </div>
 
-          <div className="flex flex-col gap-6">
+          <div className="flex flex-col gap-5">
             <div className="form-control w-full">
               <label className="label">
                 <span className="label-text font-medium">
@@ -128,8 +129,8 @@ export const UpdateUserModal = ({ user, onSuccess }: UpdateUserModalProps) => {
               </select>
             </div>
 
-            <div className="mt-6" onClick={handleUpdate}>
-              <button className="btn btn-primary w-full" disabled={isPending}>
+            <div className="mt-6 flex justify-end" onClick={handleUpdate}>
+              <button className="btn btn-primary" disabled={isPending}>
                 {isPending ? "Updating..." : "Update"}
               </button>
             </div>

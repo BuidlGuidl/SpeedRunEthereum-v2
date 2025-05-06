@@ -100,15 +100,15 @@ export const BatchModalContent = forwardRef<HTMLInputElement, BatchModalContentP
       <div>
         <input ref={ref} type="checkbox" id={modalId} className="modal-toggle" />
         <div className="modal">
-          <div className="modal-box relative">
-            {/* dummy input to capture event onclick on modal box */}
-            <input className="h-0 w-0 absolute top-0 left-0" />
-            <h3 className="text-xl font-bold mb-3">{title}</h3>
-            <label htmlFor={modalId} className="btn btn-ghost btn-sm btn-circle absolute right-3 top-3">
-              ✕
-            </label>
+          <div className="modal-box relative space-y-3">
+            <div className="bg-secondary -mx-6 -mt-6 px-6 py-4 rounded-t-xl flex items-center justify-between">
+              <h3 className="text-xl font-semibold m-0">{title}</h3>
+              <label htmlFor={modalId} className="btn btn-sm btn-circle btn-ghost text-xl h-auto">
+                ✕
+              </label>
+            </div>
 
-            <div className="flex flex-col gap-6">
+            <div className="flex flex-col gap-5">
               <div className="form-control w-full">
                 <label className="label">
                   <span className="label-text font-medium">
@@ -208,8 +208,8 @@ export const BatchModalContent = forwardRef<HTMLInputElement, BatchModalContentP
               </div>
             </div>
 
-            <div className="mt-6" onClick={handleUpdateBatch}>
-              <button className="btn btn-primary w-full" disabled={isPending}>
+            <div className="flex justify-end mt-6" onClick={handleUpdateBatch}>
+              <button className="btn btn-primary" disabled={isPending}>
                 {buttonText}
               </button>
             </div>
