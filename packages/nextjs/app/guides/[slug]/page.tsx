@@ -2,8 +2,6 @@ import { notFound } from "next/navigation";
 import { getAllGuidesSlugs, getGuideBySlug } from "~~/services/guides";
 import { getMetadata } from "~~/utils/scaffold-eth/getMetadata";
 
-// ToDo: Metadata
-
 export async function generateStaticParams() {
   const slugs = await getAllGuidesSlugs();
 
