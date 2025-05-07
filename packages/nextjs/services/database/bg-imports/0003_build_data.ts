@@ -9,24 +9,32 @@ import * as path from "path";
 // @ts-ignore: No type definitions for 'uuid'
 import { v5 as uuidv5 } from "uuid";
 
+const categorizationPath = path.join(__dirname, "aux_builds_categorization.csv");
+
+// Check if the categorization file exists before proceeding
+if (!fs.existsSync(categorizationPath)) {
+  console.warn(
+    `ERROR: aux_builds_categorization.csv not found at ${categorizationPath}.\n` +
+      `This file is required for the import process. Exiting without importing any data.`,
+  );
+  process.exit(1);
+}
+
+const categorizationRows: Record<string, { type?: string; category?: string }> = {};
+csvParse(fs.readFileSync(categorizationPath, "utf-8"), {
+  columns: true,
+  delimiter: ",",
+  relax_column_count: true,
+}).forEach(function (row: { ID: string; TYPE?: string; CATEGORY?: string }) {
+  categorizationRows[row.ID] = { type: row.TYPE, category: row.CATEGORY };
+});
+
 dotenv.config({ path: path.resolve(__dirname, "../../../.env.development") });
 
 const BG_BUILDS_ENDPOINT = `${process.env.NEXT_PUBLIC_BG_BACKEND}/builds`;
 
 // RANDOM UUID to server as a base. It's safe for this to be public
 const FIREBASE_TO_UUID_NAMESPACE = "ddeb27fb-d9a0-4624-be4d-4615062daed4";
-
-const categorizationPath = path.join(__dirname, "aux_builds_categorization.csv");
-const categorizationRows: Record<string, { type?: string; category?: string }> = {};
-if (fs.existsSync(categorizationPath)) {
-  csvParse(fs.readFileSync(categorizationPath, "utf-8"), {
-    columns: true,
-    delimiter: ",",
-    relax_column_count: true,
-  }).forEach(function (row: { ID: string; TYPE?: string; CATEGORY?: string }) {
-    categorizationRows[row.ID] = { type: row.TYPE, category: row.CATEGORY };
-  });
-}
 
 // Normalize build types from API and CSV file
 const TYPE_MAPPER: Record<string, BuildType> = {
