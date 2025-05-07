@@ -41,7 +41,7 @@ export async function fetchBatchNameList() {
   return data.batches as Pick<NonNullable<Batch>, "id" | "name">[];
 }
 
-export async function createBatch({
+export async function fetchCreateBatch({
   address,
   signature,
   name,
@@ -68,7 +68,7 @@ export async function createBatch({
   return data.batch as Batch;
 }
 
-export async function updateBatch(
+export async function fetchUpdateBatch(
   batchId: string,
   { address, signature, name, startDate, status, contractAddress, telegramLink, bgSubdomain }: UpdateBatchPayload,
 ) {
