@@ -7,7 +7,7 @@ import { batches, lower, users } from "~~/services/database/config/schema";
 
 export type BatchInsert = InferInsertModel<typeof batches>;
 export type Batch = Awaited<ReturnType<typeof getBatchById>>;
-export type BatchWithCounts = Awaited<ReturnType<typeof getSortedBatchesInfo>>["data"][0];
+export type BatchWithCounts = Awaited<ReturnType<typeof getSortedBatches>>["data"][0];
 
 export async function getBatchById(id: number) {
   return await db.query.batches.findFirst({
@@ -21,7 +21,7 @@ export async function getBatchByBgSubdomain(bgSubdomain: string) {
   });
 }
 
-export async function getSortedBatchesInfo(start: number, size: number, sorting: SortingState, filter?: string) {
+export async function getSortedBatches(start: number, size: number, sorting: SortingState, filter?: string) {
   const sortingQuery = sorting[0] as ColumnSort;
 
   const query = db.query.batches.findMany({

@@ -15,7 +15,7 @@ import WebsiteIcon from "~~/app/_assets/icons/WebsiteIcon";
 import { DateWithTooltip } from "~~/components/DateWithTooltip";
 import InfiniteTable from "~~/components/InfiniteTable";
 import { InputBase } from "~~/components/scaffold-eth";
-import { getSortedBatches } from "~~/services/api/batches";
+import { fetchSortedBatches } from "~~/services/api/batches";
 import { BatchStatus } from "~~/services/database/config/types";
 import { BatchWithCounts } from "~~/services/database/repositories/batches";
 
@@ -31,7 +31,7 @@ export default function BatchesPage() {
 
   const { data: batches } = useQuery({
     queryKey: ["batches-count", batchesUpdatesCount],
-    queryFn: () => getSortedBatches({ start: 0, size: 0, sorting: [] }),
+    queryFn: () => fetchSortedBatches({ start: 0, size: 0, sorting: [] }),
   });
 
   const tableQueryKey = useMemo(
@@ -190,7 +190,7 @@ export default function BatchesPage() {
       <InfiniteTable<BatchWithCounts>
         columns={columns}
         queryKey={tableQueryKey}
-        queryFn={({ start, size, sorting }) => getSortedBatches({ start, size, sorting, filter: debouncedFilter })}
+        queryFn={({ start, size, sorting }) => fetchSortedBatches({ start, size, sorting, filter: debouncedFilter })}
         initialSorting={tableInitialSorting}
       />
 

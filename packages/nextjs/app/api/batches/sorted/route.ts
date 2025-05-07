@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getSortedBatchesInfo } from "~~/services/database/repositories/batches";
+import { getSortedBatches } from "~~/services/database/repositories/batches";
 import { isAdminSession } from "~~/utils/auth";
 
 export async function GET(request: NextRequest) {
@@ -14,7 +14,7 @@ export async function GET(request: NextRequest) {
     const size = parseInt(searchParams.get("size") ?? "0");
     const sorting = JSON.parse(searchParams.get("sorting") ?? "[]");
     const filter = searchParams.get("filter");
-    const data = await getSortedBatchesInfo(start, size, sorting, filter || "");
+    const data = await getSortedBatches(start, size, sorting, filter || "");
 
     return Response.json(data);
   } catch (error) {

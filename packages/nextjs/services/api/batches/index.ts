@@ -3,7 +3,7 @@ import { UpdateBatchPayload } from "~~/app/api/batches/[batchId]/update/route";
 import { CreateBatchPayload } from "~~/app/api/batches/create/route";
 import { Batch, BatchWithCounts } from "~~/services/database/repositories/batches";
 
-export const getSortedBatches = async ({
+export const fetchSortedBatches = async ({
   start,
   size,
   sorting,
