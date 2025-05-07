@@ -48,3 +48,18 @@ export type BGBuilder = {
   };
   [key: string]: any;
 };
+
+export type BGBuild = {
+  id: string;
+  name: string;
+  desc?: string;
+  demoUrl?: string;
+  videoUrl?: string;
+  image?: string;
+  branch?: string;
+  type?: string;
+  submittedTimestamp?: number;
+  builder: string;
+  coBuilders?: string[];
+  likes?: string[];
+};
