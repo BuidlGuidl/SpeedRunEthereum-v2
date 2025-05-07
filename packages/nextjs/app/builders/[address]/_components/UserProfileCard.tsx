@@ -2,6 +2,7 @@
 
 import { UserLocation } from "./UserLocation";
 import { UserSocials } from "./UserSocials";
+import EditIcon from "~~/app/_assets/icons/EditIcon";
 import { UPDATE_USER_MODAL_ID, UpdateUserModal } from "~~/app/_components/UpdateUserModal";
 import { PunkBlockie } from "~~/components/PunkBlockie";
 import { Address } from "~~/components/scaffold-eth/Address/Address";
@@ -22,6 +23,7 @@ export const UserProfileCard = ({ user, address }: { user: NonNullable<UserByAdd
           {isAdmin && (
             <>
               <label htmlFor={UPDATE_USER_MODAL_ID} className="btn btn-xs btn-outline w-full">
+                <EditIcon className="w-3.5 h-3.5" />
                 Edit Profile
               </label>
               <UpdateUserModal user={user} />
