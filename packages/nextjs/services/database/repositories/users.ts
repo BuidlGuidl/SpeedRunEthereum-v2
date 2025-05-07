@@ -1,5 +1,4 @@
-import { ReviewAction } from "../config/types";
-import { UserRole } from "../config/types";
+import { BatchUserStatus, ReviewAction, UserRole } from "../config/types";
 import { ColumnSort, SortingState } from "@tanstack/react-table";
 import { InferInsertModel, and, isNotNull } from "drizzle-orm";
 import { eq, ilike, sql } from "drizzle-orm";
@@ -202,4 +201,24 @@ export async function updateUserRoleToBuilder(userAddress: string) {
 export async function isUserAdmin(userAddress: string): Promise<boolean> {
   const user = await getUserByAddress(userAddress);
   return user?.role === UserRole.ADMIN;
+}
+
+export async function updateUser(
+  userAddress: string,
+  data: {
+    role?: UserRole;
+    batchId?: number;
+    batchStatus?: BatchUserStatus;
+  },
+) {
+  const result = await db
+    .update(users)
+    .set({
+      ...data,
+      updatedAt: new Date(),
+    })
+    .where(eq(lower(users.userAddress), userAddress.toLowerCase()))
+    .returning();
+
+  return result[0];
 }

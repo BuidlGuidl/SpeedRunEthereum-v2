@@ -2,16 +2,18 @@
 
 import { useMemo, useRef, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { ColumnDef } from "@tanstack/react-table";
+import { CellContext, ColumnDef } from "@tanstack/react-table";
 import { useDebounceValue } from "usehooks-ts";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
+import EditIcon from "~~/app/_assets/icons/EditIcon";
 import SearchIcon from "~~/app/_assets/icons/SearchIcon";
+import { UPDATE_USER_MODAL_ID, UpdateUserModal } from "~~/app/_components/UpdateUserModal";
 import { CopyValueToClipboard } from "~~/components/CopyValueToClipboard";
 import { DateWithTooltip } from "~~/components/DateWithTooltip";
 import InfiniteTable from "~~/components/InfiniteTable";
 import { Address, InputBase } from "~~/components/scaffold-eth";
 import { useOutsideClick } from "~~/hooks/scaffold-eth";
-import { getSortedBatches } from "~~/services/api/batches";
+import { useBatchList } from "~~/hooks/useBatchList";
 import { getSortedBatchBuilders } from "~~/services/api/users";
 import { BatchUserStatus } from "~~/services/database/config/types";
 import { BatchBuilder } from "~~/services/database/repositories/users";
@@ -26,15 +28,13 @@ export default function BatchBuildersPage() {
     queryFn: () => getSortedBatchBuilders({ start: 0, size: 0, sorting: [] }),
   });
 
-  const { data: batches } = useQuery({
-    queryKey: ["batches-count"],
-    // note: 1000 is to be sure that we have all batches
-    queryFn: () => getSortedBatches({ start: 0, size: 1000, sorting: [] }),
-  });
+  const { data: batches } = useBatchList();
 
   const [filter, setFilter] = useState("");
   const [batchFilter, setBatchFilter] = useState("");
   const [selectedBatchId, setSelectedBatchId] = useState<number>();
+  const [builderToEdit, setBuilderToEdit] = useState<BatchBuilder>();
+  const [refreshTrigger, setRefreshTrigger] = useState(0);
   const [debouncedFilter] = useDebounceValue(filter, 500);
 
   const closeDropdown = () => {
@@ -49,8 +49,8 @@ export default function BatchBuildersPage() {
   };
 
   const tableQueryKey = useMemo(
-    () => ["batch-builders", debouncedFilter, selectedBatchId],
-    [debouncedFilter, selectedBatchId],
+    () => ["batch-builders", debouncedFilter, selectedBatchId, refreshTrigger],
+    [debouncedFilter, refreshTrigger, selectedBatchId],
   );
 
   const tableInitialSorting = useMemo(() => [{ id: "batch_start", desc: true }], []);
@@ -130,6 +130,24 @@ export default function BatchBuildersPage() {
         },
         size: 200,
       },
+      {
+        header: "Edit",
+        size: 200,
+        cell: (info: CellContext<BatchBuilder, unknown>) => {
+          const builder = info.row.original;
+          return (
+            <div className="flex w-full justify-center">
+              <label
+                htmlFor={UPDATE_USER_MODAL_ID}
+                className="btn btn-ghost btn-sm btn-circle"
+                onClick={() => setBuilderToEdit(builder)}
+              >
+                <EditIcon className="w-4 h-4" />
+              </label>
+            </div>
+          );
+        },
+      },
     ],
     [],
   );
@@ -154,7 +172,7 @@ export default function BatchBuildersPage() {
         />
         <details ref={dropdownRef} className="dropdown">
           <summary className="btn btn-primary h-10 min-h-10">
-            {selectedBatchId ? batches?.data.find(batch => batch.id === selectedBatchId)?.name : ALL_BATCHES_TEXT}
+            {selectedBatchId ? batches?.find(batch => batch.id === selectedBatchId)?.name : ALL_BATCHES_TEXT}
             <ChevronDownIcon className="h-6 w-4" />
           </summary>
           <ul className="dropdown-content menu mt-2 bg-base-100 rounded-box z-20 w-52 p-2 shadow flex-nowrap max-h-64 overflow-y-auto">
@@ -176,9 +194,8 @@ export default function BatchBuildersPage() {
                 </button>
               </li>
             )}
-            {batches?.data
-              .filter(batch => batch.name.toLowerCase().includes(batchFilter.toLowerCase()))
-              .sort((a, b) => new Date(b.startDate).getTime() - new Date(a.startDate).getTime())
+            {batches
+              ?.filter(batch => batch.name.toLowerCase().includes(batchFilter.toLowerCase()))
               .map(batch => (
                 <li key={batch.id}>
                   <button onClick={() => handleBatchSelect(batch.id)} className="w-full text-left">
@@ -189,6 +206,15 @@ export default function BatchBuildersPage() {
           </ul>
         </details>
       </div>
+      {builderToEdit && (
+        <UpdateUserModal
+          user={builderToEdit}
+          onSuccess={() => {
+            setRefreshTrigger(prev => prev + 1);
+            setBuilderToEdit(undefined);
+          }}
+        />
+      )}
       <InfiniteTable<BatchBuilder>
         columns={columns}
         queryKey={tableQueryKey}
