@@ -6,7 +6,6 @@ import { UPDATE_BATCH_MODAL_ID, UpdateBatchModal } from "./_components/UpdateBat
 import { useQuery } from "@tanstack/react-query";
 import { ColumnDef } from "@tanstack/react-table";
 import { useDebounceValue } from "usehooks-ts";
-import { useAccount } from "wagmi";
 import EditIcon from "~~/app/_assets/icons/EditIcon";
 import EthereumIcon from "~~/app/_assets/icons/EthereumIcon";
 import GithubIcon from "~~/app/_assets/icons/GithubIcon";
@@ -16,15 +15,11 @@ import WebsiteIcon from "~~/app/_assets/icons/WebsiteIcon";
 import { DateWithTooltip } from "~~/components/DateWithTooltip";
 import InfiniteTable from "~~/components/InfiniteTable";
 import { InputBase } from "~~/components/scaffold-eth";
-import { useUser } from "~~/hooks/useUser";
 import { getSortedBatches } from "~~/services/api/batches";
-import { BatchStatus, UserRole } from "~~/services/database/config/types";
+import { BatchStatus } from "~~/services/database/config/types";
 import { BatchWithCounts } from "~~/services/database/repositories/batches";
 
 export default function BatchesPage() {
-  const { address: connectedAddress } = useAccount();
-  const { data: user } = useUser(connectedAddress);
-
   const [filter, setFilter] = useState("");
   const [batchesUpdatesCount, setBatchesUpdatesCount] = useState(0);
   const [selectedBatch, setSelectedBatch] = useState<BatchWithCounts | null>(null);
@@ -174,11 +169,6 @@ export default function BatchesPage() {
     ],
     [],
   );
-
-  // TODO: update this logic later
-  if (user?.role !== UserRole.ADMIN) {
-    return null;
-  }
 
   return (
     <div className="mx-4 text-center">

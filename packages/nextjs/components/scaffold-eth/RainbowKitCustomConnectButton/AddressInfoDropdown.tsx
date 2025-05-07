@@ -1,6 +1,7 @@
 import { useRef, useState } from "react";
 import Link from "next/link";
 import { NetworkOptions } from "./NetworkOptions";
+import { signOut } from "next-auth/react";
 import CopyToClipboard from "react-copy-to-clipboard";
 import { Address, getAddress } from "viem";
 import { useDisconnect } from "wagmi";
@@ -116,7 +117,10 @@ export const AddressInfoDropdown = ({
             <button
               className="menu-item text-error btn-sm !rounded-xl flex gap-3 py-3"
               type="button"
-              onClick={() => disconnect()}
+              onClick={() => {
+                disconnect();
+                signOut();
+              }}
             >
               <ArrowLeftEndOnRectangleIcon className="h-6 w-4" /> <span>Disconnect</span>
             </button>
