@@ -129,8 +129,8 @@ export const UpdateUserModal = ({ user, onSuccess }: UpdateUserModalProps) => {
               </select>
             </div>
 
-            <div className="mt-6 flex justify-end" onClick={handleUpdate}>
-              <button className="btn btn-primary" disabled={isPending}>
+            <div className="mt-6 flex justify-end">
+              <button className="btn btn-primary" disabled={isPending} onClick={handleUpdate}>
                 {isPending ? "Updating..." : "Update"}
               </button>
             </div>
