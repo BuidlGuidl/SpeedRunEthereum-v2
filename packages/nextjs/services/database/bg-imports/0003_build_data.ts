@@ -153,31 +153,39 @@ async function importData() {
     }
 
     // Upsert build-builders
-    const builderQueries = transformedBuilds.flatMap(build => {
-      return [getBuilderRow(build.uuid, build.builder, true)]
-        .concat(build.coBuilderAddresses.map(addr => getBuilderRow(build.uuid, addr, false)))
-        .filter(Boolean);
-    });
+    const builderQueries = [];
+    for (const build of transformedBuilds) {
+      // Add the main builder
+      const ownerRow = getBuilderRow(build.uuid, build.builder, true);
+      if (ownerRow) builderQueries.push(ownerRow);
+
+      // Add all co-builders
+      for (const addr of build.coBuilderAddresses) {
+        const coBuilderRow = getBuilderRow(build.uuid, addr, false);
+        if (coBuilderRow) builderQueries.push(coBuilderRow);
+      }
+    }
     await db.executeQueries(builderQueries as any);
     console.log(`✅ Build-builder relationships import complete (${buildRelationshipsImported} relationships created)`);
 
-    // Upsert likes - simplified to match exact addresses only
+    // Upsert likes
     console.log(`Importing build likes...`);
-    const likeQueries = transformedBuilds.flatMap(build => {
-      return (build.likes || [])
-        .map(userAddress => {
-          if (existingBuilders.has(userAddress)) {
-            likesImported++;
-            return db
+    const likeQueries = [];
+    for (const build of transformedBuilds) {
+      for (const userAddress of build.likes || []) {
+        if (existingBuilders.has(userAddress)) {
+          likesImported++;
+          likeQueries.push(
+            db
               .insert(buildLikes)
               .values({ buildId: build.uuid, userAddress, likedAt: new Date() })
-              .onConflictDoNothing();
-          }
+              .onConflictDoNothing(),
+          );
+        } else {
           ignoredBuilders.add(userAddress);
-          return null;
-        })
-        .filter(Boolean);
-    });
+        }
+      }
+    }
     await db.executeQueries(likeQueries as any);
     console.log(`✅ Build likes import complete (${likesImported} likes processed)`);
 
