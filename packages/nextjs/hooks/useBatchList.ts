@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
-import { getBatchNameList } from "~~/services/api/batches";
+import { fetchBatchNameList } from "~~/services/api/batches";
 
 export const useBatchList = () => {
-  return useQuery({ queryKey: ["batches-list"], queryFn: getBatchNameList });
+  return useQuery({ queryKey: ["batches-list"], queryFn: fetchBatchNameList });
 };

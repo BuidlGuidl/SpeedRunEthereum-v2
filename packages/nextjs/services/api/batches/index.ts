@@ -32,7 +32,7 @@ export const getSortedBatches = async ({
   return batchesData;
 };
 
-export async function getBatchNameList() {
+export async function fetchBatchNameList() {
   const response = await fetch("/api/batches/name-list");
   if (!response.ok) {
     throw new Error("Failed to fetch batch name list");
