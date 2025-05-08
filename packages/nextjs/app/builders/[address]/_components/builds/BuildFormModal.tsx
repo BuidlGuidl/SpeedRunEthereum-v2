@@ -16,7 +16,7 @@ export const BuildFormModal = forwardRef<HTMLDialogElement, BuildFormModalProps>
       name: "",
       desc: "",
       buildType: BuildType.DAPP,
-      buildCategory: BuildCategory.DEV_TOOLING,
+      buildCategory: BuildCategory.DEFI,
       demoUrl: "",
       videoUrl: "",
       imageUrl: "",
@@ -62,14 +62,83 @@ export const BuildFormModal = forwardRef<HTMLDialogElement, BuildFormModalProps>
               />
             </div>
           </div>
+          <div className="flex flex-col gap-1.5 w-full">
+            <div className="flex items-base ml-2">
+              <span className="text-sm font-medium mr-2 leading-none">Build Type</span>
+            </div>
+            <select
+              className="select select-bordered bg-base-200 w-full rounded-full h-[2.2rem] min-h-[2.2rem] px-4"
+              value={form.buildType ?? ""}
+              onChange={e => setForm({ ...form, buildType: e.target.value as BuildType })}
+            >
+              {Object.values(BuildType).map(type => (
+                <option key={type} value={type}>
+                  {type}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className="flex flex-col gap-1.5 w-full">
+            <div className="flex items-base ml-2">
+              <span className="text-sm font-medium mr-2 leading-none">Build Category</span>
+            </div>
+            <select
+              className="select select-bordered bg-base-200 w-full rounded-full h-[2.2rem] min-h-[2.2rem] px-4"
+              value={form.buildCategory ?? ""}
+              onChange={e => setForm({ ...form, buildCategory: e.target.value as BuildCategory })}
+            >
+              {Object.values(BuildCategory).map(category => (
+                <option key={category} value={category}>
+                  {category}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className="flex flex-col gap-1.5 w-full">
+            <div className="flex items-base ml-2">
+              <span className="text-sm font-medium mr-2 leading-none">Demo URL</span>
+            </div>
+            <InputBase
+              placeholder="Demo URL"
+              value={form.demoUrl ?? ""}
+              onChange={value => setForm({ ...form, demoUrl: value })}
+            />
+          </div>
+          <div className="flex flex-col gap-1.5 w-full">
+            <div className="flex items-base ml-2">
+              <span className="text-sm font-medium mr-2 leading-none">GitHub URL</span>
+            </div>
+            <InputBase
+              placeholder="GitHub URL"
+              value={form.githubUrl ?? ""}
+              onChange={value => setForm({ ...form, githubUrl: value })}
+            />
+          </div>
+          <div className="flex flex-col gap-1.5 w-full">
+            <div className="flex items-base ml-2">
+              <span className="text-sm font-medium mr-2 leading-none">Video URL</span>
+            </div>
+            <InputBase
+              placeholder="Video URL"
+              value={form.videoUrl ?? ""}
+              onChange={value => setForm({ ...form, videoUrl: value })}
+            />
+          </div>
+          <div className="flex flex-col gap-1.5 w-full">
+            <div className="flex items-base ml-2">
+              <span className="text-sm font-medium mr-2 leading-none">Image URL</span>
+            </div>
+            <InputBase
+              placeholder="Image URL"
+              value={form.imageUrl ?? ""}
+              onChange={value => setForm({ ...form, imageUrl: value })}
+            />
+          </div>
           <div className="modal-action">
             <button className="btn btn-primary self-center">Submit</button>
           </div>
         </div>
       </div>
-      <form method="dialog" className="modal-backdrop">
-        <button onClick={closeModal}>close</button>
-      </form>
     </dialog>
   );
 });
