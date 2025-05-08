@@ -1,8 +1,8 @@
 import { db } from "../config/postgresClient";
-import { buildBuilders } from "../config/schema";
+import { buildBuilders, buildLikes } from "../config/schema";
 import { eq, inArray } from "drizzle-orm";
 
-// Fetch all builds for a given user address, including cobuilders for each build
+// Fetch all builds for a given user address, including cobuilders and likes for each build
 export async function getBuildsByUserAddress(userAddress: string) {
   // Find all buildBuilders for this user
   const builderRows = await db.query.buildBuilders.findMany({
@@ -21,6 +21,11 @@ export async function getBuildsByUserAddress(userAddress: string) {
     where: inArray(buildBuilders.buildId, buildIds),
   });
 
+  // Fetch all likes for these builds
+  const allLikes = await db.query.buildLikes.findMany({
+    where: inArray(buildLikes.buildId, buildIds),
+  });
+
   // Group cobuilders by buildId
   const cobuildersByBuildId = allCobuilders.reduce(
     (acc, builder) => {
@@ -31,9 +36,20 @@ export async function getBuildsByUserAddress(userAddress: string) {
     {} as Record<string, { userAddress: string; isOwner: boolean }[]>,
   );
 
-  // Attach cobuilders to each build
+  // Group likes by buildId
+  const likesByBuildId = allLikes.reduce(
+    (acc, like) => {
+      if (!acc[like.buildId]) acc[like.buildId] = [];
+      acc[like.buildId].push({ userAddress: like.userAddress, likedAt: like.likedAt });
+      return acc;
+    },
+    {} as Record<string, { userAddress: string; likedAt: Date }[]>,
+  );
+
+  // Attach cobuilders and likes to each build
   return buildsList.map(build => ({
     ...build,
     cobuilders: cobuildersByBuildId[build.id] || [],
+    likes: likesByBuildId[build.id] || [],
   }));
 }

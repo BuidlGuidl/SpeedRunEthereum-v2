@@ -95,6 +95,7 @@ export default async function BuilderPage({ params }: { params: { address: strin
                 {builds.map(build => (
                   <div key={build.id} className="bg-base-100 rounded-lg shadow p-6 flex flex-col gap-2">
                     <div className="font-bold text-lg">{build.name}</div>
+                    <div className="text-xs">ID: {build.id}</div>
                     {build.desc && <div>{build.desc}</div>}
                     <div className="text-sm text-neutral-content">Type: {build.buildType}</div>
                     <div className="text-sm text-neutral-content">Category: {build.buildCategory}</div>
@@ -152,6 +153,22 @@ export default async function BuilderPage({ params }: { params: { address: strin
                         </div>
                       </div>
                     )}
+                    {/* Likes */}
+                    <div className="mt-2">
+                      <div className="font-semibold text-xs text-neutral">Likes: {build.likes?.length || 0}</div>
+                      {build.likes && build.likes.length > 0 && (
+                        <div className="flex flex-wrap gap-2 mt-1">
+                          {build.likes.map(like => (
+                            <span
+                              key={like.userAddress}
+                              className="px-2 py-1 rounded text-xs bg-pink-100 text-pink-700"
+                            >
+                              <Address address={like.userAddress} />
+                            </span>
+                          ))}
+                        </div>
+                      )}
+                    </div>
                   </div>
                 ))}
               </div>
