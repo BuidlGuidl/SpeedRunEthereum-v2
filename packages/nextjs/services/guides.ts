@@ -8,6 +8,7 @@ const guidesDirectory = path.join(process.cwd(), "guides");
 type GuideMetadata = {
   title: string;
   description: string;
+  image?: string;
 };
 
 type Guide = GuideMetadata & {
