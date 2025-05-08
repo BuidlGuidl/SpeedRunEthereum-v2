@@ -14,6 +14,7 @@ import RegisterUser from "~~/app/_components/RegisterUser";
 import { useTargetNetwork } from "~~/hooks/scaffold-eth/useTargetNetwork";
 import { useAuthSession } from "~~/hooks/useAuthSession";
 import { useUser } from "~~/hooks/useUser";
+import { UserRole } from "~~/services/database/config/types";
 import { getBlockExplorerAddressLink } from "~~/utils/scaffold-eth";
 
 /**
@@ -25,6 +26,7 @@ export const RainbowKitCustomConnectButton = () => {
   const { data: user, isLoading: isLoadingUser } = useUser(connectedAddress);
   const { disconnect } = useDisconnect();
   const { userAddress: sessionUserAddress } = useAuthSession();
+  const isAdmin = user?.role === UserRole.ADMIN;
 
   useEffect(() => {
     if (sessionUserAddress && connectedAddress && connectedAddress !== sessionUserAddress) {
@@ -73,7 +75,12 @@ export const RainbowKitCustomConnectButton = () => {
         }
 
         return (
-          <>
+          <div className="flex flex-col items-end gap-2 sm:flex-row sm:items-center">
+            {isAdmin && (
+              <div className="flex items-center gap-2">
+                <span className="rounded-full px-3 py-0.5 font-semibold bg-violet-100 text-violet-700">ADMIN</span>
+              </div>
+            )}
             <AddressInfoDropdown
               address={account.address as Address}
               displayName={account.displayName}
@@ -81,7 +88,7 @@ export const RainbowKitCustomConnectButton = () => {
               blockExplorerAddressLink={blockExplorerAddressLink}
             />
             <AddressQRCodeModal address={account.address as Address} modalId="qrcode-modal" />
-          </>
+          </div>
         );
       }}
     </ConnectButton.Custom>
