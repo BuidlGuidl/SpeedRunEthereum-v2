@@ -5,7 +5,9 @@ import { UserProfileCard } from "./_components/UserProfileCard";
 import { Metadata } from "next";
 import { isAddress } from "viem";
 import { RouteRefresher } from "~~/components/RouteRefresher";
+import { Address } from "~~/components/scaffold-eth";
 import { isBgMember } from "~~/services/api-bg/builders";
+import { getBuildsByUserAddress } from "~~/services/database/repositories/builds";
 import { getLatestSubmissionPerChallengeByUser } from "~~/services/database/repositories/userChallenges";
 import { getUserByAddress } from "~~/services/database/repositories/users";
 import { getEnsOrAddress } from "~~/utils/ens-or-address";
@@ -63,6 +65,7 @@ export default async function BuilderPage({ params }: { params: { address: strin
   const challenges = await getLatestSubmissionPerChallengeByUser(userAddress);
   const user = await getUserByAddress(userAddress);
   const bgMemberExists = await isBgMember(userAddress);
+  const builds = await getBuildsByUserAddress(userAddress);
 
   if (!user) {
     notFound();
@@ -84,6 +87,77 @@ export default async function BuilderPage({ params }: { params: { address: strin
             ) : (
               <div className="bg-base-100 p-8 text-center rounded-lg text-neutral">
                 This builder hasn&apos;t completed any challenges.
+              </div>
+            )}
+            <h2 className="text-2xl font-bold mt-10 mb-4 text-neutral">Builds</h2>
+            {builds.length > 0 ? (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {builds.map(build => (
+                  <div key={build.id} className="bg-base-100 rounded-lg shadow p-6 flex flex-col gap-2">
+                    <div className="font-bold text-lg">{build.name}</div>
+                    {build.desc && <div>{build.desc}</div>}
+                    <div className="text-sm text-neutral-content">Type: {build.buildType}</div>
+                    <div className="text-sm text-neutral-content">Category: {build.buildCategory}</div>
+                    {build.demoUrl && (
+                      <a
+                        href={build.demoUrl}
+                        className="text-blue-500 underline"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        Demo
+                      </a>
+                    )}
+                    {build.videoUrl && (
+                      <a
+                        href={build.videoUrl}
+                        className="text-blue-500 underline"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        Video
+                      </a>
+                    )}
+                    {build.imageUrl && (
+                      /* eslint-disable-next-line @next/next/no-img-element */
+                      <img src={build.imageUrl} alt={build.name} className="w-full h-40 object-cover rounded mt-2" />
+                    )}
+                    {build.githubUrl && (
+                      <a
+                        href={build.githubUrl}
+                        className="text-blue-500 underline"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        GitHub
+                      </a>
+                    )}
+                    <div className="text-xs text-neutral-content mt-2">
+                      Submitted: {new Date(build.submittedTimestamp).toLocaleString()}
+                    </div>
+                    {/* Cobuilders */}
+                    {build.cobuilders && build.cobuilders.length > 0 && (
+                      <div className="mt-2">
+                        <div className="font-semibold text-xs text-neutral">Cobuilders:</div>
+                        <div className="flex flex-wrap gap-2 mt-1">
+                          {build.cobuilders.map(cb => (
+                            <span
+                              key={cb.userAddress}
+                              className={`px-2 py-1 rounded text-xs ${cb.isOwner ? "bg-primary text-white" : "bg-neutral-200 text-neutral-700"}`}
+                            >
+                              <Address address={cb.userAddress} />
+                              {cb.isOwner && " (Owner)"}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="bg-base-100 p-8 text-center rounded-lg text-neutral">
+                This builder hasn&apos;t submitted any builds.
               </div>
             )}
           </div>
