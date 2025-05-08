@@ -157,15 +157,19 @@ export default async function BuilderPage({ params }: { params: { address: strin
                     <div className="mt-2">
                       <div className="font-semibold text-xs text-neutral">Likes: {build.likes?.length || 0}</div>
                       {build.likes && build.likes.length > 0 && (
-                        <div className="flex flex-wrap gap-2 mt-1">
-                          {build.likes.map(like => (
-                            <span
-                              key={like.userAddress}
-                              className="px-2 py-1 rounded text-xs bg-pink-100 text-pink-700"
-                            >
-                              <Address address={like.userAddress} />
-                            </span>
-                          ))}
+                        <div className="collapse collapse-arrow bg-base-200 mt-1">
+                          <input type="checkbox" />
+                          <div className="collapse-title text-xs font-medium">Show like addresses</div>
+                          <div className="collapse-content flex flex-wrap gap-2">
+                            {build.likes.map(like => (
+                              <span
+                                key={like.userAddress}
+                                className="px-2 py-1 rounded text-xs bg-pink-100 text-pink-700"
+                              >
+                                <Address address={like.userAddress} />
+                              </span>
+                            ))}
+                          </div>
                         </div>
                       )}
                     </div>
