@@ -1,0 +1,22 @@
+import { SubmitBuildPayload } from "~~/app/api/users/builds/submit/route";
+
+export async function submitBuild(payload: SubmitBuildPayload) {
+  if (!payload.address || !payload.signature || !payload.name) {
+    throw new Error("Missing required fields");
+  }
+
+  const response = await fetch("/api/users/builds/submit", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(payload),
+  });
+
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error.error || "Failed to submit build");
+  }
+
+  return response.json();
+}
