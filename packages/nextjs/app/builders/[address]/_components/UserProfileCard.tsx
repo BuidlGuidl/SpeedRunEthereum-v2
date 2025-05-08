@@ -2,15 +2,19 @@
 
 import { UserLocation } from "./UserLocation";
 import { UserSocials } from "./UserSocials";
+import { useAccount } from "wagmi";
 import EditIcon from "~~/app/_assets/icons/EditIcon";
 import { UPDATE_USER_MODAL_ID, UpdateUserModal } from "~~/app/_components/UpdateUserModal";
 import { PunkBlockie } from "~~/components/PunkBlockie";
 import { Address } from "~~/components/scaffold-eth/Address/Address";
-import { useAuthSession } from "~~/hooks/useAuthSession";
+import { useUser } from "~~/hooks/useUser";
+import { UserRole } from "~~/services/database/config/types";
 import { UserByAddress } from "~~/services/database/repositories/users";
 
 export const UserProfileCard = ({ user, address }: { user: NonNullable<UserByAddress>; address: string }) => {
-  const { isAdmin } = useAuthSession();
+  const { address: connectedAddress } = useAccount();
+  const { data: connectedUser } = useUser(connectedAddress);
+  const isAdmin = connectedUser?.role === UserRole.ADMIN;
 
   return (
     <div className="bg-base-100 rounded-xl p-6 shadow-lg">
