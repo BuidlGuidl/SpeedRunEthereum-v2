@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { UpgradedToBGCard } from "./_components/UpgradedToBGCard";
 import { UserChallengesTable } from "./_components/UserChallengesTable";
 import { UserProfileCard } from "./_components/UserProfileCard";
+import { SubmitNewBuildBtn } from "./_components/builds/SubmitNewBuildBtn";
 import { Metadata } from "next";
 import { isAddress } from "viem";
 import { RouteRefresher } from "~~/components/RouteRefresher";
@@ -78,14 +79,25 @@ export default async function BuilderPage({ params }: { params: { address: strin
           </div>
           <div className="lg:col-span-3">
             {bgMemberExists && <UpgradedToBGCard user={user} />}
-            <h2 className="text-2xl font-bold mb-0 text-neutral pb-4">Challenges</h2>
-            {challenges.length > 0 ? (
-              <UserChallengesTable challenges={challenges} />
-            ) : (
-              <div className="bg-base-100 p-8 text-center rounded-lg text-neutral">
-                This builder hasn&apos;t completed any challenges.
+            {/* Builds */}
+            <div className="w-full">
+              <div className="flex justify-between items-center">
+                <h2 className="text-2xl font-bold mb-0 text-neutral pb-4">Builds</h2>
+                <SubmitNewBuildBtn />
               </div>
-            )}
+            </div>
+
+            {/* Challenges */}
+            <div className="w-full">
+              <h2 className="text-2xl font-bold mb-0 text-neutral pb-4">Challenges</h2>
+              {challenges.length > 0 ? (
+                <UserChallengesTable challenges={challenges} />
+              ) : (
+                <div className="bg-base-100 p-8 text-center rounded-lg text-neutral">
+                  This builder hasn&apos;t completed any challenges.
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </div>
