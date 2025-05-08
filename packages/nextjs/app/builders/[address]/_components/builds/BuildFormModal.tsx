@@ -14,6 +14,21 @@ type BuildFormModalProps = {
   isPending: boolean;
 };
 
+const isValidUrl = (url: string) => {
+  try {
+    new URL(url);
+    return true;
+  } catch {
+    return false;
+  }
+};
+
+const isValidYouTubeUrl = (url: string) => {
+  return /^((?:https?:)?\/\/)?((?:www|m)\.)?((?:youtube(-nocookie)?\.com|youtu.be))(\/(?:[\w-]+\?v=|embed\/|v\/)?)([\w-]+)(\S+)?$/.test(
+    url,
+  );
+};
+
 export const BuildFormModal = forwardRef<HTMLDialogElement, BuildFormModalProps>(
   ({ closeModal, build, buttonAction, buttonText, isPending }, ref) => {
     const [form, setForm] = useState<BuildFormInputs>(
@@ -32,6 +47,22 @@ export const BuildFormModal = forwardRef<HTMLDialogElement, BuildFormModalProps>
     const handleFormSubmit = async () => {
       if (!form.name) {
         notification.error("Build name is required");
+        return;
+      }
+      if (form.demoUrl && !isValidUrl(form.demoUrl)) {
+        notification.error("Demo URL is invalid");
+        return;
+      }
+      if (form.githubUrl && !isValidUrl(form.githubUrl)) {
+        notification.error("GitHub URL is invalid");
+        return;
+      }
+      if (form.imageUrl && !isValidUrl(form.imageUrl)) {
+        notification.error("Image URL is invalid");
+        return;
+      }
+      if (form.videoUrl && form.videoUrl.length > 0 && !isValidYouTubeUrl(form.videoUrl)) {
+        notification.error("Video URL must be a valid YouTube link");
         return;
       }
       buttonAction(form);
