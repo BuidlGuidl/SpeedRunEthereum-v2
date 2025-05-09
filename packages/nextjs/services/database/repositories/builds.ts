@@ -1,4 +1,4 @@
-import { InferInsertModel, InferSelectModel, and, eq } from "drizzle-orm";
+import { InferInsertModel, InferSelectModel, eq } from "drizzle-orm";
 import { db } from "~~/services/database/config/postgresClient";
 import { buildBuilders, buildLikes, builds, lower } from "~~/services/database/config/schema";
 
@@ -53,7 +53,7 @@ export const getBuildsByUserAddress = async (userAddress: string) => {
     .from(builds)
     .innerJoin(buildBuilders, eq(builds.id, buildBuilders.buildId))
     .leftJoin(buildLikes, eq(builds.id, buildLikes.buildId))
-    .where(and(eq(lower(buildBuilders.userAddress), userAddress.toLowerCase()), eq(buildBuilders.isOwner, true)));
+    .where(eq(lower(buildBuilders.userAddress), userAddress.toLowerCase()));
 
   const result = rows.reduce<Record<string, { build: Build; coBuilders: Set<string>; likes: Set<string> }>>(
     (acc, row) => {
