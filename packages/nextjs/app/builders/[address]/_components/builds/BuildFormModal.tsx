@@ -1,10 +1,10 @@
 import { forwardRef, useState } from "react";
 import { InputBase } from "~~/components/scaffold-eth/Input";
 import { BuildCategory, BuildType } from "~~/services/database/config/types";
-import { BuildInsert } from "~~/services/database/repositories/builds";
+import { Build } from "~~/services/database/repositories/builds";
 import { notification } from "~~/utils/scaffold-eth";
 
-export type BuildFormInputs = Omit<BuildInsert, "submittedTimestamp" | "id">;
+export type BuildFormInputs = Omit<Build, "submittedTimestamp" | "id">;
 
 type BuildFormModalProps = {
   closeModal: () => void;
