@@ -69,10 +69,10 @@ export const AddressInfoDropdown = ({
         >
           {isAdmin && (
             <>
-              <div className="text-sm opacity-70 ml-3">Admin</div>
+              <div className="text-sm font-semibold opacity-60 ml-3">Admin</div>
               <AdminMenuItems closeDropdown={closeDropdown} />
-              <hr className="my-1 border-primary/50 -mx-2" />
-              <div className="text-sm  opacity-70 ml-3">Account</div>
+              <hr className="my-1 border-primary/50" />
+              <div className="text-sm font-semibold opacity-60 ml-3">Account</div>
             </>
           )}
 
