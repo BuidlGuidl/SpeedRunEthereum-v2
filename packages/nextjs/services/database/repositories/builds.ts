@@ -55,14 +55,12 @@ export const getBuildsByUserAddress = async (userAddress: string) => {
     .leftJoin(buildLikes, eq(builds.id, buildLikes.buildId))
     .where(eq(lower(buildBuilders.userAddress), userAddress.toLowerCase()));
 
-  // Aggregate unique coBuilders (not owner) and likes per build
   const result = rows.reduce<Record<string, { build: Build; coBuilders: Set<string>; likes: Set<string> }>>(
     (acc, row) => {
       const buildId = row.build.id;
       if (!acc[buildId]) {
         acc[buildId] = { build: row.build, coBuilders: new Set(), likes: new Set() };
       }
-      // Only add as coBuilder if not owner
       if (row.builderUserAddress && !row.builderIsOwner) {
         acc[buildId].coBuilders.add(row.builderUserAddress);
       }
@@ -74,7 +72,6 @@ export const getBuildsByUserAddress = async (userAddress: string) => {
     {},
   );
 
-  // Convert Sets to Arrays for output
   return Object.values(result).map(({ build, coBuilders, likes }) => ({
     build,
     coBuilders: Array.from(coBuilders),

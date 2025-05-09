@@ -80,7 +80,7 @@ export default async function BuilderPage({ params }: { params: { address: strin
           <div className="lg:col-span-1">
             <UserProfileCard user={user} address={userAddress} />
           </div>
-          <div className="lg:col-span-3">
+          <div className="lg:col-span-3 flex flex-col gap-14">
             {bgMemberExists && <UpgradedToBGCard user={user} />}
             {/* Builds */}
             <div className="w-full">
@@ -88,11 +88,11 @@ export default async function BuilderPage({ params }: { params: { address: strin
                 <h2 className="text-2xl font-bold mb-0 text-neutral pb-4">Builds</h2>
                 <SubmitNewBuildBtn />
               </div>
-              <div className="flex flex-wrap gap-6 justify-center items-stretch w-full">
+              <div className="flex flex-wrap items-stretch w-full gap-5">
                 {builds.length > 0 &&
                   builds.map(build => (
                     <div key={build.build.id} className="flex-grow-0 flex-shrink-0">
-                      <BuildCard build={build.build} coBuilders={build.coBuilders} likes={build.likes} />
+                      <BuildCard build={build.build} likes={build.likes} />
                     </div>
                   ))}
               </div>
