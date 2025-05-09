@@ -78,7 +78,7 @@ export const RainbowKitCustomConnectButton = () => {
           <div className="flex flex-col items-end gap-2 sm:flex-row sm:items-center">
             {isAdmin && (
               <div className="flex items-center gap-2">
-                <span className="rounded-full px-3 py-0.5 font-semibold bg-violet-100 text-violet-700">ADMIN</span>
+                <span className="rounded-full px-3 py-0.5 font-semibold bg-red-100 text-red-800">ADMIN</span>
               </div>
             )}
             <AddressInfoDropdown
@@ -86,6 +86,7 @@ export const RainbowKitCustomConnectButton = () => {
               displayName={account.displayName}
               ensAvatar={account.ensAvatar}
               blockExplorerAddressLink={blockExplorerAddressLink}
+              isAdmin={isAdmin}
             />
             <AddressQRCodeModal address={account.address as Address} modalId="qrcode-modal" />
           </div>
