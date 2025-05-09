@@ -15,15 +15,11 @@ const adminMenuItems = [
   },
 ];
 export const AdminMenuItems = ({ closeDropdown }: { closeDropdown: () => void }) => {
-  return (
-    <>
-      {adminMenuItems.map(item => (
-        <li key={item.href}>
-          <Link href={item.href} className="btn-sm py-3 flex items-center" onClick={closeDropdown}>
-            <span className="whitespace-nowrap">{item.label}</span>
-          </Link>
-        </li>
-      ))}
-    </>
-  );
+  return adminMenuItems.map(item => (
+    <li key={item.href}>
+      <Link href={item.href} className="btn-sm py-3 flex items-center" onClick={closeDropdown}>
+        <span className="whitespace-nowrap">{item.label}</span>
+      </Link>
+    </li>
+  ));
 };
