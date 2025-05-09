@@ -1,0 +1,43 @@
+import { EIP_712_DOMAIN, isValidEip712Signature } from "./common";
+import { BuildFormInputs } from "~~/app/builders/[address]/_components/builds/BuildFormModal";
+
+export const EIP_712_TYPED_DATA__SUBMIT_BUILD = {
+  domain: EIP_712_DOMAIN,
+  types: {
+    Message: [
+      { name: "name", type: "string" },
+      { name: "desc", type: "string" },
+      { name: "buildType", type: "string" },
+      { name: "buildCategory", type: "string" },
+      { name: "demoUrl", type: "string" },
+      { name: "videoUrl", type: "string" },
+      { name: "imageUrl", type: "string" },
+      { name: "githubUrl", type: "string" },
+    ],
+  },
+  primaryType: "Message",
+  message: {
+    action: "Submit Build",
+  },
+} as const;
+
+export const isValidEIP712SubmitBuildSignature = async ({
+  address,
+  signature,
+  build,
+}: {
+  address: string;
+  signature: `0x${string}`;
+  build: BuildFormInputs;
+}) => {
+  const typedData = {
+    ...EIP_712_TYPED_DATA__SUBMIT_BUILD,
+    message: {
+      ...EIP_712_TYPED_DATA__SUBMIT_BUILD.message,
+      ...build,
+    },
+    signature,
+  };
+
+  return await isValidEip712Signature({ typedData, address });
+};

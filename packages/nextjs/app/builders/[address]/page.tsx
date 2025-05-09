@@ -2,10 +2,13 @@ import { notFound } from "next/navigation";
 import { UpgradedToBGCard } from "./_components/UpgradedToBGCard";
 import { UserChallengesTable } from "./_components/UserChallengesTable";
 import { UserProfileCard } from "./_components/UserProfileCard";
+import { BuildCard } from "./_components/builds/BuildCard";
+import { SubmitNewBuildBtn } from "./_components/builds/SubmitNewBuildBtn";
 import { Metadata } from "next";
 import { isAddress } from "viem";
 import { RouteRefresher } from "~~/components/RouteRefresher";
 import { isBgMember } from "~~/services/api-bg/builders";
+import { getBuildsByUserAddress } from "~~/services/database/repositories/builds";
 import { getLatestSubmissionPerChallengeByUser } from "~~/services/database/repositories/userChallenges";
 import { getUserByAddress } from "~~/services/database/repositories/users";
 import { getEnsOrAddress } from "~~/utils/ens-or-address";
@@ -63,6 +66,7 @@ export default async function BuilderPage({ params }: { params: { address: strin
   const challenges = await getLatestSubmissionPerChallengeByUser(userAddress);
   const user = await getUserByAddress(userAddress);
   const bgMemberExists = await isBgMember(userAddress);
+  const builds = await getBuildsByUserAddress(userAddress);
 
   if (!user) {
     notFound();
@@ -76,16 +80,35 @@ export default async function BuilderPage({ params }: { params: { address: strin
           <div className="lg:col-span-1">
             <UserProfileCard user={user} address={userAddress} />
           </div>
-          <div className="lg:col-span-3">
+          <div className="lg:col-span-3 flex flex-col gap-14">
             {bgMemberExists && <UpgradedToBGCard user={user} />}
-            <h2 className="text-2xl font-bold mb-0 text-neutral pb-4">Challenges</h2>
-            {challenges.length > 0 ? (
-              <UserChallengesTable challenges={challenges} />
-            ) : (
-              <div className="bg-base-100 p-8 text-center rounded-lg text-neutral">
-                This builder hasn&apos;t completed any challenges.
+            {/* Builds */}
+            <div className="w-full">
+              <div className="flex justify-between items-center">
+                <h2 className="text-2xl font-bold mb-0 text-neutral pb-4">Builds</h2>
+                <SubmitNewBuildBtn />
               </div>
-            )}
+              <div className="flex flex-wrap items-stretch w-full gap-5">
+                {builds.length > 0 &&
+                  builds.map(build => (
+                    <div key={build.build.id} className="flex-grow-0 flex-shrink-0">
+                      <BuildCard build={build.build} likes={build.likes} />
+                    </div>
+                  ))}
+              </div>
+            </div>
+
+            {/* Challenges */}
+            <div className="w-full">
+              <h2 className="text-2xl font-bold mb-0 text-neutral pb-4">Challenges</h2>
+              {challenges.length > 0 ? (
+                <UserChallengesTable challenges={challenges} />
+              ) : (
+                <div className="bg-base-100 p-8 text-center rounded-lg text-neutral">
+                  This builder hasn&apos;t completed any challenges.
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </div>
