@@ -1,30 +1,29 @@
 import Link from "next/link";
 
+const adminMenuItems = [
+  {
+    label: "Activity",
+    href: "/admin/activity",
+  },
+  {
+    label: "Batches",
+    href: "/admin/batches",
+  },
+  {
+    label: "Batch Builders",
+    href: "/admin/batch-builders",
+  },
+];
 export const AdminMenuItems = ({ closeDropdown }: { closeDropdown: () => void }) => {
-  const closeDropdownAndAdminMenu = () => {
-    closeDropdown();
-  };
-
   return (
     <>
-      <li>
-        <Link
-          href={`/admin/batches`}
-          className="btn-sm !rounded-xl flex gap-3 py-3"
-          onClick={closeDropdownAndAdminMenu}
-        >
-          <span className="whitespace-nowrap">Batches</span>
-        </Link>
-      </li>
-      <li>
-        <Link
-          href={`/admin/batch-builders`}
-          className="btn-sm !rounded-xl flex gap-3 py-3"
-          onClick={closeDropdownAndAdminMenu}
-        >
-          <span className="whitespace-nowrap">Batch Builders</span>
-        </Link>
-      </li>
+      {adminMenuItems.map(item => (
+        <li key={item.href}>
+          <Link href={item.href} className="btn-sm py-3 flex items-center" onClick={closeDropdown}>
+            <span className="whitespace-nowrap">{item.label}</span>
+          </Link>
+        </li>
+      ))}
     </>
   );
 };
