@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { CodeBracketSquareIcon, CubeTransparentIcon, UserGroupIcon } from "@heroicons/react/24/outline";
+import { AcademicCapIcon, CodeBracketSquareIcon, UserGroupIcon } from "@heroicons/react/24/outline";
 
 const adminMenuItems = [
   {
@@ -10,7 +10,7 @@ const adminMenuItems = [
   {
     label: "Batches",
     href: "/admin/batches",
-    icon: <CubeTransparentIcon className="w-4 h-6" />,
+    icon: <AcademicCapIcon className="w-4 h-6" />,
   },
   {
     label: "Batch Builders",
