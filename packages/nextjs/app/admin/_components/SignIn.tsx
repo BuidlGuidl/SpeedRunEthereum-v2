@@ -19,7 +19,7 @@ export const SignIn = () => {
   return (
     <div className="flex flex-col items-center px-4 py-10 sm:py-20">
       <h1 className="text-3xl text-center font-extrabold mb-1">Sign In</h1>
-      <p className="mb-6">You need to sign in to access the admin dashboard.</p>
+      <p className="mb-6">Please sign in with Ethereum to access the admin dashboard and app controls.</p>
       <button className="btn btn-primary" onClick={openConnectModal}>
         Sign in with Ethereum
       </button>
