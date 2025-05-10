@@ -14,7 +14,6 @@ import RegisterUser from "~~/app/_components/RegisterUser";
 import { useTargetNetwork } from "~~/hooks/scaffold-eth/useTargetNetwork";
 import { useAuthSession } from "~~/hooks/useAuthSession";
 import { useUser } from "~~/hooks/useUser";
-import { UserRole } from "~~/services/database/config/types";
 import { getBlockExplorerAddressLink } from "~~/utils/scaffold-eth";
 
 /**
@@ -25,8 +24,7 @@ export const RainbowKitCustomConnectButton = () => {
   const { address: connectedAddress } = useAccount();
   const { data: user, isLoading: isLoadingUser } = useUser(connectedAddress);
   const { disconnect } = useDisconnect();
-  const { userAddress: sessionUserAddress } = useAuthSession();
-  const isAdmin = user?.role === UserRole.ADMIN;
+  const { isAdmin, userAddress: sessionUserAddress } = useAuthSession();
 
   useEffect(() => {
     if (sessionUserAddress && connectedAddress && connectedAddress !== sessionUserAddress) {
