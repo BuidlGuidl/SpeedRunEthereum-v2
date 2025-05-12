@@ -1,11 +1,11 @@
 import Link from "next/link";
-import { AcademicCapIcon, CodeBracketSquareIcon, UserGroupIcon } from "@heroicons/react/24/outline";
+import { AcademicCapIcon, BoltIcon, UserGroupIcon } from "@heroicons/react/24/outline";
 
 const adminMenuItems = [
   {
     label: "Activity",
     href: "/admin/activity",
-    icon: <CodeBracketSquareIcon className="w-4 h-6" />,
+    icon: <BoltIcon className="w-4 h-6" />,
   },
   {
     label: "Batches",
