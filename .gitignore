@@ -23,5 +23,3 @@ node_modules
 dist
 
 data/db
-
-packages/nextjs/services/database/bg-imports/aux_builds_categorization.csv
