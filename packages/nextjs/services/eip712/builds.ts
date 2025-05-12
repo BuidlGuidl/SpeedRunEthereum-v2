@@ -13,6 +13,7 @@ export const EIP_712_TYPED_DATA__SUBMIT_BUILD = {
       { name: "videoUrl", type: "string" },
       { name: "imageUrl", type: "string" },
       { name: "githubUrl", type: "string" },
+      { name: "coBuilders", type: "address[]" },
     ],
   },
   primaryType: "Message",

@@ -1,10 +1,14 @@
 import { forwardRef, useState } from "react";
+import { TrashIcon } from "@heroicons/react/24/solid";
 import { InputBase } from "~~/components/scaffold-eth/Input";
+import { AddressInput } from "~~/components/scaffold-eth/Input/AddressInput";
 import { BuildCategory, BuildType } from "~~/services/database/config/types";
 import { Build } from "~~/services/database/repositories/builds";
 import { notification } from "~~/utils/scaffold-eth";
 
-export type BuildFormInputs = Omit<Build, "submittedTimestamp" | "id">;
+export type BuildFormInputs = Omit<Build, "submittedTimestamp" | "id"> & {
+  coBuilders: string[];
+};
 
 type BuildFormModalProps = {
   closeModal: () => void;
@@ -41,6 +45,7 @@ export const BuildFormModal = forwardRef<HTMLDialogElement, BuildFormModalProps>
         videoUrl: "",
         imageUrl: "",
         githubUrl: "",
+        coBuilders: [],
       },
     );
 
@@ -177,6 +182,46 @@ export const BuildFormModal = forwardRef<HTMLDialogElement, BuildFormModalProps>
                 value={form.imageUrl ?? ""}
                 onChange={value => setForm({ ...form, imageUrl: value })}
               />
+            </div>
+            <div className="flex flex-col gap-1.5 w-full">
+              <div className="flex items-center ml-2">
+                <span className="text-base font-medium leading-none">Co-Builders</span>
+                <button
+                  type="button"
+                  className="btn btn-sm h-6 min-h-6 p-0 w-6 btn-circle btn-ghost mt-0.5"
+                  onClick={() => setForm({ ...form, coBuilders: [...form.coBuilders, ""] })}
+                >
+                  +
+                </button>
+              </div>
+              {form.coBuilders.map((address, idx) => (
+                <div key={idx} className="flex items-center gap-2 w-full">
+                  <div className="flex-1">
+                    <AddressInput
+                      placeholder="Builder Address"
+                      value={address}
+                      onChange={val => {
+                        console.log("val", val);
+                        const updated = [...form.coBuilders];
+                        updated[idx] = val;
+                        setForm({ ...form, coBuilders: updated });
+                        console.log("form", form);
+                      }}
+                    />
+                  </div>
+
+                  <button
+                    className="btn btn-ghost btn-sm"
+                    onClick={() => {
+                      const updated = form.coBuilders.filter((_, i) => i !== idx);
+                      setForm({ ...form, coBuilders: updated });
+                    }}
+                    aria-label="Delete"
+                  >
+                    <TrashIcon className="h-5 w-5" />
+                  </button>
+                </div>
+              ))}
             </div>
             <div className="modal-action">
               <button className="btn btn-primary self-center" disabled={isPending} onClick={handleFormSubmit}>

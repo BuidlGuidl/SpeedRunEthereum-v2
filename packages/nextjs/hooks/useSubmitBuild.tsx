@@ -25,6 +25,7 @@ export function useSubmitBuild({ onSuccess }: { onSuccess?: () => void }) {
         videoUrl: build.videoUrl || "",
         imageUrl: build.imageUrl || "",
         githubUrl: build.githubUrl || "",
+        coBuilders: build.coBuilders || [],
       };
 
       const message = {
