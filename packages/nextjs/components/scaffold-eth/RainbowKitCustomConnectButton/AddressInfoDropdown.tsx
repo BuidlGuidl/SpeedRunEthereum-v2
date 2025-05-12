@@ -1,5 +1,6 @@
 import { useRef, useState } from "react";
 import Link from "next/link";
+import { AdminMenuItems } from "./AdminMenuItems";
 import { NetworkOptions } from "./NetworkOptions";
 import { signOut } from "next-auth/react";
 import CopyToClipboard from "react-copy-to-clipboard";
@@ -24,6 +25,7 @@ type AddressInfoDropdownProps = {
   address: Address;
   blockExplorerAddressLink: string | undefined;
   displayName: string;
+  isAdmin: boolean;
   ensAvatar?: string;
 };
 
@@ -31,6 +33,7 @@ export const AddressInfoDropdown = ({
   address,
   ensAvatar,
   displayName,
+  isAdmin,
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   blockExplorerAddressLink,
 }: AddressInfoDropdownProps) => {
@@ -64,6 +67,15 @@ export const AddressInfoDropdown = ({
           tabIndex={0}
           className="dropdown-content menu z-[2] p-2 mt-2 shadow-center shadow-accent bg-base-200 rounded-box gap-1"
         >
+          {isAdmin && (
+            <>
+              <div className="text-sm font-semibold opacity-60 ml-3">Admin</div>
+              <AdminMenuItems closeDropdown={closeDropdown} />
+              <hr className="my-1 border-primary/50" />
+              <div className="text-sm font-semibold opacity-60 ml-3">Account</div>
+            </>
+          )}
+
           <NetworkOptions hidden={!selectingNetwork} />
           <li>
             <Link href={`/builders/${address}`} className="btn-sm !rounded-xl flex gap-3 py-3" onClick={closeDropdown}>
