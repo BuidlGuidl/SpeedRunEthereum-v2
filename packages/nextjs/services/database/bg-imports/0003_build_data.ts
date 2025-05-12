@@ -105,10 +105,6 @@ async function importData() {
     // Track ignored addresses for logging purposes
     const ignoredBuilders = new Set<string>();
 
-    let buildsImported = 0;
-    let buildRelationshipsImported = 0;
-    let likesImported = 0;
-
     const transformedBuilds = buildsData.map(build => {
       const buildUuid = convertFirebaseIdToUuid(build.id);
       return {
@@ -121,7 +117,6 @@ async function importData() {
     // Upsert builds section
     console.log(`Importing ${transformedBuilds.length} builds into database...`);
     const buildQueries = transformedBuilds.map(build => {
-      buildsImported++;
       return db
         .insert(builds)
         .values({
@@ -139,13 +134,12 @@ async function importData() {
         .onConflictDoNothing();
     });
     await db.executeQueries(buildQueries as any);
-    console.log(`✅ Builds import complete (${buildsImported} builds processed)`);
+    console.log(`✅ Builds import complete (${buildQueries.length} builds processed)`);
 
     // Database builders handling
     console.log(`Importing build-builder relationships...`);
     function getBuilderRow(buildId: string, address: string, isOwner: boolean) {
       if (existingBuilders.has(address)) {
-        buildRelationshipsImported++;
         return db.insert(buildBuilders).values({ buildId, userAddress: address, isOwner }).onConflictDoNothing();
       }
       ignoredBuilders.add(address);
@@ -153,29 +147,28 @@ async function importData() {
     }
 
     // Upsert build-builders
-    const builderQueries = [];
+    const buildBuilderQueries = [];
     for (const build of transformedBuilds) {
       // Add the main builder
       const ownerRow = getBuilderRow(build.uuid, build.builder, true);
-      if (ownerRow) builderQueries.push(ownerRow);
+      if (ownerRow) buildBuilderQueries.push(ownerRow);
 
       // Add all co-builders
       for (const addr of build.coBuilderAddresses) {
         const coBuilderRow = getBuilderRow(build.uuid, addr, false);
-        if (coBuilderRow) builderQueries.push(coBuilderRow);
+        if (coBuilderRow) buildBuilderQueries.push(coBuilderRow);
       }
     }
-    await db.executeQueries(builderQueries as any);
-    console.log(`✅ Build-builder relationships import complete (${buildRelationshipsImported} relationships created)`);
+    await db.executeQueries(buildBuilderQueries as any);
+    console.log(`✅ Build-builder relationships import complete (${buildBuilderQueries.length} relationships created)`);
 
     // Upsert likes
     console.log(`Importing build likes...`);
-    const likeQueries = [];
+    const buildLikeQueries = [];
     for (const build of transformedBuilds) {
       for (const userAddress of build.likes || []) {
         if (existingBuilders.has(userAddress)) {
-          likesImported++;
-          likeQueries.push(
+          buildLikeQueries.push(
             db
               .insert(buildLikes)
               .values({ buildId: build.uuid, userAddress, likedAt: new Date() })
@@ -186,8 +179,8 @@ async function importData() {
         }
       }
     }
-    await db.executeQueries(likeQueries as any);
-    console.log(`✅ Build likes import complete (${likesImported} likes processed)`);
+    await db.executeQueries(buildLikeQueries as any);
+    console.log(`✅ Build likes import complete (${buildLikeQueries.length} likes processed)`);
 
     // Clean up builds from builders that don't exist in the database
     console.log(`Cleaning up orphaned builds...`);
@@ -198,6 +191,7 @@ async function importData() {
     // Log ignored addresses instead of writing to file
     if (ignoredBuilders.size > 0) {
       console.log(`Ignored ${ignoredBuilders.size} addresses that don't exist in the database.`);
+      console.log("Ignored addresses:", Array.from(ignoredBuilders));
     }
 
     console.log("✅ Build data import successfully completed!");
