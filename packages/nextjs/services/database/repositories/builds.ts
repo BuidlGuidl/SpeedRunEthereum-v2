@@ -1,4 +1,4 @@
-import { InferInsertModel, InferSelectModel, eq } from "drizzle-orm";
+import { InferInsertModel, InferSelectModel, and, eq } from "drizzle-orm";
 import { db } from "~~/services/database/config/postgresClient";
 import { buildBuilders, buildLikes, builds, lower } from "~~/services/database/config/schema";
 
@@ -40,6 +40,34 @@ export const createBuild = async (build: BuildInsert) => {
   }
 
   return { insertdBuild, insertedBuildBuilder };
+};
+
+export const isOwnerOfBuild = async (buildId: string, userAddress: string) => {
+  const [buildBuilder] = await db
+    .select()
+    .from(buildBuilders)
+    .where(and(eq(buildBuilders.buildId, buildId), eq(buildBuilders.userAddress, userAddress)));
+  return buildBuilder?.isOwner;
+};
+
+export const updateBuild = async (buildId: string, build: BuildInsert) => {
+  const [updatedBuild] = await db.update(builds).set(build).where(eq(builds.id, buildId)).returning();
+
+  if (!updatedBuild) {
+    throw new Error("Failed to update build");
+  }
+
+  if (build.coBuilders && build.coBuilders.length > 0) {
+    await db.insert(buildBuilders).values(
+      build.coBuilders.map(userAddress => ({
+        buildId: updatedBuild.id,
+        userAddress,
+        isOwner: false,
+      })),
+    );
+  }
+
+  return updatedBuild;
 };
 
 export const getBuildsByUserAddress = async (userAddress: string) => {
