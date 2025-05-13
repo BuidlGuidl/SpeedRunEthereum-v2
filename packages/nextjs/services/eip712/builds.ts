@@ -44,6 +44,17 @@ export const EIP_712_TYPED_DATA__UPDATE_BUILD = {
   },
 } as const;
 
+export const EIP_712_TYPED_DATA__DELETE_BUILD = {
+  domain: EIP_712_DOMAIN,
+  types: {
+    Message: [{ name: "id", type: "string" }],
+  },
+  primaryType: "Message",
+  message: {
+    action: "Delete Build",
+  },
+} as const;
+
 export const isValidEIP712SubmitBuildSignature = async ({
   address,
   signature,
@@ -91,6 +102,27 @@ export const isValidEIP712UpdateBuildSignature = async ({
     message: {
       ...EIP_712_TYPED_DATA__UPDATE_BUILD.message,
       ...buildWithDefaults,
+    },
+    signature,
+  };
+
+  return await isValidEip712Signature({ typedData, address });
+};
+
+export const isValidEIP712DeleteBuildSignature = async ({
+  address,
+  signature,
+  buildId,
+}: {
+  address: string;
+  signature: `0x${string}`;
+  buildId: string;
+}) => {
+  const typedData = {
+    ...EIP_712_TYPED_DATA__DELETE_BUILD,
+    message: {
+      ...EIP_712_TYPED_DATA__DELETE_BUILD.message,
+      id: buildId,
     },
     signature,
   };

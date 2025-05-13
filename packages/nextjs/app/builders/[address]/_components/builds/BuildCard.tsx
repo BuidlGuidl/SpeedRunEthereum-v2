@@ -1,5 +1,6 @@
+import { DeleteBuildBtn } from "./DeleteBuildBtn";
 import { EditBuildBtn } from "./EditBuildBtn";
-import { HeartIcon, TrashIcon } from "@heroicons/react/24/solid";
+import { HeartIcon } from "@heroicons/react/24/solid";
 import { Build } from "~~/services/database/repositories/builds";
 
 type Props = {
@@ -15,13 +16,7 @@ export const BuildCard = ({ build, likes, coBuilders, onDelete, onView }: Props)
     <div className="relative flex flex-col w-72 h-[400px] bg-base-300 rounded-xl shadow-md overflow-hidden transition hover:shadow-lg">
       <div className="absolute right-4 top-4 flex gap-2 z-10">
         <EditBuildBtn build={{ ...build, coBuilders }} buildId={build.id} />
-        <button
-          className="bg-base-100 rounded-lg p-2 hover:bg-base-200 transition"
-          onClick={onDelete}
-          aria-label="Delete"
-        >
-          <TrashIcon className="h-5 w-5" />
-        </button>
+        <DeleteBuildBtn buildId={build.id} onSuccess={onDelete} />
       </div>
       <div className="w-full h-44 flex items-center justify-center">
         {build.imageUrl ? (

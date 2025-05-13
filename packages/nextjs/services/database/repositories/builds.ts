@@ -144,3 +144,12 @@ export const getBuildsByUserAddress = async (userAddress: string) => {
     likes: Array.from(likes),
   }));
 };
+
+export const deleteBuild = async (buildId: string) => {
+  // Delete likes
+  await db.delete(buildLikes).where(eq(buildLikes.buildId, buildId));
+  // Delete builders
+  await db.delete(buildBuilders).where(eq(buildBuilders.buildId, buildId));
+  // Delete the build itself
+  await db.delete(builds).where(eq(builds.id, buildId));
+};

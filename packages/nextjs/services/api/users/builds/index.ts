@@ -42,3 +42,32 @@ export async function updateBuild(payload: UpdateBuildPayload, buildId: string) 
 
   return response.json();
 }
+
+export async function deleteBuild({
+  address,
+  signature,
+  buildId,
+}: {
+  address: string;
+  signature: `0x${string}`;
+  buildId: string;
+}) {
+  if (!address || !signature || !buildId) {
+    throw new Error("Missing required fields");
+  }
+
+  const response = await fetch(`/api/users/builds/${buildId}/delete`, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ address, signature, buildId }),
+  });
+
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error.error || "Failed to delete build");
+  }
+
+  return response.json();
+}
