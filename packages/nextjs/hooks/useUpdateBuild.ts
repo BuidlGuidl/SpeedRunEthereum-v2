@@ -42,7 +42,7 @@ export function useUpdateBuild({ onSuccess }: { onSuccess?: () => void }) {
       return updateBuild({ address, signature, build }, buildId);
     },
     onSuccess: () => {
-      notification.success("Build submitted successfully!");
+      notification.success("Build updated successfully!");
       router.refresh();
       onSuccess?.();
     },
