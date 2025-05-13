@@ -76,3 +76,22 @@ To iterate fast on the database locally:
 - Tweak the schema in `schema.ts`
 - Run `yarn drizzle-kit push` to apply the changes.
 - Copy `seed.data.example.ts` to `seed.data.ts`, tweak as needed and run `yarn db:seed` (will delete existing data)
+
+### Firebase image upload
+
+1. In the Firebase Console, go to "Project settings" (the gear icon)
+2. Navigate to the "Service accounts" tab
+3. Click "Generate new private key" for the Firebase Admin SDK
+4. Save the JSON file securely
+
+5. In `.env.local` file in the `packages/nextjs` directory, add the following variables:
+
+```
+FIREBASE_SERVICE_ACCOUNT_KEY='{"type":"service_account","project_id":"your-project-id","private_key_id":"your-private-key-id","private_key":"-----BEGIN PRIVATE KEY-----\nyour-private-key\n-----END PRIVATE KEY-----\n","client_email":"your-client-email","client_id":"your-client-id","auth_uri":"https://accounts.google.com/o/oauth2/auth","token_uri":"https://oauth2.googleapis.com/token","auth_provider_x509_cert_url":"https://www.googleapis.com/oauth2/v1/certs","client_x509_cert_url":"your-cert-url","universe_domain":"googleapis.com"}'
+
+FIREBASE_STORAGE_BUCKET=your-project-id.appspot.com
+```
+
+Replace the content of `FIREBASE_SERVICE_ACCOUNT_KEY` with the JSON content from your service account key file (wrap the json in single quotes).
+
+The `FIREBASE_STORAGE_BUCKET` should be set to your Firebase Storage bucket name, typically in the format `your-project-id.appspot.com`.

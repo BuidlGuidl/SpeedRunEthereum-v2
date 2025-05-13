@@ -1,5 +1,5 @@
-import { forwardRef, useState } from "react";
-import { TrashIcon } from "@heroicons/react/24/solid";
+import { forwardRef, useRef, useState } from "react";
+import { PhotoIcon, TrashIcon } from "@heroicons/react/24/solid";
 import { InputBase } from "~~/components/scaffold-eth/Input";
 import { AddressInput } from "~~/components/scaffold-eth/Input/AddressInput";
 import { BuildCategory, BuildType } from "~~/services/database/config/types";
@@ -48,6 +48,8 @@ export const BuildFormModal = forwardRef<HTMLDialogElement, BuildFormModalProps>
         coBuilders: [],
       },
     );
+    const [isUploading, setIsUploading] = useState(false);
+    const fileInputRef = useRef<HTMLInputElement>(null);
 
     const handleFormSubmit = async () => {
       if (!form.name) {
@@ -71,6 +73,67 @@ export const BuildFormModal = forwardRef<HTMLDialogElement, BuildFormModalProps>
         return;
       }
       buttonAction(form);
+    };
+
+    const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+      const files = event.target.files;
+      if (!files || files.length === 0) return;
+
+      const file = files[0];
+
+      // Validate file size (10MB max)
+      const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
+      if (file.size > MAX_FILE_SIZE) {
+        notification.error("Image size exceeds the 10MB limit");
+        if (fileInputRef.current) {
+          fileInputRef.current.value = "";
+        }
+        return;
+      }
+
+      // Validate file type
+      if (!file.type.startsWith("image/")) {
+        notification.error("File must be an image");
+        if (fileInputRef.current) {
+          fileInputRef.current.value = "";
+        }
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append("file", file);
+
+      setIsUploading(true);
+
+      try {
+        const response = await fetch("/api/builds/upload-image", {
+          method: "POST",
+          body: formData,
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.error || "Failed to upload image");
+        }
+
+        setForm({ ...form, imageUrl: data.url });
+        notification.success("Image uploaded successfully!");
+      } catch (error) {
+        console.error("Upload error:", error);
+        notification.error("Failed to upload image");
+      } finally {
+        setIsUploading(false);
+        if (fileInputRef.current) {
+          fileInputRef.current.value = "";
+        }
+      }
+    };
+
+    const triggerFileInput = () => {
+      if (fileInputRef.current) {
+        fileInputRef.current.click();
+      }
     };
 
     return (
@@ -175,13 +238,51 @@ export const BuildFormModal = forwardRef<HTMLDialogElement, BuildFormModalProps>
             </div>
             <div className="flex flex-col gap-1.5 w-full">
               <div className="flex items-base ml-2">
-                <span className="text-sm font-medium mr-2 leading-none">Image URL</span>
+                <span className="text-sm font-medium mr-2 leading-none">Image</span>
               </div>
-              <InputBase
-                placeholder="Image URL"
-                value={form.imageUrl ?? ""}
-                onChange={value => setForm({ ...form, imageUrl: value })}
-              />
+
+              <div className="flex items-center gap-3">
+                <InputBase
+                  placeholder="Image URL"
+                  value={form.imageUrl ?? ""}
+                  onChange={value => setForm({ ...form, imageUrl: value })}
+                />
+                <div className="flex-shrink-0">
+                  <input
+                    type="file"
+                    accept="image/*"
+                    ref={fileInputRef}
+                    onChange={handleImageUpload}
+                    className="hidden"
+                  />
+                  <button
+                    type="button"
+                    onClick={triggerFileInput}
+                    disabled={isUploading}
+                    className="btn btn-primary btn-sm h-[2.2rem] min-h-[2.2rem]"
+                  >
+                    {isUploading ? (
+                      <span className="loading loading-spinner loading-xs"></span>
+                    ) : (
+                      <PhotoIcon className="h-5 w-5" />
+                    )}
+                  </button>
+                </div>
+              </div>
+
+              {form.imageUrl && (
+                <div className="mt-2 relative w-full h-48 overflow-hidden rounded-lg">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={form.imageUrl} alt="Build preview" className="w-full h-full object-cover" />
+                  <button
+                    type="button"
+                    className="absolute top-2 right-2 btn btn-sm btn-circle btn-error"
+                    onClick={() => setForm({ ...form, imageUrl: "" })}
+                  >
+                    <TrashIcon className="h-4 w-4" />
+                  </button>
+                </div>
+              )}
             </div>
             <div className="flex flex-col gap-1.5 w-full">
               <div className="flex items-center ml-2">
@@ -224,7 +325,11 @@ export const BuildFormModal = forwardRef<HTMLDialogElement, BuildFormModalProps>
               ))}
             </div>
             <div className="modal-action">
-              <button className="btn btn-primary self-center" disabled={isPending} onClick={handleFormSubmit}>
+              <button
+                className="btn btn-primary self-center"
+                disabled={isPending || isUploading}
+                onClick={handleFormSubmit}
+              >
                 {isPending ? (
                   <>
                     <span className="loading loading-spinner loading-sm"></span>
