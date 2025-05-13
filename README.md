@@ -87,7 +87,11 @@ To iterate fast on the database locally:
 5. In `.env.local` file in the `packages/nextjs` directory, add the following variables:
 
 ```
-FIREBASE_SERVICE_ACCOUNT_KEY='{"type":"service_account","project_id":"your-project-id","private_key_id":"your-private-key-id","private_key":"-----BEGIN PRIVATE KEY-----\nyour-private-key\n-----END PRIVATE KEY-----\n","client_email":"your-client-email","client_id":"your-client-id","auth_uri":"https://accounts.google.com/o/oauth2/auth","token_uri":"https://oauth2.googleapis.com/token","auth_provider_x509_cert_url":"https://www.googleapis.com/oauth2/v1/certs","client_x509_cert_url":"your-cert-url","universe_domain":"googleapis.com"}'
+FIREBASE_SERVICE_ACCOUNT_KEY='{
+  "type": "service_account",
+  "project_id": "your-project-id",
+  ...,
+}'
 
 FIREBASE_STORAGE_BUCKET=your-project-id.appspot.com
 ```
