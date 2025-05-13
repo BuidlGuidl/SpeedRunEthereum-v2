@@ -13,18 +13,18 @@ export async function PUT(request: Request, { params }: { params: { buildId: str
   try {
     const { buildId } = params;
     const { signature, build, address }: UpdateBuildPayload = await request.json();
-    const isOwner = await isOwnerOfBuild(buildId, address);
 
     const isValidSignature = await isValidEIP712UpdateBuildSignature({
       address,
       signature,
-      build,
+      build: { ...build, buildId },
     });
 
     if (!isValidSignature) {
       return NextResponse.json({ error: "Invalid signature" }, { status: 401 });
     }
 
+    const isOwner = await isOwnerOfBuild(buildId, address);
     if (!isOwner) {
       return NextResponse.json({ error: "Not authorized to update this build" }, { status: 403 });
     }

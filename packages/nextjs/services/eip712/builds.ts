@@ -72,13 +72,25 @@ export const isValidEIP712UpdateBuildSignature = async ({
 }: {
   address: string;
   signature: `0x${string}`;
-  build: BuildFormInputs;
+  build: BuildFormInputs & { buildId: string };
 }) => {
+  const buildWithDefaults = {
+    ...build,
+    desc: build.desc || "",
+    buildType: build.buildType || "",
+    buildCategory: build.buildCategory || "",
+    demoUrl: build.demoUrl || "",
+    videoUrl: build.videoUrl || "",
+    imageUrl: build.imageUrl || "",
+    githubUrl: build.githubUrl || "",
+    coBuilders: build.coBuilders || [],
+  };
+
   const typedData = {
     ...EIP_712_TYPED_DATA__UPDATE_BUILD,
     message: {
       ...EIP_712_TYPED_DATA__UPDATE_BUILD.message,
-      ...build,
+      ...buildWithDefaults,
     },
     signature,
   };
