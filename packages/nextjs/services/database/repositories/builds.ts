@@ -152,12 +152,14 @@ export const getBuildsByUserAddress = async (userAddress: string) => {
 };
 
 export const deleteBuild = async (buildId: string) => {
-  // Delete likes
-  await db.delete(buildLikes).where(eq(buildLikes.buildId, buildId));
-  // Delete builders
-  await db.delete(buildBuilders).where(eq(buildBuilders.buildId, buildId));
-  // Delete the build itself
-  await db.delete(builds).where(eq(builds.id, buildId));
+  await db.transaction(async trx => {
+    // Delete likes
+    await trx.delete(buildLikes).where(eq(buildLikes.buildId, buildId));
+    // Delete builders
+    await trx.delete(buildBuilders).where(eq(buildBuilders.buildId, buildId));
+    // Delete the build itself
+    await trx.delete(builds).where(eq(builds.id, buildId));
+  });
 };
 
 export const getBuildLikeForUser = async (buildId: string, userAddress: string) => {
