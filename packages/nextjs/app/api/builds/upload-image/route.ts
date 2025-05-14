@@ -2,9 +2,6 @@ import { NextRequest, NextResponse } from "next/server";
 import mime from "mime-types";
 import { bucket } from "~~/services/firebase";
 
-// Export route segment config for API routes in App Router
-export const dynamic = "force-dynamic";
-
 export async function POST(request: NextRequest) {
   try {
     if (!request.body) {
