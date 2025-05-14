@@ -3,7 +3,7 @@ title: "Mastering ERC721: Developer Guide to NFT Metadata & Best Practices"
 description: "A comprehensive technical guide for developers on the ERC721 NFT standard: metadata, tokenURI management, OpenZeppelin usage, and best practices for building robust, marketplace-ready NFTs."
 ---
 
-NFTs (Non-Fungible Tokens) have revolutionized digital ownership, but building robust, marketplace-ready NFTs requires more than just a simple mint function. **This guide is your definitive technical resource for mastering ERC721 as a developer**—from the basics to advanced metadata management, tokenURI best practices, and real-world deployment tips.
+NFTs (Non-Fungible Tokens) have revolutionized digital ownership, but building robust, marketplace-ready NFTs requires more than just a simple mint function. **This guide will help you master ERC721 as a developer**—from the basics to advanced metadata management, tokenURI best practices, and real-world deployment tips.
 
 > **Looking to compare ERC721 with ERC1155?** See our in-depth [ERC721 vs. ERC1155: Key Differences, Use Cases & How to Choose](/guides/erc721-vs-erc1155) for help choosing the right standard for your project.
 
@@ -62,7 +62,7 @@ While the contract manages ownership, **metadata** gives an NFT its unique ident
 - Follow [OpenSea's metadata standard](https://docs.opensea.io/docs/metadata-standards).
 - Store images and metadata on IPFS for decentralization.
 
-## 4. `tokenURI`: The Gateway to Your NFT's Story
+## 4. tokenURI: The Gateway to Your NFT's Story
 
 The `tokenURI(uint256 tokenId)` function returns a URI pointing to the metadata JSON for a specific token. This can be an `ipfs://`, `ar://`, or `https://` URI. OpenZeppelin's `ERC721URIStorage` extension provides `_setTokenURI(tokenId, uri)` for per-token URIs.
 
@@ -93,6 +93,7 @@ contract MyAwesomeNFT is ERC721URIStorage, Ownable {
 - **On-chain:** Highest immutability and permanence, but expensive and limited in size. Used for small, critical data or fully on-chain NFTs (e.g., SVG art).
 - **Off-chain (IPFS/Arweave):** Most common. Upload images and metadata JSON to IPFS (using services like Pinata or NFT.Storage). Use the resulting `ipfs://` URI in your contract. Arweave offers "pay once, store forever" for permanent storage.
 - **Centralized servers:** Easy but risky—data can be lost or changed. Not recommended for long-term value.
+  - _Real-world example: In April 2025, the CloneX NFT collection by RTFKT (Nike) temporarily lost all its art when Cloudflare restricted access due to a Terms of Service violation. This incident highlighted how NFTs with metadata or images stored on centralized services can become inaccessible or censored, even if the tokens remain on-chain. [Read more](https://blockworks.co/news/cloudflare-rtfkt-clonex-nft-art-service-violation)._
 
 **Best practices:**
 
