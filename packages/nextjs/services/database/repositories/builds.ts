@@ -84,64 +84,64 @@ export const updateBuild = async (buildId: string, build: BuildInsert) => {
 };
 
 export const getBuildsByUserAddress = async (userAddress: string) => {
-  // Step 1: Fetch all builds where the user is a builder (owner or not)
-  const rows = await db
-    .select({
-      build: builds,
-      builderUserAddress: buildBuilders.userAddress,
-      builderIsOwner: buildBuilders.isOwner,
-      likeUserAddress: buildLikes.userAddress,
-    })
-    .from(builds)
-    .innerJoin(buildBuilders, eq(builds.id, buildBuilders.buildId))
-    .leftJoin(buildLikes, eq(builds.id, buildLikes.buildId))
-    .where(eq(lower(buildBuilders.userAddress), userAddress.toLowerCase()));
+  const normalizedAddress = userAddress.toLowerCase();
 
-  // Get unique build IDs
-  const buildIds = Array.from(new Set(rows.map(row => row.build.id)));
+  const userBuildRows = await db
+    .select({ buildId: buildBuilders.buildId })
+    .from(buildBuilders)
+    .where(eq(lower(buildBuilders.userAddress), normalizedAddress));
+
+  const buildIds = userBuildRows.map(row => row.buildId);
   if (buildIds.length === 0) return [];
 
-  // Step 2: Fetch all builder addresses for these build IDs
-  const allBuilders = await db
+  const buildsRows = await db.select().from(builds).where(inArray(builds.id, buildIds));
+
+  const buildersRows = await db
     .select({
       buildId: buildBuilders.buildId,
       userAddress: buildBuilders.userAddress,
+      isOwner: buildBuilders.isOwner,
     })
     .from(buildBuilders)
     .where(inArray(buildBuilders.buildId, buildIds));
 
-  // Map buildId to all builder addresses
-  const buildIdToBuilders = allBuilders.reduce<Record<string, Set<string>>>((acc, row) => {
-    if (!acc[row.buildId]) acc[row.buildId] = new Set();
-    acc[row.buildId].add(row.userAddress);
-    return acc;
-  }, {});
+  const likesRows = await db
+    .select({
+      buildId: buildLikes.buildId,
+      userAddress: buildLikes.userAddress,
+    })
+    .from(buildLikes)
+    .where(inArray(buildLikes.buildId, buildIds));
 
-  // Map buildId to owner address
-  const buildIdToOwner: Record<string, string> = {};
-  rows.forEach(row => {
-    if (row.builderIsOwner) {
-      buildIdToOwner[row.build.id] = row.builderUserAddress;
+  const buildIdToBuilders = new Map<string, { owner: string; coBuilders: string[] }>();
+  for (const row of buildersRows) {
+    let builderEntry = buildIdToBuilders.get(row.buildId);
+    if (!builderEntry) {
+      builderEntry = { owner: "", coBuilders: [] };
+      buildIdToBuilders.set(row.buildId, builderEntry);
     }
-  });
+    if (row.isOwner) {
+      builderEntry.owner = row.userAddress;
+    } else {
+      builderEntry.coBuilders.push(row.userAddress);
+    }
+  }
 
-  // Step 3: Reduce the original rows to build the result
-  const result = rows.reduce<Record<string, { build: Build; likes: Set<string> }>>((acc, row) => {
-    const buildId = row.build.id;
-    if (!acc[buildId]) {
-      acc[buildId] = { build: row.build, likes: new Set() };
+  const buildIdToLikes = new Map<string, string[]>();
+  for (const row of likesRows) {
+    let likesEntry = buildIdToLikes.get(row.buildId);
+    if (!likesEntry) {
+      likesEntry = [];
+      buildIdToLikes.set(row.buildId, likesEntry);
     }
-    if (row.likeUserAddress) {
-      acc[buildId].likes.add(row.likeUserAddress);
-    }
-    return acc;
-  }, {});
+    likesEntry.push(row.userAddress);
+  }
 
-  // Step 4: Return builds with all builder addresses as coBuilders, excluding the owner
-  return Object.entries(result).map(([buildId, { build, likes }]) => ({
+  return buildsRows.map(build => ({
     build,
-    coBuilders: Array.from(buildIdToBuilders[buildId] || []).filter(addr => addr !== buildIdToOwner[buildId]),
-    likes: Array.from(likes),
+    ownerAddress: buildIdToBuilders.get(build.id)?.owner || "",
+    coBuilders: buildIdToBuilders.get(build.id)?.coBuilders || [],
+    likes: buildIdToLikes.get(build.id) || [],
   }));
 };
 

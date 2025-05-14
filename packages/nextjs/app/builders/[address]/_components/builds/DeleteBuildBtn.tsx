@@ -1,16 +1,14 @@
 "use client";
 
-import { useParams } from "next/navigation";
 import { useAccount } from "wagmi";
 import { TrashIcon } from "@heroicons/react/24/solid";
 import { useDeleteBuild } from "~~/hooks/useDeleteBuild";
 
-export const DeleteBuildBtn = ({ buildId }: { buildId: string }) => {
+export const DeleteBuildBtn = ({ buildId, ownerAddress }: { buildId: string; ownerAddress: string }) => {
   const { deleteBuild, isPending } = useDeleteBuild();
   const { address: contentAddress } = useAccount();
-  const { address: builderAddress } = useParams();
 
-  if (!contentAddress || contentAddress !== builderAddress) {
+  if (!contentAddress || contentAddress !== ownerAddress) {
     return null;
   }
 

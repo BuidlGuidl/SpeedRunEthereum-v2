@@ -92,7 +92,12 @@ export default async function BuilderPage({ params }: { params: { address: strin
                 {builds.length > 0 &&
                   builds.map(build => (
                     <div key={build.build.id} className="flex-grow-0 flex-shrink-0">
-                      <BuildCard build={build.build} likes={build.likes} coBuilders={build.coBuilders} />
+                      <BuildCard
+                        ownerAddress={build.ownerAddress}
+                        build={build.build}
+                        likes={build.likes}
+                        coBuilders={build.coBuilders}
+                      />
                     </div>
                   ))}
               </div>
