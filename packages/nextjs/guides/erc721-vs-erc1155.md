@@ -92,16 +92,57 @@ contract MyGameItems is ERC1155 {
 
 ## 4. Key Differences: ERC721 vs. ERC1155
 
-| Feature                 | ERC721                             | ERC1155                                                      |
-| ----------------------- | ---------------------------------- | ------------------------------------------------------------ |
-| **Token Types**         | Only non-fungible (unique)         | Fungible, non-fungible, semi-fungible (all in one contract)  |
-| **Batch Operations**    | No native support                  | Native support for batch mint, transfer, burn                |
-| **Gas Efficiency**      | Less efficient for multiple tokens | Highly efficient for batch operations                        |
-| **Metadata**            | `tokenURI(tokenId)` per token      | `uri(id)` with `{id}` placeholder, supports dynamic metadata |
-| **Contract Structure**  | One contract per collection/type   | One contract for many types                                  |
-| **Use Cases**           | Art, collectibles, unique assets   | Games, marketplaces, airdrops, mixed asset types             |
-| **Complexity**          | Simple, easy to understand         | More complex, but powerful                                   |
-| **Marketplace Support** | Universally supported              | Supported by most, but not all, marketplaces                 |
+<table>
+  <thead>
+    <tr>
+      <th>Feature</th>
+      <th>ERC721</th>
+      <th>ERC1155</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Token Types</strong></td>
+      <td>Only non-fungible (unique)</td>
+      <td>Fungible, non-fungible, semi-fungible (all in one contract)</td>
+    </tr>
+    <tr>
+      <td><strong>Batch Operations</strong></td>
+      <td>No native support</td>
+      <td>Native support for batch mint, transfer, burn</td>
+    </tr>
+    <tr>
+      <td><strong>Gas Efficiency</strong></td>
+      <td>Less efficient for multiple tokens</td>
+      <td>Highly efficient for batch operations</td>
+    </tr>
+    <tr>
+      <td><strong>Metadata</strong></td>
+      <td><code>tokenURI(tokenId)</code> per token</td>
+      <td><code>uri(id)</code> with <code>&#123;id&#125;</code> placeholder, supports dynamic metadata</td>
+    </tr>
+    <tr>
+      <td><strong>Contract Structure</strong></td>
+      <td>One contract per collection/type</td>
+      <td>One contract for many types</td>
+    </tr>
+    <tr>
+      <td><strong>Use Cases</strong></td>
+      <td>Art, collectibles, unique assets</td>
+      <td>Games, marketplaces, airdrops, mixed asset types</td>
+    </tr>
+    <tr>
+      <td><strong>Complexity</strong></td>
+      <td>Simple, easy to understand</td>
+      <td>More complex, but powerful</td>
+    </tr>
+    <tr>
+      <td><strong>Marketplace Support</strong></td>
+      <td>Universally supported</td>
+      <td>Supported by most, but not all, marketplaces</td>
+    </tr>
+  </tbody>
+</table>
 
 ---
 
