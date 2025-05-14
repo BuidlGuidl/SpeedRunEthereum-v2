@@ -4,6 +4,7 @@ import { useAccount } from "wagmi";
 import { HeartIcon as HeartIconOutline } from "@heroicons/react/24/outline";
 import { HeartIcon as HeartIconSolid } from "@heroicons/react/24/solid";
 import { useBuildLike } from "~~/hooks/useBuildLike";
+import { notification } from "~~/utils/scaffold-eth";
 
 type LikeBuildBtnProps = {
   buildId: string;
@@ -12,9 +13,13 @@ type LikeBuildBtnProps = {
 
 export const LikeBuildBtn = ({ buildId, likes }: LikeBuildBtnProps) => {
   const { address: connectedAddress } = useAccount();
-  const { likeBuildMutation, isPending } = useBuildLike();
-
   const isLiked = connectedAddress && likes.includes(connectedAddress);
+
+  const { likeBuildMutation, isPending } = useBuildLike({
+    onSuccess: () => {
+      notification.success(`Build ${isLiked ? "unliked" : "liked"} successfully!`);
+    },
+  });
 
   return (
     <button onClick={() => likeBuildMutation({ buildId, action: isLiked ? "unlike" : "like" })} disabled={isPending}>

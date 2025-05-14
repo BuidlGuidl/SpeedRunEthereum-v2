@@ -6,7 +6,7 @@ import { likeBuild } from "~~/services/api/users/builds";
 import { EIP_712_TYPED_DATA__LIKE_BUILD } from "~~/services/eip712/builds";
 import { notification } from "~~/utils/scaffold-eth";
 
-export function useBuildLike() {
+export function useBuildLike({ onSuccess }: { onSuccess?: () => void }) {
   const { address } = useAccount();
   const { signTypedDataAsync } = useSignTypedData();
   const router = useRouter();
@@ -28,7 +28,7 @@ export function useBuildLike() {
       return likeBuild({ address, signature, buildId });
     },
     onSuccess: () => {
-      notification.success("Build liked successfully!");
+      onSuccess?.();
       router?.refresh();
     },
     onError: (error: Error) => {
