@@ -1,6 +1,5 @@
 ---
-title: "Mastering ERC721: The Developer's Guide to NFT Metadata, tokenURI, and Best Practices"
-metaTitle: "Mastering ERC721: Developer Guide to NFT Metadata & Best Practices"
+title: "Mastering ERC721: Developer Guide to NFT Metadata & Best Practices"
 description: "A comprehensive technical guide for developers on the ERC721 NFT standard: metadata, tokenURI management, OpenZeppelin usage, and best practices for building robust, marketplace-ready NFTs."
 ---
 

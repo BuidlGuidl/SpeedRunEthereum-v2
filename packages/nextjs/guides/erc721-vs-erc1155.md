@@ -1,6 +1,5 @@
 ---
-title: "ERC721 vs. ERC1155: Which NFT Standard Should You Use? Key Differences & Use Cases"
-metaTitle: "ERC721 vs. ERC1155: Key Differences, Use Cases & How to Choose"
+title: "ERC721 vs. ERC1155: Key Differences, Use Cases & How to Choose"
 description: "A strategic comparison guide for choosing between ERC721 and ERC1155 NFT standards. Understand the key differences, use cases, and decision factors to select the best standard for your project."
 ---
 
