@@ -89,7 +89,7 @@ export const BuildFormModal = forwardRef<HTMLDialogElement, BuildFormModalProps>
           setIsUploading(true);
 
           try {
-            const response = await fetch("/api/builds/upload-image", {
+            const response = await fetch("/api/builds/upload-img", {
               method: "POST",
               body: formData,
             });
