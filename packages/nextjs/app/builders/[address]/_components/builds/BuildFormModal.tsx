@@ -223,6 +223,46 @@ export const BuildFormModal = forwardRef<HTMLDialogElement, BuildFormModalProps>
               />
             </div>
             <div className="flex flex-col gap-1.5 w-full">
+              <div className="flex items-center ml-2">
+                <span className="text-base font-medium leading-none">Co-Builders</span>
+                <button
+                  type="button"
+                  className="btn btn-sm h-6 min-h-6 p-0 w-6 btn-circle btn-ghost mt-0.5"
+                  onClick={() => setForm({ ...form, coBuilders: [...form.coBuilders, ""] })}
+                >
+                  +
+                </button>
+              </div>
+              {form.coBuilders.map((address, idx) => (
+                <div key={idx} className="flex items-center gap-2 w-full">
+                  <div className="flex-1">
+                    <AddressInput
+                      placeholder="Builder Address"
+                      value={address}
+                      onChange={val => {
+                        console.log("val", val);
+                        const updated = [...form.coBuilders];
+                        updated[idx] = val;
+                        setForm({ ...form, coBuilders: updated });
+                        console.log("form", form);
+                      }}
+                    />
+                  </div>
+
+                  <button
+                    className="btn btn-ghost btn-sm"
+                    onClick={() => {
+                      const updated = form.coBuilders.filter((_, i) => i !== idx);
+                      setForm({ ...form, coBuilders: updated });
+                    }}
+                    aria-label="Delete"
+                  >
+                    <TrashIcon className="h-5 w-5" />
+                  </button>
+                </div>
+              ))}
+            </div>
+            <div className="flex flex-col gap-1.5 w-full">
               <div className="flex items-base ml-2">
                 <span className="text-sm font-medium mr-2 leading-none">Image</span>
               </div>
@@ -262,46 +302,6 @@ export const BuildFormModal = forwardRef<HTMLDialogElement, BuildFormModalProps>
                   </div>
                 </div>
               )}
-            </div>
-            <div className="flex flex-col gap-1.5 w-full">
-              <div className="flex items-center ml-2">
-                <span className="text-base font-medium leading-none">Co-Builders</span>
-                <button
-                  type="button"
-                  className="btn btn-sm h-6 min-h-6 p-0 w-6 btn-circle btn-ghost mt-0.5"
-                  onClick={() => setForm({ ...form, coBuilders: [...form.coBuilders, ""] })}
-                >
-                  +
-                </button>
-              </div>
-              {form.coBuilders.map((address, idx) => (
-                <div key={idx} className="flex items-center gap-2 w-full">
-                  <div className="flex-1">
-                    <AddressInput
-                      placeholder="Builder Address"
-                      value={address}
-                      onChange={val => {
-                        console.log("val", val);
-                        const updated = [...form.coBuilders];
-                        updated[idx] = val;
-                        setForm({ ...form, coBuilders: updated });
-                        console.log("form", form);
-                      }}
-                    />
-                  </div>
-
-                  <button
-                    className="btn btn-ghost btn-sm"
-                    onClick={() => {
-                      const updated = form.coBuilders.filter((_, i) => i !== idx);
-                      setForm({ ...form, coBuilders: updated });
-                    }}
-                    aria-label="Delete"
-                  >
-                    <TrashIcon className="h-5 w-5" />
-                  </button>
-                </div>
-              ))}
             </div>
             <div className="modal-action">
               <button
