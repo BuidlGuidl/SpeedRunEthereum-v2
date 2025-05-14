@@ -51,36 +51,43 @@ export const isOwnerOfBuild = async (buildId: string, userAddress: string) => {
 };
 
 export const updateBuild = async (buildId: string, build: BuildInsert) => {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { submittedTimestamp, ...restBuild } = build;
-  const [updatedBuild] = await db.update(builds).set(restBuild).where(eq(builds.id, buildId)).returning();
+  const {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    submittedTimestamp, // ignore this field
+    coBuilders,
+    userAddress,
+    ...updatableFields
+  } = build;
 
-  if (!updatedBuild) {
-    throw new Error("Failed to update build");
-  }
+  return await db.transaction(async trx => {
+    // Update the build
+    const [updatedBuild] = await trx.update(builds).set(updatableFields).where(eq(builds.id, buildId)).returning();
 
-  // Remove all existing builders for this build
-  await db.delete(buildBuilders).where(eq(buildBuilders.buildId, updatedBuild.id));
+    if (!updatedBuild) {
+      throw new Error("Failed to update build");
+    }
 
-  // Insert the owner
-  await db.insert(buildBuilders).values({
-    buildId: updatedBuild.id,
-    userAddress: build.userAddress,
-    isOwner: true,
-  });
+    // Remove all existing builders for this build
+    await trx.delete(buildBuilders).where(eq(buildBuilders.buildId, updatedBuild.id));
 
-  // Insert co-builders (if any)
-  if (build.coBuilders && build.coBuilders.length > 0) {
-    await db.insert(buildBuilders).values(
-      build.coBuilders.map(userAddress => ({
+    // Prepare all builders (owner + co-builders)
+    const buildersToInsert = [
+      {
         buildId: updatedBuild.id,
         userAddress,
+        isOwner: true,
+      },
+      ...(coBuilders?.map(coBuilderAddress => ({
+        buildId: updatedBuild.id,
+        userAddress: coBuilderAddress,
         isOwner: false,
-      })),
-    );
-  }
+      })) ?? []),
+    ];
 
-  return updatedBuild;
+    await trx.insert(buildBuilders).values(buildersToInsert);
+
+    return updatedBuild;
+  });
 };
 
 export const getBuildsByUserAddress = async (userAddress: string) => {
