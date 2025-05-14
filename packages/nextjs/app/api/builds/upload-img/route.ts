@@ -48,11 +48,10 @@ export async function POST(request: NextRequest) {
       public: true, // Make the file publicly accessible
     });
 
-    // Get file metadata to access the mediaLink
-    const [metadata] = await fileRef.getMetadata();
+    const publicUrl = fileRef.publicUrl();
 
     // Return the permanent media link
-    return NextResponse.json({ success: true, url: metadata.mediaLink });
+    return NextResponse.json({ success: true, url: publicUrl });
   } catch (error) {
     console.error("Server error:", error);
     return NextResponse.json({ error: "Server error" }, { status: 500 });
