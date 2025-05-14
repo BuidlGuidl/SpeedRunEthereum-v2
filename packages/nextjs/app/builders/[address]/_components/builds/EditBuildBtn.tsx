@@ -1,7 +1,9 @@
 "use client";
 
 import { useRef } from "react";
+import { useParams } from "next/navigation";
 import { BuildFormInputs, BuildFormModal } from "./BuildFormModal";
+import { useAccount } from "wagmi";
 import { PencilSquareIcon } from "@heroicons/react/24/outline";
 import { useUpdateBuild } from "~~/hooks/useUpdateBuild";
 
@@ -11,6 +13,9 @@ type EditBuildBtnProps = {
 };
 
 export const EditBuildBtn = ({ build, buildId }: EditBuildBtnProps) => {
+  const { address: connectedAddress } = useAccount();
+  const { address: builderAddress } = useParams();
+
   const modalRef = useRef<HTMLDialogElement>(null);
 
   const { updateBuild, isPending } = useUpdateBuild({
@@ -22,6 +27,10 @@ export const EditBuildBtn = ({ build, buildId }: EditBuildBtnProps) => {
   const handleUpdateBuild = (form: BuildFormInputs) => {
     updateBuild({ build: form, buildId });
   };
+
+  if (!connectedAddress || connectedAddress !== builderAddress) {
+    return null;
+  }
 
   return (
     <>
