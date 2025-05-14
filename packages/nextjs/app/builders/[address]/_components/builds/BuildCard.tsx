@@ -1,22 +1,21 @@
 import { DeleteBuildBtn } from "./DeleteBuildBtn";
 import { EditBuildBtn } from "./EditBuildBtn";
-import { HeartIcon } from "@heroicons/react/24/solid";
+import { LikeBuildBtn } from "./LikeBuildBtn";
 import { Build } from "~~/services/database/repositories/builds";
 
 type Props = {
   build: Build;
   likes: string[];
   coBuilders: string[];
-  onDelete?: () => void;
   onView?: () => void;
 };
 
-export const BuildCard = ({ build, likes, coBuilders, onDelete, onView }: Props) => {
+export const BuildCard = ({ build, likes, coBuilders, onView }: Props) => {
   return (
     <div className="relative flex flex-col w-72 h-[400px] bg-base-300 rounded-xl shadow-md overflow-hidden transition hover:shadow-lg">
       <div className="absolute right-4 top-4 flex gap-2 z-10">
         <EditBuildBtn build={{ ...build, coBuilders }} buildId={build.id} />
-        <DeleteBuildBtn buildId={build.id} onSuccess={onDelete} />
+        <DeleteBuildBtn buildId={build.id} />
       </div>
       <div className="w-full h-44 flex items-center justify-center">
         {build.imageUrl ? (
@@ -37,7 +36,7 @@ export const BuildCard = ({ build, likes, coBuilders, onDelete, onView }: Props)
             View
           </button>
           <div className="flex items-center gap-1">
-            <HeartIcon className="h-5 w-5 text-red-400" />
+            <LikeBuildBtn buildId={build.id} likes={likes} />
             <span className="text-base">{likes.length}</span>
           </div>
         </div>

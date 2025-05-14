@@ -153,3 +153,19 @@ export const deleteBuild = async (buildId: string) => {
   // Delete the build itself
   await db.delete(builds).where(eq(builds.id, buildId));
 };
+
+export const getBuildLikeForUser = async (buildId: string, userAddress: string) => {
+  const like = await db.query.buildLikes.findFirst({
+    where: and(eq(buildLikes.buildId, buildId), eq(buildLikes.userAddress, userAddress)),
+  });
+  return like;
+};
+
+export const createBuildLike = async (buildId: string, userAddress: string) => {
+  const [like] = await db.insert(buildLikes).values({ buildId, userAddress }).returning();
+  return like;
+};
+
+export const deleteBuildLike = async (likeId: number) => {
+  await db.delete(buildLikes).where(eq(buildLikes.id, likeId));
+};
