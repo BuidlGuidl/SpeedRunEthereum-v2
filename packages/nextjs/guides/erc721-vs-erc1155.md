@@ -1,6 +1,6 @@
 ---
 title: "ERC721 vs. ERC1155: Key Differences, Use Cases & How to Choose"
-description: "A strategic comparison guide for choosing between ERC721 and ERC1155 NFT standards. Understand the key differences, use cases, and decision factors to select the best standard for your project."
+description: "A comparison guide for choosing between ERC721 and ERC1155 NFT standards. Understand the key differences, use cases, and decision factors to select the best standard for your project."
 ---
 
 ## TL;DR: ERC721 vs ERC1155
@@ -14,7 +14,7 @@ description: "A strategic comparison guide for choosing between ERC721 and ERC11
 ## 1. Introduction: Navigating Ethereum's NFT Standards
 
 Ethereum's NFT ecosystem is built on robust token standards that ensure interoperability and security.
-**ERC721** was the first standard for unique, non-fungible assets, powering the early NFT boom. As NFT use cases grew—especially in gaming and large-scale collectibles—**ERC1155** emerged to address the need for efficiency, batch operations, and multi-token management.
+**ERC721** was the first standard for unique, non-fungible assets, powering the early NFT boom. As [NFT use cases](/guides/nft-use-cases) grew—especially in gaming and large-scale collectibles—**ERC1155** emerged to address the need for efficiency, batch operations, and multi-token management.
 
 **This guide is designed to help you decide which standard is right for your project.** If you want a deep technical dive into ERC721 implementation, see our [Mastering ERC721: Developer Guide to NFT Metadata & Best Practices](/guides/mastering-erc721).
 
