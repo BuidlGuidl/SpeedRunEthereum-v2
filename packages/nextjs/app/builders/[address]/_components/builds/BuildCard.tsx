@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { DeleteBuildBtn } from "./DeleteBuildBtn";
 import { EditBuildBtn } from "./EditBuildBtn";
 import { LikeBuildBtn } from "./LikeBuildBtn";
@@ -8,10 +9,9 @@ type Props = {
   build: Build;
   likes: string[];
   coBuilders: string[];
-  onView?: () => void;
 };
 
-export const BuildCard = ({ ownerAddress, build, likes, coBuilders, onView }: Props) => {
+export const BuildCard = ({ ownerAddress, build, likes, coBuilders }: Props) => {
   return (
     <div className="relative flex flex-col w-72 h-[400px] bg-base-300 rounded-xl shadow-md overflow-hidden transition hover:shadow-lg">
       <div className="absolute right-4 top-4 flex gap-2 z-10">
@@ -33,9 +33,9 @@ export const BuildCard = ({ ownerAddress, build, likes, coBuilders, onView }: Pr
         <p className="text-sm my-1 line-clamp-4">{build.desc}</p>
         <div className="flex-1" />
         <div className="flex justify-between items-center pt-2 mt-2">
-          <button className="btn btn-primary btn-sm" onClick={onView}>
+          <Link href={`/builds/${build.id}`} className="btn btn-primary btn-sm" target="_blank">
             View
-          </button>
+          </Link>
           <div className="flex items-center gap-1">
             <LikeBuildBtn buildId={build.id} likes={likes} />
             <span className="text-base">{likes.length}</span>

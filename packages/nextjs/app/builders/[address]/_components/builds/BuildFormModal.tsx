@@ -126,7 +126,7 @@ export const BuildFormModal = forwardRef<HTMLDialogElement, BuildFormModalProps>
         <div className="modal-box flex flex-col space-y-3">
           <form method="dialog" className="bg-secondary -mx-6 -mt-6 px-6 py-4 flex items-center justify-between">
             <div className="flex justify-between items-center">
-              <p className="font-bold text-xl m-0">New Build</p>
+              <p className="font-bold text-xl m-0">{build ? "Edit Build" : "New Build"}</p>
             </div>
             <button onClick={closeModal} className="btn btn-sm btn-circle btn-ghost text-xl h-auto">
               ✕
