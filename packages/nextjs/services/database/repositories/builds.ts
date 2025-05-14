@@ -86,6 +86,7 @@ export const updateBuild = async (buildId: string, build: BuildInsert) => {
 export const getBuildsByUserAddress = async (userAddress: string) => {
   const normalizedAddress = userAddress.toLowerCase();
 
+  // 1. Get all build IDs where the user is a builder (owner or co-builder)
   const userBuildRows = await db
     .select({ buildId: buildBuilders.buildId })
     .from(buildBuilders)
@@ -94,54 +95,52 @@ export const getBuildsByUserAddress = async (userAddress: string) => {
   const buildIds = userBuildRows.map(row => row.buildId);
   if (buildIds.length === 0) return [];
 
-  const buildsRows = await db.select().from(builds).where(inArray(builds.id, buildIds));
+  // 2. Fetch all builds, builders, and likes for these IDs in parallel
+  const [buildsRows, buildersRows, likesRows] = await Promise.all([
+    db.select().from(builds).where(inArray(builds.id, buildIds)),
+    db
+      .select({
+        buildId: buildBuilders.buildId,
+        userAddress: buildBuilders.userAddress,
+        isOwner: buildBuilders.isOwner,
+      })
+      .from(buildBuilders)
+      .where(inArray(buildBuilders.buildId, buildIds)),
+    db
+      .select({
+        buildId: buildLikes.buildId,
+        userAddress: buildLikes.userAddress,
+      })
+      .from(buildLikes)
+      .where(inArray(buildLikes.buildId, buildIds)),
+  ]);
 
-  const buildersRows = await db
-    .select({
-      buildId: buildBuilders.buildId,
-      userAddress: buildBuilders.userAddress,
-      isOwner: buildBuilders.isOwner,
-    })
-    .from(buildBuilders)
-    .where(inArray(buildBuilders.buildId, buildIds));
+  // 3. Group builders and likes by buildId using reduce
+  const buildIdToBuilders = buildersRows.reduce(
+    (acc, row) => {
+      if (!acc[row.buildId]) acc[row.buildId] = { owner: "", coBuilders: [] };
+      if (row.isOwner) acc[row.buildId].owner = row.userAddress;
+      else acc[row.buildId].coBuilders.push(row.userAddress);
+      return acc;
+    },
+    {} as Record<string, { owner: string; coBuilders: string[] }>,
+  );
 
-  const likesRows = await db
-    .select({
-      buildId: buildLikes.buildId,
-      userAddress: buildLikes.userAddress,
-    })
-    .from(buildLikes)
-    .where(inArray(buildLikes.buildId, buildIds));
+  const buildIdToLikes = likesRows.reduce(
+    (acc, row) => {
+      if (!acc[row.buildId]) acc[row.buildId] = [];
+      acc[row.buildId].push(row.userAddress);
+      return acc;
+    },
+    {} as Record<string, string[]>,
+  );
 
-  const buildIdToBuilders = new Map<string, { owner: string; coBuilders: string[] }>();
-  for (const row of buildersRows) {
-    let builderEntry = buildIdToBuilders.get(row.buildId);
-    if (!builderEntry) {
-      builderEntry = { owner: "", coBuilders: [] };
-      buildIdToBuilders.set(row.buildId, builderEntry);
-    }
-    if (row.isOwner) {
-      builderEntry.owner = row.userAddress;
-    } else {
-      builderEntry.coBuilders.push(row.userAddress);
-    }
-  }
-
-  const buildIdToLikes = new Map<string, string[]>();
-  for (const row of likesRows) {
-    let likesEntry = buildIdToLikes.get(row.buildId);
-    if (!likesEntry) {
-      likesEntry = [];
-      buildIdToLikes.set(row.buildId, likesEntry);
-    }
-    likesEntry.push(row.userAddress);
-  }
-
+  // 4. Assemble the result
   return buildsRows.map(build => ({
     build,
-    ownerAddress: buildIdToBuilders.get(build.id)?.owner || "",
-    coBuilders: buildIdToBuilders.get(build.id)?.coBuilders || [],
-    likes: buildIdToLikes.get(build.id) || [],
+    ownerAddress: buildIdToBuilders[build.id]?.owner || "",
+    coBuilders: buildIdToBuilders[build.id]?.coBuilders || [],
+    likes: buildIdToLikes[build.id] || [],
   }));
 };
 
