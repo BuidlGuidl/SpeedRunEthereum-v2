@@ -46,6 +46,7 @@
     "react-copy-to-clipboard": "~5.1.0",
     "react-country-flag": "^3.1.0",
     "react-dom": "~18.3.1",
+    "react-dropzone": "^14.3.8",
     "react-flags-select": "^2.4.0",
     "react-hot-toast": "~2.4.0",
     "rehype-raw": "^7.0.0",

@@ -1,5 +1,6 @@
-import { forwardRef, useRef, useState } from "react";
-import { PhotoIcon, TrashIcon } from "@heroicons/react/24/solid";
+import { forwardRef, useState } from "react";
+import { useDropzone } from "react-dropzone";
+import { TrashIcon } from "@heroicons/react/24/solid";
 import { InputBase } from "~~/components/scaffold-eth/Input";
 import { AddressInput } from "~~/components/scaffold-eth/Input/AddressInput";
 import { BuildCategory, BuildType } from "~~/services/database/config/types";
@@ -49,7 +50,6 @@ export const BuildFormModal = forwardRef<HTMLDialogElement, BuildFormModalProps>
       },
     );
     const [isUploading, setIsUploading] = useState(false);
-    const fileInputRef = useRef<HTMLInputElement>(null);
 
     const handleFormSubmit = async () => {
       if (!form.name) {
@@ -75,66 +75,51 @@ export const BuildFormModal = forwardRef<HTMLDialogElement, BuildFormModalProps>
       buttonAction(form);
     };
 
-    const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
-      const files = event.target.files;
-      if (!files || files.length === 0) return;
+    const { getRootProps, getInputProps, isDragActive } = useDropzone({
+      accept: {
+        "image/*": [],
+      },
+      maxSize: 10 * 1024 * 1024,
+      onDrop: async acceptedFiles => {
+        if (acceptedFiles && acceptedFiles.length > 0) {
+          const file = acceptedFiles[0];
+          const formData = new FormData();
+          formData.append("file", file);
 
-      const file = files[0];
+          setIsUploading(true);
 
-      // Validate file size (10MB max)
-      const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
-      if (file.size > MAX_FILE_SIZE) {
-        notification.error("Image size exceeds the 10MB limit");
-        if (fileInputRef.current) {
-          fileInputRef.current.value = "";
+          try {
+            const response = await fetch("/api/builds/upload-image", {
+              method: "POST",
+              body: formData,
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+              throw new Error(data.error || "Failed to upload image");
+            }
+
+            setForm({ ...form, imageUrl: data.url });
+            notification.success("Image uploaded successfully!");
+          } catch (error) {
+            console.error("Upload error:", error);
+            notification.error("Failed to upload image");
+          } finally {
+            setIsUploading(false);
+          }
         }
-        return;
-      }
-
-      // Validate file type
-      if (!file.type.startsWith("image/")) {
-        notification.error("File must be an image");
-        if (fileInputRef.current) {
-          fileInputRef.current.value = "";
+      },
+      onDropRejected: rejectedFiles => {
+        if (rejectedFiles[0]?.errors[0]?.code === "file-too-large") {
+          notification.error("Image size exceeds the 10MB limit");
+        } else if (rejectedFiles[0]?.errors[0]?.code === "file-invalid-type") {
+          notification.error("File must be an image");
+        } else {
+          notification.error("File upload failed");
         }
-        return;
-      }
-
-      const formData = new FormData();
-      formData.append("file", file);
-
-      setIsUploading(true);
-
-      try {
-        const response = await fetch("/api/builds/upload-image", {
-          method: "POST",
-          body: formData,
-        });
-
-        const data = await response.json();
-
-        if (!response.ok) {
-          throw new Error(data.error || "Failed to upload image");
-        }
-
-        setForm({ ...form, imageUrl: data.url });
-        notification.success("Image uploaded successfully!");
-      } catch (error) {
-        console.error("Upload error:", error);
-        notification.error("Failed to upload image");
-      } finally {
-        setIsUploading(false);
-        if (fileInputRef.current) {
-          fileInputRef.current.value = "";
-        }
-      }
-    };
-
-    const triggerFileInput = () => {
-      if (fileInputRef.current) {
-        fileInputRef.current.click();
-      }
-    };
+      },
+    });
 
     return (
       <dialog ref={ref} className="modal">
@@ -241,46 +226,39 @@ export const BuildFormModal = forwardRef<HTMLDialogElement, BuildFormModalProps>
                 <span className="text-sm font-medium mr-2 leading-none">Image</span>
               </div>
 
-              <div className="flex items-center gap-3">
-                <InputBase
-                  placeholder="Image URL"
-                  value={form.imageUrl ?? ""}
-                  onChange={value => setForm({ ...form, imageUrl: value })}
-                />
-                <div className="flex-shrink-0">
-                  <input
-                    type="file"
-                    accept="image/*"
-                    ref={fileInputRef}
-                    onChange={handleImageUpload}
-                    className="hidden"
-                  />
-                  <button
-                    type="button"
-                    onClick={triggerFileInput}
-                    disabled={isUploading}
-                    className="btn btn-primary btn-sm h-[2.2rem] min-h-[2.2rem]"
-                  >
-                    {isUploading ? (
-                      <span className="loading loading-spinner loading-xs"></span>
-                    ) : (
-                      <PhotoIcon className="h-5 w-5" />
-                    )}
-                  </button>
+              {!form.imageUrl ? (
+                <div
+                  {...getRootProps()}
+                  className={`border-2 border-dashed rounded-lg p-6 text-center cursor-pointer ${
+                    isDragActive ? "border-primary bg-primary/10" : "border-base-300 dark:border-base-content/20"
+                  }`}
+                >
+                  <input {...getInputProps()} />
+                  {isUploading ? (
+                    <div className="flex flex-col items-center">
+                      <span className="loading loading-spinner loading-md"></span>
+                      <p className="mt-2">Uploading...</p>
+                    </div>
+                  ) : (
+                    <div className="flex flex-col items-center">
+                      <p>Drag and drop an image here, or click to select</p>
+                      <p className="text-xs mt-1 text-base-content/70">(Max size: 10MB, image files only)</p>
+                    </div>
+                  )}
                 </div>
-              </div>
-
-              {form.imageUrl && (
-                <div className="mt-2 relative w-full h-48 overflow-hidden rounded-lg">
+              ) : (
+                <div className="relative w-full h-48 overflow-hidden rounded-lg">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img src={form.imageUrl} alt="Build preview" className="w-full h-full object-cover" />
-                  <button
-                    type="button"
-                    className="absolute top-2 right-2 btn btn-sm btn-circle btn-error"
-                    onClick={() => setForm({ ...form, imageUrl: "" })}
-                  >
-                    <TrashIcon className="h-4 w-4" />
-                  </button>
+                  <div className="absolute top-2 right-2 flex gap-2">
+                    <button
+                      type="button"
+                      className="btn btn-sm btn-circle btn-error"
+                      onClick={() => setForm({ ...form, imageUrl: "" })}
+                    >
+                      <TrashIcon className="h-4 w-4" />
+                    </button>
+                  </div>
                 </div>
               )}
             </div>
