@@ -6,6 +6,7 @@ import { Metadata } from "next";
 import { isAddress } from "viem";
 import { RouteRefresher } from "~~/components/RouteRefresher";
 import { isBgMember } from "~~/services/api-bg/builders";
+import { getBatchById } from "~~/services/database/repositories/batches";
 import { getLatestSubmissionPerChallengeByUser } from "~~/services/database/repositories/userChallenges";
 import { getUserByAddress } from "~~/services/database/repositories/users";
 import { getEnsOrAddress } from "~~/utils/ens-or-address";
@@ -62,6 +63,10 @@ export default async function BuilderPage({ params }: { params: { address: strin
   const { address: userAddress } = params;
   const challenges = await getLatestSubmissionPerChallengeByUser(userAddress);
   const user = await getUserByAddress(userAddress);
+  let userBatch;
+  if (user?.batchId) {
+    userBatch = await getBatchById(user.batchId);
+  }
   const bgMemberExists = await isBgMember(userAddress);
 
   if (!user) {
@@ -74,7 +79,7 @@ export default async function BuilderPage({ params }: { params: { address: strin
       <div className="max-w-7xl mx-auto px-4 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-14">
           <div className="lg:col-span-1">
-            <UserProfileCard user={user} address={userAddress} />
+            <UserProfileCard user={user} batch={userBatch} />
           </div>
           <div className="lg:col-span-3">
             {bgMemberExists && <UpgradedToBGCard user={user} />}
