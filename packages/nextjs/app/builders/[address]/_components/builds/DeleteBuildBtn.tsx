@@ -3,8 +3,8 @@
 import { TrashIcon } from "@heroicons/react/24/solid";
 import { useDeleteBuild } from "~~/hooks/useDeleteBuild";
 
-export const DeleteBuildBtn = ({ buildId, onSuccess }: { buildId: string; onSuccess?: () => void }) => {
-  const { deleteBuild, isPending } = useDeleteBuild({ onSuccess });
+export const DeleteBuildBtn = ({ buildId }: { buildId: string }) => {
+  const { deleteBuild, isPending } = useDeleteBuild();
 
   return (
     <button
