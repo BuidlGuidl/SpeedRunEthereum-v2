@@ -140,6 +140,4 @@ Mastering ERC721, metadata, and URI management is fundamental for creating valua
 
 **Ready to build your first NFT? [Try the Simple NFT Example Challenge!](/challenge/simple-nft-example)**
 
-**Want to go deeper? [NFTs in Web3: Understanding Use Cases Beyond Digital Art](/guides/nft-use-cases)**
-
-**Want to compare NFT standards? [Read: ERC721 vs. ERC1155: Key Differences, Use Cases & How to Choose](/guides/erc721-vs-erc1155)**
+**Already comfortable with the basics? [Try the SVG NFT Challenge!](/challenge/svg-nft)**
