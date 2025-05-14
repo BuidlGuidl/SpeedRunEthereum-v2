@@ -1,5 +1,6 @@
 import { forwardRef, useState } from "react";
 import { useDropzone } from "react-dropzone";
+import { Toaster } from "react-hot-toast";
 import { TrashIcon } from "@heroicons/react/24/solid";
 import { InputBase } from "~~/components/scaffold-eth/Input";
 import { AddressInput } from "~~/components/scaffold-eth/Input/AddressInput";
@@ -320,6 +321,7 @@ export const BuildFormModal = forwardRef<HTMLDialogElement, BuildFormModalProps>
             </div>
           </div>
         </div>
+        <Toaster />
       </dialog>
     );
   },
