@@ -82,6 +82,17 @@ export default async function BuilderPage({ params }: { params: { address: strin
           </div>
           <div className="lg:col-span-3 flex flex-col gap-14">
             {bgMemberExists && <UpgradedToBGCard user={user} />}
+            {/* Challenges */}
+            <div className="w-full">
+              <h2 className="text-2xl font-bold mb-0 text-neutral pb-4">Challenges</h2>
+              {challenges.length > 0 ? (
+                <UserChallengesTable challenges={challenges} />
+              ) : (
+                <div className="bg-base-100 p-8 text-center rounded-lg text-neutral">
+                  This builder hasn&apos;t completed any challenges.
+                </div>
+              )}
+            </div>
             {/* Builds */}
             <div className="w-full">
               <div className="flex justify-between items-center">
@@ -101,18 +112,6 @@ export default async function BuilderPage({ params }: { params: { address: strin
                     </div>
                   ))}
               </div>
-            </div>
-
-            {/* Challenges */}
-            <div className="w-full">
-              <h2 className="text-2xl font-bold mb-0 text-neutral pb-4">Challenges</h2>
-              {challenges.length > 0 ? (
-                <UserChallengesTable challenges={challenges} />
-              ) : (
-                <div className="bg-base-100 p-8 text-center rounded-lg text-neutral">
-                  This builder hasn&apos;t completed any challenges.
-                </div>
-              )}
             </div>
           </div>
         </div>
