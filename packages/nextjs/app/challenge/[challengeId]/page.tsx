@@ -54,12 +54,12 @@ export default async function ChallengePage({ params }: { params: { challengeId:
           <ul className="list-disc list-inside">
             <li>
               <a href="/guides/erc721-vs-erc1155" className="underline text-primary">
-                ERC721 vs. ERC1155 – Choosing the Right NFT Standard
+                ERC721 vs. ERC1155: Key Differences, Use Cases & How to Choose
               </a>
             </li>
             <li>
               <a href="/guides/mastering-erc721" className="underline text-primary">
-                Mastering ERC721: A Deep Dive into NFT Standards, Metadata, and tokenURI Management
+                Mastering ERC721: Developer Guide to NFT Metadata & Best Practices
               </a>
             </li>
             <li>
@@ -109,13 +109,13 @@ export default async function ChallengePage({ params }: { params: { challengeId:
                   {/* ERC721 vs. ERC1155 */}
                   <div className="p-4 border rounded bg-base-200 dark:bg-base-300">
                     <a href="/guides/erc721-vs-erc1155" className="text-primary underline font-semibold">
-                      ERC721 vs. ERC1155 – Choosing the Right NFT Standard
+                      ERC721 vs. ERC1155: Key Differences, Use Cases & How to Choose
                     </a>
                   </div>
                   {/* Mastering ERC721 */}
                   <div className="p-4 border rounded bg-base-200 dark:bg-base-300">
                     <a href="/guides/mastering-erc721" className="text-primary underline font-semibold">
-                      Mastering ERC721: A Deep Dive into NFT Standards, Metadata, and tokenURI Management
+                      Mastering ERC721: Developer Guide to NFT Metadata & Best Practices
                     </a>
                   </div>
                   {/* NFT Use Cases */}
