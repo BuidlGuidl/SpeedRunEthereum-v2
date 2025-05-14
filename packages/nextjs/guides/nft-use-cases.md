@@ -5,7 +5,7 @@ description: "Explore the real-world applications of NFTs in Web3, from gaming a
 
 NFTs (Non-Fungible Tokens) are often associated with digital art and collectibles, but their potential in the Web3 ecosystem goes far beyond profile pictures and rare images. As unique, verifiable digital assets on the blockchain, NFTs are revolutionizing industries and enabling new forms of ownership, interaction, and value exchange.
 
-Whether you're just starting with the [Simple NFT Example Challenge](/challenge/simple-nft-example) or looking to build advanced NFT-powered applications, understanding the breadth of NFT use cases will help you unlock the full potential of this technology.
+Whether you're just starting with the [Simple NFT Example Challenge](/challenge/simple-nft-example) or looking to build advanced NFT-powered applications, understanding the variety of NFT use cases will help you unlock the full potential of this technology.
 
 Let's explore some of the most compelling NFT use cases beyond the art world.
 
@@ -41,7 +41,7 @@ Platforms like [Decentraland](https://decentraland.org/) and [The Sandbox](https
 NFTs are offering new ways for musicians and creators to connect with their fans and monetize their work, often bypassing traditional intermediaries.
 
 - **How it works:**
-  - **Tokenized Music:** Songs or albums can be released as limited edition NFTs. See [Sound.xyz](https://www.sound.xyz/) for real-world examples.
+  - **Tokenized Music:** Songs or albums can be released as limited edition NFTs. See [Sound.xyz](https://www.sound.xyz/)
   - **Royalty Splits:** Smart contracts can automatically distribute royalties from NFT sales or resales to artists and collaborators.
   - **Exclusive Access & Fan Experiences:** NFTs can act as digital keys to unlock exclusive content, backstage passes, meet-and-greets, or voting rights in fan communities.
 - **Benefits:**
@@ -118,7 +118,7 @@ NFTs are a cornerstone of the decentralized web, enabling:
 
 - **Security:** Immutable, verifiable ownership
 - **Privacy:** User-controlled data and assets
-- **Disintermediation:** No need for centralized platforms
+- **Decentralization:** No need for centralized platforms
 - **Programmability:** Smart contracts enable new business models and interactions
 
 ## What Makes an NFT Valuable?
