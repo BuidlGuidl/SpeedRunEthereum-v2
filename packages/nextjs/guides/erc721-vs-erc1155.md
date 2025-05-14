@@ -154,7 +154,7 @@ Choose **ERC721** when:
 
 - **The project revolves around truly unique, individual items:** This is the classic use case for ERC721. Examples include:
   - **Digital Art:** One-of-a-kind artworks where each piece is distinct and not part of a larger batch of identical items.
-  - **High-Value Collectibles:** Rare items where individual identity and provenance are paramount (e.g., CryptoPunks, Bored Ape Yacht Club initially).
+  - **High-Value Collectibles:** Rare items where individual identity and provenance are paramount (e.g., [CryptoPunks](https://cryptopunks.app/), [Bored Ape Yacht Club](https://boredapeyachtclub.com/)).
   - **Unique Virtual Land Parcels:** If each land parcel in a metaverse has distinct characteristics and is not part of a fungible set (though some metaverses now use ERC1155 for land to batch operations).
   - **Certificates and Licenses:** Unique, non-transferable (or restricted transfer) certificates of authenticity, diplomas, or licenses tied to an individual.
 - **Simplicity is a priority and batch operations are not a primary concern:** If the project does not require managing multiple types of tokens within one contract, and the volume of minting or transfers is low enough that gas efficiency from batching is not a critical factor, ERC721's simpler conceptual model can be advantageous.
@@ -186,7 +186,7 @@ The decision to use ERC1155 often comes down to the need for efficiency at scale
 
 ## 7. Implementation Tips with OpenZeppelin
 
-Regardless of which standard is chosen, leveraging OpenZeppelin's extensively audited and community-vetted contract libraries is a highly recommended best practice for secure and standard-compliant development.
+Regardless of which standard is chosen, leveraging [OpenZeppelin's extensively audited and community-vetted contract libraries](https://docs.openzeppelin.com/contracts) is a highly recommended best practice for secure and standard-compliant development.
 
 - **OpenZeppelin for ERC721:** OpenZeppelin provides `ERC721.sol` as a base implementation, along with extensions like `ERC721URIStorage.sol` for metadata management, `ERC721Enumerable.sol` for on-chain token enumeration, and `ERC721Burnable.sol` for token destruction. The OpenZeppelin Contracts Wizard can also generate a customized ERC721 contract based on selected features.
 
@@ -224,7 +224,7 @@ There's no one-size-fits-all answer.
 - **ERC721** is perfect for simple, unique NFTs.
 - **ERC1155** is ideal for complex, multi-asset, or high-volume projects.
 
-**Choose the standard that fits your project's needs—and always use audited libraries like OpenZeppelin for security.**
+**Choose the standard that fits your project's needs, and try to use audited libraries like OpenZeppelin for security.**
 
 ---
 
