@@ -99,9 +99,9 @@ export default async function BuilderPage({ params }: { params: { address: strin
                 <h2 className="text-2xl font-bold mb-0 text-neutral pb-4">Builds</h2>
                 <SubmitNewBuildBtn />
               </div>
-              <div className="flex flex-wrap items-stretch w-full gap-5">
-                {builds.length > 0 &&
-                  builds.map(build => (
+              {builds.length > 0 ? (
+                <div className="flex flex-wrap items-stretch w-full gap-5">
+                  {builds.map(build => (
                     <div key={build.build.id} className="flex-grow-0 flex-shrink-0">
                       <BuildCard
                         ownerAddress={build.ownerAddress}
@@ -111,7 +111,12 @@ export default async function BuilderPage({ params }: { params: { address: strin
                       />
                     </div>
                   ))}
-              </div>
+                </div>
+              ) : (
+                <div className="bg-base-100 p-8 text-center rounded-lg text-neutral">
+                  This builder hasn&apos;t submitted any builds yet.
+                </div>
+              )}
             </div>
           </div>
         </div>
