@@ -65,12 +65,20 @@ export const BuildFormModal = forwardRef<HTMLDialogElement, BuildFormModalProps>
         notification.error("Build name is required");
         return;
       }
-      if (updatedForm.demoUrl && !isValidUrl(updatedForm.demoUrl)) {
-        notification.error("Demo URL is invalid. Please use the format https://example.com");
+      if (!updatedForm.desc) {
+        notification.error("Description is required");
         return;
       }
-      if (updatedForm.githubUrl && !isValidUrl(updatedForm.githubUrl)) {
+      if (!updatedForm.buildType) {
+        notification.error("Build type is required");
+        return;
+      }
+      if (!isValidUrl(updatedForm.githubUrl || "")) {
         notification.error("GitHub URL is invalid. Please use the format https://github.com/user/repo");
+        return;
+      }
+      if (updatedForm.demoUrl && !isValidUrl(updatedForm.demoUrl)) {
+        notification.error("Demo URL is invalid. Please use the format https://example.com");
         return;
       }
       if (updatedForm.imageUrl && !isValidUrl(updatedForm.imageUrl)) {
@@ -148,17 +156,22 @@ export const BuildFormModal = forwardRef<HTMLDialogElement, BuildFormModalProps>
           <div className="flex flex-col space-y-5">
             <div className="flex flex-col gap-1.5 w-full">
               <div className="flex items-base ml-2">
-                <span className="text-sm font-medium mr-2 leading-none">Build Name</span>
+                <span className="text-sm font-medium mr-2 leading-none">
+                  Build Name <span className="text-red-500">*</span>
+                </span>
               </div>
               <InputBase
                 placeholder="Build Name"
                 value={form.name}
                 onChange={value => setForm({ ...form, name: value })}
+                required
               />
             </div>
             <div className="flex flex-col gap-1.5 w-full">
               <div className="flex items-base ml-2">
-                <span className="text-sm font-medium mr-2 leading-none">Description</span>
+                <span className="text-sm font-medium mr-2 leading-none">
+                  Description <span className="text-red-500">*</span>
+                </span>
               </div>
               <div className="flex border-2 border-base-300 bg-base-200 rounded-xl text-accent">
                 <textarea
@@ -168,12 +181,15 @@ export const BuildFormModal = forwardRef<HTMLDialogElement, BuildFormModalProps>
                   value={form.desc ?? ""}
                   onChange={e => setForm({ ...form, desc: e.target.value })}
                   autoComplete="off"
+                  required
                 />
               </div>
             </div>
             <div className="flex flex-col gap-1.5 w-full">
               <div className="flex items-base ml-2">
-                <span className="text-sm font-medium mr-2 leading-none">Build Type</span>
+                <span className="text-sm font-medium mr-2 leading-none">
+                  Build Type <span className="text-red-500">*</span>
+                </span>
               </div>
               <select
                 className="select select-bordered bg-base-200 w-full rounded-full h-[2.2rem] min-h-[2.2rem] px-4"
@@ -208,22 +224,25 @@ export const BuildFormModal = forwardRef<HTMLDialogElement, BuildFormModalProps>
             </div>
             <div className="flex flex-col gap-1.5 w-full">
               <div className="flex items-base ml-2">
+                <span className="text-sm font-medium mr-2 leading-none">
+                  GitHub Repo URL <span className="text-red-500">*</span>
+                </span>
+              </div>
+              <InputBase
+                placeholder="https://github.com/user/repo"
+                value={form.githubUrl ?? ""}
+                onChange={value => setForm({ ...form, githubUrl: value })}
+                required
+              />
+            </div>
+            <div className="flex flex-col gap-1.5 w-full">
+              <div className="flex items-base ml-2">
                 <span className="text-sm font-medium mr-2 leading-none">Live Demo URL</span>
               </div>
               <InputBase
                 placeholder="https://example.com"
                 value={form.demoUrl ?? ""}
                 onChange={value => setForm({ ...form, demoUrl: value })}
-              />
-            </div>
-            <div className="flex flex-col gap-1.5 w-full">
-              <div className="flex items-base ml-2">
-                <span className="text-sm font-medium mr-2 leading-none">GitHub URL</span>
-              </div>
-              <InputBase
-                placeholder="https://github.com/user/repo"
-                value={form.githubUrl ?? ""}
-                onChange={value => setForm({ ...form, githubUrl: value })}
               />
             </div>
             <div className="flex flex-col gap-1.5 w-full">
