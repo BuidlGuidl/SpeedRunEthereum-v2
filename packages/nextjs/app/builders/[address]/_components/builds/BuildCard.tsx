@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { DeleteBuildBtn } from "./DeleteBuildBtn";
 import { EditBuildBtn } from "./EditBuildBtn";
 import { LikeBuildBtn } from "./LikeBuildBtn";
@@ -32,10 +31,7 @@ export const BuildCard = ({ ownerAddress, build, likes, coBuilders }: Props) => 
         <h2 className="text-xl font-bold mb-2 leading-tight line-clamp-2">{build.name}</h2>
         <p className="text-sm my-1 line-clamp-4">{build.desc}</p>
         <div className="flex-1" />
-        <div className="flex justify-between items-center pt-2 mt-2">
-          <Link href={`/builds/${build.id}`} className="btn btn-primary btn-sm" target="_blank">
-            View
-          </Link>
+        <div className="flex justify-end items-center pt-2 mt-2 w-full">
           <div className="flex items-center gap-1">
             <LikeBuildBtn buildId={build.id} likes={likes} />
             <span className="text-base">{likes.length}</span>
