@@ -127,6 +127,8 @@ Ethereum transactions have gas limits. If a function consumes too much gas, the 
 - Be mindful of gas costs for storage operations (SSTOREs), which are expensive. Minimize storage writes.
 - Profile gas usage during testing using tools like `eth-gas-reporter`.
 
+> **Real-World Example:** The Akutars NFT project suffered a smart contract bug that permanently locked over $34 million in ETH due to a faulty refund loop and logic error. This highlights the importance of careful gas management and contract logic. [Read more](https://nftnow.com/features/akutars-exploit-34-million-locked-in-smart-contract/).
+
 ---
 
 ## 9. Secure Your Metadata and `tokenURI`
