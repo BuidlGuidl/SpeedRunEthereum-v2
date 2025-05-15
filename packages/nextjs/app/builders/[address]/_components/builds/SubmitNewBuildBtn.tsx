@@ -15,7 +15,7 @@ export const SubmitNewBuildBtn = () => {
 
   return (
     <>
-      <button className="btn btn-primary btn-sm" onClick={() => modalRef.current?.showModal()}>
+      <button className="btn btn-primary btn-sm mb-4" onClick={() => modalRef.current?.showModal()}>
         <PlusIcon className="w-4 h-4" />
         New Build
       </button>
