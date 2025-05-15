@@ -36,21 +36,21 @@ const isValidYouTubeUrl = (url: string) => {
   );
 };
 
+const defaultBuildFormInputs: BuildFormInputs = {
+  name: "",
+  desc: "",
+  buildType: BuildType.DAPP,
+  buildCategory: null,
+  demoUrl: "",
+  videoUrl: "",
+  imageUrl: "",
+  githubUrl: "",
+  coBuilders: [],
+};
+
 export const BuildFormModal = forwardRef<HTMLDialogElement, BuildFormModalProps>(
   ({ closeModal, build, buttonAction, buttonText, isPending }, ref) => {
-    const [form, setForm] = useState<BuildFormInputs>(
-      build ?? {
-        name: "",
-        desc: "",
-        buildType: BuildType.DAPP,
-        buildCategory: null,
-        demoUrl: "",
-        videoUrl: "",
-        imageUrl: "",
-        githubUrl: "",
-        coBuilders: [],
-      },
-    );
+    const [form, setForm] = useState<BuildFormInputs>(build ?? defaultBuildFormInputs);
     const [isUploading, setIsUploading] = useState(false);
 
     const handleFormSubmit = async () => {
@@ -82,6 +82,9 @@ export const BuildFormModal = forwardRef<HTMLDialogElement, BuildFormModalProps>
         return;
       }
       buttonAction(updatedForm);
+      if (!build) {
+        setForm(defaultBuildFormInputs);
+      }
     };
 
     const { getRootProps, getInputProps, isDragActive } = useDropzone({
