@@ -1,3 +1,4 @@
+import { filterValidUserAddresses } from "./users";
 import { InferInsertModel, InferSelectModel, and, eq, inArray } from "drizzle-orm";
 import { db } from "~~/services/database/config/postgresClient";
 import { buildBuilders, buildLikes, builds, lower } from "~~/services/database/config/schema";
@@ -29,14 +30,17 @@ export const createBuild = async (build: BuildInsert) => {
     .returning();
 
   if (build.coBuilders && build.coBuilders.length > 0) {
-    // Insert the co-builders
-    await db.insert(buildBuilders).values(
-      build.coBuilders.map(userAddress => ({
-        buildId: insertedBuild.id,
-        userAddress,
-        isOwner: false,
-      })),
-    );
+    // Only insert co-builders that exist in the users table
+    const validCoBuilders = await filterValidUserAddresses(build.coBuilders);
+    if (validCoBuilders.length > 0) {
+      await db.insert(buildBuilders).values(
+        validCoBuilders.map(userAddress => ({
+          buildId: insertedBuild.id,
+          userAddress,
+          isOwner: false,
+        })),
+      );
+    }
   }
 
   return { insertedBuild, insertedBuildBuilder };
@@ -71,17 +75,22 @@ export const updateBuild = async (buildId: string, build: BuildInsert) => {
     await trx.delete(buildBuilders).where(eq(buildBuilders.buildId, updatedBuild.id));
 
     // Prepare all builders (owner + co-builders)
+    let validCoBuilders: string[] = [];
+    if (coBuilders && coBuilders.length > 0) {
+      validCoBuilders = await filterValidUserAddresses(coBuilders);
+    }
+
     const buildersToInsert = [
       {
         buildId: updatedBuild.id,
         userAddress,
         isOwner: true,
       },
-      ...(coBuilders?.map(coBuilderAddress => ({
+      ...validCoBuilders.map(coBuilderAddress => ({
         buildId: updatedBuild.id,
         userAddress: coBuilderAddress,
         isOwner: false,
-      })) ?? []),
+      })),
     ];
 
     await trx.insert(buildBuilders).values(buildersToInsert);
