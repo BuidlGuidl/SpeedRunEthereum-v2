@@ -25,7 +25,7 @@ export async function submitBuild(payload: SubmitBuildPayload) {
 }
 
 export async function updateBuild(payload: UpdateBuildPayload, buildId: string) {
-  if (!payload.address || !payload.signature || !payload.build) {
+  if (!payload.signatureAddress || !payload.signature || !payload.build || !payload.userAddress) {
     throw new Error("Missing required fields");
   }
 

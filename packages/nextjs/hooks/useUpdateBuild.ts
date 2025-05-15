@@ -9,12 +9,20 @@ import { notification } from "~~/utils/scaffold-eth";
 
 export function useUpdateBuild({ onSuccess }: { onSuccess?: () => void }) {
   const router = useRouter();
-  const { address } = useAccount();
+  const { address: connectedAddress } = useAccount();
   const { signTypedDataAsync } = useSignTypedData();
 
   const { mutate: updateBuildMutation, isPending } = useMutation({
-    mutationFn: async ({ build, buildId }: { build: BuildFormInputs; buildId: string }) => {
-      if (!address) throw new Error("Wallet not connected");
+    mutationFn: async ({
+      build,
+      buildId,
+      ownerAddress,
+    }: {
+      build: BuildFormInputs;
+      buildId: string;
+      ownerAddress: string;
+    }) => {
+      if (!connectedAddress) throw new Error("Wallet not connected");
 
       const buildWithDefaults = {
         ...build,
@@ -39,7 +47,7 @@ export function useUpdateBuild({ onSuccess }: { onSuccess?: () => void }) {
         message,
       });
 
-      return updateBuild({ address, signature, build }, buildId);
+      return updateBuild({ signatureAddress: connectedAddress, signature, build, userAddress: ownerAddress }, buildId);
     },
     onSuccess: () => {
       notification.success("Build updated successfully!");

@@ -4,6 +4,7 @@ import { useRef } from "react";
 import { BuildFormInputs, BuildFormModal } from "./BuildFormModal";
 import { useAccount } from "wagmi";
 import { PencilSquareIcon } from "@heroicons/react/24/outline";
+import { useAuthSession } from "~~/hooks/useAuthSession";
 import { useUpdateBuild } from "~~/hooks/useUpdateBuild";
 
 type EditBuildBtnProps = {
@@ -14,6 +15,7 @@ type EditBuildBtnProps = {
 
 export const EditBuildBtn = ({ build, buildId, ownerAddress }: EditBuildBtnProps) => {
   const { address: connectedAddress } = useAccount();
+  const { isAdmin } = useAuthSession();
 
   const modalRef = useRef<HTMLDialogElement>(null);
 
@@ -24,10 +26,10 @@ export const EditBuildBtn = ({ build, buildId, ownerAddress }: EditBuildBtnProps
   });
 
   const handleUpdateBuild = (form: BuildFormInputs) => {
-    updateBuild({ build: form, buildId });
+    updateBuild({ build: form, buildId, ownerAddress });
   };
 
-  if (!connectedAddress || connectedAddress !== ownerAddress) {
+  if (!isAdmin && connectedAddress !== ownerAddress) {
     return null;
   }
 

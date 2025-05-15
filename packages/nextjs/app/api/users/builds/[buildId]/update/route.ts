@@ -2,20 +2,22 @@ import { NextResponse } from "next/server";
 import { BuildFormInputs } from "~~/app/builders/[address]/_components/builds/BuildFormModal";
 import { isOwnerOfBuild, updateBuild } from "~~/services/database/repositories/builds";
 import { isValidEIP712UpdateBuildSignature } from "~~/services/eip712/builds";
+import { isAdminSession } from "~~/utils/auth";
 
 export type UpdateBuildPayload = {
   signature: `0x${string}`;
   build: BuildFormInputs;
-  address: string;
+  userAddress: string;
+  signatureAddress: string;
 };
 
 export async function PUT(request: Request, { params }: { params: { buildId: string } }) {
   try {
     const { buildId } = params;
-    const { signature, build, address }: UpdateBuildPayload = await request.json();
+    const { signature, build, userAddress, signatureAddress }: UpdateBuildPayload = await request.json();
 
     const isValidSignature = await isValidEIP712UpdateBuildSignature({
-      address,
+      address: signatureAddress,
       signature,
       build: { ...build, buildId },
     });
@@ -24,14 +26,23 @@ export async function PUT(request: Request, { params }: { params: { buildId: str
       return NextResponse.json({ error: "Invalid signature" }, { status: 401 });
     }
 
-    const isOwner = await isOwnerOfBuild(buildId, address);
-    if (!isOwner) {
+    let isAuthorized = false;
+    const isAdmin = await isAdminSession();
+
+    if (isAdmin) {
+      isAuthorized = true;
+    } else if (signatureAddress.toLowerCase() === userAddress.toLowerCase()) {
+      const isOwner = await isOwnerOfBuild(buildId, userAddress);
+      isAuthorized = isOwner;
+    }
+
+    if (!isAuthorized) {
       return NextResponse.json({ error: "Not authorized to update this build" }, { status: 403 });
     }
 
     const updatedBuild = await updateBuild(buildId, {
       ...build,
-      userAddress: address,
+      userAddress,
     });
 
     return NextResponse.json({ build: updatedBuild });
