@@ -6,11 +6,36 @@ export const REVIEW_ACTION_BADGE_CLASSES: Record<ReviewAction, string> = {
   [ReviewAction.SUBMITTED]: "badge-warning",
 } as const;
 
-export const CHALLENGE_METADATA: Record<string, { title: string; description: string }> = {
+export const CHALLENGE_METADATA: Record<
+  string,
+  {
+    title: string;
+    description: string;
+    guides?: { title: string; url: string }[];
+  }
+> = {
   [ChallengeId.SIMPLE_NFT_EXAMPLE]: {
     title: "Learn How to Create an NFT in Solidity",
     description:
       "Build your first NFT smart contract in Solidity. Step-by-step tutorial to mint and deploy NFTs on Ethereum using Scaffold-ETH.",
+    guides: [
+      {
+        title: "ERC721 vs. ERC1155: Key Differences, Use Cases & How to Choose",
+        url: "/guides/erc721-vs-erc1155",
+      },
+      {
+        title: "Mastering ERC721: Developer Guide to NFT Metadata & Best Practices",
+        url: "/guides/mastering-erc721",
+      },
+      {
+        title: "NFTs in Web3: Understanding Use Cases Beyond Digital Art",
+        url: "/guides/nft-use-cases",
+      },
+      {
+        title: "Solidity NFT Security: 10 Best Practices to Protect Your Collectibles",
+        url: "/guides/solidity-nft-security",
+      },
+    ],
   },
   [ChallengeId.DECENTRALIZED_STAKING]: {
     title: "Build a Decentralized Staking Application in Solidity",
