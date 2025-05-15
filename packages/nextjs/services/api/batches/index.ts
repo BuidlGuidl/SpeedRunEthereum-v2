@@ -3,7 +3,17 @@ import { UpdateBatchPayload } from "~~/app/api/batches/[batchId]/update/route";
 import { CreateBatchPayload } from "~~/app/api/batches/create/route";
 import { Batch, BatchWithCounts } from "~~/services/database/repositories/batches";
 
-export const getSortedBatches = async (start: number, size: number, sorting: SortingState, filter?: string) => {
+export const fetchSortedBatches = async ({
+  start,
+  size,
+  sorting,
+  filter,
+}: {
+  start: number;
+  size: number;
+  sorting: SortingState;
+  filter?: string;
+}) => {
   const response = await fetch(
     `/api/batches/sorted?start=${start}&size=${size}&sorting=${JSON.stringify(sorting)}&filter=${filter || ""}`,
   );
@@ -22,7 +32,16 @@ export const getSortedBatches = async (start: number, size: number, sorting: Sor
   return batchesData;
 };
 
-export async function createBatch({
+export async function fetchBatchNameList() {
+  const response = await fetch("/api/batches/name-list");
+  if (!response.ok) {
+    throw new Error("Failed to fetch batch name list");
+  }
+  const data = await response.json();
+  return data.batches as Pick<NonNullable<Batch>, "id" | "name">[];
+}
+
+export async function fetchCreateBatch({
   address,
   signature,
   name,
@@ -49,7 +68,7 @@ export async function createBatch({
   return data.batch as Batch;
 }
 
-export async function updateBatch(
+export async function fetchUpdateBatch(
   batchId: string,
   { address, signature, name, startDate, status, contractAddress, telegramLink, bgSubdomain }: UpdateBatchPayload,
 ) {

@@ -1,7 +1,7 @@
 import { useRouter } from "next/navigation";
 import { useMutation } from "@tanstack/react-query";
 import { useAccount, useSignTypedData } from "wagmi";
-import { updateBatch } from "~~/services/api/batches";
+import { fetchUpdateBatch } from "~~/services/api/batches";
 import { BatchInsert } from "~~/services/database/repositories/batches";
 import { EIP_712_TYPED_DATA__UPDATE_BATCH } from "~~/services/eip712/batches";
 import { notification } from "~~/utils/scaffold-eth";
@@ -33,7 +33,7 @@ export const useUpdateBatch = ({ onSuccess }: { onSuccess?: () => void }) => {
         message,
       });
 
-      return updateBatch(batchId, {
+      return fetchUpdateBatch(batchId, {
         address,
         signature,
         name: batch.name,

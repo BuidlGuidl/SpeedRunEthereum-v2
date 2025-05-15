@@ -7,8 +7,7 @@ import { ArrowTopRightOnSquareIcon } from "@heroicons/react/24/outline";
 import { ChallengeId } from "~~/services/database/config/types";
 import { getAllChallenges, getChallengeById } from "~~/services/database/repositories/challenges";
 import { fetchGithubReadme, parseGithubUrl } from "~~/services/github";
-
-// TODO. Metadata
+import { getMetadata } from "~~/utils/scaffold-eth/getMetadata";
 
 // 6 hours
 export const revalidate = 21600;
@@ -19,6 +18,18 @@ export async function generateStaticParams() {
   return challenges.map(challenge => ({
     challengeId: challenge.id.toString(),
   }));
+}
+
+export async function generateMetadata({ params }: { params: { challengeId: string } }) {
+  const challenge = await getChallengeById(params.challengeId as ChallengeId);
+
+  if (!challenge) return {};
+
+  return getMetadata({
+    title: challenge.challengeName,
+    description: challenge.description,
+    imageRelativePath: challenge.previewImage || undefined,
+  });
 }
 
 export default async function ChallengePage({ params }: { params: { challengeId: ChallengeId } }) {

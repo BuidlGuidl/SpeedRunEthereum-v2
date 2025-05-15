@@ -27,16 +27,10 @@ type InfiniteTableApiResponse<T> = {
 type InfiniteTableProps<T> = {
   columns: ColumnDef<T>[];
   queryKey: QueryKey;
-  queryFn: (
-    pageParam: number,
-    fetchSize: number,
-    sorting: SortingState,
-    filter?: string,
-  ) => Promise<InfiniteTableApiResponse<T>>;
+  queryFn: (params: { start: number; size: number; sorting: SortingState }) => Promise<InfiniteTableApiResponse<T>>;
   fetchSize?: number;
   rowHeightInPx?: number;
   initialSorting?: SortingState;
-  filter?: string;
 };
 
 export default function InfiniteTable<T>({
@@ -46,7 +40,6 @@ export default function InfiniteTable<T>({
   fetchSize = DEFAULT_FETCH_SIZE,
   rowHeightInPx = DEFAULT_ROW_HEIGHT_IN_PX,
   initialSorting = [],
-  filter = "",
 }: InfiniteTableProps<T>) {
   // we need a reference to the scrolling element for logic down below
   const tableContainerRef = useRef<HTMLDivElement>(null);
@@ -55,10 +48,10 @@ export default function InfiniteTable<T>({
   const [sorting, setSorting] = useState<SortingState>(initialSorting);
 
   const { data, fetchNextPage, isFetching, isLoading } = useInfiniteQuery<InfiniteTableApiResponse<T>>({
-    queryKey: [...queryKey, sorting, filter],
+    queryKey: [...queryKey, sorting],
     queryFn: async ({ pageParam = 0 }) => {
       const start = (pageParam as number) * fetchSize;
-      const fetchedData = await queryFn(start, fetchSize, sorting, filter);
+      const fetchedData = await queryFn({ start, size: fetchSize, sorting });
       return fetchedData;
     },
     initialPageParam: 0,

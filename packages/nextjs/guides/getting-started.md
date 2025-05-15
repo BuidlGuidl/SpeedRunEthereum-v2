@@ -1,6 +1,7 @@
 ---
-title: Getting Started with SpeedRunEthereum
+title: Getting Started with SRE
 description: Learn how to get started with SpeedRunEthereum challenges
+image: /assets/guides/getting-started.png
 ---
 
 Welcome to SpeedRunEthereum! This guide will help you get started with the challenges and set up your development environment.

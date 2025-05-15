@@ -7,7 +7,7 @@ import { batches, lower, users } from "~~/services/database/config/schema";
 
 export type BatchInsert = InferInsertModel<typeof batches>;
 export type Batch = Awaited<ReturnType<typeof getBatchById>>;
-export type BatchWithCounts = Awaited<ReturnType<typeof getSortedBatchesInfo>>["data"][0];
+export type BatchWithCounts = Awaited<ReturnType<typeof getSortedBatches>>["data"][0];
 
 export async function getBatchById(id: number) {
   return await db.query.batches.findFirst({
@@ -21,7 +21,7 @@ export async function getBatchByBgSubdomain(bgSubdomain: string) {
   });
 }
 
-export async function getSortedBatchesInfo(start: number, size: number, sorting: SortingState, filter?: string) {
+export async function getSortedBatches(start: number, size: number, sorting: SortingState, filter?: string) {
   const sortingQuery = sorting[0] as ColumnSort;
 
   const query = db.query.batches.findMany({
@@ -41,14 +41,9 @@ export async function getSortedBatchesInfo(start: number, size: number, sorting:
     },
   });
 
-  const [batchesData, countResult, userCounts] = await Promise.all([
+  const [batchesData, totalCount, userCounts] = await Promise.all([
     query,
-    filter
-      ? db
-          .select({ count: sql<number>`count(*)` })
-          .from(batches)
-          .where(ilike(batches.name, `%${filter}%`))
-      : db.$count(batches),
+    db.$count(batches, filter ? ilike(batches.name, `%${filter}%`) : undefined),
     db
       .select({
         batchId: users.batchId,
@@ -58,8 +53,6 @@ export async function getSortedBatchesInfo(start: number, size: number, sorting:
       .from(users)
       .groupBy(users.batchId),
   ]);
-
-  const totalCount = filter ? Number((countResult as { count: number }[])[0].count) : (countResult as number);
 
   const batchesWithCounts = batchesData.map(batch => {
     const counts = userCounts.find(count => count.batchId === batch.id) || {
@@ -87,6 +80,16 @@ export async function getSortedBatchesInfo(start: number, size: number, sorting:
       totalRowCount: totalCount,
     },
   };
+}
+
+export async function getBatchNameList() {
+  return await db.query.batches.findMany({
+    columns: {
+      id: true,
+      name: true,
+    },
+    orderBy: (batches, { desc }) => desc(batches.startDate),
+  });
 }
 
 export async function createBatch(batch: BatchInsert) {

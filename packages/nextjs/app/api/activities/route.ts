@@ -1,8 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
 import { ActivityType } from "~~/services/api/activities";
 import { getActivities } from "~~/services/database/repositories/activities";
+import { isAdminSession } from "~~/utils/auth";
 
 export async function GET(request: NextRequest) {
+  const isAdmin = await isAdminSession();
+  if (!isAdmin) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
   const searchParams = request.nextUrl.searchParams;
   const start = Number(searchParams.get("start") || 0);
   const size = Number(searchParams.get("size") || 20);

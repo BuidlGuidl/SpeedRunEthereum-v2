@@ -34,3 +34,25 @@ export enum BatchUserStatus {
   GRADUATE = "graduate",
   CANDIDATE = "candidate",
 }
+
+export enum BuildType {
+  DAPP = "Dapp",
+  INFRASTRUCTURE = "Infrastructure",
+  CHALLENGE_SUBMISSION = "Challenge submission",
+  CONTENT = "Content",
+  DESIGN = "Design",
+  OTHER = "Other",
+}
+
+export enum BuildCategory {
+  DEFI = "DeFi",
+  GAMING = "Gaming",
+  NFTS = "NFTs",
+  SOCIAL = "Social",
+  DAOS_GOVERNANCE = "DAOs & Governance",
+  DEV_TOOLING = "Dev Tooling",
+  IDENTITY_REPUTATION = "Identity & Reputation",
+  RWA_SUPPLY_CHAIN = "RWA & Supply Chain",
+  AI_AGENTS = "AI Agents",
+  PREDICTION_MARKETS = "Prediction Markets",
+}

@@ -6,7 +6,6 @@ import { UPDATE_BATCH_MODAL_ID, UpdateBatchModal } from "./_components/UpdateBat
 import { useQuery } from "@tanstack/react-query";
 import { ColumnDef } from "@tanstack/react-table";
 import { useDebounceValue } from "usehooks-ts";
-import { useAccount } from "wagmi";
 import EditIcon from "~~/app/_assets/icons/EditIcon";
 import EthereumIcon from "~~/app/_assets/icons/EthereumIcon";
 import GithubIcon from "~~/app/_assets/icons/GithubIcon";
@@ -16,15 +15,11 @@ import WebsiteIcon from "~~/app/_assets/icons/WebsiteIcon";
 import { DateWithTooltip } from "~~/components/DateWithTooltip";
 import InfiniteTable from "~~/components/InfiniteTable";
 import { InputBase } from "~~/components/scaffold-eth";
-import { useUser } from "~~/hooks/useUser";
-import { getSortedBatches } from "~~/services/api/batches";
-import { BatchStatus, UserRole } from "~~/services/database/config/types";
+import { fetchSortedBatches } from "~~/services/api/batches";
+import { BatchStatus } from "~~/services/database/config/types";
 import { BatchWithCounts } from "~~/services/database/repositories/batches";
 
 export default function BatchesPage() {
-  const { address: connectedAddress } = useAccount();
-  const { data: user } = useUser(connectedAddress);
-
   const [filter, setFilter] = useState("");
   const [batchesUpdatesCount, setBatchesUpdatesCount] = useState(0);
   const [selectedBatch, setSelectedBatch] = useState<BatchWithCounts | null>(null);
@@ -36,10 +31,13 @@ export default function BatchesPage() {
 
   const { data: batches } = useQuery({
     queryKey: ["batches-count", batchesUpdatesCount],
-    queryFn: () => getSortedBatches(0, 0, []),
+    queryFn: () => fetchSortedBatches({ start: 0, size: 0, sorting: [] }),
   });
 
-  const tableQueryKey = useMemo(() => ["batches", batchesUpdatesCount], [batchesUpdatesCount]);
+  const tableQueryKey = useMemo(
+    () => ["batches", debouncedFilter, batchesUpdatesCount],
+    [debouncedFilter, batchesUpdatesCount],
+  );
   const tableInitialSorting = useMemo(() => [{ id: "startDate", desc: true }], []);
 
   const columns = useMemo<ColumnDef<BatchWithCounts>[]>(
@@ -172,16 +170,11 @@ export default function BatchesPage() {
     [],
   );
 
-  // TODO: update this logic later
-  if (user?.role !== UserRole.ADMIN) {
-    return null;
-  }
-
   return (
     <div className="mx-4 text-center">
-      <div className="text-base mt-4 font-medium">Total batches: {batches?.meta.totalRowCount ?? "Loading..."}</div>
+      <div className="text-base mt-8 font-medium">Total batches: {batches?.meta.totalRowCount ?? "Loading..."}</div>
 
-      <div className="flex items-center justify-center max-w-md mt-4 mx-auto gap-2">
+      <div className="flex items-center justify-center max-w-md mt-4 mb-8 mx-auto gap-2">
         <InputBase
           name="filter"
           value={filter}
@@ -197,9 +190,8 @@ export default function BatchesPage() {
       <InfiniteTable<BatchWithCounts>
         columns={columns}
         queryKey={tableQueryKey}
-        queryFn={getSortedBatches}
+        queryFn={({ start, size, sorting }) => fetchSortedBatches({ start, size, sorting, filter: debouncedFilter })}
         initialSorting={tableInitialSorting}
-        filter={debouncedFilter}
       />
 
       <AddBatchModal refreshQueries={refreshQueries} />
