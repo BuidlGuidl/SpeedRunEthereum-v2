@@ -4,7 +4,7 @@ import { AfterSreCard } from "./AfterSreCard";
 import { AfterSreLine } from "./AfterSreLine";
 import { ChallengeExpandedCard } from "./ChallengeExpandedCard";
 import { Hero } from "./Hero";
-import { JoinBGCard } from "./JoinBGCard";
+import { OnboardingBatchesCard } from "./OnboardingBatchesCard";
 import { useAccount } from "wagmi";
 import { useUser } from "~~/hooks/useUser";
 import { useUserChallenges } from "~~/hooks/useUserChallenges";
@@ -53,7 +53,7 @@ export const HomepageClient = ({ challenges }: { challenges: Challenges }) => {
           challenges={challenges}
         />
 
-        <JoinBGCard userChallenges={userChallenges} user={user} />
+        <OnboardingBatchesCard userChallenges={userChallenges} user={user} />
         <ChallengeExpandedCard
           key={ChallengeId.STABLECOINS}
           challengeId={ChallengeId.STABLECOINS}

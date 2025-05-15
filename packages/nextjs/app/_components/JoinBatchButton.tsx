@@ -16,7 +16,7 @@ type JoinBGProps = {
   userChallenges?: UserChallenges;
 };
 
-const JoinBGButton = ({ user, userChallenges = [] }: JoinBGProps) => {
+const JoinBatchButton = ({ user, userChallenges = [] }: JoinBGProps) => {
   const { address: connectedAddress } = useAccount();
   const { handleJoinBg, isJoiningBg } = useJoinBg({ user });
   const { openConnectModal } = useConnectModal();
@@ -39,7 +39,7 @@ const JoinBGButton = ({ user, userChallenges = [] }: JoinBGProps) => {
     return (
       <button
         onClick={openConnectModal}
-        className="flex justify-center text-[#088484] bg-[#C8F5FF] items-center text-xs sm:text-lg px-4 py-1 border-2 border-[#088484] rounded-full opacity-70 hover:bg-white/80"
+        className="flex justify-center text-violet bg-violet-light items-center text-xs sm:text-lg px-4 py-1 border-2 border-violet rounded-full hover:bg-opacity-80"
       >
         <span>Connect Wallet</span>
       </button>
@@ -50,12 +50,12 @@ const JoinBGButton = ({ user, userChallenges = [] }: JoinBGProps) => {
     <>
       <button
         disabled={!dependenciesCompleted || builderAlreadyJoined}
-        className={`flex justify-center text-[#088484] bg-[#C8F5FF] items-center text-sm sm:text-lg px-4 py-1 border-2 border-[#088484] rounded-full hover:bg-white/80 disabled:opacity-70 ${!dependenciesCompleted ? "cursor-not-allowed hover:bg-[#C8F5FF]" : ""}`}
+        className={`flex justify-center text-violet bg-violet-light items-center text-sm sm:text-lg px-4 py-1 border-2 border-violet rounded-full hover:bg-opacity-80 disabled:opacity-70 disabled:hover:bg-opacity-100 ${!dependenciesCompleted ? "cursor-not-allowed hover:bg-violet-light" : ""}`}
         onClick={handleJoinBg}
       >
         {!dependenciesCompleted && !builderAlreadyJoined && (
           <>
-            <PadLockIcon className="w-4 h-4 sm:w-6 sm:h-6 mr-2" />
+            <PadLockIcon className="w-4 h-4 sm:w-6 sm:h-6 mr-2" fill="#606CCF" />
             <span className="uppercase">Locked</span>
           </>
         )}
@@ -64,12 +64,12 @@ const JoinBGButton = ({ user, userChallenges = [] }: JoinBGProps) => {
         {builderAlreadyJoined && <span>Already joined</span>}
       </button>
       {!dependenciesCompleted && !builderAlreadyJoined && (
-        <div className="tooltip tooltip-left relative cursor-pointer ml-2 text-[#088484]" data-tip={lockReasonToolTip}>
-          <QuestionIcon className="w-5 h-5 sm:h-8 sm:w-8" />
+        <div className="tooltip tooltip-violet tooltip-left relative cursor-pointer ml-2 " data-tip={lockReasonToolTip}>
+          <QuestionIcon className="w-5 h-5 sm:h-8 sm:w-8 text-violet" />
         </div>
       )}
     </>
   );
 };
 
-export default JoinBGButton;
+export default JoinBatchButton;
