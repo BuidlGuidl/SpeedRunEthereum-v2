@@ -53,27 +53,34 @@ export const BuildFormModal = forwardRef<HTMLDialogElement, BuildFormModalProps>
     const [isUploading, setIsUploading] = useState(false);
 
     const handleFormSubmit = async () => {
-      if (!form.name) {
+      const updatedForm = { ...form };
+
+      updatedForm.demoUrl = updatedForm.demoUrl?.trim() ?? null;
+      updatedForm.githubUrl = updatedForm.githubUrl?.trim() ?? null;
+      updatedForm.imageUrl = updatedForm.imageUrl?.trim() ?? null;
+      updatedForm.videoUrl = updatedForm.videoUrl?.trim() ?? null;
+
+      if (!updatedForm.name) {
         notification.error("Build name is required");
         return;
       }
-      if (form.demoUrl && !isValidUrl(form.demoUrl)) {
+      if (updatedForm.demoUrl && !isValidUrl(updatedForm.demoUrl)) {
         notification.error("Demo URL is invalid. Please use the format https://example.com");
         return;
       }
-      if (form.githubUrl && !isValidUrl(form.githubUrl)) {
+      if (updatedForm.githubUrl && !isValidUrl(updatedForm.githubUrl)) {
         notification.error("GitHub URL is invalid. Please use the format https://github.com/user/repo");
         return;
       }
-      if (form.imageUrl && !isValidUrl(form.imageUrl)) {
+      if (updatedForm.imageUrl && !isValidUrl(updatedForm.imageUrl)) {
         notification.error("Image URL is invalid. Please use the format https://example.com/image.png");
         return;
       }
-      if (form.videoUrl && form.videoUrl.length > 0 && !isValidYouTubeUrl(form.videoUrl)) {
+      if (updatedForm.videoUrl && updatedForm.videoUrl.length > 0 && !isValidYouTubeUrl(updatedForm.videoUrl)) {
         notification.error("Video URL must be a valid YouTube link");
         return;
       }
-      buttonAction(form);
+      buttonAction(updatedForm);
     };
 
     const { getRootProps, getInputProps, isDragActive } = useDropzone({
