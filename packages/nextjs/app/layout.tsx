@@ -13,7 +13,7 @@ const spaceGrotesk = Space_Grotesk({
 
 export const metadata = getMetadata({
   title: "Speed Run Ethereum",
-  description: "Learn how to build on Ethereum; the superpowers and the gotchas.",
+  description: "Learn Solidity development to build dapps on Ethereum with hands-on blockchain challenges.",
 });
 
 const ScaffoldEthApp = ({ children }: { children: React.ReactNode }) => {
