@@ -12,9 +12,9 @@ export type BuildInsert = InferInsertModel<typeof builds> &
 
 export const createBuild = async (build: BuildInsert) => {
   // Insert the build
-  const [insertdBuild] = await db.insert(builds).values(build).returning();
+  const [insertedBuild] = await db.insert(builds).values(build).returning();
 
-  if (!insertdBuild) {
+  if (!insertedBuild) {
     throw new Error("Failed to create build");
   }
 
@@ -22,7 +22,7 @@ export const createBuild = async (build: BuildInsert) => {
   const [insertedBuildBuilder] = await db
     .insert(buildBuilders)
     .values({
-      buildId: insertdBuild.id,
+      buildId: insertedBuild.id,
       userAddress: build.userAddress,
       isOwner: true,
     })
@@ -32,14 +32,14 @@ export const createBuild = async (build: BuildInsert) => {
     // Insert the co-builders
     await db.insert(buildBuilders).values(
       build.coBuilders.map(userAddress => ({
-        buildId: insertdBuild.id,
+        buildId: insertedBuild.id,
         userAddress,
         isOwner: false,
       })),
     );
   }
 
-  return { insertdBuild, insertedBuildBuilder };
+  return { insertedBuild, insertedBuildBuilder };
 };
 
 export const isOwnerOfBuild = async (buildId: string, userAddress: string) => {

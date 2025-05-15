@@ -26,13 +26,13 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Invalid signature" }, { status: 401 });
     }
 
-    const { insertdBuild, insertedBuildBuilder } = await createBuild({ ...build, userAddress: address });
+    const { insertedBuild, insertedBuildBuilder } = await createBuild({ ...build, userAddress: address });
 
-    if (!insertdBuild || !insertedBuildBuilder) {
+    if (!insertedBuild || !insertedBuildBuilder) {
       return NextResponse.json({ error: "Failed to create build" }, { status: 500 });
     }
 
-    return NextResponse.json({ build: insertdBuild, buildBuilder: insertedBuildBuilder }, { status: 200 });
+    return NextResponse.json({ build: insertedBuild, buildBuilder: insertedBuildBuilder }, { status: 200 });
   } catch (error) {
     console.error("Error during build submission:", error);
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
