@@ -4,6 +4,7 @@ import { MDXRemote } from "next-mdx-remote/rsc";
 import rehypeRaw from "rehype-raw";
 import remarkGfm from "remark-gfm";
 import { ArrowTopRightOnSquareIcon } from "@heroicons/react/24/outline";
+import { CHALLENGE_METADATA } from "~~/services/challenges-metadata";
 import { ChallengeId } from "~~/services/database/config/types";
 import { getAllChallenges, getChallengeById } from "~~/services/database/repositories/challenges";
 import { fetchGithubReadme, parseGithubUrl } from "~~/services/github";
@@ -23,12 +24,12 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: { params: { challengeId: string } }) {
   const challenge = await getChallengeById(params.challengeId as ChallengeId);
 
-  if (!challenge) return {};
+  const staticMetadata = CHALLENGE_METADATA[params.challengeId];
 
   return getMetadata({
-    title: challenge.challengeName,
-    description: challenge.description,
-    imageRelativePath: challenge.previewImage || undefined,
+    title: staticMetadata?.title || challenge?.challengeName || "",
+    description: staticMetadata?.description || challenge?.description || "",
+    imageRelativePath: challenge?.previewImage || undefined,
   });
 }
 

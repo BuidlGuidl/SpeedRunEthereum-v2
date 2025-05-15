@@ -1,11 +1,6 @@
 import { ChallengeId } from "~~/services/database/config/types";
 
-type ChallengeLayoutProps = {
-  children: React.ReactNode;
-  params: { challengeId: ChallengeId };
-};
-
-const CHALLENGE_METADATA: Record<string, { title: string; description: string }> = {
+export const CHALLENGE_METADATA: Record<string, { title: string; description: string }> = {
   [ChallengeId.SIMPLE_NFT_EXAMPLE]: {
     title: "Learn How to Create an NFT in Solidity",
     description:
@@ -57,39 +52,3 @@ const CHALLENGE_METADATA: Record<string, { title: string; description: string }>
       "Learn how to deploy and interact with Solidity smart contracts on Ethereum Layer 2 solutions for better scalability and lower gas costs.",
   },
 };
-
-export async function generateMetadata({ params }: { params: { challengeId: ChallengeId } }) {
-  const metadataForChallenge = CHALLENGE_METADATA[params.challengeId];
-
-  const title =
-    metadataForChallenge?.title ||
-    `Challenge: ${params.challengeId
-      .split("-")
-      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-      .join(" ")}`;
-
-  const description =
-    metadataForChallenge?.description ||
-    "Learn Solidity and smart contract development through interactive challenges on SpeedRunEthereum.";
-
-  const imageUrl = "https://speedrunethereum.com/thumbnail.png";
-
-  return {
-    title: title,
-    description: description,
-    openGraph: {
-      title: title,
-      description: description,
-      images: [{ url: imageUrl }],
-    },
-    twitter: {
-      title: title,
-      description: description,
-      images: [imageUrl],
-    },
-  };
-}
-
-export default function ChallengeLayout({ children }: ChallengeLayoutProps) {
-  return children;
-}
