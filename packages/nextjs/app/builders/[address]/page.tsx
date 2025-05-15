@@ -1,11 +1,9 @@
 import { notFound } from "next/navigation";
-import { UpgradedToBGCard } from "./_components/UpgradedToBGCard";
 import { UserChallengesTable } from "./_components/UserChallengesTable";
 import { UserProfileCard } from "./_components/UserProfileCard";
 import { Metadata } from "next";
 import { isAddress } from "viem";
 import { RouteRefresher } from "~~/components/RouteRefresher";
-import { isBgMember } from "~~/services/api-bg/builders";
 import { getBatchById } from "~~/services/database/repositories/batches";
 import { getLatestSubmissionPerChallengeByUser } from "~~/services/database/repositories/userChallenges";
 import { getUserByAddress } from "~~/services/database/repositories/users";
@@ -67,7 +65,6 @@ export default async function BuilderPage({ params }: { params: { address: strin
   if (user?.batchId) {
     userBatch = await getBatchById(user.batchId);
   }
-  const bgMemberExists = await isBgMember(userAddress);
 
   if (!user) {
     notFound();
@@ -82,7 +79,6 @@ export default async function BuilderPage({ params }: { params: { address: strin
             <UserProfileCard user={user} batch={userBatch} />
           </div>
           <div className="lg:col-span-3">
-            {bgMemberExists && <UpgradedToBGCard user={user} />}
             <h2 className="text-2xl font-bold mb-0 text-neutral pb-4">Challenges</h2>
             {challenges.length > 0 ? (
               <UserChallengesTable challenges={challenges} />
