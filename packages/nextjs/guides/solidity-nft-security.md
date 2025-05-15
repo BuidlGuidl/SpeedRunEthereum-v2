@@ -131,7 +131,7 @@ Ethereum transactions have gas limits. If a function consumes too much gas, the 
 
 ---
 
-## 9. Secure Your Metadata and `tokenURI`
+## 9. Secure Your Metadata and tokenURI
 
 While the token itself is on-chain, the metadata (name, image, attributes) is often stored off-chain and referenced by a `tokenURI`. If this URI points to a centralized server, the metadata can be changed or become unavailable, undermining the NFT's integrity.
 
@@ -166,6 +166,6 @@ Securing your NFT smart contracts is not a one-time task but an ongoing commitme
 
 ---
 
-**Want to put these security best practices to the test? [Try the Simple NFT Example Challenge!](/challenge/simple-nft-example)**
+**Want to put these security best practices to the test in your own NFT project? [Try the Simple NFT Example Challenge!](/challenge/simple-nft-example)**
 
-**Already comfortable with the basics? [Try the SVG NFT Challenge!](/challenge/svg-nft)**
+**Already comfortable with the NFT basics? [Try the SVG NFT Challenge!](/challenge/svg-nft)**
