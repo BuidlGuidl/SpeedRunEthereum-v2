@@ -1,6 +1,7 @@
 import { forwardRef, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import { Toaster } from "react-hot-toast";
+import { PlusCircleIcon } from "@heroicons/react/24/outline";
 import { TrashIcon } from "@heroicons/react/24/solid";
 import { InputBase } from "~~/components/scaffold-eth/Input";
 import { AddressInput } from "~~/components/scaffold-eth/Input/AddressInput";
@@ -204,7 +205,7 @@ export const BuildFormModal = forwardRef<HTMLDialogElement, BuildFormModalProps>
             </div>
             <div className="flex flex-col gap-1.5 w-full">
               <div className="flex items-base ml-2">
-                <span className="text-sm font-medium mr-2 leading-none">Demo URL</span>
+                <span className="text-sm font-medium mr-2 leading-none">Live Demo URL</span>
               </div>
               <InputBase
                 placeholder="https://example.com"
@@ -227,7 +228,7 @@ export const BuildFormModal = forwardRef<HTMLDialogElement, BuildFormModalProps>
                 <span className="text-sm font-medium mr-2 leading-none">YouTube URL</span>
               </div>
               <InputBase
-                placeholder="Video URL"
+                placeholder="Video demo URL"
                 value={form.videoUrl ?? ""}
                 onChange={value => setForm({ ...form, videoUrl: value })}
               />
@@ -237,10 +238,10 @@ export const BuildFormModal = forwardRef<HTMLDialogElement, BuildFormModalProps>
                 <span className="text-base font-medium leading-none">Co-Builders</span>
                 <button
                   type="button"
-                  className="btn btn-sm h-6 min-h-6 p-0 w-6 btn-circle btn-ghost mt-0.5"
+                  className="btn btn-sm btn-circle btn-ghost mt-0.5"
                   onClick={() => setForm({ ...form, coBuilders: [...form.coBuilders, ""] })}
                 >
-                  +
+                  <PlusCircleIcon className="h-5 w-5 font-black" />
                 </button>
               </div>
               {form.coBuilders.map((address, idx) => (
