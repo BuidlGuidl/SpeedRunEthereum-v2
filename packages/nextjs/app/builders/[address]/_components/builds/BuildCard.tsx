@@ -29,7 +29,7 @@ export const BuildCard = ({ ownerAddress, build, likes, coBuilders }: Props) => 
         )}
       </div>
       <div className="flex flex-col flex-1 px-6 py-4">
-        <h2 className="text-xl font-bold mb-2 leading-tight">{build.name}</h2>
+        <h2 className="text-xl font-bold mb-2 leading-tight line-clamp-2">{build.name}</h2>
         <p className="text-sm my-1 line-clamp-4">{build.desc}</p>
         <div className="flex-1" />
         <div className="flex justify-between items-center pt-2 mt-2">
