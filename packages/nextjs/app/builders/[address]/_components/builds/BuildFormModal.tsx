@@ -58,15 +58,15 @@ export const BuildFormModal = forwardRef<HTMLDialogElement, BuildFormModalProps>
         return;
       }
       if (form.demoUrl && !isValidUrl(form.demoUrl)) {
-        notification.error("Demo URL is invalid");
+        notification.error("Demo URL is invalid. Please use the format https://example.com");
         return;
       }
       if (form.githubUrl && !isValidUrl(form.githubUrl)) {
-        notification.error("GitHub URL is invalid");
+        notification.error("GitHub URL is invalid. Please use the format https://github.com/user/repo");
         return;
       }
       if (form.imageUrl && !isValidUrl(form.imageUrl)) {
-        notification.error("Image URL is invalid");
+        notification.error("Image URL is invalid. Please use the format https://example.com/image.png");
         return;
       }
       if (form.videoUrl && form.videoUrl.length > 0 && !isValidYouTubeUrl(form.videoUrl)) {
@@ -197,7 +197,7 @@ export const BuildFormModal = forwardRef<HTMLDialogElement, BuildFormModalProps>
                 <span className="text-sm font-medium mr-2 leading-none">Demo URL</span>
               </div>
               <InputBase
-                placeholder="Demo URL"
+                placeholder="https://example.com"
                 value={form.demoUrl ?? ""}
                 onChange={value => setForm({ ...form, demoUrl: value })}
               />
@@ -207,14 +207,14 @@ export const BuildFormModal = forwardRef<HTMLDialogElement, BuildFormModalProps>
                 <span className="text-sm font-medium mr-2 leading-none">GitHub URL</span>
               </div>
               <InputBase
-                placeholder="GitHub URL"
+                placeholder="https://github.com/user/repo"
                 value={form.githubUrl ?? ""}
                 onChange={value => setForm({ ...form, githubUrl: value })}
               />
             </div>
             <div className="flex flex-col gap-1.5 w-full">
               <div className="flex items-base ml-2">
-                <span className="text-sm font-medium mr-2 leading-none">Video URL</span>
+                <span className="text-sm font-medium mr-2 leading-none">YouTube URL</span>
               </div>
               <InputBase
                 placeholder="Video URL"
