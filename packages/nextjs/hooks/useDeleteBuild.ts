@@ -8,12 +8,12 @@ import { notification } from "~~/utils/scaffold-eth";
 
 export function useDeleteBuild() {
   const router = useRouter();
-  const { address } = useAccount();
+  const { address: connectedAddress } = useAccount();
   const { signTypedDataAsync } = useSignTypedData();
 
   const { mutate: deleteBuild, isPending } = useMutation({
-    mutationFn: async ({ buildId }: { buildId: string }) => {
-      if (!address) throw new Error("Wallet not connected");
+    mutationFn: async ({ buildId, ownerAddress }: { buildId: string; ownerAddress: string }) => {
+      if (!connectedAddress) throw new Error("Wallet not connected");
 
       const message = {
         ...EIP_712_TYPED_DATA__DELETE_BUILD.message,
@@ -25,7 +25,7 @@ export function useDeleteBuild() {
         message,
       });
 
-      return deleteBuildApi({ address, signature, buildId });
+      return deleteBuildApi({ signatureAddress: connectedAddress, signature, buildId, userAddress: ownerAddress });
     },
     onSuccess: () => {
       notification.success("Build deleted successfully!");

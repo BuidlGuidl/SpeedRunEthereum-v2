@@ -45,8 +45,13 @@ export async function updateBuild(payload: UpdateBuildPayload, buildId: string) 
   return response.json();
 }
 
-export async function deleteBuild({ address, signature, buildId }: DeleteBuildPayload & { buildId: string }) {
-  if (!address || !signature || !buildId) {
+export async function deleteBuild({
+  signatureAddress,
+  signature,
+  buildId,
+  userAddress,
+}: DeleteBuildPayload & { buildId: string }) {
+  if (!signatureAddress || !signature || !buildId || !userAddress) {
     throw new Error("Missing required fields");
   }
 
@@ -55,7 +60,7 @@ export async function deleteBuild({ address, signature, buildId }: DeleteBuildPa
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ address, signature, buildId }),
+    body: JSON.stringify({ signatureAddress, signature, userAddress }),
   });
 
   if (!response.ok) {
