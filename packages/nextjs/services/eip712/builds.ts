@@ -78,11 +78,23 @@ export const isValidEIP712SubmitBuildSignature = async ({
   signature: `0x${string}`;
   build: BuildFormInputs;
 }) => {
+  const buildsWithDefaults = {
+    ...build,
+    desc: build.desc || "",
+    buildType: build.buildType || "",
+    buildCategory: build.buildCategory || "",
+    demoUrl: build.demoUrl || "",
+    videoUrl: build.videoUrl || "",
+    imageUrl: build.imageUrl || "",
+    githubUrl: build.githubUrl || "",
+    coBuilders: build.coBuilders || [],
+  };
+
   const typedData = {
     ...EIP_712_TYPED_DATA__SUBMIT_BUILD,
     message: {
       ...EIP_712_TYPED_DATA__SUBMIT_BUILD.message,
-      ...build,
+      ...buildsWithDefaults,
     },
     signature,
   };

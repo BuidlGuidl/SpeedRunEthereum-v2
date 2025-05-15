@@ -42,7 +42,7 @@ export const BuildFormModal = forwardRef<HTMLDialogElement, BuildFormModalProps>
         name: "",
         desc: "",
         buildType: BuildType.DAPP,
-        buildCategory: BuildCategory.DEFI,
+        buildCategory: null,
         demoUrl: "",
         videoUrl: "",
         imageUrl: "",
@@ -192,6 +192,9 @@ export const BuildFormModal = forwardRef<HTMLDialogElement, BuildFormModalProps>
                 value={form.buildCategory ?? ""}
                 onChange={e => setForm({ ...form, buildCategory: e.target.value as BuildCategory })}
               >
+                <option value="" disabled>
+                  Select a category
+                </option>
                 {Object.values(BuildCategory).map(category => (
                   <option key={category} value={category}>
                     {category}
