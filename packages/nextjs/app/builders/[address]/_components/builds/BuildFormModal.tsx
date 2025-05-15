@@ -251,11 +251,9 @@ export const BuildFormModal = forwardRef<HTMLDialogElement, BuildFormModalProps>
                       placeholder="Builder Address"
                       value={address}
                       onChange={val => {
-                        console.log("val", val);
                         const updated = [...form.coBuilders];
                         updated[idx] = val;
                         setForm({ ...form, coBuilders: updated });
-                        console.log("form", form);
                       }}
                     />
                   </div>
