@@ -13,7 +13,6 @@ type GuideMetadata = {
 
 type Guide = GuideMetadata & {
   content: ReactElement;
-  rawContent: string;
 };
 
 export function getAllGuidesSlugs(): string[] {
@@ -33,7 +32,6 @@ export async function getGuideBySlug(slug: string): Promise<Guide | null> {
     return {
       ...frontmatter,
       content: content,
-      rawContent: fileContents,
     };
   } catch (error) {
     // Not found.
