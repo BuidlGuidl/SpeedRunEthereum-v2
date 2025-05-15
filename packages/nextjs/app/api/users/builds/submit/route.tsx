@@ -12,7 +12,7 @@ export async function POST(request: NextRequest) {
   try {
     const { address, signature, ...build } = (await request.json()) as SubmitBuildPayload;
 
-    if (!address || !signature || !build.name || !build.desc || !build.buildType || !build.githubUrl) {
+    if (!address || !signature || !build.name || !build.desc || !build.buildType) {
       return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
     }
 

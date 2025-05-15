@@ -73,7 +73,7 @@ export const BuildFormModal = forwardRef<HTMLDialogElement, BuildFormModalProps>
         notification.error("Build type is required");
         return;
       }
-      if (!isValidUrl(updatedForm.githubUrl || "")) {
+      if (updatedForm.githubUrl && !isValidUrl(updatedForm.githubUrl)) {
         notification.error("GitHub URL is invalid. Please use the format https://github.com/user/repo");
         return;
       }
@@ -224,15 +224,12 @@ export const BuildFormModal = forwardRef<HTMLDialogElement, BuildFormModalProps>
             </div>
             <div className="flex flex-col gap-1.5 w-full">
               <div className="flex items-base ml-2">
-                <span className="text-sm font-medium mr-2 leading-none">
-                  GitHub Repo URL <span className="text-red-500">*</span>
-                </span>
+                <span className="text-sm font-medium mr-2 leading-none">GitHub Repo URL</span>
               </div>
               <InputBase
                 placeholder="https://github.com/user/repo"
                 value={form.githubUrl ?? ""}
                 onChange={value => setForm({ ...form, githubUrl: value })}
-                required
               />
             </div>
             <div className="flex flex-col gap-1.5 w-full">

@@ -16,6 +16,10 @@ export async function PUT(request: Request, { params }: { params: { buildId: str
     const { buildId } = params;
     const { signature, build, userAddress, signatureAddress }: UpdateBuildPayload = await request.json();
 
+    if (!build.name || !build.desc || !build.buildType || !signatureAddress || !signature || !userAddress) {
+      return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
+    }
+
     const isValidSignature = await isValidEIP712UpdateBuildSignature({
       address: signatureAddress,
       signature,
