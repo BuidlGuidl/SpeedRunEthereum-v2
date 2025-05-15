@@ -13,6 +13,9 @@ import { getLatestSubmissionPerChallengeByUser } from "~~/services/database/repo
 import { getUserByAddress } from "~~/services/database/repositories/users";
 import { getEnsOrAddress } from "~~/utils/ens-or-address";
 
+// TODO: Make this true before merging
+const HIDE_BUILDS = false;
+
 type Props = {
   params: {
     address: string;
@@ -66,7 +69,7 @@ export default async function BuilderPage({ params }: { params: { address: strin
   const challenges = await getLatestSubmissionPerChallengeByUser(userAddress);
   const user = await getUserByAddress(userAddress);
   const bgMemberExists = await isBgMember(userAddress);
-  const builds = await getBuildsByUserAddress(userAddress);
+  const builds = HIDE_BUILDS ? [] : await getBuildsByUserAddress(userAddress);
 
   if (!user) {
     notFound();
@@ -94,30 +97,32 @@ export default async function BuilderPage({ params }: { params: { address: strin
               )}
             </div>
             {/* Builds */}
-            <div className="w-full">
-              <div className="flex justify-between items-center">
-                <h2 className="text-2xl font-bold mb-0 text-neutral pb-4">Builds</h2>
-                <SubmitNewBuildBtn />
+            {!HIDE_BUILDS && (
+              <div className="w-full">
+                <div className="flex justify-between items-center">
+                  <h2 className="text-2xl font-bold mb-0 text-neutral pb-4">Builds</h2>
+                  <SubmitNewBuildBtn />
+                </div>
+                {builds.length > 0 ? (
+                  <div className="flex flex-wrap items-stretch w-full gap-5">
+                    {builds.map(build => (
+                      <div key={build.build.id} className="flex-grow-0 flex-shrink-0">
+                        <BuildCard
+                          ownerAddress={build.ownerAddress}
+                          build={build.build}
+                          likes={build.likes}
+                          coBuilders={build.coBuilders}
+                        />
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="bg-base-100 p-8 text-center rounded-lg text-neutral">
+                    This builder hasn&apos;t submitted any builds yet.
+                  </div>
+                )}
               </div>
-              {builds.length > 0 ? (
-                <div className="flex flex-wrap items-stretch w-full gap-5">
-                  {builds.map(build => (
-                    <div key={build.build.id} className="flex-grow-0 flex-shrink-0">
-                      <BuildCard
-                        ownerAddress={build.ownerAddress}
-                        build={build.build}
-                        likes={build.likes}
-                        coBuilders={build.coBuilders}
-                      />
-                    </div>
-                  ))}
-                </div>
-              ) : (
-                <div className="bg-base-100 p-8 text-center rounded-lg text-neutral">
-                  This builder hasn&apos;t submitted any builds yet.
-                </div>
-              )}
-            </div>
+            )}
           </div>
         </div>
       </div>
