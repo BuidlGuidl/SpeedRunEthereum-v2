@@ -38,9 +38,11 @@ export async function PUT(request: Request, { params }: { params: { batchId: str
       return NextResponse.json({ error: "Only admins can update batches" }, { status: 403 });
     }
 
-    const batchExist = await getBatchByBgSubdomain(bgSubdomain);
+    const batchWithRequestedBgSubdomain = await getBatchByBgSubdomain(bgSubdomain);
+    const batchWithSameBgSubdomainExists =
+      batchWithRequestedBgSubdomain && batchWithRequestedBgSubdomain.id !== Number(batchId);
 
-    if (batchExist) {
+    if (batchWithSameBgSubdomainExists) {
       return NextResponse.json({ error: "Batch with this website url already exists" }, { status: 401 });
     }
 
