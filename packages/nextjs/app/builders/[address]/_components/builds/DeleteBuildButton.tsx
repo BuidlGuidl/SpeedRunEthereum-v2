@@ -5,7 +5,7 @@ import { TrashIcon } from "@heroicons/react/24/solid";
 import { useAuthSession } from "~~/hooks/useAuthSession";
 import { useDeleteBuild } from "~~/hooks/useDeleteBuild";
 
-export const DeleteBuildBtn = ({ buildId, ownerAddress }: { buildId: string; ownerAddress: string }) => {
+export const DeleteBuildButton = ({ buildId, ownerAddress }: { buildId: string; ownerAddress: string }) => {
   const { isAdmin } = useAuthSession();
   const { deleteBuild, isPending } = useDeleteBuild();
   const { address: contentAddress } = useAccount();

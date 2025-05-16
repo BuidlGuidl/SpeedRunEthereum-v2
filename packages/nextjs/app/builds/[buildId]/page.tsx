@@ -3,7 +3,7 @@ import { MDXRemote } from "next-mdx-remote/rsc";
 import rehypeRaw from "rehype-raw";
 import remarkGfm from "remark-gfm";
 import { ArrowTopRightOnSquareIcon } from "@heroicons/react/24/outline";
-import { LikeBuildBtn } from "~~/app/builders/[address]/_components/builds/LikeBuildBtn";
+import { LikeBuildButton } from "~~/app/builders/[address]/_components/builds/LikeBuildButton";
 import { Address } from "~~/components/scaffold-eth";
 import { getBuildByBuildId } from "~~/services/database/repositories/builds";
 import { fetchGithubBuildReadme } from "~~/services/github";
@@ -33,7 +33,7 @@ export default async function BuildPage({ params }: { params: { buildId: string 
                 </Link>
               )}
               <div className="flex items-center gap-1">
-                <LikeBuildBtn buildId={buildId} likes={buildLikesAddress} />
+                <LikeBuildButton buildId={buildId} likes={buildLikesAddress} />
                 <span className="text-base">{buildLikesAddress.length}</span>
               </div>
             </div>

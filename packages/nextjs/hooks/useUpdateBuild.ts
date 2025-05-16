@@ -12,7 +12,7 @@ export function useUpdateBuild({ onSuccess }: { onSuccess?: () => void }) {
   const { address: connectedAddress } = useAccount();
   const { signTypedDataAsync } = useSignTypedData();
 
-  const { mutate: updateBuildMutation, isPending } = useMutation({
+  const { mutateAsync: updateBuildMutation, isPending } = useMutation({
     mutationFn: async ({
       build,
       buildId,

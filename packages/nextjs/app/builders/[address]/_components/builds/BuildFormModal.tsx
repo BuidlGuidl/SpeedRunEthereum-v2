@@ -16,7 +16,7 @@ export type BuildFormInputs = Omit<Build, "submittedTimestamp" | "id"> & {
 type BuildFormModalProps = {
   closeModal: () => void;
   build?: BuildFormInputs;
-  buttonAction: (build: BuildFormInputs) => void;
+  buttonAction: (build: BuildFormInputs) => Promise<void>;
   buttonText: string;
   isPending: boolean;
 };
@@ -54,44 +54,48 @@ export const BuildFormModal = forwardRef<HTMLDialogElement, BuildFormModalProps>
     const [isUploading, setIsUploading] = useState(false);
 
     const handleFormSubmit = async () => {
-      const updatedForm = { ...form };
+      try {
+        const updatedForm = { ...form };
 
-      updatedForm.demoUrl = updatedForm.demoUrl?.trim() ?? null;
-      updatedForm.githubUrl = updatedForm.githubUrl?.trim() ?? null;
-      updatedForm.imageUrl = updatedForm.imageUrl?.trim() ?? null;
-      updatedForm.videoUrl = updatedForm.videoUrl?.trim() ?? null;
+        updatedForm.demoUrl = updatedForm.demoUrl?.trim() ?? null;
+        updatedForm.githubUrl = updatedForm.githubUrl?.trim() ?? null;
+        updatedForm.imageUrl = updatedForm.imageUrl?.trim() ?? null;
+        updatedForm.videoUrl = updatedForm.videoUrl?.trim() ?? null;
 
-      if (!updatedForm.name) {
-        notification.error("Build name is required");
-        return;
-      }
-      if (!updatedForm.desc) {
-        notification.error("Description is required");
-        return;
-      }
-      if (!updatedForm.buildType) {
-        notification.error("Build type is required");
-        return;
-      }
-      if (updatedForm.githubUrl && !isValidUrl(updatedForm.githubUrl)) {
-        notification.error("GitHub URL is invalid. Please use the format https://github.com/user/repo");
-        return;
-      }
-      if (updatedForm.demoUrl && !isValidUrl(updatedForm.demoUrl)) {
-        notification.error("Demo URL is invalid. Please use the format https://example.com");
-        return;
-      }
-      if (updatedForm.imageUrl && !isValidUrl(updatedForm.imageUrl)) {
-        notification.error("Image URL is invalid. Please use the format https://example.com/image.png");
-        return;
-      }
-      if (updatedForm.videoUrl && updatedForm.videoUrl.length > 0 && !isValidYouTubeUrl(updatedForm.videoUrl)) {
-        notification.error("Video URL must be a valid YouTube link");
-        return;
-      }
-      buttonAction(updatedForm);
-      if (!build) {
-        setForm(defaultBuildFormInputs);
+        if (!updatedForm.name) {
+          notification.error("Build name is required");
+          return;
+        }
+        if (!updatedForm.desc) {
+          notification.error("Description is required");
+          return;
+        }
+        if (!updatedForm.buildType) {
+          notification.error("Build type is required");
+          return;
+        }
+        if (updatedForm.githubUrl && !isValidUrl(updatedForm.githubUrl)) {
+          notification.error("GitHub URL is invalid. Please use the format https://github.com/user/repo");
+          return;
+        }
+        if (updatedForm.demoUrl && !isValidUrl(updatedForm.demoUrl)) {
+          notification.error("Demo URL is invalid. Please use the format https://example.com");
+          return;
+        }
+        if (updatedForm.imageUrl && !isValidUrl(updatedForm.imageUrl)) {
+          notification.error("Image URL is invalid. Please use the format https://example.com/image.png");
+          return;
+        }
+        if (updatedForm.videoUrl && updatedForm.videoUrl.length > 0 && !isValidYouTubeUrl(updatedForm.videoUrl)) {
+          notification.error("Video URL must be a valid YouTube link");
+          return;
+        }
+        await buttonAction(updatedForm);
+        if (!build) {
+          setForm(defaultBuildFormInputs);
+        }
+      } catch (e) {
+        console.error("Failed to perform build action:", e);
       }
     };
 
@@ -185,42 +189,44 @@ export const BuildFormModal = forwardRef<HTMLDialogElement, BuildFormModalProps>
                 />
               </div>
             </div>
-            <div className="flex flex-col gap-1.5 w-full">
-              <div className="flex items-base ml-2">
-                <span className="text-sm font-medium mr-2 leading-none">
-                  Build Type <span className="text-red-500">*</span>
-                </span>
+            <div className="flex gap-x-4 w-full">
+              <div className="flex flex-col gap-1.5 flex-1">
+                <div className="flex items-base ml-2">
+                  <span className="text-sm font-medium mr-2 leading-none">
+                    Build Type <span className="text-red-500">*</span>
+                  </span>
+                </div>
+                <select
+                  className="select select-bordered bg-base-200 w-full rounded-full h-[2.2rem] min-h-[2.2rem] px-4"
+                  value={form.buildType ?? ""}
+                  onChange={e => setForm({ ...form, buildType: e.target.value as BuildType })}
+                >
+                  {Object.values(BuildType).map(type => (
+                    <option key={type} value={type}>
+                      {type}
+                    </option>
+                  ))}
+                </select>
               </div>
-              <select
-                className="select select-bordered bg-base-200 w-full rounded-full h-[2.2rem] min-h-[2.2rem] px-4"
-                value={form.buildType ?? ""}
-                onChange={e => setForm({ ...form, buildType: e.target.value as BuildType })}
-              >
-                {Object.values(BuildType).map(type => (
-                  <option key={type} value={type}>
-                    {type}
+              <div className="flex flex-col gap-1.5 flex-1">
+                <div className="flex items-base ml-2">
+                  <span className="text-sm font-medium mr-2 leading-none">Build Category</span>
+                </div>
+                <select
+                  className="select select-bordered bg-base-200 w-full rounded-full h-[2.2rem] min-h-[2.2rem] px-4"
+                  value={form.buildCategory ?? ""}
+                  onChange={e => setForm({ ...form, buildCategory: e.target.value as BuildCategory })}
+                >
+                  <option value="" disabled>
+                    Select a category
                   </option>
-                ))}
-              </select>
-            </div>
-            <div className="flex flex-col gap-1.5 w-full">
-              <div className="flex items-base ml-2">
-                <span className="text-sm font-medium mr-2 leading-none">Build Category</span>
+                  {Object.values(BuildCategory).map(category => (
+                    <option key={category} value={category}>
+                      {category}
+                    </option>
+                  ))}
+                </select>
               </div>
-              <select
-                className="select select-bordered bg-base-200 w-full rounded-full h-[2.2rem] min-h-[2.2rem] px-4"
-                value={form.buildCategory ?? ""}
-                onChange={e => setForm({ ...form, buildCategory: e.target.value as BuildCategory })}
-              >
-                <option value="" disabled>
-                  Select a category
-                </option>
-                {Object.values(BuildCategory).map(category => (
-                  <option key={category} value={category}>
-                    {category}
-                  </option>
-                ))}
-              </select>
             </div>
             <div className="flex flex-col gap-1.5 w-full">
               <div className="flex items-base ml-2">

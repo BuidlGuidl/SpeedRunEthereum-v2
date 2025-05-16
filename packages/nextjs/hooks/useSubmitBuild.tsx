@@ -12,7 +12,7 @@ export function useSubmitBuild({ onSuccess }: { onSuccess?: () => void }) {
   const { address } = useAccount();
   const { signTypedDataAsync } = useSignTypedData();
 
-  const { mutate: submitBuildMutation, isPending } = useMutation({
+  const { mutateAsync: submitBuildMutation, isPending } = useMutation({
     mutationFn: async (build: BuildFormInputs) => {
       if (!address) throw new Error("Wallet not connected");
 

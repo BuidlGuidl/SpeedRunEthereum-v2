@@ -13,7 +13,7 @@ type EditBuildBtnProps = {
   ownerAddress: string;
 };
 
-export const EditBuildBtn = ({ build, buildId, ownerAddress }: EditBuildBtnProps) => {
+export const EditBuildButton = ({ build, buildId, ownerAddress }: EditBuildBtnProps) => {
   const { address: connectedAddress } = useAccount();
   const { isAdmin } = useAuthSession();
 
@@ -25,8 +25,8 @@ export const EditBuildBtn = ({ build, buildId, ownerAddress }: EditBuildBtnProps
     },
   });
 
-  const handleUpdateBuild = (form: BuildFormInputs) => {
-    updateBuild({ build: form, buildId, ownerAddress });
+  const handleUpdateBuild = async (form: BuildFormInputs) => {
+    await updateBuild({ build: form, buildId, ownerAddress });
   };
 
   if (!isAdmin && connectedAddress !== ownerAddress) {
