@@ -19,14 +19,16 @@ export const BuildCard = ({ ownerAddress, build, likes, coBuilders }: Props) => 
         <DeleteBuildButton buildId={build.id} ownerAddress={ownerAddress} />
       </div>
       <div className="w-full h-44 flex items-center justify-center">
-        {build.imageUrl ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img src={build.imageUrl} alt={build.name} className="w-full h-full object-cover" />
-        ) : (
-          <div className="w-full h-full flex items-center justify-center text-lg font-bold bg-base-200 border border-secondary">
-            No Image
-          </div>
-        )}
+        <Link href={`/builds/${build.id}`} className="w-full h-full block">
+          {build.imageUrl ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img src={build.imageUrl} alt={build.name} className="w-full h-full object-cover" />
+          ) : (
+            <div className="w-full h-full flex items-center justify-center text-lg font-bold bg-base-200 border border-secondary">
+              No Image
+            </div>
+          )}
+        </Link>
       </div>
       <div className="flex flex-col flex-1 px-6 py-4">
         <h2 className="text-xl font-bold mb-2 leading-tight line-clamp-2">{build.name}</h2>
