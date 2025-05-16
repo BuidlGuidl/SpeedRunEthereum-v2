@@ -6,8 +6,8 @@ import QuestionIcon from "../_assets/icons/QuestionIcon";
 import { useConnectModal } from "@rainbow-me/rainbowkit";
 import { useAccount } from "wagmi";
 import { useJoinBatch } from "~~/hooks/useJoinBatch";
-import { useLatestOpenBatch } from "~~/hooks/useLatestOpenBatch";
 import { useUser } from "~~/hooks/useUser";
+import { Batch } from "~~/services/database/repositories/batches";
 import { UserChallenges } from "~~/services/database/repositories/userChallenges";
 import { JOIN_BATCH_DEPENDENCIES, getChallengeDependenciesInfo } from "~~/utils/dependent-challenges";
 
@@ -16,14 +16,15 @@ const NO_USER_LOCK_REASON = "Register and complete the challenges to join a batc
 
 type JoinBatchButtonProps = {
   userChallenges?: UserChallenges;
+  latestOpenBatch?: Batch;
+  isLoadingLatestOpenBatch?: boolean;
 };
 
-const JoinBatchButton = ({ userChallenges = [] }: JoinBatchButtonProps) => {
+const JoinBatchButton = ({ userChallenges = [], latestOpenBatch, isLoadingLatestOpenBatch }: JoinBatchButtonProps) => {
   const { address: connectedAddress } = useAccount();
   const { data: user } = useUser(connectedAddress);
   const { handleJoinBatch, isJoiningBatch } = useJoinBatch({ user });
 
-  const { data: latestOpenBatch, isLoading: isLoadingLatestOpenBatch } = useLatestOpenBatch();
   const userJoinedCurrentBatch = user && user.batchId && user.batchId === latestOpenBatch?.id;
   const userJoinedOtherBatch = user && user.batchId && user.batchId !== latestOpenBatch?.id;
 
