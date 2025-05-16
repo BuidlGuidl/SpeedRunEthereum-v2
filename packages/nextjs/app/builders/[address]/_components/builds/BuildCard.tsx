@@ -1,6 +1,6 @@
-import { DeleteBuildBtn } from "./DeleteBuildBtn";
-import { EditBuildBtn } from "./EditBuildBtn";
-import { LikeBuildBtn } from "./LikeBuildBtn";
+import { DeleteBuildButton } from "./DeleteBuildButton";
+import { EditBuildButton } from "./EditBuildButton";
+import { LikeBuildButton } from "./LikeBuildButton";
 import { Build } from "~~/services/database/repositories/builds";
 
 type Props = {
@@ -14,8 +14,8 @@ export const BuildCard = ({ ownerAddress, build, likes, coBuilders }: Props) => 
   return (
     <div className="relative flex flex-col w-72 h-[400px] bg-base-300 rounded-xl shadow-md overflow-hidden transition hover:shadow-lg">
       <div className="absolute right-4 top-4 flex gap-2 z-10">
-        <EditBuildBtn build={{ ...build, coBuilders }} buildId={build.id} ownerAddress={ownerAddress} />
-        <DeleteBuildBtn buildId={build.id} ownerAddress={ownerAddress} />
+        <EditBuildButton build={{ ...build, coBuilders }} buildId={build.id} ownerAddress={ownerAddress} />
+        <DeleteBuildButton buildId={build.id} ownerAddress={ownerAddress} />
       </div>
       <div className="w-full h-44 flex items-center justify-center">
         {build.imageUrl ? (
@@ -33,7 +33,7 @@ export const BuildCard = ({ ownerAddress, build, likes, coBuilders }: Props) => 
         <div className="flex-1" />
         <div className="flex justify-end items-center pt-2 mt-2 w-full">
           <div className="flex items-center gap-1">
-            <LikeBuildBtn buildId={build.id} likes={likes} />
+            <LikeBuildButton buildId={build.id} likes={likes} />
             <span className="text-base">{likes.length}</span>
           </div>
         </div>

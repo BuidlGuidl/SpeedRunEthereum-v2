@@ -13,7 +13,7 @@ type EditBuildBtnProps = {
   ownerAddress: string;
 };
 
-export const EditBuildBtn = ({ build, buildId, ownerAddress }: EditBuildBtnProps) => {
+export const EditBuildButton = ({ build, buildId, ownerAddress }: EditBuildBtnProps) => {
   const { address: connectedAddress } = useAccount();
   const { isAdmin } = useAuthSession();
 

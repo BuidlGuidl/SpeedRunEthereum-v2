@@ -3,7 +3,7 @@ import { UpgradedToBGCard } from "./_components/UpgradedToBGCard";
 import { UserChallengesTable } from "./_components/UserChallengesTable";
 import { UserProfileCard } from "./_components/UserProfileCard";
 import { BuildCard } from "./_components/builds/BuildCard";
-import { SubmitNewBuildBtn } from "./_components/builds/SubmitNewBuildBtn";
+import { SubmitNewBuildButton } from "./_components/builds/SubmitNewBuildButton";
 import { Metadata } from "next";
 import { isAddress } from "viem";
 import { RouteRefresher } from "~~/components/RouteRefresher";
@@ -101,7 +101,7 @@ export default async function BuilderPage({ params }: { params: { address: strin
               <div className="w-full">
                 <div className="flex justify-between items-center">
                   <h2 className="text-2xl font-bold mb-0 text-neutral pb-4">Builds</h2>
-                  <SubmitNewBuildBtn />
+                  <SubmitNewBuildButton />
                 </div>
                 {builds.length > 0 ? (
                   <div className="flex flex-wrap items-stretch w-full gap-5">

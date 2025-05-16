@@ -11,7 +11,7 @@ type LikeBuildBtnProps = {
   likes: string[];
 };
 
-export const LikeBuildBtn = ({ buildId, likes }: LikeBuildBtnProps) => {
+export const LikeBuildButton = ({ buildId, likes }: LikeBuildBtnProps) => {
   const { address: connectedAddress } = useAccount();
   const isLiked = connectedAddress && likes.includes(connectedAddress);
 
