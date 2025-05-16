@@ -1,5 +1,5 @@
 export enum PlausibleEvent {
-  JOIN_BG = "joinBG",
+  JOIN_BATCH = "joinBatch",
   SIGNUP_SRE = "signupSRE",
   CHALLENGE_SUBMISSION = "challengeSubmission",
 }

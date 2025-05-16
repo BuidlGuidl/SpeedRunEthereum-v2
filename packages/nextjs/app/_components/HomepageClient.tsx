@@ -4,17 +4,14 @@ import { AfterSreCard } from "./AfterSreCard";
 import { AfterSreLine } from "./AfterSreLine";
 import { ChallengeExpandedCard } from "./ChallengeExpandedCard";
 import { Hero } from "./Hero";
-import { JoinBGCard } from "./JoinBGCard";
+import { OnboardingBatchesCard } from "./OnboardingBatchesCard";
 import { useAccount } from "wagmi";
-import { useUser } from "~~/hooks/useUser";
 import { useUserChallenges } from "~~/hooks/useUserChallenges";
 import { ChallengeId } from "~~/services/database/config/types";
 import { Challenges } from "~~/services/database/repositories/challenges";
 
 export const HomepageClient = ({ challenges }: { challenges: Challenges }) => {
   const { address: connectedAddress } = useAccount();
-
-  const { data: user } = useUser(connectedAddress);
 
   const { data: userChallenges } = useUserChallenges(connectedAddress);
 
@@ -53,7 +50,7 @@ export const HomepageClient = ({ challenges }: { challenges: Challenges }) => {
           challenges={challenges}
         />
 
-        <JoinBGCard userChallenges={userChallenges} user={user} />
+        <OnboardingBatchesCard userChallenges={userChallenges} />
         <ChallengeExpandedCard
           key={ChallengeId.STABLECOINS}
           challengeId={ChallengeId.STABLECOINS}

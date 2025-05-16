@@ -29,15 +29,15 @@ export const getChallengeDependenciesInfo = ({
   dependencies: string[];
   userChallenges: UserChallenges;
 }) => {
-  const lockReasonToolTip = getLockReasonTooltip({
+  const lockReasonTooltip = getLockReasonTooltip({
     dependencies,
     userChallenges,
   });
 
-  return { completed: !lockReasonToolTip, lockReasonToolTip };
+  return { completed: !lockReasonTooltip, lockReasonTooltip };
 };
 
-export const JOIN_BG_DEPENDENCIES = [
+export const JOIN_BATCH_DEPENDENCIES = [
   ChallengeId.SIMPLE_NFT_EXAMPLE,
   ChallengeId.DECENTRALIZED_STAKING,
   ChallengeId.TOKEN_VENDOR,

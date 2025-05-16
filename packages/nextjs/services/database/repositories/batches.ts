@@ -1,3 +1,4 @@
+import { BatchStatus } from "../config/types";
 import { ColumnSort, SortingState } from "@tanstack/react-table";
 import { InferInsertModel, ilike } from "drizzle-orm";
 import { eq } from "drizzle-orm";
@@ -88,6 +89,13 @@ export async function getBatchNameList() {
       id: true,
       name: true,
     },
+    orderBy: (batches, { desc }) => desc(batches.startDate),
+  });
+}
+
+export async function getLatestOpenBatch() {
+  return await db.query.batches.findFirst({
+    where: eq(batches.status, BatchStatus.OPEN),
     orderBy: (batches, { desc }) => desc(batches.startDate),
   });
 }
