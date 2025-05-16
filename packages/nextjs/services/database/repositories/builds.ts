@@ -186,3 +186,14 @@ export const createBuildLike = async (buildId: string, userAddress: string) => {
 export const deleteBuildLike = async (likeId: number) => {
   await db.delete(buildLikes).where(eq(buildLikes.id, likeId));
 };
+
+export const getBuildByBuildId = async (buildId: string) => {
+  const build = await db.query.builds.findFirst({
+    where: eq(builds.id, buildId),
+    with: {
+      builders: true,
+      likes: true,
+    },
+  });
+  return build;
+};
