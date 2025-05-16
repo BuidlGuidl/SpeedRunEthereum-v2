@@ -189,42 +189,44 @@ export const BuildFormModal = forwardRef<HTMLDialogElement, BuildFormModalProps>
                 />
               </div>
             </div>
-            <div className="flex flex-col gap-1.5 w-full">
-              <div className="flex items-base ml-2">
-                <span className="text-sm font-medium mr-2 leading-none">
-                  Build Type <span className="text-red-500">*</span>
-                </span>
+            <div className="flex gap-x-4 w-full">
+              <div className="flex flex-col gap-1.5 flex-1">
+                <div className="flex items-base ml-2">
+                  <span className="text-sm font-medium mr-2 leading-none">
+                    Build Type <span className="text-red-500">*</span>
+                  </span>
+                </div>
+                <select
+                  className="select select-bordered bg-base-200 w-full rounded-full h-[2.2rem] min-h-[2.2rem] px-4"
+                  value={form.buildType ?? ""}
+                  onChange={e => setForm({ ...form, buildType: e.target.value as BuildType })}
+                >
+                  {Object.values(BuildType).map(type => (
+                    <option key={type} value={type}>
+                      {type}
+                    </option>
+                  ))}
+                </select>
               </div>
-              <select
-                className="select select-bordered bg-base-200 w-full rounded-full h-[2.2rem] min-h-[2.2rem] px-4"
-                value={form.buildType ?? ""}
-                onChange={e => setForm({ ...form, buildType: e.target.value as BuildType })}
-              >
-                {Object.values(BuildType).map(type => (
-                  <option key={type} value={type}>
-                    {type}
+              <div className="flex flex-col gap-1.5 flex-1">
+                <div className="flex items-base ml-2">
+                  <span className="text-sm font-medium mr-2 leading-none">Build Category</span>
+                </div>
+                <select
+                  className="select select-bordered bg-base-200 w-full rounded-full h-[2.2rem] min-h-[2.2rem] px-4"
+                  value={form.buildCategory ?? ""}
+                  onChange={e => setForm({ ...form, buildCategory: e.target.value as BuildCategory })}
+                >
+                  <option value="" disabled>
+                    Select a category
                   </option>
-                ))}
-              </select>
-            </div>
-            <div className="flex flex-col gap-1.5 w-full">
-              <div className="flex items-base ml-2">
-                <span className="text-sm font-medium mr-2 leading-none">Build Category</span>
+                  {Object.values(BuildCategory).map(category => (
+                    <option key={category} value={category}>
+                      {category}
+                    </option>
+                  ))}
+                </select>
               </div>
-              <select
-                className="select select-bordered bg-base-200 w-full rounded-full h-[2.2rem] min-h-[2.2rem] px-4"
-                value={form.buildCategory ?? ""}
-                onChange={e => setForm({ ...form, buildCategory: e.target.value as BuildCategory })}
-              >
-                <option value="" disabled>
-                  Select a category
-                </option>
-                {Object.values(BuildCategory).map(category => (
-                  <option key={category} value={category}>
-                    {category}
-                  </option>
-                ))}
-              </select>
             </div>
             <div className="flex flex-col gap-1.5 w-full">
               <div className="flex items-base ml-2">
