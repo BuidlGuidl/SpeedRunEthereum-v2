@@ -41,9 +41,9 @@ export default async function BuildPage({ params }: { params: { buildId: string 
           </div>
           <div className="flex justify-center">
             {build?.imageUrl ? (
-              <div className="border-2 border-primary rounded-lg">
+              <div className="w-[290px] h-[200px] flex items-center justify-center border-2 border-primary rounded-lg">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={build?.imageUrl} alt={build?.name} className="w-[325px] h-[200px] rounded-lg" />
+                <img src={build?.imageUrl} alt={build?.name} className="w-full h-full object-cover rounded-lg" />
               </div>
             ) : (
               <div className="w-[250px] h-[200px] rounded-lg bg-base-300 dark:bg-base-200">
