@@ -81,7 +81,7 @@ export default async function ChallengePage({ params }: { params: { challengeId:
               <div className="mt-16 mb-4 font-semibold text-left">Related guides</div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2 mb-2">
                 {guides.map(guide => (
-                  <div key={guide.url} className="p-4 border rounded bg-base-200 dark:bg-base-300">
+                  <div key={guide.url} className="p-4 border rounded bg-base-300">
                     <a href={guide.url} className="text-primary underline font-semibold">
                       {guide.title}
                     </a>
