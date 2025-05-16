@@ -16,7 +16,7 @@ export type BuildFormInputs = Omit<Build, "submittedTimestamp" | "id"> & {
 type BuildFormModalProps = {
   closeModal: () => void;
   build?: BuildFormInputs;
-  buttonAction: (build: BuildFormInputs) => void;
+  buttonAction: (build: BuildFormInputs) => Promise<void>;
   buttonText: string;
   isPending: boolean;
 };
@@ -54,44 +54,48 @@ export const BuildFormModal = forwardRef<HTMLDialogElement, BuildFormModalProps>
     const [isUploading, setIsUploading] = useState(false);
 
     const handleFormSubmit = async () => {
-      const updatedForm = { ...form };
+      try {
+        const updatedForm = { ...form };
 
-      updatedForm.demoUrl = updatedForm.demoUrl?.trim() ?? null;
-      updatedForm.githubUrl = updatedForm.githubUrl?.trim() ?? null;
-      updatedForm.imageUrl = updatedForm.imageUrl?.trim() ?? null;
-      updatedForm.videoUrl = updatedForm.videoUrl?.trim() ?? null;
+        updatedForm.demoUrl = updatedForm.demoUrl?.trim() ?? null;
+        updatedForm.githubUrl = updatedForm.githubUrl?.trim() ?? null;
+        updatedForm.imageUrl = updatedForm.imageUrl?.trim() ?? null;
+        updatedForm.videoUrl = updatedForm.videoUrl?.trim() ?? null;
 
-      if (!updatedForm.name) {
-        notification.error("Build name is required");
-        return;
-      }
-      if (!updatedForm.desc) {
-        notification.error("Description is required");
-        return;
-      }
-      if (!updatedForm.buildType) {
-        notification.error("Build type is required");
-        return;
-      }
-      if (updatedForm.githubUrl && !isValidUrl(updatedForm.githubUrl)) {
-        notification.error("GitHub URL is invalid. Please use the format https://github.com/user/repo");
-        return;
-      }
-      if (updatedForm.demoUrl && !isValidUrl(updatedForm.demoUrl)) {
-        notification.error("Demo URL is invalid. Please use the format https://example.com");
-        return;
-      }
-      if (updatedForm.imageUrl && !isValidUrl(updatedForm.imageUrl)) {
-        notification.error("Image URL is invalid. Please use the format https://example.com/image.png");
-        return;
-      }
-      if (updatedForm.videoUrl && updatedForm.videoUrl.length > 0 && !isValidYouTubeUrl(updatedForm.videoUrl)) {
-        notification.error("Video URL must be a valid YouTube link");
-        return;
-      }
-      buttonAction(updatedForm);
-      if (!build) {
-        setForm(defaultBuildFormInputs);
+        if (!updatedForm.name) {
+          notification.error("Build name is required");
+          return;
+        }
+        if (!updatedForm.desc) {
+          notification.error("Description is required");
+          return;
+        }
+        if (!updatedForm.buildType) {
+          notification.error("Build type is required");
+          return;
+        }
+        if (updatedForm.githubUrl && !isValidUrl(updatedForm.githubUrl)) {
+          notification.error("GitHub URL is invalid. Please use the format https://github.com/user/repo");
+          return;
+        }
+        if (updatedForm.demoUrl && !isValidUrl(updatedForm.demoUrl)) {
+          notification.error("Demo URL is invalid. Please use the format https://example.com");
+          return;
+        }
+        if (updatedForm.imageUrl && !isValidUrl(updatedForm.imageUrl)) {
+          notification.error("Image URL is invalid. Please use the format https://example.com/image.png");
+          return;
+        }
+        if (updatedForm.videoUrl && updatedForm.videoUrl.length > 0 && !isValidYouTubeUrl(updatedForm.videoUrl)) {
+          notification.error("Video URL must be a valid YouTube link");
+          return;
+        }
+        await buttonAction(updatedForm);
+        if (!build) {
+          setForm(defaultBuildFormInputs);
+        }
+      } catch (e) {
+        console.error("Failed to perform build action:", e);
       }
     };
 
