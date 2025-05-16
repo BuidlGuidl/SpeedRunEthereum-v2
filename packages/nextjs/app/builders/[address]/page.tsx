@@ -13,8 +13,8 @@ import { getLatestSubmissionPerChallengeByUser } from "~~/services/database/repo
 import { getUserByAddress } from "~~/services/database/repositories/users";
 import { getEnsOrAddress } from "~~/utils/ens-or-address";
 
-// TODO: Make this true before merging
-const HIDE_BUILDS = false;
+// TODO: Change this when https://github.com/BuidlGuidl/SpeedRunEthereum-v2/issues/113 is done
+const HIDE_BUILDS = true;
 
 type Props = {
   params: {
