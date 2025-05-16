@@ -9,7 +9,8 @@ import { useSubmitBuild } from "~~/hooks/useSubmitBuild";
 
 export const SubmitNewBuildButton = () => {
   const { address: connectedAddress } = useAccount();
-  const { address: profileAddress } = useParams();
+  const { address: profileAddress } = useParams() as { address: string };
+  const isProfileOwner = connectedAddress?.toLowerCase() === profileAddress?.toLowerCase();
 
   const modalRef = useRef<HTMLDialogElement>(null);
 
@@ -19,7 +20,7 @@ export const SubmitNewBuildButton = () => {
     },
   });
 
-  if (connectedAddress !== profileAddress) {
+  if (!isProfileOwner) {
     return null;
   }
 
