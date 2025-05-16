@@ -125,8 +125,8 @@ export const getSortedBatchBuilders = async ({
   return batchBuildersData;
 };
 
-export async function userJoinBg({ address, signature }: { address: string; signature: string }) {
-  const response = await fetch("/api/users/join-bg", {
+export async function userJoinBatch({ address, signature }: { address: string; signature: string }) {
+  const response = await fetch("/api/users/join-batch", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -137,7 +137,7 @@ export async function userJoinBg({ address, signature }: { address: string; sign
   const data = await response.json();
 
   if (!response.ok) {
-    throw new Error(data.error || "Failed to join BuidlGuidl");
+    throw new Error(data.error || "Failed to join batch");
   }
 
   return data.user as NonNullable<UserByAddress>;

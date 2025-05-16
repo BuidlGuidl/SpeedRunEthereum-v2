@@ -1,39 +1,37 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import Link from "next/link";
 import PadLockIcon from "../_assets/icons/PadLockIcon";
 import QuestionIcon from "../_assets/icons/QuestionIcon";
 import { useConnectModal } from "@rainbow-me/rainbowkit";
 import { useAccount } from "wagmi";
-import { useJoinBg } from "~~/hooks/useJoinBg";
-import { isBgMember } from "~~/services/api-bg/builders";
+import { useJoinBatch } from "~~/hooks/useJoinBatch";
+import { useLatestOpenBatch } from "~~/hooks/useLatestOpenBatch";
+import { useUser } from "~~/hooks/useUser";
 import { UserChallenges } from "~~/services/database/repositories/userChallenges";
-import { UserByAddress } from "~~/services/database/repositories/users";
-import { JOIN_BG_DEPENDENCIES, getChallengeDependenciesInfo } from "~~/utils/dependent-challenges";
+import { JOIN_BATCH_DEPENDENCIES, getChallengeDependenciesInfo } from "~~/utils/dependent-challenges";
 
-type JoinBGProps = {
-  user?: UserByAddress;
+const NO_BATCH_LOCK_REASON = "No batch is currently open";
+const NO_USER_LOCK_REASON = "Register and complete the challenges to join a batch";
+
+type JoinBatchButtonProps = {
   userChallenges?: UserChallenges;
 };
 
-const JoinBatchButton = ({ user, userChallenges = [] }: JoinBGProps) => {
+const JoinBatchButton = ({ userChallenges = [] }: JoinBatchButtonProps) => {
   const { address: connectedAddress } = useAccount();
-  const { handleJoinBg, isJoiningBg } = useJoinBg({ user });
+  const { data: user } = useUser(connectedAddress);
+  const { handleJoinBatch, isJoiningBatch } = useJoinBatch({ user });
+
+  const { data: latestOpenBatch, isLoading: isLoadingLatestOpenBatch } = useLatestOpenBatch();
+  const userJoinedCurrentBatch = user && user.batchId && user.batchId === latestOpenBatch?.id;
+  const userJoinedOtherBatch = user && user.batchId && user.batchId !== latestOpenBatch?.id;
+
   const { openConnectModal } = useConnectModal();
-  const { completed: dependenciesCompleted, lockReasonToolTip } = getChallengeDependenciesInfo({
-    dependencies: JOIN_BG_DEPENDENCIES,
+  const { completed: dependenciesCompleted, lockReasonTooltip: dependenciesLockReason } = getChallengeDependenciesInfo({
+    dependencies: JOIN_BATCH_DEPENDENCIES,
     userChallenges,
   });
-
-  const [builderAlreadyJoined, setBuilderAlreadyJoined] = useState(false);
-
-  useEffect(() => {
-    const checkBgMemberExists = async () => {
-      const exists = await isBgMember(connectedAddress);
-      setBuilderAlreadyJoined(exists);
-    };
-    checkBgMemberExists();
-  }, [connectedAddress, isJoiningBg]);
 
   if (!connectedAddress) {
     return (
@@ -46,28 +44,83 @@ const JoinBatchButton = ({ user, userChallenges = [] }: JoinBGProps) => {
     );
   }
 
+  if (isLoadingLatestOpenBatch) {
+    return (
+      <button
+        disabled
+        className="flex justify-center text-violet bg-violet-light items-center text-sm sm:text-lg px-4 py-1 border-2 border-violet rounded-full hover:bg-opacity-80 disabled:opacity-70 disabled:hover:bg-opacity-100"
+      >
+        <span>Loading...</span>
+      </button>
+    );
+  }
+
+  if (!user || !dependenciesCompleted || !latestOpenBatch) {
+    let lockReason;
+
+    if (!user) {
+      lockReason = NO_USER_LOCK_REASON;
+    } else if (!latestOpenBatch) {
+      lockReason = NO_BATCH_LOCK_REASON;
+    } else if (!dependenciesCompleted) {
+      lockReason = dependenciesLockReason;
+    }
+
+    return (
+      <>
+        <button
+          disabled
+          className={`flex justify-center text-violet bg-violet-light items-center text-sm sm:text-lg px-4 py-1 border-2 border-violet rounded-full hover:bg-opacity-80 disabled:opacity-70 disabled:hover:bg-opacity-100 ${!dependenciesCompleted ? "cursor-not-allowed hover:bg-violet-light" : ""}`}
+          onClick={handleJoinBatch}
+        >
+          <PadLockIcon className="w-4 h-4 sm:w-6 sm:h-6 mr-2" fill="#606CCF" />
+          <span className="uppercase">Locked</span>
+        </button>
+
+        <div className="tooltip tooltip-violet tooltip-left relative cursor-pointer ml-2 " data-tip={lockReason}>
+          <QuestionIcon className="w-5 h-5 sm:h-8 sm:w-8 text-violet" />
+        </div>
+      </>
+    );
+  }
+
+  if (userJoinedOtherBatch) {
+    return (
+      <button
+        disabled
+        className="flex justify-center text-violet bg-violet-light items-center text-sm sm:text-lg px-4 py-1 border-2 border-violet rounded-full hover:bg-opacity-80 disabled:opacity-70 disabled:hover:bg-opacity-100"
+      >
+        <span>Already joined</span>
+      </button>
+    );
+  }
+
+  if (userJoinedCurrentBatch) {
+    return (
+      <>
+        <Link
+          href={latestOpenBatch.telegramLink}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex justify-center text-violet bg-violet-light items-center text-sm sm:text-lg px-4 py-1 border-2 border-violet rounded-full hover:bg-opacity-80 disabled:opacity-70 disabled:hover:bg-opacity-100"
+        >
+          Join Telegram
+        </Link>
+      </>
+    );
+  }
+
+  // user is not joined any batch yet, and dependencies are completed
   return (
     <>
       <button
-        disabled={!dependenciesCompleted || builderAlreadyJoined}
-        className={`flex justify-center text-violet bg-violet-light items-center text-sm sm:text-lg px-4 py-1 border-2 border-violet rounded-full hover:bg-opacity-80 disabled:opacity-70 disabled:hover:bg-opacity-100 ${!dependenciesCompleted ? "cursor-not-allowed hover:bg-violet-light" : ""}`}
-        onClick={handleJoinBg}
+        className={`flex justify-center text-violet bg-violet-light items-center text-sm sm:text-lg px-4 py-1 border-2 border-violet rounded-full hover:bg-opacity-80 disabled:opacity-70 disabled:hover:bg-opacity-100 disabled:cursor-not-allowed`}
+        onClick={handleJoinBatch}
+        disabled={isJoiningBatch}
       >
-        {!dependenciesCompleted && !builderAlreadyJoined && (
-          <>
-            <PadLockIcon className="w-4 h-4 sm:w-6 sm:h-6 mr-2" fill="#606CCF" />
-            <span className="uppercase">Locked</span>
-          </>
-        )}
-        {dependenciesCompleted && !isJoiningBg && !builderAlreadyJoined && <span>Join the 🏰️ BuidlGuidl</span>}
-        {isJoiningBg && <span className="mr-2">Joining...</span>}
-        {builderAlreadyJoined && <span>Already joined</span>}
+        {!isJoiningBatch && <span>Get Telegram Access</span>}
+        {isJoiningBatch && <span className="mr-2">Getting Telegram Access...</span>}
       </button>
-      {!dependenciesCompleted && !builderAlreadyJoined && (
-        <div className="tooltip tooltip-violet tooltip-left relative cursor-pointer ml-2 " data-tip={lockReasonToolTip}>
-          <QuestionIcon className="w-5 h-5 sm:h-8 sm:w-8 text-violet" />
-        </div>
-      )}
     </>
   );
 };
