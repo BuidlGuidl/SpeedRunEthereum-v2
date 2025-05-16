@@ -6,6 +6,7 @@ type InputBaseProps<T> = CommonInputProps<T> & {
   prefix?: ReactNode;
   suffix?: ReactNode;
   reFocus?: boolean;
+  required?: boolean;
 };
 
 export const InputBase = <T extends { toString: () => string } | undefined = string>({
@@ -18,6 +19,7 @@ export const InputBase = <T extends { toString: () => string } | undefined = str
   prefix,
   suffix,
   reFocus,
+  required,
 }: InputBaseProps<T>) => {
   const inputReft = useRef<HTMLInputElement>(null);
 
@@ -59,6 +61,7 @@ export const InputBase = <T extends { toString: () => string } | undefined = str
         autoComplete="off"
         ref={inputReft}
         onFocus={onFocus}
+        required={required}
       />
       {suffix}
     </div>
