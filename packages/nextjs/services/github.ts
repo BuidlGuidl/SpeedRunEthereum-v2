@@ -37,7 +37,7 @@ export const getGithubApiReadmeFromRepoUrl = (repoUrl: string): string =>
 
 export const isGithubBranch = (url: string): boolean => /github\.com\/.*?\/.*?\/tree\/.*/.test(url);
 
-export const fetchGithubBuildReadme = async (githubUrl: string): Promise<string> => {
+export const fetchGithubBuildReadme = async (githubUrl: string): Promise<string | undefined> => {
   try {
     let readmeUrl: string;
 
@@ -61,6 +61,6 @@ export const fetchGithubBuildReadme = async (githubUrl: string): Promise<string>
     return await response.text();
   } catch (err) {
     console.log("error fetching build README", err);
-    throw new Error("error fetching build README");
+    return undefined;
   }
 };
