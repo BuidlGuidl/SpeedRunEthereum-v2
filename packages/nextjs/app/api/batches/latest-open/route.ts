@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 import { getLatestOpenBatch } from "~~/services/database/repositories/batches";
 
+export const dynamic = "force-dynamic";
+
 export const GET = async () => {
   try {
     const batch = await getLatestOpenBatch();
