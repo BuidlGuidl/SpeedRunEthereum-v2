@@ -2,6 +2,7 @@ import { BatchUserStatus, ReviewAction, UserRole } from "../config/types";
 import { ColumnSort, SortingState } from "@tanstack/react-table";
 import { InferInsertModel, and, isNotNull } from "drizzle-orm";
 import { eq, ilike, sql } from "drizzle-orm";
+import { inArray } from "drizzle-orm";
 import { db } from "~~/services/database/config/postgresClient";
 import { lower, userChallenges, users } from "~~/services/database/config/schema";
 
@@ -219,4 +220,13 @@ export async function updateUser(
     .returning();
 
   return result[0];
+}
+
+export async function filterValidUserAddresses(addresses: string[]): Promise<string[]> {
+  if (!addresses.length) return [];
+  const rows = await db
+    .select({ userAddress: users.userAddress })
+    .from(users)
+    .where(inArray(users.userAddress, addresses));
+  return rows.map(row => row.userAddress);
 }

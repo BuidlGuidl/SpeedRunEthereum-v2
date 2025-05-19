@@ -6,7 +6,8 @@ import remarkGfm from "remark-gfm";
 import { ArrowTopRightOnSquareIcon } from "@heroicons/react/24/outline";
 import { ChallengeId } from "~~/services/database/config/types";
 import { getAllChallenges, getChallengeById } from "~~/services/database/repositories/challenges";
-import { fetchGithubReadme, parseGithubUrl } from "~~/services/github";
+import { fetchGithubChallengeReadme, parseGithubUrl } from "~~/services/github";
+import { CHALLENGE_METADATA } from "~~/utils/challenges";
 import { getMetadata } from "~~/utils/scaffold-eth/getMetadata";
 
 // 6 hours
@@ -23,12 +24,12 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: { params: { challengeId: string } }) {
   const challenge = await getChallengeById(params.challengeId as ChallengeId);
 
-  if (!challenge) return {};
+  const staticMetadata = CHALLENGE_METADATA[params.challengeId];
 
   return getMetadata({
-    title: challenge.challengeName,
-    description: challenge.description,
-    imageRelativePath: challenge.previewImage || undefined,
+    title: staticMetadata?.title || challenge?.challengeName || "",
+    description: staticMetadata?.description || challenge?.description || "",
+    imageRelativePath: challenge?.previewImage || undefined,
   });
 }
 
@@ -38,11 +39,14 @@ export default async function ChallengePage({ params }: { params: { challengeId:
     notFound();
   }
 
+  const staticMetadata = CHALLENGE_METADATA[challenge.id];
+  const guides = staticMetadata?.guides;
+
   if (!challenge.github) {
     return <div>No challenge content available</div>;
   }
 
-  const challengeReadme = await fetchGithubReadme(challenge.github);
+  const challengeReadme = await fetchGithubChallengeReadme(challenge.github);
   const { owner, repo, branch } = parseGithubUrl(challenge.github);
 
   return (
@@ -72,6 +76,20 @@ export default async function ChallengePage({ params }: { params: { challengeId:
               <ArrowTopRightOnSquareIcon className="w-3 h-3 sm:w-4 sm:h-4" />
             </button>
           </a>
+          {guides && guides.length > 0 && (
+            <div className="max-w-[850px] w-full mx-auto">
+              <div className="mt-16 mb-4 font-semibold text-left">Related guides</div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2 mb-2">
+                {guides.map(guide => (
+                  <div key={guide.url} className="p-4 border rounded bg-base-300">
+                    <a href={guide.url} className="text-primary underline font-semibold">
+                      {guide.title}
+                    </a>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
         </>
       ) : (
         <div>Failed to load challenge content</div>
