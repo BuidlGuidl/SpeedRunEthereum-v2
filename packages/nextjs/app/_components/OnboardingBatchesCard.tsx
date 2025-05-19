@@ -47,7 +47,8 @@ export const OnboardingBatchesCard = ({ userChallenges = [] }: { userChallenges?
           </div>
           {latestOpenBatch && (
             <div className="mt-4 flex items-center gap-1 text-black">
-              {latestOpenBatch.name} {new Date(latestOpenBatch.startDate) > new Date() ? "starting in:" : "started"}
+              <span className="font-bold">{latestOpenBatch.name}</span>{" "}
+              {new Date(latestOpenBatch.startDate) > new Date() ? "starting in:" : "started"}
               <span className="bg-violet-light rounded px-1 py-0.5">{getRelativeTime(latestOpenBatch.startDate)}</span>
             </div>
           )}

@@ -38,7 +38,7 @@ const JoinBatchButton = ({ userChallenges = [], latestOpenBatch, isLoadingLatest
     return (
       <button
         onClick={openConnectModal}
-        className="flex justify-center text-violet bg-violet-light items-center text-xs sm:text-lg px-4 py-1 border-2 border-violet rounded-full hover:bg-opacity-80"
+        className="flex justify-center text-black bg-violet-light items-center text-xs sm:text-lg px-4 py-1 border-2 border-violet rounded-full hover:bg-opacity-80"
       >
         <span>Connect Wallet</span>
       </button>
@@ -102,7 +102,7 @@ const JoinBatchButton = ({ userChallenges = [], latestOpenBatch, isLoadingLatest
         href={latestOpenBatch.telegramLink}
         target="_blank"
         rel="noopener noreferrer"
-        className="flex justify-center text-violet bg-violet-light items-center text-sm sm:text-lg px-4 py-1 border-2 border-violet rounded-full hover:bg-opacity-80 disabled:opacity-70 disabled:hover:bg-opacity-100"
+        className="flex justify-center text-black bg-violet-light items-center text-sm sm:text-lg px-4 py-1 border-2 border-violet rounded-full hover:bg-opacity-80 disabled:opacity-70 disabled:hover:bg-opacity-100"
       >
         Join Telegram
       </Link>
@@ -112,7 +112,7 @@ const JoinBatchButton = ({ userChallenges = [], latestOpenBatch, isLoadingLatest
   // user is not joined any batch yet, and dependencies are completed
   return (
     <button
-      className={`flex justify-center text-violet bg-violet-light items-center text-sm sm:text-lg px-4 py-1 border-2 border-violet rounded-full hover:bg-opacity-80 disabled:opacity-70 disabled:hover:bg-opacity-100 disabled:cursor-not-allowed`}
+      className={`flex justify-center text-black bg-violet-light items-center text-sm sm:text-lg px-4 py-1 border-2 border-violet rounded-full hover:bg-opacity-80 disabled:opacity-70 disabled:hover:bg-opacity-100 disabled:cursor-not-allowed`}
       onClick={handleJoinBatch}
       disabled={isJoiningBatch}
     >
