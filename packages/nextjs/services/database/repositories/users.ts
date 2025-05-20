@@ -99,7 +99,7 @@ export async function getSortedBatchBuilders({
   batchId?: number;
 }) {
   const sortingQuery = sorting[0] as ColumnSort;
-  const query = db.query.users.findMany({
+  const buildersData = await db.query.users.findMany({
     limit: size,
     offset: start,
     with: {
@@ -127,8 +127,6 @@ export async function getSortedBatchBuilders({
       return [];
     },
   });
-
-  const [buildersData] = await Promise.all([query]);
 
   const totalRowCount = await db.$count(
     users,

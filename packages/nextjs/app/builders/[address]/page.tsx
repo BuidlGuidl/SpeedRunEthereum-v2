@@ -1,5 +1,4 @@
 import { notFound } from "next/navigation";
-import { UpgradedToBGCard } from "./_components/UpgradedToBGCard";
 import { UserChallengesTable } from "./_components/UserChallengesTable";
 import { UserProfileCard } from "./_components/UserProfileCard";
 import { BuildCard } from "./_components/builds/BuildCard";
@@ -7,14 +6,11 @@ import { SubmitNewBuildButton } from "./_components/builds/SubmitNewBuildButton"
 import { Metadata } from "next";
 import { isAddress } from "viem";
 import { RouteRefresher } from "~~/components/RouteRefresher";
-import { isBgMember } from "~~/services/api-bg/builders";
+import { getBatchById } from "~~/services/database/repositories/batches";
 import { getBuildsByUserAddress } from "~~/services/database/repositories/builds";
 import { getLatestSubmissionPerChallengeByUser } from "~~/services/database/repositories/userChallenges";
 import { getUserByAddress } from "~~/services/database/repositories/users";
 import { getEnsOrAddress } from "~~/utils/ens-or-address";
-
-// TODO: Change this when https://github.com/BuidlGuidl/SpeedRunEthereum-v2/issues/113 is done
-const HIDE_BUILDS = true;
 
 type Props = {
   params: {
@@ -68,8 +64,11 @@ export default async function BuilderPage({ params }: { params: { address: strin
   const { address: userAddress } = params;
   const challenges = await getLatestSubmissionPerChallengeByUser(userAddress);
   const user = await getUserByAddress(userAddress);
-  const bgMemberExists = await isBgMember(userAddress);
-  const builds = HIDE_BUILDS ? [] : await getBuildsByUserAddress(userAddress);
+  let userBatch;
+  if (user?.batchId) {
+    userBatch = await getBatchById(user.batchId);
+  }
+  const builds = await getBuildsByUserAddress(userAddress);
 
   if (!user) {
     notFound();
@@ -81,10 +80,9 @@ export default async function BuilderPage({ params }: { params: { address: strin
       <div className="max-w-7xl mx-auto px-4 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-14">
           <div className="lg:col-span-1">
-            <UserProfileCard user={user} address={userAddress} />
+            <UserProfileCard user={user} batch={userBatch} />
           </div>
           <div className="lg:col-span-3 flex flex-col gap-14">
-            {bgMemberExists && <UpgradedToBGCard user={user} />}
             {/* Challenges */}
             <div className="w-full">
               <h2 className="text-2xl font-bold mb-0 text-neutral pb-4">Challenges</h2>
@@ -97,32 +95,30 @@ export default async function BuilderPage({ params }: { params: { address: strin
               )}
             </div>
             {/* Builds */}
-            {!HIDE_BUILDS && (
-              <div className="w-full">
-                <div className="flex justify-between items-center">
-                  <h2 className="text-2xl font-bold mb-0 text-neutral pb-4">Builds</h2>
-                  <SubmitNewBuildButton />
-                </div>
-                {builds.length > 0 ? (
-                  <div className="flex flex-wrap items-stretch w-full gap-5">
-                    {builds.map(build => (
-                      <div key={build.build.id} className="flex-grow-0 flex-shrink-0">
-                        <BuildCard
-                          ownerAddress={build.ownerAddress}
-                          build={build.build}
-                          likes={build.likes}
-                          coBuilders={build.coBuilders}
-                        />
-                      </div>
-                    ))}
-                  </div>
-                ) : (
-                  <div className="bg-base-100 p-8 text-center rounded-lg text-neutral">
-                    This builder hasn&apos;t submitted any builds yet.
-                  </div>
-                )}
+            <div className="w-full">
+              <div className="flex justify-between items-center">
+                <h2 className="text-2xl font-bold mb-0 text-neutral pb-4">Builds</h2>
+                <SubmitNewBuildButton />
               </div>
-            )}
+              {builds.length > 0 ? (
+                <div className="flex flex-wrap items-stretch w-full gap-5">
+                  {builds.map(build => (
+                    <div key={build.build.id} className="flex-grow-0 flex-shrink-0">
+                      <BuildCard
+                        ownerAddress={build.ownerAddress}
+                        build={build.build}
+                        likes={build.likes}
+                        coBuilders={build.coBuilders}
+                      />
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="bg-base-100 p-8 text-center rounded-lg text-neutral">
+                  This builder hasn&apos;t submitted any builds yet.
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </div>
