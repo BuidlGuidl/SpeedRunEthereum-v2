@@ -1,18 +1,13 @@
 import Link from "next/link";
-import { MDXRemote } from "next-mdx-remote/rsc";
-import rehypeRaw from "rehype-raw";
-import remarkGfm from "remark-gfm";
+import { BuildReadme } from "./_components/BuildReadme";
 import { ArrowTopRightOnSquareIcon } from "@heroicons/react/24/outline";
 import { LikeBuildButton } from "~~/app/builders/[address]/_components/builds/LikeBuildButton";
 import { Address } from "~~/components/scaffold-eth";
 import { getBuildByBuildId } from "~~/services/database/repositories/builds";
-import { fetchGithubBuildReadme } from "~~/services/github";
 
 export default async function BuildPage({ params }: { params: { buildId: string } }) {
   const { buildId } = params;
   const build = await getBuildByBuildId(buildId);
-
-  const buildReadme = build?.githubUrl && (await fetchGithubBuildReadme(build.githubUrl));
   const buildLikesAddress = build?.likes.map(like => like.userAddress) || [];
 
   return (
@@ -57,20 +52,7 @@ export default async function BuildPage({ params }: { params: { buildId: string 
         </div>
       </div>
 
-      {buildReadme && (
-        <div className="prose dark:prose-invert max-w-fit break-words lg:max-w-[850px] mt-12">
-          <MDXRemote
-            source={buildReadme}
-            options={{
-              mdxOptions: {
-                rehypePlugins: [rehypeRaw],
-                remarkPlugins: [remarkGfm],
-                format: "md",
-              },
-            }}
-          />
-        </div>
-      )}
+      {build?.githubUrl && <BuildReadme githubUrl={build.githubUrl} />}
     </div>
   );
 }
