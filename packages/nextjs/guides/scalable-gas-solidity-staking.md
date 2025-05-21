@@ -73,19 +73,21 @@ Let's walk through the common user actions. Most staking contracts will have a m
 
 **The `updateReward(address user)` Logic (Conceptual):**
 
-1.  Calculate the latest `rewardPerTokenStored`. This involves determining rewards accrued per token since the last update (e.g., based on rewards added to the contract or time elapsed at a defined reward rate) and adding this to the stored `rewardPerTokenStored` value.
-2.  If a specific `user` is provided:
-    - Calculate `newly_earned = user.balance * (rewardPerTokenStored - user.userRewardPerTokenPaid)`.
-    - Add this to `user.rewards_claimable += newly_earned`.
-    - Set `user.userRewardPerTokenPaid = rewardPerTokenStored` (this is crucial – update their baseline!).
+- Calculate the latest `rewardPerTokenStored`. This involves determining rewards accrued per token since the last update (e.g., based on rewards added to the contract or time elapsed at a defined reward rate) and adding this to the stored `rewardPerTokenStored` value.
+- If a specific `user` is provided:
+  - Calculate `newly_earned = user.balance * (rewardPerTokenStored - user.userRewardPerTokenPaid)`.
+  - Add this to `user.rewards_claimable += newly_earned`.
+  - Set `user.userRewardPerTokenPaid = rewardPerTokenStored` (this is crucial – update their baseline!).
 
-**1. Staking More Tokens (`stake(uint256 amount)`):**
+Here's how this logic is typically integrated into the main user actions of a staking contract:
+
+### 1. Staking More Tokens (`stake(uint256 amount)`)
 
 - Call `updateReward(msg.sender)`: This calculates any rewards `msg.sender` earned with their _previous_ balance and updates their `userRewardPerTokenPaid` to the current global `rewardPerTokenStored`.
 - Add `amount` to `msg.sender`'s staked balance (`_balances[msg.sender] += amount`).
 - Increase `_totalSupply` of staked tokens.
 
-**2. Claiming Rewards (`getReward()`):**
+### 2. Claiming Rewards (`getReward()`)
 
 - Call `updateReward(msg.sender)`: This ensures all pending rewards for `msg.sender` are calculated and stored in `rewards[msg.sender]`, and their `userRewardPerTokenPaid` is updated.
 - Get the `uint256 reward_amount = rewards[msg.sender]`.
@@ -93,7 +95,7 @@ Let's walk through the common user actions. Most staking contracts will have a m
   - Set `rewards[msg.sender] = 0` (reset their claimable balance).
   - Transfer `reward_amount` of the reward token to `msg.sender`.
 
-**3. Withdrawing Stake (`withdraw(uint256 amount)`):**
+### 3. Withdrawing Stake (`withdraw(uint256 amount)`)
 
 - Call `updateReward(msg.sender)`: Calculates pending rewards based on their balance _before_ withdrawing and updates their `userRewardPerTokenPaid`.
 - (Optional but good practice: if any rewards were calculated and credited to `rewards[msg.sender]` by `updateReward`, transfer them now, or ensure `getReward` is called).
@@ -103,7 +105,7 @@ Let's walk through the common user actions. Most staking contracts will have a m
 
 ## Why This Pattern is Awesome for Your Staking Contract
 
-- **Super Gas Efficient (O(1) Baby!):** The cost of `stake`, `withdraw`, and `getReward` doesn't depend on the total number of stakers. This is the biggest win!
+- **Super Gas Efficient O(1):** The cost of `stake`, `withdraw`, and `getReward` doesn't depend on the total number of stakers. This is the biggest win!
 - **Scalable:** Your contract can handle a massive number of users without grinding to a halt due to gas fees.
 - **Fair:** Rewards are calculated proportionally based on the user's stake amount and how long it has been staked relative to reward distributions.
 - **Battle-Tested:** This isn't some new, experimental idea. It's used by some of the largest and most successful DeFi protocols (like Synthetix and Sushiswap's original MasterChef).
