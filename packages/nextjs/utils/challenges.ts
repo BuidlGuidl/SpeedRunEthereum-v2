@@ -41,6 +41,24 @@ export const CHALLENGE_METADATA: Record<
     title: "Build a Decentralized Staking Application in Solidity",
     description:
       "Learn to build a decentralized staking application with Solidity. Create smart contracts for coordinating group funding on Ethereum.",
+    guides: [
+      {
+        title: "Beyond APY: Building Sustainable Tokenomics for Your Staking Protocol",
+        url: "/guides/sustainable-tokenomics-staking-protocols",
+      },
+      {
+        title: "Time-Weighted Staking Rewards: Aligning Incentives in DeFi Protocols",
+        url: "/guides/time-weighted-staking-rewards",
+      },
+      {
+        title: "Scalable Solidity Staking: O(1) Reward Distribution",
+        url: "/guides/scalable-gas-solidity-staking",
+      },
+      {
+        title: "A Developer's Guide to Liquid Staking Tokens (LSTs)",
+        url: "/guides/liquid-staking-tokens",
+      },
+    ],
   },
   [ChallengeId.TOKEN_VENDOR]: {
     title: "Create an ERC20 Token and Vendor Contract in Solidity",
