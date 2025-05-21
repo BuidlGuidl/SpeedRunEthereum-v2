@@ -10,6 +10,8 @@ import {
 } from "~~/services/database/repositories/userChallenges";
 import { getEnsOrAddress, publicClient } from "~~/utils/ens-or-address";
 
+export const dynamic = "force-dynamic";
+
 export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
