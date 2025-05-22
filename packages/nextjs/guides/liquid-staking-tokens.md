@@ -1,6 +1,7 @@
 ---
 title: "A Developer's Guide to Liquid Staking Tokens (LSTs)"
 description: "taked your ETH but miss using its value in DeFi? Discover Liquid Staking Tokens (LSTs)! This guide explains how LSTs like stETH and rETH work, the difference between rebasing and reward-bearing tokens, and their impact on DeFi. Essential for Solidity devs exploring advanced staking."
+image: /assets/guides/liquid-staking-tokens.jpg
 ---
 
 So, you've learned about staking, maybe even built a basic staking contract. You lock up your ETH (or other PoS assets) to help secure the network and earn rewards. Awesome! But there's a catch: while your crypto is staked, it's usually stuck – illiquid and unusable for anything else. What if you could earn those staking rewards _and_ still use the value of your staked assets in DeFi?
