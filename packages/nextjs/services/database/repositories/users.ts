@@ -1,6 +1,6 @@
 import { BatchUserStatus, ReviewAction, UserRole } from "../config/types";
 import { ColumnSort, SortingState } from "@tanstack/react-table";
-import { InferInsertModel, and, isNotNull } from "drizzle-orm";
+import { InferInsertModel, and, isNotNull, isNull } from "drizzle-orm";
 import { eq, ilike, sql } from "drizzle-orm";
 import { inArray } from "drizzle-orm";
 import { db } from "~~/services/database/config/postgresClient";
@@ -208,6 +208,7 @@ export async function updateUser(
     role?: UserRole;
     batchId?: number;
     batchStatus?: BatchUserStatus;
+    ens?: string;
   },
 ) {
   const result = await db
@@ -229,4 +230,10 @@ export async function filterValidUserAddresses(addresses: string[]): Promise<str
     .from(users)
     .where(inArray(users.userAddress, addresses));
   return rows.map(row => row.userAddress);
+}
+
+export async function getUsersWithoutEns() {
+  return await db.query.users.findMany({
+    where: isNull(users.ens),
+  });
 }
