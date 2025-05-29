@@ -4,8 +4,9 @@ import React, { useMemo } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Logo from "./Logo";
-import { useAccount } from "wagmi";
+import { useAccount, useEnsName } from "wagmi";
 import { RainbowKitCustomConnectButton } from "~~/components/scaffold-eth";
+import { useUpdateEns } from "~~/hooks/useUpdateEns";
 import { useUser } from "~~/hooks/useUser";
 import { UserRole } from "~~/services/database/config/types";
 import { UserByAddress } from "~~/services/database/repositories/users";
@@ -93,6 +94,12 @@ export const Header = () => {
 
   const { address: connectedAddress } = useAccount();
   const { data: user } = useUser(connectedAddress);
+  const { data: ens, isLoading: isEnsLoading } = useEnsName({
+    address: connectedAddress,
+    query: { enabled: Boolean(user) },
+  });
+  const cachedEns = user?.ens ?? null;
+  useUpdateEns({ address: connectedAddress, enabled: Boolean(user) && !isEnsLoading && cachedEns !== ens });
 
   return (
     <div className="sticky lg:static top-0 navbar bg-base-300 min-h-0 flex-shrink-0 justify-between z-20 px-0 sm:px-2">
