@@ -1,3 +1,9 @@
 {
-  "installCommand": "yarn install"
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "crons": [
+    {
+      "path": "/api/cron/update-ens",
+      "schedule": "0 0 * * *"
+    }
+  ]
 }
