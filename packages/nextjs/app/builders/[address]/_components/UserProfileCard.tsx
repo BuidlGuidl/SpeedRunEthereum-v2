@@ -1,5 +1,6 @@
 "use client";
 
+import { RefreshEnsButton } from "./RefreshEnsButton";
 import { UserLocation } from "./UserLocation";
 import { UserSocials } from "./UserSocials";
 import EditIcon from "~~/app/_assets/icons/EditIcon";
@@ -45,6 +46,8 @@ export const UserProfileCard = ({ user, batch }: { user: NonNullable<UserByAddre
           )}
 
           <hr className="w-full border-base-200 mb-2" />
+          <div className="text-sm text-neutral">ENS: {user.ens}</div>
+          <RefreshEnsButton user={user} />
           <UserLocation user={user} />
           <UserSocials user={user} />
           <div className="text-sm text-neutral">
