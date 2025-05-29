@@ -36,6 +36,13 @@
       "when": 1746171913714,
       "tag": "0004_dizzy_black_queen",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1748445893496,
+      "tag": "0005_sweet_rawhide_kid",
+      "breakpoints": true
     }
   ]
 }
