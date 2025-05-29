@@ -3,11 +3,6 @@ import { updateEnsNames } from "~~/services/cron/updateEns";
 
 export const dynamic = "force-dynamic";
 
-export const config = {
-  // Run every day at midnight UTC
-  cron: "0 0 * * *",
-};
-
 export async function GET(request: Request) {
   try {
     const authHeader = request.headers.get("authorization");
