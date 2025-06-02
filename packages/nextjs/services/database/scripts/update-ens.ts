@@ -1,8 +1,8 @@
 import { db } from "../config/postgresClient";
-import { users } from "../config/schema";
-import { updateUser } from "../repositories/users";
+import { lower, users } from "../config/schema";
 import * as dotenv from "dotenv";
 import { isNull } from "drizzle-orm";
+import { eq } from "drizzle-orm";
 import * as path from "path";
 import { createPublicClient, http, namehash } from "viem";
 import { mainnet } from "viem/chains";
@@ -178,12 +178,29 @@ async function updateEnsNames() {
     // Batch process ENS lookups
     const ensResults = await batchGetENS(addresses);
 
-    // Update users with their ENS names
-    for (const [address, ensName] of Object.entries(ensResults)) {
-      if (ensName) {
-        await updateUser(address, { ens: ensName });
-        console.log(`Updated ENS name for ${address}: ${ensName}`);
-      }
+    // Prepare bulk update data
+    const updates = Object.entries(ensResults)
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      .filter(([_, ensName]) => ensName !== null)
+      .map(([address, ensName]) => ({
+        address: address.toLowerCase(),
+        ens: ensName,
+      }));
+
+    if (updates.length > 0) {
+      // Perform bulk update
+      await db.transaction(async tx => {
+        for (const { address, ens } of updates) {
+          await tx
+            .update(users)
+            .set({
+              ens,
+              updatedAt: new Date(),
+            })
+            .where(eq(lower(users.userAddress), address));
+        }
+      });
+      console.log(`Bulk updated ENS names for ${updates.length} users`);
     }
 
     console.log("ENS name update completed");
