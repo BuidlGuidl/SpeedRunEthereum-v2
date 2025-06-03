@@ -29,7 +29,8 @@ export function useUpdateEns() {
         throw new Error(error.error || "Failed to update ENS");
       }
 
-      return response.json();
+      const data = await response.json();
+      return data.user;
     },
     onSuccess: user => {
       queryClient.setQueryData(["user", address], user);
