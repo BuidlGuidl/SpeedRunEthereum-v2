@@ -1,5 +1,5 @@
 import { db } from "../config/postgresClient";
-import { lower, users } from "../config/schema";
+import { users } from "../config/schema";
 import * as dotenv from "dotenv";
 import { isNull } from "drizzle-orm";
 import { eq } from "drizzle-orm";
@@ -66,9 +66,14 @@ async function batchGetENS(addresses: `0x${string}`[]): Promise<Record<string, s
 
   for (const addressBatch of addressChunks) {
     // Phase 1: Get all resolver addresses
-    const reverseNodes = addressBatch.map(addr => namehash(`${addr.slice(2).toLowerCase()}.addr.reverse`));
+    const reverseNodes = addressBatch.map(addr => {
+      // Ensure address is properly formatted for reverse lookup
+      const cleanAddr = addr.toLowerCase().startsWith("0x") ? addr.toLowerCase() : `0x${addr.toLowerCase()}`;
+      const node = namehash(`${cleanAddr.slice(2)}.addr.reverse`);
+      return { node, originalAddress: addr };
+    });
 
-    const resolverCalls = reverseNodes.map(node => ({
+    const resolverCalls = reverseNodes.map(({ node }) => ({
       address: ENS_REGISTRY,
       abi: ensAbi,
       functionName: "resolver",
@@ -83,17 +88,18 @@ async function batchGetENS(addresses: `0x${string}`[]): Promise<Record<string, s
     // Phase 2: Get names from resolvers
     const nameCalls = resolverResults
       .map((res, i) => {
-        const address = addressBatch[i];
+        const { node, originalAddress } = reverseNodes[i];
         if (res.status === "success" && res.result !== "0x0000000000000000000000000000000000000000") {
           return {
             address: res.result as `0x${string}`,
             abi: ensAbi,
             functionName: "name",
-            args: [reverseNodes[i]],
+            args: [node],
+            originalAddress,
           };
         } else {
           // No resolver found for this address
-          noEnsRecords.push(address);
+          noEnsRecords.push(originalAddress);
           return null;
         }
       })
@@ -112,13 +118,13 @@ async function batchGetENS(addresses: `0x${string}`[]): Promise<Record<string, s
     const fallbackAddresses: `0x${string}`[] = [];
 
     nameResults.forEach((result, i) => {
-      const address = addressBatch[i];
+      const { originalAddress } = nameCalls[i];
       if (result.status === "success" && typeof result.result === "string" && result.result) {
-        results[address] = result.result;
+        results[originalAddress] = result.result;
       } else {
         // Resolver exists but failed to return a name
-        failedResolvers.push(address);
-        fallbackAddresses.push(address);
+        failedResolvers.push(originalAddress);
+        fallbackAddresses.push(originalAddress);
       }
     });
 
@@ -132,10 +138,12 @@ async function batchGetENS(addresses: `0x${string}`[]): Promise<Record<string, s
         await Promise.all(
           fallbackBatch.map(async (address: `0x${string}`) => {
             try {
-              const ensName = await publicClient.getEnsName({ address });
+              const cleanAddress = address.toLowerCase() as `0x${string}`;
+              const ensName = await publicClient.getEnsName({
+                address: cleanAddress,
+              });
               if (ensName) {
                 results[address] = ensName;
-                console.log(`Found ENS name via fallback for ${address}: ${ensName}`);
               } else {
                 results[address] = null;
               }
@@ -172,38 +180,47 @@ async function updateEnsNames() {
 
     console.log(`Found ${usersWithoutEns.length} users without ENS names`);
 
+    // Create a map of lowercase addresses to user records
+    const userMap = new Map(usersWithoutEns.map(user => [user.userAddress.toLowerCase(), user]));
+
     // Get all addresses that need ENS lookup
     const addresses = usersWithoutEns.map(user => user.userAddress as `0x${string}`);
 
-    // Batch process ENS lookups
     const ensResults = await batchGetENS(addresses);
 
     // Prepare bulk update data
     const updates = Object.entries(ensResults)
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       .filter(([_, ensName]) => ensName !== null)
-      .map(([address, ensName]) => ({
-        address: address.toLowerCase(),
-        ens: ensName,
-      }));
+      .map(([address, ensName]) => {
+        const originalUser = userMap.get(address.toLowerCase());
+        if (!originalUser) {
+          return null;
+        }
+        return {
+          address: originalUser.userAddress, // Use the original address from the database
+          ens: ensName,
+        };
+      })
+      .filter((update): update is NonNullable<typeof update> => update !== null);
 
     if (updates.length > 0) {
       // Perform bulk update
-      await db.transaction(async tx => {
-        for (const { address, ens } of updates) {
-          await tx
-            .update(users)
-            .set({
-              ens,
-              updatedAt: new Date(),
-            })
-            .where(eq(lower(users.userAddress), address));
-        }
+      const updateQueries = updates.map(({ address, ens }) => {
+        return db
+          .update(users)
+          .set({
+            ens,
+            updatedAt: new Date(),
+          })
+          .where(eq(users.userAddress, address));
       });
+
+      await db.executeQueries(updateQueries as any);
       console.log(`Bulk updated ENS names for ${updates.length} users`);
     }
 
-    console.log("ENS name update completed");
+    console.log("\nENS name update completed");
   } catch (error) {
     console.error("Error in updateEnsNames:", error);
     throw error;
