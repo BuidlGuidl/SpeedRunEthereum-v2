@@ -72,6 +72,7 @@ type AddressProps = {
   size?: "xs" | "sm" | "base" | "lg" | "xl" | "2xl" | "3xl";
   onlyEnsOrAddress?: boolean;
   hideAvatar?: boolean;
+  hideEns?: boolean;
 };
 
 export const Address = ({
@@ -81,6 +82,7 @@ export const Address = ({
   size = "base",
   onlyEnsOrAddress = false,
   hideAvatar = false,
+  hideEns = false,
 }: AddressProps) => {
   const checkSumAddress = address ? getAddress(address) : undefined;
 
@@ -102,13 +104,14 @@ export const Address = ({
 
   const shortAddress = checkSumAddress?.slice(0, 6) + "..." + checkSumAddress?.slice(-4);
   const displayAddress = format === "long" ? checkSumAddress : shortAddress;
-  const displayEnsOrAddress = ens || displayAddress;
+  const displayEnsOrAddress = hideEns ? displayAddress : ens || displayAddress;
 
-  const showSkeleton = !checkSumAddress || (!onlyEnsOrAddress && (ens || isEnsNameLoading));
+  const showSkeleton = !checkSumAddress || (!onlyEnsOrAddress && !hideEns && (ens || isEnsNameLoading));
 
-  const addressSize = showSkeleton && !onlyEnsOrAddress ? getPrevSize(textSizeMap, size, 2) : size;
+  const addressSize = showSkeleton && !onlyEnsOrAddress && !hideEns ? getPrevSize(textSizeMap, size, 2) : size;
   const ensSize = getNextSize(textSizeMap, addressSize);
-  const blockieSize = showSkeleton && !onlyEnsOrAddress ? getNextSize(blockieSizeMap, addressSize, 4) : addressSize;
+  const blockieSize =
+    showSkeleton && !onlyEnsOrAddress && !hideEns ? getNextSize(blockieSizeMap, addressSize, 4) : addressSize;
 
   if (!checkSumAddress) {
     return (
@@ -121,7 +124,7 @@ export const Address = ({
           }}
         ></div>
         <div className="flex flex-col space-y-1">
-          {!onlyEnsOrAddress && (
+          {!onlyEnsOrAddress && !hideEns && (
             <div className={`ml-1.5 skeleton rounded-lg font-bold ${textSizeMap[ensSize]}`}>
               <span className="invisible">0x1234...56789</span>
             </div>
@@ -144,13 +147,14 @@ export const Address = ({
         <div className="flex-shrink-0">
           <BlockieAvatar
             address={checkSumAddress}
-            ensImage={ensAvatar}
+            ensImage={!hideEns ? ensAvatar : undefined}
             size={(blockieSizeMap[blockieSize] * 24) / blockieSizeMap["base"]}
           />
         </div>
       )}
       <div className="flex flex-col">
-        {showSkeleton &&
+        {!hideEns &&
+          showSkeleton &&
           (isEnsNameLoading ? (
             <div className={`ml-1.5 skeleton rounded-lg font-bold ${textSizeMap[ensSize]}`}>
               <span className="invisible">{shortAddress}</span>
@@ -165,7 +169,7 @@ export const Address = ({
         <div className={`flex ${hideAvatar ? "justify-center" : ""}`}>
           <span className={`ml-1.5 ${textSizeMap[addressSize]} font-normal`}>
             <AddressLinkWrapper disableAddressLink={disableAddressLink} address={checkSumAddress}>
-              {onlyEnsOrAddress ? displayEnsOrAddress : displayAddress}
+              {onlyEnsOrAddress && !hideEns ? displayEnsOrAddress : displayAddress}
             </AddressLinkWrapper>
           </span>
           <AddressCopyIcon
