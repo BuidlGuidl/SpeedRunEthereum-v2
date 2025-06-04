@@ -61,9 +61,7 @@ async function batchGetENS(addresses: `0x${string}`[]): Promise<Record<string, s
   // Process in batches
   const addressChunks = chunk(addresses, BATCH_SIZE);
   const results: Record<string, string | null> = {};
-  const failedResolvers: `0x${string}`[] = [];
   const noEnsRecords: `0x${string}`[] = [];
-  const processedFallbacks = new Set<string>();
 
   for (const addressBatch of addressChunks) {
     // Phase 1: Get all resolver addresses
@@ -110,57 +108,25 @@ async function batchGetENS(addresses: `0x${string}`[]): Promise<Record<string, s
       continue; // Skip to next batch if no valid resolvers
     }
 
-    const nameResults = await publicClient.multicall({
-      contracts: nameCalls,
-      allowFailure: true,
-    });
+    // Process nameCalls in batches of 50
+    const nameCallBatches = chunk(nameCalls, 50);
+    const nameResults: (string | null)[] = [];
 
-    // Process results and handle fallbacks
-    const fallbackAddresses: `0x${string}`[] = [];
+    for (const batch of nameCallBatches) {
+      const batchResults = await Promise.all(
+        batch.map(call => publicClient.getEnsName({ address: call.originalAddress })),
+      );
+      nameResults.push(...batchResults);
+      // Add 0.1 second delay between batches
+      await new Promise(resolve => setTimeout(resolve, 100));
+    }
 
     nameResults.forEach((result, i) => {
       const { originalAddress } = nameCalls[i];
-      if (result.status === "success" && typeof result.result === "string" && result.result) {
-        results[originalAddress] = result.result;
-      } else {
-        // Resolver exists but failed to return a name
-        failedResolvers.push(originalAddress);
-        if (!processedFallbacks.has(originalAddress.toLowerCase())) {
-          fallbackAddresses.push(originalAddress);
-          processedFallbacks.add(originalAddress.toLowerCase());
-        }
+      if (result) {
+        results[originalAddress] = result;
       }
     });
-
-    // Handle fallbacks using viem's getEnsName
-    if (fallbackAddresses.length > 0) {
-      console.log(`Processing fallback lookup for ${fallbackAddresses.length} unique addresses`);
-
-      // Process fallbacks in smaller batches to avoid rate limits
-      const fallbackChunks = chunk<`0x${string}`>(fallbackAddresses, 10);
-      for (const fallbackBatch of fallbackChunks) {
-        await Promise.all(
-          fallbackBatch.map(async (address: `0x${string}`) => {
-            try {
-              const cleanAddress = address.toLowerCase() as `0x${string}`;
-              const ensName = await publicClient.getEnsName({
-                address: cleanAddress,
-              });
-              if (ensName) {
-                results[address] = ensName;
-              } else {
-                results[address] = null;
-              }
-            } catch (error) {
-              console.error(`Error in fallback lookup for ${address}:`, error);
-              results[address] = null;
-            }
-          }),
-        );
-        // Delay between fallback chunks
-        await new Promise(resolve => setTimeout(resolve, 100));
-      }
-    }
 
     // Delay between main batches to avoid rate limiting
     await new Promise(resolve => setTimeout(resolve, 200));
@@ -170,7 +136,6 @@ async function batchGetENS(addresses: `0x${string}`[]): Promise<Record<string, s
   console.log("\nENS Lookup Summary:");
   console.log(`Total addresses processed: ${addresses.length}`);
   console.log(`Addresses with no ENS records: ${noEnsRecords.length}`);
-  console.log(`Addresses with failed resolvers: ${failedResolvers.length}`);
   console.log(`Successfully resolved ENS names: ${Object.values(results).filter(Boolean).length}`);
 
   return results;
