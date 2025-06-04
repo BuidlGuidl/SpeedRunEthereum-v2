@@ -63,6 +63,7 @@ async function batchGetENS(addresses: `0x${string}`[]): Promise<Record<string, s
   const results: Record<string, string | null> = {};
   const failedResolvers: `0x${string}`[] = [];
   const noEnsRecords: `0x${string}`[] = [];
+  const processedFallbacks = new Set<string>();
 
   for (const addressBatch of addressChunks) {
     // Phase 1: Get all resolver addresses
@@ -124,13 +125,16 @@ async function batchGetENS(addresses: `0x${string}`[]): Promise<Record<string, s
       } else {
         // Resolver exists but failed to return a name
         failedResolvers.push(originalAddress);
-        fallbackAddresses.push(originalAddress);
+        if (!processedFallbacks.has(originalAddress.toLowerCase())) {
+          fallbackAddresses.push(originalAddress);
+          processedFallbacks.add(originalAddress.toLowerCase());
+        }
       }
     });
 
     // Handle fallbacks using viem's getEnsName
     if (fallbackAddresses.length > 0) {
-      console.log(`Falling back to getEnsName for ${fallbackAddresses.length} addresses with failed resolvers`);
+      console.log(`Processing fallback lookup for ${fallbackAddresses.length} unique addresses`);
 
       // Process fallbacks in smaller batches to avoid rate limits
       const fallbackChunks = chunk<`0x${string}`>(fallbackAddresses, 10);
