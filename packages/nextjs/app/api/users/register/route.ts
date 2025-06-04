@@ -1,8 +1,11 @@
 import { NextResponse } from "next/server";
 import { waitUntil } from "@vercel/functions";
+import { InferInsertModel } from "drizzle-orm";
+import { users } from "~~/services/database/config/schema";
 import { createUser, isUserRegistered } from "~~/services/database/repositories/users";
 import { isValidEIP712UserRegisterSignature } from "~~/services/eip712/register";
 import { PlausibleEvent, trackPlausibleEvent } from "~~/services/plausible";
+import { publicClient } from "~~/utils/ens-or-address";
 
 type RegisterPayload = {
   address: string;
@@ -29,7 +32,21 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Invalid signature" }, { status: 401 });
     }
 
-    const user = await createUser({ userAddress: address });
+    const userToCreate: InferInsertModel<typeof users> = {
+      userAddress: address,
+    };
+
+    try {
+      const ensName = await publicClient.getEnsName({ address });
+
+      if (ensName) {
+        userToCreate.ens = ensName;
+      }
+    } catch (error) {
+      console.error(`Error getting ENS name for user ${address}:`, error);
+    }
+
+    const user = await createUser(userToCreate);
 
     waitUntil(trackPlausibleEvent(PlausibleEvent.SIGNUP_SRE, {}, req));
 
