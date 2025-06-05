@@ -2,6 +2,12 @@ import Link from "next/link";
 import { Filters } from "./_components/filters";
 import { BuildCategory, BuildType } from "~~/services/database/config/types";
 import { Build, getAllBuilds } from "~~/services/database/repositories/builds";
+import { getMetadata } from "~~/utils/scaffold-eth/getMetadata";
+
+export const metadata = getMetadata({
+  title: "All Builds",
+  description: "View all the builds by the Speed Run Ethereum community",
+});
 
 export default async function AllBuildsPage({
   searchParams,
