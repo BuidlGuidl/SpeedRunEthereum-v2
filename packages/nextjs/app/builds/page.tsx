@@ -6,11 +6,11 @@ import { Build, getAllBuilds } from "~~/services/database/repositories/builds";
 export default async function AllBuildsPage({
   searchParams,
 }: {
-  searchParams: { category?: BuildCategory; type?: BuildType };
+  searchParams: { category?: BuildCategory; type?: BuildType; name?: string };
 }) {
   let builds: Build[] = [];
   try {
-    builds = await getAllBuilds(searchParams.category, searchParams.type);
+    builds = await getAllBuilds(searchParams.category, searchParams.type, searchParams.name);
   } catch (error) {
     console.error("Error fetching builds:", error);
     return <div className="py-12 px-6 max-w-7xl mx-auto w-full">Error fetching builds</div>;

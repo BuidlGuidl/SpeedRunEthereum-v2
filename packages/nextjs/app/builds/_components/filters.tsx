@@ -49,6 +49,19 @@ export function Filters() {
           </option>
         ))}
       </select>
+
+      <p className="mt-6 mb-2">Name</p>
+      <input
+        type="text"
+        className="input input-bordered w-full"
+        value={searchParams.get("name") || ""}
+        placeholder="Search by name..."
+        onChange={e => {
+          const newSearchParams = new URLSearchParams(searchParams);
+          newSearchParams.set("name", e.target.value);
+          router.push(`${pathname}?${newSearchParams.toString()}`);
+        }}
+      />
     </>
   );
 }
