@@ -1,11 +1,16 @@
 import Link from "next/link";
+import { Filters } from "./_components/filters";
 import { BuildCategory, BuildType } from "~~/services/database/config/types";
-import { getAllBuilds } from "~~/services/database/repositories/builds";
+import { Build, getAllBuilds } from "~~/services/database/repositories/builds";
 
-export default async function AllBuildsPage({ params }: { params: { category?: string; type?: string } }) {
-  let builds = [];
+export default async function AllBuildsPage({
+  searchParams,
+}: {
+  searchParams: { category?: BuildCategory; type?: BuildType };
+}) {
+  let builds: Build[] = [];
   try {
-    builds = await getAllBuilds(params.category as BuildCategory, params.type as BuildType);
+    builds = await getAllBuilds(searchParams.category, searchParams.type);
   } catch (error) {
     console.error("Error fetching builds:", error);
     return <div className="py-12 px-6 max-w-7xl mx-auto w-full">Error fetching builds</div>;
@@ -14,6 +19,9 @@ export default async function AllBuildsPage({ params }: { params: { category?: s
   return (
     <div className="py-12 px-6 max-w-7xl mx-auto w-full">
       <h1 className="text-2xl font-bold lg:text-4xl">All Builds</h1>
+      <div>
+        <Filters />
+      </div>
       <div className="mt-6 grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4 lg:gap-6">
         {builds.map(build => (
           <div

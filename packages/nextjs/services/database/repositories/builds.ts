@@ -199,22 +199,13 @@ export const getBuildByBuildId = async (buildId: string) => {
   return build;
 };
 
-export const getAllBuilds = async (
-  category?: BuildCategory,
-  type?: BuildType,
-): Promise<InferSelectModel<typeof builds>[]> => {
-  const conditions = [];
-
-  if (category) {
-    conditions.push(eq(builds.buildCategory, category));
-  }
-  if (type) {
-    conditions.push(eq(builds.buildType, type));
-  }
-
-  const result = await db.query.builds.findMany({
-    where: conditions.length > 0 ? and(...conditions) : undefined,
+export const getAllBuilds = async (category?: BuildCategory, type?: BuildType) => {
+  const results = await db.query.builds.findMany({
+    where: and(
+      category ? eq(builds.buildCategory, category) : undefined,
+      type ? eq(builds.buildType, type) : undefined,
+    ),
     orderBy: [desc(builds.submittedTimestamp)],
   });
-  return result;
+  return results;
 };
