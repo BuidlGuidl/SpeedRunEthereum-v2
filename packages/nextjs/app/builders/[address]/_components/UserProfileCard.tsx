@@ -21,7 +21,7 @@ export const UserProfileCard = ({ user, batch }: { user: NonNullable<UserByAddre
         <PunkBlockie address={user.userAddress} scale={2} />
         <div className="flex flex-col items-center gap-4">
           <div className="text-neutral">
-            <Address address={user.userAddress} hideAvatar size="xl" />
+            <Address address={user.userAddress} hideAvatar size="xl" cachedEns={user.ens} />
           </div>
 
           {batch && (
