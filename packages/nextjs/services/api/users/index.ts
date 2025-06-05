@@ -73,12 +73,16 @@ export const getSortedUsersWithChallenges = async ({
   start,
   size,
   sorting,
+  filter,
 }: {
   start: number;
   size: number;
   sorting: SortingState;
+  filter?: string;
 }) => {
-  const response = await fetch(`/api/users/sorted?start=${start}&size=${size}&sorting=${JSON.stringify(sorting)}`);
+  const response = await fetch(
+    `/api/users/sorted?start=${start}&size=${size}&sorting=${JSON.stringify(sorting)}&filter=${filter ?? ""}`,
+  );
 
   if (!response.ok) {
     throw new Error(`Failed to fetch sorted users: ${response.status} ${response.statusText}`);
