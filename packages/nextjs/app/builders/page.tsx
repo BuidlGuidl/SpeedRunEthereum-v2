@@ -35,7 +35,7 @@ export default function BuildersPage() {
         cell: info => {
           const row = info.row.original;
 
-          return <Address address={row.userAddress} />;
+          return <Address address={row.userAddress} cachedEns={row.ens} />;
         },
       },
       {

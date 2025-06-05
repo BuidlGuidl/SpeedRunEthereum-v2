@@ -5,9 +5,10 @@ import { Address } from "~~/components/scaffold-eth";
 type AddressQRCodeModalProps = {
   address: AddressType;
   modalId: string;
+  cachedEns: string | null;
 };
 
-export const AddressQRCodeModal = ({ address, modalId }: AddressQRCodeModalProps) => {
+export const AddressQRCodeModal = ({ address, modalId, cachedEns }: AddressQRCodeModalProps) => {
   return (
     <>
       <div>
@@ -22,7 +23,7 @@ export const AddressQRCodeModal = ({ address, modalId }: AddressQRCodeModalProps
             <div className="space-y-3 py-6">
               <div className="flex flex-col items-center gap-6">
                 <QRCodeSVG value={address} size={256} />
-                <Address address={address} format="long" disableAddressLink onlyEnsOrAddress />
+                <Address address={address} format="long" disableAddressLink onlyEnsOrAddress cachedEns={cachedEns} />
               </div>
             </div>
           </label>

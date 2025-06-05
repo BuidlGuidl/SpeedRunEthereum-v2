@@ -43,9 +43,11 @@ export async function getActivities(start: number, size: number, activityType: A
           uc.review_action as review_action,
           uc.frontend_url as frontend_url,
           uc.contract_url as contract_url,
-          c.challenge_name as challenge_name
+          c.challenge_name as challenge_name,
+          u.ens as user_ens
         FROM ${userChallenges} uc
         LEFT JOIN ${challenges} c ON uc.challenge_id = c.id
+        LEFT JOIN ${users} u ON uc.user_address = u.user_address
         
         UNION ALL
         
@@ -58,7 +60,8 @@ export async function getActivities(start: number, size: number, activityType: A
           NULL as review_action,
           NULL as frontend_url,
           NULL as contract_url,
-          NULL as challenge_name
+          NULL as challenge_name,
+          u.ens as user_ens
         FROM ${users} u
       )
       SELECT * FROM all_activities
@@ -90,6 +93,7 @@ export async function getActivities(start: number, size: number, activityType: A
         id: item.id,
         type: item.type as ActivityType,
         userAddress: item.user_address,
+        userEns: item.user_ens,
         timestamp: item.timestamp,
         details: {
           challengeId: item.challenge_id,
@@ -116,6 +120,7 @@ export async function getActivities(start: number, size: number, activityType: A
         id: `uc_${item.id}`,
         type: activityType,
         userAddress: item.userAddress,
+        userEns: item.user?.ens,
         timestamp: item.submittedAt,
         details: {
           challengeId: item.challengeId,
@@ -135,6 +140,7 @@ export async function getActivities(start: number, size: number, activityType: A
         id: `u_${item.userAddress}`,
         type: activityType,
         userAddress: item.userAddress,
+        userEns: item.ens,
         timestamp: item.createdAt,
         details: {},
       })),
