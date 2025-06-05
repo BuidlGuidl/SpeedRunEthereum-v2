@@ -1,6 +1,6 @@
 import { BatchUserStatus, ReviewAction, UserRole } from "../config/types";
 import { ColumnSort, SortingState } from "@tanstack/react-table";
-import { InferInsertModel, and, isNotNull } from "drizzle-orm";
+import { InferInsertModel, and, isNotNull, or } from "drizzle-orm";
 import { eq, ilike, sql } from "drizzle-orm";
 import { inArray } from "drizzle-orm";
 import { db } from "~~/services/database/config/postgresClient";
@@ -23,7 +23,12 @@ export async function getUserByAddress(address: string) {
   });
 }
 
-export async function getSortedUsersWithChallengesInfo(start: number, size: number, sorting: SortingState) {
+export async function getSortedUsersWithChallengesInfo(
+  start: number,
+  size: number,
+  sorting: SortingState,
+  filter?: string,
+) {
   const sortingQuery = sorting[0] as ColumnSort;
 
   const challengesCompletedExpr = sql`(SELECT COUNT(DISTINCT uc.challenge_id) FROM ${userChallenges} uc WHERE uc.user_address = ${users.userAddress} AND uc.review_action = ${ReviewAction.ACCEPTED})`;
@@ -35,9 +40,22 @@ export async function getSortedUsersWithChallengesInfo(start: number, size: numb
     'YYYY-MM-DD"T"HH24:MI:SS.MS"Z"'
   )`;
 
+  const filterConditions = filter
+    ? or(
+        ilike(users.ens, `%${filter}%`),
+        ilike(users.socialTelegram, `%${filter}%`),
+        ilike(users.socialX, `%${filter}%`),
+        ilike(users.socialGithub, `%${filter}%`),
+        ilike(users.socialInstagram, `%${filter}%`),
+        ilike(users.socialDiscord, `%${filter}%`),
+        ilike(users.socialEmail, `%${filter}%`),
+      )
+    : undefined;
+
   const query = db.query.users.findMany({
     limit: size,
     offset: start,
+    where: filterConditions,
     orderBy: (users, { desc, asc }) => {
       if (!sortingQuery) return [];
 
@@ -68,7 +86,7 @@ export async function getSortedUsersWithChallengesInfo(start: number, size: numb
     },
   });
 
-  const [usersData, totalCount] = await Promise.all([query, db.$count(users)]);
+  const [usersData, totalCount] = await Promise.all([query, db.$count(users, filterConditions)]);
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const preparedUsersData = usersData.map(({ userChallenges, ...restUser }) => ({
