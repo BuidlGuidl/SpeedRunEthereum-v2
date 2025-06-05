@@ -21,7 +21,7 @@ export const UserProfileCard = ({ user, batch }: { user: NonNullable<UserByAddre
         <PunkBlockie address={user.userAddress} scale={2} />
         <div className="flex flex-col items-center gap-4">
           <div className="text-neutral">
-            <Address address={user.userAddress} hideAvatar size="xl" hideEns={!user.ens} />
+            <Address address={user.userAddress} hideAvatar size="xl" />
           </div>
 
           {batch && (
@@ -46,7 +46,6 @@ export const UserProfileCard = ({ user, batch }: { user: NonNullable<UserByAddre
           )}
 
           <hr className="w-full border-base-200 mb-2" />
-          <div className="text-sm text-neutral">ENS: {user.ens}</div>
           <RefreshEnsButton user={user} />
           <UserLocation user={user} />
           <UserSocials user={user} />

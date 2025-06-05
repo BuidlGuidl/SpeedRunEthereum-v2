@@ -46,7 +46,7 @@ export const RegisterUser = () => {
               <div className="rounded-md border-primary border">
                 <PunkBlockie address={address} scale={0.5} className="rounded-md" />
               </div>
-              <Address address={address} size="sm" hideAvatar hideEns />
+              <Address address={address} size="sm" hideAvatar />
             </div>
           )}
           <button
