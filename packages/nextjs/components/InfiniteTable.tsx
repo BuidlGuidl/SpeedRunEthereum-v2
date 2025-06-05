@@ -225,7 +225,7 @@ export default function InfiniteTable<T>({
           </tbody>
         </table>
       </div>
-      {isFetching && <div>Fetching data...</div>}
+      {isFetching && <div className="text-center mt-4">Fetching data...</div>}
     </>
   );
 }

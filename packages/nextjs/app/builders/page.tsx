@@ -118,7 +118,7 @@ export default function BuildersPage() {
           name="filter"
           value={filter}
           onChange={setFilter}
-          placeholder="Search by ENS or socials"
+          placeholder="Search Builders"
           suffix={<SearchIcon className="w-7 h-6 pr-2 fill-primary/60 self-center" />}
         />
       </div>

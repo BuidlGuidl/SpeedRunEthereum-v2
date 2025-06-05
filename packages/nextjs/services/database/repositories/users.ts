@@ -42,6 +42,7 @@ export async function getSortedUsersWithChallengesInfo(
 
   const filterConditions = filter
     ? or(
+        ilike(users.userAddress, `%${filter}%`),
         ilike(users.ens, `%${filter}%`),
         ilike(users.socialTelegram, `%${filter}%`),
         ilike(users.socialX, `%${filter}%`),
