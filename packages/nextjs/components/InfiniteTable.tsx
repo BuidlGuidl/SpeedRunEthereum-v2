@@ -31,6 +31,7 @@ type InfiniteTableProps<T> = {
   fetchSize?: number;
   rowHeightInPx?: number;
   initialSorting?: SortingState;
+  showLoadingSkeleton?: boolean;
 };
 
 export default function InfiniteTable<T>({
@@ -40,6 +41,7 @@ export default function InfiniteTable<T>({
   fetchSize = DEFAULT_FETCH_SIZE,
   rowHeightInPx = DEFAULT_ROW_HEIGHT_IN_PX,
   initialSorting = [],
+  showLoadingSkeleton = false,
 }: InfiniteTableProps<T>) {
   // we need a reference to the scrolling element for logic down below
   const tableContainerRef = useRef<HTMLDivElement>(null);
@@ -85,13 +87,13 @@ export default function InfiniteTable<T>({
 
   const tableColumns = useMemo(
     () =>
-      isLoading
+      isLoading || showLoadingSkeleton
         ? columns.map(column => ({
             ...column,
             cell: () => <div className="skeleton h-4 w-full bg-accent" />,
           }))
         : columns,
-    [isLoading, columns],
+    [isLoading, columns, showLoadingSkeleton],
   );
 
   const table = useReactTable({
