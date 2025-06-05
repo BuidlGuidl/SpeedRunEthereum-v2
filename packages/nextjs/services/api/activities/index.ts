@@ -11,6 +11,7 @@ export type ActivityItem = {
   id: string;
   type: ActivityType;
   userAddress: string;
+  userEns?: string | null;
   timestamp: Date;
   details: {
     challengeId?: string;
@@ -21,7 +22,7 @@ export type ActivityItem = {
   };
 };
 
-export const getActivities = async (
+export const fetchActivities = async (
   start: number,
   size: number,
   activityType: ActivityType = "ALL",
