@@ -191,7 +191,11 @@ export const getBuildByBuildId = async (buildId: string) => {
   const build = await db.query.builds.findFirst({
     where: eq(builds.id, buildId),
     with: {
-      builders: true,
+      builders: {
+        with: {
+          user: true,
+        },
+      },
       likes: true,
     },
   });
