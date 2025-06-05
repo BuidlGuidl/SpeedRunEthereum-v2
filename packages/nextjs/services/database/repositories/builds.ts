@@ -1,5 +1,6 @@
+import { BuildCategory, BuildType } from "../config/types";
 import { filterValidUserAddresses } from "./users";
-import { InferInsertModel, InferSelectModel, and, eq, inArray } from "drizzle-orm";
+import { InferInsertModel, InferSelectModel, and, desc, eq, inArray } from "drizzle-orm";
 import { db } from "~~/services/database/config/postgresClient";
 import { buildBuilders, buildLikes, builds, lower } from "~~/services/database/config/schema";
 
@@ -196,4 +197,24 @@ export const getBuildByBuildId = async (buildId: string) => {
     },
   });
   return build;
+};
+
+export const getAllBuilds = async (
+  category?: BuildCategory,
+  type?: BuildType,
+): Promise<InferSelectModel<typeof builds>[]> => {
+  const conditions = [];
+
+  if (category) {
+    conditions.push(eq(builds.buildCategory, category));
+  }
+  if (type) {
+    conditions.push(eq(builds.buildType, type));
+  }
+
+  const result = await db.query.builds.findMany({
+    where: conditions.length > 0 ? and(...conditions) : undefined,
+    orderBy: [desc(builds.submittedTimestamp)],
+  });
+  return result;
 };
