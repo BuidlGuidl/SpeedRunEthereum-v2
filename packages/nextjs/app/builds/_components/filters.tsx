@@ -21,9 +21,10 @@ export function Filters() {
   };
 
   return (
-    <div>
-      <p>Category</p>
+    <>
+      <p className="mt-0 mb-2">Category</p>
       <select
+        className="select select-bordered w-full"
         value={searchParams.get("category") || ""}
         onChange={e => handleCategoryChange(e.target.value as BuildCategory)}
       >
@@ -35,8 +36,12 @@ export function Filters() {
         ))}
       </select>
 
-      <p>Type</p>
-      <select value={searchParams.get("type") || ""} onChange={e => handleTypeChange(e.target.value as BuildType)}>
+      <p className="mt-6 mb-2">Type</p>
+      <select
+        className="select select-bordered w-full"
+        value={searchParams.get("type") || ""}
+        onChange={e => handleTypeChange(e.target.value as BuildType)}
+      >
         <option value="">All</option>
         {Object.values(BuildType).map(type => (
           <option key={type} value={type}>
@@ -44,6 +49,6 @@ export function Filters() {
           </option>
         ))}
       </select>
-    </div>
+    </>
   );
 }
