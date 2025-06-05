@@ -16,23 +16,12 @@ import { getUserSocialsList } from "~~/utils/socials";
 
 export default function BuildersPage() {
   const [filter, setFilter] = useState("");
-  const [debouncedFilter] = useDebounceValue(filter, 500);
+
+  const [debouncedFilter] = useDebounceValue(filter.length >= 3 ? filter : "", 500);
 
   const { data: builders, isLoading } = useQuery({
     queryKey: ["builders-count"],
     queryFn: () => getSortedUsersWithChallenges({ start: 0, size: 0, sorting: [] }),
-  });
-
-  const { data: filteredBuilders, isLoading: isFilteredLoading } = useQuery({
-    queryKey: ["builders-filtered", debouncedFilter],
-    queryFn: () =>
-      getSortedUsersWithChallenges({
-        start: 0,
-        size: 1,
-        sorting: [],
-        filter: debouncedFilter.length >= 3 ? debouncedFilter : "",
-      }),
-    enabled: debouncedFilter.length >= 3,
   });
 
   const tableQueryKey = useMemo(() => ["users", debouncedFilter], [debouncedFilter]);
@@ -101,7 +90,9 @@ export default function BuildersPage() {
     [],
   );
 
-  const showNoResults = debouncedFilter.length >= 3 && !isFilteredLoading && filteredBuilders?.meta.totalRowCount === 0;
+  const emptyMessage = debouncedFilter
+    ? `No builders found matching "${debouncedFilter}". Try a different search term.`
+    : "No builders found";
 
   return (
     <div className="mx-4 text-center">
@@ -132,28 +123,20 @@ export default function BuildersPage() {
         />
       </div>
 
-      {showNoResults ? (
-        <div className="mt-8 text-center">
-          <div className="bg-base-100 p-8 rounded-lg text-neutral">
-            No builders found matching &quot;{debouncedFilter}&quot;. Try a different search term.
-          </div>
-        </div>
-      ) : (
-        <InfiniteTable<UserWithChallengesData>
-          columns={columns}
-          showLoadingSkeleton={isFilteredLoading}
-          queryKey={tableQueryKey}
-          queryFn={({ start, size, sorting }) =>
-            getSortedUsersWithChallenges({
-              start,
-              size,
-              sorting,
-              filter: debouncedFilter.length >= 3 ? debouncedFilter : "",
-            })
-          }
-          initialSorting={tableInitialSorting}
-        />
-      )}
+      <InfiniteTable<UserWithChallengesData>
+        columns={columns}
+        queryKey={tableQueryKey}
+        queryFn={({ start, size, sorting }) =>
+          getSortedUsersWithChallenges({
+            start,
+            size,
+            sorting,
+            filter: debouncedFilter,
+          })
+        }
+        initialSorting={tableInitialSorting}
+        emptyStateMessage={emptyMessage}
+      />
     </div>
   );
 }
