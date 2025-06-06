@@ -2,26 +2,97 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 import { useDebounceValue } from "usehooks-ts";
 import { InputBase } from "~~/components/scaffold-eth";
 import { getAllFilteredBuilds } from "~~/services/api/builds";
+import { BuildCategory, BuildType } from "~~/services/database/config/types";
 
 export default function AllBuildsPage() {
-  const [nameFilter, setNameFilter] = useState("");
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const [categoryFilter, setCategoryFilter] = useState(searchParams.get("category") || "");
+  const [typeFilter, setTypeFilter] = useState(searchParams.get("type") || "");
+  const [nameFilter, setNameFilter] = useState(searchParams.get("name") || "");
 
   const [debouncedFilter] = useDebounceValue(nameFilter.length >= 3 ? nameFilter : "", 500);
 
   const { data: builds } = useQuery({
-    queryKey: ["all-builds", debouncedFilter],
-    queryFn: () => getAllFilteredBuilds({ name: debouncedFilter }),
+    queryKey: ["all-builds", debouncedFilter, categoryFilter, typeFilter],
+    queryFn: () =>
+      getAllFilteredBuilds({
+        name: debouncedFilter,
+        category: categoryFilter as BuildCategory,
+        type: typeFilter as BuildType,
+      }),
   });
+
+  const handleCategoryChange = (category: BuildCategory) => {
+    if (!category) {
+      setCategoryFilter("");
+      const newSearchParams = new URLSearchParams(searchParams);
+      newSearchParams.delete("category");
+      router.replace(`${pathname}?${newSearchParams.toString()}`);
+      return;
+    }
+
+    setCategoryFilter(category);
+    const newSearchParams = new URLSearchParams(searchParams);
+    newSearchParams.set("category", category);
+    router.replace(`${pathname}?${newSearchParams.toString()}`);
+  };
+
+  const handleTypeChange = (type: BuildType) => {
+    if (!type) {
+      setTypeFilter("");
+      const newSearchParams = new URLSearchParams(searchParams);
+      newSearchParams.delete("type");
+      router.replace(`${pathname}?${newSearchParams.toString()}`);
+      return;
+    }
+
+    setTypeFilter(type);
+    const newSearchParams = new URLSearchParams(searchParams);
+    newSearchParams.set("type", type);
+    router.replace(`${pathname}?${newSearchParams.toString()}`);
+  };
 
   return (
     <div className="py-12 px-6 max-w-7xl mx-auto w-full">
       <h1 className="text-2xl font-bold lg:text-4xl">All Builds</h1>
       <div className="mt-8 grid grid-cols-1 md:grid-cols-6 gap-6">
         <div className="md:col-span-2 lg:col-span-1">
+          <p className="mt-0 mb-2">Category</p>
+          <select
+            className="select select-bordered w-full"
+            value={categoryFilter}
+            onChange={e => handleCategoryChange(e.target.value as BuildCategory)}
+          >
+            <option value="">All</option>
+            {Object.values(BuildCategory).map(category => (
+              <option key={category} value={category}>
+                {category}
+              </option>
+            ))}
+          </select>
+
+          <p className="mt-6 mb-2">Type</p>
+          <select
+            className="select select-bordered w-full"
+            value={typeFilter}
+            onChange={e => handleTypeChange(e.target.value as BuildType)}
+          >
+            <option value="">All</option>
+            {Object.values(BuildType).map(type => (
+              <option key={type} value={type}>
+                {type}
+              </option>
+            ))}
+          </select>
+
+          <p className="mt-6 mb-2">Name</p>
           <InputBase name="filter" value={nameFilter} onChange={setNameFilter} placeholder="Search Builds" />
         </div>
         <div className="md:col-span-4 lg:col-span-5">
