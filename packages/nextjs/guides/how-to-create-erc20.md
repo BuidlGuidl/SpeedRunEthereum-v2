@@ -9,7 +9,7 @@ We'll cover the core concepts of the ERC20 standard, show you how to write the s
 
 ## What Is an ERC20 Token?
 
-An **ERC20 token** is a smart contract deployed on the Ethereum blockchain that adheres to a specific technical standard (ERC-20). This standard defines a common set of rules and functions that all compliant tokens must implement. "Fungible" means each token is identical to and interchangeable with any other token of the same type – like how one US dollar is the same as any other US dollar.
+An **ERC20 token** is a smart contract deployed on the Ethereum (or other EVM compatible) blockchain that adheres to a specific technical standard (ERC-20). This standard defines a common set of rules and functions that all compliant tokens must implement. "Fungible" means each token is identical to and interchangeable with any other token of the same type, like how one US dollar is the same as any other US dollar.
 
 This standardization is incredibly powerful because it ensures interoperability. Any ERC20 token can be easily supported by Ethereum wallets (like MetaMask), crypto exchanges, and other dApps without requiring custom integrations for each new token. Popular examples include stablecoins like USDC and DAI, or utility tokens like Chainlink's LINK.
 
@@ -27,7 +27,7 @@ This standardization is incredibly powerful because it ensures interoperability.
 
 - `name()` (Optional but Recommended): Returns the human-readable name of the token (e.g., "My Awesome Token").
 - `symbol()` (Optional but Recommended): Returns the ticker symbol for the token (e.g., "MAT").
-- `decimals()` (Optional but Recommended): Returns the number of decimal places the token uses. Typically 18, similar to Ether's divisibility (1 Ether \= 1018 wei).
+- `decimals()` (Optional but Recommended): Returns the number of decimal places the token uses. Typically 18, similar to Ether's divisibility (1 Ether \= 10<sup>18</sup> wei).
 - `totalSupply()`: Returns the total amount of tokens in existence.
 - `balanceOf(address account)`: Returns the token balance of a specified `account`.
 - `transfer(address recipient, uint256 amount)`: Transfers `amount` tokens from the caller's (`msg.sender`) balance to the `recipient`. Must emit a `Transfer` event.
@@ -40,7 +40,7 @@ This standardization is incredibly powerful because it ensures interoperability.
 - `Transfer(address indexed from, address indexed to, uint256 value)`: Emitted when tokens are transferred, including zero value transfers and minting/burning.
 - `Approval(address indexed owner, address indexed spender, uint256 value)`: Emitted when an allowance is set by an `approve` call
 
-## Prerequisites
+## Good to have before starting
 
 - A basic understanding of blockchain concepts and Ethereum.
 - Familiarity with Solidity programming basics (variables, functions, contracts) will be helpful. Check solidity by example [here](https://solidity-by-example.org/).
@@ -114,13 +114,13 @@ contract YourToken is ERC20, Ownable {
 
   - `ERC20(name_, symbol_)`: Calls the constructor of the parent `ERC20` contract, setting the token's name and symbol.
 
-  - `Ownable(msg.sender)`: (If `Ownable` is used) Sets the address deploying the contract (`msg.sender`) as the initial "owner," granting them permission to call `onlyOwner` functions.
+  - `Ownable(msg.sender)`: (If `Ownable` is used) Sets the address deploying the contract (`msg.sender`) as the initial owner, granting them permission to call `onlyOwner` functions.
 
   - `_mint(msg.sender, initialSupply_ * (10**decimals()));`: This is where the tokens are created.
 
     - `_mint`: An internal function from OpenZeppelin's `ERC20.sol` that creates new tokens and assigns them to an address. It should only be called from within the contract or its derivatives.
     - `msg.sender`: The address deploying the contract. They receive all the initially minted tokens.
-    - `initialSupply_ * (10**decimals())`: This calculates the actual number of smallest token units. `decimals()` (from OpenZeppelin's `ERC20.sol`) usually returns 18. So, to mint 1,000,000 whole tokens, you're minting 1,000,000times1018 base units. This is crucial for representing fractional tokens on-chain, as Solidity and the EVM only handle integers.
+    - `initialSupply_ * (10**decimals())`: This calculates the actual number of smallest token units. `decimals()` (from OpenZeppelin's `ERC20.sol`) usually returns 18. So, to mint 1,000,000 whole tokens, you're minting 1,000,000 times 10<sup>18</sup> base units. This is crucial for representing fractional tokens on-chain, as Solidity and the EVM only handle integers.
 
 - **Optional `mint` function**:
   - `function mint(address to, uint256 amount) public onlyOwner { ... }`: If you included `Ownable`, this function allows the contract owner to create more tokens after initial deployment. The `onlyOwner` modifier restricts its use to the owner. If you want a fixed supply token, you should remove this function.
@@ -136,30 +136,30 @@ To compile, deploy, and test your `YourToken.sol` contract, you'll need a develo
 2. **Local Development with Hardhat (e.g., via Scaffold-ETH 2):**
    - **What it is:** For more complex projects or a professional workflow, a local setup using Hardhat is common. Hardhat is an Ethereum development environment that facilitates compiling, deploying, testing, and debugging.
    - **Scaffold-ETH 2:** A great starting point, it bundles Hardhat with a pre-configured frontend (Next.JS) and many useful scripts, allowing you to get up and running quickly. [Scaffold-ETH 2 repository](https://github.com/scaffold-eth/scaffold-eth-2).
-   - **How it works (general):** You'd typically place your .sol files in a contracts directory, write deployment scripts, and use command-line tasks to compile, deploy, and test.
-   - **For detailed setup with Scaffold-ETH 2:** The SpeedRunEthereum challenges, like the [Token Vendor challenge](https://speedrunethereum.com/challenge/token-vendor), provide excellent, step-by-step instructions on cloning and setting up a Scaffold-ETH 2 environment.
+   - **How it works (general approach):** You'd typically place your .sol files in a contracts directory, write deployment scripts, and use command-line tasks to compile, deploy, and test.
+   - **Quick setup with Scaffold-ETH 2:** The SpeedRunEthereum challenges, like the [Token Vendor challenge](https://speedrunethereum.com/challenge/token-vendor), provide excellent, step-by-step instructions on cloning and setting up a Scaffold-ETH 2 environment. It will speed up your development and learning process.
 
 Choose the environment that best suits your current needs. For this tutorial, the Solidity code remains the same regardless of your choice.
 
 ## Compiling, Deploying, and Interacting with Your Token
 
-Once you have your YourToken.sol code and an environment set up:
+Once you have your `YourToken.sol` code and an environment set up:
 
 1. **Compilation:**
    - Your Solidity code needs to be compiled into Ethereum Virtual Machine (EVM) bytecode.
    - In Remix, this is done via the "Solidity compiler" tab.
-   - In a Hardhat setup (like Scaffold-ETH 2), you typically run a command like `yarn compile`.
+   - In Scaffold-ETH 2, run `yarn compile` in your terminal.
 2. **Deployment:**
    - This step pushes your compiled contract onto the blockchain (either a local testnet, a public testnet like Sepolia, or the Ethereum mainnet).
    - In Remix, you'd use the "Deploy & Run Transactions" tab, select your contract, provide constructor arguments (name, symbol, initial supply), and deploy. You'll need test Ether in your wallet if deploying to a public testnet.
-   - In a Hardhat/Scaffold-ETH 2 setup, you run a deployment script (e.g., `yarn deploy`).
+   - In Scaffold-ETH 2, run `yarn deploy` in your terminal (after running your local blockchain with `yarn chain` in another terminal).
 3. **Interaction:**
-
    - After deployment, you'll get a contract address.
    - **Remix:** You can interact with your deployed contract directly in Remix's "Deployed Contracts" section.
    - **Wallets:** Add the token to MetaMask (or another wallet) using its contract address to see your balance. You'll need to be on the correct network.
    - **Etherscan (or other block explorers):** On public testnets/mainnet, you can view your contract and its transactions on a block explorer like Etherscan by searching for its address.
-   - **Programmatically/Frontend:** In a Scaffold-ETH 2 setup, the provided frontend allows interaction directly from the "Debug Contracts" tab. You can also use [Abi Ninja](https://abi.ninja/) tool to interact with the contract.
+   - **Scaffold-ETH 2 Frontend:** In a Scaffold-ETH 2 setup, the provided frontend allows interaction directly from the "Debug Contracts" tab.
+   - You can also use [Abi Ninja](https://abi.ninja/) tool to interact with the contract.
 
 ## ERC20 Token Flow: How Transfers and Approvals Work
 
@@ -181,12 +181,12 @@ Once you have your YourToken.sol code and an environment set up:
 
 ## Important Tips and Best Practices
 
-- **Always Use OpenZeppelin:** For standard contracts like ERC20, rely on OpenZeppelin's audited and community-vetted implementations. This significantly reduces security risks.
-- **Understand decimals:** The decimals property (defaulting to 18\) is crucial. Remember that on-chain amounts are typically handled in their smallest unit (e.g., 1texttoken=1times1018textbaseunits). User interfaces then use the decimals value for display.
+- **Use OpenZeppelin if you are not a solidity wizard:** For standard contracts like ERC20, rely on OpenZeppelin's audited and community-vetted implementations. This significantly reduces security risks.
+- **Understand decimals:** The decimals property (defaulting to 18) is crucial. Remember that on-chain amounts are typically handled in their smallest unit (e.g., 1 token = 1 times 10<sup>18</sup> base units). User interfaces then use the decimals value for display.
 - **Fixed Supply vs. Mintable:** Decide if your token needs a fixed supply created only at deployment, or if an owner should be able to mint more tokens later. Our example includes an optional mint function protected by Ownable. For a strictly fixed supply, remove the mint function and Ownable related code.
-- **Ownership and Access Control:** If you have administrative functions (like mint), secure the owner account. For production systems, consider transferring ownership to a multisig wallet or a DAO to decentralize control and reduce single points of failure.
+- **Ownership and Access Control:** If you have administrative functions (like mint), secure the owner account. For production systems, consider transferring ownership to a multisig wallet or a DAO to decentralize control and reduce single points of failure. You can also use [OpenZeppelin's Ownable](https://docs.openzeppelin.com/contracts/4.x/api/access#Ownable) contract to manage ownership.
 - **Thorough Testing:** Write comprehensive tests for your contract, especially if you add custom logic beyond the standard ERC20. Test all functions, edge cases, and interactions on a local blockchain and a public testnet.
-- **Verify on Block Explorers:** When deploying to a public network (testnet or mainnet), verify your contract's source code on a block explorer like Etherscan. This builds trust and transparency, allowing users to inspect your code.
+- **Verify on Block Explorers:** When deploying to a public network (testnet or mainnet), verify your contract's source code on a block explorer like Etherscan. This builds trust and transparency, allowing users to inspect your code. With Scaffold-ETH 2, you can verify your contract on Etherscan by running `yarn verify` in your terminal.
 
 🚀 **Ready to apply this knowledge?**
 
