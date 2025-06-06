@@ -73,6 +73,10 @@ export const CHALLENGE_METADATA: Record<
         title: "Solidity Contract-to-Contract Interactions",
         url: "/guides/solidity-contract-to-contract-interactions",
       },
+      {
+        title: "Sustainable ERC20 Supply Models: Tokenomics Best Practices",
+        url: "/guides/sustainable-erc20-supply-models",
+      },
     ],
   },
   [ChallengeId.DICE_GAME]: {
