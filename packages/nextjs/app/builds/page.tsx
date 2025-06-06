@@ -1,151 +1,16 @@
-"use client";
-
-import { useState } from "react";
-import Link from "next/link";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { LoadingSkeleton } from "./_components/LoadingSkeleton";
-import { useQuery } from "@tanstack/react-query";
-import { useDebounceValue } from "usehooks-ts";
-import { getAllFilteredBuilds } from "~~/services/api/builds";
+import { AllBuilds } from "./_components/AllBuilds";
 import { BuildCategory, BuildType } from "~~/services/database/config/types";
+import { getMetadata } from "~~/utils/scaffold-eth/getMetadata";
 
-export default function AllBuildsPage() {
-  const router = useRouter();
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
-  const [categoryFilter, setCategoryFilter] = useState(searchParams.get("category") || "");
-  const [typeFilter, setTypeFilter] = useState(searchParams.get("type") || "");
-  const [nameFilter, setNameFilter] = useState(searchParams.get("name") || "");
+export const metadata = getMetadata({
+  title: "All Builds",
+  description: "View all the builds by the Speed Run Ethereum community",
+});
 
-  const [debouncedFilter] = useDebounceValue(nameFilter.length >= 3 ? nameFilter : "", 500);
-
-  const { data: builds, isLoading } = useQuery({
-    queryKey: ["all-builds", debouncedFilter, categoryFilter, typeFilter],
-    queryFn: () =>
-      getAllFilteredBuilds({
-        name: debouncedFilter,
-        category: categoryFilter as BuildCategory,
-        type: typeFilter as BuildType,
-      }),
-  });
-
-  const handleCategoryChange = (category: BuildCategory) => {
-    if (!category) {
-      setCategoryFilter("");
-      const newSearchParams = new URLSearchParams(searchParams);
-      newSearchParams.delete("category");
-      router.replace(`${pathname}?${newSearchParams.toString()}`);
-      return;
-    }
-
-    setCategoryFilter(category);
-    const newSearchParams = new URLSearchParams(searchParams);
-    newSearchParams.set("category", category);
-    router.replace(`${pathname}?${newSearchParams.toString()}`);
-  };
-
-  const handleTypeChange = (type: BuildType) => {
-    if (!type) {
-      setTypeFilter("");
-      const newSearchParams = new URLSearchParams(searchParams);
-      newSearchParams.delete("type");
-      router.replace(`${pathname}?${newSearchParams.toString()}`);
-      return;
-    }
-
-    setTypeFilter(type);
-    const newSearchParams = new URLSearchParams(searchParams);
-    newSearchParams.set("type", type);
-    router.replace(`${pathname}?${newSearchParams.toString()}`);
-  };
-
-  return (
-    <div className="py-12 px-6 max-w-7xl mx-auto w-full">
-      <h1 className="text-2xl font-bold lg:text-4xl">All Builds</h1>
-      <div className="mt-8 grid grid-cols-1 md:grid-cols-6 gap-6">
-        <div className="md:col-span-2 lg:col-span-1">
-          <p className="mt-0 mb-2">Category</p>
-          <select
-            className="select select-bordered w-full"
-            value={categoryFilter}
-            onChange={e => handleCategoryChange(e.target.value as BuildCategory)}
-          >
-            <option value="">All</option>
-            {Object.values(BuildCategory).map(category => (
-              <option key={category} value={category}>
-                {category}
-              </option>
-            ))}
-          </select>
-
-          <p className="mt-6 mb-2">Type</p>
-          <select
-            className="select select-bordered w-full"
-            value={typeFilter}
-            onChange={e => handleTypeChange(e.target.value as BuildType)}
-          >
-            <option value="">All</option>
-            {Object.values(BuildType).map(type => (
-              <option key={type} value={type}>
-                {type}
-              </option>
-            ))}
-          </select>
-
-          <p className="mt-6 mb-2">Name</p>
-          <input
-            type="text"
-            className="input input-bordered w-full"
-            name="filter"
-            value={nameFilter}
-            onChange={e => setNameFilter(e.target.value)}
-            placeholder="Search by name..."
-          />
-        </div>
-        <div className="md:col-span-4 lg:col-span-5">
-          <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4 lg:gap-6">
-            {isLoading && (
-              <>
-                <LoadingSkeleton />
-                <LoadingSkeleton />
-                <LoadingSkeleton />
-                <LoadingSkeleton />
-              </>
-            )}
-            {builds &&
-              Boolean(builds.length > 0) &&
-              builds.map(build => (
-                <div
-                  key={build.id}
-                  className="relative bg-base-300 rounded-xl shadow-md overflow-hidden transition hover:shadow-lg"
-                >
-                  <div className="w-full h-44 flex items-center justify-center">
-                    <Link href={`/builds/${build.id}`} className="w-full h-full block">
-                      {build.imageUrl ? (
-                        // eslint-disable-next-line @next/next/no-img-element
-                        <img src={build.imageUrl} alt={build.name} className="w-full h-full object-cover" />
-                      ) : (
-                        <div className="w-full h-full flex items-center justify-center text-lg font-bold bg-base-200 border border-secondary">
-                          No Image
-                        </div>
-                      )}
-                    </Link>
-                  </div>
-                  <div className="flex flex-col flex-1 px-6 py-4">
-                    <h2 className="text-xl font-bold mb-2 leading-tight line-clamp-2">{build.name}</h2>
-                    <p className="text-sm my-1 line-clamp-4">{build.desc}</p>
-                    <div className="flex-1" />
-                    <div className="flex justify-between items-center pt-2 mt-2 w-full gap-2">
-                      <Link className="btn btn-sm btn-outline grow" href={`/builds/${build.id}`}>
-                        View
-                      </Link>
-                    </div>
-                  </div>
-                </div>
-              ))}
-          </div>
-        </div>
-      </div>
-    </div>
-  );
+export default async function AllBuildsPage({
+  searchParams,
+}: {
+  searchParams: { category?: BuildCategory; type?: BuildType };
+}) {
+  return <AllBuilds searchParams={searchParams} />;
 }
