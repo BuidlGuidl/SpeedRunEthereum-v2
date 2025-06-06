@@ -218,6 +218,7 @@ export const getAllBuilds = async ({
     with: {
       likes: true,
     },
+    limit: 48,
   });
 
   // Sort the results by likes count
