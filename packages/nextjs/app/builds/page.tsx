@@ -3,9 +3,9 @@
 import { useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { LoadingSkeleton } from "./_components/LoadingSkeleton";
 import { useQuery } from "@tanstack/react-query";
 import { useDebounceValue } from "usehooks-ts";
-import { InputBase } from "~~/components/scaffold-eth";
 import { getAllFilteredBuilds } from "~~/services/api/builds";
 import { BuildCategory, BuildType } from "~~/services/database/config/types";
 
@@ -19,7 +19,7 @@ export default function AllBuildsPage() {
 
   const [debouncedFilter] = useDebounceValue(nameFilter.length >= 3 ? nameFilter : "", 500);
 
-  const { data: builds } = useQuery({
+  const { data: builds, isLoading } = useQuery({
     queryKey: ["all-builds", debouncedFilter, categoryFilter, typeFilter],
     queryFn: () =>
       getAllFilteredBuilds({
@@ -93,10 +93,25 @@ export default function AllBuildsPage() {
           </select>
 
           <p className="mt-6 mb-2">Name</p>
-          <InputBase name="filter" value={nameFilter} onChange={setNameFilter} placeholder="Search Builds" />
+          <input
+            type="text"
+            className="input input-bordered w-full"
+            name="filter"
+            value={nameFilter}
+            onChange={e => setNameFilter(e.target.value)}
+            placeholder="Search by name..."
+          />
         </div>
         <div className="md:col-span-4 lg:col-span-5">
           <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4 lg:gap-6">
+            {isLoading && (
+              <>
+                <LoadingSkeleton />
+                <LoadingSkeleton />
+                <LoadingSkeleton />
+                <LoadingSkeleton />
+              </>
+            )}
             {builds &&
               Boolean(builds.length > 0) &&
               builds.map(build => (
