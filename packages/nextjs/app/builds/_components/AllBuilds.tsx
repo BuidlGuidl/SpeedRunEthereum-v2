@@ -6,6 +6,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { LoadingSkeleton } from "./LoadingSkeleton";
 import { useQuery } from "@tanstack/react-query";
 import { useDebounceValue } from "usehooks-ts";
+import { LikeBuildButton } from "~~/app/builders/[address]/_components/builds/LikeBuildButton";
 import { getAllFilteredBuilds } from "~~/services/api/builds";
 import { BuildCategory, BuildType } from "~~/services/database/config/types";
 
@@ -138,6 +139,10 @@ export function AllBuilds({ searchParams }: { searchParams: { category?: BuildCa
                       <Link className="btn btn-sm btn-outline grow" href={`/builds/${build.id}`}>
                         View
                       </Link>
+                      <div className="flex items-center gap-1">
+                        <LikeBuildButton buildId={build.id} likes={build.likes.map(like => like.userAddress)} />
+                        <span className="text-base">{build.likes.length}</span>
+                      </div>
                     </div>
                   </div>
                 </div>

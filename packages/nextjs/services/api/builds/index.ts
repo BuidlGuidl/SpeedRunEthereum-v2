@@ -20,7 +20,7 @@ export const getAllFilteredBuilds = async ({
     throw new Error(`Failed to fetch all builds: ${response.status} ${response.statusText}`);
   }
 
-  const buildsData = (await response.json()) as Build[];
+  const buildsData = (await response.json()) as Array<Build & { likes: Array<{ userAddress: string }> }>;
 
   return buildsData;
 };
