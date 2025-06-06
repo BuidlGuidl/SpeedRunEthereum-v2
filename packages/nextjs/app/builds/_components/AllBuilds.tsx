@@ -117,7 +117,7 @@ export function AllBuilds({ searchParams }: { searchParams: { category?: BuildCa
               builds.map(build => (
                 <div
                   key={build.id}
-                  className="relative bg-base-300 rounded-xl shadow-md overflow-hidden transition hover:shadow-lg"
+                  className="relative flex flex-col bg-base-300 rounded-xl shadow-md overflow-hidden transition hover:shadow-lg"
                 >
                   <div className="w-full h-44 flex items-center justify-center">
                     <Link href={`/builds/${build.id}`} className="w-full h-full block">
