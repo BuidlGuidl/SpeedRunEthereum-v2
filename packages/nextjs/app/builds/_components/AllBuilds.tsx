@@ -19,7 +19,11 @@ export function AllBuilds({ searchParams }: { searchParams: { category?: BuildCa
 
   const [debouncedFilter] = useDebounceValue(nameFilter.length >= 3 ? nameFilter : "", 500);
 
-  const { data: builds, isLoading } = useQuery({
+  const {
+    data: builds,
+    isLoading,
+    refetch,
+  } = useQuery({
     queryKey: ["all-builds", debouncedFilter, categoryFilter, typeFilter],
     queryFn: () =>
       getAllFilteredBuilds({
@@ -140,7 +144,11 @@ export function AllBuilds({ searchParams }: { searchParams: { category?: BuildCa
                         View
                       </Link>
                       <div className="flex items-center gap-1">
-                        <LikeBuildButton buildId={build.id} likes={build.likes.map(like => like.userAddress)} />
+                        <LikeBuildButton
+                          buildId={build.id}
+                          likes={build.likes.map(like => like.userAddress)}
+                          onSuccess={() => refetch()}
+                        />
                         <span className="text-base">{build.likes.length}</span>
                       </div>
                     </div>
