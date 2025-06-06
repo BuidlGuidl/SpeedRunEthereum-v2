@@ -69,6 +69,10 @@ export const CHALLENGE_METADATA: Record<
         title: "How to Create a ERC20 Token: Complete Solidity Tutorial",
         url: "/guides/how-to-create-erc20",
       },
+      {
+        title: "Solidity Contract-to-Contract Interactions",
+        url: "/guides/solidity-contract-to-contract-interactions",
+      },
     ],
   },
   [ChallengeId.DICE_GAME]: {
