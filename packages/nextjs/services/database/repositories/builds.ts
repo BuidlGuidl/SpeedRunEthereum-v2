@@ -208,7 +208,6 @@ export const getAllBuilds = async ({
   type?: BuildType;
   nameSearch?: string;
 }) => {
-  // First get all builds with their likes
   const results = await db.query.builds.findMany({
     where: and(
       category ? eq(builds.buildCategory, category) : undefined,
@@ -218,9 +217,9 @@ export const getAllBuilds = async ({
     with: {
       likes: true,
     },
+    orderBy: (builds, { desc, sql }) => [desc(sql`(SELECT COUNT(*) FROM build_likes WHERE build_id = ${builds.id})`)],
     limit: 48,
   });
 
-  // Sort the results by likes count
-  return results.sort((a, b) => b.likes.length - a.likes.length);
+  return results;
 };
