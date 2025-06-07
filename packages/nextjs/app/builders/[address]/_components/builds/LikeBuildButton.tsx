@@ -9,15 +9,17 @@ import { notification } from "~~/utils/scaffold-eth";
 type LikeBuildBtnProps = {
   buildId: string;
   likes: string[];
+  onSuccess?: () => void;
 };
 
-export const LikeBuildButton = ({ buildId, likes }: LikeBuildBtnProps) => {
+export const LikeBuildButton = ({ buildId, likes, onSuccess }: LikeBuildBtnProps) => {
   const { address: connectedAddress } = useAccount();
   const isLiked = connectedAddress && likes.includes(connectedAddress);
 
   const { likeBuildMutation, isPending } = useBuildLike({
     onSuccess: () => {
       notification.success(`Build ${isLiked ? "unliked" : "liked"} successfully!`);
+      onSuccess?.();
     },
   });
 
