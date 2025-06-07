@@ -74,6 +74,10 @@ export const CHALLENGE_METADATA: Record<
         url: "/guides/solidity-contract-to-contract-interactions",
       },
       {
+        title: "ERC20 Approve Pattern: Secure Token Allowances Guide",
+        url: "/guides/erc20-approve-pattern",
+      },
+      {
         title: "Sustainable ERC20 Supply Models: Tokenomics Best Practices",
         url: "/guides/sustainable-erc20-supply-models",
       },
