@@ -78,6 +78,10 @@ export const CHALLENGE_METADATA: Record<
         url: "/guides/erc20-approve-pattern",
       },
       {
+        title: "Solidity Bonding Curves & Dynamic Token Pricing Explained",
+        url: "/guides/solidity-bonding-curves-token-pricing",
+      },
+      {
         title: "Sustainable ERC20 Supply Models: Tokenomics Best Practices",
         url: "/guides/sustainable-erc20-supply-models",
       },
