@@ -1,7 +1,7 @@
 ---
 title: "Solidity Contract-to-Contract Interactions Guide"
-description: "A practical guide to secure contract-to-contract interactions in Solidity. Learn the key patterns, security pitfalls, and best practices for building robust, composable dApps."
-image: /assets/guides/contract-to-contract-interactions.jpg
+description: "A practical guide to Solidity contract-to-contract interactions. Learn how contracts call each other, handle errors, and manage security. Includes code patterns, pitfalls, and best practices."
+image: "/assets/guides/contract-interactions.jpg"
 ---
 
 ## TL;DR: Secure Contract-to-Contract Interactions in Solidity

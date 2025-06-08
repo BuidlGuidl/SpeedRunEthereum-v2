@@ -1,6 +1,7 @@
 ---
 title: "Solidity Bonding Curves & Dynamic Token Pricing Explained"
-description: "Learn how to build dynamic token pricing with bonding curves in Solidity. Discover types, use cases, code examples, and best practices for DeFi, token sales, and automated market makers."
+description: "A developer-focused guide to bonding curves and dynamic token pricing in Solidity. Learn the math, use cases, and best practices for implementing bonding curves in your dApps. Includes Solidity code and real-world examples."
+image: "/assets/guides/bonding-curves.jpg"
 ---
 
 ## TL;DR
