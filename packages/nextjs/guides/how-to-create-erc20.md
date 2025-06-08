@@ -6,7 +6,7 @@ image: "/assets/guides/create-erc20-token.jpg"
 
 Want to launch your own digital currency or utility token on the Ethereum blockchain? This guide provides a comprehensive walkthrough on **how to create an ERC20 token using Solidity**. An ERC20 token is the most widely adopted standard for fungible (interchangeable) tokens on Ethereum, making them essential building blocks for countless decentralized applications (dApps).
 
-We'll cover the core concepts of the ERC20 standard, show you how to write the smart contract code using the secure OpenZeppelin library, and discuss how to get it onto the blockchain. This tutorial will equip you with the foundational knowledge needed before tackling more advanced projects, such as building a token vending machine (as in SpeedRunEthereum's [Token Vendor challenge](https://speedrunethereum.com/challenge/token-vendor)) or creating your own decentralized exchange ([Minimum Viable Exchange challenge](https://speedrunethereum.com/challenge/minimum-viable-exchange)).
+We'll cover the core concepts of the ERC20 standard, show you how to write the smart contract code using the secure OpenZeppelin library, and discuss how to get it onto the blockchain. Once you've mastered these basics, you can put your skills to the test by building a token vending machine in the [Token Vendor challenge](/challenge/token-vendor) or even creating your own decentralized exchange in the [Minimum Viable Exchange challenge](/challenge/minimum-viable-exchange).
 
 ## What Is an ERC20 Token?
 
