@@ -1,7 +1,7 @@
 import { BuildCategory, BuildType } from "~~/services/database/config/types";
 import { Build } from "~~/services/database/repositories/builds";
 
-export const getAllFilteredBuilds = async ({
+export const fetchBuilds = async ({
   category,
   type,
   name,

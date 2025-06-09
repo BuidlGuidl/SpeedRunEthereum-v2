@@ -7,7 +7,7 @@ import { LoadingSkeleton } from "./LoadingSkeleton";
 import { useQuery } from "@tanstack/react-query";
 import { useDebounceValue } from "usehooks-ts";
 import { LikeBuildButton } from "~~/app/builders/[address]/_components/builds/LikeBuildButton";
-import { getAllFilteredBuilds } from "~~/services/api/builds";
+import { fetchBuilds } from "~~/services/api/builds";
 import { BuildCategory, BuildType } from "~~/services/database/config/types";
 
 export function AllBuilds({ searchParams }: { searchParams: { category?: BuildCategory; type?: BuildType } }) {
@@ -26,7 +26,7 @@ export function AllBuilds({ searchParams }: { searchParams: { category?: BuildCa
   } = useQuery({
     queryKey: ["all-builds", debouncedFilter, categoryFilter, typeFilter],
     queryFn: () =>
-      getAllFilteredBuilds({
+      fetchBuilds({
         name: debouncedFilter,
         category: categoryFilter as BuildCategory,
         type: typeFilter as BuildType,
