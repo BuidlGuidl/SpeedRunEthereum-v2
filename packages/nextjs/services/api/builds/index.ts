@@ -14,7 +14,7 @@ export const fetchBuilds = async ({
   if (name) params.append("name", name);
   if (category) params.append("category", category);
   if (type) params.append("type", type);
-  const response = await fetch(`/api/builds/all-builds?${params}`);
+  const response = await fetch(`/api/builds?${params}`);
 
   if (!response.ok) {
     throw new Error(`Failed to fetch all builds: ${response.status} ${response.statusText}`);
