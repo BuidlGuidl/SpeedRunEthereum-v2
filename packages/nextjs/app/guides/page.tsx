@@ -1,6 +1,8 @@
-import SearchGuides from "./_components/SearchGuides";
+import SearchGuides, { Guide } from "./_components/SearchGuides";
 import { getAllGuidesSlugs, getGuideBySlug } from "~~/services/guides";
 import { getMetadata } from "~~/utils/scaffold-eth/getMetadata";
+
+export const revalidate = 36000;
 
 export const metadata = getMetadata({
   title: "Solidity Tutorials and Guides",
@@ -17,7 +19,7 @@ export default async function GuidesPage() {
         return guide ? { ...guide, slug } : null;
       }),
     )
-  ).filter((guide): guide is NonNullable<typeof guide> => Boolean(guide));
+  ).filter(Boolean) as Guide[];
 
   return (
     <div className="container mx-auto px-2 py-10 max-w-7xl">

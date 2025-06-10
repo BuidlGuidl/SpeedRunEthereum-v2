@@ -6,7 +6,7 @@ import Link from "next/link";
 import SearchIcon from "../../_assets/icons/SearchIcon";
 import { useDebounceValue } from "usehooks-ts";
 
-type Guide = {
+export type Guide = {
   slug: string;
   title: string;
   description: string;
@@ -15,15 +15,11 @@ type Guide = {
 
 export default function SearchGuides({ guides }: { guides: Guide[] }) {
   const [search, setSearch] = useState("");
-  const [debouncedSearch] = useDebounceValue(search, 500);
+  const [debouncedSearch] = useDebounceValue(search.trim(), 500);
 
   const filteredGuides =
     debouncedSearch.length >= 3
-      ? guides.filter(
-          guide =>
-            guide.title.toLowerCase().includes(debouncedSearch.toLowerCase()) ||
-            guide.description.toLowerCase().includes(debouncedSearch.toLowerCase()),
-        )
+      ? guides.filter(guide => (guide.title + guide.description).toLowerCase().includes(debouncedSearch.toLowerCase()))
       : guides;
 
   return (
@@ -58,12 +54,11 @@ export default function SearchGuides({ guides }: { guides: Guide[] }) {
                     alt={guide.title}
                     fill
                     className="object-cover object-center"
-                    sizes="100vw"
-                    priority={false}
+                    sizes="(min-width:1024px) 50vw, 100vw"
                   />
                 </div>
               ) : (
-                <div className="w-full h-32 flex items-center justify-center text-base font-bold bg-base-200 border border-secondary">
+                <div className="w-full h-48 flex items-center justify-center text-base font-bold bg-base-200 border border-secondary">
                   No Image
                 </div>
               )}
