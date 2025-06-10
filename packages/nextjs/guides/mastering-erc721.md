@@ -8,7 +8,7 @@ NFTs (Non-Fungible Tokens) have revolutionized digital ownership, but building r
 
 > **Looking to compare ERC721 with ERC1155?** See our in-depth [ERC721 vs. ERC1155: Key Differences, Use Cases & How to Choose](/guides/erc721-vs-erc1155) for help choosing the right standard for your project.
 
-## 1. Introduction: What is ERC721 and Why It Matters
+## 1. What is ERC721 and Why It Matters
 
 Non-Fungible Tokens (NFTs) represent unique ownership of digital (and increasingly, physical) assets. The **ERC721 standard** is the foundation of this innovation on Ethereum. "ERC" stands for Ethereum Request for Comments—a formal process for proposing standards. Proposed in 2018, ERC721 provides an open blueprint for creating, managing, owning, and trading tokens where each token is unique.
 
