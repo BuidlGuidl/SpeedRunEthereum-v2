@@ -1,4 +1,5 @@
 import { ReactElement } from "react";
+import { TocItem, buildToc } from "../utils/buildToc";
 import fs from "fs";
 import { compileMDX } from "next-mdx-remote/rsc";
 import path from "path";
@@ -13,6 +14,7 @@ type GuideMetadata = {
 
 type Guide = GuideMetadata & {
   content: ReactElement;
+  toc: TocItem[];
 };
 
 export function getAllGuidesSlugs(): string[] {
@@ -29,9 +31,12 @@ export async function getGuideBySlug(slug: string): Promise<Guide | null> {
       options: { parseFrontmatter: true },
     });
 
+    const { toc } = buildToc(fileContents);
+
     return {
       ...frontmatter,
-      content: content,
+      content,
+      toc,
     };
   } catch (error) {
     // Not found.
