@@ -37,6 +37,12 @@ export const Footer = () => {
         <ul className="menu menu-horizontal w-full">
           <div className="flex justify-center items-center gap-2 text-sm w-full">
             <div className="text-center">
+              <Link href="/guides" className="link">
+                Solidity Guides
+              </Link>
+            </div>
+            <span>·</span>
+            <div className="text-center">
               <a
                 href="https://github.com/BuidlGuidl/SpeedRunEthereum-v2"
                 target="_blank"
