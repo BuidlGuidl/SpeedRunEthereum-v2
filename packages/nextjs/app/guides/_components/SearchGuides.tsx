@@ -4,6 +4,7 @@ import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import SearchIcon from "../../_assets/icons/SearchIcon";
+import { useDebounceValue } from "usehooks-ts";
 
 type Guide = {
   slug: string;
@@ -14,12 +15,16 @@ type Guide = {
 
 export default function SearchGuides({ guides }: { guides: Guide[] }) {
   const [search, setSearch] = useState("");
+  const [debouncedSearch] = useDebounceValue(search, 500);
 
-  const filteredGuides = guides.filter(
-    guide =>
-      guide.title.toLowerCase().includes(search.toLowerCase()) ||
-      guide.description.toLowerCase().includes(search.toLowerCase()),
-  );
+  const filteredGuides =
+    debouncedSearch.length >= 3
+      ? guides.filter(
+          guide =>
+            guide.title.toLowerCase().includes(debouncedSearch.toLowerCase()) ||
+            guide.description.toLowerCase().includes(debouncedSearch.toLowerCase()),
+        )
+      : guides;
 
   return (
     <>
