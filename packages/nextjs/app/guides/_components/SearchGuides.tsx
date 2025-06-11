@@ -5,13 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import SearchIcon from "../../_assets/icons/SearchIcon";
 import { useDebounceValue } from "usehooks-ts";
-
-export type Guide = {
-  slug: string;
-  title: string;
-  description: string;
-  image?: string;
-};
+import { Guide } from "~~/services/guides";
 
 export default function SearchGuides({ guides }: { guides: Guide[] }) {
   const [search, setSearch] = useState("");

@@ -1,5 +1,5 @@
-import SearchGuides, { Guide } from "./_components/SearchGuides";
-import { getAllGuidesSlugs, getGuideBySlug } from "~~/services/guides";
+import SearchGuides from "./_components/SearchGuides";
+import { getAllGuides } from "~~/services/guides";
 import { getMetadata } from "~~/utils/scaffold-eth/getMetadata";
 
 export const revalidate = 36000;
@@ -11,15 +11,7 @@ export const metadata = getMetadata({
 });
 
 export default async function GuidesPage() {
-  const slugs = await getAllGuidesSlugs();
-  const guides = (
-    await Promise.all(
-      slugs.map(async slug => {
-        const guide = await getGuideBySlug(slug);
-        return guide ? { ...guide, slug } : null;
-      }),
-    )
-  ).filter(Boolean) as Guide[];
+  const guides = await getAllGuides();
 
   return (
     <div className="container mx-auto px-2 py-10 max-w-7xl">

@@ -11,9 +11,16 @@ type GuideMetadata = {
   image?: string;
 };
 
-type Guide = GuideMetadata & {
+export type Guide = GuideMetadata & {
   content: ReactElement;
+  slug: string;
 };
+
+export async function getAllGuides(): Promise<Guide[]> {
+  const slugs = getAllGuidesSlugs();
+  const guides = await Promise.all(slugs.map(getGuideBySlug));
+  return guides.filter(Boolean) as Guide[];
+}
 
 export function getAllGuidesSlugs(): string[] {
   return fs.readdirSync(guidesDirectory).map(fileName => fileName.replace(/\.md$/, ""));
@@ -32,6 +39,7 @@ export async function getGuideBySlug(slug: string): Promise<Guide | null> {
     return {
       ...frontmatter,
       content: content,
+      slug,
     };
   } catch (error) {
     // Not found.
