@@ -5,20 +5,17 @@ import { and, isNull, not } from "drizzle-orm";
 import { eq } from "drizzle-orm";
 import * as path from "path";
 import {
-  Hex,
   createPublicClient,
   decodeFunctionResult,
   encodeFunctionData,
   getChainContractAddress,
   http,
-  isHex,
-  labelhash,
   namehash,
-  stringToBytes,
   toHex,
 } from "viem";
 import { mainnet } from "viem/chains";
 import { normalize, parseAvatarRecord } from "viem/ens";
+import { packetToBytes } from "~~/node_modules/viem/utils/ens/packetToBytes";
 import { getAlchemyHttpUrl } from "~~/utils/scaffold-eth";
 
 dotenv.config({ path: path.resolve(__dirname, "../../../.env.development") });
@@ -74,46 +71,6 @@ function chunk<T>(array: T[], size: number): T[][] {
     chunks.push(array.slice(i, i + size));
   }
   return chunks;
-}
-
-// https://github.com/wevm/viem/blob/main/src/utils/ens/encodedLabelToLabelhash.ts
-export function encodedLabelToLabelhash(label: string): Hex | null {
-  if (label.length !== 66) return null;
-  if (label.indexOf("[") !== 0) return null;
-  if (label.indexOf("]") !== 65) return null;
-  const hash = `0x${label.slice(1, 65)}`;
-  if (!isHex(hash)) return null;
-  return hash;
-}
-
-// https://github.com/wevm/viem/blob/main/src/utils/ens/encodeLabelhash.ts
-export function encodeLabelhash(hash: Hex): `[${string}]` {
-  return `[${hash.slice(2)}]`;
-}
-
-// https://github.com/wevm/viem/blob/main/src/utils/ens/packetToBytes.ts
-function packetToBytes(packet: string): Uint8Array {
-  // strip leading and trailing `.`
-  const value = packet.replace(/^\.|\.$/gm, "");
-  if (value.length === 0) return new Uint8Array(1);
-
-  const bytes = new Uint8Array(stringToBytes(value).byteLength + 2);
-
-  let offset = 0;
-  const list = value.split(".");
-  for (let i = 0; i < list.length; i++) {
-    let encoded = stringToBytes(list[i]);
-    // if the length is > 255, make the encoded label value a labelhash
-    // this is compatible with the universal resolver
-    if (encoded.byteLength > 255) encoded = stringToBytes(encodeLabelhash(labelhash(list[i])));
-    bytes[offset] = encoded.length;
-    bytes.set(encoded, offset + 1);
-    offset += encoded.length + 1;
-  }
-
-  if (bytes.byteLength !== offset + 1) return bytes.slice(0, offset + 1);
-
-  return bytes;
 }
 
 async function batchGetEnsAvatars(ensNames: string[]): Promise<Record<string, string | null>> {
