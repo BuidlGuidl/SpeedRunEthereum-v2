@@ -19,13 +19,14 @@ export default function SearchGuides({ guides }: { guides: Guide[] }) {
 
   const filteredGuides =
     debouncedSearch.length >= 3
-      ? guides.filter(guide => (guide.title + guide.description).toLowerCase().includes(debouncedSearch.toLowerCase()))
+      ? guides.filter(g => (g.title + g.description).toLowerCase().includes(debouncedSearch.toLowerCase()))
       : guides;
 
   return (
     <>
+      {/* ───────── Search box ───────── */}
       <div className="flex justify-center mb-8">
-        <div className="relative w-full max-w-sm flex items-center">
+        <div className="relative flex items-center w-full max-w-sm">
           <input
             type="text"
             value={search}
@@ -34,48 +35,69 @@ export default function SearchGuides({ guides }: { guides: Guide[] }) {
             className="input input-bordered w-full pr-12"
           />
           <span className="absolute right-3">
-            <SearchIcon className="w-6 h-6 fill-primary/60 self-center" />
+            <SearchIcon className="w-6 h-6 fill-primary/60" />
           </span>
         </div>
       </div>
-      <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-2">
+
+      {/* ───────── Guides list ───────── */}
+      <div className="flex flex-col gap-8 mx-auto max-w-5xl items-center">
         {filteredGuides.length === 0 ? (
-          <div className="col-span-full text-center">No guides found.</div>
+          <p className="text-center">No guides found.</p>
         ) : (
           filteredGuides.map(guide => (
-            <div
+            <article
               key={guide.slug}
-              className="relative flex flex-col bg-base-300 rounded-xl shadow-md overflow-hidden transition hover:shadow-lg"
+              className="flex flex-col md:flex-row items-stretch
+                         w-full max-w-[350px] md:max-w-none mx-auto
+                         bg-base-300 rounded-xl overflow-hidden
+                         shadow-md hover:shadow-lg transition-shadow"
             >
-              {guide.image ? (
-                <div className="relative w-full h-48">
+              {/* Image / placeholder */}
+              <div className="flex items-center justify-center w-full md:w-auto h-48 md:h-52">
+                {guide.image ? (
                   <Image
                     src={guide.image}
                     alt={guide.title}
-                    fill
-                    className="object-cover object-center"
-                    sizes="(min-width:1024px) 50vw, 100vw"
+                    height={192}
+                    width={0}
+                    className="w-full h-full object-contain object-center
+                               rounded-t-xl md:rounded-l-xl md:rounded-t-none"
+                    sizes="350px"
                   />
-                </div>
-              ) : (
-                <div className="w-full h-48 flex items-center justify-center text-base font-bold bg-base-200 border border-secondary">
-                  No Image
-                </div>
-              )}
-              <div className="flex flex-col justify-between p-4 flex-1">
+                ) : (
+                  <div
+                    className="flex items-center justify-center
+                                  h-full w-full md:w-auto min-w-[8rem]
+                                  bg-base-200 border border-secondary
+                                  text-base font-bold
+                                  rounded-t-xl md:rounded-l-xl md:rounded-t-none"
+                  >
+                    No Image
+                  </div>
+                )}
+              </div>
+
+              {/* Content */}
+              <div
+                className="relative flex flex-col justify-between flex-1
+                              p-2 pb-8 md:p-6 md:pb-12 text-sm md:text-base
+                              mt-6 md:mt-0 h-auto md:h-52"
+              >
                 <div>
-                  <Link href={`/guides/${guide.slug}`} className="text-lg font-semibold hover:underline">
+                  <Link href={`/guides/${guide.slug}`} className="text-xl font-semibold hover:underline">
                     {guide.title}
                   </Link>
-                  <p className="mt-2 text-sm text-base-content/80 line-clamp-4">{guide.description}</p>
+                  <p className="mt-4 text-base-content/80 line-clamp-3">{guide.description}</p>
                 </div>
-                <div className="mt-3">
+
+                <div className="flex justify-end mt-4 md:mt-0 md:absolute md:bottom-4 md:right-4">
                   <Link href={`/guides/${guide.slug}`} className="btn btn-primary btn-sm">
                     Read more
                   </Link>
                 </div>
               </div>
-            </div>
+            </article>
           ))
         )}
       </div>
