@@ -42,7 +42,7 @@ export default function SearchGuides({ guides }: { guides: Guide[] }) {
               key={guide.slug}
               className="flex flex-col md:flex-row items-stretch w-full max-w-[350px] md:max-w-none mx-auto bg-base-300 rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-shadow"
             >
-              <div className="flex items-center justify-center w-full md:w-auto h-48 md:h-52">
+              <div className="flex items-center justify-center w-full md:w-auto h-48 md:h-64">
                 {guide.image ? (
                   <Image
                     src={guide.image}
@@ -59,7 +59,7 @@ export default function SearchGuides({ guides }: { guides: Guide[] }) {
                 )}
               </div>
 
-              <div className="relative flex flex-col justify-between flex-1 p-2 pb-8 md:p-6 md:pb-12 text-sm md:text-base mt-6 md:mt-0 h-auto md:h-52">
+              <div className="relative flex flex-col justify-between flex-1 py-4 px-6 pt-6 text-sm md:text-base">
                 <div>
                   <Link href={`/guides/${guide.slug}`} className="text-xl font-semibold hover:underline">
                     {guide.title}
@@ -67,7 +67,7 @@ export default function SearchGuides({ guides }: { guides: Guide[] }) {
                   <p className="mt-4 text-base-content/80 line-clamp-3">{guide.description}</p>
                 </div>
 
-                <div className="flex justify-end mt-4 md:mt-0 md:absolute md:bottom-4 md:right-4">
+                <div className="flex justify-end mt-4">
                   <Link href={`/guides/${guide.slug}`} className="btn btn-primary btn-sm">
                     Read more
                   </Link>
