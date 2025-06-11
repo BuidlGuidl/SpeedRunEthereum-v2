@@ -9,8 +9,9 @@ export async function GET(request: NextRequest) {
     const start = parseInt(searchParams.get("start") ?? "0");
     const size = parseInt(searchParams.get("size") ?? "0");
     const sorting = JSON.parse(searchParams.get("sorting") ?? "[]");
+    const filter = searchParams.get("filter");
 
-    const data = await getSortedUsersWithChallengesInfo(start, size, sorting);
+    const data = await getSortedUsersWithChallengesInfo(start, size, sorting, filter || "");
 
     return Response.json(data);
   } catch (error) {
