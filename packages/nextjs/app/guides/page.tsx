@@ -2,8 +2,6 @@ import SearchGuides from "./_components/SearchGuides";
 import { getAllGuides } from "~~/services/guides";
 import { getMetadata } from "~~/utils/scaffold-eth/getMetadata";
 
-export const revalidate = 36000;
-
 export const metadata = getMetadata({
   title: "Solidity Tutorials and Guides",
   description:
