@@ -63,16 +63,26 @@ export function AllBuilds({ searchParams }: { searchParams: { category?: BuildCa
     router.replace(`${pathname}?${newSearchParams.toString()}`);
   };
 
+  const numberOfBuilds = builds?.length || 0;
+
   return (
     <div className="py-12 px-6 max-w-7xl mx-auto w-full">
-      <h1 className="text-2xl font-bold lg:text-4xl">All Builds</h1>
+      <div className="flex items-center gap-3">
+        <h1 className="m-0 text-2xl font-bold lg:text-4xl">All Builds</h1>
+        <p className="m-0 text-2xl lg:text-4xl">-</p>
+        {isLoading ? (
+          <div className="skeleton rounded-md w-12 h-7 lg:h-9"></div>
+        ) : (
+          <p className="mb-0 mt-0.5 text-xl lg:mt-1 lg:text-3xl">{numberOfBuilds}</p>
+        )}
+      </div>
       <div className="mt-8">
-        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-3 lg:grid-cols-4 lg:gap-6">
           <div>
-            <p className="mt-0 mb-2">Name</p>
+            <p className="mt-0 mb-1 text-sm lg:mb-2">Filter By Name</p>
             <input
               type="text"
-              className="input input-bordered w-full"
+              className="input input-sm input-bordered w-full"
               name="filter"
               value={nameFilter}
               onChange={e => setNameFilter(e.target.value)}
@@ -81,9 +91,9 @@ export function AllBuilds({ searchParams }: { searchParams: { category?: BuildCa
           </div>
 
           <div>
-            <p className="mt-0 mb-2">Category</p>
+            <p className="mt-0 mb-1 text-sm lg:mb-2">Filter By Category</p>
             <select
-              className="select select-bordered w-full"
+              className="select select-sm select-bordered w-full"
               value={categoryFilter}
               onChange={e => handleCategoryChange(e.target.value as BuildCategory)}
             >
@@ -97,9 +107,9 @@ export function AllBuilds({ searchParams }: { searchParams: { category?: BuildCa
           </div>
 
           <div>
-            <p className="mt-0 mb-2">Type</p>
+            <p className="mt-0 mb-1 text-sm lg:mb-2">Filter By Type</p>
             <select
-              className="select select-bordered w-full"
+              className="select select-sm select-bordered w-full"
               value={typeFilter}
               onChange={e => handleTypeChange(e.target.value as BuildType)}
             >
@@ -112,6 +122,7 @@ export function AllBuilds({ searchParams }: { searchParams: { category?: BuildCa
             </select>
           </div>
         </div>
+        <hr className="hidden my-6 border-base-300 lg:block" />
         <div className="mt-6">
           <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4 lg:gap-6">
             {isLoading && (
