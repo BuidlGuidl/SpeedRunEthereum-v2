@@ -79,7 +79,10 @@ export function AllBuilds({ searchParams }: { searchParams: { category?: BuildCa
       <div className="mt-8">
         <div className="grid grid-cols-1 gap-4 md:grid-cols-3 lg:grid-cols-4 lg:gap-6">
           <div>
-            <p className="mt-0 mb-1 text-sm lg:mb-2">Filter By Name</p>
+            <p className="mt-0 mb-1 text-sm lg:mb-2">
+              {nameFilter ? "Filtering" : "Filter"} By Name{" "}
+              {nameFilter && <span className="ml-1 inline-block w-2 h-2 bg-[#facb83] rounded-full"></span>}
+            </p>
             <input
               type="text"
               className="input input-sm input-bordered w-full"
@@ -91,7 +94,10 @@ export function AllBuilds({ searchParams }: { searchParams: { category?: BuildCa
           </div>
 
           <div>
-            <p className="mt-0 mb-1 text-sm lg:mb-2">Filter By Category</p>
+            <p className="mt-0 mb-1 text-sm lg:mb-2">
+              {categoryFilter ? "Filtering" : "Filter"} By Category{" "}
+              {categoryFilter && <span className="ml-1 inline-block w-2 h-2 bg-[#facb83] rounded-full"></span>}
+            </p>
             <select
               className="select select-sm select-bordered w-full"
               value={categoryFilter}
@@ -107,7 +113,10 @@ export function AllBuilds({ searchParams }: { searchParams: { category?: BuildCa
           </div>
 
           <div>
-            <p className="mt-0 mb-1 text-sm lg:mb-2">Filter By Type</p>
+            <p className="mt-0 mb-1 text-sm lg:mb-2">
+              {typeFilter ? "Filtering" : "Filter"} By Type{" "}
+              {typeFilter && <span className="ml-1 inline-block w-2 h-2 bg-[#facb83] rounded-full"></span>}
+            </p>
             <select
               className="select select-sm select-bordered w-full"
               value={typeFilter}
