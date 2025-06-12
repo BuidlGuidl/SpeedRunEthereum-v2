@@ -66,47 +66,53 @@ export function AllBuilds({ searchParams }: { searchParams: { category?: BuildCa
   return (
     <div className="py-12 px-6 max-w-7xl mx-auto w-full">
       <h1 className="text-2xl font-bold lg:text-4xl">All Builds</h1>
-      <div className="mt-8 grid grid-cols-1 md:grid-cols-6 gap-6">
-        <div className="md:col-span-2 lg:col-span-1">
-          <p className="mt-0 mb-2">Category</p>
-          <select
-            className="select select-bordered w-full"
-            value={categoryFilter}
-            onChange={e => handleCategoryChange(e.target.value as BuildCategory)}
-          >
-            <option value="">All</option>
-            {Object.values(BuildCategory).map(category => (
-              <option key={category} value={category}>
-                {category}
-              </option>
-            ))}
-          </select>
+      <div className="mt-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          <div>
+            <p className="mt-0 mb-2">Name</p>
+            <input
+              type="text"
+              className="input input-bordered w-full"
+              name="filter"
+              value={nameFilter}
+              onChange={e => setNameFilter(e.target.value)}
+              placeholder="Search by name..."
+            />
+          </div>
 
-          <p className="mt-6 mb-2">Type</p>
-          <select
-            className="select select-bordered w-full"
-            value={typeFilter}
-            onChange={e => handleTypeChange(e.target.value as BuildType)}
-          >
-            <option value="">All</option>
-            {Object.values(BuildType).map(type => (
-              <option key={type} value={type}>
-                {type}
-              </option>
-            ))}
-          </select>
+          <div>
+            <p className="mt-0 mb-2">Category</p>
+            <select
+              className="select select-bordered w-full"
+              value={categoryFilter}
+              onChange={e => handleCategoryChange(e.target.value as BuildCategory)}
+            >
+              <option value="">All</option>
+              {Object.values(BuildCategory).map(category => (
+                <option key={category} value={category}>
+                  {category}
+                </option>
+              ))}
+            </select>
+          </div>
 
-          <p className="mt-6 mb-2">Name</p>
-          <input
-            type="text"
-            className="input input-bordered w-full"
-            name="filter"
-            value={nameFilter}
-            onChange={e => setNameFilter(e.target.value)}
-            placeholder="Search by name..."
-          />
+          <div>
+            <p className="mt-0 mb-2">Type</p>
+            <select
+              className="select select-bordered w-full"
+              value={typeFilter}
+              onChange={e => handleTypeChange(e.target.value as BuildType)}
+            >
+              <option value="">All</option>
+              {Object.values(BuildType).map(type => (
+                <option key={type} value={type}>
+                  {type}
+                </option>
+              ))}
+            </select>
+          </div>
         </div>
-        <div className="md:col-span-4 lg:col-span-5">
+        <div className="mt-6">
           <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4 lg:gap-6">
             {isLoading && (
               <>
