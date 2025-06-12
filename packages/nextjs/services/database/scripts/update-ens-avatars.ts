@@ -30,7 +30,7 @@ const publicClient = createPublicClient({
   transport: http(getAlchemyHttpUrl(mainnet.id)),
 });
 
-const BATCH_SIZE = 500;
+const BATCH_SIZE = 250;
 
 // ABI Definitions
 const ensAbi = [
