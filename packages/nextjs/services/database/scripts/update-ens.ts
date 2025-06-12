@@ -4,8 +4,9 @@ import * as dotenv from "dotenv";
 import { isNull } from "drizzle-orm";
 import { eq } from "drizzle-orm";
 import * as path from "path";
-import { createPublicClient, http, namehash } from "viem";
+import { createPublicClient, getChainContractAddress, http, toHex } from "viem";
 import { mainnet } from "viem/chains";
+import { packetToBytes } from "~~/node_modules/viem/utils/ens/packetToBytes";
 import { getAlchemyHttpUrl } from "~~/utils/scaffold-eth";
 
 dotenv.config({ path: path.resolve(__dirname, "../../../.env.development") });
@@ -19,6 +20,22 @@ const publicClient = createPublicClient({
   chain: mainnet,
   transport: http(getAlchemyHttpUrl(mainnet.id)),
 });
+
+const BATCH_SIZE = 500;
+
+// ABI Definitions
+const universalResolverReverseAbi = [
+  {
+    inputs: [{ name: "name", type: "bytes" }],
+    name: "reverse",
+    outputs: [
+      { name: "name", type: "string" },
+      { name: "address", type: "address" },
+    ],
+    stateMutability: "view",
+    type: "function" as const,
+  },
+] as const;
 
 /**
  * Splits an array into chunks of specified size
@@ -34,108 +51,56 @@ function chunk<T>(array: T[], size: number): T[][] {
   return chunks;
 }
 
-const BATCH_SIZE = 500;
-const ENS_REGISTRY = "0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e";
-
-// ABI Definitions
-const ensAbi = [
-  // Registry
-  {
-    inputs: [{ name: "node", type: "bytes32" }],
-    name: "resolver",
-    outputs: [{ name: "", type: "address" }],
-    stateMutability: "view",
-    type: "function" as const,
-  },
-  // Resolver
-  {
-    inputs: [{ name: "node", type: "bytes32" }],
-    name: "name",
-    outputs: [{ name: "", type: "string" }],
-    stateMutability: "view",
-    type: "function" as const,
-  },
-] as const;
-
 async function batchGetENS(addresses: `0x${string}`[]): Promise<Record<string, string | null>> {
-  // Process in batches
-  const addressChunks = chunk(addresses, BATCH_SIZE);
   const results: Record<string, string | null> = {};
-  const noEnsRecords: `0x${string}`[] = [];
+  const addressChunks = chunk(addresses, BATCH_SIZE);
 
-  for (const addressBatch of addressChunks) {
-    // Phase 1: Get all resolver addresses
-    const reverseNodes = addressBatch.map(addr => {
-      // Ensure address is properly formatted for reverse lookup
+  const universalResolverAddress = getChainContractAddress({
+    chain: mainnet,
+    contract: "ensUniversalResolver",
+  });
+
+  for (const batch of addressChunks) {
+    const reverseCalls = batch.map(addr => {
       const cleanAddr = addr.toLowerCase().startsWith("0x") ? addr.toLowerCase() : `0x${addr.toLowerCase()}`;
-      const node = namehash(`${cleanAddr.slice(2)}.addr.reverse`);
-      return { node, originalAddress: addr };
+      const reverseNode = `${cleanAddr.slice(2)}.addr.reverse`;
+
+      return {
+        address: universalResolverAddress,
+        abi: universalResolverReverseAbi,
+        functionName: "reverse",
+        args: [toHex(packetToBytes(reverseNode))],
+        originalAddress: addr,
+      } as const;
     });
 
-    const resolverCalls = reverseNodes.map(({ node }) => ({
-      address: ENS_REGISTRY,
-      abi: ensAbi,
-      functionName: "resolver",
-      args: [node],
-    }));
-
-    const resolverResults = await publicClient.multicall({
-      contracts: resolverCalls,
+    const reverseResults = await publicClient.multicall({
+      contracts: reverseCalls,
       allowFailure: true,
     });
 
-    // Phase 2: Get names from resolvers
-    const nameCalls = resolverResults
-      .map((res, i) => {
-        const { node, originalAddress } = reverseNodes[i];
-        if (res.status === "success" && res.result !== "0x0000000000000000000000000000000000000000") {
-          return {
-            address: res.result as `0x${string}`,
-            abi: ensAbi,
-            functionName: "name",
-            args: [node],
-            originalAddress,
-          };
+    reverseResults.forEach((res, i) => {
+      const { originalAddress } = reverseCalls[i];
+      if (res.status === "success") {
+        const [name, resolvedAddress] = res.result;
+        // Verify that the resolved address matches the input address
+        if (resolvedAddress.toLowerCase() === originalAddress.toLowerCase()) {
+          results[originalAddress] = name;
         } else {
-          // No resolver found for this address
-          noEnsRecords.push(originalAddress);
-          return null;
+          results[originalAddress] = null;
         }
-      })
-      .filter((call): call is NonNullable<typeof call> => call !== null);
-
-    if (nameCalls.length === 0) {
-      continue; // Skip to next batch if no valid resolvers
-    }
-
-    // Process nameCalls in batches of 50
-    const nameCallBatches = chunk(nameCalls, 50);
-    const nameResults: (string | null)[] = [];
-
-    for (const batch of nameCallBatches) {
-      const batchResults = await Promise.all(
-        batch.map(call => publicClient.getEnsName({ address: call.originalAddress })),
-      );
-      nameResults.push(...batchResults);
-      // Add 0.1 second delay between batches
-      await new Promise(resolve => setTimeout(resolve, 100));
-    }
-
-    nameResults.forEach((result, i) => {
-      const { originalAddress } = nameCalls[i];
-      if (result) {
-        results[originalAddress] = result;
+      } else {
+        results[originalAddress] = null;
       }
     });
 
-    // Delay between main batches to avoid rate limiting
+    // Add delay between batches to avoid rate limiting
     await new Promise(resolve => setTimeout(resolve, 200));
   }
 
   // Log summary
   console.log("\nENS Lookup Summary:");
   console.log(`Total addresses processed: ${addresses.length}`);
-  console.log(`Addresses with no ENS records: ${noEnsRecords.length}`);
   console.log(`Successfully resolved ENS names: ${Object.values(results).filter(Boolean).length}`);
 
   return results;
