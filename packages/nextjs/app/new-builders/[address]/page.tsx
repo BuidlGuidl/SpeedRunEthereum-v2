@@ -1,5 +1,4 @@
 import { notFound } from "next/navigation";
-import { UserChallengesTable } from "./_components/UserChallengesTable";
 import { UserProfileCard } from "./_components/UserProfileCard";
 import { BuildCard } from "./_components/builds/BuildCard";
 import { SubmitNewBuildButton } from "./_components/builds/SubmitNewBuildButton";
@@ -8,7 +7,7 @@ import { isAddress } from "viem";
 import { RouteRefresher } from "~~/components/RouteRefresher";
 import { getBatchById } from "~~/services/database/repositories/batches";
 import { getBuildsByUserAddress } from "~~/services/database/repositories/builds";
-import { getLatestSubmissionPerChallengeByUser } from "~~/services/database/repositories/userChallenges";
+// import { getLatestSubmissionPerChallengeByUser } from "~~/services/database/repositories/userChallenges";
 import { getUserByAddress } from "~~/services/database/repositories/users";
 import { getEnsOrAddress } from "~~/utils/ens-or-address";
 
@@ -62,7 +61,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function BuilderPage({ params }: { params: { address: string } }) {
   const { address: userAddress } = params;
-  const challenges = await getLatestSubmissionPerChallengeByUser(userAddress);
+  // const challenges = await getLatestSubmissionPerChallengeByUser(userAddress);
   const user = await getUserByAddress(userAddress);
   let userBatch;
   if (user?.batchId) {
@@ -83,14 +82,19 @@ export default async function BuilderPage({ params }: { params: { address: strin
           <div>
             {/* Challenges */}
             <div className="w-full">
-              <h2 className="text-2xl font-bold mb-0 text-neutral pb-4">Challenges</h2>
-              {challenges.length > 0 ? (
-                <UserChallengesTable challenges={challenges} />
-              ) : (
-                <div className="bg-base-100 p-8 text-center rounded-lg text-neutral">
-                  This builder hasn&apos;t completed any challenges.
+              {/* <h2 className="text-2xl font-bold mb-0 text-neutral pb-4">Challenges</h2> */}
+              <div className="p-5 bg-base-100 rounded-xl shadow-md">
+                <div className="flex items-center gap-3">
+                  <div className="w-12 h-12 flex items-center justify-center flex-shrink-0 text-3xl rounded-full bg-base-200">
+                    💰
+                  </div>
+                  <h2 className="m-0 font-semibold text-lg lg:text-xl">DeFi Challenges</h2>
                 </div>
-              )}
+                <p className="mb-0">
+                  A series of challenges to further your understanding of decentralized finance. Explore digital
+                  currencies, build a decentralized exchange, deep dive into stablecoins, and much more!
+                </p>
+              </div>
             </div>
             {/* Builds */}
             <div className="mt-12 w-full">
