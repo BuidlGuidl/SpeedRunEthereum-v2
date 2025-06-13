@@ -1,11 +1,11 @@
 "use client";
 
 // import { UserLocation } from "./UserLocation";
+import { UserAddress } from "./UserAddress";
 import { UserSocials } from "./UserSocials";
 import EditIcon from "~~/app/_assets/icons/EditIcon";
 import { UPDATE_USER_MODAL_ID, UpdateUserModal } from "~~/app/_components/UpdateUserModal";
 // import { PunkBlockie } from "~~/components/PunkBlockie";
-import { Address } from "~~/components/scaffold-eth/Address/Address";
 import { useAuthSession } from "~~/hooks/useAuthSession";
 import { BatchUserStatus } from "~~/services/database/config/types";
 import { Batch } from "~~/services/database/repositories/batches";
@@ -20,7 +20,7 @@ export const UserProfileCard = ({ user, batch }: { user: NonNullable<UserByAddre
         <div className="flex flex-col items-center gap-4 md:flex-row">
           {/* <PunkBlockie address={user.userAddress} className="rounded-full" scale={1} /> */}
           <div className="flex flex-col gap-3 text-neutral">
-            <Address address={user.userAddress} size="3xl" />
+            <UserAddress address={user.userAddress} />
             <UserSocials user={user} />
           </div>
         </div>
