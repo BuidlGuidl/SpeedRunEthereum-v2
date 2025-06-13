@@ -36,6 +36,7 @@ export const users = pgTable(
     createdAt: timestamp().defaultNow().notNull(),
     updatedAt: timestamp().defaultNow().notNull(),
     ens: varchar({ length: 255 }),
+    ensAvatar: text(),
     socialTelegram: varchar({ length: 255 }),
     socialX: varchar({ length: 255 }),
     socialGithub: varchar({ length: 255 }),
