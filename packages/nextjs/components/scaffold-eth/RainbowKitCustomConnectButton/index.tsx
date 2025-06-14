@@ -2,6 +2,7 @@
 
 // @refresh reset
 import { useEffect } from "react";
+import Link from "next/link";
 import { AddressInfoDropdown } from "./AddressInfoDropdown";
 import { AddressQRCodeModal } from "./AddressQRCodeModal";
 import { WrongNetworkDropdown } from "./WrongNetworkDropdown";
@@ -9,7 +10,7 @@ import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { signOut } from "next-auth/react";
 import { Address } from "viem";
 import { useAccount, useDisconnect } from "wagmi";
-import { XMarkIcon } from "@heroicons/react/24/outline";
+import { EyeIcon, EyeSlashIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import RegisterUser from "~~/app/_components/RegisterUser";
 import { useTargetNetwork } from "~~/hooks/scaffold-eth/useTargetNetwork";
 import { useAuthSession } from "~~/hooks/useAuthSession";
@@ -27,6 +28,7 @@ export const RainbowKitCustomConnectButton = () => {
   const { disconnect } = useDisconnect();
   const { userAddress: sessionUserAddress } = useAuthSession();
   const isAdmin = user?.role === UserRole.ADMIN;
+  const { isAdmin: isAdminFromSession } = useAuthSession();
 
   useEffect(() => {
     if (sessionUserAddress && connectedAddress && connectedAddress !== sessionUserAddress) {
@@ -78,7 +80,16 @@ export const RainbowKitCustomConnectButton = () => {
           <div className="flex flex-col items-end gap-2 sm:flex-row sm:items-center">
             {isAdmin && (
               <div className="flex items-center gap-2">
-                <span className="rounded-full px-3 py-0.5 font-semibold bg-red-100 text-red-800">ADMIN</span>
+                <span className="rounded-full pl-2 pr-3 flex items-center gap-1 py-0.5 font-semibold bg-red-100 text-red-800">
+                  {isAdminFromSession ? (
+                    <EyeIcon className="w-4 h-4" />
+                  ) : (
+                    <Link href="/admin/siwe" className="btn btn-ghost p-0.5 !min-h-0 h-auto hover:bg-red-200">
+                      <EyeSlashIcon className="w-4 h-4" />{" "}
+                    </Link>
+                  )}{" "}
+                  ADMIN
+                </span>
               </div>
             )}
             <AddressInfoDropdown
