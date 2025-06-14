@@ -4,7 +4,7 @@ import { AddressCopyIcon } from "./AddressCopyIcon";
 import { AddressLinkWrapper } from "./AddressLinkWrapper";
 import { Address as AddressType, getAddress, isAddress } from "viem";
 import { normalize } from "viem/ens";
-import { useEnsAvatar, useEnsName } from "wagmi";
+import { useEnsAvatar } from "wagmi";
 import { BlockieAvatar } from "~~/components/scaffold-eth";
 
 const textSizeMap = {
@@ -65,13 +65,14 @@ const getPrevSize = <T extends SizeMap>(sizeMap: T, currentSize: keyof T, step =
   return sizes[prevIndex];
 };
 
-type AddressProps = {
+export type AddressProps = {
   address?: AddressType;
   disableAddressLink?: boolean;
   format?: "short" | "long";
   size?: "xs" | "sm" | "base" | "lg" | "xl" | "2xl" | "3xl";
   onlyEnsOrAddress?: boolean;
   hideAvatar?: boolean;
+  cachedEns?: string | null;
 };
 
 export const Address = ({
@@ -81,30 +82,24 @@ export const Address = ({
   size = "base",
   onlyEnsOrAddress = false,
   hideAvatar = false,
+  cachedEns,
 }: AddressProps) => {
   const checkSumAddress = address ? getAddress(address) : undefined;
 
-  const { data: ens, isLoading: isEnsNameLoading } = useEnsName({
-    address: checkSumAddress,
-    chainId: 1,
-    query: {
-      enabled: isAddress(checkSumAddress ?? ""),
-    },
-  });
   const { data: ensAvatar } = useEnsAvatar({
-    name: ens ? normalize(ens) : undefined,
+    name: cachedEns ? normalize(cachedEns) : undefined,
     chainId: 1,
     query: {
-      enabled: Boolean(ens),
+      enabled: Boolean(cachedEns),
       gcTime: 30_000,
     },
   });
 
   const shortAddress = checkSumAddress?.slice(0, 6) + "..." + checkSumAddress?.slice(-4);
   const displayAddress = format === "long" ? checkSumAddress : shortAddress;
-  const displayEnsOrAddress = ens || displayAddress;
+  const displayEnsOrAddress = cachedEns || displayAddress;
 
-  const showSkeleton = !checkSumAddress || (!onlyEnsOrAddress && (ens || isEnsNameLoading));
+  const showSkeleton = !checkSumAddress || (!onlyEnsOrAddress && cachedEns);
 
   const addressSize = showSkeleton && !onlyEnsOrAddress ? getPrevSize(textSizeMap, size, 2) : size;
   const ensSize = getNextSize(textSizeMap, addressSize);
@@ -114,7 +109,7 @@ export const Address = ({
     return (
       <div className="flex items-center">
         <div
-          className="flex-shrink-0 skeleton rounded-full"
+          className="shrink-0 skeleton rounded-full"
           style={{
             width: (blockieSizeMap[blockieSize] * 24) / blockieSizeMap["base"],
             height: (blockieSizeMap[blockieSize] * 24) / blockieSizeMap["base"],
@@ -150,18 +145,13 @@ export const Address = ({
         </div>
       )}
       <div className="flex flex-col">
-        {showSkeleton &&
-          (isEnsNameLoading ? (
-            <div className={`ml-1.5 skeleton rounded-lg font-bold ${textSizeMap[ensSize]}`}>
-              <span className="invisible">{shortAddress}</span>
-            </div>
-          ) : (
-            <span className={`ml-1.5 ${textSizeMap[ensSize]} font-bold`}>
-              <AddressLinkWrapper disableAddressLink={disableAddressLink} address={checkSumAddress}>
-                {ens}
-              </AddressLinkWrapper>
-            </span>
-          ))}
+        {showSkeleton && cachedEns && (
+          <span className={`ml-1.5 ${textSizeMap[ensSize]} font-bold`}>
+            <AddressLinkWrapper disableAddressLink={disableAddressLink} address={checkSumAddress}>
+              {cachedEns}
+            </AddressLinkWrapper>
+          </span>
+        )}
         <div className={`flex ${hideAvatar ? "justify-center" : ""}`}>
           <span className={`ml-1.5 ${textSizeMap[addressSize]} font-normal`}>
             <AddressLinkWrapper disableAddressLink={disableAddressLink} address={checkSumAddress}>
