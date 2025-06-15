@@ -1,8 +1,10 @@
+import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { UserProfileCard } from "./_components/UserProfileCard";
 import { BuildCard } from "./_components/builds/BuildCard";
 import { SubmitNewBuildButton } from "./_components/builds/SubmitNewBuildButton";
+import clsx from "clsx";
 import { Metadata } from "next";
 import { isAddress } from "viem";
 import { RouteRefresher } from "~~/components/RouteRefresher";
@@ -136,10 +138,24 @@ export default async function BuilderPage({ params }: { params: { address: strin
                       currencies, build a decentralized exchange, deep dive into stablecoins, and much more!
                     </p>
                     <div className="mt-6 px-4 py-3 border rounded-xl">
-                      <p className="mt-0 font-medium">
+                      <p className="mt-0 mb-2 font-medium">
                         Achievements -{" "}
                         <span className="text-gray-400 font-normal dark:text-gray-300">2/5 Completed</span>
                       </p>
+                      <div className="flex flex-wrap gap-2">
+                        {Array.from({ length: 5 }).map((_, index) => (
+                          <Image
+                            key={index}
+                            className={clsx("rounded-full w-10 h-10 border-2 border-white", {
+                              "saturate-0 opacity-50": index > 1,
+                            })}
+                            src={`/assets/achievements/icon-challenge-${index + 1}.png`}
+                            alt={`Challenge ${index + 1} achievement`}
+                            width={125}
+                            height={125}
+                          />
+                        ))}
+                      </div>
                     </div>
                   </div>
                   <div className="px-5 pb-5 space-y-5 divide-y max-h-80 overflow-x-hidden overflow-y-scroll">
@@ -176,7 +192,7 @@ export default async function BuilderPage({ params }: { params: { address: strin
                       currencies, build a decentralized exchange, deep dive into stablecoins, and much more!
                     </p>
                     <div className="mt-6 px-4 py-3 border rounded-xl">
-                      <p className="mt-0 font-medium">
+                      <p className="mt-0 mb-2 font-medium">
                         Achievements -{" "}
                         <span className="text-gray-400 font-normal dark:text-gray-300">0/5 Completed</span>
                       </p>

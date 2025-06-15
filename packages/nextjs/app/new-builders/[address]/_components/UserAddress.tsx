@@ -37,8 +37,8 @@ export const UserAddress = ({ address }: UserAddressProps) => {
         <div
           className="flex-shrink-0 skeleton rounded-full"
           style={{
-            width: 72,
-            height: 72,
+            width: 100,
+            height: 100,
           }}
         ></div>
         <div className="flex flex-col space-y-1">
@@ -57,17 +57,19 @@ export const UserAddress = ({ address }: UserAddressProps) => {
   return (
     <div className="flex items-center gap-5">
       <div className="flex-shrink-0">
-        <BlockieAvatar address={checkSumAddress} ensImage={ensAvatar} size={72} />
+        <div className="rounded-full border-4 border-base-100">
+          <BlockieAvatar address={checkSumAddress} ensImage={ensAvatar} size={100} />
+        </div>
       </div>
-      <div className="">
+      <div>
         {isEnsNameLoading && (
           <div className={"skeleton rounded-lg font-bold"}>
-            <span className="invisible">{shortAddress}</span>
+            <div className="invisible">{shortAddress}</div>
           </div>
         )}
-        {!isEnsNameLoading && ens && <p className={"font-semibold text-lg"}>{ens}</p>}
+        {!isEnsNameLoading && ens && <p className={"m-0 font-semibold text-lg"}>{ens || "pabl0cks.eth"}</p>}
         <div className={"flex items-center"}>
-          <span className={"font-normal text-lg"}>{shortAddress}</span>
+          <p className={"m-0 font-normal text-lg"}>{shortAddress}</p>
           <AddressCopyIcon className={"ml-1 cursor-pointer w-4 h-4"} address={checkSumAddress} />
         </div>
       </div>
