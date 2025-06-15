@@ -25,7 +25,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { ensName, shortAddress } = await getEnsOrAddress(address);
 
   // Default title and description
-  const title = `${ensName || shortAddress} | Speed Run Ethereum`;
+  const title = `${ensName || shortAddress}`;
 
   // Base URL - replace with your actual domain in production
   const baseUrl = process.env.VERCEL_PROJECT_PRODUCTION_URL

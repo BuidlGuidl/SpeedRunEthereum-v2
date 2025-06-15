@@ -12,7 +12,7 @@ image: /assets/guides/erc1155vs721.jpg
 
 ---
 
-## 1. Introduction: Navigating Ethereum's NFT Standards
+## 1. Navigating Ethereum's NFT Standards
 
 Ethereum's NFT ecosystem is built on robust token standards that ensure interoperability and security.
 **ERC721** was the first standard for unique, non-fungible assets, powering the early NFT boom. As [NFT use cases](/guides/nft-use-cases) grew—especially in gaming and large-scale collectibles—**ERC1155** emerged to address the need for efficiency, batch operations, and multi-token management.

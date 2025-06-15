@@ -6,6 +6,11 @@
     <priority>1.0</priority>
   </url>
   <url>
+    <loc>https://speedrunethereum.com/guides</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
     <loc>https://speedrunethereum.com/challenge/simple-nft-example</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
@@ -77,6 +82,31 @@
   </url>
   <url>
     <loc>https://speedrunethereum.com/guides/scalable-gas-solidity-staking</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://speedrunethereum.com/guides/how-to-create-erc20</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://speedrunethereum.com/guides/solidity-contract-to-contract-interactions</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://speedrunethereum.com/guides/erc20-approve-pattern</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://speedrunethereum.com/guides/solidity-bonding-curves-token-pricing</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://speedrunethereum.com/guides/sustainable-erc20-supply-models</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>

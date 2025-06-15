@@ -64,6 +64,28 @@ export const CHALLENGE_METADATA: Record<
     title: "Create an ERC20 Token and Vendor Contract in Solidity",
     description:
       "Learn to create your own ERC20 token and build a decentralized vending machine using Solidity smart contracts on Ethereum.",
+    guides: [
+      {
+        title: "How to Create a ERC20 Token: Complete Solidity Tutorial",
+        url: "/guides/how-to-create-erc20",
+      },
+      {
+        title: "Solidity Contract-to-Contract Interactions",
+        url: "/guides/solidity-contract-to-contract-interactions",
+      },
+      {
+        title: "ERC20 Approve Pattern: Secure Token Allowances Guide",
+        url: "/guides/erc20-approve-pattern",
+      },
+      {
+        title: "Solidity Bonding Curves & Dynamic Token Pricing Explained",
+        url: "/guides/solidity-bonding-curves-token-pricing",
+      },
+      {
+        title: "Sustainable ERC20 Supply Models: Tokenomics Best Practices",
+        url: "/guides/sustainable-erc20-supply-models",
+      },
+    ],
   },
   [ChallengeId.DICE_GAME]: {
     title: "Solidity Randomness and Security: Build a Dice Game",
