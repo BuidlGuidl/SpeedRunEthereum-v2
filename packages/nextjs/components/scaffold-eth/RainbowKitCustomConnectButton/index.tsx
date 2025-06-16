@@ -80,16 +80,17 @@ export const RainbowKitCustomConnectButton = () => {
           <div className="flex flex-col items-end gap-2 sm:flex-row sm:items-center">
             {isAdmin && (
               <div className="flex items-center gap-2">
-                <span className="rounded-full pl-2 pr-3 flex items-center gap-1 py-0.5 font-semibold bg-red-100 text-red-800">
-                  {isAdminFromSession ? (
-                    <EyeIcon className="w-4 h-4" />
-                  ) : (
-                    <Link href="/admin/siwe" className="btn btn-ghost p-0.5 !min-h-0 h-auto hover:bg-red-200">
-                      <EyeSlashIcon className="w-4 h-4" />{" "}
-                    </Link>
-                  )}{" "}
-                  ADMIN
-                </span>
+                {isAdminFromSession ? (
+                  <span className="rounded-full pl-2 pr-3 flex items-center gap-1 py-0.5 font-semibold bg-red-100 text-red-800">
+                    <EyeIcon className="w-4 h-4" /> ADMIN
+                  </span>
+                ) : (
+                  <Link href="/admin/siwe">
+                    <span className="rounded-full pl-2 pr-3 flex items-center gap-1 py-0.5 font-semibold bg-red-100 text-red-800 hover:bg-red-200">
+                      <EyeSlashIcon className="w-4 h-4" /> ADMIN
+                    </span>
+                  </Link>
+                )}
               </div>
             )}
             <AddressInfoDropdown
