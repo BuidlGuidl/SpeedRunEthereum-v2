@@ -1,4 +1,5 @@
 import { useAccount } from "wagmi";
+import { ArrowPathIcon } from "@heroicons/react/24/outline";
 import { useUpdateEns } from "~~/hooks/useUpdateEns";
 import { UserByAddress } from "~~/services/database/repositories/users";
 
@@ -12,8 +13,13 @@ export const RefreshEnsButton = ({ user }: { user: NonNullable<UserByAddress> })
   }
 
   return (
-    <button className="btn btn-xs btn-outline w-full" onClick={handleUpdateEns} disabled={isUpdatingEns}>
-      {isUpdatingEns ? <span className="loading loading-spinner loading-xs"></span> : "Refresh ENS"}
+    <button
+      className="btn-ghost hover:bg-transparent hover:opacity-80 tooltip"
+      onClick={handleUpdateEns}
+      disabled={isUpdatingEns}
+      data-tip={`${isUpdatingEns ? "Updating ENS..." : "Refresh ENS from ENS records"}`}
+    >
+      <ArrowPathIcon className={`w-4 h-4 ${isUpdatingEns ? "animate-spin opacity-50" : ""}`} />
     </button>
   );
 };

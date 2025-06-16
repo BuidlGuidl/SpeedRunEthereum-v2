@@ -22,6 +22,9 @@ export const UserProfileCard = ({ user, batch }: { user: NonNullable<UserByAddre
         <div className="flex flex-col items-center gap-4">
           <div className="text-neutral">
             <Address address={user.userAddress} hideAvatar size="xl" cachedEns={user.ens} />
+            <div className="text-center">
+              <RefreshEnsButton user={user} />
+            </div>
           </div>
 
           {batch && (
@@ -46,7 +49,6 @@ export const UserProfileCard = ({ user, batch }: { user: NonNullable<UserByAddre
           )}
 
           <hr className="w-full border-base-200 mb-2" />
-          <RefreshEnsButton user={user} />
           <UserLocation user={user} />
           <UserSocials user={user} />
           <div className="text-sm text-neutral">
