@@ -52,11 +52,10 @@ export const HomepageClient = ({ challenges }: { challenges: Challenges }) => {
 
         <OnboardingBatchesCard userChallenges={userChallenges} />
         <ChallengeExpandedCard
-          key={ChallengeId.STABLECOINS}
-          challengeId={ChallengeId.STABLECOINS}
+          key={ChallengeId.OVER_COLLATERALIZED_LENDING}
+          challengeId={ChallengeId.OVER_COLLATERALIZED_LENDING}
           userChallenges={userChallenges}
           challenges={challenges}
-          comingSoon
         />
         <ChallengeExpandedCard
           key={ChallengeId.PREDICTION_MARKETS}
