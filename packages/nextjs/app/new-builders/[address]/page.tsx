@@ -165,7 +165,10 @@ export default async function BuilderPage({ params }: { params: { address: strin
                   </div>
                   <div className="px-5 pb-5 space-y-5 divide-y max-h-80 overflow-x-hidden overflow-y-scroll">
                     {CHALLENGES.map(challenge => (
-                      <div key={challenge.id} className={clsx("pt-5 flex gap-4", challenge.completed && "opacity-50")}>
+                      <div
+                        key={challenge.id}
+                        className={clsx("pt-5 flex gap-4", challenge.completed && "text-base-content/50")}
+                      >
                         <div className="w-8 h-8 flex items-center justify-center flex-shrink-0 text-lg font-semibold rounded-full bg-base-200 border">
                           {challenge.id}
                         </div>
