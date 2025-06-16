@@ -21,6 +21,7 @@ const CHALLENGES = [
     description:
       "Make a decentralized, digital currency and build an unstoppable vending machine that will buy and sell the currency.",
     link: "/challenge/decentralized-staking",
+    completed: true,
   },
   {
     id: 2,
@@ -28,6 +29,7 @@ const CHALLENGES = [
     description:
       "Make a decentralized, digital currency and build an unstoppable vending machine that will buy and sell the currency.",
     link: "/challenge/decentralized-staking",
+    completed: true,
   },
   {
     id: 3,
@@ -35,6 +37,7 @@ const CHALLENGES = [
     description:
       "Make a decentralized, digital currency and build an unstoppable vending machine that will buy and sell the currency.",
     link: "/challenge/decentralized-staking",
+    completed: false,
   },
   {
     id: 4,
@@ -42,6 +45,7 @@ const CHALLENGES = [
     description:
       "Make a decentralized, digital currency and build an unstoppable vending machine that will buy and sell the currency.",
     link: "/challenge/decentralized-staking",
+    completed: false,
   },
   {
     id: 5,
@@ -49,6 +53,7 @@ const CHALLENGES = [
     description:
       "Make a decentralized, digital currency and build an unstoppable vending machine that will buy and sell the currency.",
     link: "/challenge/decentralized-staking",
+    completed: false,
   },
 ];
 
@@ -160,16 +165,23 @@ export default async function BuilderPage({ params }: { params: { address: strin
                   </div>
                   <div className="px-5 pb-5 space-y-5 divide-y max-h-80 overflow-x-hidden overflow-y-scroll">
                     {CHALLENGES.map(challenge => (
-                      <div key={challenge.id} className="pt-5 flex gap-4">
+                      <div key={challenge.id} className={clsx("pt-5 flex gap-4", challenge.completed && "opacity-50")}>
                         <div className="w-8 h-8 flex items-center justify-center flex-shrink-0 text-lg font-semibold rounded-full bg-base-200 border">
                           {challenge.id}
                         </div>
                         <div>
-                          <h3 className="m-0 font-medium">
-                            <Link className="hover:underline" href={challenge.link}>
-                              {challenge.title}
-                            </Link>
-                          </h3>
+                          <div className="flex items-center gap-2">
+                            <h3 className="m-0 font-medium">
+                              <Link className="hover:underline" href={challenge.link}>
+                                {challenge.title}
+                              </Link>
+                            </h3>
+                            {challenge.completed && (
+                              <span className="badge badge-xs badge-primary pt-1 pb-1 h-4 text-[0.7rem]">
+                                completed
+                              </span>
+                            )}
+                          </div>
                           <p className="mb-0 mt-2 text-sm">{challenge.description}</p>
                         </div>
                       </div>
