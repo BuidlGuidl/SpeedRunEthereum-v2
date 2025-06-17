@@ -24,12 +24,13 @@ export function AllBuilds({ searchParams }: { searchParams: { category?: BuildCa
   const {
     data: builds,
     isLoading,
+    isFetching,
     refetch,
     fetchNextPage,
+    hasNextPage,
   } = useInfiniteQuery({
     queryKey: ["all-builds", debouncedFilter, categoryFilter, typeFilter],
     queryFn: async ({ pageParam = 0 }) => {
-      console.log("pageParam", pageParam);
       const start = (pageParam as number) * FETCH_SIZE;
       const response = await fetchBuilds({
         name: debouncedFilter,
@@ -41,7 +42,12 @@ export function AllBuilds({ searchParams }: { searchParams: { category?: BuildCa
       return response;
     },
     initialPageParam: 0,
-    getNextPageParam: (_lastGroup, groups) => groups.length,
+    getNextPageParam: (lastGroup, groups) => {
+      if (lastGroup.length < FETCH_SIZE) {
+        return undefined;
+      }
+      return groups.length;
+    },
     refetchOnWindowFocus: false,
     placeholderData: keepPreviousData,
   });
@@ -78,7 +84,7 @@ export function AllBuilds({ searchParams }: { searchParams: { category?: BuildCa
     router.replace(`${pathname}?${newSearchParams.toString()}`);
   };
 
-  // const numberOfBuilds = builds?.length || 0;
+  const numberOfBuilds = flatData.length || 0;
 
   return (
     <div className="py-12 px-6 max-w-7xl mx-auto w-full">
@@ -88,7 +94,7 @@ export function AllBuilds({ searchParams }: { searchParams: { category?: BuildCa
         {isLoading ? (
           <div className="skeleton rounded-md w-12 h-7 lg:h-9"></div>
         ) : (
-          <p className="mb-0 mt-0.5 text-xl lg:mt-1 lg:text-3xl">0</p>
+          <p className="mb-0 mt-0.5 text-xl lg:mt-1 lg:text-3xl">{numberOfBuilds}</p>
         )}
       </div>
       <div className="mt-8">
@@ -215,7 +221,13 @@ export function AllBuilds({ searchParams }: { searchParams: { category?: BuildCa
               </div>
             )}
           </div>
-          <button onClick={() => fetchNextPage()}>Load More</button>
+          <button
+            className="mt-8 btn btn-primary"
+            disabled={!hasNextPage || isFetching}
+            onClick={() => fetchNextPage()}
+          >
+            Load More
+          </button>
         </div>
       </div>
     </div>
