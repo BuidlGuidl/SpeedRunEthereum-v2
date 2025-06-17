@@ -1,14 +1,16 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { LoadingSkeleton } from "./LoadingSkeleton";
-import { useQuery } from "@tanstack/react-query";
+import { keepPreviousData, useInfiniteQuery } from "@tanstack/react-query";
 import { useDebounceValue } from "usehooks-ts";
 import { LikeBuildButton } from "~~/app/builders/[address]/_components/builds/LikeBuildButton";
 import { fetchBuilds } from "~~/services/api/builds";
 import { BuildCategory, BuildType } from "~~/services/database/config/types";
+
+const FETCH_SIZE = 2;
 
 export function AllBuilds({ searchParams }: { searchParams: { category?: BuildCategory; type?: BuildType } }) {
   const router = useRouter();
@@ -23,16 +25,28 @@ export function AllBuilds({ searchParams }: { searchParams: { category?: BuildCa
     data: builds,
     isLoading,
     refetch,
-  } = useQuery({
+    fetchNextPage,
+  } = useInfiniteQuery({
     queryKey: ["all-builds", debouncedFilter, categoryFilter, typeFilter],
-    queryFn: () =>
-      fetchBuilds({
+    queryFn: async ({ pageParam = 0 }) => {
+      console.log("pageParam", pageParam);
+      const start = (pageParam as number) * FETCH_SIZE;
+      const response = await fetchBuilds({
         name: debouncedFilter,
         category: categoryFilter as BuildCategory,
         type: typeFilter as BuildType,
-        start: 48,
-      }),
+        start,
+        size: FETCH_SIZE,
+      });
+      return response;
+    },
+    initialPageParam: 0,
+    getNextPageParam: (_lastGroup, groups) => groups.length,
+    refetchOnWindowFocus: false,
+    placeholderData: keepPreviousData,
   });
+
+  const flatData = useMemo(() => builds?.pages?.flatMap(page => page) ?? [], [builds]);
 
   const handleCategoryChange = (category: BuildCategory) => {
     if (!category) {
@@ -64,7 +78,7 @@ export function AllBuilds({ searchParams }: { searchParams: { category?: BuildCa
     router.replace(`${pathname}?${newSearchParams.toString()}`);
   };
 
-  const numberOfBuilds = builds?.length || 0;
+  // const numberOfBuilds = builds?.length || 0;
 
   return (
     <div className="py-12 px-6 max-w-7xl mx-auto w-full">
@@ -74,7 +88,7 @@ export function AllBuilds({ searchParams }: { searchParams: { category?: BuildCa
         {isLoading ? (
           <div className="skeleton rounded-md w-12 h-7 lg:h-9"></div>
         ) : (
-          <p className="mb-0 mt-0.5 text-xl lg:mt-1 lg:text-3xl">{numberOfBuilds}</p>
+          <p className="mb-0 mt-0.5 text-xl lg:mt-1 lg:text-3xl">0</p>
         )}
       </div>
       <div className="mt-8">
@@ -144,8 +158,8 @@ export function AllBuilds({ searchParams }: { searchParams: { category?: BuildCa
               </>
             )}
             {builds &&
-              Boolean(builds.length > 0) &&
-              builds.map(build => (
+              Boolean(flatData.length > 0) &&
+              flatData.map(build => (
                 <div
                   key={build.id}
                   className="relative flex flex-col bg-base-300 rounded-xl shadow-md overflow-hidden transition hover:shadow-lg"
@@ -182,7 +196,7 @@ export function AllBuilds({ searchParams }: { searchParams: { category?: BuildCa
                   </div>
                 </div>
               ))}
-            {builds && builds.length === 0 && (
+            {builds && flatData.length === 0 && (
               <div role="alert" className="alert alert-info md:col-span-2 lg:col-span-4">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -201,6 +215,7 @@ export function AllBuilds({ searchParams }: { searchParams: { category?: BuildCa
               </div>
             )}
           </div>
+          <button onClick={() => fetchNextPage()}>Load More</button>
         </div>
       </div>
     </div>

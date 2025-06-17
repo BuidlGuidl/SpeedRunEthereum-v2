@@ -6,17 +6,20 @@ export const fetchBuilds = async ({
   type,
   name,
   start,
+  size,
 }: {
   category?: BuildCategory;
   type?: BuildType;
   name?: string;
   start?: number;
+  size?: number;
 }) => {
   const params = new URLSearchParams();
   if (name) params.append("name", name);
   if (category) params.append("category", category);
   if (type) params.append("type", type);
   if (start) params.append("start", start.toString());
+  if (size) params.append("size", size.toString());
   const response = await fetch(`/api/builds?${params}`);
 
   if (!response.ok) {

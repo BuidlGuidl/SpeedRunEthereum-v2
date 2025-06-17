@@ -208,11 +208,13 @@ export const getAllBuilds = async ({
   type,
   nameSearch,
   start,
+  size,
 }: {
   category?: BuildCategory;
   type?: BuildType;
   nameSearch?: string;
   start?: number;
+  size?: number;
 }) => {
   const results = await db.query.builds.findMany({
     where: and(
@@ -224,7 +226,7 @@ export const getAllBuilds = async ({
       likes: true,
     },
     orderBy: (builds, { desc, sql }) => [desc(sql`(SELECT COUNT(*) FROM build_likes WHERE build_id = ${builds.id})`)],
-    limit: 48,
+    limit: size || 48,
     offset: start,
   });
 
