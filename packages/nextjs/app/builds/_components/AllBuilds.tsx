@@ -30,6 +30,7 @@ export function AllBuilds({ searchParams }: { searchParams: { category?: BuildCa
         name: debouncedFilter,
         category: categoryFilter as BuildCategory,
         type: typeFilter as BuildType,
+        start: 48,
       }),
   });
 
