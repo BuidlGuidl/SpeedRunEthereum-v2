@@ -54,7 +54,6 @@ export function AllBuilds({ searchParams }: { searchParams: { category?: BuildCa
 
   const flatData = useMemo(() => builds?.pages?.flatMap(page => page.data) ?? [], [builds]);
   const totalBuilds = builds?.pages?.[0]?.meta?.totalRowCount ?? 0;
-  const totalFetched = flatData.length;
 
   useEffect(() => {
     const onscroll = () => {
@@ -161,13 +160,11 @@ export function AllBuilds({ searchParams }: { searchParams: { category?: BuildCa
           </div>
 
           <div>
-            <p className="mt-0 mb-1 text-sm lg:mb-2">Builds Found</p>
+            <p className="mt-0 mb-1 text-sm lg:mb-2">Total Builds</p>
             {isLoading ? (
               <div className="skeleton rounded-md w-24 h-7"></div>
             ) : (
-              <p className="m-0 text-lg font-semibold">
-                {totalFetched} out of {totalBuilds}
-              </p>
+              <p className="m-0 text-lg font-semibold">{totalBuilds}</p>
             )}
           </div>
         </div>
