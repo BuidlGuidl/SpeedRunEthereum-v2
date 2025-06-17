@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { LoadingSkeleton } from "./LoadingSkeleton";
@@ -10,7 +10,7 @@ import { LikeBuildButton } from "~~/app/builders/[address]/_components/builds/Li
 import { fetchBuilds } from "~~/services/api/builds";
 import { BuildCategory, BuildType } from "~~/services/database/config/types";
 
-const FETCH_SIZE = 2;
+const FETCH_SIZE = 48;
 
 export function AllBuilds({ searchParams }: { searchParams: { category?: BuildCategory; type?: BuildType } }) {
   const router = useRouter();
@@ -53,6 +53,20 @@ export function AllBuilds({ searchParams }: { searchParams: { category?: BuildCa
   });
 
   const flatData = useMemo(() => builds?.pages?.flatMap(page => page) ?? [], [builds]);
+
+  useEffect(() => {
+    const onscroll = () => {
+      const scrolledTo = window.scrollY + window.innerHeight;
+      const isReachBottom = document.body.scrollHeight === scrolledTo;
+      if (isReachBottom && hasNextPage && !isFetching) {
+        fetchNextPage();
+      }
+    };
+    window.addEventListener("scroll", onscroll);
+    return () => {
+      window.removeEventListener("scroll", onscroll);
+    };
+  }, [fetchNextPage, hasNextPage, isFetching]);
 
   const handleCategoryChange = (category: BuildCategory) => {
     if (!category) {
@@ -221,13 +235,6 @@ export function AllBuilds({ searchParams }: { searchParams: { category?: BuildCa
               </div>
             )}
           </div>
-          <button
-            className="mt-8 btn btn-primary"
-            disabled={!hasNextPage || isFetching}
-            onClick={() => fetchNextPage()}
-          >
-            Load More
-          </button>
         </div>
       </div>
     </div>
