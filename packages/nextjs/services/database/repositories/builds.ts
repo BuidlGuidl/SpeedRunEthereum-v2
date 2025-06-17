@@ -216,7 +216,7 @@ export const getAllBuilds = async ({
   start?: number;
   size?: number;
 }) => {
-  const results = await db.query.builds.findMany({
+  const query = db.query.builds.findMany({
     where: and(
       category ? eq(builds.buildCategory, category) : undefined,
       type ? eq(builds.buildType, type) : undefined,
@@ -230,7 +230,9 @@ export const getAllBuilds = async ({
     offset: start,
   });
 
-  const count = await db.select({ count: sql<number>`count(*)` }).from(builds);
+  const countQuery = db.select({ count: sql<number>`count(*)` }).from(builds);
 
-  return { data: results, meta: { totalRowCount: count[0]?.count || 0 } };
+  const [buildsData, countResult] = await Promise.all([query, countQuery]);
+
+  return { data: buildsData, meta: { totalRowCount: countResult[0]?.count || 0 } };
 };
