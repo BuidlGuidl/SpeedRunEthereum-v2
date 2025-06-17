@@ -1,6 +1,6 @@
 import { BuildCategory, BuildType } from "../config/types";
 import { filterValidUserAddresses } from "./users";
-import { InferInsertModel, InferSelectModel, and, eq, ilike, inArray } from "drizzle-orm";
+import { InferInsertModel, InferSelectModel, and, eq, ilike, inArray, sql } from "drizzle-orm";
 import { db } from "~~/services/database/config/postgresClient";
 import { buildBuilders, buildLikes, builds, lower } from "~~/services/database/config/schema";
 
@@ -230,5 +230,7 @@ export const getAllBuilds = async ({
     offset: start,
   });
 
-  return results;
+  const count = await db.select({ count: sql<number>`count(*)` }).from(builds);
+
+  return { data: results, meta: { totalRowCount: count[0]?.count || 0 } };
 };

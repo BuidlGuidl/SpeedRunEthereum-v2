@@ -26,7 +26,12 @@ export const fetchBuilds = async ({
     throw new Error(`Failed to fetch all builds: ${response.status} ${response.statusText}`);
   }
 
-  const buildsData = (await response.json()) as Array<Build & { likes: Array<{ userAddress: string }> }>;
+  const buildsData = (await response.json()) as {
+    data: Array<Build & { likes: Array<{ userAddress: string }> }>;
+    meta: {
+      totalRowCount: string;
+    };
+  };
 
   return buildsData;
 };

@@ -43,7 +43,7 @@ export function AllBuilds({ searchParams }: { searchParams: { category?: BuildCa
     },
     initialPageParam: 0,
     getNextPageParam: (lastGroup, groups) => {
-      if (lastGroup.length < FETCH_SIZE) {
+      if (lastGroup.data.length < FETCH_SIZE) {
         return undefined;
       }
       return groups.length;
@@ -52,7 +52,9 @@ export function AllBuilds({ searchParams }: { searchParams: { category?: BuildCa
     placeholderData: keepPreviousData,
   });
 
-  const flatData = useMemo(() => builds?.pages?.flatMap(page => page) ?? [], [builds]);
+  const flatData = useMemo(() => builds?.pages?.flatMap(page => page.data) ?? [], [builds]);
+  const totalBuilds = builds?.pages?.[0]?.meta?.totalRowCount ?? 0;
+  const totalFetched = flatData.length;
 
   useEffect(() => {
     const onscroll = () => {
@@ -98,18 +100,10 @@ export function AllBuilds({ searchParams }: { searchParams: { category?: BuildCa
     router.replace(`${pathname}?${newSearchParams.toString()}`);
   };
 
-  const numberOfBuilds = flatData.length || 0;
-
   return (
     <div className="py-12 px-6 max-w-7xl mx-auto w-full">
       <div className="flex items-center gap-3">
         <h1 className="m-0 text-2xl font-bold lg:text-4xl">All Builds</h1>
-        <p className="m-0 text-2xl lg:text-4xl">-</p>
-        {isLoading ? (
-          <div className="skeleton rounded-md w-12 h-7 lg:h-9"></div>
-        ) : (
-          <p className="mb-0 mt-0.5 text-xl lg:mt-1 lg:text-3xl">{numberOfBuilds}</p>
-        )}
       </div>
       <div className="mt-8">
         <div className="grid grid-cols-1 gap-4 md:grid-cols-3 lg:grid-cols-4 lg:gap-6">
@@ -164,6 +158,17 @@ export function AllBuilds({ searchParams }: { searchParams: { category?: BuildCa
                 </option>
               ))}
             </select>
+          </div>
+
+          <div>
+            <p className="mt-0 mb-1 text-sm lg:mb-2">Builds Found</p>
+            {isLoading ? (
+              <div className="skeleton rounded-md w-24 h-7"></div>
+            ) : (
+              <p className="m-0 text-lg font-semibold">
+                {totalFetched} out of {totalBuilds}
+              </p>
+            )}
           </div>
         </div>
         <hr className="hidden my-6 border-base-300 lg:block" />
