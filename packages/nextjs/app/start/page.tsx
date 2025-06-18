@@ -65,7 +65,7 @@ const StartLandingPage = () => {
           </div>
         </div>
         <div className="mb-8 mx-auto w-80 h-40 bg-[url('/assets/start/window-1.svg')] bg-center bg-no-repeat lg:mb-0 lg:absolute lg:right-[5%] lg:-bottom-20">
-          <div className="pt-14 px-10 md:pt-[3.25rem]">
+          <div className="pt-14 px-10 text-gray-600 md:pt-[3.25rem]">
             <p className="mt-0 mb-1 md:text-lg">Already comfortable building on Ethereum?</p>
             <a href="https://speedrunethereum.com/challenge/simple-nft-example" className="link">
               Jump straight to Challenge #0
@@ -77,24 +77,24 @@ const StartLandingPage = () => {
       <div className="w-full h-[18px] bg-[url('/assets/start/color-border.svg')] bg-repeat-x"></div>
       <div className="pt-12 bg-base-300 lg:pt-24">
         <div className="max-w-4xl mx-auto px-6 text-lg lg:pb-12">
-          <h2 className="text-center text-2xl font-medium mb-4 md:text-4xl">
+          <div className="mb-12 flex flex-col items-center gap-2 lg:flex-row lg:gap-4 lg:justify-center">
             <Image
               src="/assets/start/diamond.svg"
               alt="Diamond"
               aria-hidden="true"
-              className="relative inline-block w-10 h-10 -top-1 mr-1"
+              className="w-10 h-10"
               width={49}
               height={49}
-            />{" "}
-            Why build on Ethereum?
-          </h2>
+            />
+            <h2 className="m-0 text-center text-2xl font-medium md:text-4xl">Why build on Ethereum?</h2>
+          </div>
           <p className="md:my-8 md:text-xl">
             Ethereum is a global network where you can deploy apps that <strong>run forever, can't be shut down</strong>
             , <strong>and give ownership to their creators.</strong>
           </p>
 
           <p className="mb-4">It works like this:</p>
-          <ul className="list-disc pl-6 mb-8 space-y-4">
+          <ul className="list-disc pl-6 mb-12 space-y-4">
             <li>
               🤖 You write logic in smart contracts and deploy them to the blockchain (decentralized, immutable,
               available to anyone forever!)
@@ -105,11 +105,18 @@ const StartLandingPage = () => {
             </li>
           </ul>
 
-          <p>
-            It's not just about digital assets; Ethereum lets you build systems where{" "}
-            <strong>money itself is programmable</strong>. From payments and rewards to auctions and governance, logic
-            becomes value.
-          </p>
+          <div className="bg-base-100 px-4 border-2 border-primary rounded-lg lg:bg-transparent lg:border-0 lg:mx-auto lg:w-[510px] lg:h-[110px] lg:bg-[url('/assets/start/text-bubble-boy.svg')] lg:bg-no-repeat">
+            <p className="lg:pt-3 lg:pl-1 lg:pr-10 lg:m-0 lg:text-gray-600">
+              It's not just about digital assets; Ethereum lets you build systems where{" "}
+              <strong>money itself is programmable</strong>.
+            </p>
+          </div>
+
+          <div className="my-8 bg-base-100 px-4 border-2 border-primary rounded-lg lg:bg-transparent lg:border-0 lg:mx-auto lg:w-[516px] lg:h-[100px] lg:bg-[url('/assets/start/text-bubble-girl.svg')] lg:bg-no-repeat">
+            <p className="lg:pt-5 lg:pl-[4.5rem] lg:pr-1 lg:m-0 lg:text-gray-600">
+              From payments and rewards to auctions and governance, logic becomes value.
+            </p>
+          </div>
         </div>
         <div className="mt-12 relative h-[130px]">
           <div className="absolute inset-0 bg-[url('/assets/header_platform.svg')] bg-repeat-x bg-[length:auto_130px] z-10" />
@@ -134,17 +141,17 @@ const StartLandingPage = () => {
           height={280}
         />
         <div className="relative z-10 max-w-4xl mx-auto px-6 text-lg lg:pb-12">
-          <h2 className="text-center text-2xl font-medium mb-4 md:text-4xl">
+          <div className="mb-12 flex flex-col items-center gap-2 lg:flex-row lg:gap-4 lg:justify-center">
             <Image
               src="/assets/start/tools.svg"
               alt="Tools"
               aria-hidden="true"
-              className="relative inline-block w-10 h-10 -top-1 mr-1"
+              className="w-10 h-10"
               width={49}
               height={49}
-            />{" "}
-            How does SpeedRunEthereum work?
-          </h2>
+            />
+            <h2 className="m-0 text-center text-2xl font-medium md:text-4xl">How does SpeedRunEthereum work?</h2>
+          </div>
           <p className="mt-8 mb-4">
             You'll use{" "}
             <a href="https://github.com/scaffold-eth/scaffold-eth-2" className="link">
@@ -168,8 +175,8 @@ const StartLandingPage = () => {
             becomes a public proof of your learning.
           </p>
 
-          <div>
-            <p>
+          <div className="px-4 mt-10 mx-auto bg-base-200 border-2 border-primary rounded-lg lg:border-none lg:pt-1 lg:bg-transparent lg:w-[660px] lg:h-32 lg:bg-[url('/assets/start/window-2.svg')] lg:bg-center lg:bg-no-repeat">
+            <p className="lg:text-gray-600">
               Don't worry if you don't understand everything up front. Each step is designed to make things click as you
               go. Just keep going. It'll all start to make sense.
             </p>
@@ -183,29 +190,29 @@ const StartLandingPage = () => {
 
       <div className="bg-base-200 py-12 lg:py-24">
         <div className="max-w-4xl mx-auto px-6 text-lg lg:pb-12">
-          <h2 className="text-center text-2xl font-medium mb-4 md:text-4xl">
+          <div className="mb-12 flex flex-col items-center gap-2 lg:flex-row lg:gap-4 lg:justify-center">
             <Image
               src="/assets/start/spaceship.svg"
               alt="Spaceship"
               aria-hidden="true"
-              className="relative inline-block w-10 h-10 -top-1 mr-1"
+              className="w-10 h-10"
               width={47}
               height={49}
-            />{" "}
-            Ready?
-          </h2>
+            />
+            <h2 className="m-0 text-center text-2xl font-medium md:text-4xl">Ready?</h2>
+          </div>
           <Image
             src="/assets/challenges/simpleNFT.svg"
             alt="NFT"
-            className="my-8 mx-auto max-w-md"
+            className="my-8 mx-auto md:max-w-md"
             width={650}
             height={400}
           />
           <p className="mb-2 text-center font-medium">Start with Challenge #0: Simple NFT Example</p>
           <p className="mt-2 text-center">You'll deploy your first smart contract and mint an NFT on a testnet.</p>
-          <p className="mt-8 text-center">
+          <div className="flex justify-center">
             <StartChallengesButton />
-          </p>
+          </div>
         </div>
       </div>
     </div>

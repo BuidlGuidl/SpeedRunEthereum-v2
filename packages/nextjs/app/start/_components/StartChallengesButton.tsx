@@ -16,9 +16,9 @@ export const StartChallengesButton = () => {
     <Link
       href="/challenge/simple-nft-example"
       onClick={handleCtaClick}
-      className="mt-4 px-6 py-3 text-lg font-medium text-white bg-primary rounded-full hover:bg-secondary-content dark:text-gray-800 transition-colors"
+      className="px-12 py-4 text-gray-600 bg-[url('/assets/start/button-frame.svg')] bg-no-repeat bg-center bg-cover"
     >
-      Start Challenge #
+      Start Challenge #0
     </Link>
   );
 };
