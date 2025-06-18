@@ -43,6 +43,13 @@
       "when": 1748445893496,
       "tag": "0005_sweet_rawhide_kid",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1749656686202,
+      "tag": "0006_normal_maelstrom",
+      "breakpoints": true
     }
   ]
 }
