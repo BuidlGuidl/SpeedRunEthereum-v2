@@ -1,6 +1,7 @@
 /* eslint-disable react/no-unescaped-entities */
 import Image from "next/image";
 import HeroLogo from "../_assets/icons/HeroLogo";
+import { DiamondIcon, LightbulbIcon, MachineIcon, SpaceshipIcon, TargetIcon, ToolsIcon } from "./_components/Icons";
 import { StartChallengesButton } from "./_components/StartChallengesButton";
 
 const StartLandingPage = () => {
@@ -32,35 +33,11 @@ const StartLandingPage = () => {
           </div>
           <div className="max-w-3xl mx-auto">
             <p className="my-10 text-lg md:my-14 md:text-center md:text-xl md:leading-relaxed">
-              SpeedRunEthereum is a{" "}
-              <Image
-                src="/assets/start/diana.svg"
-                alt="Target"
-                aria-hidden="true"
-                className="inline-block w-6 h-6"
-                width={49}
-                height={48}
-              />{" "}
-              hands-on series of challenges designed to help you <strong>learn by building</strong>. Each challenge
-              delivers one key "aha" moment,{" "}
-              <Image
-                src="/assets/start/lightbulb.svg"
-                alt="Lightbulb"
-                aria-hidden="true"
-                className="inline-block w-6 h-6"
-                width={38}
-                height={46}
-              />{" "}
-              a mental unlock about how{" "}
-              <Image
-                src="/assets/start/machine.svg"
-                alt="Machine"
-                aria-hidden="true"
-                className="inline-block w-6 h-6"
-                width={48}
-                height={48}
-              />{" "}
-              Ethereum really works. At the same time, you'll be building your Ethereum portfolio.
+              SpeedRunEthereum is a <TargetIcon className="inline-block w-6 h-6" /> hands-on series of challenges
+              designed to help you <strong>learn by building</strong>. Each challenge delivers one key "aha" moment,{" "}
+              <LightbulbIcon className="inline-block w-6 h-6" /> a mental unlock about how{" "}
+              <MachineIcon className="inline-block w-6 h-6" /> Ethereum really works. At the same time, you'll be
+              building your Ethereum portfolio.
             </p>
           </div>
         </div>
@@ -78,14 +55,7 @@ const StartLandingPage = () => {
       <div className="pt-12 bg-base-300 lg:pt-24">
         <div className="max-w-4xl mx-auto px-6 text-lg lg:pb-12">
           <div className="mb-12 flex flex-col items-center gap-2 lg:flex-row lg:gap-4 lg:justify-center">
-            <Image
-              src="/assets/start/diamond.svg"
-              alt="Diamond"
-              aria-hidden="true"
-              className="w-10 h-10"
-              width={49}
-              height={49}
-            />
+            <DiamondIcon />
             <h2 className="m-0 text-center text-2xl font-medium md:text-4xl">Why build on Ethereum?</h2>
           </div>
           <p className="md:my-8 md:text-xl">
@@ -142,14 +112,7 @@ const StartLandingPage = () => {
         />
         <div className="relative z-10 max-w-4xl mx-auto px-6 text-lg lg:pb-12">
           <div className="mb-12 flex flex-col items-center gap-2 lg:flex-row lg:gap-4 lg:justify-center">
-            <Image
-              src="/assets/start/tools.svg"
-              alt="Tools"
-              aria-hidden="true"
-              className="w-10 h-10"
-              width={49}
-              height={49}
-            />
+            <ToolsIcon />
             <h2 className="m-0 text-center text-2xl font-medium md:text-4xl">How does SpeedRunEthereum work?</h2>
           </div>
           <p className="mt-8 mb-4">
@@ -191,14 +154,7 @@ const StartLandingPage = () => {
       <div className="bg-base-200 py-12 lg:py-24">
         <div className="max-w-4xl mx-auto px-6 text-lg lg:pb-12">
           <div className="mb-12 flex flex-col items-center gap-2 lg:flex-row lg:gap-4 lg:justify-center">
-            <Image
-              src="/assets/start/spaceship.svg"
-              alt="Spaceship"
-              aria-hidden="true"
-              className="w-10 h-10"
-              width={47}
-              height={49}
-            />
+            <SpaceshipIcon />
             <h2 className="m-0 text-center text-2xl font-medium md:text-4xl">Ready?</h2>
           </div>
           <Image
