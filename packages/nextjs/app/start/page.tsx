@@ -63,7 +63,7 @@ const StartLandingPage = () => {
       <div className="w-full h-[18px] bg-[url('/assets/start/color-border.svg')] bg-repeat-x"></div>
       <div className="pt-12 bg-base-300 lg:pt-24">
         <div className="max-w-4xl mx-auto px-6 text-lg lg:pb-12">
-          <div className="mb-12 flex flex-col items-center gap-2 lg:flex-row lg:gap-4 lg:justify-center">
+          <div className="mb-12 flex flex-col items-center gap-4 lg:flex-row lg:gap-4 lg:justify-center">
             <DiamondIcon />
             <h2 className="m-0 text-center text-2xl font-medium md:text-4xl">Why build on Ethereum?</h2>
           </div>
@@ -122,7 +122,7 @@ const StartLandingPage = () => {
           height={280}
         />
         <div className="relative z-10 max-w-4xl mx-auto px-6 text-lg lg:pb-12">
-          <div className="mb-12 flex flex-col items-center gap-2 lg:flex-row lg:gap-4 lg:justify-center">
+          <div className="mb-12 flex flex-col items-center gap-4 lg:flex-row lg:gap-4 lg:justify-center">
             <ToolsIcon />
             <h2 className="m-0 text-center text-2xl font-medium md:text-4xl">How does SpeedRunEthereum work?</h2>
           </div>
@@ -164,7 +164,7 @@ const StartLandingPage = () => {
 
       <div className="bg-base-200 py-12 lg:py-24">
         <div className="max-w-4xl mx-auto px-6 text-lg lg:pb-12">
-          <div className="mb-12 flex flex-col items-center gap-2 lg:flex-row lg:gap-4 lg:justify-center">
+          <div className="mb-12 flex flex-col items-center gap-4 lg:flex-row lg:gap-4 lg:justify-center">
             <SpaceshipIcon />
             <h2 className="m-0 text-center text-2xl font-medium md:text-4xl">Ready?</h2>
           </div>
