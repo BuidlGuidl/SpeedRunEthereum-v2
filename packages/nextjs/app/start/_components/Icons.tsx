@@ -246,3 +246,34 @@ export function MachineIcon({ className }: { className?: string }) {
     </svg>
   );
 }
+
+export function BoyIcon({ className }: { className?: string }) {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="33" fill="none" className={className}>
+      <path fill="currentColor" d="M25.28 25.397h-2.47v2.486h2.47v-2.486Z" />
+      <path
+        fill="currentColor"
+        d="M3.001 15.5h2.47v-2.486H22.81v2.487h2.47v9.896h2.486V5.588H25.28v-2.47h-2.47V.648H5.471v2.47h-2.47v2.47H.531v19.809h2.47V15.5ZM22.81 27.883h-2.47v2.47h2.47v-2.47Z"
+      />
+      <path
+        fill="currentColor"
+        d="M22.81 17.97h-2.47v4.957h2.47V17.97ZM20.34 30.353H7.958v2.47H20.34v-2.47ZM17.854 25.397h-7.427v2.486h7.427v-2.486ZM7.957 27.883H5.471v2.47h2.486v-2.47ZM7.957 17.97H5.471v4.957h2.486V17.97ZM5.471 25.397h-2.47v2.486h2.47v-2.486Z"
+      />
+    </svg>
+  );
+}
+
+export function GirlIcon({ className }: { className?: string }) {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" width="39" height="33" fill="none" className={className}>
+      <path
+        fill="currentColor"
+        d="M3.443 30.008H5.93v2.47h4.94v-2.47h2.487v-2.47h-2.487v-2.486H8.4v-9.896h2.47v-2.487h17.34v2.486h2.47v9.897h-2.47v2.486h-2.47v2.47h2.47v2.47h4.955v-2.47h2.47v-4.956h2.487V12.669h-2.487V7.73h-2.47V5.243h-2.486v-2.47h-2.47V.303H10.87v2.47H8.4v2.47H5.93v2.486H3.443v4.94H.973v12.383h2.47v4.956Z"
+      />
+      <path
+        fill="currentColor"
+        d="M28.208 17.625h-2.47v4.957h2.47v-4.957ZM25.738 30.008H13.355v2.47h12.383v-2.47ZM23.252 25.052h-7.426v2.486h7.426v-2.486ZM13.355 17.625H10.87v4.957h2.486v-4.957Z"
+      />
+    </svg>
+  );
+}

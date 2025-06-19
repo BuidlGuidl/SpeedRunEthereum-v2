@@ -1,7 +1,16 @@
 /* eslint-disable react/no-unescaped-entities */
 import Image from "next/image";
 import HeroLogo from "../_assets/icons/HeroLogo";
-import { DiamondIcon, LightbulbIcon, MachineIcon, SpaceshipIcon, TargetIcon, ToolsIcon } from "./_components/Icons";
+import {
+  BoyIcon,
+  DiamondIcon,
+  GirlIcon,
+  LightbulbIcon,
+  MachineIcon,
+  SpaceshipIcon,
+  TargetIcon,
+  ToolsIcon,
+} from "./_components/Icons";
 import { StartChallengesButton } from "./_components/StartChallengesButton";
 
 const StartLandingPage = () => {
@@ -75,17 +84,19 @@ const StartLandingPage = () => {
             </li>
           </ul>
 
-          <div className="bg-base-100 px-4 border-2 border-primary rounded-lg lg:bg-transparent lg:border-0 lg:mx-auto lg:w-[510px] lg:h-[110px] lg:bg-[url('/assets/start/text-bubble-boy.svg')] lg:bg-no-repeat">
-            <p className="lg:pt-3 lg:pl-1 lg:pr-10 lg:m-0 lg:text-gray-600">
+          <div className="relative bg-base-100 px-4 border-2 border-primary rounded-lg lg:bg-transparent lg:border-0 lg:mx-auto lg:w-[470px] lg:h-[111px] lg:bg-[url('/assets/start/text-bubble-left.svg')] lg:bg-no-repeat">
+            <p className="lg:pt-3 lg:pl-3 lg:pr-6 lg:m-0 lg:text-gray-600">
               It's not just about digital assets; Ethereum lets you build systems where{" "}
               <strong>money itself is programmable</strong>.
             </p>
+            <BoyIcon className="hidden absolute -right-12 bottom-6 lg:block" />
           </div>
 
-          <div className="my-8 bg-base-100 px-4 border-2 border-primary rounded-lg lg:bg-transparent lg:border-0 lg:mx-auto lg:w-[516px] lg:h-[100px] lg:bg-[url('/assets/start/text-bubble-girl.svg')] lg:bg-no-repeat">
-            <p className="lg:pt-5 lg:pl-[4.5rem] lg:pr-1 lg:m-0 lg:text-gray-600">
+          <div className="relative my-8 bg-base-100 px-4 border-2 border-primary rounded-lg lg:bg-transparent lg:border-0 lg:mx-auto lg:w-[471px] lg:h-[97px] lg:bg-[url('/assets/start/text-bubble-right.svg')] lg:bg-no-repeat">
+            <p className="lg:pt-5 lg:pl-[1.5rem] lg:pr-1 lg:m-0 lg:text-gray-600">
               From payments and rewards to auctions and governance, logic becomes value.
             </p>
+            <GirlIcon className="hidden absolute -left-14 bottom-4 lg:block" />
           </div>
         </div>
         <div className="mt-12 relative h-[130px]">
