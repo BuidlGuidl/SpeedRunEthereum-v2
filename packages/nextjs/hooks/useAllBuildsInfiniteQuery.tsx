@@ -16,14 +16,7 @@ export function useAllBuildsInfiniteQuery({
   typeFilter: BuildType;
   nameFilter: string;
 }) {
-  const {
-    data: builds,
-    isLoading,
-    isFetching,
-    refetch,
-    fetchNextPage,
-    hasNextPage,
-  } = useInfiniteQuery({
+  const { data, isLoading, isFetching, isFetched, refetch, fetchNextPage, hasNextPage } = useInfiniteQuery({
     queryKey: ["all-builds", nameFilter, categoryFilter, typeFilter],
     queryFn: async ({ pageParam = 0 }) => {
       const start = (pageParam as number) * FETCH_SIZE;
@@ -47,8 +40,8 @@ export function useAllBuildsInfiniteQuery({
     placeholderData: keepPreviousData,
   });
 
-  const flatData = useMemo(() => builds?.pages?.flatMap(page => page.data) ?? [], [builds]);
-  const totalBuilds = builds?.pages?.[0]?.meta?.totalRowCount ?? 0;
+  const builds = useMemo(() => data?.pages?.flatMap(page => page.data) ?? [], [data]);
+  const totalBuilds = data?.pages?.[0]?.meta?.totalRowCount ?? 0;
 
   useEffect(() => {
     const onscroll = () => {
@@ -67,8 +60,9 @@ export function useAllBuildsInfiniteQuery({
   return {
     builds,
     isLoading,
+    isFetching,
+    isFetched,
     refetch,
-    flatData,
     totalBuilds,
   };
 }

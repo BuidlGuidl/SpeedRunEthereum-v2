@@ -18,7 +18,7 @@ export function AllBuilds({ searchParams }: { searchParams: { category?: BuildCa
 
   const [debouncedFilter] = useDebounceValue(nameFilter.length >= 3 ? nameFilter : "", 500);
 
-  const { builds, isLoading, refetch, flatData, totalBuilds } = useAllBuildsInfiniteQuery({
+  const { builds, isLoading, isFetching, isFetched, refetch, totalBuilds } = useAllBuildsInfiniteQuery({
     categoryFilter: categoryFilter as BuildCategory,
     typeFilter: typeFilter as BuildType,
     nameFilter: debouncedFilter,
@@ -134,9 +134,9 @@ export function AllBuilds({ searchParams }: { searchParams: { category?: BuildCa
                 <LoadingSkeleton />
               </>
             )}
-            {builds &&
-              Boolean(flatData.length > 0) &&
-              flatData.map(build => (
+            {isFetched &&
+              Boolean(builds.length > 0) &&
+              builds.map(build => (
                 <div
                   key={build.id}
                   className="relative flex flex-col bg-base-300 rounded-xl shadow-md overflow-hidden transition hover:shadow-lg"
@@ -173,7 +173,16 @@ export function AllBuilds({ searchParams }: { searchParams: { category?: BuildCa
                   </div>
                 </div>
               ))}
-            {builds && flatData.length === 0 && (
+            {/* Show loading skeleton when fetching during scrolling */}
+            {!isLoading && isFetching && (
+              <>
+                <LoadingSkeleton />
+                <LoadingSkeleton />
+                <LoadingSkeleton />
+                <LoadingSkeleton />
+              </>
+            )}
+            {isFetched && builds.length === 0 && (
               <div role="alert" className="alert alert-info md:col-span-2 lg:col-span-4">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
