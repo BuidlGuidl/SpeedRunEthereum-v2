@@ -62,7 +62,6 @@ export const HomepageClient = ({ challenges }: { challenges: Challenges }) => {
           challengeId={ChallengeId.PREDICTION_MARKETS}
           userChallenges={userChallenges}
           challenges={challenges}
-          comingSoon
         />
         <ChallengeExpandedCard
           key={ChallengeId.DEPLOY_TO_L2}
