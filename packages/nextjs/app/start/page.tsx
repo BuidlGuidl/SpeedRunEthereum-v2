@@ -133,20 +133,6 @@ const StartLandingPage = () => {
             <ToolsIcon />
             <h2 className="m-0 text-center text-2xl font-medium md:text-4xl">How does SpeedRunEthereum work?</h2>
           </div>
-          <p className="mt-8 mb-4">
-            You'll use{" "}
-            <a href="https://github.com/scaffold-eth/scaffold-eth-2" className="link">
-              Scaffold-ETH 2
-            </a>
-            , a powerful developer toolkit that gives you:
-          </p>
-
-          <ul className="list-disc pl-6 mb-8 space-y-4">
-            <li>⚙️ A full Ethereum dev environment with local blockchain</li>
-            <li>🔌 A frontend connected to your contracts</li>
-            <li>🔍 Built-in Debug tools, Faucets, wallet connection, and powerful hooks and components.</li>
-          </ul>
-
           <p>
             You'll be able to <strong>tinker with smart contracts</strong>, deploy locally, test interactions, and build
             usable decentralized apps from day one.
@@ -155,6 +141,18 @@ const StartLandingPage = () => {
             Along the way, you can submit completed challenges to your SpeedRunEthereum portfolio. Each challenge
             becomes a public proof of your learning.
           </p>
+          <p className="mt-8 mb-4">
+            You'll use{" "}
+            <a href="https://github.com/scaffold-eth/scaffold-eth-2" className="link">
+              Scaffold-ETH 2
+            </a>
+            , a powerful developer toolkit that gives you:
+          </p>
+          <ul className="list-disc pl-6 mb-8 space-y-4">
+            <li>⚙️ A full Ethereum dev environment with local blockchain</li>
+            <li>🔌 A frontend connected to your contracts</li>
+            <li>🔍 Built-in Debug tools, Faucets, wallet connection, and powerful hooks and components.</li>
+          </ul>
 
           <div className="px-4 mt-10 mx-auto bg-base-200 border-2 border-primary rounded-lg lg:border-none lg:pt-1 lg:bg-transparent lg:w-[660px] lg:h-32 lg:bg-[url('/assets/start/window-2.svg')] lg:bg-center lg:bg-no-repeat">
             <p className="lg:text-gray-600">
