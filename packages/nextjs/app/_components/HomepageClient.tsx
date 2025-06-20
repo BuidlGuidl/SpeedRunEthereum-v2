@@ -17,7 +17,7 @@ export const HomepageClient = ({ challenges }: { challenges: Challenges }) => {
 
   return (
     <div>
-      <Hero firstChallengeId={"simple-nft-example"} />
+      <Hero />
       <div className="bg-base-200">
         <ChallengeExpandedCard
           key={ChallengeId.SIMPLE_NFT_EXAMPLE}
