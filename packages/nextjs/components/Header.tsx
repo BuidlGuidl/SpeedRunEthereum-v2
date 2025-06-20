@@ -105,12 +105,11 @@ export const Header = () => {
     >
       <div className="navbar-start w-auto lg:w-1/2">
         <div className="flex items-center">
-          {!isHomepage ||
-            (!isStartPage && (
-              <Link href="/" className="ml-2 lg:ml-6 lg:mr-4 lg:my-2">
-                <Logo className="w-36 lg:w-48" />
-              </Link>
-            ))}
+          {!isHomepage && (
+            <Link href="/" className="ml-2 lg:ml-6 lg:mr-4 lg:my-2">
+              <Logo className="w-36 lg:w-48" />
+            </Link>
+          )}
           <ul className="hidden lg:flex flex-nowrap px-1 gap-2">
             <HeaderMenuLinks hideItemsByLabel={["Home"]} user={user} />
           </ul>
