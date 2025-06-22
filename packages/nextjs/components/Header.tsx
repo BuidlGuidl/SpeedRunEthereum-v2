@@ -4,6 +4,7 @@ import React, { useMemo } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Logo from "./Logo";
+import clsx from "clsx";
 import { useAccount } from "wagmi";
 import { RainbowKitCustomConnectButton } from "~~/components/scaffold-eth";
 import { useUser } from "~~/hooks/useUser";
@@ -90,12 +91,18 @@ export const HeaderMenuLinks = ({ hideItemsByLabel, user }: { hideItemsByLabel?:
 export const Header = () => {
   const pathname = usePathname();
   const isHomepage = pathname === "/";
+  const isStartPage = pathname === "/start";
 
   const { address: connectedAddress } = useAccount();
   const { data: user } = useUser(connectedAddress);
 
   return (
-    <div className="sticky lg:static top-0 navbar bg-base-300 min-h-0 flex-shrink-0 justify-between z-20 px-0 sm:px-2">
+    <div
+      className={clsx(
+        "sticky lg:static top-0 navbar min-h-0 flex-shrink-0 justify-between z-20 px-0 sm:px-2",
+        isStartPage ? "bg-[#F9FEFF] dark:bg-base-100" : "bg-base-300",
+      )}
+    >
       <div className="navbar-start w-auto lg:w-1/2">
         <div className="flex items-center">
           {!isHomepage && (

@@ -2,7 +2,7 @@ import HeroDiamond from "../_assets/icons/HeroDiamond";
 import HeroLogo from "../_assets/icons/HeroLogo";
 import { StartBuildingButton } from "./StartBuildingButton";
 
-export const Hero = ({ firstChallengeId }: { firstChallengeId: string }) => {
+export const Hero = () => {
   return (
     <div className="relative bg-base-300">
       <div className="absolute inset-0 bg-[url('/assets/home_header_clouds.svg')] bg-top bg-repeat-x bg-[length:auto_200px] sm:bg-[length:auto_300px]" />
@@ -20,7 +20,7 @@ export const Hero = ({ firstChallengeId }: { firstChallengeId: string }) => {
           <HeroLogo className="max-w-[600px]" />
         </div>
 
-        <StartBuildingButton firstChallengeId={firstChallengeId} />
+        <StartBuildingButton />
       </div>
 
       <div className="relative h-[130px]">
