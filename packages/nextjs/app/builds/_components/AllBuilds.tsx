@@ -4,10 +4,9 @@ import { useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { LoadingSkeleton } from "./LoadingSkeleton";
-import { useQuery } from "@tanstack/react-query";
 import { useDebounceValue } from "usehooks-ts";
 import { LikeBuildButton } from "~~/app/builders/[address]/_components/builds/LikeBuildButton";
-import { fetchBuilds } from "~~/services/api/builds";
+import { useAllBuildsInfiniteQuery } from "~~/hooks/useAllBuildsInfiniteQuery";
 import { BuildCategory, BuildType } from "~~/services/database/config/types";
 
 export function AllBuilds({ searchParams }: { searchParams: { category?: BuildCategory; type?: BuildType } }) {
@@ -19,18 +18,10 @@ export function AllBuilds({ searchParams }: { searchParams: { category?: BuildCa
 
   const [debouncedFilter] = useDebounceValue(nameFilter.length >= 3 ? nameFilter : "", 500);
 
-  const {
-    data: builds,
-    isLoading,
-    refetch,
-  } = useQuery({
-    queryKey: ["all-builds", debouncedFilter, categoryFilter, typeFilter],
-    queryFn: () =>
-      fetchBuilds({
-        name: debouncedFilter,
-        category: categoryFilter as BuildCategory,
-        type: typeFilter as BuildType,
-      }),
+  const { builds, isLoading, isFetching, isFetched, refetch, totalBuilds } = useAllBuildsInfiniteQuery({
+    categoryFilter: categoryFilter as BuildCategory,
+    typeFilter: typeFilter as BuildType,
+    nameFilter: debouncedFilter,
   });
 
   const handleCategoryChange = (category: BuildCategory) => {
@@ -63,18 +54,10 @@ export function AllBuilds({ searchParams }: { searchParams: { category?: BuildCa
     router.replace(`${pathname}?${newSearchParams.toString()}`);
   };
 
-  const numberOfBuilds = builds?.length || 0;
-
   return (
     <div className="py-12 px-6 max-w-7xl mx-auto w-full">
       <div className="flex items-center gap-3">
         <h1 className="m-0 text-2xl font-bold lg:text-4xl">All Builds</h1>
-        <p className="m-0 text-2xl lg:text-4xl">-</p>
-        {isLoading ? (
-          <div className="skeleton rounded-md w-12 h-7 lg:h-9"></div>
-        ) : (
-          <p className="mb-0 mt-0.5 text-xl lg:mt-1 lg:text-3xl">{numberOfBuilds}</p>
-        )}
       </div>
       <div className="mt-8">
         <div className="grid grid-cols-1 gap-4 md:grid-cols-3 lg:grid-cols-4 lg:gap-6">
@@ -130,6 +113,15 @@ export function AllBuilds({ searchParams }: { searchParams: { category?: BuildCa
               ))}
             </select>
           </div>
+
+          <div>
+            <p className="mt-0 mb-1 text-sm lg:mb-2">Total Builds</p>
+            {isLoading ? (
+              <div className="skeleton rounded-md w-24 h-7"></div>
+            ) : (
+              <p className="m-0 text-lg font-semibold">{totalBuilds}</p>
+            )}
+          </div>
         </div>
         <hr className="hidden my-6 border-base-300 lg:block" />
         <div className="mt-6">
@@ -142,7 +134,7 @@ export function AllBuilds({ searchParams }: { searchParams: { category?: BuildCa
                 <LoadingSkeleton />
               </>
             )}
-            {builds &&
+            {isFetched &&
               Boolean(builds.length > 0) &&
               builds.map(build => (
                 <div
@@ -181,7 +173,16 @@ export function AllBuilds({ searchParams }: { searchParams: { category?: BuildCa
                   </div>
                 </div>
               ))}
-            {builds && builds.length === 0 && (
+            {/* Show loading skeleton when fetching during scrolling */}
+            {!isLoading && isFetching && (
+              <>
+                <LoadingSkeleton />
+                <LoadingSkeleton />
+                <LoadingSkeleton />
+                <LoadingSkeleton />
+              </>
+            )}
+            {isFetched && builds.length === 0 && (
               <div role="alert" className="alert alert-info md:col-span-2 lg:col-span-4">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
