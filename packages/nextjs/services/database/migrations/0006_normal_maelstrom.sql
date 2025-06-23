@@ -1,0 +1,1 @@
+ALTER TABLE "users" ADD COLUMN "ens_avatar" text;
