@@ -19,31 +19,33 @@ import { useParallax, useSlideInFromRight } from "~~/hooks/useParallax";
 const StartLandingPage = () => {
   const cloudsLeftStyle1 = useParallax(0.15);
   const cloudsRightStyle1 = useParallax(0.2);
-  const cloudsLeftStyle2 = useParallax(0.15);
-  const cloudsRightStyle2 = useParallax(0.15);
+  const cloudsLeftStyle2 = useParallax(0.1);
+  const cloudsRightStyle2 = useParallax(0.1);
   const windowSlideStyle = useSlideInFromRight(0.05, 350);
 
   return (
     <div className="bg-[#F9FEFF] dark:bg-base-100 overflow-hidden">
       <div className="relative">
-        <Image
-          src="/assets/start/clouds-left.svg"
-          alt="Clouds"
-          aria-hidden="true"
-          className="absolute -top-4 -left-24 scale-50 lg:left-0 lg:scale-100 xl:left-12"
-          width={332}
-          height={225}
-          style={cloudsLeftStyle1}
-        />
-        <Image
-          src="/assets/start/clouds-right.svg"
-          alt="Clouds"
-          aria-hidden="true"
-          className="absolute top-0 -right-32 scale-50 lg:scale-100 lg:-top-6 xl:top-0 xl:-right-8"
-          width={445}
-          height={280}
-          style={cloudsRightStyle1}
-        />
+        <div style={cloudsLeftStyle1}>
+          <Image
+            src="/assets/start/clouds-left.svg"
+            alt="Clouds"
+            aria-hidden="true"
+            className="absolute -top-4 -left-24 scale-[0.65] lg:left-0 lg:scale-100 xl:left-12"
+            width={332}
+            height={225}
+          />
+        </div>
+        <div style={cloudsRightStyle1}>
+          <Image
+            src="/assets/start/clouds-right.svg"
+            alt="Clouds"
+            aria-hidden="true"
+            className="absolute top-0 -right-32 scale-[0.65] lg:scale-100 lg:-top-6 xl:top-0 xl:-right-8"
+            width={445}
+            height={280}
+          />
+        </div>
         <div className="relative z-10 px-6 lg:pb-12">
           <p className="text-center mb-10 dark:text-gray-200">
             Learn how to build on <strong>Ethereum</strong>; the superpowers and the gotchas.
@@ -119,24 +121,26 @@ const StartLandingPage = () => {
         </div>
       </div>
       <div className="relative pt-12 bg-base-100 lg:pt-24">
-        <Image
-          src="/assets/start/clouds-left.svg"
-          alt="Clouds"
-          aria-hidden="true"
-          className="hidden absolute -top-28 -left-24 scale-50 lg:left-0 lg:scale-100 xl:block"
-          width={332}
-          height={225}
-          style={cloudsLeftStyle2}
-        />
-        <Image
-          src="/assets/start/clouds-right.svg"
-          alt="Clouds"
-          aria-hidden="true"
-          className="hidden absolute -top-28 -right-32 scale-50 lg:block lg:scale-100 xl:-right-0"
-          width={445}
-          height={280}
-          style={cloudsRightStyle2}
-        />
+        <div style={cloudsLeftStyle2}>
+          <Image
+            src="/assets/start/clouds-left.svg"
+            alt="Clouds"
+            aria-hidden="true"
+            className="hidden absolute -top-32 -left-24 scale-[0.5] lg:left-0 lg:scale-100 xl:block"
+            width={332}
+            height={225}
+          />
+        </div>
+        <div style={cloudsRightStyle2}>
+          <Image
+            src="/assets/start/clouds-right.svg"
+            alt="Clouds"
+            aria-hidden="true"
+            className="hidden absolute -top-32 -right-32 scale-[0.5] lg:block lg:scale-100 xl:-right-0"
+            width={445}
+            height={280}
+          />
+        </div>
         <div className="relative z-10 max-w-4xl mx-auto px-6 text-lg lg:pb-12">
           <div className="mb-12 flex flex-col items-center gap-4 lg:flex-row lg:gap-4 lg:justify-center">
             <ToolsIcon />
