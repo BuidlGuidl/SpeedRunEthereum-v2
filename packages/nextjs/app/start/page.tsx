@@ -1,3 +1,5 @@
+"use client";
+
 /* eslint-disable react/no-unescaped-entities */
 import Image from "next/image";
 import HeroLogo from "../_assets/icons/HeroLogo";
@@ -12,15 +14,14 @@ import {
   ToolsIcon,
 } from "./_components/Icons";
 import { StartChallengesButton } from "./_components/StartChallengesButton";
-import { getMetadata } from "~~/utils/scaffold-eth/getMetadata";
-
-export const metadata = getMetadata({
-  title: "Build your first Apps on Ethereum",
-  description:
-    "Build your first Ethereum apps with hands-on challenges. Learn smart contracts and dapp development through real, practical experience.",
-});
+import { useParallax } from "~~/hooks/useParallax";
 
 const StartLandingPage = () => {
+  const cloudsLeftStyle1 = useParallax(0.15);
+  const cloudsRightStyle1 = useParallax(0.2);
+  const cloudsLeftStyle2 = useParallax(0.15);
+  const cloudsRightStyle2 = useParallax(0.15);
+
   return (
     <div className="bg-[#F9FEFF] dark:bg-base-100 overflow-hidden">
       <div className="relative">
@@ -31,6 +32,7 @@ const StartLandingPage = () => {
           className="absolute -top-4 -left-24 scale-50 lg:left-0 lg:scale-100 xl:left-12"
           width={332}
           height={225}
+          style={cloudsLeftStyle1}
         />
         <Image
           src="/assets/start/clouds-right.svg"
@@ -39,6 +41,7 @@ const StartLandingPage = () => {
           className="absolute top-0 -right-32 scale-50 lg:scale-100 lg:-top-6 xl:top-0 xl:-right-8"
           width={445}
           height={280}
+          style={cloudsRightStyle1}
         />
         <div className="relative z-10 px-6 lg:pb-12">
           <p className="text-center mb-10 dark:text-gray-200">
@@ -116,17 +119,19 @@ const StartLandingPage = () => {
           src="/assets/start/clouds-left.svg"
           alt="Clouds"
           aria-hidden="true"
-          className="hidden absolute -left-24 scale-50 lg:left-0 lg:scale-100 xl:block"
+          className="hidden absolute -top-28 -left-24 scale-50 lg:left-0 lg:scale-100 xl:block"
           width={332}
           height={225}
+          style={cloudsLeftStyle2}
         />
         <Image
           src="/assets/start/clouds-right.svg"
           alt="Clouds"
           aria-hidden="true"
-          className="hidden absolute top-12 -right-32 scale-50 lg:block lg:scale-100 xl:-right-0"
+          className="hidden absolute -top-28 -right-32 scale-50 lg:block lg:scale-100 xl:-right-0"
           width={445}
           height={280}
+          style={cloudsRightStyle2}
         />
         <div className="relative z-10 max-w-4xl mx-auto px-6 text-lg lg:pb-12">
           <div className="mb-12 flex flex-col items-center gap-4 lg:flex-row lg:gap-4 lg:justify-center">
