@@ -14,13 +14,14 @@ import {
   ToolsIcon,
 } from "./_components/Icons";
 import { StartChallengesButton } from "./_components/StartChallengesButton";
-import { useParallax } from "~~/hooks/useParallax";
+import { useParallax, useSlideInFromRight } from "~~/hooks/useParallax";
 
 const StartLandingPage = () => {
   const cloudsLeftStyle1 = useParallax(0.15);
   const cloudsRightStyle1 = useParallax(0.2);
   const cloudsLeftStyle2 = useParallax(0.15);
   const cloudsRightStyle2 = useParallax(0.15);
+  const windowSlideStyle = useSlideInFromRight(0.05, 350);
 
   return (
     <div className="bg-[#F9FEFF] dark:bg-base-100 overflow-hidden">
@@ -60,7 +61,10 @@ const StartLandingPage = () => {
             </p>
           </div>
         </div>
-        <div className="mb-8 mx-auto w-80 h-40 bg-[url('/assets/start/window-1.svg')] bg-center bg-no-repeat lg:mb-0 lg:absolute lg:right-[5%] lg:-bottom-20">
+        <div
+          className="mb-8 mx-auto w-80 h-40 bg-[url('/assets/start/window-1.svg')] bg-center bg-no-repeat lg:mb-0 lg:absolute lg:right-[5%] lg:-bottom-20"
+          style={windowSlideStyle}
+        >
           <div className="pt-14 px-10 text-gray-600 md:pt-[3.25rem]">
             <p className="mt-0 mb-1 md:text-lg">Already comfortable building on Ethereum?</p>
             <a href="https://speedrunethereum.com/challenge/simple-nft-example" className="link">
