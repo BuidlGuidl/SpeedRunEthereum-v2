@@ -54,7 +54,7 @@ const StartLandingPage = () => {
             <HeroLogo className="max-w-[600px]" />
           </div>
           <div className="max-w-3xl mx-auto">
-            <p className="my-12 text-lg md:my-14 md:text-center md:text-xl md:leading-relaxed">
+            <p className="my-12 text-lg text-center md:my-14 md:text-center md:text-xl md:leading-relaxed">
               SpeedRunEthereum is a <TargetIcon className="inline-block w-6 h-6" /> hands-on series of challenges
               designed to help you <strong>learn by building</strong>. Each challenge delivers one key "aha" moment,{" "}
               <LightbulbIcon className="inline-block w-6 h-6" /> a mental unlock about how{" "}
@@ -68,7 +68,7 @@ const StartLandingPage = () => {
           style={windowSlideStyle}
         >
           <div className="pt-14 px-10 text-gray-600 md:pt-[3.25rem]">
-            <p className="mt-0 mb-1 md:text-lg">Already comfortable building on Ethereum?</p>
+            <p className="mt-0 mb-1 text-center lg:text-left md:text-lg">Already comfortable building on Ethereum?</p>
             <a href="https://speedrunethereum.com/challenge/simple-nft-example" className="link">
               Jump straight to Challenge #0
             </a>
@@ -196,7 +196,7 @@ const StartLandingPage = () => {
           />
           <p className="mb-2 text-center font-medium">Start with Challenge #0: Simple NFT Example</p>
           <p className="mt-2 text-center">You'll deploy your first smart contract and mint an NFT on a testnet.</p>
-          <div className="flex justify-center mt-8 lg:mt-12">
+          <div className="flex justify-center mt-8 mb-8 lg:mb-0 lg:mt-12">
             <StartChallengesButton />
           </div>
         </div>
