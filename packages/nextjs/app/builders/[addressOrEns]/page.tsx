@@ -1,4 +1,4 @@
-import { notFound, redirect } from "next/navigation";
+import { notFound, permanentRedirect } from "next/navigation";
 import { UserChallengesTable } from "./_components/UserChallengesTable";
 import { UserProfileCard } from "./_components/UserProfileCard";
 import { BuildCard } from "./_components/builds/BuildCard";
@@ -86,7 +86,7 @@ export default async function BuilderPage({ params }: { params: { addressOrEns: 
   const { canonicalAddress, isEns } = await getCanonicalAddress(addressOrEns);
 
   if (isEns && canonicalAddress) {
-    redirect(`/builders/${canonicalAddress}`);
+    permanentRedirect(`/builders/${canonicalAddress}`);
   }
 
   const userAddress = addressOrEns;
