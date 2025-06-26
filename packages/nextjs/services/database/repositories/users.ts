@@ -23,6 +23,12 @@ export async function getUserByAddress(address: string) {
   });
 }
 
+export async function getUserByEns(ensName: string) {
+  return await db.query.users.findFirst({
+    where: eq(lower(users.ens), ensName.toLowerCase()),
+  });
+}
+
 export async function getSortedUsersWithChallengesInfo(
   start: number,
   size: number,

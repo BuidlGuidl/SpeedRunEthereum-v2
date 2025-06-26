@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { isUserAdmin, updateUser } from "~~/services/database/repositories/users";
 import { isValidEIP712UpdateEnsSignature } from "~~/services/eip712/ens";
-import { publicClient } from "~~/utils/ens-or-address";
+import { publicClient } from "~~/utils/short-address-and-ens";
 
 type UpdateEnsPayload = {
   address: string;

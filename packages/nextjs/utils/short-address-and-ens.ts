@@ -1,5 +1,6 @@
 import { Address, createPublicClient, http } from "viem";
 import { mainnet } from "viem/chains";
+import { getUserByAddress } from "~~/services/database/repositories/users";
 import { getAlchemyHttpUrl } from "~~/utils/scaffold-eth";
 
 export const publicClient = createPublicClient({
@@ -7,12 +8,13 @@ export const publicClient = createPublicClient({
   transport: http(getAlchemyHttpUrl(mainnet.id)),
 });
 
-export async function getEnsOrAddress(address: Address) {
+export async function getShortAddressAndEns(address: Address) {
   let ensName = null;
   const shortAddress = `${address.slice(0, 6)}...${address.slice(-6)}`;
 
   try {
-    ensName = await publicClient.getEnsName({ address });
+    const user = await getUserByAddress(address);
+    ensName = user?.ens;
   } catch (error) {
     console.error("Error resolving ENS name:", error);
   }
