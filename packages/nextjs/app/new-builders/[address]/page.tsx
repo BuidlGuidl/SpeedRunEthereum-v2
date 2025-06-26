@@ -1,5 +1,4 @@
 import Image from "next/image";
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import { UserProfileCard } from "./_components/UserProfileCard";
 import { BuildCard } from "./_components/builds/BuildCard";
@@ -50,6 +49,14 @@ const CHALLENGES = [
   {
     id: 5,
     title: "Build a DEX",
+    description:
+      "Make a decentralized, digital currency and build an unstoppable vending machine that will buy and sell the currency.",
+    link: "/challenge/decentralized-staking",
+    completed: false,
+  },
+  {
+    id: 6,
+    title: "SVG NFT",
     description:
       "Make a decentralized, digital currency and build an unstoppable vending machine that will buy and sell the currency.",
     link: "/challenge/decentralized-staking",
@@ -123,140 +130,65 @@ export default async function BuilderPage({ params }: { params: { address: strin
     <>
       <RouteRefresher />
       <div className="max-w-[1440px] w-full mx-auto px-4 py-8">
-        <UserProfileCard user={user} batch={userBatch} />
-        <div className="mt-12">
-          <div>
-            {/* Challenges */}
-            <div className="w-full">
-              {/* <h2 className="text-2xl font-bold mb-0 text-neutral pb-4">Challenges</h2> */}
-              <div className="mb-8 bg-base-100 rounded-xl border">
-                <div className="grid grid-cols-1 divide-y lg:divide-y-0 lg:divide-x lg:grid-cols-2">
-                  <div className="p-5">
-                    <div className="flex items-center gap-3">
-                      <div className="w-12 h-12 flex items-center justify-center flex-shrink-0 text-3xl rounded-full bg-base-200">
-                        💰
-                      </div>
-                      <h2 className="m-0 font-semibold text-lg lg:text-xl">DeFi Challenges</h2>
-                    </div>
-                    <p className="mb-0">
-                      A series of challenges to further your understanding of decentralized finance. Explore digital
-                      currencies, build a decentralized exchange, deep dive into stablecoins, and much more!
-                    </p>
-                    <div className="mt-6 px-4 py-3 border rounded-xl">
-                      <p className="mt-0 mb-2 font-medium">
-                        Achievements -{" "}
-                        <span className="text-gray-400 font-normal dark:text-gray-300">2/5 Completed</span>
-                      </p>
-                      <div className="flex flex-wrap gap-2">
-                        {Array.from({ length: 5 }).map((_, index) => (
-                          <Image
-                            key={index}
-                            className={clsx("rounded-full w-10 h-10 border-2 border-white", {
-                              "saturate-0 opacity-50": index > 1,
-                            })}
-                            src={`/assets/achievements/icon-challenge-${index + 1}.png`}
-                            alt={`Challenge ${index + 1} achievement`}
-                            width={125}
-                            height={125}
-                          />
-                        ))}
-                      </div>
-                    </div>
+        <div className="grid grid-cols-1 xl:grid-cols-4 gap-6">
+          <UserProfileCard user={user} batch={userBatch} />
+          <div className="xl:mt-9 xl:col-span-3">
+            <div>
+              {/* Challenges */}
+              <div>
+                <div className="mb-8 p-4 bg-base-100 rounded-xl">
+                  <div className="flex items-center justify-between">
+                    <h2 className="text-2xl font-bold m-0">Challenges</h2>
+                    <p className="m-0 text-gray-500">2 / 10 Completed</p>
                   </div>
-                  <div className="px-5 pb-5 space-y-5 divide-y max-h-80 overflow-x-hidden overflow-y-scroll">
+                  <div className="mt-4 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-4">
                     {CHALLENGES.map(challenge => (
                       <div
                         key={challenge.id}
-                        className={clsx("pt-5 flex gap-4", challenge.completed && "text-base-content/50")}
+                        className={clsx(
+                          "aspect-square flex items-center justify-center bg-base-200 mask mask-hexagon-2",
+                          {
+                            "opacity-50": !challenge.completed,
+                          },
+                        )}
                       >
-                        <div className="w-8 h-8 flex items-center justify-center flex-shrink-0 text-lg font-semibold rounded-full bg-base-200 border">
-                          {challenge.id}
-                        </div>
-                        <div>
-                          <div className="flex items-center gap-2">
-                            <h3 className="m-0 font-medium">
-                              <Link className="hover:underline" href={challenge.link}>
-                                {challenge.title}
-                              </Link>
-                            </h3>
-                            {challenge.completed && (
-                              <span className="badge badge-xs badge-primary pt-1 pb-1 h-4 text-[0.7rem]">
-                                completed
-                              </span>
-                            )}
-                          </div>
-                          <p className="mb-0 mt-2 text-sm">{challenge.description}</p>
-                        </div>
+                        <Image
+                          src={`/assets/achievements/trophy-${challenge.id}.svg`}
+                          alt={`Trophy for ${challenge.id}`}
+                          className="w-16 h-auto"
+                          width={100}
+                          height={100}
+                        />
                       </div>
                     ))}
                   </div>
                 </div>
               </div>
-
-              <div className="bg-base-100 rounded-xl border">
-                <div className="grid grid-cols-1 divide-y lg:divide-y-0 lg:divide-x lg:grid-cols-2">
-                  <div className="p-5">
-                    <div className="flex items-center gap-3">
-                      <div className="w-12 h-12 flex items-center justify-center flex-shrink-0 text-3xl rounded-full bg-base-200">
-                        🎰
-                      </div>
-                      <h2 className="m-0 font-semibold text-lg lg:text-xl">Gaming Challenges</h2>
-                    </div>
-                    <p className="mb-0">
-                      A series of challenges to further your understanding of decentralized finance. Explore digital
-                      currencies, build a decentralized exchange, deep dive into stablecoins, and much more!
-                    </p>
-                    <div className="mt-6 px-4 py-3 border rounded-xl">
-                      <p className="mt-0 mb-2 font-medium">
-                        Achievements -{" "}
-                        <span className="text-gray-400 font-normal dark:text-gray-300">0/5 Completed</span>
-                      </p>
-                    </div>
-                  </div>
-                  <div className="px-5 pb-5 space-y-5 divide-y max-h-80 overflow-x-hidden overflow-y-scroll">
-                    {CHALLENGES.map(challenge => (
-                      <div key={challenge.id} className="pt-5 flex gap-4">
-                        <div className="w-8 h-8 flex items-center justify-center flex-shrink-0 text-lg font-semibold rounded-full bg-base-200 border">
-                          {challenge.id}
-                        </div>
-                        <div>
-                          <h3 className="m-0 font-medium">
-                            <Link className="hover:underline" href={challenge.link}>
-                              {challenge.title}
-                            </Link>
-                          </h3>
-                          <p className="mb-0 mt-2 text-sm">{challenge.description}</p>
-                        </div>
+              {/* Builds */}
+              <div className="mt-12 w-full">
+                <div className="flex justify-between items-center">
+                  <h2 className="text-2xl font-bold mb-0 text-neutral pb-4">Builds</h2>
+                  <SubmitNewBuildButton />
+                </div>
+                {builds.length > 0 ? (
+                  <div className="flex flex-wrap items-stretch w-full gap-5">
+                    {builds.map(build => (
+                      <div key={build.build.id} className="flex-grow-0 flex-shrink-0">
+                        <BuildCard
+                          ownerAddress={build.ownerAddress}
+                          build={build.build}
+                          likes={build.likes}
+                          coBuilders={build.coBuilders}
+                        />
                       </div>
                     ))}
                   </div>
-                </div>
+                ) : (
+                  <div className="bg-base-100 p-8 text-center rounded-lg text-neutral">
+                    This builder hasn&apos;t submitted any builds yet.
+                  </div>
+                )}
               </div>
-            </div>
-            {/* Builds */}
-            <div className="mt-12 w-full">
-              <div className="flex justify-between items-center">
-                <h2 className="text-2xl font-bold mb-0 text-neutral pb-4">Builds</h2>
-                <SubmitNewBuildButton />
-              </div>
-              {builds.length > 0 ? (
-                <div className="flex flex-wrap items-stretch w-full gap-5">
-                  {builds.map(build => (
-                    <div key={build.build.id} className="flex-grow-0 flex-shrink-0">
-                      <BuildCard
-                        ownerAddress={build.ownerAddress}
-                        build={build.build}
-                        likes={build.likes}
-                        coBuilders={build.coBuilders}
-                      />
-                    </div>
-                  ))}
-                </div>
-              ) : (
-                <div className="bg-base-100 p-8 text-center rounded-lg text-neutral">
-                  This builder hasn&apos;t submitted any builds yet.
-                </div>
-              )}
             </div>
           </div>
         </div>

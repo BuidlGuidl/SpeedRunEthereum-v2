@@ -20,7 +20,7 @@ export const UserSocials = ({ user }: { user: NonNullable<UserByAddress> }) => {
   }
 
   return (
-    <div className="flex items-center justify-center gap-2 md:justify-start md:ml-1">
+    <div className="flex items-center justify-start gap-2">
       {Boolean(userSocials.length > 0) && (
         <div className="flex flex-wrap gap-3">
           {userSocials

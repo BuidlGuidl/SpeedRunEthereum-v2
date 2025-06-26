@@ -1,17 +1,15 @@
 "use client";
 
-import { Address as AddressType, getAddress, isAddress } from "viem";
+import { UserSocials } from "./UserSocials";
+import { getAddress, isAddress } from "viem";
 import { normalize } from "viem/ens";
 import { useEnsAvatar, useEnsName } from "wagmi";
 import { BlockieAvatar } from "~~/components/scaffold-eth";
 import { AddressCopyIcon } from "~~/components/scaffold-eth/Address/AddressCopyIcon";
+import { UserByAddress } from "~~/services/database/repositories/users";
 
-type UserAddressProps = {
-  address: AddressType;
-};
-
-export const UserAddress = ({ address }: UserAddressProps) => {
-  const checkSumAddress = address ? getAddress(address) : undefined;
+export const UserAddress = ({ user }: { user: NonNullable<UserByAddress> }) => {
+  const checkSumAddress = user.userAddress ? getAddress(user.userAddress) : undefined;
 
   const { data: ens, isLoading: isEnsNameLoading } = useEnsName({
     address: checkSumAddress,
@@ -55,7 +53,7 @@ export const UserAddress = ({ address }: UserAddressProps) => {
   }
 
   return (
-    <div className="flex items-center gap-5">
+    <div className="flex items-center gap-3">
       <div className="flex-shrink-0">
         <div className="rounded-full border-4 border-base-100">
           <BlockieAvatar address={checkSumAddress} ensImage={ensAvatar} size={100} />
@@ -68,10 +66,11 @@ export const UserAddress = ({ address }: UserAddressProps) => {
           </div>
         )}
         {!isEnsNameLoading && ens && <p className={"m-0 font-semibold text-lg"}>{ens || "pabl0cks.eth"}</p>}
-        <div className={"flex items-center"}>
-          <p className={"m-0 font-normal text-lg"}>{shortAddress}</p>
+        <div className="mb-2 flex items-center">
+          <p className="m-0 font-normal text-lg">{shortAddress}</p>
           <AddressCopyIcon className={"ml-1 cursor-pointer w-4 h-4"} address={checkSumAddress} />
         </div>
+        <UserSocials user={user} />
       </div>
     </div>
   );
