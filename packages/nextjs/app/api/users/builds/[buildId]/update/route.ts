@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { BuildFormInputs } from "~~/app/builders/[address]/_components/builds/BuildFormModal";
+import { BuildFormInputs } from "~~/app/builders/[addressOrEns]/_components/builds/BuildFormModal";
 import { isOwnerOfBuild, updateBuild } from "~~/services/database/repositories/builds";
 import { isValidEIP712UpdateBuildSignature } from "~~/services/eip712/builds";
 import { isAdminSession } from "~~/utils/auth";

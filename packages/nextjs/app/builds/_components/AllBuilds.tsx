@@ -5,7 +5,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { LoadingSkeleton } from "./LoadingSkeleton";
 import { useDebounceValue } from "usehooks-ts";
-import { LikeBuildButton } from "~~/app/builders/[address]/_components/builds/LikeBuildButton";
+import { LikeBuildButton } from "~~/app/builders/[addressOrEns]/_components/builds/LikeBuildButton";
 import { useAllBuildsInfiniteQuery } from "~~/hooks/useAllBuildsInfiniteQuery";
 import { BuildCategory, BuildType } from "~~/services/database/config/types";
 

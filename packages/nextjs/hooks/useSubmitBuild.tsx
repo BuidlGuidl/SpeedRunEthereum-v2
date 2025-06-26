@@ -2,7 +2,7 @@ import { useRouter } from "next/navigation";
 import { useMutation } from "@tanstack/react-query";
 import { useSignTypedData } from "wagmi";
 import { useAccount } from "wagmi";
-import { BuildFormInputs } from "~~/app/builders/[address]/_components/builds/BuildFormModal";
+import { BuildFormInputs } from "~~/app/builders/[addressOrEns]/_components/builds/BuildFormModal";
 import { submitBuild } from "~~/services/api/users/builds";
 import { EIP_712_TYPED_DATA__SUBMIT_BUILD } from "~~/services/eip712/builds";
 import { notification } from "~~/utils/scaffold-eth";

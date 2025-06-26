@@ -1,5 +1,5 @@
 import { EIP_712_DOMAIN, isValidEip712Signature } from "./common";
-import { BuildFormInputs } from "~~/app/builders/[address]/_components/builds/BuildFormModal";
+import { BuildFormInputs } from "~~/app/builders/[addressOrEns]/_components/builds/BuildFormModal";
 
 export const EIP_712_TYPED_DATA__SUBMIT_BUILD = {
   domain: EIP_712_DOMAIN,
