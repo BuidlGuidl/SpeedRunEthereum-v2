@@ -1,4 +1,4 @@
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { UserChallengesTable } from "./_components/UserChallengesTable";
 import { UserProfileCard } from "./_components/UserProfileCard";
 import { BuildCard } from "./_components/builds/BuildCard";
@@ -9,37 +9,58 @@ import { RouteRefresher } from "~~/components/RouteRefresher";
 import { getBatchById } from "~~/services/database/repositories/batches";
 import { getBuildsByUserAddress } from "~~/services/database/repositories/builds";
 import { getLatestSubmissionPerChallengeByUser } from "~~/services/database/repositories/userChallenges";
-import { getUserByAddress } from "~~/services/database/repositories/users";
-import { getEnsOrAddress } from "~~/utils/ens-or-address";
+import { getUserByAddress, getUserByEns } from "~~/services/database/repositories/users";
+import { getShortAddressAndEns } from "~~/utils/short-address-and-ens";
 
 type Props = {
   params: {
-    address: string;
+    addressOrEns: string;
   };
 };
 
+async function getCanonicalAddress(addressOrEns: string) {
+  const isValidAddress = isAddress(addressOrEns);
+  const isEns = addressOrEns.endsWith(".eth");
+
+  if (isValidAddress) {
+    return { canonicalAddress: addressOrEns, isEns: false };
+  }
+
+  let canonicalAddress = null;
+  if (isEns) {
+    const userByEns = await getUserByEns(addressOrEns);
+    if (userByEns) {
+      canonicalAddress = userByEns.userAddress;
+    }
+  }
+  return { canonicalAddress, isEns };
+}
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const address = params.address;
-  const isValidAddress = isAddress(address);
+  const addressOrEns = params.addressOrEns;
 
-  const { ensName, shortAddress } = await getEnsOrAddress(address);
-
-  // Default title and description
-  const title = `${ensName || shortAddress}`;
+  const { canonicalAddress } = await getCanonicalAddress(addressOrEns);
+  if (!canonicalAddress) {
+    return {
+      title: "User Not Found",
+    };
+  }
+  const { shortAddress } = await getShortAddressAndEns(canonicalAddress);
+  const title = shortAddress;
 
   // Base URL - replace with your actual domain in production
   const baseUrl = process.env.VERCEL_PROJECT_PRODUCTION_URL
     ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
     : "http://localhost:3000";
 
-  // OG image URL
-  const ogImageUrl = isValidAddress
-    ? `${baseUrl}/api/og?address=${address}`
-    : `${baseUrl}/api/og?address=0x0000000000000000000000000000000000000000`;
+  const ogImageUrl = `${baseUrl}/api/og?address=${canonicalAddress}`;
 
   return {
     metadataBase: new URL(baseUrl),
     title,
+    alternates: {
+      canonical: `${baseUrl}/builders/${canonicalAddress}`,
+    },
     openGraph: {
       title,
       type: "website",
@@ -48,7 +69,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
           url: ogImageUrl,
           width: 1200,
           height: 630,
-          alt: `QR Code for ${address}`,
+          alt: `QR Code for ${canonicalAddress}`,
         },
       ],
     },
@@ -60,8 +81,16 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-export default async function BuilderPage({ params }: { params: { address: string } }) {
-  const { address: userAddress } = params;
+export default async function BuilderPage({ params }: { params: { addressOrEns: string } }) {
+  const { addressOrEns } = params;
+  const { canonicalAddress, isEns } = await getCanonicalAddress(addressOrEns);
+
+  if (isEns && canonicalAddress) {
+    redirect(`/builders/${canonicalAddress}`);
+  }
+
+  const userAddress = addressOrEns;
+
   const challenges = await getLatestSubmissionPerChallengeByUser(userAddress);
   const user = await getUserByAddress(userAddress);
   let userBatch;

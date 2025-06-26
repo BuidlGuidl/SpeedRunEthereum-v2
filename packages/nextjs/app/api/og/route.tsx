@@ -8,7 +8,7 @@ import {
   UserChallenges,
   getLatestSubmissionPerChallengeByUser,
 } from "~~/services/database/repositories/userChallenges";
-import { getEnsOrAddress, publicClient } from "~~/utils/ens-or-address";
+import { getShortAddressAndEns, publicClient } from "~~/utils/short-address-and-ens";
 
 export const dynamic = "force-dynamic";
 
@@ -23,7 +23,7 @@ export async function GET(request: Request) {
 
     const checksumAddress = getAddress(address);
 
-    const { ensName, shortAddress } = await getEnsOrAddress(checksumAddress);
+    const { ensName, shortAddress } = await getShortAddressAndEns(checksumAddress);
 
     let challenges: UserChallenges = [];
     try {
@@ -37,6 +37,7 @@ export async function GET(request: Request) {
     let avatarUrl = null;
     if (ensName) {
       try {
+        // TODO: update after caching ENS avatars
         avatarUrl = await publicClient.getEnsAvatar({ name: normalize(ensName) });
       } catch (error) {
         console.error("Error resolving ENS avatar:", error);
