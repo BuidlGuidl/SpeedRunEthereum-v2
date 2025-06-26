@@ -100,7 +100,7 @@ export const Header = () => {
     <div
       className={clsx(
         "sticky lg:static top-0 navbar min-h-0 flex-shrink-0 justify-between z-20 px-0 sm:px-2",
-        isStartPage ? "bg-[#F9FEFF] dark:bg-base-100" : "bg-base-300",
+        isStartPage ? "bg-[#F9FEFF] dark:bg-base-200" : "bg-base-300",
       )}
     >
       <div className="navbar-start w-auto lg:w-1/2">

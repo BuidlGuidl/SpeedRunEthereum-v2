@@ -24,7 +24,7 @@ const StartLandingPage = () => {
   const windowSlideStyle = useSlideInFromRight(0.05, 350);
 
   return (
-    <div className="bg-[#F9FEFF] dark:bg-base-100 overflow-hidden">
+    <div className="bg-[#F9FEFF] dark:bg-base-200 overflow-hidden">
       <div className="relative">
         <div style={cloudsLeftStyle1}>
           <Image
@@ -76,7 +76,7 @@ const StartLandingPage = () => {
         </div>
       </div>
 
-      <div className="w-full h-[18px] bg-[url('/assets/start/color-border.svg')] bg-repeat-x"></div>
+      <div className="w-full h-[18px] bg-[url('/assets/start/color-border.svg')] dark:bg-[url('/assets/start/color-border-dark.svg')] bg-repeat-x"></div>
       <div className="pt-12 bg-base-300 lg:pt-24">
         <div className="max-w-4xl mx-auto px-6 text-lg lg:pb-12">
           <div className="mb-12 lg:mb-16 mt-2 lg:mt-4 flex flex-col items-center gap-4 lg:flex-row lg:gap-4 lg:justify-center">
@@ -100,7 +100,7 @@ const StartLandingPage = () => {
             </li>
           </ul>
 
-          <div className="relative bg-base-100 px-4 border-2 border-primary rounded-lg lg:bg-transparent lg:border-0 lg:mx-auto lg:w-[470px] lg:h-[111px] lg:bg-[url('/assets/start/text-bubble-left.svg')] lg:bg-no-repeat">
+          <div className="relative bg-base-200 px-4 border-2 border-primary rounded-lg lg:bg-transparent lg:border-0 lg:mx-auto lg:w-[470px] lg:h-[111px] lg:bg-[url('/assets/start/text-bubble-left.svg')] lg:bg-no-repeat">
             <p className="lg:pt-3 lg:pl-3 lg:pr-6 lg:m-0 lg:text-gray-600">
               It's not just about digital assets; Ethereum lets you build systems where{" "}
               <strong>money itself is programmable</strong>.
@@ -108,18 +108,19 @@ const StartLandingPage = () => {
             <BoyIcon className="hidden absolute -right-12 bottom-6 lg:block" />
           </div>
 
-          <div className="relative mt-8 mb-2 bg-base-100 px-4 border-2 border-primary rounded-lg lg:bg-transparent lg:border-0 lg:mx-auto lg:w-[471px] lg:h-[97px] lg:bg-[url('/assets/start/text-bubble-right.svg')] lg:bg-no-repeat">
+          <div className="relative mt-8 mb-2 bg-base-200 px-4 border-2 border-primary rounded-lg lg:bg-transparent lg:border-0 lg:mx-auto lg:w-[471px] lg:h-[97px] lg:bg-[url('/assets/start/text-bubble-right.svg')] lg:bg-no-repeat">
             <p className="lg:pt-5 lg:pl-[1.5rem] lg:pr-1 lg:m-0 lg:text-gray-600">
               From payments and rewards to auctions and governance, logic becomes value.
             </p>
             <GirlIcon className="hidden absolute -left-14 bottom-4 lg:block" />
           </div>
         </div>
-        <div className="lg:mt-12 relative h-[130px]">
+        <div className="lg:mt-12 mt-8 relative h-[130px]">
           <div className="absolute inset-0 bg-[url('/assets/header_platform.svg')] bg-repeat-x bg-[length:auto_130px] z-10" />
           <div className="bg-base-100 absolute inset-0 top-auto w-full h-5" />
         </div>
       </div>
+
       <div className="relative pt-12 bg-base-100 lg:pt-24">
         <div style={cloudsLeftStyle2}>
           <Image
