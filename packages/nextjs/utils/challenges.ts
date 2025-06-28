@@ -105,6 +105,10 @@ export const CHALLENGE_METADATA: Record<
         title: "Impermanent Loss Explained: The Math Behind DeFi's Hidden Risk",
         url: "/guides/impermanent-loss-math-explained",
       },
+      {
+        title: "Front-Running & MEV Mitigation: A DEX Developer's Guide",
+        url: "/guides/front-running-mev-mitigation",
+      },
     ],
   },
   [ChallengeId.MULTISIG]: {
