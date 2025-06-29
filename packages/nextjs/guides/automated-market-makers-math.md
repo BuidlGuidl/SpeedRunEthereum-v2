@@ -63,16 +63,9 @@ The most popular AMM model is the **constant product market maker** (CPMM), used
 
 The equation `x*y=k` describes a **hyperbola** in the first quadrant. Every possible state of the pool is a point on this curve.
 
-```
-Reserve Y (USDC)
-^         |
-|         |
-|         |\
-|         | \
-|         |  \
-|         |   \
-|         +----+----> Reserve X (ETH)
-```
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/12072395/205343533-7e3a2cfe-8329-42af-a35d-6352a12bf61e.png" alt="AMM constant product curve: x*y=k" width="100%" />
+</p>
 
 - **Trades move the pool along the curve.**
 - **Spot price:** Slope of the tangent at a point (`y/x`).
