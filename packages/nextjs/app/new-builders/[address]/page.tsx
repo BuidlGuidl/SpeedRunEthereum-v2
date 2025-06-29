@@ -15,15 +15,15 @@ import { getEnsOrAddress } from "~~/utils/ens-or-address";
 
 const CHALLENGES = [
   {
-    id: 1,
+    id: 0,
     title: "Simple NFT Example",
     description:
       "Make a decentralized, digital currency and build an unstoppable vending machine that will buy and sell the currency.",
-    link: "/challenge/decentralized-staking",
+    link: "/challenge/simple-nft-example",
     completed: true,
   },
   {
-    id: 2,
+    id: 1,
     title: "Decentralized Staking App",
     description:
       "Make a decentralized, digital currency and build an unstoppable vending machine that will buy and sell the currency.",
@@ -31,7 +31,7 @@ const CHALLENGES = [
     completed: true,
   },
   {
-    id: 3,
+    id: 2,
     title: "Token Vendor",
     description:
       "Make a decentralized, digital currency and build an unstoppable vending machine that will buy and sell the currency.",
@@ -39,7 +39,7 @@ const CHALLENGES = [
     completed: false,
   },
   {
-    id: 4,
+    id: 3,
     title: "Dice Game",
     description:
       "Make a decentralized, digital currency and build an unstoppable vending machine that will buy and sell the currency.",
@@ -47,7 +47,7 @@ const CHALLENGES = [
     completed: false,
   },
   {
-    id: 5,
+    id: 4,
     title: "Build a DEX",
     description:
       "Make a decentralized, digital currency and build an unstoppable vending machine that will buy and sell the currency.",
@@ -55,7 +55,39 @@ const CHALLENGES = [
     completed: false,
   },
   {
+    id: 5,
+    title: "Over-Collateralized Lending",
+    description:
+      "Make a decentralized, digital currency and build an unstoppable vending machine that will buy and sell the currency.",
+    link: "/challenge/decentralized-staking",
+    completed: false,
+  },
+  {
     id: 6,
+    title: "Prediction Markets",
+    description:
+      "Make a decentralized, digital currency and build an unstoppable vending machine that will buy and sell the currency.",
+    link: "/challenge/decentralized-staking",
+    completed: false,
+  },
+  {
+    id: 7,
+    title: "Deploy to Layer 2",
+    description:
+      "Make a decentralized, digital currency and build an unstoppable vending machine that will buy and sell the currency.",
+    link: "/challenge/decentralized-staking",
+    completed: false,
+  },
+  {
+    id: 8,
+    title: "Multisig Wallet",
+    description:
+      "Make a decentralized, digital currency and build an unstoppable vending machine that will buy and sell the currency.",
+    link: "/challenge/decentralized-staking",
+    completed: false,
+  },
+  {
+    id: 9,
     title: "SVG NFT",
     description:
       "Make a decentralized, digital currency and build an unstoppable vending machine that will buy and sell the currency.",
@@ -141,24 +173,30 @@ export default async function BuilderPage({ params }: { params: { address: strin
                     <h2 className="text-2xl font-bold m-0">Challenges</h2>
                     <p className="m-0 text-gray-500">2 / 10 Completed</p>
                   </div>
-                  <div className="mt-4 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-4">
+                  <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-3 md:gap-y-6 lg:grid-cols-5">
                     {CHALLENGES.map(challenge => (
                       <div
                         key={challenge.id}
-                        className={clsx(
-                          "aspect-square flex items-center justify-center bg-base-200 mask mask-hexagon-2",
-                          {
-                            "opacity-50": !challenge.completed,
-                          },
-                        )}
+                        className={clsx({
+                          "opacity-50": !challenge.completed,
+                        })}
                       >
-                        <Image
-                          src={`/assets/achievements/trophy-${challenge.id}.svg`}
-                          alt={`Trophy for ${challenge.id}`}
-                          className="w-16 h-auto"
-                          width={100}
-                          height={100}
-                        />
+                        <a
+                          href={challenge.link}
+                          className={clsx(
+                            "aspect-square flex items-center justify-center bg-base-200 mask mask-hexagon-2",
+                          )}
+                        >
+                          <Image
+                            src={`/assets/achievements/trophy-${challenge.id}.svg`}
+                            alt={`Trophy for ${challenge.id}`}
+                            className="w-16 h-auto"
+                            width={100}
+                            height={100}
+                          />
+                        </a>
+                        <p className="mt-1 mb-0 text-sm text-center">Challenge #{challenge.id}</p>
+                        <p className="mt-0.5 mb-0 text-sm text-center">{challenge.title}</p>
                       </div>
                     ))}
                   </div>
