@@ -3082,6 +3082,7 @@ __metadata:
     dotenv: ^16.4.7
     drizzle-kit: ^0.30.4
     drizzle-orm: ^0.42.0
+    drizzle-seed: ^0.3.1
     eslint: ~8.57.1
     eslint-config-next: ~14.2.15
     eslint-config-prettier: ~8.10.0
@@ -7358,6 +7359,20 @@ __metadata:
     sqlite3:
       optional: true
   checksum: 1545f879a43b9cd73ef1af51fa18fdbbcfafc28cd469d4cd09817439a9c7183e83dccf67c2731bbfcab8311793aa19e4228bfacecd4cc5db477c09d092302801
+  languageName: node
+  linkType: hard
+
+"drizzle-seed@npm:^0.3.1":
+  version: 0.3.1
+  resolution: "drizzle-seed@npm:0.3.1"
+  dependencies:
+    pure-rand: ^6.1.0
+  peerDependencies:
+    drizzle-orm: ">=0.36.4"
+  peerDependenciesMeta:
+    drizzle-orm:
+      optional: true
+  checksum: 66b0ff4e3efba29bf5ac43f4c1e1cb7ac3295cd9f62308df9c2018c16abf31299e8766482a0180903e61e2f1cd97b20f11b3e99b79abb213016d776d6ec69f40
   languageName: node
   linkType: hard
 
@@ -14562,6 +14577,13 @@ __metadata:
   version: 2.3.1
   resolution: "punycode@npm:2.3.1"
   checksum: bb0a0ceedca4c3c57a9b981b90601579058903c62be23c5e8e843d2c2d4148a3ecf029d5133486fb0e1822b098ba8bba09e89d6b21742d02fa26bda6441a6fb2
+  languageName: node
+  linkType: hard
+
+"pure-rand@npm:^6.1.0":
+  version: 6.1.0
+  resolution: "pure-rand@npm:6.1.0"
+  checksum: 8d53bc02bed99eca0b65b505090152ee7e9bd67dd74f8ff32ba1c883b87234067c5bf68d2614759fb217d82594d7a92919e6df80f97885e7b12b42af4bd3316a
   languageName: node
   linkType: hard
 

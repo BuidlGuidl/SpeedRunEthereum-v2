@@ -80,7 +80,7 @@ async function seed() {
   try {
     // Clear existing data in a transaction
     await db.transaction(async tx => {
-      console.log("Clearing existing data...");
+      console.log("\nClearing existing data...");
       await tx.delete(userChallenges).execute();
       await tx.delete(challenges).execute();
       await tx.delete(buildLikes).execute();
