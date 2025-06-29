@@ -36,7 +36,7 @@ const CHALLENGES = [
     description:
       "Make a decentralized, digital currency and build an unstoppable vending machine that will buy and sell the currency.",
     link: "/challenge/decentralized-staking",
-    completed: false,
+    completed: true,
   },
   {
     id: 3,
@@ -171,9 +171,9 @@ export default async function BuilderPage({ params }: { params: { address: strin
                 <div className="mb-8 p-4 bg-base-100 rounded-xl">
                   <div className="flex items-center justify-between">
                     <h2 className="text-2xl font-bold m-0">Challenges</h2>
-                    <p className="m-0 text-gray-500">2 / 10 Completed</p>
+                    <p className="m-0 text-gray-400 dark:text-gray-200">3 / 10 Completed</p>
                   </div>
-                  <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-3 md:gap-y-6 lg:grid-cols-5">
+                  <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-3 md:gap-6 lg:grid-cols-5">
                     {CHALLENGES.map(challenge => (
                       <div
                         key={challenge.id}
@@ -184,7 +184,7 @@ export default async function BuilderPage({ params }: { params: { address: strin
                         <a
                           href={challenge.link}
                           className={clsx(
-                            "aspect-square flex items-center justify-center bg-base-200 mask mask-hexagon-2",
+                            "aspect-square flex items-center justify-center bg-base-300 mask mask-hexagon-2 transition-transform hover:scale-110 dark:bg-base-200/50",
                           )}
                         >
                           <Image
@@ -195,8 +195,10 @@ export default async function BuilderPage({ params }: { params: { address: strin
                             height={100}
                           />
                         </a>
-                        <p className="mt-1 mb-0 text-sm text-center">Challenge #{challenge.id}</p>
-                        <p className="mt-0.5 mb-0 text-sm text-center">{challenge.title}</p>
+                        <p className="m-0 text-sm text-center text-gray-400 dark:text-gray-200">
+                          Challenge #{challenge.id}
+                        </p>
+                        <p className="mt-0.5 mb-0 text-sm text-center font-medium">{challenge.title}</p>
                       </div>
                     ))}
                   </div>
