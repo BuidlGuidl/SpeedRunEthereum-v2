@@ -1,6 +1,7 @@
 ---
 title: "Impermanent Loss Explained: The Math Behind DeFi's Hidden Risk"
 description: "Learn everything about impermanent loss in DeFi. Understand the formula, see real-world examples, and discover key strategies to protect your crypto assets as a liquidity provider."
+image: "/assets/guides/impermanent-loss-math-explained.jpg"
 ---
 
 Understanding impermanent loss is crucial for anyone participating in decentralized finance (DeFi). This often-misunderstood risk can turn a profitable-looking venture into a net loss for a liquidity provider. In this guide, we break down the exact impermanent loss formula, show you how to calculate it, and provide actionable strategies to minimize its impact.

@@ -1,6 +1,7 @@
 ---
 title: "Front-Running & MEV Mitigation: A DEX Developer's Guide"
 description: "Learn to mitigate front-running and MEV attacks on your DEX. This guide covers key strategies, Solidity examples, and a checklist for developers."
+image: "/assets/guides/front-running-mev-mitigation.jpg"
 ---
 
 ## TL;DR: Front-Running & MEV in DeFi
