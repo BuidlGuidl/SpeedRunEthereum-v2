@@ -98,6 +98,10 @@ export const CHALLENGE_METADATA: Record<
       "Step-by-step tutorial to build your own DEX with liquidity pools, token swapping, and automated market making in Solidity.",
     guides: [
       {
+        title: "Automated Market Makers (AMMs): Math, Risks & Solidity Code",
+        url: "/guides/automated-market-makers-math",
+      },
+      {
         title: "Flash Loan Exploits: A Developer's Guide to Securing Your DEX",
         url: "/guides/flash-loan-exploits",
       },
