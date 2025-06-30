@@ -5,6 +5,7 @@ import { UserProfileCard } from "./_components/UserProfileCard";
 import { Metadata } from "next";
 import { isAddress } from "viem";
 import { RouteRefresher } from "~~/components/RouteRefresher";
+import { BatchUserStatus } from "~~/services/database/config/types";
 import { getBatchById } from "~~/services/database/repositories/batches";
 // import { getLatestSubmissionPerChallengeByUser } from "~~/services/database/repositories/userChallenges";
 import { getUserByAddress } from "~~/services/database/repositories/users";
@@ -75,9 +76,20 @@ export default async function BuilderPage({ params }: { params: { address: strin
     <>
       <RouteRefresher />
       <div className="max-w-[1440px] w-full mx-auto px-4 py-8">
+        {userBatch && (
+          <div
+            className={`mb-4 inline-block rounded-sm px-2 py-0.5 font-semibold ${
+              user.batchStatus === BatchUserStatus.GRADUATE
+                ? "bg-green-500/30"
+                : "text-yellow-600 dark:text-yellow-400 bg-warning/30"
+            }`}
+          >
+            {userBatch.name.toString().toUpperCase()}
+          </div>
+        )}
         <div className="grid grid-cols-1 xl:grid-cols-4 gap-6">
-          <UserProfileCard user={user} batch={userBatch} />
-          <div className="xl:mt-9 xl:col-span-3">
+          <UserProfileCard user={user} />
+          <div className="xl:col-span-3">
             <div>
               <div className="mb-8 p-4 bg-base-100 rounded-xl">
                 <div className="flex items-center justify-between">
