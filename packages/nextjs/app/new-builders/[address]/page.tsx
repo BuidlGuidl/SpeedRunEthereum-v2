@@ -1,100 +1,15 @@
 import Image from "next/image";
 import { notFound } from "next/navigation";
+import { CHALLENGES } from "../dummy-data";
 import { UserProfileCard } from "./_components/UserProfileCard";
-import { BuildCard } from "./_components/builds/BuildCard";
-import { SubmitNewBuildButton } from "./_components/builds/SubmitNewBuildButton";
 import clsx from "clsx";
 import { Metadata } from "next";
 import { isAddress } from "viem";
 import { RouteRefresher } from "~~/components/RouteRefresher";
 import { getBatchById } from "~~/services/database/repositories/batches";
-import { getBuildsByUserAddress } from "~~/services/database/repositories/builds";
 // import { getLatestSubmissionPerChallengeByUser } from "~~/services/database/repositories/userChallenges";
 import { getUserByAddress } from "~~/services/database/repositories/users";
 import { getEnsOrAddress } from "~~/utils/ens-or-address";
-
-const CHALLENGES = [
-  {
-    id: 0,
-    title: "Simple NFT Example",
-    description:
-      "Make a decentralized, digital currency and build an unstoppable vending machine that will buy and sell the currency.",
-    link: "/challenge/simple-nft-example",
-    completed: true,
-  },
-  {
-    id: 1,
-    title: "Decentralized Staking App",
-    description:
-      "Make a decentralized, digital currency and build an unstoppable vending machine that will buy and sell the currency.",
-    link: "/challenge/decentralized-staking",
-    completed: true,
-  },
-  {
-    id: 2,
-    title: "Token Vendor",
-    description:
-      "Make a decentralized, digital currency and build an unstoppable vending machine that will buy and sell the currency.",
-    link: "/challenge/decentralized-staking",
-    completed: true,
-  },
-  {
-    id: 3,
-    title: "Dice Game",
-    description:
-      "Make a decentralized, digital currency and build an unstoppable vending machine that will buy and sell the currency.",
-    link: "/challenge/decentralized-staking",
-    completed: false,
-  },
-  {
-    id: 4,
-    title: "Build a DEX",
-    description:
-      "Make a decentralized, digital currency and build an unstoppable vending machine that will buy and sell the currency.",
-    link: "/challenge/decentralized-staking",
-    completed: false,
-  },
-  {
-    id: 5,
-    title: "Over-Collateralized Lending",
-    description:
-      "Make a decentralized, digital currency and build an unstoppable vending machine that will buy and sell the currency.",
-    link: "/challenge/decentralized-staking",
-    completed: false,
-  },
-  {
-    id: 6,
-    title: "Prediction Markets",
-    description:
-      "Make a decentralized, digital currency and build an unstoppable vending machine that will buy and sell the currency.",
-    link: "/challenge/decentralized-staking",
-    completed: false,
-  },
-  {
-    id: 7,
-    title: "Deploy to Layer 2",
-    description:
-      "Make a decentralized, digital currency and build an unstoppable vending machine that will buy and sell the currency.",
-    link: "/challenge/decentralized-staking",
-    completed: false,
-  },
-  {
-    id: 8,
-    title: "Multisig Wallet",
-    description:
-      "Make a decentralized, digital currency and build an unstoppable vending machine that will buy and sell the currency.",
-    link: "/challenge/decentralized-staking",
-    completed: false,
-  },
-  {
-    id: 9,
-    title: "SVG NFT",
-    description:
-      "Make a decentralized, digital currency and build an unstoppable vending machine that will buy and sell the currency.",
-    link: "/challenge/decentralized-staking",
-    completed: false,
-  },
-];
 
 type Props = {
   params: {
@@ -152,7 +67,6 @@ export default async function BuilderPage({ params }: { params: { address: strin
   if (user?.batchId) {
     userBatch = await getBatchById(user.batchId);
   }
-  const builds = await getBuildsByUserAddress(userAddress);
 
   if (!user) {
     notFound();
@@ -203,31 +117,6 @@ export default async function BuilderPage({ params }: { params: { address: strin
                     ))}
                   </div>
                 </div>
-              </div>
-              {/* Builds */}
-              <div className="mt-12 w-full">
-                <div className="flex justify-between items-center">
-                  <h2 className="text-2xl font-bold mb-0 text-neutral pb-4">Builds</h2>
-                  <SubmitNewBuildButton />
-                </div>
-                {builds.length > 0 ? (
-                  <div className="flex flex-wrap items-stretch w-full gap-5">
-                    {builds.map(build => (
-                      <div key={build.build.id} className="flex-grow-0 flex-shrink-0">
-                        <BuildCard
-                          ownerAddress={build.ownerAddress}
-                          build={build.build}
-                          likes={build.likes}
-                          coBuilders={build.coBuilders}
-                        />
-                      </div>
-                    ))}
-                  </div>
-                ) : (
-                  <div className="bg-base-100 p-8 text-center rounded-lg text-neutral">
-                    This builder hasn&apos;t submitted any builds yet.
-                  </div>
-                )}
               </div>
             </div>
           </div>
