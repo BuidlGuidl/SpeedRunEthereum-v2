@@ -2,6 +2,7 @@
 
 import { useRef } from "react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { ChallengeModal } from "./ChallengeModal";
 import clsx from "clsx";
 
@@ -10,10 +11,21 @@ type Challenge = {
   title: string;
   description: string;
   completed: boolean;
+  link: string;
 };
 
 export function UserChallenge({ challenge }: { challenge: Challenge }) {
+  const router = useRouter();
   const challengeModalRef = useRef<HTMLDialogElement>(null);
+
+  const onChallengeClick = () => {
+    if (challenge.completed) {
+      challengeModalRef.current?.showModal();
+      return;
+    }
+
+    router.push(challenge.link);
+  };
 
   return (
     <div
@@ -23,7 +35,7 @@ export function UserChallenge({ challenge }: { challenge: Challenge }) {
       })}
     >
       <button
-        onClick={() => challengeModalRef.current?.showModal()}
+        onClick={onChallengeClick}
         className={clsx(
           "w-full h-auto aspect-square flex items-center justify-center bg-base-300 mask mask-hexagon-2 transition-transform hover:scale-110 dark:bg-base-200/50",
         )}
