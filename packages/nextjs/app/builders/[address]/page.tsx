@@ -1,4 +1,4 @@
-import { notFound, permanentRedirect } from "next/navigation";
+import { notFound } from "next/navigation";
 import { UserChallengesTable } from "./_components/UserChallengesTable";
 import { UserProfileCard } from "./_components/UserProfileCard";
 import { BuildCard } from "./_components/builds/BuildCard";
@@ -9,43 +9,24 @@ import { RouteRefresher } from "~~/components/RouteRefresher";
 import { getBatchById } from "~~/services/database/repositories/batches";
 import { getBuildsByUserAddress } from "~~/services/database/repositories/builds";
 import { getLatestSubmissionPerChallengeByUser } from "~~/services/database/repositories/userChallenges";
-import { getUserByAddress, getUserByEns } from "~~/services/database/repositories/users";
+import { getUserByAddress } from "~~/services/database/repositories/users";
 import { getShortAddressAndEns } from "~~/utils/short-address-and-ens";
 
 type Props = {
   params: {
-    addressOrEns: string;
+    address: string;
   };
 };
 
-async function getCanonicalAddress(addressOrEns: string) {
-  const isValidAddress = isAddress(addressOrEns);
-  const isEns = addressOrEns.endsWith(".eth");
-
-  if (isValidAddress) {
-    return { canonicalAddress: addressOrEns, isEns: false };
-  }
-
-  let canonicalAddress = null;
-  if (isEns) {
-    const userByEns = await getUserByEns(addressOrEns);
-    if (userByEns) {
-      canonicalAddress = userByEns.userAddress;
-    }
-  }
-  return { canonicalAddress, isEns };
-}
-
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const addressOrEns = params.addressOrEns;
+  const address = params.address;
 
-  const { canonicalAddress } = await getCanonicalAddress(addressOrEns);
-  if (!canonicalAddress) {
+  if (!isAddress(address)) {
     return {
       title: "User Not Found",
     };
   }
-  const { shortAddress } = await getShortAddressAndEns(canonicalAddress);
+  const { shortAddress } = await getShortAddressAndEns(address);
   const title = shortAddress;
 
   // Base URL - replace with your actual domain in production
@@ -53,14 +34,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
     : "http://localhost:3000";
 
-  const ogImageUrl = `${baseUrl}/api/og?address=${canonicalAddress}`;
+  const ogImageUrl = `${baseUrl}/api/og?address=${address}`;
 
   return {
     metadataBase: new URL(baseUrl),
     title,
-    alternates: {
-      canonical: `${baseUrl}/builders/${canonicalAddress}`,
-    },
     openGraph: {
       title,
       type: "website",
@@ -69,7 +47,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
           url: ogImageUrl,
           width: 1200,
           height: 630,
-          alt: `QR Code for ${canonicalAddress}`,
+          alt: `QR Code for ${address}`,
         },
       ],
     },
@@ -81,23 +59,16 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-export default async function BuilderPage({ params }: { params: { addressOrEns: string } }) {
-  const { addressOrEns } = params;
-  const { canonicalAddress, isEns } = await getCanonicalAddress(addressOrEns);
+export default async function BuilderPage({ params }: { params: { address: string } }) {
+  const { address } = params;
 
-  if (isEns && canonicalAddress) {
-    permanentRedirect(`/builders/${canonicalAddress}`);
-  }
-
-  const userAddress = addressOrEns;
-
-  const challenges = await getLatestSubmissionPerChallengeByUser(userAddress);
-  const user = await getUserByAddress(userAddress);
+  const challenges = await getLatestSubmissionPerChallengeByUser(address);
+  const user = await getUserByAddress(address);
   let userBatch;
   if (user?.batchId) {
     userBatch = await getBatchById(user.batchId);
   }
-  const builds = await getBuildsByUserAddress(userAddress);
+  const builds = await getBuildsByUserAddress(address);
 
   if (!user) {
     notFound();

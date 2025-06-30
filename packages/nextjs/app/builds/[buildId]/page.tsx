@@ -3,7 +3,7 @@ import { MDXRemote } from "next-mdx-remote/rsc";
 import rehypeRaw from "rehype-raw";
 import remarkGfm from "remark-gfm";
 import { ArrowTopRightOnSquareIcon } from "@heroicons/react/24/outline";
-import { LikeBuildButton } from "~~/app/builders/[addressOrEns]/_components/builds/LikeBuildButton";
+import { LikeBuildButton } from "~~/app/builders/[address]/_components/builds/LikeBuildButton";
 import { Address } from "~~/components/scaffold-eth";
 import { getBuildByBuildId } from "~~/services/database/repositories/builds";
 import { fetchGithubBuildReadme } from "~~/services/github";
