@@ -14,6 +14,7 @@
     "chain": "yarn hardhat:chain",
     "compile": "yarn hardhat:compile",
     "db:seed": "yarn workspace @se-2/nextjs db:seed",
+    "db:reset": "yarn workspace @se-2/nextjs db:reset",
     "deploy": "yarn hardhat:deploy",
     "drizzle-kit": "yarn workspace @se-2/nextjs drizzle-kit",
     "fork": "yarn hardhat:fork",
