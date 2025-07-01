@@ -133,6 +133,7 @@ async function batchGetEnsAvatars(ensNames: string[]): Promise<Record<string, st
       results[name] = avatar;
     });
 
+    console.log(`Got ${batch.length} ENS avatars. Continuing...`);
     // Add delay between batches to avoid rate limiting
     await new Promise(resolve => setTimeout(resolve, 200));
   }
