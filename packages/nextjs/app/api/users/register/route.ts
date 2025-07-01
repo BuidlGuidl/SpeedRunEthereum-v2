@@ -5,7 +5,7 @@ import { users } from "~~/services/database/config/schema";
 import { createUser, isUserRegistered } from "~~/services/database/repositories/users";
 import { isValidEIP712UserRegisterSignature } from "~~/services/eip712/register";
 import { PlausibleEvent, trackPlausibleEvent } from "~~/services/plausible";
-import { publicClient } from "~~/utils/ens-or-address";
+import { publicClient } from "~~/utils/short-address-and-ens";
 
 type RegisterPayload = {
   address: string;
