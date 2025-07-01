@@ -5,8 +5,7 @@
   "scripts": {
     "build": "next build",
     "check-types": "tsc --noEmit --incremental",
-    "db:reset": "tsx services/database/scripts/reset-db.ts && yarn db:migrate && yarn db:seed",
-    "db:migrate": "drizzle-kit migrate",
+    "db:reset": "tsx services/database/scripts/reset-db.ts && yarn drizzle-kit migrate && yarn db:seed",
     "db:seed": "tsx services/database/seed.ts",
     "dev": "next dev",
     "drizzle-kit": "drizzle-kit",
