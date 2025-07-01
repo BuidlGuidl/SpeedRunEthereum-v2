@@ -200,6 +200,7 @@ export function AllBuilds({ searchParams }: { searchParams: { category?: BuildCa
                 <span>No builds found. Please try searching with different filters.</span>
               </div>
             )}
+            <div id="sentinel" className="h-1" />
           </div>
         </div>
       </div>
