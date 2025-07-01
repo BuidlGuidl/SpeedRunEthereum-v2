@@ -1,8 +1,8 @@
-"use client";
-
 /* eslint-disable react/no-unescaped-entities */
 import Image from "next/image";
 import HeroLogo from "../_assets/icons/HeroLogo";
+import { AnimatedCloudsFirstSection, AnimatedCloudsSecondSection } from "./_components/AnimatedClouds";
+import { AnimatedWindow } from "./_components/AnimatedWindow";
 import {
   BoyIcon,
   DiamondIcon,
@@ -14,38 +14,19 @@ import {
   ToolsIcon,
 } from "./_components/Icons";
 import { StartChallengesButton } from "./_components/StartChallengesButton";
-import { useParallax, useSlideInFromRight } from "~~/hooks/useParallax";
+import { getMetadata } from "~~/utils/scaffold-eth/getMetadata";
+
+export const metadata = getMetadata({
+  title: "Build your first Apps on Ethereum",
+  description:
+    "Build your first Ethereum apps with hands-on challenges. Learn smart contracts and dapp development through real, practical experience.",
+});
 
 const StartLandingPage = () => {
-  const cloudsLeftStyle1 = useParallax(0.2);
-  const cloudsRightStyle1 = useParallax(0.2);
-  const cloudsLeftStyle2 = useParallax(0.1);
-  const cloudsRightStyle2 = useParallax(0.1);
-  const windowSlideStyle = useSlideInFromRight(0.05, 350);
-
   return (
     <div className="bg-[#F9FEFF] dark:bg-base-200 overflow-hidden">
       <div className="relative">
-        <div style={cloudsLeftStyle1}>
-          <Image
-            src="/assets/start/clouds-left.svg"
-            alt="Clouds"
-            aria-hidden="true"
-            className="absolute top-14 -left-24 scale-[0.65] lg:left-0 lg:scale-100 xl:left-12"
-            width={332}
-            height={225}
-          />
-        </div>
-        <div style={cloudsRightStyle1}>
-          <Image
-            src="/assets/start/clouds-right.svg"
-            alt="Clouds"
-            aria-hidden="true"
-            className="absolute top-14 -right-32 scale-[0.65] lg:scale-100 lg:-top-6 xl:top-0 xl:-right-8"
-            width={445}
-            height={280}
-          />
-        </div>
+        <AnimatedCloudsFirstSection />
         <div className="relative z-10 px-6 pt-10 lg:pb-12">
           <p className="text-center mb-10 dark:text-gray-200">
             Learn how to build on <strong>Ethereum</strong>; the superpowers and the gotchas.
@@ -63,17 +44,14 @@ const StartLandingPage = () => {
             </p>
           </div>
         </div>
-        <div
-          className="mb-10 mx-auto w-80 h-40 bg-[url('/assets/start/window-1.svg')] bg-center bg-no-repeat lg:mb-0 lg:absolute lg:right-[5%] lg:-bottom-20"
-          style={windowSlideStyle}
-        >
+        <AnimatedWindow>
           <div className="pt-14 px-10 text-gray-600 md:pt-[3.25rem]">
             <p className="mt-0 mb-1 text-center lg:text-left md:text-lg">Already comfortable building on Ethereum?</p>
             <a href="https://speedrunethereum.com/challenge/simple-nft-example" className="link">
               Jump straight to Challenge #0
             </a>
           </div>
-        </div>
+        </AnimatedWindow>
       </div>
 
       <div className="w-full h-[18px] bg-[url('/assets/start/color-border.svg')] dark:bg-[url('/assets/start/color-border-dark.svg')] bg-repeat-x"></div>
@@ -122,26 +100,7 @@ const StartLandingPage = () => {
       </div>
 
       <div className="relative pt-12 bg-base-100 lg:pt-24">
-        <div style={cloudsLeftStyle2}>
-          <Image
-            src="/assets/start/clouds-left.svg"
-            alt="Clouds"
-            aria-hidden="true"
-            className="hidden absolute -top-32 -left-24 scale-[0.5] lg:left-0 lg:scale-100 xl:block"
-            width={332}
-            height={225}
-          />
-        </div>
-        <div style={cloudsRightStyle2}>
-          <Image
-            src="/assets/start/clouds-right.svg"
-            alt="Clouds"
-            aria-hidden="true"
-            className="hidden absolute -top-32 -right-32 scale-[0.5] lg:block lg:scale-100 xl:-right-0"
-            width={445}
-            height={280}
-          />
-        </div>
+        <AnimatedCloudsSecondSection />
         <div className="relative z-10 max-w-4xl mx-auto px-6 text-lg lg:pb-12">
           <div className="mb-12 lg:mb-16 mt-4 flex flex-col items-center gap-4 lg:flex-row lg:gap-4 lg:justify-center">
             <ToolsIcon />
