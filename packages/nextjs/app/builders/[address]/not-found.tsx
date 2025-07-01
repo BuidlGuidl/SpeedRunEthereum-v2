@@ -6,8 +6,7 @@ export default function NotFoundPage() {
       heading="User Not Found"
       extraElement={
         <>
-          <p className="mb-0">Double check the Ethereum address is correct in the URL</p>
-          <p className="m-0">Make sure not to use an ENS address in the URL</p>
+          <p className="mb-0">Double check the Ethereum address or ENS is correct in the URL</p>
         </>
       }
     />

@@ -1,6 +1,6 @@
 import { BuildCategory, BuildType } from "../config/types";
 import { filterValidUserAddresses } from "./users";
-import { InferInsertModel, InferSelectModel, and, eq, ilike, inArray } from "drizzle-orm";
+import { InferInsertModel, InferSelectModel, and, eq, ilike, inArray, sql } from "drizzle-orm";
 import { db } from "~~/services/database/config/postgresClient";
 import { buildBuilders, buildLikes, builds, lower } from "~~/services/database/config/schema";
 
@@ -192,7 +192,11 @@ export const getBuildByBuildId = async (buildId: string) => {
   const build = await db.query.builds.findFirst({
     where: eq(builds.id, buildId),
     with: {
-      builders: true,
+      builders: {
+        with: {
+          user: true,
+        },
+      },
       likes: true,
     },
   });
@@ -203,12 +207,16 @@ export const getAllBuilds = async ({
   category,
   type,
   nameSearch,
+  start,
+  size,
 }: {
   category?: BuildCategory;
   type?: BuildType;
   nameSearch?: string;
+  start?: number;
+  size?: number;
 }) => {
-  const results = await db.query.builds.findMany({
+  const query = db.query.builds.findMany({
     where: and(
       category ? eq(builds.buildCategory, category) : undefined,
       type ? eq(builds.buildType, type) : undefined,
@@ -218,8 +226,13 @@ export const getAllBuilds = async ({
       likes: true,
     },
     orderBy: (builds, { desc, sql }) => [desc(sql`(SELECT COUNT(*) FROM build_likes WHERE build_id = ${builds.id})`)],
-    limit: 48,
+    limit: size || 48,
+    offset: start,
   });
 
-  return results;
+  const countQuery = db.select({ count: sql<number>`count(*)` }).from(builds);
+
+  const [buildsData, countResult] = await Promise.all([query, countQuery]);
+
+  return { data: buildsData, meta: { totalRowCount: countResult[0]?.count || 0 } };
 };

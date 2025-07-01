@@ -23,6 +23,12 @@ export async function getUserByAddress(address: string) {
   });
 }
 
+export async function getUserByEns(ensName: string) {
+  return await db.query.users.findFirst({
+    where: eq(lower(users.ens), ensName.toLowerCase()),
+  });
+}
+
 export async function getSortedUsersWithChallengesInfo(
   start: number,
   size: number,
@@ -227,6 +233,7 @@ export async function updateUser(
     role?: UserRole;
     batchId?: number;
     batchStatus?: BatchUserStatus;
+    ens?: string;
   },
 ) {
   const result = await db

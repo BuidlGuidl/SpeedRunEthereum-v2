@@ -17,7 +17,7 @@ export const HomepageClient = ({ challenges }: { challenges: Challenges }) => {
 
   return (
     <div>
-      <Hero firstChallengeId={"simple-nft-example"} />
+      <Hero />
       <div className="bg-base-200">
         <ChallengeExpandedCard
           key={ChallengeId.SIMPLE_NFT_EXAMPLE}
@@ -52,18 +52,16 @@ export const HomepageClient = ({ challenges }: { challenges: Challenges }) => {
 
         <OnboardingBatchesCard userChallenges={userChallenges} />
         <ChallengeExpandedCard
-          key={ChallengeId.STABLECOINS}
-          challengeId={ChallengeId.STABLECOINS}
+          key={ChallengeId.OVER_COLLATERALIZED_LENDING}
+          challengeId={ChallengeId.OVER_COLLATERALIZED_LENDING}
           userChallenges={userChallenges}
           challenges={challenges}
-          comingSoon
         />
         <ChallengeExpandedCard
           key={ChallengeId.PREDICTION_MARKETS}
           challengeId={ChallengeId.PREDICTION_MARKETS}
           userChallenges={userChallenges}
           challenges={challenges}
-          comingSoon
         />
         <ChallengeExpandedCard
           key={ChallengeId.DEPLOY_TO_L2}

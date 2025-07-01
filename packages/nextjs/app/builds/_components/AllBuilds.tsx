@@ -4,10 +4,9 @@ import { useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { LoadingSkeleton } from "./LoadingSkeleton";
-import { useQuery } from "@tanstack/react-query";
 import { useDebounceValue } from "usehooks-ts";
 import { LikeBuildButton } from "~~/app/builders/[address]/_components/builds/LikeBuildButton";
-import { fetchBuilds } from "~~/services/api/builds";
+import { useAllBuildsInfiniteQuery } from "~~/hooks/useAllBuildsInfiniteQuery";
 import { BuildCategory, BuildType } from "~~/services/database/config/types";
 
 export function AllBuilds({ searchParams }: { searchParams: { category?: BuildCategory; type?: BuildType } }) {
@@ -19,18 +18,10 @@ export function AllBuilds({ searchParams }: { searchParams: { category?: BuildCa
 
   const [debouncedFilter] = useDebounceValue(nameFilter.length >= 3 ? nameFilter : "", 500);
 
-  const {
-    data: builds,
-    isLoading,
-    refetch,
-  } = useQuery({
-    queryKey: ["all-builds", debouncedFilter, categoryFilter, typeFilter],
-    queryFn: () =>
-      fetchBuilds({
-        name: debouncedFilter,
-        category: categoryFilter as BuildCategory,
-        type: typeFilter as BuildType,
-      }),
+  const { builds, isLoading, isFetching, isFetched, refetch, totalBuilds } = useAllBuildsInfiniteQuery({
+    categoryFilter: categoryFilter as BuildCategory,
+    typeFilter: typeFilter as BuildType,
+    nameFilter: debouncedFilter,
   });
 
   const handleCategoryChange = (category: BuildCategory) => {
@@ -65,48 +56,75 @@ export function AllBuilds({ searchParams }: { searchParams: { category?: BuildCa
 
   return (
     <div className="py-12 px-6 max-w-7xl mx-auto w-full">
-      <h1 className="text-2xl font-bold lg:text-4xl">All Builds</h1>
-      <div className="mt-8 grid grid-cols-1 md:grid-cols-6 gap-6">
-        <div className="md:col-span-2 lg:col-span-1">
-          <p className="mt-0 mb-2">Category</p>
-          <select
-            className="select select-bordered w-full"
-            value={categoryFilter}
-            onChange={e => handleCategoryChange(e.target.value as BuildCategory)}
-          >
-            <option value="">All</option>
-            {Object.values(BuildCategory).map(category => (
-              <option key={category} value={category}>
-                {category}
-              </option>
-            ))}
-          </select>
+      <div className="flex items-center gap-3">
+        <h1 className="m-0 text-2xl font-bold lg:text-4xl">All Builds</h1>
+      </div>
+      <div className="mt-8">
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-3 lg:grid-cols-4 lg:gap-6">
+          <div>
+            <p className="mt-0 mb-1 text-sm lg:mb-2">
+              {nameFilter ? "Filtering" : "Filter"} By Name{" "}
+              {nameFilter && <span className="ml-1 inline-block w-2 h-2 bg-[#facb83] rounded-full"></span>}
+            </p>
+            <input
+              type="text"
+              className="input input-sm input-bordered w-full"
+              name="filter"
+              value={nameFilter}
+              onChange={e => setNameFilter(e.target.value)}
+              placeholder="Search by name..."
+            />
+          </div>
 
-          <p className="mt-6 mb-2">Type</p>
-          <select
-            className="select select-bordered w-full"
-            value={typeFilter}
-            onChange={e => handleTypeChange(e.target.value as BuildType)}
-          >
-            <option value="">All</option>
-            {Object.values(BuildType).map(type => (
-              <option key={type} value={type}>
-                {type}
-              </option>
-            ))}
-          </select>
+          <div>
+            <p className="mt-0 mb-1 text-sm lg:mb-2">
+              {categoryFilter ? "Filtering" : "Filter"} By Category{" "}
+              {categoryFilter && <span className="ml-1 inline-block w-2 h-2 bg-[#facb83] rounded-full"></span>}
+            </p>
+            <select
+              className="select select-sm select-bordered w-full"
+              value={categoryFilter}
+              onChange={e => handleCategoryChange(e.target.value as BuildCategory)}
+            >
+              <option value="">All</option>
+              {Object.values(BuildCategory).map(category => (
+                <option key={category} value={category}>
+                  {category}
+                </option>
+              ))}
+            </select>
+          </div>
 
-          <p className="mt-6 mb-2">Name</p>
-          <input
-            type="text"
-            className="input input-bordered w-full"
-            name="filter"
-            value={nameFilter}
-            onChange={e => setNameFilter(e.target.value)}
-            placeholder="Search by name..."
-          />
+          <div>
+            <p className="mt-0 mb-1 text-sm lg:mb-2">
+              {typeFilter ? "Filtering" : "Filter"} By Type{" "}
+              {typeFilter && <span className="ml-1 inline-block w-2 h-2 bg-[#facb83] rounded-full"></span>}
+            </p>
+            <select
+              className="select select-sm select-bordered w-full"
+              value={typeFilter}
+              onChange={e => handleTypeChange(e.target.value as BuildType)}
+            >
+              <option value="">All</option>
+              {Object.values(BuildType).map(type => (
+                <option key={type} value={type}>
+                  {type}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div>
+            <p className="mt-0 mb-1 text-sm lg:mb-2">Total Builds</p>
+            {isLoading ? (
+              <div className="skeleton rounded-md w-24 h-7"></div>
+            ) : (
+              <p className="m-0 text-lg font-semibold">{totalBuilds}</p>
+            )}
+          </div>
         </div>
-        <div className="md:col-span-4 lg:col-span-5">
+        <hr className="hidden my-6 border-base-300 lg:block" />
+        <div className="mt-6">
           <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4 lg:gap-6">
             {isLoading && (
               <>
@@ -116,7 +134,7 @@ export function AllBuilds({ searchParams }: { searchParams: { category?: BuildCa
                 <LoadingSkeleton />
               </>
             )}
-            {builds &&
+            {isFetched &&
               Boolean(builds.length > 0) &&
               builds.map(build => (
                 <div
@@ -155,7 +173,16 @@ export function AllBuilds({ searchParams }: { searchParams: { category?: BuildCa
                   </div>
                 </div>
               ))}
-            {builds && builds.length === 0 && (
+            {/* Show loading skeleton when fetching during scrolling */}
+            {!isLoading && isFetching && (
+              <>
+                <LoadingSkeleton />
+                <LoadingSkeleton />
+                <LoadingSkeleton />
+                <LoadingSkeleton />
+              </>
+            )}
+            {isFetched && builds.length === 0 && (
               <div role="alert" className="alert alert-info md:col-span-2 lg:col-span-4">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -173,6 +200,7 @@ export function AllBuilds({ searchParams }: { searchParams: { category?: BuildCa
                 <span>No builds found. Please try searching with different filters.</span>
               </div>
             )}
+            <div id="sentinel" className="h-1" />
           </div>
         </div>
       </div>

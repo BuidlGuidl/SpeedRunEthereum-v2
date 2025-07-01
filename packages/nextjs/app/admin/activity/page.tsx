@@ -6,7 +6,7 @@ import { ColumnDef, flexRender, getCoreRowModel, useReactTable } from "@tanstack
 import { useVirtualizer } from "@tanstack/react-virtual";
 import { DateWithTooltip } from "~~/components/DateWithTooltip";
 import { Address } from "~~/components/scaffold-eth";
-import { ActivityItem, ActivityResponse, ActivityType, getActivities } from "~~/services/api/activities";
+import { ActivityItem, ActivityResponse, ActivityType, fetchActivities } from "~~/services/api/activities";
 import { ReviewAction } from "~~/services/database/config/types";
 
 const FETCH_SIZE = 20;
@@ -24,7 +24,7 @@ export default function ActivityPage() {
         size: 200,
         cell: info => {
           const row = info.row.original;
-          return <Address address={row.userAddress} />;
+          return <Address address={row.userAddress} cachedEns={row.userEns} />;
         },
       },
       {
@@ -76,7 +76,7 @@ export default function ActivityPage() {
     queryKey: ["activities", activityType],
     queryFn: async ({ pageParam = 0 }) => {
       const start = (pageParam as number) * FETCH_SIZE;
-      const fetchedData = await getActivities(start, FETCH_SIZE, activityType);
+      const fetchedData = await fetchActivities(start, FETCH_SIZE, activityType);
       return fetchedData;
     },
     initialPageParam: 0,

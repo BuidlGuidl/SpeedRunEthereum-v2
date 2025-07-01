@@ -1,5 +1,6 @@
 "use client";
 
+import { RefreshEnsButton } from "./RefreshEnsButton";
 import { UserLocation } from "./UserLocation";
 import { UserSocials } from "./UserSocials";
 import EditIcon from "~~/app/_assets/icons/EditIcon";
@@ -20,7 +21,10 @@ export const UserProfileCard = ({ user, batch }: { user: NonNullable<UserByAddre
         <PunkBlockie address={user.userAddress} scale={2} />
         <div className="flex flex-col items-center gap-4">
           <div className="text-neutral">
-            <Address address={user.userAddress} hideAvatar size="xl" />
+            <Address address={user.userAddress} hideAvatar size="xl" cachedEns={user.ens} />
+            <div className="text-center">
+              <RefreshEnsButton user={user} />
+            </div>
           </div>
 
           {batch && (
