@@ -96,7 +96,7 @@ export const RainbowKitCustomConnectButton = () => {
             <AddressInfoDropdown
               address={account.address as Address}
               displayName={user.ens || account.address}
-              ensAvatar={user.ens ? account.ensAvatar : undefined}
+              ensAvatar={user.ensAvatar}
               blockExplorerAddressLink={blockExplorerAddressLink}
               isAdmin={isAdmin}
             />
