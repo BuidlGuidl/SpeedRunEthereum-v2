@@ -100,7 +100,12 @@ export const RainbowKitCustomConnectButton = () => {
               blockExplorerAddressLink={blockExplorerAddressLink}
               isAdmin={isAdmin}
             />
-            <AddressQRCodeModal address={account.address as Address} modalId="qrcode-modal" cachedEns={user.ens} />
+            <AddressQRCodeModal
+              address={account.address as Address}
+              modalId="qrcode-modal"
+              cachedEns={user.ens}
+              cachedEnsAvatar={user.ensAvatar}
+            />
           </div>
         );
       }}

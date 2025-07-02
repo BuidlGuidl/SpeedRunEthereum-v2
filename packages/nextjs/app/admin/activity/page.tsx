@@ -24,7 +24,7 @@ export default function ActivityPage() {
         size: 200,
         cell: info => {
           const row = info.row.original;
-          return <Address address={row.userAddress} cachedEns={row.userEns} />;
+          return <Address address={row.userAddress} cachedEns={row.userEns} cachedEnsAvatar={row.userEnsAvatar} />;
         },
       },
       {
