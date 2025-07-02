@@ -6,9 +6,10 @@ type AddressQRCodeModalProps = {
   address: AddressType;
   modalId: string;
   cachedEns: string | null;
+  cachedEnsAvatar: string | null;
 };
 
-export const AddressQRCodeModal = ({ address, modalId, cachedEns }: AddressQRCodeModalProps) => {
+export const AddressQRCodeModal = ({ address, modalId, cachedEns, cachedEnsAvatar }: AddressQRCodeModalProps) => {
   return (
     <>
       <div>
@@ -23,7 +24,14 @@ export const AddressQRCodeModal = ({ address, modalId, cachedEns }: AddressQRCod
             <div className="space-y-3 py-6">
               <div className="flex flex-col items-center gap-6">
                 <QRCodeSVG value={address} size={256} />
-                <Address address={address} format="long" disableAddressLink onlyEnsOrAddress cachedEns={cachedEns} />
+                <Address
+                  address={address}
+                  format="long"
+                  disableAddressLink
+                  onlyEnsOrAddress
+                  cachedEns={cachedEns}
+                  cachedEnsAvatar={cachedEnsAvatar}
+                />
               </div>
             </div>
           </label>

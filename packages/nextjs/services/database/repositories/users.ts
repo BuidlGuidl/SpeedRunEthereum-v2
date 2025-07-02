@@ -234,6 +234,7 @@ export async function updateUser(
     batchId?: number;
     batchStatus?: BatchUserStatus;
     ens?: string;
+    ensAvatar?: string | null;
   },
 ) {
   const result = await db

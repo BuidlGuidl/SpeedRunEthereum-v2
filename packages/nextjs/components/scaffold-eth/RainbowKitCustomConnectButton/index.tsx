@@ -96,11 +96,16 @@ export const RainbowKitCustomConnectButton = () => {
             <AddressInfoDropdown
               address={account.address as Address}
               displayName={user.ens || account.address}
-              ensAvatar={user.ens ? account.ensAvatar : undefined}
+              ensAvatar={user.ensAvatar}
               blockExplorerAddressLink={blockExplorerAddressLink}
               isAdmin={isAdmin}
             />
-            <AddressQRCodeModal address={account.address as Address} modalId="qrcode-modal" cachedEns={user.ens} />
+            <AddressQRCodeModal
+              address={account.address as Address}
+              modalId="qrcode-modal"
+              cachedEns={user.ens}
+              cachedEnsAvatar={user.ensAvatar}
+            />
           </div>
         );
       }}

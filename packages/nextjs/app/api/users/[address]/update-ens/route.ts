@@ -36,7 +36,9 @@ export async function PUT(req: Request, { params }: { params: { address: string 
         return NextResponse.json({ error: "No ENS name found for this address" }, { status: 400 });
       }
 
-      const user = await updateUser(addressToUpdateEns, { ens: ensName });
+      const ensAvatar = await publicClient.getEnsAvatar({ name: ensName });
+
+      const user = await updateUser(addressToUpdateEns, { ens: ensName, ensAvatar });
 
       return NextResponse.json({ user }, { status: 200 });
     } catch (error) {

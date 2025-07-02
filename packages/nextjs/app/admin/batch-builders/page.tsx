@@ -63,7 +63,7 @@ export default function BatchBuildersPage() {
         cell: info => {
           const row = info.row.original;
 
-          return <Address address={row.userAddress} cachedEns={row.ens} />;
+          return <Address address={row.userAddress} cachedEns={row.ens} cachedEnsAvatar={row.ensAvatar} />;
         },
       },
       {

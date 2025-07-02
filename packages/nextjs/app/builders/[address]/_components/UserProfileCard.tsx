@@ -18,7 +18,14 @@ export const UserProfileCard = ({ user, batch }: { user: NonNullable<UserByAddre
   return (
     <div className="bg-base-100 rounded-xl p-6 shadow-lg">
       <div className="flex flex-col md:flex-row justify-around lg:flex-col items-center gap-4">
-        <PunkBlockie address={user.userAddress} scale={2} />
+        {user.ensAvatar ? (
+          <div className="w-[224px] h-[224px] relative">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={user.ensAvatar} alt={user.userAddress} className="absolute inset-0" />
+          </div>
+        ) : (
+          <PunkBlockie address={user.userAddress} scale={2} />
+        )}
         <div className="flex flex-col items-center gap-4">
           <div className="text-neutral">
             <Address address={user.userAddress} hideAvatar size="xl" cachedEns={user.ens} />

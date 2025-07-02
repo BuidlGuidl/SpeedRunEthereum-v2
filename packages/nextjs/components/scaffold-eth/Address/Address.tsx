@@ -3,8 +3,6 @@
 import { AddressCopyIcon } from "./AddressCopyIcon";
 import { AddressLinkWrapper } from "./AddressLinkWrapper";
 import { Address as AddressType, getAddress, isAddress } from "viem";
-import { normalize } from "viem/ens";
-import { useEnsAvatar } from "wagmi";
 import { BlockieAvatar } from "~~/components/scaffold-eth";
 
 const textSizeMap = {
@@ -73,6 +71,7 @@ export type AddressProps = {
   onlyEnsOrAddress?: boolean;
   hideAvatar?: boolean;
   cachedEns?: string | null;
+  cachedEnsAvatar?: string | null;
 };
 
 export const Address = ({
@@ -83,17 +82,9 @@ export const Address = ({
   onlyEnsOrAddress = false,
   hideAvatar = false,
   cachedEns,
+  cachedEnsAvatar,
 }: AddressProps) => {
   const checkSumAddress = address ? getAddress(address) : undefined;
-
-  const { data: ensAvatar } = useEnsAvatar({
-    name: cachedEns ? normalize(cachedEns) : undefined,
-    chainId: 1,
-    query: {
-      enabled: Boolean(cachedEns),
-      gcTime: 30_000,
-    },
-  });
 
   const shortAddress = checkSumAddress?.slice(0, 6) + "..." + checkSumAddress?.slice(-4);
   const displayAddress = format === "long" ? checkSumAddress : shortAddress;
@@ -139,7 +130,7 @@ export const Address = ({
         <div className="flex-shrink-0">
           <BlockieAvatar
             address={checkSumAddress}
-            ensImage={ensAvatar}
+            ensImage={cachedEnsAvatar}
             size={(blockieSizeMap[blockieSize] * 24) / blockieSizeMap["base"]}
           />
         </div>
