@@ -44,16 +44,29 @@ export function useAllBuildsInfiniteQuery({
   const totalBuilds = data?.pages?.[0]?.meta?.totalRowCount ?? 0;
 
   useEffect(() => {
-    const onscroll = () => {
-      const scrolledTo = window.scrollY + window.innerHeight;
-      const isReachBottom = document.body.scrollHeight === scrolledTo;
-      if (isReachBottom && hasNextPage && !isFetching) {
-        fetchNextPage();
-      }
-    };
-    window.addEventListener("scroll", onscroll);
+    const observer = new IntersectionObserver(
+      entries => {
+        const target = entries[0];
+        if (target.isIntersecting && hasNextPage && !isFetching) {
+          fetchNextPage();
+        }
+      },
+      {
+        root: null, // viewport
+        threshold: 0.1, // trigger when at least 10% of the target is visible
+      },
+    );
+
+    // Add a sentinel element at the bottom of your content
+    const sentinel = document.querySelector("#sentinel");
+    if (sentinel) {
+      observer.observe(sentinel);
+    }
+
     return () => {
-      window.removeEventListener("scroll", onscroll);
+      if (sentinel) {
+        observer.unobserve(sentinel);
+      }
     };
   }, [fetchNextPage, hasNextPage, isFetching]);
 

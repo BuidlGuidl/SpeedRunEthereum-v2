@@ -10,7 +10,7 @@ import { getBatchById } from "~~/services/database/repositories/batches";
 import { getBuildsByUserAddress } from "~~/services/database/repositories/builds";
 import { getLatestSubmissionPerChallengeByUser } from "~~/services/database/repositories/userChallenges";
 import { getUserByAddress } from "~~/services/database/repositories/users";
-import { getEnsOrAddress } from "~~/utils/ens-or-address";
+import { getShortAddressAndEns } from "~~/utils/short-address-and-ens";
 
 type Props = {
   params: {
@@ -20,22 +20,21 @@ type Props = {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const address = params.address;
-  const isValidAddress = isAddress(address);
 
-  const { ensName, shortAddress } = await getEnsOrAddress(address);
-
-  // Default title and description
-  const title = `${ensName || shortAddress}`;
+  if (!isAddress(address)) {
+    return {
+      title: "User Not Found",
+    };
+  }
+  const { shortAddress } = await getShortAddressAndEns(address);
+  const title = shortAddress;
 
   // Base URL - replace with your actual domain in production
   const baseUrl = process.env.VERCEL_PROJECT_PRODUCTION_URL
     ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
     : "http://localhost:3000";
 
-  // OG image URL
-  const ogImageUrl = isValidAddress
-    ? `${baseUrl}/api/og?address=${address}`
-    : `${baseUrl}/api/og?address=0x0000000000000000000000000000000000000000`;
+  const ogImageUrl = `${baseUrl}/api/og?address=${address}`;
 
   return {
     metadataBase: new URL(baseUrl),
@@ -61,14 +60,15 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function BuilderPage({ params }: { params: { address: string } }) {
-  const { address: userAddress } = params;
-  const challenges = await getLatestSubmissionPerChallengeByUser(userAddress);
-  const user = await getUserByAddress(userAddress);
+  const { address } = params;
+
+  const challenges = await getLatestSubmissionPerChallengeByUser(address);
+  const user = await getUserByAddress(address);
   let userBatch;
   if (user?.batchId) {
     userBatch = await getBatchById(user.batchId);
   }
-  const builds = await getBuildsByUserAddress(userAddress);
+  const builds = await getBuildsByUserAddress(address);
 
   if (!user) {
     notFound();

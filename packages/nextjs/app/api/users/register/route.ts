@@ -5,7 +5,7 @@ import { users } from "~~/services/database/config/schema";
 import { createUser, isUserRegistered } from "~~/services/database/repositories/users";
 import { isValidEIP712UserRegisterSignature } from "~~/services/eip712/register";
 import { PlausibleEvent, trackPlausibleEvent } from "~~/services/plausible";
-import { publicClient } from "~~/utils/ens-or-address";
+import { publicClient } from "~~/utils/short-address-and-ens";
 
 type RegisterPayload = {
   address: string;
@@ -36,14 +36,26 @@ export async function POST(req: Request) {
       userAddress: address,
     };
 
+    let ensName: string | null = null;
     try {
-      const ensName = await publicClient.getEnsName({ address });
+      ensName = await publicClient.getEnsName({ address });
 
       if (ensName) {
         userToCreate.ens = ensName;
       }
     } catch (error) {
       console.error(`Error getting ENS name for user ${address}:`, error);
+    }
+
+    if (ensName) {
+      try {
+        const ensAvatar = await publicClient.getEnsAvatar({ name: ensName });
+        if (ensAvatar) {
+          userToCreate.ensAvatar = ensAvatar;
+        }
+      } catch (error) {
+        console.error(`Error getting ENS avatar for user ${address}:`, error);
+      }
     }
 
     const user = await createUser(userToCreate);
