@@ -8,7 +8,7 @@ Understanding impermanent loss is crucial for anyone participating in decentrali
 
 ## TL;DR: Impermanent Loss in DeFi
 
-- **Impermanent loss (IL)** is the opportunity cost when providing liquidity to AMMs—your position may underperform simply holding the tokens (HODLing) if prices diverge.
+- **Impermanent loss (IL)** is the opportunity cost when providing liquidity to AMMs, your position may underperform simply holding the tokens (HODLing) if prices diverge.
 - **Formula:** For a 50/50 pool, IL = 2√d/(1+d) - 1, where d = price ratio change. A 2x price move = 5.7% loss vs. HODL.
 - **Why it happens:** Arbitrageurs rebalance pools, leaving LPs with more of the depreciating asset.
 - **Modern AMMs:** Concentrated liquidity (Uniswap v3) increases capital efficiency but can amplify IL risk.
@@ -18,7 +18,7 @@ Understanding impermanent loss is crucial for anyone participating in decentrali
 
 ## 1. What is Impermanent Loss?
 
-Impermanent loss is one of the most misunderstood concepts in decentralized finance (DeFi). It's not a direct loss of your tokens, but rather an **opportunity cost**—the difference between the value of your liquidity position and what you would have if you had simply held your assets.
+Impermanent loss is one of the most misunderstood concepts in decentralized finance (DeFi). It's not a direct loss of your tokens, but rather an **opportunity cost** (the difference between the value of your liquidity position and what you would have if you had simply held your assets).
 
 > **Note:** The term "impermanent" is misleading. The loss only reverses if prices return to their original ratio before you withdraw. In most cases, especially in volatile markets, the loss becomes permanent (realized) when you exit at a new price ratio. Think of it as an _unrealized loss_ until you withdraw.
 
@@ -340,7 +340,7 @@ The combination of two key standards, **ERC-4337** and the newer **ERC-7702**, r
 
 With these two standards working together, a new era of automated and user-friendly IL management is possible:
 
-1.  **One-Click Rebalancing:** A Uniswap v3 LP using a standard MetaMask wallet could, with a single signature, authorize a trusted "manager" contract to perform a complex rebalancing of their position. The manager contract would atomically withdraw the liquidity, swap the assets to the correct ratio, and redeposit them into a new price range—all in one seamless, "gasless" transaction (paid for by the dApp via a paymaster).
+1.  **One-Click Rebalancing:** A Uniswap v3 LP using a standard MetaMask wallet could, with a single signature, authorize a trusted "manager" contract to perform a complex rebalancing of their position. The manager contract would atomically withdraw the liquidity, swap the assets to the correct ratio, and redeposit them into a new price range. All in one seamless, "gasless" transaction (paid for by the dApp via a paymaster).
 
 2.  **Automated Hedging:** A user could authorize a DeFi protocol to automatically execute an options-based hedge if their position's impermanent loss exceeds a certain threshold. This "if-this-then-that" logic, previously complex and gas-intensive, becomes a single, delegatable action thanks to ERC-7702.
 
@@ -375,7 +375,7 @@ Impermanent loss is not a bug but a feature of decentralized market making. Unde
 - Monitor your positions regularly
 - Consider hedging strategies for large positions
 
-Impermanent loss doesn't have to be a barrier to DeFi participation—it's a risk that can be understood, calculated, and managed with the right knowledge and tools.
+Impermanent loss doesn't have to be a barrier to DeFi participation, it's a risk that can be understood, calculated, and managed with the right knowledge and tools.
 
 ---
 

@@ -7,17 +7,16 @@ image: "/assets/guides/automated-market-makers-math.jpg"
 ## TL;DR: Automated Market Makers (AMMs) in DeFi
 
 - **AMMs** use math, not order books, to set prices and enable 24/7 trading on-chain.
-- **Constant product formula (x\*y=k)** powers Uniswap and most DEXs—ensures liquidity but causes price impact and impermanent loss.
+- **Constant product formula (x\*y=k)** powers Uniswap and most DEXs (ensures liquidity but causes price impact and impermanent loss).
 - **Liquidity providers (LPs)** earn fees but face risks if token prices diverge.
 - **Key risks:** Price impact, slippage, impermanent loss, and arbitrage.
-- **Solidity code:** See a minimal AMM contract and swap logic.
 - **Best practices:** Understand the math, use secure code, and always compare LP fees to potential losses.
 
 ---
 
 ## History & Motivation: Why AMMs?
 
-Traditional exchanges use Central Limit Order Books (CLOBs) to match buyers and sellers. This works well for liquid markets, but fails for illiquid assets and is impractical on-chain due to high latency and gas costs. AMMs were invented to solve these problems—using math and pooled liquidity to enable permissionless, always-on trading for any token pair, without the need for order books or market makers.
+Traditional exchanges use Central Limit Order Books (CLOBs) to match buyers and sellers. This works well for liquid markets, but fails for illiquid assets and is impractical on-chain due to high latency and gas costs. AMMs were invented to solve these problems (using math and pooled liquidity to enable permissionless, always-on trading for any token pair, without the need for order books or market makers).
 
 ---
 
@@ -71,7 +70,7 @@ The equation `x*y=k` describes a **hyperbola** in the first quadrant. Every poss
 - **Spot price:** Slope of the tangent at a point (`y/x`).
 - **Execution price:** Average price over a finite trade (secant line between start/end points).
 
-**Key insight:** The curve ensures you can never drain the pool—prices become extreme as reserves approach zero.
+**Key insight:** The curve ensures you can never drain the pool (prices become extreme as reserves approach zero).
 
 ---
 
@@ -80,7 +79,7 @@ The equation `x*y=k` describes a **hyperbola** in the first quadrant. Every poss
 ### Price Impact
 
 - **Definition:** The change in price caused by your own trade.
-- **Why it happens:** The AMM curve is a hyperbola—big trades move the price a lot, small trades move it a little.
+- **Why it happens:** The AMM curve is a hyperbola, big trades move the price a lot, small trades move it a little.
 - **Tip:** Larger pools = less price impact.
 
 ### Slippage
@@ -269,7 +268,7 @@ contract MinimalAMM is ERC20 {
 - **Checks-Effects-Interactions (CEI):** Update state before external calls to prevent reentrancy.
 - **Reentrancy:** AMMs are less vulnerable, but always use CEI and consider OpenZeppelin's `ReentrancyGuard` for complex logic.
 - **Math precision:** Use integer math, avoid overflows, and use proven math libraries (see Uniswap's `Math.sol`).
-- **Fee-on-transfer tokens:** Production AMMs handle these edge cases—test with non-standard ERC20s.
+- **Fee-on-transfer tokens:** Production AMMs handle these edge cases (test with non-standard ERC20s).
 
 ---
 
@@ -346,7 +345,7 @@ contract MinimalAMM is ERC20 {
 ## 12. Economic & Game Theory Insights
 
 - **Arbitrage:** Essential for keeping AMMs in sync with global prices, but causes impermanent loss for LPs. Arbitrageurs buy the underpriced asset from the AMM and sell it on the open market, pushing the AMM price back in line. This process is what realizes impermanent loss for LPs.
-- **Loss-versus-rebalancing (LVR):** The value extracted by arbitrageurs is the LP's loss vs. HODLing. This is a fundamental tradeoff: LPs earn fees, but pay for it by being "short volatility"—they lose if prices diverge too much.
+- **Loss-versus-rebalancing (LVR):** The value extracted by arbitrageurs is the LP's loss vs. HODLing. This is a fundamental tradeoff: LPs earn fees, but pay for it by being "short volatility" (they lose if prices diverge too much).
 - **LPs are short volatility:** They earn fees but lose if prices diverge too much. Providing liquidity is like selling options: you profit in stable markets, but lose if prices move sharply.
 
 ---
@@ -357,13 +356,13 @@ contract MinimalAMM is ERC20 {
 - **Use audited code:** Always use OpenZeppelin and proven AMM templates.
 - **Monitor your positions:** Track fees earned vs. potential impermanent loss.
 - **Test with non-standard tokens:** Some ERC20s have transfer fees or non-standard logic.
-- **Stay updated:** DeFi evolves fast—follow new AMM models and security best practices.
+- **Stay updated:** DeFi evolves fast, follow new AMM models and security best practices.
 
 ---
 
 ## 14. The Power and Tradeoffs of AMMs
 
-AMMs revolutionized DeFi by making on-chain trading and liquidity provision simple and permissionless. But their math creates new risks—price impact, impermanent loss, and arbitrage. By understanding the constant product formula and using secure, well-audited code, you can trade and build confidently in the world of decentralized finance.
+AMMs revolutionized DeFi by making on-chain trading and liquidity provision simple and permissionless. But their math creates new risks (price impact, impermanent loss, and arbitrage). By understanding the constant product formula and using secure, well-audited code, you can trade and build confidently in the world of decentralized finance.
 
 ---
 

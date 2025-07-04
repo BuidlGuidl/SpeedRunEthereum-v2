@@ -6,7 +6,7 @@ image: "/assets/guides/front-running-mev-mitigation.jpg"
 
 ## TL;DR: Front-Running & MEV in DeFi
 
-- **MEV (Maximal Extractable Value)** is the "invisible tax" on DeFi users—bots and validators profit by reordering, inserting, or censoring transactions in the mempool.
+- **MEV (Maximal Extractable Value)** is the "invisible tax" on DeFi users, bots and validators profit by reordering, inserting, or censoring transactions in the mempool.
 - **Front-running, sandwich, and displacement attacks** are the most damaging for DEX users.
 - **Mitigation is multi-layered:** Use slippage/deadline checks, commit-reveal schemes, batch auctions, private orderflow (Flashbots Protect), and intent-based systems ([CoW Protocol](https://cow.fi/)).
 - **For devs:** Enforce slippage/deadline, consider commit-reveal for sensitive actions, explore intent-based architectures, and educate users on private RPCs.
@@ -16,7 +16,7 @@ image: "/assets/guides/front-running-mev-mitigation.jpg"
 
 ## 1. What is MEV? Why Does It Matter for DEXs?
 
-**Maximal Extractable Value (MEV)** is the extra value that can be captured by reordering, inserting, or censoring transactions in a block. In DEXs, this means bots and validators can profit at the expense of regular users—especially when trading large amounts or creating new pools.
+**Maximal Extractable Value (MEV)** is the extra value that can be captured by reordering, inserting, or censoring transactions in a block. In DEXs, this means bots and validators can profit at the expense of regular users (especially when trading large amounts or creating new pools).
 
 **MEV Supply Chain:** The MEV ecosystem involves several actors:
 
@@ -24,7 +24,7 @@ image: "/assets/guides/front-running-mev-mitigation.jpg"
 - **Builders:** Aggregate bundles and user transactions to construct the most profitable block.
 - **Validators (Proposers):** Choose which block to propose, often selecting the most profitable one.
 
-This supply chain means MEV is not a bug, but a structural feature of transparent, permissionless blockchains—making mitigation a core design challenge for DEXs.
+This supply chain means MEV is not a bug, but a structural feature of transparent, permissionless blockchains (making mitigation a core design challenge for DEXs).
 
 **Key MEV Attack Vectors:**
 
@@ -76,7 +76,7 @@ This supply chain means MEV is not a bug, but a structural feature of transparen
 1. Bot sees your swap with a slippage tolerance (e.g., 1%).
 2. Bot buys before you, pushing the price up.
 3. Your trade executes at a worse price (max slippage).
-4. Bot sells after you, locking in profit—your loss is their gain.
+4. Bot sells after you, locking in profit (your loss is their gain).
 
 ### **Displacement Attack**
 
@@ -90,7 +90,7 @@ This supply chain means MEV is not a bug, but a structural feature of transparen
 
 - **Slippage:** Always require `amountOutMin` (or `amountInMax`) in swaps. Revert if the user gets a worse price.
 - **Deadline:** Require a `deadline` parameter. Revert if the transaction is mined after this time.
-- **Why:** These checks are your first line of defense—don't let users get sandwiched or stuck with stale trades.
+- **Why:** These checks are your first line of defense (don't let users get sandwiched or stuck with stale trades).
 
 **Solidity Example:**
 
@@ -115,7 +115,7 @@ function revealAndExecuteSwap(params, salt) external { ... }
 
 ### **C. Batch Auctions (Neutralize Ordering Attacks)**
 
-- **How it works:** Collect trades over a period, then settle all at a uniform price. No advantage to being first—front-running and sandwiching are neutralized.
+- **How it works:** Collect trades over a period, then settle all at a uniform price. No advantage to being first (front-running and sandwiching are neutralized).
 - **Tradeoff:** Complex to implement; often requires off-chain solvers (see [CoW Protocol](https://cow.fi/)). Batch auctions offer strong protection but fundamentally change the trading model and may not suit all DEXs.
 
 ### **D. Private Orderflow & MEV-Rebates (Flashbots, MEV Blocker)**
@@ -161,10 +161,10 @@ function revealAndExecuteSwap(params, salt) external { ... }
 ## 5. User Tips: How to Avoid Getting Sandwiched
 
 - **Use wallets with private RPCs** (e.g., Flashbots Protect, mevblocker.io) for all DEX trades.
-- **Set tight slippage tolerances**—never use high slippage unless you understand the risk.
-- **Check deadlines**—don't let transactions sit in the mempool.
-- **Avoid trading illiquid pairs**—they're easier targets for MEV bots.
-- **Stay informed**—follow DEX and wallet updates for new MEV protection features.
+- **Set tight slippage tolerances**, never use high slippage unless you understand the risk.
+- **Check deadlines**, don't let transactions sit in the mempool.
+- **Avoid trading illiquid pairs** since they're easier targets for MEV bots.
+- **Stay informed**, follow DEX and wallet updates for new MEV protection features.
 
 ---
 
@@ -178,7 +178,7 @@ MEV is a fact of life in DeFi, but you can fight back. As a builder, enforce sli
 - **Commit-Reveal:** Strong for privacy, but adds friction (2 transactions).
 - **Batch Auctions:** Excellent protection, but complex and changes trading UX.
 - **Private Orderflow:** Great for users, easy to adopt, but relies on external infrastructure.
-- **FSS:** Theoretical, protocol-level fix—watch this space for the future!
+- **FSS:** Theoretical, protocol-level fix.
 
 ---
 
