@@ -7,10 +7,10 @@ export type OnchainData = {
 };
 
 export async function fetchOnchainData(address: string): Promise<OnchainData> {
-  const ens = await fetchEnsData(address);
+  const ensData = await fetchEnsData(address);
 
   return {
     address,
-    ensData: ens,
+    ensData,
   };
 }
