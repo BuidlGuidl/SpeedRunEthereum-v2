@@ -4,8 +4,8 @@ import { InferInsertModel } from "drizzle-orm";
 import { users } from "~~/services/database/config/schema";
 import { createUser, isUserRegistered, updateUser } from "~~/services/database/repositories/users";
 import { isValidEIP712UserRegisterSignature } from "~~/services/eip712/register";
+import { fetchOnchainData } from "~~/services/onchainData";
 import { PlausibleEvent, trackPlausibleEvent } from "~~/services/plausible";
-import { publicClient } from "~~/utils/short-address-and-ens";
 
 type RegisterPayload = {
   address: string;
@@ -44,31 +44,18 @@ export async function POST(req: Request) {
         try {
           await trackPlausibleEvent(PlausibleEvent.SIGNUP_SRE, {}, req);
 
-          let ensName: string | null = null;
-          try {
-            ensName = await publicClient.getEnsName({ address });
-          } catch (error) {
-            console.error(`Error getting ENS name for user ${address}:`, error);
-          }
-
-          let ensAvatar: string | null = null;
-          if (ensName) {
-            try {
-              ensAvatar = await publicClient.getEnsAvatar({ name: ensName });
-            } catch (error) {
-              console.error(`Error getting ENS avatar for user ${address}:`, error);
-            }
-          }
+          const { ensData } = await fetchOnchainData(address);
 
           // Update user with ENS data if we have any
-          if (ensName || ensAvatar) {
-            const updateData: { ens?: string; ensAvatar?: string } = {};
-            if (ensName) updateData.ens = ensName;
-            if (ensAvatar) updateData.ensAvatar = ensAvatar;
+          if (ensData.name || ensData.avatar) {
+            const updateData = {
+              ens: ensData.name ?? undefined,
+              ensAvatar: ensData.avatar ?? undefined,
+            };
 
             await updateUser(address, updateData);
             console.log(
-              `ENS data updated for user ${address}: ${ensName ? `name: ${ensName}` : ""} ${ensAvatar ? `avatar: ${ensAvatar}` : ""}`,
+              `ENS data updated for user ${address}: ${ensData.name ? `name: ${ensData.name}` : ""} ${ensData.avatar ? `avatar: ${ensData.avatar}` : ""}`,
             );
           }
         } catch (error) {
