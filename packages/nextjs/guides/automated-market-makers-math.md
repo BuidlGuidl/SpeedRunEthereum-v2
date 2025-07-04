@@ -67,7 +67,7 @@ The equation `x*y=k` describes a **hyperbola** in the first quadrant. Every poss
 </p>
 
 - **Trades move the pool along the curve.**
-- **Spot price:** Slope of the tangent at a point (`y/x`).
+- **Spot price:** Slope of the tangent at a point (`y/x`). (At the initial state, this is `y₀/x₀`.)
 - **Execution price:** Average price over a finite trade (secant line between start/end points).
 
 **Key insight:** The curve ensures you can never drain the pool (prices become extreme as reserves approach zero).
@@ -108,16 +108,16 @@ When you swap tokens in an AMM, the output amount is determined by the constant 
 
 Suppose you swap `Δx` of token X for token Y:
 
-- Initial reserves: `x0 * y0 = k`
-- After swap: `(x0 + Δx) * (y0 - Δy) = k`
+- Initial reserves: `x₀ * y₀ = k`
+- After swap: `(x₀ + Δx) * (y₀ - Δy) = k`
 - Solve for output amount (`Δy`):
   ```
-  Δy = y0 - (k / (x0 + Δx))
+  Δy = y₀ - (k / (x₀ + Δx))
   ```
 
 ### With Fees (e.g., 0.3%)
 
-- Only a portion of `Δx` is used for the swap: `Δx_effective = Δx * 0.997`
+- Only a portion of `Δx` is used for the swap: `Δxₑₓₑc = Δx * 0.997`
 - Output formula:
   ```
   amountOut = (reserveOut * amountInWithFee) / (reserveIn + amountInWithFee)
@@ -126,7 +126,7 @@ Suppose you swap `Δx` of token X for token Y:
 
 ### Spot Price vs. Execution Price
 
-- **Spot price:** Slope of the tangent at a point (`y/x`).
+- **Spot price:** Slope of the tangent at a point (`y/x`). (At the initial state, this is `y₀/x₀`.)
 - **Execution price:** Average price over a finite trade (secant line between start/end points).
 - **Price impact:** The difference between spot and execution price increases with trade size.
 
@@ -159,7 +159,7 @@ This formula ensures the product of reserves stays (almost) constant, minus the 
 
 ### Why LP Token Math Matters
 
-- Prevents donation attacks.
+- Prevents donation attacks (a technique where tokens are sent directly to the pool contract, potentially disrupting its internal accounting and pricing).
 - Ensures fair share of pool for all LPs.
 
 ---
