@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import { UserChallenges } from "./_components/UserChallenges";
 import { UserProfileCard } from "./_components/UserProfileCard";
 import { BuildCard } from "./_components/builds/BuildCard";
 import { SubmitNewBuildButton } from "./_components/builds/SubmitNewBuildButton";
@@ -83,11 +84,7 @@ export default async function BuilderPage({ params }: { params: { address: strin
           </div>
           <div className="xl:col-span-3">
             {/* Challenges */}
-            <div>
-              {challenges.map(challenge => (
-                <div key={challenge.id}>{challenge.challenge.challengeName}</div>
-              ))}
-            </div>
+            <UserChallenges challenges={challenges} />
             {/* Builds */}
             <div className="mt-12">
               <div className="flex justify-between items-center">
