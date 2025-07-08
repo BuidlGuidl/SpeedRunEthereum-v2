@@ -1,5 +1,4 @@
 import { notFound } from "next/navigation";
-import { UserChallengesTable } from "./_components/UserChallengesTable";
 import { UserProfileCard } from "./_components/UserProfileCard";
 import { BuildCard } from "./_components/builds/BuildCard";
 import { SubmitNewBuildButton } from "./_components/builds/SubmitNewBuildButton";
@@ -77,25 +76,20 @@ export default async function BuilderPage({ params }: { params: { address: strin
   return (
     <>
       <RouteRefresher />
-      <div className="max-w-7xl mx-auto px-4 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-14">
-          <div className="lg:col-span-1">
+      <div className="max-w-[1440px] w-full mx-auto px-4 py-8">
+        <div className="grid grid-cols-1 xl:grid-cols-4 gap-6">
+          <div>
             <UserProfileCard user={user} batch={userBatch} />
           </div>
-          <div className="lg:col-span-3 flex flex-col gap-14">
+          <div className="xl:col-span-3">
             {/* Challenges */}
-            <div className="w-full">
-              <h2 className="text-2xl font-bold mb-0 text-neutral pb-4">Challenges</h2>
-              {challenges.length > 0 ? (
-                <UserChallengesTable challenges={challenges} />
-              ) : (
-                <div className="bg-base-100 p-8 text-center rounded-lg text-neutral">
-                  This builder hasn&apos;t completed any challenges.
-                </div>
-              )}
+            <div>
+              {challenges.map(challenge => (
+                <div key={challenge.id}>{challenge.challenge.challengeName}</div>
+              ))}
             </div>
             {/* Builds */}
-            <div className="w-full">
+            <div className="mt-12">
               <div className="flex justify-between items-center">
                 <h2 className="text-2xl font-bold mb-0 text-neutral pb-4">Builds</h2>
                 <SubmitNewBuildButton />

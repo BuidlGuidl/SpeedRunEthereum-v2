@@ -31,7 +31,7 @@ export const UserSocials = ({ user }: { user: NonNullable<UserByAddress> }) => {
                 <div key={social.key} className="flex items-center">
                   {link ? (
                     <a href={link} target="_blank" rel="noopener noreferrer" className="link">
-                      <social.icon className="w-4 h-4" />
+                      <social.icon className="w-6 h-6" />
                     </a>
                   ) : (
                     <CopyValueToClipboard text={social.value as string} Icon={social.icon} />

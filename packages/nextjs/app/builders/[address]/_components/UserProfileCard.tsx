@@ -1,7 +1,6 @@
 "use client";
 
 import { RefreshEnsButton } from "./RefreshEnsButton";
-import { UserLocation } from "./UserLocation";
 import { UserSocials } from "./UserSocials";
 import EditIcon from "~~/app/_assets/icons/EditIcon";
 import { UPDATE_USER_MODAL_ID, UpdateUserModal } from "~~/app/_components/UpdateUserModal";
@@ -16,7 +15,7 @@ export const UserProfileCard = ({ user, batch }: { user: NonNullable<UserByAddre
   const { isAdmin } = useAuthSession();
 
   return (
-    <div className="bg-base-100 rounded-xl p-6 shadow-lg">
+    <div className="bg-base-100 rounded-xl p-6">
       <div className="flex flex-col md:flex-row justify-around lg:flex-col items-center gap-4">
         <PunkBlockie address={user.userAddress} scale={2} />
         <div className="flex flex-col items-center gap-4">
@@ -48,12 +47,7 @@ export const UserProfileCard = ({ user, batch }: { user: NonNullable<UserByAddre
             </>
           )}
 
-          <hr className="w-full border-base-200 mb-2" />
-          <UserLocation user={user} />
           <UserSocials user={user} />
-          <div className="text-sm text-neutral">
-            Joined {new Date(user.createdAt).toLocaleDateString("en-US", { month: "long", year: "numeric" })}
-          </div>
         </div>
       </div>
       <UpdateUserModal user={user} />
