@@ -11,6 +11,7 @@ type PickSocials<T> = {
 };
 
 export type UserInsert = InferInsertModel<typeof users>;
+export type UserUpdate = Partial<Omit<UserInsert, "userAddress">>;
 export type UserByAddress = Awaited<ReturnType<typeof getUserByAddress>>;
 export type UserSocials = PickSocials<NonNullable<UserByAddress>>;
 export type UserWithChallengesData = Awaited<ReturnType<typeof getSortedUsersWithChallengesInfo>>["data"][0];
@@ -227,7 +228,7 @@ export async function isUserAdmin(userAddress: string): Promise<boolean> {
   return user?.role === UserRole.ADMIN;
 }
 
-export async function updateUser(userAddress: string, data: Partial<UserInsert>) {
+export async function updateUser(userAddress: string, data: UserUpdate) {
   const result = await db
     .update(users)
     .set({

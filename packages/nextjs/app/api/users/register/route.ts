@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { waitUntil } from "@vercel/functions";
 import { InferInsertModel } from "drizzle-orm";
 import { users } from "~~/services/database/config/schema";
-import { createUser, isUserRegistered, updateUser } from "~~/services/database/repositories/users";
+import { UserUpdate, createUser, isUserRegistered, updateUser } from "~~/services/database/repositories/users";
 import { isValidEIP712UserRegisterSignature } from "~~/services/eip712/register";
 import { fetchOnchainData } from "~~/services/onchainData";
 import { PlausibleEvent, trackPlausibleEvent } from "~~/services/plausible";
@@ -48,7 +48,7 @@ export async function POST(req: Request) {
 
           // Update user with ENS data if we have any
           if (ensData.name || ensData.avatar) {
-            const updateData = {
+            const updateData: UserUpdate = {
               ens: ensData.name ?? undefined,
               ensAvatar: ensData.avatar ?? undefined,
             };
