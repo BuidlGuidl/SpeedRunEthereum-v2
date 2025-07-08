@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { ChallengeStatus } from "./ChallengeStatus";
 import { DateWithTooltip } from "~~/components/DateWithTooltip";
-import { ReviewAction } from "~~/services/database/config/types";
 import { UserChallenges } from "~~/services/database/repositories/userChallenges";
 
 const ChallengeRow = ({ challenge }: { challenge: UserChallenges[number] }) => {
@@ -40,10 +39,7 @@ const ChallengeRow = ({ challenge }: { challenge: UserChallenges[number] }) => {
         <DateWithTooltip timestamp={challenge.submittedAt} />
       </td>
       <td>
-        <ChallengeStatus
-          reviewAction={challenge.reviewAction ?? ReviewAction.SUBMITTED}
-          comment={challenge.reviewComment}
-        />
+        <ChallengeStatus comment={challenge.reviewComment} />
       </td>
     </tr>
   );

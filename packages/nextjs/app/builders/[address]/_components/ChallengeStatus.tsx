@@ -1,14 +1,11 @@
 "use client";
 
-import { forwardRef, useRef } from "react";
-import { useEffect, useState } from "react";
+import { forwardRef, useEffect, useRef, useState } from "react";
 import { MDXRemote, MDXRemoteProps } from "next-mdx-remote";
 import { serialize } from "next-mdx-remote/serialize";
 import rehypeRaw from "rehype-raw";
 import remarkGfm from "remark-gfm";
-import { QuestionMarkCircleIcon } from "@heroicons/react/24/outline";
-import { ReviewAction } from "~~/services/database/config/types";
-import { REVIEW_ACTION_BADGE_CLASSES } from "~~/utils/challenges";
+import { ChatBubbleBottomCenterTextIcon } from "@heroicons/react/24/outline";
 
 const ReviewMarkdownContent = ({ content }: { content: string }) => {
   const [mdxSource, setMdxSource] = useState<MDXRemoteProps>();
@@ -68,29 +65,22 @@ const ChallengeStatusModal = forwardRef<HTMLDialogElement, ChallengeStatusModalP
 ChallengeStatusModal.displayName = "ChallengeStatusModal";
 
 type ChallengeStatusProps = {
-  reviewAction: ReviewAction;
   comment?: string | null;
 };
 
-export const ChallengeStatus = ({ reviewAction, comment }: ChallengeStatusProps) => {
+export const ChallengeStatus = ({ comment }: ChallengeStatusProps) => {
   const modalRef = useRef<HTMLDialogElement>(null);
-  const badgeClass = REVIEW_ACTION_BADGE_CLASSES[reviewAction];
+
+  if (!comment) {
+    return null;
+  }
 
   return (
-    <div className="flex items-center gap-4">
-      <span className={`badge ${badgeClass} w-[90px]`}>{reviewAction.toLowerCase()}</span>
-      {comment && (
-        <>
-          <div
-            className="tooltip tooltip-left"
-            data-tip="Click to see review"
-            onClick={() => modalRef.current?.showModal()}
-          >
-            <QuestionMarkCircleIcon className="h-4 w-4 cursor-pointer hover:opacity-80" />
-          </div>
-          <ChallengeStatusModal ref={modalRef} closeModal={() => modalRef.current?.close()} comment={comment} />
-        </>
-      )}
+    <div className="flex items-center">
+      <div className="tooltip tooltip-top" data-tip="Click to see review" onClick={() => modalRef.current?.showModal()}>
+        <ChatBubbleBottomCenterTextIcon className="h-4 w-4 cursor-pointer hover:opacity-80" />
+      </div>
+      <ChallengeStatusModal ref={modalRef} closeModal={() => modalRef.current?.close()} comment={comment} />
     </div>
   );
 };
