@@ -63,7 +63,8 @@ export async function POST(req: Request) {
       batchStatus: BatchUserStatus.CANDIDATE,
     });
 
-    waitUntil(trackPlausibleEvent(PlausibleEvent.JOIN_BATCH, {}, req));
+    const referrer = user?.referrer || "";
+    waitUntil(trackPlausibleEvent(PlausibleEvent.JOIN_BATCH, { referrer }, req));
 
     return NextResponse.json({ user: updatedUser }, { status: 200 });
   } catch (error) {

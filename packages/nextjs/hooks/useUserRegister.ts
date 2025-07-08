@@ -21,12 +21,12 @@ export function useUserRegister() {
     },
   });
 
-  const handleRegister = async () => {
+  const handleRegister = async (referrer: string | null) => {
     if (!address) return;
 
     try {
       const signature = await signTypedDataAsync(EIP_712_TYPED_DATA__USER_REGISTER);
-      register({ address, signature });
+      register({ address, signature, referrer });
     } catch (error) {
       console.error("Error during signature:", error);
       notification.error("Failed to sign message. Please try again.");

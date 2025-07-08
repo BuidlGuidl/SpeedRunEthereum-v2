@@ -3,14 +3,16 @@
 import { useCallback } from "react";
 import Link from "next/link";
 import { usePlausible } from "next-plausible";
+import { useLocalStorage } from "usehooks-ts";
 
 export const StartChallengesButton = () => {
   const plausible = usePlausible();
+  const [storedReferrer] = useLocalStorage<string | null>("originalReferrer", null);
 
   // TODO: test this later
   const handleCtaClick = useCallback(() => {
-    plausible("cta_from_start");
-  }, [plausible]);
+    plausible("cta_from_start", { props: { referrer: storedReferrer || "" } });
+  }, [plausible, storedReferrer]);
 
   return (
     <Link
