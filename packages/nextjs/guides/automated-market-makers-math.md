@@ -8,7 +8,7 @@ image: "/assets/guides/automated-market-makers-math.jpg"
 
 - **AMMs** use math, not order books, to set prices and enable 24/7 trading on-chain.
 - **Constant product formula (x\*y=k)** powers Uniswap and most DEXs (ensures liquidity but causes price impact and impermanent loss).
-- **Liquidity providers (LPs)** earn fees but face risks if token prices diverge.
+- **Liquidity providers (LPs)** deposit up to two tokens (e.g ETH, USDC) into a pool, enabling users to swap between them while LPs earn fees, but have risk of impermanent loss if token prices diverge.
 - **Key risks:** Price impact, slippage, impermanent loss, and arbitrage.
 - **Best practices:** Understand the math, use secure code, and always compare LP fees to potential losses.
 
@@ -22,7 +22,7 @@ Traditional exchanges use Central Limit Order Books (CLOBs) to match buyers and 
 
 ## 1. What is an Automated Market Maker (AMM)?
 
-Automated Market Makers (AMMs) are the backbone of decentralized exchanges (DEXs) like Uniswap, SushiSwap, and Balancer. Unlike traditional exchanges that use order books to match buyers and sellers, AMMs use smart contracts and math to set prices and enable anyone to trade or provide liquidity at any time.
+Automated Market Makers (AMMs) are the backbone of decentralized exchanges (DEXs) like Uniswap, SushiSwap, and Balancer. Unlike traditional exchanges that use order books to match buyers and sellers, AMMs use smart contracts and mathematical formulas to set prices and create token pools. Anyone can trade or provide liquidity, permissionlessly, at any time.
 
 **How it works:**
 
@@ -66,7 +66,7 @@ The equation `x*y=k` describes a **hyperbola** in the first quadrant. Every poss
   <img src="https://user-images.githubusercontent.com/12072395/205343533-7e3a2cfe-8329-42af-a35d-6352a12bf61e.png" alt="AMM constant product curve: x*y=k" width="100%" />
 </p>
 
-- **Trades move the pool along the curve.**
+- Each trade shifts the pool’s reserve balances along the constant product curve, changing the token ratio and therefore the price.
 - **Spot price:** Slope of the tangent at a point (`y/x`). (At the initial state, this is `y₀/x₀`.)
 - **Execution price:** Average price over a finite trade (secant line between start/end points).
 
@@ -76,19 +76,22 @@ The equation `x*y=k` describes a **hyperbola** in the first quadrant. Every poss
 
 ## 4. Price Impact, Slippage, and Impermanent Loss
 
-### Price Impact
+### ⚠️ Slippage (User Risk)
 
-- **Definition:** The change in price caused by your own trade.
-- **Why it happens:** The AMM curve is a hyperbola, big trades move the price a lot, small trades move it a little.
-- **Tip:** Larger pools = less price impact.
+- **Definition:** The difference between the expected price shown when you submit the trade and the actual price when it executes.
+- **Causes:**
+  - **Price Impact** (explained below)
+  - **Other pending trades** (submitted before yours but mined first)
+  - **Network delays, MEV, or bot front-running**
+- **Mitigation:** Most DEXs let you set a slippage tolerance. If the final price exceeds this threshold, the transaction reverts.
 
-### Slippage
+### 📉 Price Impact (a component of slippage)
 
-- **Definition:** The difference between the expected price and the actual execution price.
-- **Causes:** Price impact + other trades happening before yours is confirmed.
-- **Mitigation:** Set a slippage tolerance in your DEX UI.
+- **Definition:** The price movement caused directly by your own trade due to the AMM curve.
+- **Why it happens:** In AMMs like Uniswap, token prices are determined by a curve (x \* y = k). Larger trades push further along the curve, worsening the price.
+- **Tip:** Deeper liquidity = less price impact.
 
-### Impermanent Loss
+### 💸 Impermanent Loss (LP risk)
 
 - **Definition:** The loss LPs experience compared to simply holding both tokens, if prices diverge.
 - **Why it happens:** Arbitrageurs rebalance the pool when external prices move, leaving LPs with more of the losing asset.
@@ -336,7 +339,9 @@ contract MinimalAMM is ERC20 {
 
 ## 11. Concentrated Liquidity & The Evolution of AMMs
 
-- **Uniswap v3:** LPs provide liquidity in specific price ranges ("ticks"), boosting capital efficiency but increasing management complexity and risk.
+- **Uniswap v3 introduced concentrated liquidity**, letting LPs allocate capital within chosen price ranges. This improves capital efficiency and fee potential but comes with tradeoffs:
+  - LPs must actively manage positions to stay in range.
+  - When the price moves outside the range, liquidity becomes one-sided (held entirely in one asset), earning no fees and increasing impermanent loss risk compared to v2.
 - **Stablecoin AMMs (Curve, Balancer):** Use different math for low-slippage swaps between similar assets.
 - **Capital efficiency:** CPMMs are simple but inefficient; new models let LPs focus capital where it's most useful.
 
