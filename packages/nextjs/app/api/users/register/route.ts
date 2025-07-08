@@ -39,11 +39,11 @@ export async function POST(req: Request) {
     const user = await createUser(userToCreate);
 
     // Background processing
+    waitUntil(trackPlausibleEvent(PlausibleEvent.SIGNUP_SRE, {}, req));
+
     waitUntil(
       (async () => {
         try {
-          await trackPlausibleEvent(PlausibleEvent.SIGNUP_SRE, {}, req);
-
           const { ensData } = await fetchOnchainData(address);
 
           // Update user with ENS data if we have any
