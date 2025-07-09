@@ -54,7 +54,12 @@ export default async function BuildPage({ params }: { params: { buildId: string 
         </div>
         <div className="flex mt-5 flex-wrap gap-4 w-full justify-center lg:justify-start p-6 bg-base-300 dark:bg-primary-content">
           {build?.builders.map(builder => (
-            <Address key={builder.userAddress} address={builder.userAddress} cachedEns={builder.user.ens} />
+            <Address
+              key={builder.userAddress}
+              address={builder.userAddress}
+              cachedEns={builder.user.ens}
+              cachedEnsAvatar={builder.user.ensAvatar}
+            />
           ))}
         </div>
       </div>

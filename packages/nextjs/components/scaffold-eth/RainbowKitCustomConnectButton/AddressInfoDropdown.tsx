@@ -26,7 +26,7 @@ type AddressInfoDropdownProps = {
   blockExplorerAddressLink: string | undefined;
   displayName: string;
   isAdmin: boolean;
-  ensAvatar?: string;
+  ensAvatar?: string | null;
 };
 
 export const AddressInfoDropdown = ({
