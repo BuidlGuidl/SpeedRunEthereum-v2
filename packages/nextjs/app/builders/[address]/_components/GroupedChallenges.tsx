@@ -1,11 +1,15 @@
 import { ChallengeDetails } from "./ChallengeDetails";
 import { ChallengeDetailsStatus } from "./ChallengeDetailsStatus";
 import { ChallengeIconComputer } from "./ChallengeGroupIcons";
-import { ReviewAction } from "~~/services/database/config/types";
+import { ChallengeId, ReviewAction } from "~~/services/database/config/types";
 import type { Challenges } from "~~/services/database/repositories/challenges";
 import type { UserChallenges } from "~~/services/database/repositories/userChallenges";
 
-const basicChallengeIds = new Set(["simple-nft-example", "decentralized-staking", "token-vendor"]);
+const basicChallengeIds = new Set<ChallengeId>([
+  ChallengeId.SIMPLE_NFT_EXAMPLE,
+  ChallengeId.DECENTRALIZED_STAKING,
+  ChallengeId.TOKEN_VENDOR,
+]);
 
 export type MappedChallenges = Challenges[number] & {
   reviewAction?: ReviewAction | null;
@@ -44,8 +48,10 @@ export function GroupedChallenges({
   });
 
   // Filter challenges into basic and advanced
-  const basicChallenges = userMappedChallenges.filter(challenge => basicChallengeIds.has(challenge.id));
-  const advancedChallenges = userMappedChallenges.filter(challenge => !basicChallengeIds.has(challenge.id));
+  const basicChallenges = userMappedChallenges.filter(challenge => basicChallengeIds.has(challenge.id as ChallengeId));
+  const advancedChallenges = userMappedChallenges.filter(
+    challenge => !basicChallengeIds.has(challenge.id as ChallengeId),
+  );
 
   return (
     <div>
