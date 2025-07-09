@@ -30,20 +30,25 @@ export function GroupedChallenges({
   userChallenges: UserChallenges;
 }) {
   // Map challenges with user challenges
-  const userMappedChallenges: MappedChallenges[] = challenges.map((challenge: Challenges[number]) => {
-    const userChallenge = userChallenges.find(uc => uc.challengeId === challenge.id);
+  const userMappedChallenges: MappedChallenges[] = challenges
+    .map((challenge: Challenges[number]) => {
+      const userChallenge = userChallenges.find(uc => uc.challengeId === challenge.id);
 
-    if (!userChallenge) return challenge;
+      if (!userChallenge) return challenge;
 
-    return {
-      ...challenge,
-      reviewAction: userChallenge.reviewAction ?? null,
-      submittedAt: userChallenge.submittedAt ?? new Date(),
-      reviewComment: userChallenge.reviewComment ?? null,
-      contractUrl: userChallenge.contractUrl ?? null,
-      frontendUrl: userChallenge.frontendUrl ?? null,
-    };
-  });
+      return {
+        ...challenge,
+        reviewAction: userChallenge.reviewAction ?? null,
+        submittedAt: userChallenge.submittedAt ?? new Date(),
+        reviewComment: userChallenge.reviewComment ?? null,
+        contractUrl: userChallenge.contractUrl ?? null,
+        frontendUrl: userChallenge.frontendUrl ?? null,
+      };
+    })
+    .sort((a, b) => a.sortOrder - b.sortOrder)
+    .filter(challenge => {
+      return challenge.id !== ChallengeId.STATE_CHANNELS && challenge.id !== ChallengeId.STABLECOINS;
+    });
 
   // Filter challenges into basic and advanced
   const basicChallenges = userMappedChallenges.filter(challenge => basicChallengeIds.has(challenge.id as ChallengeId));
