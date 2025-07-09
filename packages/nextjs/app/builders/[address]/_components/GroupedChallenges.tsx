@@ -106,6 +106,7 @@ export function GroupedChallenges({
                   address={address}
                   challenge={challenge}
                   userChallenges={userChallenges}
+                  comingSoon={challenge.id === ChallengeId.DEPLOY_TO_L2}
                 />
               );
             })}

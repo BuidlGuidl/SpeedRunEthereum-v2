@@ -11,10 +11,12 @@ export function ChallengeDetails({
   address,
   challenge,
   userChallenges,
+  comingSoon,
 }: {
   address: Address;
   challenge: MappedChallenges;
   userChallenges: UserChallenges;
+  comingSoon?: boolean;
 }) {
   const { address: connectedAddress } = useAccount();
   const { completed: builderHasCompletedDependenciesChallenges } = getChallengeDependenciesInfo({
@@ -34,12 +36,13 @@ export function ChallengeDetails({
             {challenge.sortOrder}
           </div>
           <h2 className="m-0 font-medium lg:text-xl">
-            {!isChallengeLocked && (
+            {!isChallengeLocked && !comingSoon && (
               <Link href={`/challenge/${challenge.id}`} className="hover:underline">
                 {challenge.challengeName}
               </Link>
             )}
             {isChallengeLocked && challenge.challengeName}
+            {comingSoon && `${challenge.challengeName} - Coming Soon`}
           </h2>
         </div>
         {isChallengeLocked && isUserConnected && (
