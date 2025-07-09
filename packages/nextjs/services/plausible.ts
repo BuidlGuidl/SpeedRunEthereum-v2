@@ -10,11 +10,13 @@ export async function trackPlausibleEvent(
   eventName: PlausibleEvent,
   props?: Record<string, string | number | boolean>,
   request?: Request,
+  referrer?: string | null,
 ) {
   const payload = {
     domain: "speedrunethereum.com",
     name: eventName,
     url: `https://speedrunethereum.com`,
+    referrer: referrer || "",
     props,
   };
 

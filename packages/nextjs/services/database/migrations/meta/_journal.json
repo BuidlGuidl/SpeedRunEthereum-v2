@@ -50,6 +50,13 @@
       "when": 1749656686202,
       "tag": "0006_normal_maelstrom",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1751993122948,
+      "tag": "0007_unique_iron_monger",
+      "breakpoints": true
     }
   ]
 }

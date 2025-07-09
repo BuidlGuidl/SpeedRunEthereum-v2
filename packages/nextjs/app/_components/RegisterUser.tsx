@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { useLocalStorage } from "usehooks-ts";
 import { useAccount } from "wagmi";
 import { UserIcon } from "@heroicons/react/24/outline";
 import { PunkBlockie } from "~~/components/PunkBlockie";
@@ -10,6 +11,7 @@ export const RegisterUser = () => {
   const [showTooltip, setShowTooltip] = useState(true);
   const { handleRegister, isRegistering } = useUserRegister();
   const containerRef = useRef<HTMLDivElement>(null);
+  const [storedReferrer] = useLocalStorage<string | null>("originalReferrer", null);
 
   useEffect(() => {
     if (!showTooltip) return;
@@ -51,7 +53,7 @@ export const RegisterUser = () => {
           )}
           <button
             className="flex items-center justify-center py-1.5 lg:py-2 px-3 lg:px-4 border-2 border-primary rounded-full bg-base-300 hover:bg-base-200 transition-colors cursor-pointer mt-4 text-sm w-full"
-            onClick={handleRegister}
+            onClick={() => handleRegister(storedReferrer)}
             disabled={isRegistering}
           >
             {isRegistering ? (

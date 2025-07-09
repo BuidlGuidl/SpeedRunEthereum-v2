@@ -69,7 +69,8 @@ export async function POST(req: NextRequest, { params }: { params: { challengeId
     waitUntil(
       (async () => {
         try {
-          await trackPlausibleEvent(PlausibleEvent.CHALLENGE_SUBMISSION, { challengeId }, req);
+          const referrer = user?.referrer || "";
+          await trackPlausibleEvent(PlausibleEvent.CHALLENGE_SUBMISSION, { challengeId }, req, referrer);
           const autoGraderChallengeId = challenge.sortOrder;
 
           const gradingResult = await submitToAutograder({

@@ -10,11 +10,12 @@ import { PlausibleEvent, trackPlausibleEvent } from "~~/services/plausible";
 type RegisterPayload = {
   address: string;
   signature: `0x${string}`;
+  referrer: string | null;
 };
 
 export async function POST(req: Request) {
   try {
-    const { address, signature } = (await req.json()) as RegisterPayload;
+    const { address, signature, referrer } = (await req.json()) as RegisterPayload;
 
     if (!address || !signature) {
       return NextResponse.json({ error: "Address and signature are required" }, { status: 400 });
@@ -34,12 +35,13 @@ export async function POST(req: Request) {
 
     const userToCreate: InferInsertModel<typeof users> = {
       userAddress: address,
+      referrer,
     };
 
     const user = await createUser(userToCreate);
 
     // Background processing
-    waitUntil(trackPlausibleEvent(PlausibleEvent.SIGNUP_SRE, {}, req));
+    waitUntil(trackPlausibleEvent(PlausibleEvent.SIGNUP_SRE, {}, req, referrer));
 
     waitUntil(
       (async () => {
