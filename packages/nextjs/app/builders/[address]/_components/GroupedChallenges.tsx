@@ -1,6 +1,6 @@
 import { ChallengeDetails } from "./ChallengeDetails";
 import { ChallengeDetailsStatus } from "./ChallengeDetailsStatus";
-import { ChallengeIconComputer } from "./ChallengeGroupIcons";
+import { ChallengeIconComputer, ChallengeIconRocket } from "./ChallengeGroupIcons";
 import { ChallengeId, ReviewAction } from "~~/services/database/config/types";
 import type { Challenges } from "~~/services/database/repositories/challenges";
 import type { UserChallenges } from "~~/services/database/repositories/userChallenges";
@@ -58,9 +58,9 @@ export function GroupedChallenges({
       <div className="collapse collapse-arrow bg-base-300 rounded-lg">
         <input type="checkbox" defaultChecked />
         <div className="collapse-title text-xl font-medium">
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-3">
             <ChallengeIconComputer />
-            Basic Challenges
+            Ethereum 101
           </div>
         </div>
         <div className="collapse-content bg-base-100">
@@ -78,9 +78,9 @@ export function GroupedChallenges({
       <div className="mt-6 collapse collapse-arrow bg-base-300 rounded-lg">
         <input type="checkbox" />
         <div className="collapse-title text-xl font-medium">
-          <div className="flex items-center gap-2">
-            <ChallengeIconComputer />
-            Advanced Challenges
+          <div className="flex items-center gap-3">
+            <ChallengeIconRocket />
+            Advanced Concepts
           </div>
         </div>
         <div className="collapse-content bg-base-100">
