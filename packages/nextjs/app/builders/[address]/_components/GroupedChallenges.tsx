@@ -67,10 +67,10 @@ export function GroupedChallenges({
           <div className="mt-6 space-y-6 divide-y">
             {basicChallenges.map(challenge => {
               if (challenge.reviewAction) {
-                return <ChallengeDetailsStatus challenge={challenge} key={challenge.id} />;
+                return <ChallengeDetailsStatus key={challenge.id} challenge={challenge} />;
               }
 
-              return <ChallengeDetails challenge={challenge} key={challenge.id} />;
+              return <ChallengeDetails key={challenge.id} challenge={challenge} userChallenges={userChallenges} />;
             })}
           </div>
         </div>
@@ -87,10 +87,10 @@ export function GroupedChallenges({
           <div className="mt-6 space-y-6 divide-y">
             {advancedChallenges.map(challenge => {
               if (challenge.reviewAction) {
-                return <ChallengeDetailsStatus challenge={challenge} key={challenge.id} />;
+                return <ChallengeDetailsStatus key={challenge.id} challenge={challenge} />;
               }
 
-              return <ChallengeDetails challenge={challenge} key={challenge.id} />;
+              return <ChallengeDetails key={challenge.id} challenge={challenge} userChallenges={userChallenges} />;
             })}
           </div>
         </div>
