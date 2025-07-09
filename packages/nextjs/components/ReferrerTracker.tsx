@@ -11,12 +11,7 @@ const ReferrerTracker = () => {
     // Skip if already stored
     if (storedReferrer) return;
 
-    // Delete: this is for testing purposes only
-    // e.g. http://localhost:3000/?mockReferrer=https://www.example.com
-    const urlParams = new URLSearchParams(window.location.search);
-    const mockReferrer = urlParams.get("mockReferrer");
-
-    const referrer = mockReferrer || document.referrer;
+    const referrer = document.referrer;
     const currentDomain = window.location.hostname;
 
     if (referrer && !referrer.includes(currentDomain)) {
