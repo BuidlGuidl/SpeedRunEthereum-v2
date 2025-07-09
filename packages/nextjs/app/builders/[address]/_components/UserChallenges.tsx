@@ -11,7 +11,7 @@ export function UserChallenges({ challenges }: { challenges: UserChallenges }) {
   return (
     <div>
       <div className="collapse collapse-arrow bg-base-300 rounded-lg">
-        <input type="radio" name="challenge-accordion" defaultChecked />
+        <input type="checkbox" defaultChecked />
         <div className="collapse-title text-xl font-medium">
           <div className="flex items-center gap-2">
             <ChallengeIconComputer />
@@ -36,7 +36,7 @@ export function UserChallenges({ challenges }: { challenges: UserChallenges }) {
                     </div>
                     <div
                       className={clsx("badge text-xs", {
-                        "badge-info": isAccepted,
+                        "badge-secondary": isAccepted,
                         "badge-warning": isSubmitted,
                         "badge-error": isRejected,
                       })}
@@ -75,7 +75,7 @@ export function UserChallenges({ challenges }: { challenges: UserChallenges }) {
         </div>
       </div>
       <div className="mt-6 collapse collapse-arrow bg-base-300 rounded-lg">
-        <input type="radio" name="challenge-accordion" />
+        <input type="checkbox" />
         <div className="collapse-title text-xl font-medium">Advanced Challenges</div>
         <div className="collapse-content bg-base-100">
           <p>hello</p>
