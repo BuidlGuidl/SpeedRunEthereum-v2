@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { isUserAdmin, updateUser } from "~~/services/database/repositories/users";
 import { isValidEIP712UpdateEnsSignature } from "~~/services/eip712/ens";
-import { publicClient } from "~~/utils/short-address-and-ens";
+import { fetchEnsData } from "~~/services/onchainData/ens";
 
 type UpdateEnsPayload = {
   address: string;
@@ -30,15 +30,13 @@ export async function PUT(req: Request, { params }: { params: { address: string 
     }
 
     try {
-      const ensName = await publicClient.getEnsName({ address: addressToUpdateEns });
+      const { name: ens, avatar: ensAvatar } = await fetchEnsData(addressToUpdateEns);
 
-      if (!ensName) {
+      if (!ens) {
         return NextResponse.json({ error: "No ENS name found for this address" }, { status: 400 });
       }
 
-      const ensAvatar = await publicClient.getEnsAvatar({ name: ensName });
-
-      const user = await updateUser(addressToUpdateEns, { ens: ensName, ensAvatar });
+      const user = await updateUser(addressToUpdateEns, { ens, ensAvatar });
 
       return NextResponse.json({ user }, { status: 200 });
     } catch (error) {
