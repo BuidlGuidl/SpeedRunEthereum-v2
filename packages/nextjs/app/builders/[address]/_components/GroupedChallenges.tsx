@@ -28,23 +28,18 @@ export function GroupedChallenges({
 }) {
   // Map challenges with user challenges
   const userMappedChallenges: MappedChallenges[] = challenges.map((challenge: Challenges[number]) => {
-    if (userChallenges.find(userChallenge => userChallenge.challengeId === challenge.id)) {
-      return {
-        ...challenge,
-        reviewAction:
-          userChallenges.find(userChallenge => userChallenge.challengeId === challenge.id)?.reviewAction || null,
-        submittedAt:
-          userChallenges.find(userChallenge => userChallenge.challengeId === challenge.id)?.submittedAt || new Date(),
-        reviewComment:
-          userChallenges.find(userChallenge => userChallenge.challengeId === challenge.id)?.reviewComment || null,
-        contractUrl:
-          userChallenges.find(userChallenge => userChallenge.challengeId === challenge.id)?.contractUrl || null,
-        frontendUrl:
-          userChallenges.find(userChallenge => userChallenge.challengeId === challenge.id)?.frontendUrl || null,
-      };
-    }
+    const userChallenge = userChallenges.find(uc => uc.challengeId === challenge.id);
 
-    return challenge;
+    if (!userChallenge) return challenge;
+
+    return {
+      ...challenge,
+      reviewAction: userChallenge.reviewAction ?? null,
+      submittedAt: userChallenge.submittedAt ?? new Date(),
+      reviewComment: userChallenge.reviewComment ?? null,
+      contractUrl: userChallenge.contractUrl ?? null,
+      frontendUrl: userChallenge.frontendUrl ?? null,
+    };
   });
 
   // Filter challenges into basic and advanced
