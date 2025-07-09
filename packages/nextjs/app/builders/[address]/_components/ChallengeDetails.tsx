@@ -1,21 +1,30 @@
+"use client";
+
 import Link from "next/link";
 import type { MappedChallenges } from "./GroupedChallenges";
+import type { Address } from "viem";
+import { useAccount } from "wagmi";
 import type { UserChallenges } from "~~/services/database/repositories/userChallenges";
 import { getChallengeDependenciesInfo } from "~~/utils/dependent-challenges";
 
 export function ChallengeDetails({
+  address,
   challenge,
   userChallenges,
 }: {
+  address: Address;
   challenge: MappedChallenges;
   userChallenges: UserChallenges;
 }) {
+  const { address: connectedAddress } = useAccount();
   const { completed: builderHasCompletedDependenciesChallenges } = getChallengeDependenciesInfo({
     dependencies: challenge.dependencies || [],
     userChallenges,
   });
 
   const isChallengeLocked = challenge.disabled || !builderHasCompletedDependenciesChallenges;
+
+  const isUserConnected = connectedAddress === address;
 
   return (
     <div className="text-base-content/50 hover:text-base-content transition">
@@ -33,12 +42,12 @@ export function ChallengeDetails({
             {isChallengeLocked && challenge.challengeName}
           </h2>
         </div>
-        {isChallengeLocked && (
+        {isChallengeLocked && isUserConnected && (
           <button disabled className="btn btn-sm opacity-75 disabled:bg-accent disabled:text-accent-content">
             Locked
           </button>
         )}
-        {!isChallengeLocked && (
+        {!isChallengeLocked && isUserConnected && (
           <Link href={`/challenge/${challenge.id}`} className="btn btn-primary btn-sm rounded-md">
             Start
           </Link>

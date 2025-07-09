@@ -86,7 +86,7 @@ export default async function BuilderPage({ params }: { params: { address: strin
           </div>
           <div className="xl:col-span-3">
             {/* Challenges */}
-            <GroupedChallenges challenges={challenges} userChallenges={userChallenges} />
+            <GroupedChallenges address={address} challenges={challenges} userChallenges={userChallenges} />
             {/* Builds */}
             <div className="mt-12">
               <div className="flex justify-between items-center">

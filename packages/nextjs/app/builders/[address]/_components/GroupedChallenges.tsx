@@ -1,6 +1,7 @@
 import { ChallengeDetails } from "./ChallengeDetails";
 import { ChallengeDetailsStatus } from "./ChallengeDetailsStatus";
 import { ChallengeIconComputer, ChallengeIconRocket } from "./ChallengeGroupIcons";
+import { type Address } from "viem";
 import { ChallengeId, ReviewAction } from "~~/services/database/config/types";
 import type { Challenges } from "~~/services/database/repositories/challenges";
 import type { UserChallenges } from "~~/services/database/repositories/userChallenges";
@@ -20,9 +21,11 @@ export type MappedChallenges = Challenges[number] & {
 };
 
 export function GroupedChallenges({
+  address,
   challenges,
   userChallenges,
 }: {
+  address: Address;
   challenges: Challenges;
   userChallenges: UserChallenges;
 }) {
@@ -65,7 +68,14 @@ export function GroupedChallenges({
                 return <ChallengeDetailsStatus key={challenge.id} challenge={challenge} />;
               }
 
-              return <ChallengeDetails key={challenge.id} challenge={challenge} userChallenges={userChallenges} />;
+              return (
+                <ChallengeDetails
+                  key={challenge.id}
+                  address={address}
+                  challenge={challenge}
+                  userChallenges={userChallenges}
+                />
+              );
             })}
           </div>
         </div>
@@ -85,7 +95,14 @@ export function GroupedChallenges({
                 return <ChallengeDetailsStatus key={challenge.id} challenge={challenge} />;
               }
 
-              return <ChallengeDetails key={challenge.id} challenge={challenge} userChallenges={userChallenges} />;
+              return (
+                <ChallengeDetails
+                  key={challenge.id}
+                  address={address}
+                  challenge={challenge}
+                  userChallenges={userChallenges}
+                />
+              );
             })}
           </div>
         </div>
