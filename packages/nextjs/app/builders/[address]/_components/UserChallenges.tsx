@@ -46,7 +46,12 @@ export function UserChallenges({ challenges }: { challenges: UserChallenges }) {
                   </div>
                   <div className="pl-10">
                     <p>{challenge.challenge.description}</p>
-                    <div className="mt-6 flex items-center gap-2 px-3 py-2 bg-base-200 rounded-lg">
+                    <div
+                      className={clsx("mt-6 flex items-center gap-2 px-3 py-2 rounded-lg", {
+                        "bg-base-200": isAccepted || isSubmitted,
+                        "bg-error/20 dark:bg-error/50": isRejected,
+                      })}
+                    >
                       <div className="text-sm">
                         {isAccepted && "✅"}
                         {isRejected && "❌"}
