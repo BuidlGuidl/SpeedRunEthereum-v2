@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import { UserChallenges } from "./_components/UserChallenges";
+import { GroupedChallenges } from "./_components/GroupedChallenges";
 import { UserProfileCard } from "./_components/UserProfileCard";
 import { BuildCard } from "./_components/builds/BuildCard";
 import { SubmitNewBuildButton } from "./_components/builds/SubmitNewBuildButton";
@@ -8,6 +8,7 @@ import { isAddress } from "viem";
 import { RouteRefresher } from "~~/components/RouteRefresher";
 import { getBatchById } from "~~/services/database/repositories/batches";
 import { getBuildsByUserAddress } from "~~/services/database/repositories/builds";
+import { getAllChallenges } from "~~/services/database/repositories/challenges";
 import { getLatestSubmissionPerChallengeByUser } from "~~/services/database/repositories/userChallenges";
 import { getUserByAddress } from "~~/services/database/repositories/users";
 import { getShortAddressAndEns } from "~~/utils/short-address-and-ens";
@@ -62,7 +63,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function BuilderPage({ params }: { params: { address: string } }) {
   const { address } = params;
 
-  const challenges = await getLatestSubmissionPerChallengeByUser(address);
+  const challenges = await getAllChallenges();
+  const userChallenges = await getLatestSubmissionPerChallengeByUser(address);
   const user = await getUserByAddress(address);
   let userBatch;
   if (user?.batchId) {
@@ -84,7 +86,7 @@ export default async function BuilderPage({ params }: { params: { address: strin
           </div>
           <div className="xl:col-span-3">
             {/* Challenges */}
-            <UserChallenges challenges={challenges} />
+            <GroupedChallenges challenges={challenges} userChallenges={userChallenges} />
             {/* Builds */}
             <div className="mt-12">
               <div className="flex justify-between items-center">
