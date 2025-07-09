@@ -13,10 +13,10 @@ export function ChallengeDetailsStatus({ challenge }: { challenge: MappedChallen
     <div>
       <div className="mt-6 flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <div className="flex items-center justify-center w-8 h-8 bg-base-300 rounded-full font-semibold dark:bg-base-200">
+          <div className="flex items-center justify-center w-9 h-9 bg-base-300 rounded-full font-semibold lg:text-lg dark:bg-base-200">
             {challenge.sortOrder}
           </div>
-          <h2 className="m-0 font-medium">
+          <h2 className="m-0 font-medium lg:text-xl">
             <Link href={`/challenge/${challenge.id}`} className="hover:underline">
               {challenge.challengeName}
             </Link>
