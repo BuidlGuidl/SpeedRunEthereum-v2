@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { ChallengeStatus } from "./ChallengeStatus";
 import type { MappedChallenges } from "./GroupedChallenges";
 import clsx from "clsx";
@@ -15,7 +16,11 @@ export function ChallengeDetailsStatus({ challenge }: { challenge: MappedChallen
           <div className="flex items-center justify-center w-8 h-8 bg-base-300 rounded-full font-semibold dark:bg-base-200">
             {challenge.sortOrder}
           </div>
-          <h2 className="m-0 font-medium">{challenge.challengeName}</h2>
+          <h2 className="m-0 font-medium">
+            <Link href={`/challenge/${challenge.id}`} className="hover:underline">
+              {challenge.challengeName}
+            </Link>
+          </h2>
         </div>
         <div
           className={clsx("badge text-xs", {
