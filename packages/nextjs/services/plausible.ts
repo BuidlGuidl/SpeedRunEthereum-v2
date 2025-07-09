@@ -8,15 +8,13 @@ const PLAUSIBLE_EVENT_ENDPOINT = "https://plausible.io/api/event";
 
 export async function trackPlausibleEvent(
   eventName: PlausibleEvent,
-  props?: Record<string, string | number | boolean>,
+  props?: Record<string, string | number | boolean | undefined>,
   request?: Request,
-  referrer?: string | null,
 ) {
   const payload = {
     domain: "speedrunethereum.com",
     name: eventName,
     url: `https://speedrunethereum.com`,
-    referrer: referrer || "",
     props,
   };
 
