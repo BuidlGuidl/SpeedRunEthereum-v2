@@ -23,7 +23,7 @@ export function ChallengeDetailsStatus({ challenge }: { challenge: MappedChallen
           </h2>
         </div>
         <div
-          className={clsx("badge", {
+          className={clsx("badge py-4 px-3", {
             "badge-secondary": isAccepted,
             "badge-warning": isSubmitted,
             "badge-error": isRejected,
@@ -35,7 +35,7 @@ export function ChallengeDetailsStatus({ challenge }: { challenge: MappedChallen
       <div className="pl-10">
         <p>{challenge.description}</p>
         <div
-          className={clsx("mt-6 flex items-center gap-2 px-3 py-2 rounded-lg", {
+          className={clsx("mt-6 flex items-center gap-2 px-4 py-3 rounded-lg", {
             "bg-base-200": isSubmitted,
             "bg-[#E3FFF1] dark:bg-base-200/70": isAccepted,
             "bg-error/20 dark:bg-error/50": isRejected,
