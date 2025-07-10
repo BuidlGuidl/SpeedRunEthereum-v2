@@ -11,7 +11,7 @@ export function ChallengeDetailsStatus({ challenge }: { challenge: MappedChallen
   const isRejected = challenge.reviewAction === ReviewAction.REJECTED;
   return (
     <div>
-      <div className="mt-6 flex items-center justify-between">
+      <div className="mt-6 flex flex-wrap items-center justify-between">
         <div className="flex items-center gap-2">
           <div className="flex items-center justify-center w-9 h-9 bg-base-300 rounded-full font-semibold lg:text-lg dark:bg-base-200">
             {challenge.sortOrder}
@@ -23,7 +23,7 @@ export function ChallengeDetailsStatus({ challenge }: { challenge: MappedChallen
           </h2>
         </div>
         <div
-          className={clsx("badge py-4 px-3", {
+          className={clsx("badge py-4 px-3 lg:px-4", {
             "badge-secondary": isAccepted,
             "badge-warning": isSubmitted,
             "badge-error": isRejected,
