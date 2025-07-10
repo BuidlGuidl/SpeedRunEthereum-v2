@@ -5,6 +5,17 @@ import { submitChallenge } from "~~/services/api/challenges";
 import { EIP_712_TYPED_DATA__CHALLENGE_SUBMIT } from "~~/services/eip712/challenge";
 import { notification } from "~~/utils/scaffold-eth";
 
+const VALID_BLOCK_EXPLORER_HOSTS = [
+  "sepolia.etherscan.io",
+  "sepolia-optimism.etherscan.io",
+  "sepolia.arbiscan.io",
+  "cardona-zkevm.polygonscan.com",
+  "amoy.polygonscan.com",
+  "sepolia.basescan.org",
+  "sepolia.scrollscan.com",
+  "alfajores.celoscan.io",
+];
+
 type SubmitChallengeParams = {
   challengeId: string;
   frontendUrl: string;
@@ -14,10 +25,22 @@ type SubmitChallengeParams = {
 const validateUrls = (params: SubmitChallengeParams) => {
   try {
     new URL(params.frontendUrl);
-    new URL(params.contractUrl);
   } catch (e) {
-    throw new Error("Please enter valid URLs");
+    throw new Error("Please enter a valid URL of deployed app");
   }
+
+  try {
+    const etherscanUrl = new URL(params.contractUrl);
+    if (!VALID_BLOCK_EXPLORER_HOSTS.includes(etherscanUrl.host)) {
+      throw new Error();
+    }
+  } catch (e) {
+    throw new Error(
+      `Please use a valid contract URL.\n\nSupported block explorers: \n${VALID_BLOCK_EXPLORER_HOSTS.join("\n")}`,
+    );
+  }
+
+  return true;
 };
 
 export const useSubmitChallenge = ({ onSuccess }: { onSuccess?: () => void }) => {
