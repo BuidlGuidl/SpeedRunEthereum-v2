@@ -3078,7 +3078,7 @@ __metadata:
     blo: ~1.2.0
     burner-connector: 0.0.9
     csv-parse: ^5.6.0
-    daisyui: 4.12.10
+    daisyui: 4.12.24
     dotenv: ^16.4.7
     drizzle-kit: ^0.30.4
     drizzle-orm: ^0.42.0
@@ -6872,15 +6872,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"daisyui@npm:4.12.10":
-  version: 4.12.10
-  resolution: "daisyui@npm:4.12.10"
+"daisyui@npm:4.12.24":
+  version: 4.12.24
+  resolution: "daisyui@npm:4.12.24"
   dependencies:
     css-selector-tokenizer: ^0.8
     culori: ^3
     picocolors: ^1
     postcss-js: ^4
-  checksum: 506e7545502b75f43995f6fd460c907e95af03b12d750b49dbec14338d81d91b540cded0179004c87d2a326d024500b8529a456f70819bff24011b269f76aeec
+  checksum: 7c503bb64e64067b7ac58c95c85e3af02294413575127bcfd727fa1a841d956ab4b1e7cec7f4ca5466dd86c2fb96a6642f8f6c4f1e4a059701da908d4bd24d7e
   languageName: node
   linkType: hard
 
