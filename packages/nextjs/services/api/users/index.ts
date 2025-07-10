@@ -17,13 +17,21 @@ export async function fetchUser(address: string | undefined) {
   return data.user as UserByAddress;
 }
 
-export async function registerUser({ address, signature }: { address: string; signature: string }) {
+export async function registerUser({
+  address,
+  signature,
+  referrer,
+}: {
+  address: string;
+  signature: string;
+  referrer: string | null;
+}) {
   const response = await fetch("/api/users/register", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ address, signature }),
+    body: JSON.stringify({ address, signature, referrer }),
   });
 
   const data = await response.json();

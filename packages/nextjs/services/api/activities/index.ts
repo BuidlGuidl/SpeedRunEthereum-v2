@@ -12,6 +12,7 @@ export type ActivityItem = {
   type: ActivityType;
   userAddress: string;
   userEns?: string | null;
+  userEnsAvatar?: string | null;
   timestamp: Date;
   details: {
     challengeId?: string;
