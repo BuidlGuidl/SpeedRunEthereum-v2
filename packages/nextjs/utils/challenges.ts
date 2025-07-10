@@ -96,6 +96,24 @@ export const CHALLENGE_METADATA: Record<
     title: "How to Build a Decentralized Exchange (DEX) in Solidity",
     description:
       "Step-by-step tutorial to build your own DEX with liquidity pools, token swapping, and automated market making in Solidity.",
+    guides: [
+      {
+        title: "Automated Market Makers (AMMs): Math, Risks & Solidity Code",
+        url: "/guides/automated-market-makers-math",
+      },
+      {
+        title: "Flash Loan Exploits: A Developer's Guide to Securing Your DEX",
+        url: "/guides/flash-loan-exploits",
+      },
+      {
+        title: "Impermanent Loss Explained: The Math Behind DeFi's Hidden Risk",
+        url: "/guides/impermanent-loss-math-explained",
+      },
+      {
+        title: "Front-Running & MEV Mitigation: A DEX Developer's Guide",
+        url: "/guides/front-running-mev-mitigation",
+      },
+    ],
   },
   [ChallengeId.MULTISIG]: {
     title: "Build a Multisignature Wallet in Solidity",
