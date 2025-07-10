@@ -46,7 +46,7 @@ export function ChallengeDetails({
           </h2>
         </div>
         {isChallengeLocked && isUserConnected && (
-          <button disabled className="btn btn-sm opacity-75 disabled:bg-accent disabled:text-accent-content">
+          <button disabled className="btn btn-sm rounded-md opacity-65 disabled:bg-accent disabled:text-accent-content">
             Locked
           </button>
         )}
