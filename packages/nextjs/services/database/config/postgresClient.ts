@@ -16,7 +16,7 @@ let poolInstance: Pool | NeonPool | null = null;
 
 const isNextRuntime = !!process.env.NEXT_RUNTIME;
 
-function getDb(): DbInstance {
+export function getDb(): DbInstance {
   if (dbInstance) {
     return dbInstance;
   }

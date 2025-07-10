@@ -2,13 +2,12 @@
 import { ImageResponse } from "next/og";
 import { blo } from "blo";
 import { getAddress, isAddress } from "viem";
-import { normalize } from "viem/ens";
 import { ReviewAction } from "~~/services/database/config/types";
 import {
   UserChallenges,
   getLatestSubmissionPerChallengeByUser,
 } from "~~/services/database/repositories/userChallenges";
-import { getEnsOrAddress, publicClient } from "~~/utils/ens-or-address";
+import { getShortAddressAndEns } from "~~/utils/short-address-and-ens";
 
 export const dynamic = "force-dynamic";
 
@@ -23,7 +22,7 @@ export async function GET(request: Request) {
 
     const checksumAddress = getAddress(address);
 
-    const { ensName, shortAddress } = await getEnsOrAddress(checksumAddress);
+    const { ensName, ensAvatar, shortAddress } = await getShortAddressAndEns(checksumAddress);
 
     let challenges: UserChallenges = [];
     try {
@@ -32,17 +31,6 @@ export async function GET(request: Request) {
     } catch (error) {
       console.error("Error fetching builder challenges", error);
     }
-
-    // Try to resolve ENS avatar if we have an ENS name
-    let avatarUrl = null;
-    if (ensName) {
-      try {
-        avatarUrl = await publicClient.getEnsAvatar({ name: normalize(ensName) });
-      } catch (error) {
-        console.error("Error resolving ENS avatar:", error);
-      }
-    }
-
     // punk size with scale = 1
     const PUNK_SIZE = 112;
     // punk size pixels in the original file
@@ -143,9 +131,9 @@ export async function GET(request: Request) {
             </svg>
 
             {/* Avatar */}
-            {avatarUrl ? (
+            {ensAvatar ? (
               <img
-                src={avatarUrl || ""}
+                src={ensAvatar || ""}
                 width={200}
                 height={200}
                 alt="Avatar"

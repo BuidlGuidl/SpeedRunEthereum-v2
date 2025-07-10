@@ -1,4 +1,4 @@
-import { BatchUserStatus, ReviewAction, UserRole } from "../config/types";
+import { ReviewAction, UserRole } from "../config/types";
 import { ColumnSort, SortingState } from "@tanstack/react-table";
 import { InferInsertModel, and, isNotNull, or } from "drizzle-orm";
 import { eq, ilike, sql } from "drizzle-orm";
@@ -11,6 +11,7 @@ type PickSocials<T> = {
 };
 
 export type UserInsert = InferInsertModel<typeof users>;
+export type UserUpdate = Partial<Omit<UserInsert, "userAddress">>;
 export type UserByAddress = Awaited<ReturnType<typeof getUserByAddress>>;
 export type UserSocials = PickSocials<NonNullable<UserByAddress>>;
 export type UserWithChallengesData = Awaited<ReturnType<typeof getSortedUsersWithChallengesInfo>>["data"][0];
@@ -20,6 +21,12 @@ export type UserLocation = NonNullable<UserByAddress>["location"];
 export async function getUserByAddress(address: string) {
   return await db.query.users.findFirst({
     where: eq(lower(users.userAddress), address.toLowerCase()),
+  });
+}
+
+export async function getUserByEns(ensName: string) {
+  return await db.query.users.findFirst({
+    where: eq(lower(users.ens), ensName.toLowerCase()),
   });
 }
 
@@ -221,15 +228,7 @@ export async function isUserAdmin(userAddress: string): Promise<boolean> {
   return user?.role === UserRole.ADMIN;
 }
 
-export async function updateUser(
-  userAddress: string,
-  data: {
-    role?: UserRole;
-    batchId?: number;
-    batchStatus?: BatchUserStatus;
-    ens?: string;
-  },
-) {
+export async function updateUser(userAddress: string, data: UserUpdate) {
   const result = await db
     .update(users)
     .set({

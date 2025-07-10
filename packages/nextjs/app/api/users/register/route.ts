@@ -2,19 +2,20 @@ import { NextResponse } from "next/server";
 import { waitUntil } from "@vercel/functions";
 import { InferInsertModel } from "drizzle-orm";
 import { users } from "~~/services/database/config/schema";
-import { createUser, isUserRegistered } from "~~/services/database/repositories/users";
+import { UserUpdate, createUser, isUserRegistered, updateUser } from "~~/services/database/repositories/users";
 import { isValidEIP712UserRegisterSignature } from "~~/services/eip712/register";
+import { fetchOnchainData } from "~~/services/onchainData";
 import { PlausibleEvent, trackPlausibleEvent } from "~~/services/plausible";
-import { publicClient } from "~~/utils/ens-or-address";
 
 type RegisterPayload = {
   address: string;
   signature: `0x${string}`;
+  referrer: string | null;
 };
 
 export async function POST(req: Request) {
   try {
-    const { address, signature } = (await req.json()) as RegisterPayload;
+    const { address, signature, referrer } = (await req.json()) as RegisterPayload;
 
     if (!address || !signature) {
       return NextResponse.json({ error: "Address and signature are required" }, { status: 400 });
@@ -34,21 +35,36 @@ export async function POST(req: Request) {
 
     const userToCreate: InferInsertModel<typeof users> = {
       userAddress: address,
+      referrer,
     };
-
-    try {
-      const ensName = await publicClient.getEnsName({ address });
-
-      if (ensName) {
-        userToCreate.ens = ensName;
-      }
-    } catch (error) {
-      console.error(`Error getting ENS name for user ${address}:`, error);
-    }
 
     const user = await createUser(userToCreate);
 
-    waitUntil(trackPlausibleEvent(PlausibleEvent.SIGNUP_SRE, {}, req));
+    // Background processing
+    waitUntil(trackPlausibleEvent(PlausibleEvent.SIGNUP_SRE, {}, req, referrer));
+
+    waitUntil(
+      (async () => {
+        try {
+          const { ensData } = await fetchOnchainData(address);
+
+          // Update user with ENS data if we have any
+          if (ensData.name || ensData.avatar) {
+            const updateData: UserUpdate = {
+              ens: ensData.name ?? undefined,
+              ensAvatar: ensData.avatar ?? undefined,
+            };
+
+            await updateUser(address, updateData);
+            console.log(
+              `ENS data updated for user ${address}: ${ensData.name ? `name: ${ensData.name}` : ""} ${ensData.avatar ? `avatar: ${ensData.avatar}` : ""}`,
+            );
+          }
+        } catch (error) {
+          console.error(`Error in background processing for user ${address}:`, error);
+        }
+      })(),
+    );
 
     return NextResponse.json({ user }, { status: 200 });
   } catch (error) {

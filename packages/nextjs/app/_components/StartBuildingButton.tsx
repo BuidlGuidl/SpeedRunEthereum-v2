@@ -7,7 +7,6 @@ import { usePlausible } from "next-plausible";
 export const StartBuildingButton = () => {
   const plausible = usePlausible();
 
-  // TODO: test this later
   const handleCtaClick = useCallback(() => {
     plausible("cta");
   }, [plausible]);
