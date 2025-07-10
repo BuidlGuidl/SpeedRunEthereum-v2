@@ -47,7 +47,11 @@ export function GroupedChallenges({
     })
     .sort((a, b) => a.sortOrder - b.sortOrder)
     .filter(challenge => {
-      return challenge.id !== ChallengeId.STATE_CHANNELS && challenge.id !== ChallengeId.STABLECOINS;
+      return (
+        challenge.id !== ChallengeId.STATE_CHANNELS &&
+        challenge.id !== ChallengeId.STABLECOINS &&
+        challenge.id !== ChallengeId.DEPLOY_TO_L2
+      );
     });
 
   // Filter challenges into basic and advanced
