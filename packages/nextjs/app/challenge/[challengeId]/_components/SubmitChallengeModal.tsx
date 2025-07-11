@@ -49,8 +49,8 @@ export const SubmitChallengeModal = forwardRef<HTMLDialogElement, SubmitChalleng
 
             <div className="flex flex-col gap-1.5 w-full">
               <div className="flex items-base ml-2">
-                <span className="text-sm font-medium mr-2 leading-none">Etherscan URL</span>
-                <div className="tooltip" data-tip="Your verfied contract URL on etherscan">
+                <span className="text-sm font-medium mr-2 leading-none">Testnet contract URL</span>
+                <div className="tooltip" data-tip="Verified contract URL on block explorer">
                   <QuestionMarkCircleIcon className="h-4 w-4" />
                 </div>
               </div>
