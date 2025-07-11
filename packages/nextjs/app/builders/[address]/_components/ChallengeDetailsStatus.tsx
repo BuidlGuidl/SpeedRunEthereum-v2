@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { ChallengeStatus } from "./ChallengeStatus";
 import type { MappedChallenges } from "./GroupedChallenges";
-import clsx from "clsx";
 import { DateWithTooltip } from "~~/components/DateWithTooltip";
 import { ReviewAction } from "~~/services/database/config/types";
 
@@ -9,6 +8,15 @@ export function ChallengeDetailsStatus({ challenge }: { challenge: MappedChallen
   const isSubmitted = challenge.reviewAction === ReviewAction.SUBMITTED;
   const isAccepted = challenge.reviewAction === ReviewAction.ACCEPTED;
   const isRejected = challenge.reviewAction === ReviewAction.REJECTED;
+
+  let badgeClass = "badge-warning";
+  if (isAccepted) badgeClass = "badge-secondary";
+  if (isRejected) badgeClass = "badge-error";
+
+  let statusAlertClass = "bg-base-200";
+  if (isAccepted) statusAlertClass = "bg-[#E3FFF1] dark:bg-base-200/70";
+  if (isRejected) statusAlertClass = "bg-error/20 dark:bg-error/50";
+
   return (
     <div>
       <div className="mt-6 flex flex-wrap items-center justify-between">
@@ -22,25 +30,11 @@ export function ChallengeDetailsStatus({ challenge }: { challenge: MappedChallen
             </Link>
           </h2>
         </div>
-        <div
-          className={clsx("badge py-4 px-3 lg:px-4", {
-            "badge-secondary": isAccepted,
-            "badge-warning": isSubmitted,
-            "badge-error": isRejected,
-          })}
-        >
-          {challenge.reviewAction}
-        </div>
+        <div className={`badge py-4 px-3 lg:px-4 ${badgeClass}`}>{challenge.reviewAction}</div>
       </div>
       <div className="pl-10">
         <p>{challenge.description}</p>
-        <div
-          className={clsx("mt-6 flex items-center gap-2 px-4 py-3 rounded-lg", {
-            "bg-base-200": isSubmitted,
-            "bg-[#E3FFF1] dark:bg-base-200/70": isAccepted,
-            "bg-error/20 dark:bg-error/50": isRejected,
-          })}
-        >
+        <div className={`mt-6 flex items-center gap-2 px-4 py-3 rounded-lg ${statusAlertClass}`}>
           <div>
             {isAccepted && "✅"}
             {isRejected && "❌"}
