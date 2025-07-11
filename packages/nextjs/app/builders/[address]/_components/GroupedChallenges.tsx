@@ -39,7 +39,7 @@ export function GroupedChallenges({
       return {
         ...challenge,
         reviewAction: userChallenge.reviewAction ?? null,
-        submittedAt: userChallenge.submittedAt ?? new Date(),
+        submittedAt: userChallenge.submittedAt ?? null,
         reviewComment: userChallenge.reviewComment ?? null,
         contractUrl: userChallenge.contractUrl ?? null,
         frontendUrl: userChallenge.frontendUrl ?? null,
