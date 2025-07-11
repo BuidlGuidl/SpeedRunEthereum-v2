@@ -36,13 +36,13 @@ export function ChallengeDetails({
             {challenge.sortOrder}
           </div>
           <h2 className="m-0 font-medium lg:text-xl">
-            {!isChallengeLocked && !comingSoon && (
+            {!isChallengeLocked && (
               <Link href={`/challenge/${challenge.id}`} className="hover:underline">
                 {challenge.challengeName}
               </Link>
             )}
             {isChallengeLocked && challenge.challengeName}
-            {comingSoon && `${challenge.challengeName} - Coming Soon`}
+            {comingSoon && ` - Coming Soon`}
           </h2>
         </div>
         {isChallengeLocked && isUserConnected && (
