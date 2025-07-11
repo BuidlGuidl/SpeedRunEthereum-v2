@@ -30,7 +30,7 @@
     "@vercel/functions": "^2.0.0",
     "blo": "~1.2.0",
     "burner-connector": "0.0.9",
-    "daisyui": "4.12.10",
+    "daisyui": "4.12.24",
     "dotenv": "^16.4.7",
     "drizzle-orm": "^0.42.0",
     "firebase-admin": "^13.4.0",
