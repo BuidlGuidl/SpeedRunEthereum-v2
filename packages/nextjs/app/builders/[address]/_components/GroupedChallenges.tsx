@@ -12,6 +12,12 @@ const basicChallengeIds = new Set<ChallengeId>([
   ChallengeId.TOKEN_VENDOR,
 ]);
 
+const excludedChallengeIds = new Set<ChallengeId>([
+  ChallengeId.STATE_CHANNELS,
+  ChallengeId.STABLECOINS,
+  ChallengeId.DEPLOY_TO_L2,
+]);
+
 export type MappedChallenges = Challenges[number] & {
   reviewAction?: ReviewAction | null;
   submittedAt?: Date;
@@ -46,13 +52,7 @@ export function GroupedChallenges({
       };
     })
     .sort((a, b) => a.sortOrder - b.sortOrder)
-    .filter(challenge => {
-      return (
-        challenge.id !== ChallengeId.STATE_CHANNELS &&
-        challenge.id !== ChallengeId.STABLECOINS &&
-        challenge.id !== ChallengeId.DEPLOY_TO_L2
-      );
-    });
+    .filter(challenge => !excludedChallengeIds.has(challenge.id as ChallengeId));
 
   // Filter challenges into basic and advanced
   const basicChallenges = userMappedChallenges.filter(challenge => basicChallengeIds.has(challenge.id as ChallengeId));
