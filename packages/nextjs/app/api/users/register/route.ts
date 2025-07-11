@@ -41,7 +41,7 @@ export async function POST(req: Request) {
     const user = await createUser(userToCreate);
 
     // Background processing
-    waitUntil(trackPlausibleEvent(PlausibleEvent.SIGNUP_SRE, {}, req, referrer));
+    waitUntil(trackPlausibleEvent(PlausibleEvent.SIGNUP_SRE, { originalReferrer: referrer ?? undefined }, req));
 
     waitUntil(
       (async () => {
