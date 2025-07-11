@@ -88,7 +88,7 @@ export default async function BuilderPage({ params }: { params: { address: strin
             {/* Challenges */}
             <GroupedChallenges address={address} challenges={challenges} userChallenges={userChallenges} />
             {/* Builds */}
-            <div className="mt-12">
+            <div className="mt-24">
               <div className="flex justify-between items-center">
                 <h2 className="text-2xl font-bold mb-0 text-neutral pb-4">Builds</h2>
                 <SubmitNewBuildButton />
