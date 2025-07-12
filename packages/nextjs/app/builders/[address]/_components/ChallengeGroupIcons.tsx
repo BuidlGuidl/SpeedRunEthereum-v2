@@ -1,6 +1,6 @@
 export function ChallengeIconComputer() {
   return (
-    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 39 44" className="w-8 h-8">
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 39 44" className="w-6 h-6">
       <path
         fill="currentColor"
         d="M38.233 31.15h-6.036v-2.021h2.008V27.12H4.028v2.008h2.014v2.02H0v12.07h38.233V31.15Zm-30.19-2.021h22.134v2.02H8.043v-2.02Zm28.182 12.083H2.007v-8.056h34.218v8.056Z"
@@ -19,7 +19,7 @@ export function ChallengeIconComputer() {
 
 export function ChallengeIconRocket() {
   return (
-    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 41 42" className="w-8 h-8">
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 41 42" className="w-6 h-6">
       <path
         fill="currentColor"
         d="M40.39 37.235h-3.826v1.92h3.825v-1.92ZM36.564 39.155h-1.907v1.906h1.907v-1.906ZM34.657 25.77h-1.92v1.907h1.92v1.92h1.907v-9.559h-1.907v5.733ZM34.657 37.235H30.83v1.92h3.826v-1.92ZM34.657 18.132h-1.92v1.906h1.92v-1.906Z"

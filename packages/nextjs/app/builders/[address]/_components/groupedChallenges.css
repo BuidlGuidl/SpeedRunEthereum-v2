@@ -1,0 +1,10 @@
+.collapse-title, :where(.collapse > input[type="checkbox"]), :where(.collapse > input[type="radio"]) {
+    padding: 0.5rem;
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+    min-height: 2.5rem;
+}
+
+.collapse-arrow > .collapse-title:after {
+    top: 1.25rem;
+}
