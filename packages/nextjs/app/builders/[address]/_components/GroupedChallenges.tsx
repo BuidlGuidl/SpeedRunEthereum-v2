@@ -72,7 +72,7 @@ export function GroupedChallenges({
           </div>
         </div>
         <div className="collapse-content px-3 bg-base-100">
-          <div className="mt-4 space-y-4 divide-y">
+          <div className="mt-3 space-y-4 divide-y">
             {basicChallenges.map(challenge => {
               if (challenge.reviewAction) {
                 return <ChallengeDetailsStatus key={challenge.id} challenge={challenge} />;
@@ -99,7 +99,7 @@ export function GroupedChallenges({
           </div>
         </div>
         <div className="collapse-content px-3 bg-base-100">
-          <div className="mt-4 space-y-4 divide-y">
+          <div className="mt-3 space-y-4 divide-y">
             {advancedChallenges.map(challenge => {
               if (challenge.reviewAction) {
                 return <ChallengeDetailsStatus key={challenge.id} challenge={challenge} />;

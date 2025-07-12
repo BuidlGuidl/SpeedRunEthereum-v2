@@ -21,7 +21,7 @@ export function ChallengeDetailsStatus({ challenge }: { challenge: MappedChallen
 
   return (
     <div>
-      <div className="mt-4 flex flex-wrap items-center justify-between">
+      <div className="mt-3 flex flex-wrap items-center justify-between">
         <div className="flex items-center gap-2">
           <div className="flex items-center justify-center w-6 h-6 bg-base-300 rounded-full font-semibold text-sm dark:bg-base-200">
             {challenge.sortOrder}

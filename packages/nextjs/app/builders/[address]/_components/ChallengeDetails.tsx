@@ -32,7 +32,7 @@ export function ChallengeDetails({
 
   return (
     <div className="text-base-content/50 hover:text-base-content transition">
-      <div className="mt-4 flex items-center justify-between gap-4">
+      <div className="mt-3 flex items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-2">
             <div className="flex items-center justify-center w-6 h-6 bg-base-300 rounded-full font-semibold text-sm dark:bg-base-200">
