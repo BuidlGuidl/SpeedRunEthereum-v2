@@ -22,6 +22,7 @@ export const useUpdateSocials = ({ onSuccess }: { onSuccess?: () => void }) => {
         socialInstagram: "",
         socialDiscord: "",
         socialEmail: "",
+        socialFarcaster: "",
         ...socials,
       };
 
