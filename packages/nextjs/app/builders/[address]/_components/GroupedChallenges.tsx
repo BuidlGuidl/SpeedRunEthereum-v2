@@ -1,6 +1,7 @@
 import { ChallengeDetails } from "./ChallengeDetails";
 import { ChallengeDetailsStatus } from "./ChallengeDetailsStatus";
 import { ChallengeIconComputer, ChallengeIconRocket } from "./ChallengeGroupIcons";
+import "./groupedChallenges.css";
 import { type Address } from "viem";
 import { ChallengeId, ReviewAction } from "~~/services/database/config/types";
 import type { Challenges } from "~~/services/database/repositories/challenges";
@@ -64,14 +65,14 @@ export function GroupedChallenges({
     <div>
       <div className="collapse collapse-arrow bg-base-300 rounded-lg">
         <input type="checkbox" defaultChecked />
-        <div className="collapse-title text-xl font-medium">
-          <div className="flex items-center gap-3">
+        <div className="collapse-title text-base font-medium">
+          <div className="flex items-center gap-2">
             <ChallengeIconComputer />
             Ethereum 101
           </div>
         </div>
-        <div className="collapse-content bg-base-100">
-          <div className="mt-6 space-y-6 divide-y">
+        <div className="collapse-content px-3 bg-base-100">
+          <div className="mt-3 space-y-4 divide-y">
             {basicChallenges.map(challenge => {
               if (challenge.reviewAction) {
                 return <ChallengeDetailsStatus key={challenge.id} challenge={challenge} />;
@@ -89,16 +90,16 @@ export function GroupedChallenges({
           </div>
         </div>
       </div>
-      <div className="mt-6 collapse collapse-arrow bg-base-300 rounded-lg">
+      <div className="mt-4 collapse collapse-arrow bg-base-300 rounded-lg">
         <input type="checkbox" />
-        <div className="collapse-title text-xl font-medium">
-          <div className="flex items-center gap-3">
+        <div className="collapse-title text-base font-medium">
+          <div className="flex items-center gap-2">
             <ChallengeIconRocket />
             Advanced Concepts
           </div>
         </div>
-        <div className="collapse-content bg-base-100">
-          <div className="mt-6 space-y-6 divide-y">
+        <div className="collapse-content px-3 bg-base-100">
+          <div className="mt-3 space-y-4 divide-y">
             {advancedChallenges.map(challenge => {
               if (challenge.reviewAction) {
                 return <ChallengeDetailsStatus key={challenge.id} challenge={challenge} />;
