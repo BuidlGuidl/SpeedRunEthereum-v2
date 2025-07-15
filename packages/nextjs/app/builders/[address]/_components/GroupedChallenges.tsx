@@ -1,6 +1,7 @@
 import { ChallengeDetails } from "./ChallengeDetails";
 import { ChallengeDetailsStatus } from "./ChallengeDetailsStatus";
 import { ChallengeIconComputer, ChallengeIconRocket } from "./ChallengeGroupIcons";
+import { GroupedChallengeTitle } from "./GroupedChallengeTitle";
 import "./groupedChallenges.css";
 import { type Address } from "viem";
 import { ChallengeId, ReviewAction } from "~~/services/database/config/types";
@@ -66,10 +67,7 @@ export function GroupedChallenges({
       <div className="collapse collapse-arrow bg-base-300 rounded-lg">
         <input type="checkbox" defaultChecked />
         <div className="collapse-title text-base font-medium">
-          <div className="flex items-center gap-2">
-            <ChallengeIconComputer />
-            Ethereum 101
-          </div>
+          <GroupedChallengeTitle title="Ethereum 101" icon={<ChallengeIconComputer />} challenges={basicChallenges} />
         </div>
         <div className="collapse-content px-3 bg-base-100">
           <div className="mt-3 space-y-4 divide-y">
@@ -93,10 +91,11 @@ export function GroupedChallenges({
       <div className="mt-4 collapse collapse-arrow bg-base-300 rounded-lg">
         <input type="checkbox" />
         <div className="collapse-title text-base font-medium">
-          <div className="flex items-center gap-2">
-            <ChallengeIconRocket />
-            Advanced Concepts
-          </div>
+          <GroupedChallengeTitle
+            title="Advanced Concepts"
+            icon={<ChallengeIconRocket />}
+            challenges={advancedChallenges}
+          />
         </div>
         <div className="collapse-content px-3 bg-base-100">
           <div className="mt-3 space-y-4 divide-y">
