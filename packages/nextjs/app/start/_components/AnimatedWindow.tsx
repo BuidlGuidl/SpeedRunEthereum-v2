@@ -8,11 +8,11 @@ interface AnimatedWindowProps {
 }
 
 export const AnimatedWindow = ({ className = "", children }: AnimatedWindowProps) => {
-  const windowSlideStyle = useSlideInFromRight(0.05, 350);
+  const windowSlideStyle = useSlideInFromRight(0.08, 300);
 
   return (
     <div
-      className={`mb-10 mx-auto w-80 h-40 bg-[url('/assets/start/window-1.svg')] bg-center bg-no-repeat lg:mb-0 lg:absolute lg:right-[5%] lg:-bottom-20 ${className}`}
+      className={`mb-10 mx-auto w-80 h-40 bg-[url('/assets/start/window-1.svg')] bg-center bg-no-repeat lg:mb-0 lg:absolute lg:right-[15%] lg:-bottom-20 ${className}`}
       style={windowSlideStyle}
     >
       {children}
