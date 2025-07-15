@@ -1,5 +1,6 @@
 import DiscordIcon from "~~/app/_assets/icons/DiscordIcon";
 import EmailIcon from "~~/app/_assets/icons/EmailIcon";
+import FarcasterIcon from "~~/app/_assets/icons/FarcasterIcon";
 import GithubIcon from "~~/app/_assets/icons/GithubIcon";
 import InstagramIcon from "~~/app/_assets/icons/InstagramIcon";
 import TelegramIcon from "~~/app/_assets/icons/TelegramIcon";
@@ -29,31 +30,38 @@ export const socials: Record<keyof UserSocials, Social> = {
     weight: 1,
     icon: XIcon,
   },
+  socialFarcaster: {
+    label: "Farcaster",
+    placeholder: "Your Farcaster username",
+    getLink: (value: string) => `https://farcaster.xyz/${value}`,
+    weight: 2,
+    icon: FarcasterIcon,
+  },
   socialDiscord: {
     label: "Discord",
     placeholder: "Your Discord username#id",
-    weight: 2,
+    weight: 3,
     icon: DiscordIcon,
   },
   socialGithub: {
     label: "GitHub",
     placeholder: "Your GitHub username",
     getLink: (value: string) => `https://github.com/${value}`,
-    weight: 3,
+    weight: 4,
     icon: GithubIcon,
   },
   socialEmail: {
     label: "E-mail",
     placeholder: "Your e-mail address",
     getLink: (value: string) => `mailto:${value}`,
-    weight: 4,
+    weight: 5,
     icon: EmailIcon,
   },
   socialInstagram: {
     label: "Instagram",
     placeholder: "Your Instagram handle without the @",
     getLink: (value: string) => `https://instagram.com/${value}`,
-    weight: 5,
+    weight: 6,
     icon: InstagramIcon,
   },
 };

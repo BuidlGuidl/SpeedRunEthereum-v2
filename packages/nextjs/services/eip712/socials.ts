@@ -12,6 +12,7 @@ export const EIP_712_TYPED_DATA__UPDATE_SOCIALS = {
       { name: "socialInstagram", type: "string" },
       { name: "socialDiscord", type: "string" },
       { name: "socialEmail", type: "string" },
+      { name: "socialFarcaster", type: "string" },
     ],
   },
   primaryType: "Message",
@@ -36,6 +37,7 @@ export const isValidEIP712UpdateSocialsSignature = async ({
     socialInstagram: "",
     socialDiscord: "",
     socialEmail: "",
+    socialFarcaster: "",
     ...socials,
   };
 

@@ -43,6 +43,7 @@ export const users = pgTable(
     socialInstagram: varchar({ length: 255 }),
     socialDiscord: varchar({ length: 255 }),
     socialEmail: varchar({ length: 255 }),
+    socialFarcaster: varchar({ length: 255 }),
     location: varchar({ length: 255 }),
     batchId: integer().references(() => batches.id),
     batchStatus: batchUserStatusEnum(),
