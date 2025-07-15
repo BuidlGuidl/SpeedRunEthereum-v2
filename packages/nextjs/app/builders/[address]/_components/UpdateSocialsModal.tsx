@@ -18,6 +18,7 @@ export const UpdateSocialsModal = forwardRef<HTMLDialogElement, UpdateSocialsMod
       socialInstagram: existingSocials?.socialInstagram || "",
       socialDiscord: existingSocials?.socialDiscord || "",
       socialEmail: existingSocials?.socialEmail || "",
+      socialFarcaster: existingSocials?.socialFarcaster || "",
     });
 
     const { updateSocials, isPending } = useUpdateSocials({
