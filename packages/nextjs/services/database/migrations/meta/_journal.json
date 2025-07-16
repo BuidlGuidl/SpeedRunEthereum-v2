@@ -64,13 +64,6 @@
       "when": 1752492039602,
       "tag": "0008_sudden_carlie_cooper",
       "breakpoints": true
-    },
-    {
-      "idx": 9,
-      "version": "7",
-      "when": 1752652489303,
-      "tag": "0009_careless_mongoose",
-      "breakpoints": true
     }
   ]
 }
