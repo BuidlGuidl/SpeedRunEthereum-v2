@@ -6,8 +6,9 @@ import { join } from "path";
 dotenv.config({ path: ".env.development" });
 
 const PRODUCTION_DATABASE_HOSTNAME = "cold-resonance";
+const SKIP_PRODUCTION_DATABASE_PROMPT = process.env.VERCEL === "1";
 
-if (process.env.POSTGRES_URL?.includes(PRODUCTION_DATABASE_HOSTNAME)) {
+if (!SKIP_PRODUCTION_DATABASE_PROMPT && process.env.POSTGRES_URL?.includes(PRODUCTION_DATABASE_HOSTNAME)) {
   process.stdout.write("\n⚠️ You are pointing to the production database. Are you sure you want to proceed? (y/N): ");
 
   const result = spawnSync("tsx", [join(__dirname, "utils/prompt-confirm.ts")], {
