@@ -1,0 +1,1 @@
+ALTER TABLE "users" ADD COLUMN "test_field" varchar(255);

@@ -48,6 +48,7 @@ export const users = pgTable(
     batchId: integer().references(() => batches.id),
     batchStatus: batchUserStatusEnum(),
     referrer: varchar({ length: 255 }),
+    testField: varchar({ length: 255 }),
   },
   table => [uniqueIndex("idUniqueIndex").on(lower(table.userAddress))],
 );
