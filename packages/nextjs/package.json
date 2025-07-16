@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "build": "next build && sh -c 'if [ \"$VERCEL_ENV\" = \"production\" ]; then yarn drizzle-kit migrate; else echo Skipping migration; fi'",
+    "build": "next build && sh -c 'if [ \"$VERCEL_ENV\" = \"production\" ]; then yarn drizzle-kit migrate; fi'",
     "check-types": "tsc --noEmit --incremental",
     "db:reset": "tsx services/database/scripts/reset-db.ts && yarn drizzle-kit migrate && yarn db:seed",
     "db:seed": "tsx services/database/seed.ts",
