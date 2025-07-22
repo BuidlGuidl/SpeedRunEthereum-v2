@@ -1,6 +1,7 @@
 "use client";
 
 import { BuildCard } from "./BuildCard";
+import { BuildIdeas } from "./BuildIdeas";
 import { SubmitNewBuildButton } from "./SubmitNewBuildButton";
 import { useAccount } from "wagmi";
 import { Build } from "~~/services/database/repositories/builds";
@@ -43,13 +44,7 @@ export function Builds({ address, builds }: { address: string; builds: BuildByUs
             ))}
           </div>
         )}
-        {!hasBuilds && isOwner && (
-          <div>
-            <p className="m-0">
-              <strong>You currently have no builds.</strong> Take a look at some recommended build ideas:
-            </p>
-          </div>
-        )}
+        {!hasBuilds && isOwner && <BuildIdeas />}
       </div>
     </div>
   );
