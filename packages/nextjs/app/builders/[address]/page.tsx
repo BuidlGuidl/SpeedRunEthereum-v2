@@ -1,8 +1,7 @@
 import { notFound } from "next/navigation";
 import { GroupedChallenges } from "./_components/GroupedChallenges";
 import { UserProfileCard } from "./_components/UserProfileCard";
-import { BuildCard } from "./_components/builds/BuildCard";
-import { SubmitNewBuildButton } from "./_components/builds/SubmitNewBuildButton";
+import { Builds } from "./_components/builds/Builds";
 import { Metadata } from "next";
 import { isAddress } from "viem";
 import { RouteRefresher } from "~~/components/RouteRefresher";
@@ -89,28 +88,7 @@ export default async function BuilderPage({ params }: { params: { address: strin
             <GroupedChallenges address={address} challenges={challenges} userChallenges={userChallenges} />
             {/* Builds */}
             <div className="mt-24">
-              <div className="flex justify-between items-center">
-                <h2 className="text-2xl font-bold mb-0 text-neutral pb-4">Builds</h2>
-                <SubmitNewBuildButton />
-              </div>
-              {builds.length > 0 ? (
-                <div className="flex flex-wrap items-stretch w-full gap-5">
-                  {builds.map(build => (
-                    <div key={build.build.id} className="flex-grow-0 flex-shrink-0">
-                      <BuildCard
-                        ownerAddress={build.ownerAddress}
-                        build={build.build}
-                        likes={build.likes}
-                        coBuilders={build.coBuilders}
-                      />
-                    </div>
-                  ))}
-                </div>
-              ) : (
-                <div className="bg-base-100 p-8 text-center rounded-lg text-neutral">
-                  This builder hasn&apos;t submitted any builds yet.
-                </div>
-              )}
+              <Builds address={address} builds={builds} />
             </div>
           </div>
         </div>
