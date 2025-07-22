@@ -87,9 +87,7 @@ export default async function BuilderPage({ params }: { params: { address: strin
             {/* Challenges */}
             <GroupedChallenges address={address} challenges={challenges} userChallenges={userChallenges} />
             {/* Builds */}
-            <div className="mt-24">
-              <Builds address={address} builds={builds} />
-            </div>
+            <Builds address={address} builds={builds} />
           </div>
         </div>
       </div>

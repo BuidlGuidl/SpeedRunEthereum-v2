@@ -18,8 +18,12 @@ export function Builds({ address, builds }: { address: string; builds: BuildByUs
   const isOwner = connectedAddress === address;
   const hasBuilds = builds.length > 0;
 
+  if (!hasBuilds && !isOwner) {
+    return null;
+  }
+
   return (
-    <>
+    <div className="mt-24">
       <div className="flex justify-between items-center">
         <h2 className="text-2xl font-bold mb-0 text-neutral pb-4">Builds</h2>
         <SubmitNewBuildButton />
@@ -44,6 +48,6 @@ export function Builds({ address, builds }: { address: string; builds: BuildByUs
           <SubmitNewBuildButton />
         </div>
       )}
-    </>
+    </div>
   );
 }
