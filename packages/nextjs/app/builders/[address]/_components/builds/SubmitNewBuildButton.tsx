@@ -6,10 +6,10 @@ import { PlusIcon, QuestionMarkCircleIcon } from "@heroicons/react/24/outline";
 import { useSubmitBuild } from "~~/hooks/useSubmitBuild";
 
 export const SubmitNewBuildButton = ({
-  isOwner,
+  isProfileOwner,
   userHasCompletedChallenges,
 }: {
-  isOwner: boolean;
+  isProfileOwner: boolean;
   userHasCompletedChallenges: boolean;
 }) => {
   const modalRef = useRef<HTMLDialogElement>(null);
@@ -20,7 +20,7 @@ export const SubmitNewBuildButton = ({
     },
   });
 
-  if (!isOwner) {
+  if (!isProfileOwner) {
     return null;
   }
 

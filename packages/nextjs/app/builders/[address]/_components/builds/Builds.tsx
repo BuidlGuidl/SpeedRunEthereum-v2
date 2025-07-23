@@ -24,10 +24,10 @@ export function Builds({
 }) {
   const { address: connectedAddress } = useAccount();
 
-  const isOwner = connectedAddress === address;
+  const isProfileOwner = connectedAddress?.toLowerCase() === address.toLowerCase();
   const hasBuilds = builds.length > 0;
 
-  if (!hasBuilds && !isOwner) {
+  if (!hasBuilds && !isProfileOwner) {
     return null;
   }
 
@@ -35,7 +35,7 @@ export function Builds({
     <div className="mt-20">
       <div className="mb-4 flex justify-between items-center">
         <h2 className="text-2xl font-bold mb-0 text-neutral">Builds</h2>
-        <SubmitNewBuildButton isOwner={isOwner} userHasCompletedChallenges={userHasCompletedChallenges} />
+        <SubmitNewBuildButton isProfileOwner userHasCompletedChallenges={userHasCompletedChallenges} />
       </div>
       <div className="p-6 bg-base-100 rounded-lg">
         {hasBuilds && (
@@ -52,7 +52,7 @@ export function Builds({
             ))}
           </div>
         )}
-        {!hasBuilds && isOwner && <BuildIdeas />}
+        {!hasBuilds && isProfileOwner && <BuildIdeas />}
       </div>
     </div>
   );

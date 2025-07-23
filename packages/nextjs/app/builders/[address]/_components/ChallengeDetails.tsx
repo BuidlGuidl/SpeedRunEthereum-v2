@@ -26,7 +26,7 @@ export function ChallengeDetails({
 
   const isChallengeLocked = challenge.disabled || !builderHasCompletedDependenciesChallenges;
 
-  const isUserConnected = connectedAddress === address;
+  const isProfileOwner = connectedAddress?.toLowerCase() === address.toLowerCase();
 
   const shortedDescription = challenge.description.split(".")[0];
 
@@ -53,12 +53,12 @@ export function ChallengeDetails({
           </div>
         </div>
 
-        {isChallengeLocked && isUserConnected && (
+        {isChallengeLocked && isProfileOwner && (
           <button disabled className="btn btn-sm rounded-md opacity-65 disabled:bg-accent disabled:text-accent-content">
             Locked
           </button>
         )}
-        {!isChallengeLocked && isUserConnected && (
+        {!isChallengeLocked && isProfileOwner && (
           <Link href={`/challenge/${challenge.id}`} className="btn btn-primary btn-sm rounded-md">
             Start
           </Link>
