@@ -1,17 +1,17 @@
 "use client";
 
 import { useRef } from "react";
-import { useParams } from "next/navigation";
 import { BuildFormModal } from "./BuildFormModal";
-import { useAccount } from "wagmi";
-import { PlusIcon } from "@heroicons/react/24/outline";
+import { PlusIcon, QuestionMarkCircleIcon } from "@heroicons/react/24/outline";
 import { useSubmitBuild } from "~~/hooks/useSubmitBuild";
 
-export const SubmitNewBuildButton = () => {
-  const { address: connectedAddress } = useAccount();
-  const { address: profileAddress } = useParams() as { address: string };
-  const isProfileOwner = connectedAddress?.toLowerCase() === profileAddress?.toLowerCase();
-
+export const SubmitNewBuildButton = ({
+  isOwner,
+  userHasChallenges,
+}: {
+  isOwner: boolean;
+  userHasChallenges: boolean;
+}) => {
   const modalRef = useRef<HTMLDialogElement>(null);
 
   const { submitBuild, isPending } = useSubmitBuild({
@@ -20,16 +20,25 @@ export const SubmitNewBuildButton = () => {
     },
   });
 
-  if (!isProfileOwner) {
+  if (!isOwner) {
     return null;
   }
 
   return (
-    <>
-      <button className="btn btn-primary btn-sm mb-4" onClick={() => modalRef.current?.showModal()}>
-        <PlusIcon className="w-4 h-4" />
-        New Build
-      </button>
+    <div>
+      <div className="flex items-center gap-2">
+        <div className="tooltip" data-tip="Please try to complete a challenge before submitting a build">
+          <QuestionMarkCircleIcon className="w-5 h-5" />
+        </div>
+        <button
+          className="btn btn-primary btn-sm disabled:text-base-content/50"
+          disabled={!userHasChallenges}
+          onClick={() => modalRef.current?.showModal()}
+        >
+          <PlusIcon className="w-4 h-4" />
+          New Build
+        </button>
+      </div>
       <BuildFormModal
         ref={modalRef}
         closeModal={() => modalRef.current?.close()}
@@ -37,6 +46,6 @@ export const SubmitNewBuildButton = () => {
         buttonText="Submit"
         isPending={isPending}
       />
-    </>
+    </div>
   );
 };

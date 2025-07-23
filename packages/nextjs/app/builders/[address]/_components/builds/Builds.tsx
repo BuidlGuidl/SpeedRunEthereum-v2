@@ -13,7 +13,15 @@ type BuildByUser = {
   coBuilders: string[];
 };
 
-export function Builds({ address, builds }: { address: string; builds: BuildByUser[] }) {
+export function Builds({
+  address,
+  builds,
+  userHasChallenges,
+}: {
+  address: string;
+  builds: BuildByUser[];
+  userHasChallenges: boolean;
+}) {
   const { address: connectedAddress } = useAccount();
 
   const isOwner = connectedAddress === address;
@@ -25,9 +33,9 @@ export function Builds({ address, builds }: { address: string; builds: BuildByUs
 
   return (
     <div className="mt-12">
-      <div className="flex justify-between items-center">
-        <h2 className="text-2xl font-bold mb-0 text-neutral pb-4">Builds</h2>
-        <SubmitNewBuildButton />
+      <div className="mb-4 flex justify-between items-center">
+        <h2 className="text-2xl font-bold mb-0 text-neutral">Builds</h2>
+        <SubmitNewBuildButton isOwner={isOwner} userHasChallenges={userHasChallenges} />
       </div>
       <div className="p-6 bg-base-100 rounded-lg">
         {hasBuilds && (

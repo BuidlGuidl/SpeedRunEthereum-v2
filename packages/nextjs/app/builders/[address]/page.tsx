@@ -75,6 +75,8 @@ export default async function BuilderPage({ params }: { params: { address: strin
     notFound();
   }
 
+  const userHasChallenges = userChallenges.length > 0;
+
   return (
     <>
       <RouteRefresher />
@@ -87,7 +89,7 @@ export default async function BuilderPage({ params }: { params: { address: strin
             {/* Challenges */}
             <GroupedChallenges address={address} challenges={challenges} userChallenges={userChallenges} />
             {/* Builds */}
-            <Builds address={address} builds={builds} />
+            <Builds address={address} builds={builds} userHasChallenges={userHasChallenges} />
           </div>
         </div>
       </div>
