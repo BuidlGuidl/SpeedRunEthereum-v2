@@ -19,8 +19,9 @@ const BUILD_IDEAS = [
 export function BuildIdeas() {
   return (
     <div>
-      <p className="m-0">
-        <strong>You currently have no builds.</strong> Take a look at some recommended build ideas:
+      <p className="m-0 font-medium">Showcase your Ethereum builds and share them with the community!</p>
+      <p className="mt-2 mb-0">
+        If you&apos;re just getting started or looking for your next idea, take a look at some recommended builds below:
       </p>
       <div className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-3">
         {BUILD_IDEAS.map(build => (
