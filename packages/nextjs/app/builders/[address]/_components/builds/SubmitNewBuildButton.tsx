@@ -27,9 +27,11 @@ export const SubmitNewBuildButton = ({
   return (
     <div>
       <div className="flex items-center gap-2">
-        <div className="tooltip" data-tip="Please try to complete a challenge before submitting a build">
-          <QuestionMarkCircleIcon className="w-5 h-5" />
-        </div>
+        {!userHasChallenges && (
+          <div className="tooltip" data-tip="Please try to complete a challenge before submitting a build">
+            <QuestionMarkCircleIcon className="w-5 h-5" />
+          </div>
+        )}
         <button
           className="btn btn-primary btn-sm disabled:text-base-content/50"
           disabled={!userHasChallenges}
