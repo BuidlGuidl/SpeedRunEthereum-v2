@@ -27,7 +27,7 @@ export function BuildIdeas() {
         {BUILD_IDEAS.map(build => (
           <div
             key={build.name}
-            className="bg-base-300 rounded-lg shadow-md overflow-hidden transition hover:shadow-lg dark:bg-base-200"
+            className="bg-base-300 rounded-lg shadow-md overflow-hidden [&_img]:opacity-50 [&_img]:hover:opacity-100 text-base-content/50 hover:text-base-content hover:shadow-lg dark:bg-base-200"
           >
             <div className="pt-5 pb-4 w-full flex items-center justify-center bg-base-200">
               <Link className="w-full h-full block" href={build.url} target="_blank" rel="noopener noreferrer">
