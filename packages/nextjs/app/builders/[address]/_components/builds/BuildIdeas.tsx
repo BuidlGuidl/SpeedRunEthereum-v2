@@ -5,13 +5,13 @@ const BUILD_IDEAS = [
   {
     name: "Multisig Wallet",
     description: "Secure assets by requiring multiple accounts to 'vote' on transactions.",
-    imageUrl: "/assets/builds/build-multisig.png",
+    imageUrl: "/assets/challenges/multiSig.svg",
     url: "https://github.com/scaffold-eth/se-2-challenges/tree/challenge-6-multisig",
   },
   {
     name: "SVG NFT",
     description: "Tinker around with cutting edge smart contracts that render SVGs in Solidity.",
-    imageUrl: "/assets/builds/build-svg.png",
+    imageUrl: "/assets/challenges/dynamicSvgNFT.svg",
     url: "https://github.com/scaffold-eth/se-2-challenges/tree/challenge-7-svg-nft",
   },
 ];
@@ -29,15 +29,9 @@ export function BuildIdeas() {
             key={build.name}
             className="bg-base-300 rounded-lg shadow-md overflow-hidden transition hover:shadow-lg dark:bg-base-200"
           >
-            <div className="w-full h-44 flex items-center justify-center">
+            <div className="pt-5 pb-4 w-full flex items-center justify-center bg-base-200">
               <Link className="w-full h-full block" href={build.url} target="_blank" rel="noopener noreferrer">
-                <Image
-                  alt={build.name}
-                  src={build.imageUrl}
-                  width={600}
-                  height={600}
-                  className="w-full h-full object-cover"
-                />
+                <Image alt={build.name} src={build.imageUrl} width={652} height={401} className="w-3/4 mx-auto" />
               </Link>
             </div>
             <div className="flex flex-col flex-1 px-6 py-4">
