@@ -16,11 +16,11 @@ type BuildByUser = {
 export function Builds({
   address,
   builds,
-  userHasChallenges,
+  userHasCompletedChallenges,
 }: {
   address: string;
   builds: BuildByUser[];
-  userHasChallenges: boolean;
+  userHasCompletedChallenges: boolean;
 }) {
   const { address: connectedAddress } = useAccount();
 
@@ -35,7 +35,7 @@ export function Builds({
     <div className="mt-12">
       <div className="mb-4 flex justify-between items-center">
         <h2 className="text-2xl font-bold mb-0 text-neutral">Builds</h2>
-        <SubmitNewBuildButton isOwner={isOwner} userHasChallenges={userHasChallenges} />
+        <SubmitNewBuildButton isOwner={isOwner} userHasCompletedChallenges={userHasCompletedChallenges} />
       </div>
       <div className="p-6 bg-base-100 rounded-lg">
         {hasBuilds && (

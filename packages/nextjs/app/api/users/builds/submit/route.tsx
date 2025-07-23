@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { BuildFormInputs } from "~~/app/builders/[address]/_components/builds/BuildFormModal";
+import { ReviewAction } from "~~/services/database/config/types";
 import { createBuild } from "~~/services/database/repositories/builds";
 import { getLatestSubmissionPerChallengeByUser } from "~~/services/database/repositories/userChallenges";
 import { isValidEIP712SubmitBuildSignature } from "~~/services/eip712/builds";
@@ -28,9 +29,12 @@ export async function POST(request: NextRequest) {
     }
 
     const userChallenges = await getLatestSubmissionPerChallengeByUser(address);
+    const userCompletedChallenges = userChallenges.filter(
+      challenge => challenge.reviewAction === ReviewAction.ACCEPTED,
+    );
 
-    if (userChallenges.length === 0) {
-      return NextResponse.json({ error: "User has no challenges" }, { status: 400 });
+    if (userCompletedChallenges.length === 0) {
+      return NextResponse.json({ error: "User has no completed challenges" }, { status: 400 });
     }
 
     const { insertedBuild, insertedBuildBuilder } = await createBuild({ ...build, userAddress: address });

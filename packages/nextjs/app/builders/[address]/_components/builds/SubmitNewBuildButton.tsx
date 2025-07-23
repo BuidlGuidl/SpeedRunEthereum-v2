@@ -7,10 +7,10 @@ import { useSubmitBuild } from "~~/hooks/useSubmitBuild";
 
 export const SubmitNewBuildButton = ({
   isOwner,
-  userHasChallenges,
+  userHasCompletedChallenges,
 }: {
   isOwner: boolean;
-  userHasChallenges: boolean;
+  userHasCompletedChallenges: boolean;
 }) => {
   const modalRef = useRef<HTMLDialogElement>(null);
 
@@ -27,14 +27,14 @@ export const SubmitNewBuildButton = ({
   return (
     <div>
       <div className="flex items-center gap-2">
-        {!userHasChallenges && (
+        {!userHasCompletedChallenges && (
           <div className="tooltip" data-tip="Please try to complete a challenge before submitting a build">
             <QuestionMarkCircleIcon className="w-5 h-5" />
           </div>
         )}
         <button
           className="btn btn-primary btn-sm disabled:text-base-content/50"
-          disabled={!userHasChallenges}
+          disabled={!userHasCompletedChallenges}
           onClick={() => modalRef.current?.showModal()}
         >
           <PlusIcon className="w-4 h-4" />

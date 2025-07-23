@@ -5,6 +5,7 @@ import { Builds } from "./_components/builds/Builds";
 import { Metadata } from "next";
 import { isAddress } from "viem";
 import { RouteRefresher } from "~~/components/RouteRefresher";
+import { ReviewAction } from "~~/services/database/config/types";
 import { getBatchById } from "~~/services/database/repositories/batches";
 import { getBuildsByUserAddress } from "~~/services/database/repositories/builds";
 import { getAllChallenges } from "~~/services/database/repositories/challenges";
@@ -64,7 +65,9 @@ export default async function BuilderPage({ params }: { params: { address: strin
 
   const challenges = await getAllChallenges();
   const userChallenges = await getLatestSubmissionPerChallengeByUser(address);
+  const userCompletedChallenges = userChallenges.filter(challenge => challenge.reviewAction === ReviewAction.ACCEPTED);
   const user = await getUserByAddress(address);
+
   let userBatch;
   if (user?.batchId) {
     userBatch = await getBatchById(user.batchId);
@@ -75,7 +78,7 @@ export default async function BuilderPage({ params }: { params: { address: strin
     notFound();
   }
 
-  const userHasChallenges = userChallenges.length > 0;
+  const userHasCompletedChallenges = userCompletedChallenges.length > 0;
 
   return (
     <>
@@ -86,10 +89,8 @@ export default async function BuilderPage({ params }: { params: { address: strin
             <UserProfileCard user={user} batch={userBatch} />
           </div>
           <div className="xl:col-span-3">
-            {/* Challenges */}
             <GroupedChallenges address={address} challenges={challenges} userChallenges={userChallenges} />
-            {/* Builds */}
-            <Builds address={address} builds={builds} userHasChallenges={userHasChallenges} />
+            <Builds address={address} builds={builds} userHasCompletedChallenges={userHasCompletedChallenges} />
           </div>
         </div>
       </div>
