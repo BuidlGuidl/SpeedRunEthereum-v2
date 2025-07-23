@@ -32,7 +32,7 @@ export function Builds({
   }
 
   return (
-    <div className="mt-12">
+    <div className="mt-20">
       <div className="mb-4 flex justify-between items-center">
         <h2 className="text-2xl font-bold mb-0 text-neutral">Builds</h2>
         <SubmitNewBuildButton isOwner={isOwner} userHasCompletedChallenges={userHasCompletedChallenges} />
