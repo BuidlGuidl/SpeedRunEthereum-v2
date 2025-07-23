@@ -18,6 +18,8 @@ const excludedChallengeIds = new Set<ChallengeId>([
   ChallengeId.STATE_CHANNELS,
   ChallengeId.STABLECOINS,
   ChallengeId.DEPLOY_TO_L2,
+  ChallengeId.MULTISIG,
+  ChallengeId.SVG_NFT,
 ]);
 
 export type MappedChallenges = Challenges[number] & {

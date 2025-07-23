@@ -13,7 +13,7 @@ type Props = {
 
 export const BuildCard = ({ ownerAddress, build, likes, coBuilders }: Props) => {
   return (
-    <div className="relative flex flex-col w-72 h-[400px] bg-base-300 rounded-xl shadow-md overflow-hidden transition hover:shadow-lg">
+    <div className="relative flex flex-col md:h-[400px] bg-base-300 rounded-lg shadow-md overflow-hidden transition hover:shadow-lg dark:bg-base-200">
       <div className="absolute right-4 top-4 flex gap-2 z-10">
         <EditBuildButton build={{ ...build, coBuilders }} buildId={build.id} ownerAddress={ownerAddress} />
         <DeleteBuildButton buildId={build.id} ownerAddress={ownerAddress} />
