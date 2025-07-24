@@ -78,14 +78,7 @@ export function GroupedChallenges({
                 return <ChallengeDetailsStatus key={challenge.id} challenge={challenge} />;
               }
 
-              return (
-                <ChallengeDetails
-                  key={challenge.id}
-                  address={address}
-                  challenge={challenge}
-                  userChallenges={userChallenges}
-                />
-              );
+              return <ChallengeDetails key={challenge.id} address={address} challenge={challenge} />;
             })}
           </div>
         </div>
@@ -111,7 +104,6 @@ export function GroupedChallenges({
                   key={challenge.id}
                   address={address}
                   challenge={challenge}
-                  userChallenges={userChallenges}
                   comingSoon={challenge.id === ChallengeId.DEPLOY_TO_L2}
                 />
               );
