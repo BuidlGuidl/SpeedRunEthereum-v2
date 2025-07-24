@@ -1,0 +1,1 @@
+ALTER TABLE "challenges" DROP COLUMN "dependencies";

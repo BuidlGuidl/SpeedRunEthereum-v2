@@ -67,7 +67,6 @@ export const challenges = pgTable("challenges", {
   disabled: boolean().default(false),
   previewImage: varchar({ length: 255 }),
   icon: varchar({ length: 255 }),
-  dependencies: varchar({ length: 255 }).notNull().array(),
   externalLink: jsonb("external_link").$type<ExternalLink>(),
 });
 
