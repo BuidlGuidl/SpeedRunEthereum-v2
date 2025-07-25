@@ -100,7 +100,7 @@ export const seedChallenges: (typeof challenges.$inferInsert)[] = [
     previewImage: "/assets/challenges/diceGame.svg",
   },
   {
-    id: ChallengeId.MINIMUM_VIABLE_EXCHANGE,
+    id: ChallengeId.DEX,
     challengeName: "Build a DEX",
     github: "scaffold-eth/se-2-challenges:challenge-4-dex",
     autograding: true,
@@ -256,7 +256,7 @@ export const seedUserChallenges: (typeof userChallenges.$inferInsert)[] = [
   },
   {
     userAddress: seedUsers?.[2]?.userAddress,
-    challengeId: ChallengeId.MINIMUM_VIABLE_EXCHANGE,
+    challengeId: ChallengeId.DEX,
     frontendUrl: "https://sour-snake.surge.sh",
     contractUrl: "https://goerli.etherscan.io/address/0x0752d3847601b506cBFB10330172821B495e6bB0",
     reviewComment: "Dummy review, it's working great",
@@ -330,7 +330,7 @@ export const seedUserChallenges: (typeof userChallenges.$inferInsert)[] = [
   },
   {
     userAddress: seedUsers?.[4]?.userAddress,
-    challengeId: ChallengeId.MINIMUM_VIABLE_EXCHANGE,
+    challengeId: ChallengeId.DEX,
     frontendUrl: "https://sepolia-optimism.etherscan.io/address/0xFD893C93f44fdCd16D4673072D2a071578e6C7Ee#code",
     contractUrl: "https://sepolia-optimism.etherscan.io/address/0xFD893C93f44fdCd16D4673072D2a071578e6C7Ee#code",
     submittedAt: new Date(1736523426599),

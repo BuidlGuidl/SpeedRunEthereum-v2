@@ -42,5 +42,5 @@ export const JOIN_BATCH_DEPENDENCIES = [
   ChallengeId.DECENTRALIZED_STAKING,
   ChallengeId.TOKEN_VENDOR,
   ChallengeId.DICE_GAME,
-  ChallengeId.MINIMUM_VIABLE_EXCHANGE,
+  ChallengeId.DEX,
 ];
