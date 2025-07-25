@@ -7,7 +7,7 @@ export async function submitToAutograder({
   challengeId,
   contractUrl,
 }: {
-  challengeId: number;
+  challengeId: string;
   contractUrl: string;
 }): Promise<AutogradingResult> {
   const contractUrlObject = new URL(contractUrl);
