@@ -182,4 +182,4 @@ MEV is a fact of life in DeFi, but you can fight back. As a builder, enforce sli
 
 ---
 
-**Ready to build a secure DEX? [Try the Minimum Viable Exchange Challenge!](/challenge/minimum-viable-exchange)**
+**Ready to build a secure DEX? [Try the Minimum Viable Exchange (Dex) Challenge!](/challenge/dex)**

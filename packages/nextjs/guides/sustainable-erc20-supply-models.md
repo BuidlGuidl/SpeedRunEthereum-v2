@@ -340,6 +340,6 @@ Sustainable ERC20 tokenomics require thoughtful design—balancing supply, deman
 
 - [Decentralized Staking Challenge](https://speedrunethereum.com/challenge/decentralized-staking)
 - [Token Vendor Challenge](https://speedrunethereum.com/challenge/token-vendor)
-- [Minimum Viable Exchange Challenge](https://speedrunethereum.com/challenge/minimum-viable-exchange)
+- [Minimum Viable Exchange (Dex) Challenge](https://speedrunethereum.com/challenge/dex)
 
 **Good luck building sustainable, valuable ERC20 ecosystems!**
