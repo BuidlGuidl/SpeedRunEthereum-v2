@@ -92,7 +92,7 @@ export const CHALLENGE_METADATA: Record<
     description:
       "Learn about randomness challenges in blockchain and exploit vulnerabilities in a Solidity dice game. Essential security concepts for blockchain developers.",
   },
-  [ChallengeId.MINIMUM_VIABLE_EXCHANGE]: {
+  [ChallengeId.DEX]: {
     title: "How to Build a Decentralized Exchange (DEX) in Solidity",
     description:
       "Step-by-step tutorial to build your own DEX with liquidity pools, token swapping, and automated market making in Solidity.",

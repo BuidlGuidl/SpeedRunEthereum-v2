@@ -16,7 +16,7 @@ export enum ChallengeId {
   DECENTRALIZED_STAKING = "decentralized-staking",
   TOKEN_VENDOR = "token-vendor",
   DICE_GAME = "dice-game",
-  MINIMUM_VIABLE_EXCHANGE = "minimum-viable-exchange",
+  DEX = "dex",
   OVER_COLLATERALIZED_LENDING = "over-collateralized-lending",
   STABLECOINS = "stablecoins",
   PREDICTION_MARKETS = "prediction-markets",
