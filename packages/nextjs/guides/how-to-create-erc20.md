@@ -6,7 +6,7 @@ image: "/assets/guides/create-erc20-token.jpg"
 
 Want to launch your own digital currency or utility token on the Ethereum blockchain? This guide provides a comprehensive walkthrough on **how to create an ERC20 token using Solidity**. An ERC20 token is the most widely adopted standard for fungible (interchangeable) tokens on Ethereum, making them essential building blocks for countless decentralized applications (dApps).
 
-We'll cover the core concepts of the ERC20 standard, show you how to write the smart contract code using the secure OpenZeppelin library, and discuss how to get it onto the blockchain. Once you've mastered these basics, you can put your skills to the test by building a token vending machine in the [Token Vendor challenge](/challenge/token-vendor) or even creating your own decentralized exchange in the [Minimum Viable Exchange challenge](/challenge/minimum-viable-exchange).
+We'll cover the core concepts of the ERC20 standard, show you how to write the smart contract code using the secure OpenZeppelin library, and discuss how to get it onto the blockchain. Once you've mastered these basics, you can put your skills to the test by building a token vending machine in the [Token Vendor challenge](/challenge/token-vendor) or even creating your own decentralized exchange in the [Minimum Viable Exchange (Dex) Challenge](/challenge/dex).
 
 ## What Is an ERC20 Token?
 
@@ -194,6 +194,6 @@ Once you have your `YourToken.sol` code and an environment set up:
 The ERC20 token you've designed is the perfect starting point for more advanced challenges on SpeedRunEthereum:
 
 - [**Token Vendor Challenge**](https://speedrunethereum.com/challenge/token-vendor)**:** Take the token you just conceptualized and build a TokenVendor.sol smart contract. This vendor will act like a vending machine, selling your ERC20 tokens to users in exchange for ETH.
-- [**Minimum Viable Exchange (DEX) Challenge**](https://speedrunethereum.com/challenge/minimum-viable-exchange)**:** Go even further by building a basic decentralized exchange. Users will be able to trade ETH for your token and your token back for ETH, learning about liquidity provision and automated market-making concepts.
+- [**Minimum Viable Exchange (DEX) Challenge**](https://speedrunethereum.com/challenge/dex)**:** Go even further by building a basic decentralized exchange. Users will be able to trade ETH for your token and your token back for ETH, learning about liquidity provision and automated market-making concepts.
 
 These hands-on challenges will solidify your understanding and show you how ERC20 tokens are integrated into real-world decentralized applications. Happy coding!

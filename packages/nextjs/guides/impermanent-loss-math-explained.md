@@ -379,6 +379,6 @@ Impermanent loss doesn't have to be a barrier to DeFi participation, it's a risk
 
 ---
 
-**Ready to practice? [Try the Minimum Viable Exchange Challenge!](/challenge/minimum-viable-exchange)**
+**Ready to practice? [Try the Minimum Viable Exchange (Dex) Challenge!](/challenge/dex)**
 
 **Want to build with tokens? [Try the Token Vendor Challenge!](/challenge/token-vendor)**
