@@ -34,10 +34,12 @@ export function GroupedChallenges({
   address,
   challenges,
   userChallenges,
+  userHasCompletedChallenges,
 }: {
   address: Address;
   challenges: Challenges;
   userChallenges: UserChallenges;
+  userHasCompletedChallenges: boolean;
 }) {
   // Map challenges with user challenges
   const userMappedChallenges: MappedChallenges[] = challenges
@@ -84,7 +86,7 @@ export function GroupedChallenges({
         </div>
       </div>
       <div className="mt-4 collapse collapse-arrow bg-base-300 rounded-lg">
-        <input type="checkbox" />
+        <input type="checkbox" defaultChecked={userHasCompletedChallenges} />
         <div className="collapse-title text-base font-medium">
           <GroupedChallengeTitle
             title="Advanced Concepts"
