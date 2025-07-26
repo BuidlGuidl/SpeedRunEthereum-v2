@@ -89,7 +89,12 @@ export default async function BuilderPage({ params }: { params: { address: strin
             <UserProfileCard user={user} batch={userBatch} />
           </div>
           <div className="xl:col-span-3">
-            <GroupedChallenges address={address} challenges={challenges} userChallenges={userChallenges} />
+            <GroupedChallenges
+              address={address}
+              challenges={challenges}
+              userChallenges={userChallenges}
+              userHasCompletedChallenges={userHasCompletedChallenges}
+            />
             <Builds address={address} builds={builds} userHasCompletedChallenges={userHasCompletedChallenges} />
           </div>
         </div>
