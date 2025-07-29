@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import { SubmitChallengeButton } from "./_components/SubmitChallengeButton";
+import { WelcomeBanner } from "./_components/WelcomeBanner";
 import { MDXRemote } from "next-mdx-remote/rsc";
 import rehypeRaw from "rehype-raw";
 import remarkGfm from "remark-gfm";
@@ -51,6 +52,7 @@ export default async function ChallengePage({ params }: { params: { challengeId:
 
   return (
     <div className="flex flex-col items-center py-8 px-5 xl:p-12 relative max-w-[100vw]">
+      <WelcomeBanner />
       {challengeReadme ? (
         <>
           <div className="prose dark:prose-invert max-w-fit break-words lg:max-w-[850px]">
