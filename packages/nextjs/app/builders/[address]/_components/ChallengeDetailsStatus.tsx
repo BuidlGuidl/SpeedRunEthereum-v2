@@ -23,9 +23,6 @@ export function ChallengeDetailsStatus({ challenge }: { challenge: MappedChallen
     <div>
       <div className="mt-3 flex flex-wrap items-center justify-between">
         <div className="flex items-center gap-2">
-          <div className="flex items-center justify-center w-6 h-6 bg-base-300 rounded-full font-semibold text-sm dark:bg-base-200">
-            {challenge.sortOrder}
-          </div>
           <h2 className="m-0 font-medium">
             <Link href={`/challenge/${challenge.id}`} className="hover:underline">
               {challenge.challengeName}
@@ -34,7 +31,7 @@ export function ChallengeDetailsStatus({ challenge }: { challenge: MappedChallen
         </div>
         <div className={`badge badge-sm py-3 px-3 ${badgeClass}`}>{challenge.reviewAction}</div>
       </div>
-      <div className="pl-8">
+      <div>
         <p className="mt-2 mb-0 text-sm">{shortedDescription}.</p>
         <div className={`mt-3 flex items-center gap-2 px-2 py-1 rounded-md ${statusAlertClass}`}>
           <div>

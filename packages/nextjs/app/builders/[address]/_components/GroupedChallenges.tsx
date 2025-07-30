@@ -73,7 +73,7 @@ export function GroupedChallenges({
         <div className="collapse-title text-base font-medium">
           <GroupedChallengeTitle title="Ethereum 101" icon={<ChallengeIconComputer />} challenges={basicChallenges} />
         </div>
-        <div className="collapse-content px-3 bg-base-100">
+        <div className="collapse-content px-4 bg-base-100">
           <div className="mt-3 space-y-4 divide-y">
             {basicChallenges.map(challenge => {
               if (challenge.reviewAction) {
@@ -94,7 +94,7 @@ export function GroupedChallenges({
             challenges={advancedChallenges}
           />
         </div>
-        <div className="collapse-content px-3 bg-base-100">
+        <div className="collapse-content px-4 bg-base-100">
           <div className="mt-3 space-y-4 divide-y">
             {advancedChallenges.map(challenge => {
               if (challenge.reviewAction) {
