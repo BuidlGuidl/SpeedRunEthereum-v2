@@ -41,7 +41,7 @@ export const WelcomeBanner = () => {
           {!isWalletConnected ? (
             <RainbowKitCustomConnectButton />
           ) : (
-            <button className="btn btn-primary md:btn-lg" onClick={() => handleRegister(null)} disabled={isRegistering}>
+            <button className="btn btn-primary" onClick={() => handleRegister(null)} disabled={isRegistering}>
               {isRegistering ? (
                 <span className="loading loading-spinner loading-sm"></span>
               ) : (
