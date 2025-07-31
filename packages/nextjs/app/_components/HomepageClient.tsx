@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect } from "react";
 import { AfterSreCard } from "./AfterSreCard";
 import { AfterSreLine } from "./AfterSreLine";
 import { ChallengeExpandedCard } from "./ChallengeExpandedCard";
@@ -14,6 +15,10 @@ export const HomepageClient = ({ challenges }: { challenges: Challenges }) => {
   const { address: connectedAddress } = useAccount();
 
   const { data: userChallenges } = useUserChallenges(connectedAddress);
+
+  useEffect(() => {
+    throw new Error("test");
+  }, []);
 
   return (
     <div>
