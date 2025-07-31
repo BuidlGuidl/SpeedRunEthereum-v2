@@ -189,6 +189,7 @@ export const deleteBuildLike = async (likeId: number) => {
 };
 
 export const getBuildByBuildId = async (buildId: string) => {
+  throw new Error("build error");
   const build = await db.query.builds.findFirst({
     where: eq(builds.id, buildId),
     with: {
