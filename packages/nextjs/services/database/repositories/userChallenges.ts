@@ -6,6 +6,7 @@ export type UserChallengeInsert = InferInsertModel<typeof userChallenges>;
 export type UserChallenges = Awaited<ReturnType<typeof getLatestSubmissionPerChallengeByUser>>;
 
 export async function getLatestSubmissionPerChallengeByUser(userAddress: string) {
+  throw new Error("submission test error");
   const allChallenges = await db.query.userChallenges.findMany({
     where: eq(lower(userChallenges.userAddress), userAddress.toLowerCase()),
     with: {
