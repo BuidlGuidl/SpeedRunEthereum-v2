@@ -73,9 +73,7 @@ export default async function BuilderPage({ params }: { params: { address: strin
     userBatch = await getBatchById(user.batchId);
   }
   const builds = await getBuildsByUserAddress(address);
-
-  const userPoints = await getUserPoints(address);
-  console.log("userPoints", userPoints);
+  const experiencePoints = await getUserPoints(address);
 
   if (!user) {
     notFound();
@@ -89,7 +87,7 @@ export default async function BuilderPage({ params }: { params: { address: strin
       <div className="max-w-[1440px] w-full mx-auto px-4 py-8">
         <div className="grid grid-cols-1 xl:grid-cols-4 gap-6">
           <div>
-            <UserProfileCard user={user} batch={userBatch} />
+            <UserProfileCard user={user} batch={userBatch} experiencePoints={experiencePoints} />
           </div>
           <div className="xl:col-span-3">
             <GroupedChallenges

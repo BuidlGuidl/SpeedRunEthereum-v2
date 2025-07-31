@@ -12,8 +12,16 @@ import { BatchUserStatus } from "~~/services/database/config/types";
 import { Batch } from "~~/services/database/repositories/batches";
 import { UserByAddress } from "~~/services/database/repositories/users";
 
-export const UserProfileCard = ({ user, batch }: { user: NonNullable<UserByAddress>; batch: Batch }) => {
+type UserProfileCardProps = {
+  user: NonNullable<UserByAddress>;
+  batch: Batch;
+  experiencePoints: { userPoints: number; totalPoints: number };
+};
+
+export const UserProfileCard = ({ user, batch, experiencePoints }: UserProfileCardProps) => {
   const { isAdmin } = useAuthSession();
+
+  console.log("experiencePoints", experiencePoints);
 
   return (
     <div className="bg-base-100 rounded-xl p-6 shadow-lg">
@@ -60,6 +68,17 @@ export const UserProfileCard = ({ user, batch }: { user: NonNullable<UserByAddre
           <UserSocials user={user} />
           <div className="text-sm text-neutral">
             Joined {new Date(user.createdAt).toLocaleDateString("en-US", { month: "long", year: "numeric" })}
+          </div>
+
+          <div>
+            <p className="mt-0 mb-1 text-center">
+              {experiencePoints.userPoints} / {experiencePoints.totalPoints} XP points
+            </p>
+            <progress
+              className="progress progress-info w-52 h-4"
+              value={experiencePoints.userPoints}
+              max={experiencePoints.totalPoints}
+            ></progress>
           </div>
         </div>
       </div>
