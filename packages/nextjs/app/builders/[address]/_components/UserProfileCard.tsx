@@ -21,8 +21,6 @@ type UserProfileCardProps = {
 export const UserProfileCard = ({ user, batch, experiencePoints }: UserProfileCardProps) => {
   const { isAdmin } = useAuthSession();
 
-  console.log("experiencePoints", experiencePoints);
-
   return (
     <div className="bg-base-100 rounded-xl p-6 shadow-lg">
       <div className="flex flex-col md:flex-row justify-around lg:flex-col items-center gap-4">
