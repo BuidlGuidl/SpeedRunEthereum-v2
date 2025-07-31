@@ -14,5 +14,6 @@ export async function getChallengeById(id: ChallengeId) {
 }
 
 export async function getAllChallenges() {
+  throw new Error("Challenges error");
   return await db.select().from(challenges);
 }
