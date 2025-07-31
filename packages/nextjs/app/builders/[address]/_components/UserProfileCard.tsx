@@ -75,7 +75,7 @@ export const UserProfileCard = ({ user, batch, experiencePoints }: UserProfileCa
               {experiencePoints.userPoints} / {experiencePoints.totalPoints} XP points
             </p>
             <progress
-              className="progress progress-info w-52 h-4"
+              className="progress progress-info w-56 h-4"
               value={experiencePoints.userPoints}
               max={experiencePoints.totalPoints}
             ></progress>
