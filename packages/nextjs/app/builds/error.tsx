@@ -10,12 +10,18 @@ export default function Error({ error, reset }: { error: Error & { digest?: stri
         <h1 className="mt-16 text-2xl font-semibold md:mt-32 md:text-5xl">Something went wrong!</h1>
         <div className="mt-6 text-center font-bold">
           {isServerError ? (
-            <>Error digest: {error.digest}</>
+            <>
+              Server-side error
+              <br />
+              Error digest: {error.digest}
+            </>
           ) : (
             <>
+              Client-side error
+              <br />
               Error message: {error.message}
               <br />
-              To see the full error in the console, open the developer tools.
+              See the browser console for more information
             </>
           )}
         </div>
