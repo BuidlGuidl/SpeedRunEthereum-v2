@@ -37,6 +37,9 @@ Impermanent loss occurs due to **arbitrage**. Here's how:
 
 **Example:** You deposit 1 ETH ($3,000) and 3,000 USDC into a pool. If ETH rises to $4,000 externally, arbitrageurs will buy ETH from your pool until it matches $4,000. You'll have less ETH and more USDC than if you had just held both assets.
 
+![How Arbitrage Causes Impermanent Loss](/assets/guides/impernanent-loss-arbitrage-diagram.png)
+_Figure: Arbitrageurs rebalance pools, leading to impermanent loss for LPs._
+
 ---
 
 ## 2. How is Impermanent Loss Calculated? The Formula Explained
@@ -129,6 +132,9 @@ You deposit 1 ETH ($3,000) and 3,000 USDC into a Uniswap pool:
 - **If you HODLed:** You'd have 1 ETH ($6,000) + 3,000 USDC = $9,000
 - **As an LP:** You'd have ~0.707 ETH ($4,242) + ~4,242 USDC = $8,484
 - **Impermanent Loss:** $8,484/$9,000 - 1 = -5.7%
+
+![LP vs HODL Value Comparison](/assets/guides/impermanent-loss-lp-vs-hold-diagram.png)
+_Figure: Comparing the value of providing liquidity vs simply holding assets._
 
 ---
 
@@ -225,6 +231,9 @@ For sophisticated LPs, options can provide IL protection:
 **Institutional IL-Hedged Products:**
 
 - Some firms (e.g., MEV Capital, OrBit Markets) offer institutional-grade products that fully hedge IL for LPs using custom OTC options packages. These are typically for large positions and may trade some upside for full downside protection.
+
+![Impermanent Loss Mitigation Strategies](/assets/guides/impermanent-loss-mitigation-strategies.png)
+_Figure: Key strategies to reduce or hedge impermanent loss risk._
 
 ---
 
@@ -347,6 +356,9 @@ With these two standards working together, a new era of automated and user-frien
 3.  **Programmatic Limit Orders & Range Management:** The single-sided liquidity strategy mentioned earlier becomes far more powerful. A user can authorize a protocol to automatically "walk" their liquidity range up or down the price curve, continuously earning fees without manual intervention. This turns a static LP position into a dynamic, fee-earning strategy that adapts to the market.
 
 By removing the friction of multiple transactions and the barrier of gas fees, account abstraction will transform liquidity provision from a high-maintenance, professional activity into a more accessible and manageable strategy for a much broader audience.
+
+![Automated IL Management with Account Abstraction](/assets/guides/impermanent-loss-aa-automated-il-management-diagram.png)
+_Figure: How Account Abstraction (ERC-7702) enable automated impermanent loss management._
 
 ---
 
