@@ -248,39 +248,49 @@ export async function filterValidUserAddresses(addresses: string[]): Promise<str
   return rows.map(row => row.userAddress);
 }
 
-const CHALLENGE_POINTS = 10;
-const BATCH_POINTS = 20;
-const BUILD_POINTS = 5;
+const CHALLENGE_NUMBER = 6; // Number of challenges currently possible
+const CHALLENGE_POINTS = 10; // Points per accepted challenge
+const BATCH_POINTS = 20; // Points for being in a batch
+const BUILD_POINTS = 5; // Points for _first_ build only
 
 export async function getUserPoints(userAddress: string) {
   const lowercaseAddress = userAddress.toLowerCase();
 
-  const acceptedChallenges = await db.query.userChallenges.findMany({
-    where: and(
-      eq(lower(userChallenges.userAddress), lowercaseAddress),
-      eq(userChallenges.reviewAction, ReviewAction.ACCEPTED),
-    ),
-  });
+  // Execute all queries in parallel
+  const [{ count: acceptedChallengesCount }, user, { exists: hasBuilds }] = await Promise.all([
+    // Count accepted challenges
+    db
+      .select({ count: sql<number>`count(*)::int` })
+      .from(userChallenges)
+      .where(
+        and(
+          eq(lower(userChallenges.userAddress), lowercaseAddress),
+          eq(userChallenges.reviewAction, ReviewAction.ACCEPTED),
+        ),
+      )
+      .then(rows => rows[0] || { count: 0 }),
 
-  // User gets points for every challenge that is ACCEPTED
-  const challengePoints = acceptedChallenges.length * CHALLENGE_POINTS;
+    // Get user with batch info
+    db.query.users.findFirst({
+      where: eq(lower(users.userAddress), lowercaseAddress),
+      columns: { batchId: true },
+    }),
 
-  const user = await db.query.users.findFirst({
-    where: eq(lower(users.userAddress), lowercaseAddress),
-  });
+    // Check if user has any builds (using exists for better performance)
+    db
+      .select({ exists: sql<boolean>`true` })
+      .from(buildBuilders)
+      .where(eq(lower(buildBuilders.userAddress), lowercaseAddress))
+      .limit(1)
+      .then(rows => ({ exists: rows.length > 0 })),
+  ]);
 
-  // User gets points for being in a batch
+  const challengePoints = (acceptedChallengesCount || 0) * CHALLENGE_POINTS;
   const batchPoints = user?.batchId ? BATCH_POINTS : 0;
-
-  const userBuildRows = await db
-    .select({ buildId: buildBuilders.buildId })
-    .from(buildBuilders)
-    .where(eq(lower(buildBuilders.userAddress), lowercaseAddress));
-
-  // User gets points only for the first build they submit
-  const buildPoints = userBuildRows.length > 0 ? BUILD_POINTS : 0;
+  const buildPoints = hasBuilds ? BUILD_POINTS : 0;
 
   return {
-    points: challengePoints + batchPoints + buildPoints,
+    userPoints: challengePoints + batchPoints + buildPoints,
+    totalPoints: CHALLENGE_NUMBER * CHALLENGE_POINTS + BATCH_POINTS + BUILD_POINTS,
   };
 }
