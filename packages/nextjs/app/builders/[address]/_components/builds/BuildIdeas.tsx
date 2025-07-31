@@ -6,13 +6,13 @@ const BUILD_IDEAS = [
     name: "Multisig Wallet",
     description: "Secure assets by requiring multiple accounts to 'vote' on transactions.",
     imageUrl: "/assets/challenges/multiSig.svg",
-    url: "https://github.com/scaffold-eth/se-2-challenges/tree/challenge-6-multisig",
+    url: "https://github.com/scaffold-eth/se-2-challenges/tree/challenge-multisig",
   },
   {
     name: "SVG NFT",
     description: "Tinker around with cutting edge smart contracts that render SVGs in Solidity.",
     imageUrl: "/assets/challenges/dynamicSvgNFT.svg",
-    url: "https://github.com/scaffold-eth/se-2-challenges/tree/challenge-7-svg-nft",
+    url: "https://github.com/scaffold-eth/se-2-challenges/tree/challenge-svg-nft",
   },
 ];
 

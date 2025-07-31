@@ -4,28 +4,17 @@ import Link from "next/link";
 import type { MappedChallenges } from "./GroupedChallenges";
 import type { Address } from "viem";
 import { useAccount } from "wagmi";
-import type { UserChallenges } from "~~/services/database/repositories/userChallenges";
-import { getChallengeDependenciesInfo } from "~~/utils/dependent-challenges";
 
 export function ChallengeDetails({
   address,
   challenge,
-  userChallenges,
   comingSoon,
 }: {
   address: Address;
   challenge: MappedChallenges;
-  userChallenges: UserChallenges;
   comingSoon?: boolean;
 }) {
   const { address: connectedAddress } = useAccount();
-  const { completed: builderHasCompletedDependenciesChallenges } = getChallengeDependenciesInfo({
-    dependencies: challenge.dependencies || [],
-    userChallenges,
-  });
-
-  const isChallengeLocked = challenge.disabled || !builderHasCompletedDependenciesChallenges;
-
   const isProfileOwner = connectedAddress?.toLowerCase() === address.toLowerCase();
 
   const shortedDescription = challenge.description.split(".")[0];
@@ -39,12 +28,9 @@ export function ChallengeDetails({
               {challenge.sortOrder}
             </div>
             <h2 className="m-0 font-medium">
-              {!isChallengeLocked && (
-                <Link href={`/challenge/${challenge.id}`} className="hover:underline">
-                  {challenge.challengeName}
-                </Link>
-              )}
-              {isChallengeLocked && challenge.challengeName}
+              <Link href={`/challenge/${challenge.id}`} className="hover:underline">
+                {challenge.challengeName}
+              </Link>
               {comingSoon && ` - Coming Soon`}
             </h2>
           </div>
@@ -53,12 +39,7 @@ export function ChallengeDetails({
           </div>
         </div>
 
-        {isChallengeLocked && isProfileOwner && (
-          <button disabled className="btn btn-sm rounded-md opacity-65 disabled:bg-accent disabled:text-accent-content">
-            Locked
-          </button>
-        )}
-        {!isChallengeLocked && isProfileOwner && (
+        {isProfileOwner && (
           <Link href={`/challenge/${challenge.id}`} className="btn btn-primary btn-sm rounded-md">
             Start
           </Link>

@@ -26,6 +26,15 @@ const nextConfig = {
       },
     ];
   },
+  async redirects() {
+    return [
+      {
+        source: '/challenge/minimum-viable-exchange',
+        destination: '/challenge/dex',
+        permanent: true,
+      },
+    ];
+  },
 };
 
 module.exports = nextConfig;

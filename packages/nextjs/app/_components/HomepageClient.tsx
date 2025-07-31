@@ -44,8 +44,8 @@ export const HomepageClient = ({ challenges }: { challenges: Challenges }) => {
           challenges={challenges}
         />
         <ChallengeExpandedCard
-          key={ChallengeId.MINIMUM_VIABLE_EXCHANGE}
-          challengeId={ChallengeId.MINIMUM_VIABLE_EXCHANGE}
+          key={ChallengeId.DEX}
+          challengeId={ChallengeId.DEX}
           userChallenges={userChallenges}
           challenges={challenges}
         />

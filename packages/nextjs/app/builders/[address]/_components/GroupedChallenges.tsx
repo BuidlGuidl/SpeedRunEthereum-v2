@@ -34,10 +34,12 @@ export function GroupedChallenges({
   address,
   challenges,
   userChallenges,
+  userHasCompletedChallenges,
 }: {
   address: Address;
   challenges: Challenges;
   userChallenges: UserChallenges;
+  userHasCompletedChallenges: boolean;
 }) {
   // Map challenges with user challenges
   const userMappedChallenges: MappedChallenges[] = challenges
@@ -78,20 +80,13 @@ export function GroupedChallenges({
                 return <ChallengeDetailsStatus key={challenge.id} challenge={challenge} />;
               }
 
-              return (
-                <ChallengeDetails
-                  key={challenge.id}
-                  address={address}
-                  challenge={challenge}
-                  userChallenges={userChallenges}
-                />
-              );
+              return <ChallengeDetails key={challenge.id} address={address} challenge={challenge} />;
             })}
           </div>
         </div>
       </div>
       <div className="mt-4 collapse collapse-arrow bg-base-300 rounded-lg">
-        <input type="checkbox" />
+        <input type="checkbox" defaultChecked={userHasCompletedChallenges} />
         <div className="collapse-title text-base font-medium">
           <GroupedChallengeTitle
             title="Advanced Concepts"
@@ -111,7 +106,6 @@ export function GroupedChallenges({
                   key={challenge.id}
                   address={address}
                   challenge={challenge}
-                  userChallenges={userChallenges}
                   comingSoon={challenge.id === ChallengeId.DEPLOY_TO_L2}
                 />
               );

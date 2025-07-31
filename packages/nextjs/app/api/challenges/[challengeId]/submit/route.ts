@@ -75,7 +75,9 @@ export async function POST(req: NextRequest, { params }: { params: { challengeId
             { challengeId, originalReferrer: referrer },
             req,
           );
-          const autoGraderChallengeId = challenge.sortOrder;
+
+          // TODO: Won't work for simple-nft-example (update se-2-challenges branch OR update database (all relations!))
+          const autoGraderChallengeId = `challenge-${challenge.id}`;
 
           const gradingResult = await submitToAutograder({
             challengeId: autoGraderChallengeId,
