@@ -248,7 +248,7 @@ export async function filterValidUserAddresses(addresses: string[]): Promise<str
   return rows.map(row => row.userAddress);
 }
 
-const CHALLENGE_NUMBER = 6; // Number of challenges currently possible
+const CHALLENGE_NUMBER = 7; // Number of challenges currently possible
 const CHALLENGE_POINTS = 10; // Points per accepted challenge
 const BATCH_POINTS = 20; // Points for being in a batch
 const BUILD_POINTS = 5; // Points for _first_ build only
