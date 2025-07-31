@@ -15,6 +15,10 @@ const BlockExplorer: NextPage = () => {
   const [hasError, setHasError] = useState(false);
 
   useEffect(() => {
+    throw new Error("test");
+  }, []);
+
+  useEffect(() => {
     if (targetNetwork.id !== hardhat.id) {
       setIsLocalNetwork(false);
     }
