@@ -7,10 +7,9 @@ export const metadata = getMetadata({
   description: "View all the builds by the Speed Run Ethereum community",
 });
 
-export default async function AllBuildsPage({
-  searchParams,
-}: {
-  searchParams: { category?: BuildCategory; type?: BuildType };
+export default async function AllBuildsPage(props: {
+  searchParams: Promise<{ category?: BuildCategory; type?: BuildType }>;
 }) {
+  const searchParams = await props.searchParams;
   return <AllBuilds searchParams={searchParams} />;
 }

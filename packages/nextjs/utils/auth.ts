@@ -53,10 +53,11 @@ export const providers = [
           return null;
         }
 
+        const cookieStore = await cookies();
         const csrfToken = await getCsrfToken({
           req: {
             headers: {
-              cookie: cookies().toString(),
+              cookie: cookieStore.toString(),
             },
           },
         });

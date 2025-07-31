@@ -11,7 +11,8 @@ export type UpdateBuildPayload = {
   signatureAddress: string;
 };
 
-export async function PUT(request: Request, { params }: { params: { buildId: string } }) {
+export async function PUT(request: Request, props: { params: Promise<{ buildId: string }> }) {
+  const params = await props.params;
   try {
     const { buildId } = params;
     const { signature, build, userAddress, signatureAddress }: UpdateBuildPayload = await request.json();

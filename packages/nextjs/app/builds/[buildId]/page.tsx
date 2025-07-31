@@ -8,7 +8,8 @@ import { Address } from "~~/components/scaffold-eth";
 import { getBuildByBuildId } from "~~/services/database/repositories/builds";
 import { fetchGithubBuildReadme } from "~~/services/github";
 
-export default async function BuildPage({ params }: { params: { buildId: string } }) {
+export default async function BuildPage(props: { params: Promise<{ buildId: string }> }) {
+  const params = await props.params;
   const { buildId } = params;
   const build = await getBuildByBuildId(buildId);
 
