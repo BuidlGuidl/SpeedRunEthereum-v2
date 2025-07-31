@@ -1,10 +1,8 @@
 import { ReviewAction, UserRole } from "../config/types";
 import { ColumnSort, SortingState } from "@tanstack/react-table";
-import { InferInsertModel, and, isNotNull, or } from "drizzle-orm";
-import { eq, ilike, sql } from "drizzle-orm";
-import { inArray } from "drizzle-orm";
+import { InferInsertModel, and, eq, ilike, inArray, isNotNull, or, sql } from "drizzle-orm";
 import { db } from "~~/services/database/config/postgresClient";
-import { lower, userChallenges, users } from "~~/services/database/config/schema";
+import { buildBuilders, lower, userChallenges, users } from "~~/services/database/config/schema";
 
 type PickSocials<T> = {
   [K in keyof T as K extends `social${string}` ? K : never]?: T[K] extends string | null ? string : never;
@@ -248,4 +246,41 @@ export async function filterValidUserAddresses(addresses: string[]): Promise<str
     .from(users)
     .where(inArray(users.userAddress, addresses));
   return rows.map(row => row.userAddress);
+}
+
+const CHALLENGE_POINTS = 10;
+const BATCH_POINTS = 20;
+const BUILD_POINTS = 5;
+
+export async function getUserPoints(userAddress: string) {
+  const lowercaseAddress = userAddress.toLowerCase();
+
+  const acceptedChallenges = await db.query.userChallenges.findMany({
+    where: and(
+      eq(lower(userChallenges.userAddress), lowercaseAddress),
+      eq(userChallenges.reviewAction, ReviewAction.ACCEPTED),
+    ),
+  });
+
+  // User gets points for every challenge that is ACCEPTED
+  const challengePoints = acceptedChallenges.length * CHALLENGE_POINTS;
+
+  const user = await db.query.users.findFirst({
+    where: eq(lower(users.userAddress), lowercaseAddress),
+  });
+
+  // User gets points for being in a batch
+  const batchPoints = user?.batchId ? BATCH_POINTS : 0;
+
+  const userBuildRows = await db
+    .select({ buildId: buildBuilders.buildId })
+    .from(buildBuilders)
+    .where(eq(lower(buildBuilders.userAddress), lowercaseAddress));
+
+  // User gets points only for the first build they submit
+  const buildPoints = userBuildRows.length > 0 ? BUILD_POINTS : 0;
+
+  return {
+    points: challengePoints + batchPoints + buildPoints,
+  };
 }
