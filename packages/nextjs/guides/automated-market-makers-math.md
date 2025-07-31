@@ -342,10 +342,10 @@ contract MinimalAMM is ERC20 {
 - **Oracle manipulation:** Never use spot price as an oracle. Use TWAPs (time-weighted average price) or Chainlink.
 - **Front-running & Sandwich Attacks:** Bots can see your trade in the mempool and trade before/after you. Use tight slippage and private relays (Flashbots) to reduce risk.
 
+[Read the Flash Loan Exploits Guide →](/guides/flash-loan-exploits)
+
 ![Managing Risks in DEXs](/assets/guides/amm-manage-risks-in-dex.png)
 _Figure: Managing risks in decentralized exchanges: slippage, impermanent loss, and more._
-
-[Read the Flash Loan Exploits Guide →](/guides/flash-loan-exploits)
 
 ---
 
