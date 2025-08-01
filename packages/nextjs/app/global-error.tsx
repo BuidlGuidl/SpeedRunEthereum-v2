@@ -1,12 +1,30 @@
 "use client";
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export default function Error({ error, reset }: { error: Error & { digest?: string }; reset: () => void }) {
+  const isServerError = Boolean(error.digest);
+
   return (
     <div className="relative bg-base-300">
       <div className="absolute inset-0 bg-[url('/assets/home_header_clouds.svg')] bg-top bg-repeat-x bg-[length:auto_200px] sm:bg-[length:auto_300px]" />
       <div className="relative container mx-auto px-5 mb-11 flex flex-col items-center">
         <h1 className="mt-16 text-2xl font-semibold md:mt-32 md:text-5xl">Something went wrong!</h1>
+        <div className="mt-6 text-center font-bold">
+          {isServerError ? (
+            <>
+              Server-side error
+              <br />
+              Error digest: {error.digest}
+            </>
+          ) : (
+            <>
+              Client-side error
+              <br />
+              Error message: {error.message}
+              <br />
+              See the browser console for more information
+            </>
+          )}
+        </div>
         <button className="btn btn-primary btn-lg md:mt-8" onClick={() => reset()}>
           Try again
         </button>
