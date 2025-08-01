@@ -9,7 +9,8 @@ export type DeleteBuildPayload = {
   userAddress: string;
 };
 
-export async function DELETE(request: Request, { params }: { params: { buildId: string } }) {
+export async function DELETE(request: Request, props: { params: Promise<{ buildId: string }> }) {
+  const params = await props.params;
   try {
     const { buildId } = params;
     const { signature, signatureAddress, userAddress }: DeleteBuildPayload = await request.json();

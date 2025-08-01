@@ -8,7 +8,8 @@ type UpdateEnsPayload = {
   signature: `0x${string}`;
 };
 
-export async function PUT(req: Request, { params }: { params: { address: string } }) {
+export async function PUT(req: Request, props: { params: Promise<{ address: string }> }) {
+  const params = await props.params;
   try {
     const { address, signature } = (await req.json()) as UpdateEnsPayload;
 

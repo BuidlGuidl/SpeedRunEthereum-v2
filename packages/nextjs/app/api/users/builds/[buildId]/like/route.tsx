@@ -7,7 +7,8 @@ export type LikeBuildPayload = {
   signature: `0x${string}`;
 };
 
-export async function POST(request: Request, { params }: { params: { buildId: string } }) {
+export async function POST(request: Request, props: { params: Promise<{ buildId: string }> }) {
+  const params = await props.params;
   const { buildId } = params;
   const { address, signature }: LikeBuildPayload = await request.json();
 

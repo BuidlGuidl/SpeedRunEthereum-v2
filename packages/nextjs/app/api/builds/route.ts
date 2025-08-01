@@ -2,8 +2,6 @@ import { NextRequest } from "next/server";
 import { BuildCategory, BuildType } from "~~/services/database/config/types";
 import { getAllBuilds } from "~~/services/database/repositories/builds";
 
-export const dynamic = "force-dynamic";
-
 export async function GET(request: NextRequest) {
   try {
     const searchParams = request.nextUrl.searchParams;

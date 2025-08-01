@@ -9,8 +9,6 @@ import {
 } from "~~/services/database/repositories/userChallenges";
 import { getShortAddressAndEns } from "~~/utils/short-address-and-ens";
 
-export const dynamic = "force-dynamic";
-
 export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
