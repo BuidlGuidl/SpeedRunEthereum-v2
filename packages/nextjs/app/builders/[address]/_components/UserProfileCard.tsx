@@ -70,7 +70,7 @@ export const UserProfileCard = ({ user, batch, experiencePoints }: UserProfileCa
 
           <div>
             <p className="mt-0 mb-1 text-center">
-              {experiencePoints.userPoints} / {experiencePoints.totalPoints} XP points
+              {experiencePoints.userPoints} / {experiencePoints.totalPoints} Points
             </p>
             <progress
               className="progress progress-info w-56 h-4"

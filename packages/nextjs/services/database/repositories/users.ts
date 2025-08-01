@@ -2,7 +2,8 @@ import { ReviewAction, UserRole } from "../config/types";
 import { ColumnSort, SortingState } from "@tanstack/react-table";
 import { InferInsertModel, and, eq, ilike, inArray, isNotNull, or, sql } from "drizzle-orm";
 import { db } from "~~/services/database/config/postgresClient";
-import { buildBuilders, lower, userChallenges, users } from "~~/services/database/config/schema";
+import { lower, userChallenges, users } from "~~/services/database/config/schema";
+import { BatchUserStatus } from "~~/services/database/config/types";
 
 type PickSocials<T> = {
   [K in keyof T as K extends `social${string}` ? K : never]?: T[K] extends string | null ? string : never;
@@ -256,37 +257,23 @@ const BUILD_POINTS = 5; // Points for _first_ build only
 export async function getUserPoints(userAddress: string) {
   const lowercaseAddress = userAddress.toLowerCase();
 
-  // Execute all queries in parallel
-  const [{ count: acceptedChallengesCount }, user, { exists: hasBuilds }] = await Promise.all([
-    // Count accepted challenges
-    db
-      .select({ count: sql<number>`count(*)::int` })
-      .from(userChallenges)
-      .where(
-        and(
-          eq(lower(userChallenges.userAddress), lowercaseAddress),
-          eq(userChallenges.reviewAction, ReviewAction.ACCEPTED),
-        ),
-      )
-      .then(rows => rows[0] || { count: 0 }),
+  const user = await db.query.users.findFirst({
+    where: eq(lower(users.userAddress), lowercaseAddress),
+    with: {
+      userChallenges: {
+        where: eq(userChallenges.reviewAction, ReviewAction.ACCEPTED),
+      },
+      batch: true,
+      buildBuilders: true,
+    },
+  });
 
-    // Get user with batch info
-    db.query.users.findFirst({
-      where: eq(lower(users.userAddress), lowercaseAddress),
-      columns: { batchId: true },
-    }),
-
-    // Check if user has any builds (using exists for better performance)
-    db
-      .select({ exists: sql<boolean>`true` })
-      .from(buildBuilders)
-      .where(eq(lower(buildBuilders.userAddress), lowercaseAddress))
-      .limit(1)
-      .then(rows => ({ exists: rows.length > 0 })),
-  ]);
+  const acceptedChallengesCount = user?.userChallenges.length || 0;
+  const hasBatch = user?.batchStatus === BatchUserStatus.GRADUATE;
+  const hasBuilds = user?.buildBuilders && user?.buildBuilders.length > 0;
 
   const challengePoints = (acceptedChallengesCount || 0) * CHALLENGE_POINTS;
-  const batchPoints = user?.batchId ? BATCH_POINTS : 0;
+  const batchPoints = hasBatch ? BATCH_POINTS : 0;
   const buildPoints = hasBuilds ? BUILD_POINTS : 0;
 
   return {
