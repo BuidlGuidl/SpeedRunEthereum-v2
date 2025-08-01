@@ -26,6 +26,9 @@ image: "/assets/guides/front-running-mev-mitigation.jpg"
 
 This supply chain means MEV is not a bug, but a structural feature of transparent, permissionless blockchains (making mitigation a core design challenge for DEXs).
 
+![MEV Extraction Process](/assets/guides/front-run-mev-extraction-process.png)
+_Figure: The MEV supply chain and extraction process in DeFi._
+
 **Key MEV Attack Vectors:**
 
 - **Front-running:** An attacker sees your pending trade and jumps ahead, profiting from the price move you create.
@@ -78,6 +81,9 @@ This supply chain means MEV is not a bug, but a structural feature of transparen
 3. Your trade executes at a worse price (max slippage).
 4. Bot sells after you, locking in profit (your loss is their gain).
 
+![Sandwich Attack Example](/assets/guides/front-run-sandwich-attack.png)
+_Figure: A sandwich attack sequence: bot buys before and sells after your trade, extracting value from your slippage._
+
 ### **Displacement Attack**
 
 - Bot preempts a unique action (e.g., pool creation, NFT mint) with malicious parameters, causing your transaction to fail or be less valuable.
@@ -113,6 +119,9 @@ function commitSwap(bytes32 commitment) external { ... }
 function revealAndExecuteSwap(params, salt) external { ... }
 ```
 
+![Commit-Reveal Scheme](/assets/guides/front-run-commit-reveal.png)
+_Figure: Commit-reveal scheme: users first commit a hash, then reveal trade details to prevent front-running._
+
 ### **C. Batch Auctions (Neutralize Ordering Attacks)**
 
 - **How it works:** Collect trades over a period, then settle all at a uniform price. No advantage to being first (front-running and sandwiching are neutralized).
@@ -131,6 +140,9 @@ function revealAndExecuteSwap(params, salt) external { ... }
   2. Select this network before trading for MEV protection.
 - **Bonus:** Failed transactions submitted via private relays don't cost gas! You might even receive an MEV rebate, turning a potential loss into a small gain.
 
+![Private Orderflow & MEV Rebates](/assets/guides/front-run-private-orderflow.png)
+_Figure: Private orderflow protects users from front-running and can share MEV rebates back to users._
+
 ### **E. Fair Sequencing Services (FSS) (Future/Protocol-Level)**
 
 - **How it works:** Decentralized networks (e.g., [Chainlink FSS](https://blog.chain.link/chainlink-fair-sequencing-services-enabling-a-provably-fair-defi-ecosystem/)) fairly order transactions before block production. A core technology enabling this is the **encrypted mempool**, where transactions are submitted in an encrypted state and only decrypted after a final order has been established. This makes front-running impossible without relying on a centralized relay. Projects like **Shutter Network** are actively developing this tech.
@@ -142,6 +154,9 @@ function revealAndExecuteSwap(params, salt) external { ... }
 - **How it works:** This is a shift from imperative transactions (e.g., "swap X for Y on this DEX") to declarative **intents** (e.g., "I want to end up with at least Y tokens, and I'm willing to spend at most X tokens"). Users sign these intents, and a network of off-chain "solvers" competes to find the best possible way to execute them across any number of venues (DEXs, private liquidity, etc.).
 - **Why it stops MEV:** The execution path is never broadcast to the public mempool, so there is nothing to front-run or sandwich. Solvers are responsible for execution and finding the best price. DEXs like [CoW Protocol](https://cow.fi/) are pioneers in this space, combining intents with batch auctions for powerful MEV protection.
 - **The Future:** `transaction -> public mempool -> MEV risk` becomes `intent -> solver network -> optimized execution -> MEV protection`.
+
+![MEV Mitigation Strategies](/assets/guides/front-run-mev-mitigation-strategies.png)
+_Figure: Overview of core MEV mitigation strategies for DEX builders and users._
 
 ---
 
