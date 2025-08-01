@@ -15,10 +15,11 @@ import { UserByAddress } from "~~/services/database/repositories/users";
 type UserProfileCardProps = {
   user: NonNullable<UserByAddress>;
   batch: Batch;
-  experiencePoints: { userPoints: number; totalPoints: number };
+  points: number;
+  totalPoints: number;
 };
 
-export const UserProfileCard = ({ user, batch, experiencePoints }: UserProfileCardProps) => {
+export const UserProfileCard = ({ user, batch, points, totalPoints }: UserProfileCardProps) => {
   const { isAdmin } = useAuthSession();
 
   return (
@@ -69,14 +70,10 @@ export const UserProfileCard = ({ user, batch, experiencePoints }: UserProfileCa
           </div>
 
           <div>
-            <p className="mt-0 mb-1 text-center">
-              {experiencePoints.userPoints} / {experiencePoints.totalPoints} Points
+            <p className="mt-0 mb-1 text-center font-medium">
+              {points} / {totalPoints} Points
             </p>
-            <progress
-              className="progress progress-info w-56 h-4"
-              value={experiencePoints.userPoints}
-              max={experiencePoints.totalPoints}
-            ></progress>
+            <progress className="progress progress-primary w-56 h-4" value={points} max={totalPoints}></progress>
           </div>
         </div>
       </div>

@@ -249,10 +249,9 @@ export async function filterValidUserAddresses(addresses: string[]): Promise<str
   return rows.map(row => row.userAddress);
 }
 
-const CHALLENGE_NUMBER = 7; // Number of challenges currently possible
-const CHALLENGE_POINTS = 10; // Points per accepted challenge
-const BATCH_POINTS = 20; // Points for being in a batch
-const BUILD_POINTS = 5; // Points for _first_ build only
+export const CHALLENGE_POINTS = 10; // Points per accepted challenge
+export const BATCH_POINTS = 20; // Points for being in a batch
+export const BUILD_POINTS = 5; // Points for _first_ build only
 
 export async function getUserPoints(userAddress: string) {
   const lowercaseAddress = userAddress.toLowerCase();
@@ -276,8 +275,5 @@ export async function getUserPoints(userAddress: string) {
   const batchPoints = hasBatch ? BATCH_POINTS : 0;
   const buildPoints = hasBuilds ? BUILD_POINTS : 0;
 
-  return {
-    userPoints: challengePoints + batchPoints + buildPoints,
-    totalPoints: CHALLENGE_NUMBER * CHALLENGE_POINTS + BATCH_POINTS + BUILD_POINTS,
-  };
+  return challengePoints + batchPoints + buildPoints;
 }
