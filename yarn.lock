@@ -3269,7 +3269,7 @@ __metadata:
     "@tanstack/react-virtual": ^3.13.2
     "@trivago/prettier-plugin-sort-imports": ~4.3.0
     "@types/mime-types": ^2.1.4
-    "@types/node": ~18.19.50
+    "@types/node": ~22.17.0
     "@types/pg": ^8
     "@types/react": ~19.1.9
     "@typescript-eslint/eslint-plugin": ~5.40.0
@@ -4081,12 +4081,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:~18.19.50":
-  version: 18.19.75
-  resolution: "@types/node@npm:18.19.75"
+"@types/node@npm:~22.17.0":
+  version: 22.17.0
+  resolution: "@types/node@npm:22.17.0"
   dependencies:
-    undici-types: ~5.26.4
-  checksum: 8f780a51a2dc1d597b104a2c33a2ab175fda492defbaab2cbb5fd098124d867ebed7cda0eaf80309bba25fbd4e41b4a04c91b7f14b50547b4377a39ccf749a7c
+    undici-types: ~6.21.0
+  checksum: a7e4dd638e319fabdd9b24f4d46313b16a771c13658b7e07040a47d856bab68cd1d67ac1d027eb3757c2c6534fdd61c74981e4e59322f95f8cbebf77f3f1db17
   languageName: node
   linkType: hard
 
@@ -17608,13 +17608,6 @@ __metadata:
   version: 0.1.3
   resolution: "uncrypto@npm:0.1.3"
   checksum: 07160e08806dd6cea16bb96c3fd54cd70fc801e02fc3c6f86980144d15c9ebbd1c55587f7280a207b3af6cd34901c0d0b77ada5a02c2f7081a033a05acf409e2
-  languageName: node
-  linkType: hard
-
-"undici-types@npm:~5.26.4":
-  version: 5.26.5
-  resolution: "undici-types@npm:5.26.5"
-  checksum: 3192ef6f3fd5df652f2dc1cd782b49d6ff14dc98e5dced492aa8a8c65425227da5da6aafe22523c67f035a272c599bb89cfe803c1db6311e44bed3042fc25487
   languageName: node
   linkType: hard
 
