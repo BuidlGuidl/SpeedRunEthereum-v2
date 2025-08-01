@@ -4,6 +4,7 @@ import PlausibleProvider from "next-plausible";
 import ReferrerTracker from "~~/components/ReferrerTracker";
 import { ScaffoldEthAppWithProviders } from "~~/components/ScaffoldEthAppWithProviders";
 import { ThemeProvider } from "~~/components/ThemeProvider";
+import UTMTracker from "~~/components/UTMTracker";
 import "~~/styles/globals.css";
 import { getMetadata } from "~~/utils/scaffold-eth/getMetadata";
 
@@ -26,6 +27,7 @@ const ScaffoldEthApp = ({ children }: { children: React.ReactNode }) => {
       <body>
         <ThemeProvider enableSystem>
           <ReferrerTracker />
+          <UTMTracker />
           <ScaffoldEthAppWithProviders>{children}</ScaffoldEthAppWithProviders>
         </ThemeProvider>
       </body>

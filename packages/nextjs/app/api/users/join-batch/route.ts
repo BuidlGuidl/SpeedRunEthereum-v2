@@ -64,7 +64,21 @@ export async function POST(req: Request) {
     });
 
     const referrer = user?.referrer || undefined;
-    waitUntil(trackPlausibleEvent(PlausibleEvent.JOIN_BATCH, { originalReferrer: referrer }, req));
+    const originalUtmParams = user?.originalUtmParams;
+    waitUntil(
+      trackPlausibleEvent(
+        PlausibleEvent.JOIN_BATCH,
+        {
+          originalReferrer: referrer,
+          originalUtmSource: originalUtmParams?.utm_source,
+          originalUtmMedium: originalUtmParams?.utm_medium,
+          originalUtmCampaign: originalUtmParams?.utm_campaign,
+          originalUtmTerm: originalUtmParams?.utm_term,
+          originalUtmContent: originalUtmParams?.utm_content,
+        },
+        req,
+      ),
+    );
 
     return NextResponse.json({ user: updatedUser }, { status: 200 });
   } catch (error) {
