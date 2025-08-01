@@ -345,7 +345,7 @@ contract MinimalAMM is ERC20 {
 [Read the Flash Loan Exploits Guide →](/guides/flash-loan-exploits)
 
 ![Managing Risks in DEXs](/assets/guides/amm-manage-risks-in-dex.png)
-_Figure: Managing risks in decentralized exchanges: slippage, impermanent loss, and more._
+_Figure: Managing risks in decentralized exchanges: slippage, impermanent loss, and liquidity depth._
 
 ---
 
