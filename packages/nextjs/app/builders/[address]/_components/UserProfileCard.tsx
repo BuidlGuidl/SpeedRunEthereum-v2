@@ -12,7 +12,14 @@ import { BatchUserStatus } from "~~/services/database/config/types";
 import { Batch } from "~~/services/database/repositories/batches";
 import { UserByAddress } from "~~/services/database/repositories/users";
 
-export const UserProfileCard = ({ user, batch }: { user: NonNullable<UserByAddress>; batch: Batch }) => {
+type UserProfileCardProps = {
+  user: NonNullable<UserByAddress>;
+  batch: Batch;
+  points: number;
+  totalPoints: number;
+};
+
+export const UserProfileCard = ({ user, batch, points, totalPoints }: UserProfileCardProps) => {
   const { isAdmin } = useAuthSession();
 
   return (
@@ -60,6 +67,13 @@ export const UserProfileCard = ({ user, batch }: { user: NonNullable<UserByAddre
           <UserSocials user={user} />
           <div className="text-sm text-neutral">
             Joined {new Date(user.createdAt).toLocaleDateString("en-US", { month: "long", year: "numeric" })}
+          </div>
+
+          <div>
+            <p className="mt-0 mb-1 text-center font-medium">
+              {points} / {totalPoints} Points
+            </p>
+            <progress className="progress progress-primary w-56 h-4" value={points} max={totalPoints}></progress>
           </div>
         </div>
       </div>
