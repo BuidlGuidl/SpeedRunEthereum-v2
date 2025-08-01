@@ -33,6 +33,9 @@ Automated Market Makers (AMMs) are the backbone of decentralized exchanges (DEXs
 
 - AMMs make DeFi trading permissionless, always-on, and accessible to anyone with a wallet.
 
+![The Essence of AMMs](/assets/guides/amm-essence.png)
+_Figure: The essence of AMMs: liquidity pools, permissionless trading, and on-chain pricing._
+
 ---
 
 ## 2. The Constant Product Formula (x\*y=k) Explained
@@ -147,6 +150,9 @@ You want to swap 1 ETH for USDC.
 
 This formula ensures the product of reserves stays (almost) constant, minus the fee, and is the core of how AMMs like Uniswap work.
 
+![AMM Core Swap Process](/assets/guides/amm-core-swap-process.png)
+_Figure: The core swap process in an AMM, from input to output calculation._
+
 ---
 
 ## 6. LP Tokens & Liquidity Math
@@ -164,6 +170,9 @@ This formula ensures the product of reserves stays (almost) constant, minus the 
 
 - Prevents donation attacks (a technique where tokens are sent directly to the pool contract, potentially disrupting its internal accounting and pricing).
 - Ensures fair share of pool for all LPs.
+
+![Adding Liquidity to an AMM](/assets/guides/amm-adding-liquidity.png)
+_Figure: Adding liquidity to an AMM and receiving LP tokens in return._
 
 ---
 
@@ -334,6 +343,9 @@ contract MinimalAMM is ERC20 {
 - **Front-running & Sandwich Attacks:** Bots can see your trade in the mempool and trade before/after you. Use tight slippage and private relays (Flashbots) to reduce risk.
 
 [Read the Flash Loan Exploits Guide →](/guides/flash-loan-exploits)
+
+![Managing Risks in DEXs](/assets/guides/amm-manage-risks-in-dex.png)
+_Figure: Managing risks in decentralized exchanges: slippage, impermanent loss, and liquidity depth._
 
 ---
 
