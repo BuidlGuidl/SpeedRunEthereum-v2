@@ -1,8 +1,6 @@
 import { NextResponse } from "next/server";
 import { getBatchNameList } from "~~/services/database/repositories/batches";
 
-export const dynamic = "force-dynamic";
-
 export async function GET() {
   try {
     const batches = await getBatchNameList();
