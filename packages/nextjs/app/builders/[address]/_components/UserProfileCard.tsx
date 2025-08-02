@@ -22,7 +22,7 @@ export const UserProfileCard = ({ user, batch }: UserProfileCardProps) => {
 
   return (
     <>
-      <div className="bg-base-100 rounded-xl p-6">
+      <div className="bg-base-100 rounded-lg p-6">
         <div className="flex flex-col md:flex-row justify-around lg:flex-col items-center gap-4">
           {user.ensAvatar ? (
             <div className="w-[224px] h-[224px] relative">

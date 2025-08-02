@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import { GroupedChallenges } from "./_components/GroupedChallenges";
+import { PointsBar } from "./_components/PointsBar";
 import { UserProfileCard } from "./_components/UserProfileCard";
 import { Builds } from "./_components/builds/Builds";
 import { Metadata } from "next";
@@ -99,14 +100,7 @@ export default async function BuilderPage({ params }: { params: { address: strin
         <div className="grid grid-cols-1 xl:grid-cols-4 gap-6">
           <div>
             <UserProfileCard user={user} batch={userBatch} />
-            <div className="mt-4 bg-base-100 rounded-xl p-6">
-              <p className="mt-0 mb-2 text-center font-medium">
-                {points} / {totalPoints} Points
-              </p>
-              <div className="flex justify-center">
-                <progress className="progress progress-primary w-56 h-4" value={points} max={totalPoints}></progress>
-              </div>
-            </div>
+            <PointsBar points={points} totalPoints={totalPoints} />
           </div>
           <div className="xl:col-span-3">
             <GroupedChallenges
