@@ -98,7 +98,15 @@ export default async function BuilderPage({ params }: { params: { address: strin
       <div className="max-w-[1440px] w-full mx-auto px-4 py-8">
         <div className="grid grid-cols-1 xl:grid-cols-4 gap-6">
           <div>
-            <UserProfileCard user={user} batch={userBatch} points={points} totalPoints={totalPoints} />
+            <UserProfileCard user={user} batch={userBatch} />
+            <div className="mt-4 bg-base-100 rounded-xl p-6">
+              <p className="mt-0 mb-2 text-center font-medium">
+                {points} / {totalPoints} Points
+              </p>
+              <div className="flex justify-center">
+                <progress className="progress progress-primary w-56 h-4" value={points} max={totalPoints}></progress>
+              </div>
+            </div>
           </div>
           <div className="xl:col-span-3">
             <GroupedChallenges
