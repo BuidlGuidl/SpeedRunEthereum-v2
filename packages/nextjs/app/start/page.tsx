@@ -41,7 +41,7 @@ const StartLandingPage = () => {
           height={280}
         />
         <div className="relative z-10 px-6 lg:pb-12">
-          <p className="text-center mb-10 dark:text-gray-200">
+          <p className="text-center mb-10 mt-16 dark:text-gray-200">
             Learn how to build on <strong>Ethereum</strong>; the superpowers and the gotchas.
           </p>
           <div className="flex justify-center w-full">
