@@ -15,14 +15,14 @@ export const ChallengeCard = ({ challenge }: ChallengeCardProps) => {
 
   return (
     <a href={`https://speedrunethereum.com/challenge/${challenge.id}`} className="block">
-      <div className="bg-base-100 rounded-xl shadow-md overflow-hidden transition hover:shadow-lg border-[1.5px] border-base-300 max-w-xs mx-auto cursor-pointer">
-        <div className="w-full h-40 flex items-center justify-center bg-base-200">
+      <div className="bg-base-100 rounded-xl shadow-md overflow-hidden transition hover:shadow-lg border-2 border-base-300 max-w-xs mx-auto cursor-pointer h-78 flex flex-col">
+        <div className="w-full h-48 flex items-center justify-center bg-base-200">
           {challenge.previewImage ? (
             <Image
               src={challenge.previewImage}
               alt={challenge.challengeName}
               width={200}
-              height={160}
+              height={192}
               className="w-full h-full object-contain p-4"
             />
           ) : (
@@ -31,7 +31,7 @@ export const ChallengeCard = ({ challenge }: ChallengeCardProps) => {
             </div>
           )}
         </div>
-        <div className="px-4 py-3">
+        <div className="px-4  flex-1 flex items-center">
           <p className="text-base text-base-content/70 line-clamp-3 font-normal">{firstSentence}</p>
         </div>
       </div>
