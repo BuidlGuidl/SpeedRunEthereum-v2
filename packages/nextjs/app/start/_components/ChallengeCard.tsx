@@ -26,13 +26,13 @@ export const ChallengeCard = ({ challenge }: ChallengeCardProps) => {
               className="w-full h-full object-contain p-4"
             />
           ) : (
-            <div className="w-full h-full flex items-center justify-center text-lg font-bold text-base-content/50">
+            <div className="w-full h-full flex items-center justify-center text-lg font-bold text-base-content/80">
               No Image
             </div>
           )}
         </div>
         <div className="px-4  flex-1 flex items-center">
-          <p className="text-base text-base-content/70 line-clamp-3 font-normal">{firstSentence}</p>
+          <p className="text-base text-base-content/90 line-clamp-3 font-normal">{firstSentence}</p>
         </div>
       </div>
     </a>
