@@ -4,6 +4,7 @@ import HeroLogo from "../_assets/icons/HeroLogo";
 import { ChallengeCard } from "./_components/ChallengeCard";
 import {
   BoyIcon,
+  ComputerIcon,
   DiamondIcon,
   GirlIcon,
   LightbulbIcon,
@@ -177,8 +178,9 @@ const StartLandingPage = async () => {
       {/* CHALLENGES OVERVIEW SECTION */}
       <div className="bg-base-100 py-12 lg:py-24">
         <div className="max-w-6xl mx-auto px-6">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl lg:text-4xl font-medium mb-4">Challenges Overview</h2>
+          <div className="mb-12 flex flex-col items-center gap-4 lg:flex-row lg:gap-4 lg:justify-center">
+            <ComputerIcon />
+            <h2 className="m-0 text-center text-2xl font-medium md:text-4xl">Challenges Overview</h2>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
