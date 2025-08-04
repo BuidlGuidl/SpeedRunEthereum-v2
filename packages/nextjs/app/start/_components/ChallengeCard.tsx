@@ -10,12 +10,11 @@ export const ChallengeCard = ({ challenge }: ChallengeCardProps) => {
     return null;
   }
 
-  // Get the first sentence (up to the first dot)
   const firstSentence = challenge.description.split(".")[0] + ".";
 
   return (
     <a href={`https://speedrunethereum.com/challenge/${challenge.id}`} className="block">
-      <div className="bg-base-100 rounded-xl shadow-md overflow-hidden transition hover:shadow-lg border-2 border-base-300 max-w-xs mx-auto cursor-pointer h-78 flex flex-col">
+      <div className="bg-base-100 rounded-xl shadow-md overflow-hidden transition hover:shadow-lg border-2 border-base-300 max-w-xs mx-auto h-78 flex flex-col">
         <div className="w-full h-48 flex items-center justify-center bg-base-200">
           {challenge.previewImage ? (
             <Image
@@ -26,9 +25,7 @@ export const ChallengeCard = ({ challenge }: ChallengeCardProps) => {
               className="w-full h-full object-contain p-4"
             />
           ) : (
-            <div className="w-full h-full flex items-center justify-center text-lg font-bold text-base-content/80">
-              No Image
-            </div>
+            <div className="w-full h-full flex items-center justify-center text-lg text-base-content/80">No Image</div>
           )}
         </div>
         <div className="px-4  flex-1 flex items-center">

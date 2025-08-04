@@ -183,7 +183,7 @@ const StartLandingPage = async () => {
             <h2 className="m-0 text-center text-2xl font-medium md:text-4xl">Challenges Overview</h2>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 mb-8 pt-6 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {challenges.map(challenge => (
               <ChallengeCard key={challenge.id} challenge={challenge} />
             ))}
