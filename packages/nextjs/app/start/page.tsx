@@ -1,6 +1,7 @@
 /* eslint-disable react/no-unescaped-entities */
 import Image from "next/image";
 import HeroLogo from "../_assets/icons/HeroLogo";
+import { ChallengeCard } from "./_components/ChallengeCard";
 import {
   BoyIcon,
   DiamondIcon,
@@ -12,6 +13,7 @@ import {
   ToolsIcon,
 } from "./_components/Icons";
 import { StartChallengesButton } from "./_components/StartChallengesButton";
+import { getAllChallenges } from "~~/services/database/repositories/challenges";
 import { getMetadata } from "~~/utils/scaffold-eth/getMetadata";
 
 export const metadata = getMetadata({
@@ -20,9 +22,12 @@ export const metadata = getMetadata({
     "Build your first Ethereum apps with hands-on challenges. Learn smart contracts and dapp development through real, practical experience.",
 });
 
-const StartLandingPage = () => {
+const StartLandingPage = async () => {
+  const challenges = await getAllChallenges();
+
   return (
     <div className="bg-[#F9FEFF] dark:bg-base-100 overflow-hidden">
+      {/* HERO SECTION */}
       <div className="relative">
         <Image
           src="/assets/start/clouds-left.svg"
@@ -57,6 +62,7 @@ const StartLandingPage = () => {
             </p>
           </div>
         </div>
+        {/* SHORTCUT CALL-TO-ACTION */}
         <div className="mb-8 mx-auto w-80 h-40 bg-[url('/assets/start/window-1.svg')] bg-center bg-no-repeat lg:mb-0 lg:absolute lg:right-[5%] lg:-bottom-20">
           <div className="pt-14 px-10 text-gray-600 md:pt-[3.25rem]">
             <p className="mt-0 mb-1 md:text-lg">Already comfortable building on Ethereum?</p>
@@ -68,6 +74,8 @@ const StartLandingPage = () => {
       </div>
 
       <div className="w-full h-[18px] bg-[url('/assets/start/color-border.svg')] bg-repeat-x"></div>
+
+      {/* WHY BUILD ON ETHEREUM SECTION */}
       <div className="pt-12 bg-base-300 lg:pt-24">
         <div className="max-w-4xl mx-auto px-6 text-lg lg:pb-12">
           <div className="mb-12 flex flex-col items-center gap-4 lg:flex-row lg:gap-4 lg:justify-center">
@@ -106,11 +114,14 @@ const StartLandingPage = () => {
             <GirlIcon className="hidden absolute -left-14 bottom-4 lg:block" />
           </div>
         </div>
+        {/* PLATFORM HEADER SEPARATOR */}
         <div className="mt-12 relative h-[130px]">
           <div className="absolute inset-0 bg-[url('/assets/header_platform.svg')] bg-repeat-x bg-[length:auto_130px] z-10" />
           <div className="bg-base-100 absolute inset-0 top-auto w-full h-5" />
         </div>
       </div>
+
+      {/* HOW IT WORKS SECTION */}
       <div className="relative pt-12 bg-base-100 lg:pt-24">
         <Image
           src="/assets/start/clouds-left.svg"
@@ -161,12 +172,30 @@ const StartLandingPage = () => {
             </p>
           </div>
         </div>
-        <div className="mt-12 relative h-[130px]">
-          <div className="absolute inset-0 bg-[url('/assets/start/separation-trees.svg')] bg-repeat-x bg-[length:auto_130px] z-10" />
-          <div className="bg-base-200 absolute inset-0 top-auto w-full h-24" />
+      </div>
+
+      {/* CHALLENGES OVERVIEW SECTION */}
+      <div className="bg-base-100 py-12 lg:py-24">
+        <div className="max-w-6xl mx-auto px-6">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl lg:text-4xl font-medium mb-4">Challenges Overview</h2>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {challenges.map(challenge => (
+              <ChallengeCard key={challenge.id} challenge={challenge} />
+            ))}
+          </div>
         </div>
       </div>
 
+      {/* TREES SEPARATOR */}
+      <div className="relative h-[130px]">
+        <div className="absolute inset-0 bg-[url('/assets/start/separation-trees.svg')] bg-repeat-x bg-[length:auto_130px] z-10" />
+        <div className="bg-base-200 absolute inset-0 top-auto w-full h-24" />
+      </div>
+
+      {/* CALL-TO-ACTION SECTION */}
       <div className="bg-base-200 py-12 lg:py-24">
         <div className="max-w-4xl mx-auto px-6 text-lg lg:pb-12">
           <div className="mb-12 flex flex-col items-center gap-4 lg:flex-row lg:gap-4 lg:justify-center">
