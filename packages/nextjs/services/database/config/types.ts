@@ -57,3 +57,9 @@ export enum BuildCategory {
   AI_AGENTS = "AI Agents",
   PREDICTION_MARKETS = "Prediction Markets",
 }
+
+export const SUPPORTED_NETWORKS = {
+  NONE: "",
+  ARBITRUM: "arbitrum",
+  OPTIMISM: "optimism",
+} as const;

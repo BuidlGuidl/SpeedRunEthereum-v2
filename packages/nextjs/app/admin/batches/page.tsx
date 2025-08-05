@@ -16,7 +16,7 @@ import { DateWithTooltip } from "~~/components/DateWithTooltip";
 import InfiniteTable from "~~/components/InfiniteTable";
 import { InputBase } from "~~/components/scaffold-eth";
 import { fetchSortedBatches } from "~~/services/api/batches";
-import { BatchStatus } from "~~/services/database/config/types";
+import { BatchStatus, SUPPORTED_NETWORKS } from "~~/services/database/config/types";
 import { BatchWithCounts } from "~~/services/database/repositories/batches";
 
 export default function BatchesPage() {
@@ -203,6 +203,7 @@ export default function BatchesPage() {
           defaultStartDate={new Date(selectedBatch.startDate)}
           defaultTelegramLink={selectedBatch.telegramLink}
           defaultRegistryAddress={selectedBatch.contractAddress || ""}
+          defaultNetwork={selectedBatch.network || SUPPORTED_NETWORKS.NONE}
           refreshQueries={refreshQueries}
           setSelectedBatch={setSelectedBatch}
         />

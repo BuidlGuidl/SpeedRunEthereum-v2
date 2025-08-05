@@ -6,6 +6,7 @@ import {
   BuildType,
   ChallengeId,
   ReviewAction,
+  SUPPORTED_NETWORKS,
   UserRole,
 } from "./config/types";
 
@@ -349,6 +350,7 @@ export const seedBatches: (typeof batches.$inferInsert & { userAddresses?: strin
     contractAddress: "0x0000000000000000000000000000000000000000",
     bgSubdomain: "batch1",
     userAddresses: [seedUsers?.[0]?.userAddress, seedUsers?.[1]?.userAddress],
+    network: SUPPORTED_NETWORKS.ARBITRUM,
   },
   {
     name: "Batch 2",
@@ -358,6 +360,7 @@ export const seedBatches: (typeof batches.$inferInsert & { userAddresses?: strin
     contractAddress: "0x0000000000000000000000000000000000000000",
     bgSubdomain: "batch2",
     userAddresses: [seedUsers?.[2]?.userAddress, seedUsers?.[3]?.userAddress],
+    network: SUPPORTED_NETWORKS.OPTIMISM,
   },
   {
     name: "Batch 3",
@@ -366,6 +369,7 @@ export const seedBatches: (typeof batches.$inferInsert & { userAddresses?: strin
     telegramLink: "https://t.me/joinchat/3",
     contractAddress: "0x0000000000000000000000000000000000000000",
     bgSubdomain: "batch3",
+    network: SUPPORTED_NETWORKS.NONE,
   },
 ];
 

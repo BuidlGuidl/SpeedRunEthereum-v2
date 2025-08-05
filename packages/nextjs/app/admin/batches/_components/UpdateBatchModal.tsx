@@ -13,6 +13,7 @@ type UpdateBatchModalProps = {
   defaultStartDate: Date;
   defaultTelegramLink: string;
   defaultRegistryAddress: string;
+  defaultNetwork: string;
   refreshQueries: () => void;
   setSelectedBatch: (batch: BatchWithCounts | null) => void;
 };
@@ -24,6 +25,7 @@ export const UpdateBatchModal = ({
   defaultStartDate,
   defaultTelegramLink,
   defaultRegistryAddress,
+  defaultNetwork,
   refreshQueries,
   setSelectedBatch,
 }: UpdateBatchModalProps) => {
@@ -49,6 +51,7 @@ export const UpdateBatchModal = ({
       defaultStartDate={defaultStartDate}
       defaultTelegramLink={defaultTelegramLink}
       defaultRegistryAddress={defaultRegistryAddress}
+      defaultNetwork={defaultNetwork}
       updateBatch={data => updateBatch({ batchId, ...data })}
       modalId={UPDATE_BATCH_MODAL_ID}
       batchOperation="edit"
