@@ -22,6 +22,10 @@ export async function getBatchByBgSubdomain(bgSubdomain: string) {
   });
 }
 
+export async function getAllBatches() {
+  return await db.query.batches.findMany();
+}
+
 export async function getSortedBatches(start: number, size: number, sorting: SortingState, filter?: string) {
   const sortingQuery = sorting[0] as ColumnSort;
 
