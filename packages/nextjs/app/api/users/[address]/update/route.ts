@@ -12,7 +12,8 @@ export type UpdateUserPayload = {
   address: string;
 };
 
-export async function PUT(request: Request, { params }: { params: { address: string } }) {
+export async function PUT(request: Request, props: { params: Promise<{ address: string }> }) {
+  const params = await props.params;
   try {
     const { address: userAddress } = params;
     const { signature, role, batchId, batchStatus, address }: UpdateUserPayload = await request.json();

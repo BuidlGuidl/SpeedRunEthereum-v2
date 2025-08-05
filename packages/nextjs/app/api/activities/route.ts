@@ -3,8 +3,6 @@ import { ActivityType } from "~~/services/api/activities";
 import { getActivities } from "~~/services/database/repositories/activities";
 import { isAdminSession } from "~~/utils/auth";
 
-export const dynamic = "force-dynamic";
-
 export async function GET(request: NextRequest) {
   const isAdmin = await isAdminSession();
   if (!isAdmin) {

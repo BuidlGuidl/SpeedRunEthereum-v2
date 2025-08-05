@@ -15,7 +15,8 @@ export type UpdateBatchPayload = {
   bgSubdomain: string;
 };
 
-export async function PUT(request: Request, { params }: { params: { batchId: string } }) {
+export async function PUT(request: Request, props: { params: Promise<{ batchId: string }> }) {
+  const params = await props.params;
   try {
     const { batchId } = params;
     const {
