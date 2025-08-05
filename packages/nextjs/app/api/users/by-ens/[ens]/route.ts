@@ -1,7 +1,8 @@
 import { NextResponse } from "next/server";
 import { getUserByEns } from "~~/services/database/repositories/users";
 
-export async function GET(_req: Request, { params }: { params: { ens: string } }) {
+export async function GET(_req: Request, props: { params: Promise<{ ens: string }> }) {
+  const params = await props.params;
   try {
     const { ens } = params;
 

@@ -22,7 +22,8 @@ export async function generateStaticParams() {
   }));
 }
 
-export async function generateMetadata({ params }: { params: { challengeId: string } }) {
+export async function generateMetadata(props: { params: Promise<{ challengeId: string }> }) {
+  const params = await props.params;
   const challenge = await getChallengeById(params.challengeId as ChallengeId);
 
   const staticMetadata = CHALLENGE_METADATA[params.challengeId];
@@ -34,7 +35,8 @@ export async function generateMetadata({ params }: { params: { challengeId: stri
   });
 }
 
-export default async function ChallengePage({ params }: { params: { challengeId: ChallengeId } }) {
+export default async function ChallengePage(props: { params: Promise<{ challengeId: ChallengeId }> }) {
+  const params = await props.params;
   const challenge = await getChallengeById(params.challengeId);
   if (!challenge || challenge.disabled) {
     notFound();

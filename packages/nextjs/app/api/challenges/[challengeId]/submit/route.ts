@@ -18,7 +18,8 @@ export type ChallengeSubmitPayload = {
   signature: `0x${string}`;
 };
 
-export async function POST(req: NextRequest, { params }: { params: { challengeId: ChallengeId } }) {
+export async function POST(req: NextRequest, props: { params: Promise<{ challengeId: ChallengeId }> }) {
+  const params = await props.params;
   try {
     const challengeId = params.challengeId;
     const { userAddress, frontendUrl, contractUrl, signature } = (await req.json()) as ChallengeSubmitPayload;
