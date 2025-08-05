@@ -13,8 +13,8 @@ export const ChallengeCard = ({ challenge }: ChallengeCardProps) => {
   const firstSentence = challenge.description.split(".")[0] + ".";
 
   return (
-    <a href={`https://speedrunethereum.com/challenge/${challenge.id}`} className="block">
-      <div className="bg-base-100 rounded-xl shadow-md overflow-hidden transition hover:shadow-lg border-2 border-base-300 max-w-xs mx-auto h-78 flex flex-col">
+    <a href={`https://speedrunethereum.com/challenge/${challenge.id}`} className="flex">
+      <div className="bg-base-100 rounded-xl shadow-md overflow-hidden transition hover:shadow-lg border-2 border-base-300 max-w-xs mx-auto flex flex-col">
         <div className="w-full h-48 flex items-center justify-center bg-base-200">
           {challenge.previewImage ? (
             <Image
@@ -28,8 +28,8 @@ export const ChallengeCard = ({ challenge }: ChallengeCardProps) => {
             <div className="w-full h-full flex items-center justify-center text-lg text-base-content/80">No Image</div>
           )}
         </div>
-        <div className="px-4  flex-1 flex items-center">
-          <p className="text-base text-base-content/90 line-clamp-3 font-normal">{firstSentence}</p>
+        <div className="px-4 pb-1 pt-1 flex-1 flex items-start">
+          <p className="text-base text-base-content/90 line-clamp-3 font-normal leading-normal">{firstSentence}</p>
         </div>
       </div>
     </a>
