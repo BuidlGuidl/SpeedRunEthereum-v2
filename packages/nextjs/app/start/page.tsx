@@ -2,6 +2,7 @@
 import Image from "next/image";
 import HeroLogo from "../_assets/icons/HeroLogo";
 import { ChallengeCard } from "./_components/ChallengeCard";
+import { ConnectAndRegisterButton } from "./_components/ConnectAndRegisterButton";
 import {
   BoyIcon,
   ComputerIcon,
@@ -13,7 +14,6 @@ import {
   TargetIcon,
   ToolsIcon,
 } from "./_components/Icons";
-import { StartChallengesButton } from "./_components/StartChallengesButton";
 import { getAllChallenges } from "~~/services/database/repositories/challenges";
 import { getMetadata } from "~~/utils/scaffold-eth/getMetadata";
 
@@ -220,7 +220,7 @@ const StartLandingPage = async () => {
             smart contract and mint an NFT on a testnet.
           </p>
           <div className="flex justify-center">
-            <StartChallengesButton />
+            <ConnectAndRegisterButton />
           </div>
           <p className="mt-4 text-center text-sm leading-tight">
             Registration is free and only requires signing an offchain message with your wallet.
