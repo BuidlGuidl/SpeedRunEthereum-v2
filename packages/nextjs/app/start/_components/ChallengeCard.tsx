@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { ChallengeId } from "~~/services/database/config/types";
 import { Challenges } from "~~/services/database/repositories/challenges";
 
 type ChallengeCardProps = {
@@ -12,27 +13,43 @@ export const ChallengeCard = ({ challenge }: ChallengeCardProps) => {
   }
 
   const firstSentence = challenge.description.split(".")[0] + ".";
+  const isComingSoon = challenge.id === ChallengeId.DEPLOY_TO_L2;
+
+  const cardContent = (
+    <div className="bg-base-100 rounded-xl shadow-md overflow-hidden transition hover:shadow-lg border-2 border-base-300 max-w-xs mx-auto flex flex-col">
+      <div className="w-full h-48 flex items-center justify-center bg-base-200 relative">
+        {challenge.previewImage ? (
+          <Image
+            src={challenge.previewImage}
+            alt={challenge.challengeName}
+            width={200}
+            height={192}
+            className="w-full h-full object-contain p-4"
+          />
+        ) : (
+          <div className="w-full h-full flex items-center justify-center text-lg text-base-content/80">No Image</div>
+        )}
+        {isComingSoon && (
+          <div className="absolute top-2 right-2">
+            <span className="inline-flex items-center text-base text-base-content bg-base-300 px-4 py-1.5 rounded-full">
+              Coming Soon
+            </span>
+          </div>
+        )}
+      </div>
+      <div className="px-4 pb-1 pt-1 flex-1 flex items-start">
+        <p className="text-base text-base-content/90 line-clamp-3 font-normal leading-normal">{firstSentence}</p>
+      </div>
+    </div>
+  );
+
+  if (isComingSoon) {
+    return <div className="flex cursor-not-allowed">{cardContent}</div>;
+  }
 
   return (
     <Link href={`/challenge/${challenge.id}`} className="flex">
-      <div className="bg-base-100 rounded-xl shadow-md overflow-hidden transition hover:shadow-lg border-2 border-base-300 max-w-xs mx-auto flex flex-col">
-        <div className="w-full h-48 flex items-center justify-center bg-base-200">
-          {challenge.previewImage ? (
-            <Image
-              src={challenge.previewImage}
-              alt={challenge.challengeName}
-              width={200}
-              height={192}
-              className="w-full h-full object-contain p-4"
-            />
-          ) : (
-            <div className="w-full h-full flex items-center justify-center text-lg text-base-content/80">No Image</div>
-          )}
-        </div>
-        <div className="px-4 pb-1 pt-1 flex-1 flex items-start">
-          <p className="text-base text-base-content/90 line-clamp-3 font-normal leading-normal">{firstSentence}</p>
-        </div>
-      </div>
+      {cardContent}
     </Link>
   );
 };
