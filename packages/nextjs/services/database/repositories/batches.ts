@@ -1,6 +1,6 @@
 import { BatchStatus } from "../config/types";
 import { ColumnSort, SortingState } from "@tanstack/react-table";
-import { InferInsertModel, ilike } from "drizzle-orm";
+import { InferInsertModel, getTableColumns, ilike } from "drizzle-orm";
 import { eq } from "drizzle-orm";
 import { sql } from "drizzle-orm";
 import { db } from "~~/services/database/config/postgresClient";
@@ -22,8 +22,19 @@ export async function getBatchByBgSubdomain(bgSubdomain: string) {
   });
 }
 
-export async function getAllBatches() {
-  return await db.query.batches.findMany();
+export async function getAllBatchesDataWithCounts() {
+  const result = await db
+    .select({
+      ...getTableColumns(batches),
+      graduates: sql<number>`coalesce(count(*) filter (where ${users.batchStatus} = 'graduate'), 0)::int`,
+      totalParticipants: sql<number>`coalesce(count(*) filter (where ${users.batchId} is not null), 0)::int`,
+    })
+    .from(batches)
+    .leftJoin(users, eq(batches.id, users.batchId))
+    .groupBy(batches.id)
+    .orderBy(batches.id);
+
+  return result;
 }
 
 export async function getSortedBatches(start: number, size: number, sorting: SortingState, filter?: string) {

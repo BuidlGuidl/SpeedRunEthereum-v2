@@ -1,8 +1,8 @@
-import { Batch, getAllBatches } from "~~/services/database/repositories/batches";
+import { Batch, getAllBatchesDataWithCounts } from "~~/services/database/repositories/batches";
 
 export async function GET() {
   try {
-    const allBatchData = await getAllBatches();
+    const allBatchData = await getAllBatchesDataWithCounts();
     const batches = allBatchData.map((batch: Batch) => ({
       ...batch,
       telegramLink: undefined,
