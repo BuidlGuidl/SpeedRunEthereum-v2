@@ -214,11 +214,17 @@ const StartLandingPage = async () => {
             width={650}
             height={400}
           />
-          <p className="mb-2 text-center font-medium">Start with Challenge #0: Simple NFT Example</p>
-          <p className="mt-2 text-center">You'll deploy your first smart contract and mint an NFT on a testnet.</p>
+          <h3 className="mb-2 text-center font-medium text-xl">Start learning today!</h3>
+          <p className="mt-2 text-center">
+            Connect your wallet and register to start your journey. In the first challenge, you'll deploy your first
+            smart contract and mint an NFT on a testnet.
+          </p>
           <div className="flex justify-center">
             <StartChallengesButton />
           </div>
+          <p className="mt-4 text-center text-sm leading-tight">
+            Registration is free and only requires signing an offchain message with your wallet.
+          </p>
         </div>
       </div>
     </div>
