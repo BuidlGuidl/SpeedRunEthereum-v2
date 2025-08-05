@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import { Challenges } from "~~/services/database/repositories/challenges";
 
 type ChallengeCardProps = {
@@ -13,7 +14,7 @@ export const ChallengeCard = ({ challenge }: ChallengeCardProps) => {
   const firstSentence = challenge.description.split(".")[0] + ".";
 
   return (
-    <a href={`https://speedrunethereum.com/challenge/${challenge.id}`} className="flex">
+    <Link href={`/challenge/${challenge.id}`} className="flex">
       <div className="bg-base-100 rounded-xl shadow-md overflow-hidden transition hover:shadow-lg border-2 border-base-300 max-w-xs mx-auto flex flex-col">
         <div className="w-full h-48 flex items-center justify-center bg-base-200">
           {challenge.previewImage ? (
@@ -32,6 +33,6 @@ export const ChallengeCard = ({ challenge }: ChallengeCardProps) => {
           <p className="text-base text-base-content/90 line-clamp-3 font-normal leading-normal">{firstSentence}</p>
         </div>
       </div>
-    </a>
+    </Link>
   );
 };
