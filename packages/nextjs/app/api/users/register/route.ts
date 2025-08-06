@@ -11,11 +11,12 @@ type RegisterPayload = {
   address: string;
   signature: `0x${string}`;
   referrer: string | null;
+  originalUtmParams?: Record<string, string>;
 };
 
 export async function POST(req: Request) {
   try {
-    const { address, signature, referrer } = (await req.json()) as RegisterPayload;
+    const { address, signature, referrer, originalUtmParams } = (await req.json()) as RegisterPayload;
 
     if (!address || !signature) {
       return NextResponse.json({ error: "Address and signature are required" }, { status: 400 });
@@ -36,12 +37,26 @@ export async function POST(req: Request) {
     const userToCreate: InferInsertModel<typeof users> = {
       userAddress: address,
       referrer,
+      originalUtmParams,
     };
 
     const user = await createUser(userToCreate);
 
     // Background processing
-    waitUntil(trackPlausibleEvent(PlausibleEvent.SIGNUP_SRE, { originalReferrer: referrer ?? undefined }, req));
+    waitUntil(
+      trackPlausibleEvent(
+        PlausibleEvent.SIGNUP_SRE,
+        {
+          originalReferrer: referrer ?? undefined,
+          originalUtmSource: originalUtmParams?.utm_source,
+          originalUtmMedium: originalUtmParams?.utm_medium,
+          originalUtmCampaign: originalUtmParams?.utm_campaign,
+          originalUtmTerm: originalUtmParams?.utm_term,
+          originalUtmContent: originalUtmParams?.utm_content,
+        },
+        req,
+      ),
+    );
 
     waitUntil(
       (async () => {
