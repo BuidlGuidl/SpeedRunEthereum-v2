@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { BatchStatus, SUPPORTED_NETWORKS } from "~~/services/database/config/types";
+import { BatchNetwork, BatchStatus } from "~~/services/database/config/types";
 import { getBatchByBgSubdomain, getBatchById, updateBatch } from "~~/services/database/repositories/batches";
 import { isUserAdmin } from "~~/services/database/repositories/users";
 import { isValidEIP712UpdateBatchSignature } from "~~/services/eip712/batches";
@@ -13,7 +13,7 @@ export type UpdateBatchPayload = {
   contractAddress?: string;
   telegramLink: string;
   bgSubdomain: string;
-  network?: string;
+  network: BatchNetwork;
 };
 
 export async function PUT(request: Request, props: { params: Promise<{ batchId: string }> }) {
@@ -63,7 +63,7 @@ export async function PUT(request: Request, props: { params: Promise<{ batchId: 
       contractAddress: contractAddress || "",
       telegramLink,
       bgSubdomain,
-      network: network || SUPPORTED_NETWORKS.NONE,
+      network: network,
     });
 
     if (!isValidSignature) {

@@ -2,7 +2,6 @@ import { useRouter } from "next/navigation";
 import { useMutation } from "@tanstack/react-query";
 import { useAccount, useSignTypedData } from "wagmi";
 import { fetchUpdateBatch } from "~~/services/api/batches";
-import { SUPPORTED_NETWORKS } from "~~/services/database/config/types";
 import { BatchInsert } from "~~/services/database/repositories/batches";
 import { EIP_712_TYPED_DATA__UPDATE_BATCH } from "~~/services/eip712/batches";
 import { notification } from "~~/utils/scaffold-eth";
@@ -27,7 +26,7 @@ export const useUpdateBatch = ({ onSuccess }: { onSuccess?: () => void }) => {
         contractAddress: batch.contractAddress || "",
         telegramLink: batch.telegramLink,
         bgSubdomain: batch.bgSubdomain,
-        network: batch.network || SUPPORTED_NETWORKS.NONE,
+        network: batch.network,
       };
 
       const signature = await signTypedDataAsync({
@@ -44,7 +43,7 @@ export const useUpdateBatch = ({ onSuccess }: { onSuccess?: () => void }) => {
         contractAddress: batch.contractAddress || "",
         telegramLink: batch.telegramLink,
         bgSubdomain: batch.bgSubdomain,
-        network: batch.network || SUPPORTED_NETWORKS.NONE,
+        network: batch.network,
       });
     },
     onSuccess: () => {

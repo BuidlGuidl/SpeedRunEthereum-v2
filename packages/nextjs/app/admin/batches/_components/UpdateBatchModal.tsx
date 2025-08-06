@@ -1,7 +1,7 @@
 import { useRef } from "react";
 import { BatchModalContent } from "./BatchModalContent";
 import { useUpdateBatch } from "~~/hooks/useUpdateBatch";
-import { BatchStatus } from "~~/services/database/config/types";
+import { BatchNetwork, BatchStatus } from "~~/services/database/config/types";
 import { BatchWithCounts } from "~~/services/database/repositories/batches";
 
 export const UPDATE_BATCH_MODAL_ID = "edit-batch-modal";
@@ -13,7 +13,7 @@ type UpdateBatchModalProps = {
   defaultStartDate: Date;
   defaultTelegramLink: string;
   defaultRegistryAddress: string;
-  defaultNetwork: string;
+  defaultNetwork: BatchNetwork;
   refreshQueries: () => void;
   setSelectedBatch: (batch: BatchWithCounts | null) => void;
 };

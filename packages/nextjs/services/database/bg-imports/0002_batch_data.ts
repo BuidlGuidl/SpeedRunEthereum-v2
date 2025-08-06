@@ -1,6 +1,6 @@
 import { db } from "../config/postgresClient";
 import { batches, users } from "../config/schema";
-import { BatchStatus, BatchUserStatus } from "../config/types";
+import { BatchNetwork, BatchStatus, BatchUserStatus } from "../config/types";
 import { BgBatch, BgBatchUser } from "./types";
 import * as dotenv from "dotenv";
 import { eq } from "drizzle-orm";
@@ -48,6 +48,7 @@ async function importData() {
         contractAddress: batch.contractAddress,
         telegramLink: batch.telegramLink,
         bgSubdomain: `batch${batch.name}`,
+        network: batch.network as BatchNetwork,
       };
 
       let createdBatch;

@@ -1,5 +1,5 @@
 {
-  "id": "e612afcf-f58f-46b2-b71b-6cfc34cedf11",
+  "id": "4795c14b-af22-4cf3-9469-f1f47513946f",
   "prevId": "b138afca-7a57-4c82-9be3-bf5e6c51f6ea",
   "version": "7",
   "dialect": "postgresql",
@@ -52,9 +52,9 @@
         },
         "network": {
           "name": "network",
-          "type": "network_enum",
+          "type": "batch_network",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         }
       },
       "indexes": {},
@@ -698,6 +698,14 @@
     }
   },
   "enums": {
+    "public.batch_network": {
+      "name": "batch_network",
+      "schema": "public",
+      "values": [
+        "arbitrum",
+        "optimism"
+      ]
+    },
     "public.batch_status_enum": {
       "name": "batch_status_enum",
       "schema": "public",
@@ -740,14 +748,6 @@
         "Content",
         "Design",
         "Other"
-      ]
-    },
-    "public.network_enum": {
-      "name": "network_enum",
-      "schema": "public",
-      "values": [
-        "arbitrum",
-        "optimism"
       ]
     },
     "public.review_action_enum": {

@@ -58,8 +58,7 @@ export enum BuildCategory {
   PREDICTION_MARKETS = "Prediction Markets",
 }
 
-export const SUPPORTED_NETWORKS = {
-  NONE: "",
-  ARBITRUM: "arbitrum",
-  OPTIMISM: "optimism",
-} as const;
+export enum BatchNetwork {
+  ARBITRUM = "arbitrum",
+  OPTIMISM = "optimism",
+}

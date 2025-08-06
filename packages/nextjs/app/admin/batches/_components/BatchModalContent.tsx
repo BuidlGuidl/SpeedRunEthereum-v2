@@ -1,6 +1,6 @@
 import { forwardRef, useEffect, useMemo, useState } from "react";
 import { InputBase } from "~~/components/scaffold-eth";
-import { BatchStatus, SUPPORTED_NETWORKS } from "~~/services/database/config/types";
+import { BatchNetwork, BatchStatus } from "~~/services/database/config/types";
 import { notification } from "~~/utils/scaffold-eth";
 
 const isSubdomainValid = (subdomain: string): boolean => {
@@ -25,7 +25,7 @@ type BatchModalContentProps = {
   defaultStartDate?: Date;
   defaultTelegramLink?: string;
   defaultRegistryAddress?: string;
-  defaultNetwork?: string;
+  defaultNetwork?: BatchNetwork;
   isPending: boolean;
   batchOperation: BatchOperation;
   updateBatch: (data: {
@@ -35,7 +35,7 @@ type BatchModalContentProps = {
     telegramLink: string;
     contractAddress: string;
     bgSubdomain: string;
-    network: string;
+    network: BatchNetwork;
   }) => void;
 };
 
@@ -47,7 +47,7 @@ export const BatchModalContent = forwardRef<HTMLInputElement, BatchModalContentP
       defaultStartDate,
       defaultTelegramLink = "",
       defaultRegistryAddress = "",
-      defaultNetwork = SUPPORTED_NETWORKS.NONE,
+      defaultNetwork = BatchNetwork.ARBITRUM,
       updateBatch,
       modalId,
       batchOperation,
@@ -152,7 +152,7 @@ export const BatchModalContent = forwardRef<HTMLInputElement, BatchModalContentP
                   <label className="flex items-center gap-2 cursor-pointer">
                     <input
                       type="radio"
-                      name={`status-${defaultName}`}
+                      name={`status-${modalId}`}
                       className="radio radio-primary"
                       checked={status === BatchStatus.CLOSED}
                       onChange={() => setStatus(BatchStatus.CLOSED)}
@@ -162,7 +162,7 @@ export const BatchModalContent = forwardRef<HTMLInputElement, BatchModalContentP
                   <label className="flex items-center gap-2 cursor-pointer">
                     <input
                       type="radio"
-                      name={`status-${defaultName}`}
+                      name={`status-${modalId}`}
                       className="radio radio-primary"
                       checked={status === BatchStatus.OPEN}
                       onChange={() => setStatus(BatchStatus.OPEN)}
@@ -220,32 +220,22 @@ export const BatchModalContent = forwardRef<HTMLInputElement, BatchModalContentP
                   <label className="flex items-center gap-2 cursor-pointer">
                     <input
                       type="radio"
-                      name={`network-${defaultName}`}
+                      name={`network-${modalId}`}
                       className="radio radio-primary"
-                      checked={selectedNetwork === SUPPORTED_NETWORKS.NONE}
-                      onChange={() => setSelectedNetwork(SUPPORTED_NETWORKS.NONE)}
+                      checked={selectedNetwork === BatchNetwork.ARBITRUM}
+                      onChange={() => setSelectedNetwork(BatchNetwork.ARBITRUM)}
                     />
-                    <span>None</span>
+                    <span>{BatchNetwork.ARBITRUM}</span>
                   </label>
                   <label className="flex items-center gap-2 cursor-pointer">
                     <input
                       type="radio"
-                      name={`network-${defaultName}`}
+                      name={`network-${modalId}`}
                       className="radio radio-primary"
-                      checked={selectedNetwork === SUPPORTED_NETWORKS.ARBITRUM}
-                      onChange={() => setSelectedNetwork(SUPPORTED_NETWORKS.ARBITRUM)}
+                      checked={selectedNetwork === BatchNetwork.OPTIMISM}
+                      onChange={() => setSelectedNetwork(BatchNetwork.OPTIMISM)}
                     />
-                    <span>{SUPPORTED_NETWORKS.ARBITRUM}</span>
-                  </label>
-                  <label className="flex items-center gap-2 cursor-pointer">
-                    <input
-                      type="radio"
-                      name={`network-${defaultName}`}
-                      className="radio radio-primary"
-                      checked={selectedNetwork === SUPPORTED_NETWORKS.OPTIMISM}
-                      onChange={() => setSelectedNetwork(SUPPORTED_NETWORKS.OPTIMISM)}
-                    />
-                    <span>{SUPPORTED_NETWORKS.OPTIMISM}</span>
+                    <span>{BatchNetwork.OPTIMISM}</span>
                   </label>
                 </div>
               </div>
