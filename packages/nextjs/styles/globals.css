@@ -95,6 +95,17 @@ p {
   word-break: break-word;
 }
 
+/* Remove quotes and normalize font styling from blockquotes */
+.prose :where(blockquote p:first-of-type):not(:where([class~="not-prose"], [class~="not-prose"] *))::before,
+.prose :where(blockquote p:last-of-type):not(:where([class~="not-prose"], [class~="not-prose"] *))::after {
+  content: none;
+}
+
+.prose :where(blockquote):not(:where([class~="not-prose"], [class~="not-prose"] *)) {
+  font-style: normal;
+  font-weight: normal;
+}
+
 .flag-selector ul,
 .flag-selector #rfs-btn,
 .flag-selector ul > div,
