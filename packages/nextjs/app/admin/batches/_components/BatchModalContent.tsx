@@ -217,26 +217,18 @@ export const BatchModalContent = forwardRef<HTMLInputElement, BatchModalContentP
                   <span className="label-text font-medium">Network</span>
                 </label>
                 <div className="flex gap-4">
-                  <label className="flex items-center gap-2 cursor-pointer">
-                    <input
-                      type="radio"
-                      name={`network-${modalId}`}
-                      className="radio radio-primary"
-                      checked={selectedNetwork === BatchNetwork.ARBITRUM}
-                      onChange={() => setSelectedNetwork(BatchNetwork.ARBITRUM)}
-                    />
-                    <span>{BatchNetwork.ARBITRUM}</span>
-                  </label>
-                  <label className="flex items-center gap-2 cursor-pointer">
-                    <input
-                      type="radio"
-                      name={`network-${modalId}`}
-                      className="radio radio-primary"
-                      checked={selectedNetwork === BatchNetwork.OPTIMISM}
-                      onChange={() => setSelectedNetwork(BatchNetwork.OPTIMISM)}
-                    />
-                    <span>{BatchNetwork.OPTIMISM}</span>
-                  </label>
+                  {Object.values(BatchNetwork).map(network => (
+                    <label key={network} className="flex items-center gap-2 cursor-pointer">
+                      <input
+                        type="radio"
+                        name={`network-${modalId}`}
+                        className="radio radio-primary"
+                        checked={selectedNetwork === network}
+                        onChange={() => setSelectedNetwork(network)}
+                      />
+                      <span>{network}</span>
+                    </label>
+                  ))}
                 </div>
               </div>
             </div>
