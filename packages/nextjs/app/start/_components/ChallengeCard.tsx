@@ -17,7 +17,7 @@ export const ChallengeCard = ({ challenge }: ChallengeCardProps) => {
 
   const cardContent = (
     <div className="bg-base-100 rounded-xl shadow-md overflow-hidden transition hover:shadow-lg border-2 border-base-300 max-w-xs mx-auto flex flex-col">
-      <div className="w-full h-24 md:h-40 lg:h-48 flex items-center justify-center bg-base-200 relative">
+      <div className="w-full h-24 md:h-40 lg:h-48 flex items-center justify-center bg-base-200 dark:bg-teal-800 relative">
         {challenge.previewImage ? (
           <Image
             src={challenge.previewImage}
@@ -37,7 +37,7 @@ export const ChallengeCard = ({ challenge }: ChallengeCardProps) => {
           </div>
         )}
       </div>
-      <div className="px-4 pb-1 pt-1 flex-1 flex items-start">
+      <div className="px-4 pb-1 pt-1 flex-1 flex items-start bg-base-100 dark:bg-teal-950">
         <p className="text-sm md:text-base text-base-content/90 line-clamp-4 font-normal leading-tight md:leading-normal">
           {firstSentence}
         </p>
