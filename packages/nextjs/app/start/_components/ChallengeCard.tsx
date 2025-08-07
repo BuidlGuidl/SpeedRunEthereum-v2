@@ -19,12 +19,12 @@ export const ChallengeCard = ({ challenge }: ChallengeCardProps) => {
   const cardContent = (
     <div
       className={`bg-base-100 rounded-xl shadow-md overflow-hidden transition hover:shadow-lg border-2 max-w-xs mx-auto flex flex-col ${
-        isBuilderSuggestion ? "border-[#FFCB7E]" : "border-base-300"
+        isBuilderSuggestion ? "border-[#FFCB7E] dark:border-[#D5853B]" : "border-base-300"
       }`}
     >
       <div
         className={`w-full h-24 md:h-40 lg:h-48 flex items-center justify-center relative ${
-          isBuilderSuggestion ? "bg-[#FFE9C9] dark:bg-[#FFE9C9]" : "bg-base-200 dark:bg-teal-800"
+          isBuilderSuggestion ? "bg-[#FFE9C9] dark:bg-[#7E4510]" : "bg-base-200 dark:bg-teal-800"
         }`}
       >
         {challenge.previewImage ? (
