@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { useAccount } from "wagmi";
 import { useUser } from "~~/hooks/useUser";
@@ -11,10 +12,6 @@ export const ConnectAndRegisterButton = () => {
   const { data: user, isLoading: isLoadingUser } = useUser(connectedAddress);
   const { handleRegister, isRegistering } = useUserRegister();
   const [isLocalLoading, setIsLocalLoading] = useState(false);
-
-  if (user || isLoadingUser) {
-    return null;
-  }
 
   const isWalletConnected = !!connectedAddress;
   const isLoading = isLocalLoading || isRegistering;
@@ -29,6 +26,27 @@ export const ConnectAndRegisterButton = () => {
       setIsLocalLoading(false);
     }
   };
+
+  // If user is registered, show "go to your portfolio" button
+  if (user && !isLoadingUser) {
+    return (
+      <div className="flex flex-col sm:flex-row gap-3 justify-center items-center">
+        <Link href={`/builders/${connectedAddress}`}>
+          <button
+            className="w-[300px] h-[60px] text-gray-600 bg-[url('/assets/start/button-frame.svg')] bg-no-repeat bg-center bg-contain flex items-center justify-center"
+            type="button"
+          >
+            Go to your portfolio
+          </button>
+        </Link>
+      </div>
+    );
+  }
+
+  // If still loading user data, show nothing
+  if (isLoadingUser) {
+    return null;
+  }
 
   return (
     <div className="flex flex-col sm:flex-row gap-3 justify-center items-center">

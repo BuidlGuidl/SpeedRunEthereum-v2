@@ -218,6 +218,9 @@ const StartLandingPage = async () => {
             <div className="flex justify-center">
               <ConnectAndRegisterButton />
             </div>
+            <p className="mt-4 text-center text-sm">
+              Registration is free and only requires signing an offchain message in your wallet.
+            </p>
           </div>
         </div>
       </div>
