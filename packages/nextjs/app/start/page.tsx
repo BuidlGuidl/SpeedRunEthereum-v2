@@ -2,7 +2,7 @@
 import Image from "next/image";
 import HeroLogo from "../_assets/icons/HeroLogo";
 import { ChallengeCard } from "./_components/ChallengeCard";
-import { ConnectAndRegisterButton } from "./_components/ConnectAndRegisterButton";
+import { ConnectAndRegisterSection } from "./_components/ConnectAndRegisterSection";
 import {
   BoyIcon,
   ComputerIcon,
@@ -210,17 +210,7 @@ const StartLandingPage = async () => {
               width={650}
               height={400}
             />
-            <h3 className="mb-2 text-center font-medium text-xl">Start learning today!</h3>
-            <p className="mt-2 text-center">
-              Connect your wallet and register to start your journey. In the first challenge, you'll deploy your first
-              smart contract and mint an NFT on a testnet.
-            </p>
-            <div className="flex justify-center">
-              <ConnectAndRegisterButton />
-            </div>
-            <p className="mt-4 text-center text-sm">
-              Registration is free and only requires signing an offchain message in your wallet.
-            </p>
+            <ConnectAndRegisterSection />
           </div>
         </div>
       </div>
