@@ -11,6 +11,7 @@ export const EIP_712_TYPED_DATA__CREATE_BATCH = {
       { name: "contractAddress", type: "string" },
       { name: "telegramLink", type: "string" },
       { name: "bgSubdomain", type: "string" },
+      { name: "network", type: "string" },
     ],
   },
   primaryType: "Message",
@@ -28,6 +29,7 @@ export const isValidEIP712CreateBatchSignature = async ({
   contractAddress,
   telegramLink,
   bgSubdomain,
+  network,
 }: {
   address: string;
   signature: `0x${string}`;
@@ -37,6 +39,7 @@ export const isValidEIP712CreateBatchSignature = async ({
   contractAddress: string;
   telegramLink: string;
   bgSubdomain: string;
+  network: string;
 }) => {
   const typedData = {
     ...EIP_712_TYPED_DATA__CREATE_BATCH,
@@ -48,6 +51,7 @@ export const isValidEIP712CreateBatchSignature = async ({
       contractAddress,
       telegramLink,
       bgSubdomain,
+      network,
     },
     signature,
   };
@@ -66,6 +70,7 @@ export const EIP_712_TYPED_DATA__UPDATE_BATCH = {
       { name: "contractAddress", type: "string" },
       { name: "telegramLink", type: "string" },
       { name: "bgSubdomain", type: "string" },
+      { name: "network", type: "string" },
     ],
   },
   primaryType: "Message",
@@ -83,6 +88,7 @@ export const isValidEIP712UpdateBatchSignature = async ({
   contractAddress,
   telegramLink,
   bgSubdomain,
+  network,
 }: {
   address: string;
   signature: `0x${string}`;
@@ -92,6 +98,7 @@ export const isValidEIP712UpdateBatchSignature = async ({
   contractAddress: string;
   telegramLink: string;
   bgSubdomain: string;
+  network: string;
 }) => {
   const typedData = {
     ...EIP_712_TYPED_DATA__UPDATE_BATCH,
@@ -103,6 +110,7 @@ export const isValidEIP712UpdateBatchSignature = async ({
       contractAddress,
       telegramLink,
       bgSubdomain,
+      network,
     },
     signature,
   };
