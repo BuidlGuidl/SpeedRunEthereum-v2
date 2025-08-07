@@ -1,7 +1,8 @@
 import { NextResponse } from "next/server";
 import { getUserByAddress } from "~~/services/database/repositories/users";
 
-export async function GET(_req: Request, { params }: { params: { address: string } }) {
+export async function GET(_req: Request, props: { params: Promise<{ address: string }> }) {
+  const params = await props.params;
   try {
     const { address } = params;
 

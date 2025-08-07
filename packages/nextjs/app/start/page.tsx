@@ -2,6 +2,7 @@
 import Image from "next/image";
 import HeroLogo from "../_assets/icons/HeroLogo";
 import { ChallengeCard } from "./_components/ChallengeCard";
+import { ConnectAndRegisterButton } from "./_components/ConnectAndRegisterButton";
 import {
   BoyIcon,
   ComputerIcon,
@@ -13,7 +14,6 @@ import {
   TargetIcon,
   ToolsIcon,
 } from "./_components/Icons";
-import { StartChallengesButton } from "./_components/StartChallengesButton";
 import { getAllChallenges } from "~~/services/database/repositories/challenges";
 import { getMetadata } from "~~/utils/scaffold-eth/getMetadata";
 
@@ -172,11 +172,6 @@ const StartLandingPage = async () => {
           </div>
         </div>
 
-        <div className="mt-14 lg:mt-12 relative h-[130px]">
-          <div className="absolute inset-0 bg-[url('/assets/start/separation-trees.svg')] bg-repeat-x bg-[length:auto_130px] z-10" />
-          <div className="bg-base-200 absolute inset-0 top-auto w-full h-24" />
-        </div>
-
         {/* CHALLENGES OVERVIEW SECTION */}
         <div className="bg-base-100 py-12 lg:py-24">
           <div className="max-w-6xl mx-auto px-6">
@@ -196,6 +191,11 @@ const StartLandingPage = async () => {
           </div>
         </div>
 
+        <div className="mt-14 lg:mt-12 relative h-[130px]">
+          <div className="absolute inset-0 bg-[url('/assets/start/separation-trees.svg')] bg-repeat-x bg-[length:auto_130px] z-10" />
+          <div className="bg-base-200 absolute inset-0 top-auto w-full h-24" />
+        </div>
+
         {/* CALL-TO-ACTION SECTION */}
         <div className="bg-base-200 py-12 lg:py-24">
           <div className="max-w-4xl mx-auto px-6 text-lg lg:pb-12">
@@ -210,14 +210,14 @@ const StartLandingPage = async () => {
               width={650}
               height={400}
             />
-            <p className="mb-2 text-center font-medium">Start with Challenge #0: Simple NFT Example</p>
-            <p className="mt-2 text-center">You'll deploy your first smart contract and mint an NFT on a testnet.</p>
-            <div className="flex justify-center mt-8 mb-8 lg:mb-0 lg:mt-12">
-              <StartChallengesButton />
-            </div>
-            <p className="mt-4 text-center text-sm leading-tight">
-              Registration is free and only requires signing an offchain message with your wallet.
+            <h3 className="mb-2 text-center font-medium text-xl">Start learning today!</h3>
+            <p className="mt-2 text-center">
+              Connect your wallet and register to start your journey. In the first challenge, you'll deploy your first
+              smart contract and mint an NFT on a testnet.
             </p>
+            <div className="flex justify-center">
+              <ConnectAndRegisterButton />
+            </div>
           </div>
         </div>
       </div>

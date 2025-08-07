@@ -14,7 +14,7 @@ You can find the repository containing the challenges [here](https://github.com/
 
 Before you begin, you need to install the following tools:
 
-- [Node (>= v18.18)](https://nodejs.org/en/download/)
+- [Node (>= v22.18.0)](https://nodejs.org/en/download/)
 - Yarn ([v1](https://classic.yarnpkg.com/en/docs/install/) or [v2+](https://yarnpkg.com/getting-started/install))
 - [Git](https://git-scm.com/downloads)
 - [Docker Engine](https://docs.docker.com/engine/install/)
