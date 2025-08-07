@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { recoverTypedDataAddress } from "viem";
-import { validateSafeSignature } from "~~/utils/safe-signature";
 import { getBuildByBuildId, updateBuildGrantFlag } from "~~/services/database/repositories/builds";
 import { isUserAdmin } from "~~/services/database/repositories/users";
+import { validateSafeSignature } from "~~/utils/safe-signature";
 
 type GrantCompletedPayload = {
   grantId: string;
