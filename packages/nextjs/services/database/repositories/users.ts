@@ -262,7 +262,6 @@ export async function getUserPoints(userAddress: string) {
       userChallenges: {
         where: eq(userChallenges.reviewAction, ReviewAction.ACCEPTED),
       },
-      batch: true,
       buildBuilders: true,
     },
   });
