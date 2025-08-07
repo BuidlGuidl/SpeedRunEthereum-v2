@@ -6,6 +6,7 @@ import { UPDATE_BATCH_MODAL_ID, UpdateBatchModal } from "./_components/UpdateBat
 import { useQuery } from "@tanstack/react-query";
 import { ColumnDef } from "@tanstack/react-table";
 import { useDebounceValue } from "usehooks-ts";
+import * as chains from "viem/chains";
 import EditIcon from "~~/app/_assets/icons/EditIcon";
 import EthereumIcon from "~~/app/_assets/icons/EthereumIcon";
 import GithubIcon from "~~/app/_assets/icons/GithubIcon";
@@ -18,6 +19,7 @@ import { InputBase } from "~~/components/scaffold-eth";
 import { fetchSortedBatches } from "~~/services/api/batches";
 import { BatchStatus } from "~~/services/database/config/types";
 import { BatchWithCounts } from "~~/services/database/repositories/batches";
+import { getBlockExplorerAddressLink } from "~~/utils/scaffold-eth/networks";
 
 export default function BatchesPage() {
   const [filter, setFilter] = useState("");
@@ -110,13 +112,14 @@ export default function BatchesPage() {
         cell: info => {
           const batch = info.row.original;
 
-          const { telegramLink, contractAddress, bgSubdomain } = batch;
+          const { telegramLink, contractAddress, bgSubdomain, network } = batch;
+          const chainForNetwork = chains[network as keyof typeof chains];
 
           return (
             <div className="flex w-full items-center justify-center gap-3">
               {contractAddress && (
                 <a
-                  href={`https://optimistic.etherscan.io/address/${contractAddress}`}
+                  href={getBlockExplorerAddressLink(chainForNetwork, contractAddress)}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="link"
