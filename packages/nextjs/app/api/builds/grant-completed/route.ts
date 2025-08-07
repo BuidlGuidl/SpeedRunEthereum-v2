@@ -37,14 +37,13 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
     }
 
-    // 1. Reconstruct EIP-712 domain
     const domain = {
       name: "BuidlGuidl Grants",
       version: "1",
       chainId: Number(txChainId),
     };
 
-    // 2. Reconstruct EIP-712 types
+    // EIP-712 must match signed struct exactly; include note only when present
     const types = note !== undefined
       ? {
           Message: [
@@ -66,15 +65,12 @@ export async function POST(request: NextRequest) {
           ],
         };
 
-    // 3. Reconstruct the message
     const message = note !== undefined
       ? { grantId, action, txHash, txChainId, link, note }
       : { grantId, action, txHash, txChainId, link };
 
-    // 4. Verify the signature (Safe or EOA)
     let isValidSignature = false;
     if (isSafeSignature) {
-      // Safe expects the full typedData structure
       const typedData = {
         domain,
         types,
@@ -101,13 +97,12 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Signature verification failed" }, { status: 401 });
     }
 
-    // 5. Check admin role
+    // Only allow platform admins to toggle grant flag
     const isAdmin = await isUserAdmin(signer);
     if (!isAdmin) {
       return NextResponse.json({ error: "Forbidden: signer is not an admin" }, { status: 403 });
     }
 
-    // 6. Extract build ID and update
     const buildId = extractBuildIdFromLink(link);
     if (!buildId) {
       return NextResponse.json({ error: "Invalid build link format" }, { status: 400 });
