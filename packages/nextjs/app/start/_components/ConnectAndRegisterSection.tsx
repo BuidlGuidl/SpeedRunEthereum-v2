@@ -54,9 +54,9 @@ export const ConnectAndRegisterSection = () => {
 
   return (
     <div className="text-center">
-      <h3 className="mb-2 text-center font-medium text-xl">Start learning today!</h3>
       {!isWalletConnected ? (
         <>
+          <h3 className="mb-2 text-center font-medium text-xl">Start learning today!</h3>
           <p className="mt-2 text-center">
             Connect your wallet and register to start your journey. In the first challenge, you&apos;ll deploy your
             first smart contract and mint an NFT on a testnet.
@@ -80,6 +80,7 @@ export const ConnectAndRegisterSection = () => {
         </>
       ) : (
         <>
+          <h3 className="mb-2 text-center font-medium text-xl">Almost there!</h3>
           <p className="mt-2 text-center">
             You&apos;re almost there! Register as a builder to start your journey. In the first challenge, you&apos;ll
             deploy your first smart contract and mint an NFT on a testnet.
