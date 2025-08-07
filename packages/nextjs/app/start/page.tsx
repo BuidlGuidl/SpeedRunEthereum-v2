@@ -76,7 +76,6 @@ const StartLandingPage = async () => {
 
       <div className="w-full h-[18px] bg-[url('/assets/start/color-border.svg')] dark:bg-[url('/assets/start/color-border-dark.svg')] bg-repeat-x"></div>
 
-      {/* WHY BUILD ON ETHEREUM SECTION */}
       <div className="pt-12 bg-base-300 lg:pt-24">
         <div className="max-w-4xl mx-auto px-6 text-lg lg:pb-12">
           <div className="mb-12 flex flex-col items-center gap-4 lg:flex-row lg:gap-4 lg:justify-center">
@@ -115,7 +114,6 @@ const StartLandingPage = async () => {
             <GirlIcon className="hidden absolute -left-14 bottom-4 lg:block" />
           </div>
         </div>
-        {/* PLATFORM HEADER SEPARATOR */}
         <div className="lg:mt-12 mt-8 relative h-[130px]">
           <div className="absolute inset-0 bg-[url('/assets/header_platform.svg')] bg-repeat-x bg-[length:auto_130px] z-10" />
           <div className="bg-base-100 absolute inset-0 top-auto w-full h-5" />
@@ -173,55 +171,54 @@ const StartLandingPage = async () => {
             </p>
           </div>
         </div>
-      </div>
 
-      {/* CHALLENGES OVERVIEW SECTION */}
-      <div className="bg-base-100 py-12 lg:py-24">
-        <div className="max-w-6xl mx-auto px-6">
-          <div className="mb-12 flex flex-col items-center gap-4 lg:flex-row lg:gap-4 lg:justify-center">
-            <ComputerIcon />
-            <h2 className="m-0 text-center text-2xl font-medium md:text-4xl">Challenges Overview</h2>
-          </div>
+        <div className="mt-14 lg:mt-12 relative h-[130px]">
+          <div className="absolute inset-0 bg-[url('/assets/start/separation-trees.svg')] bg-repeat-x bg-[length:auto_130px] z-10" />
+          <div className="bg-base-200 absolute inset-0 top-auto w-full h-24" />
+        </div>
 
-          <div className="grid grid-cols-1 mb-8 lg:pt-6 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {challenges
-              .filter(challenge => !challenge.disabled)
-              .sort((a, b) => a.sortOrder - b.sortOrder)
-              .map(challenge => (
-                <ChallengeCard key={challenge.id} challenge={challenge} />
-              ))}
+        {/* CHALLENGES OVERVIEW SECTION */}
+        <div className="bg-base-100 py-12 lg:py-24">
+          <div className="max-w-6xl mx-auto px-6">
+            <div className="mb-12 flex flex-col items-center gap-4 lg:flex-row lg:gap-4 lg:justify-center">
+              <ComputerIcon />
+              <h2 className="m-0 text-center text-2xl font-medium md:text-4xl">Challenges Overview</h2>
+            </div>
+
+            <div className="grid grid-cols-1 mb-8 lg:pt-6 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {challenges
+                .filter(challenge => !challenge.disabled)
+                .sort((a, b) => a.sortOrder - b.sortOrder)
+                .map(challenge => (
+                  <ChallengeCard key={challenge.id} challenge={challenge} />
+                ))}
+            </div>
           </div>
         </div>
-      </div>
 
-      {/* SEPARATION TREES SECTION */}
-      <div className="mt-14 lg:mt-12 relative h-[130px]">
-        <div className="absolute inset-0 bg-[url('/assets/start/separation-trees.svg')] bg-repeat-x bg-[length:auto_130px] z-10" />
-        <div className="bg-base-200 absolute inset-0 top-auto w-full h-24" />
-      </div>
-
-      {/* CALL-TO-ACTION SECTION */}
-      <div className="bg-base-200 py-12 lg:py-24">
-        <div className="max-w-4xl mx-auto px-6 text-lg lg:pb-12">
-          <div className="mb-12 flex flex-col items-center gap-4 lg:flex-row lg:gap-4 lg:justify-center">
-            <SpaceshipIcon />
-            <h2 className="m-0 text-center text-2xl font-medium md:text-4xl">Ready?</h2>
+        {/* CALL-TO-ACTION SECTION */}
+        <div className="bg-base-200 py-12 lg:py-24">
+          <div className="max-w-4xl mx-auto px-6 text-lg lg:pb-12">
+            <div className="mb-12 flex flex-col items-center gap-4 lg:flex-row lg:gap-4 lg:justify-center">
+              <SpaceshipIcon />
+              <h2 className="m-0 text-center text-2xl font-medium md:text-4xl">Ready?</h2>
+            </div>
+            <Image
+              src="/assets/challenges/simpleNFT.svg"
+              alt="NFT"
+              className="my-8 mx-auto md:max-w-md"
+              width={650}
+              height={400}
+            />
+            <p className="mb-2 text-center font-medium">Start with Challenge #0: Simple NFT Example</p>
+            <p className="mt-2 text-center">You'll deploy your first smart contract and mint an NFT on a testnet.</p>
+            <div className="flex justify-center mt-8 mb-8 lg:mb-0 lg:mt-12">
+              <StartChallengesButton />
+            </div>
+            <p className="mt-4 text-center text-sm leading-tight">
+              Registration is free and only requires signing an offchain message with your wallet.
+            </p>
           </div>
-          <Image
-            src="/assets/challenges/simpleNFT.svg"
-            alt="NFT"
-            className="my-8 mx-auto md:max-w-md"
-            width={650}
-            height={400}
-          />
-          <p className="mb-2 text-center font-medium">Start with Challenge #0: Simple NFT Example</p>
-          <p className="mt-2 text-center">You'll deploy your first smart contract and mint an NFT on a testnet.</p>
-          <div className="flex justify-center mt-8 mb-8 lg:mb-0 lg:mt-12">
-            <StartChallengesButton />
-          </div>
-          <p className="mt-4 text-center text-sm leading-tight">
-            Registration is free and only requires signing an offchain message with your wallet.
-          </p>
         </div>
       </div>
     </div>
