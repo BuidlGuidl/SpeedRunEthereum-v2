@@ -4,6 +4,18 @@ import { isUserAdmin } from "~~/services/database/repositories/users";
 import { recoverTypedDataAddress } from "viem";
 import { validateSafeSignature } from "~~/utils/safe-signature";
 
+type GrantCompletedPayload = {
+  grantId: string;
+  action: string;
+  txHash: string;
+  txChainId: string | number;
+  link: string;
+  note?: string;
+  signature: `0x${string}`;
+  signer: string;
+  isSafeSignature: boolean;
+};
+
 function extractBuildIdFromLink(link: string): string | null {
   link = link.trim().replace(/^@/, "");
   const match = link.match(/builds\/([\w-]+)/);
@@ -11,14 +23,16 @@ function extractBuildIdFromLink(link: string): string | null {
 }
 
 export async function POST(request: NextRequest) {
-  let grantId, action, txHash, txChainId, link, note, signature, signer, isSafeSignature;
+  let payload: GrantCompletedPayload;
   try {
-    ({ grantId, action, txHash, txChainId, link, note, signature, signer, isSafeSignature } = await request.json());
+    payload = (await request.json()) as GrantCompletedPayload;
   } catch (e) {
     return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
   }
 
   try {
+    const { grantId, action, txHash, txChainId, link, note, signature, signer, isSafeSignature } = payload;
+
     if (!grantId || !action || !txHash || !txChainId || !link || !signature || !signer) {
       return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
     }
@@ -31,29 +45,26 @@ export async function POST(request: NextRequest) {
     };
 
     // 2. Reconstruct EIP-712 types
-    let types;
-    if (note !== undefined) {
-      types = {
-        Message: [
-          { name: "grantId", type: "string" },
-          { name: "action", type: "string" },
-          { name: "txHash", type: "string" },
-          { name: "txChainId", type: "string" },
-          { name: "link", type: "string" },
-          { name: "note", type: "string" },
-        ],
-      };
-    } else {
-      types = {
-        Message: [
-          { name: "grantId", type: "string" },
-          { name: "action", type: "string" },
-          { name: "txHash", type: "string" },
-          { name: "txChainId", type: "string" },
-          { name: "link", type: "string" },
-        ],
-      };
-    }
+    const types = note !== undefined
+      ? {
+          Message: [
+            { name: "grantId", type: "string" },
+            { name: "action", type: "string" },
+            { name: "txHash", type: "string" },
+            { name: "txChainId", type: "string" },
+            { name: "link", type: "string" },
+            { name: "note", type: "string" },
+          ],
+        }
+      : {
+          Message: [
+            { name: "grantId", type: "string" },
+            { name: "action", type: "string" },
+            { name: "txHash", type: "string" },
+            { name: "txChainId", type: "string" },
+            { name: "link", type: "string" },
+          ],
+        };
 
     // 3. Reconstruct the message
     const message = note !== undefined
@@ -73,7 +84,7 @@ export async function POST(request: NextRequest) {
       isValidSignature = await validateSafeSignature({
         chainId: Number(txChainId),
         safeAddress: signer,
-        typedData: typedData as any,
+        typedData,
         signature,
       });
     } else {
@@ -93,7 +104,7 @@ export async function POST(request: NextRequest) {
     // 5. Check admin role
     const isAdmin = await isUserAdmin(signer);
     if (!isAdmin) {
-      return NextResponse.json({ error: "Unauthorized admin" }, { status: 401 });
+      return NextResponse.json({ error: "Forbidden: signer is not an admin" }, { status: 403 });
     }
 
     // 6. Extract build ID and update
