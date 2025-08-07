@@ -11,19 +11,15 @@ function extractBuildIdFromLink(link: string): string | null {
 }
 
 export async function POST(request: NextRequest) {
-  const raw = await request.text();
-  console.log("RAW BODY:", raw);
   let grantId, action, txHash, txChainId, link, note, signature, signer, isSafeSignature;
   try {
-    ({ grantId, action, txHash, txChainId, link, note, signature, signer, isSafeSignature } = JSON.parse(raw));
+    ({ grantId, action, txHash, txChainId, link, note, signature, signer, isSafeSignature } = await request.json());
   } catch (e) {
-    console.error("JSON parse error:", e, "RAW BODY:", raw);
     return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
   }
 
   try {
     if (!grantId || !action || !txHash || !txChainId || !link || !signature || !signer) {
-      console.log("Step: missing required fields");
       return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
     }
 
@@ -88,44 +84,31 @@ export async function POST(request: NextRequest) {
         message,
         signature,
       });
-      console.log("Recovered address:", recovered);
       isValidSignature = recovered.toLowerCase() === signer.toLowerCase();
     }
     if (!isValidSignature) {
-      console.log("Step: signature mismatch");
       return NextResponse.json({ error: "Signature verification failed" }, { status: 401 });
     }
 
     // 5. Check admin role
-    console.log("Step: admin check");
     const isAdmin = await isUserAdmin(signer);
-    console.log("isAdmin:", isAdmin);
     if (!isAdmin) {
       return NextResponse.json({ error: "Unauthorized admin" }, { status: 401 });
     }
 
     // 6. Extract build ID and update
-    console.log("Step: buildId extraction");
     const buildId = extractBuildIdFromLink(link);
-    console.log("Extracted buildId:", buildId);
     if (!buildId) {
       return NextResponse.json({ error: "Invalid build link format" }, { status: 400 });
     }
-
-    console.log("Step: DB lookup");
     const build = await getBuildByBuildId(buildId);
-    console.log("DB build:", build);
     if (!build) {
       return NextResponse.json({ error: "Build not found" }, { status: 404 });
     }
-
-    console.log("Step: DB update");
     await updateBuildGrantFlag(buildId, true);
-    console.log("Step: success");
 
     return NextResponse.json({ success: true });
   } catch (error: any) {
-    console.error("API ERROR:", error, error?.stack);
     return NextResponse.json({ error: error.message || "Internal Server Error" }, { status: 500 });
   }
 }
