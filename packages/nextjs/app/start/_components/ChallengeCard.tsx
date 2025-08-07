@@ -40,14 +40,14 @@ export const ChallengeCard = ({ challenge }: ChallengeCardProps) => {
         )}
         {isComingSoon && (
           <div className="absolute top-2 right-2">
-            <span className="inline-flex items-center text-sm md:text-base text-base-content bg-[#8CD9DA] px-3 md:px-4 py-1.5 rounded-full">
+            <span className="inline-flex items-center text-sm md:text-base text-teal-950 bg-[#8CD9DA] px-3 md:px-4 py-1.5 rounded-full">
               Coming Soon
             </span>
           </div>
         )}
         {isBuilderSuggestion && (
           <div className="absolute top-2 right-2">
-            <span className="inline-flex items-center text-sm md:text-base text-base-content bg-[#FFBB54] text-base-content px-3 md:px-4 py-1.5 rounded-full">
+            <span className="inline-flex items-center text-sm md:text-base text-teal-950 bg-[#FFBB54] px-3 md:px-4 py-1.5 rounded-full">
               Build Idea
             </span>
           </div>
