@@ -20,12 +20,13 @@ import {
 import { getShortAddressAndEns } from "~~/utils/short-address-and-ens";
 
 type Props = {
-  params: {
+  params: Promise<{
     address: string;
-  };
+  }>;
 };
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
+export async function generateMetadata(props: Props): Promise<Metadata> {
+  const params = await props.params;
   const address = params.address;
 
   if (!isAddress(address)) {
@@ -66,7 +67,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-export default async function BuilderPage({ params }: { params: { address: string } }) {
+export default async function BuilderPage(props: { params: Promise<{ address: string }> }) {
+  const params = await props.params;
   const { address } = params;
 
   const challenges = await getAllChallenges();

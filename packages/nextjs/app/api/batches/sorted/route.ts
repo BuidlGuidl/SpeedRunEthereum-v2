@@ -2,8 +2,6 @@ import { NextRequest, NextResponse } from "next/server";
 import { getSortedBatches } from "~~/services/database/repositories/batches";
 import { isAdminSession } from "~~/utils/auth";
 
-export const dynamic = "force-dynamic";
-
 export async function GET(request: NextRequest) {
   try {
     const isAdmin = await isAdminSession();

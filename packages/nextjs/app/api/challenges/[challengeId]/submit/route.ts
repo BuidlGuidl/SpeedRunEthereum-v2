@@ -18,7 +18,8 @@ export type ChallengeSubmitPayload = {
   signature: `0x${string}`;
 };
 
-export async function POST(req: NextRequest, { params }: { params: { challengeId: ChallengeId } }) {
+export async function POST(req: NextRequest, props: { params: Promise<{ challengeId: ChallengeId }> }) {
+  const params = await props.params;
   try {
     const challengeId = params.challengeId;
     const { userAddress, frontendUrl, contractUrl, signature } = (await req.json()) as ChallengeSubmitPayload;
@@ -70,9 +71,18 @@ export async function POST(req: NextRequest, { params }: { params: { challengeId
       (async () => {
         try {
           const referrer = user?.referrer || undefined;
+          const originalUtmParams = user?.originalUtmParams;
           await trackPlausibleEvent(
             PlausibleEvent.CHALLENGE_SUBMISSION,
-            { challengeId, originalReferrer: referrer },
+            {
+              challengeId,
+              originalReferrer: referrer,
+              originalUtmSource: originalUtmParams?.utm_source,
+              originalUtmMedium: originalUtmParams?.utm_medium,
+              originalUtmCampaign: originalUtmParams?.utm_campaign,
+              originalUtmTerm: originalUtmParams?.utm_term,
+              originalUtmContent: originalUtmParams?.utm_content,
+            },
             req,
           );
 
