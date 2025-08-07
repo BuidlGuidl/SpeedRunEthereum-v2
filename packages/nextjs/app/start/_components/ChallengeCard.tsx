@@ -14,10 +14,19 @@ export const ChallengeCard = ({ challenge }: ChallengeCardProps) => {
 
   const firstSentence = challenge.description.split(".")[0] + ".";
   const isComingSoon = challenge.id === ChallengeId.DEPLOY_TO_L2;
+  const isBuilderSuggestion = challenge.id === ChallengeId.MULTISIG || challenge.id === ChallengeId.SVG_NFT;
 
   const cardContent = (
-    <div className="bg-base-100 rounded-xl shadow-md overflow-hidden transition hover:shadow-lg border-2 border-base-300 max-w-xs mx-auto flex flex-col">
-      <div className="w-full h-24 md:h-40 lg:h-48 flex items-center justify-center bg-base-200 dark:bg-teal-800 relative">
+    <div
+      className={`bg-base-100 rounded-xl shadow-md overflow-hidden transition hover:shadow-lg border-2 max-w-xs mx-auto flex flex-col ${
+        isBuilderSuggestion ? "border-[#FFCB7E]" : "border-base-300"
+      }`}
+    >
+      <div
+        className={`w-full h-24 md:h-40 lg:h-48 flex items-center justify-center relative ${
+          isBuilderSuggestion ? "bg-[#FFE9C9] dark:bg-[#FFE9C9]" : "bg-base-200 dark:bg-teal-800"
+        }`}
+      >
         {challenge.previewImage ? (
           <Image
             src={challenge.previewImage}
@@ -31,8 +40,15 @@ export const ChallengeCard = ({ challenge }: ChallengeCardProps) => {
         )}
         {isComingSoon && (
           <div className="absolute top-2 right-2">
-            <span className="inline-flex items-center text-base text-base-content bg-base-300 px-4 py-1.5 rounded-full">
+            <span className="inline-flex items-center text-sm md:text-base text-base-content bg-[#8CD9DA] px-3 md:px-4 py-1.5 rounded-full">
               Coming Soon
+            </span>
+          </div>
+        )}
+        {isBuilderSuggestion && (
+          <div className="absolute top-2 right-2">
+            <span className="inline-flex items-center text-sm md:text-base text-base-content bg-[#FFBB54] text-base-content px-3 md:px-4 py-1.5 rounded-full">
+              Build Idea
             </span>
           </div>
         )}
