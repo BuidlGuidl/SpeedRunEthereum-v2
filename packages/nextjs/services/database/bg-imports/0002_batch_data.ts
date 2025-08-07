@@ -48,7 +48,8 @@ async function importData() {
         contractAddress: batch.contractAddress,
         telegramLink: batch.telegramLink,
         bgSubdomain: `batch${batch.name}`,
-        network: batch.network as BatchNetwork,
+        // Not present in BG data, so we use Optimism as default
+        network: BatchNetwork.OPTIMISM,
       };
 
       let createdBatch;

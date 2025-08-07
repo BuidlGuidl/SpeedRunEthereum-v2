@@ -7,7 +7,6 @@ export type BgBatch = {
   contractAddress: string;
   totalParticipants: number;
   graduates: number;
-  network: string;
 };
 
 export type BgBatchUser = {
