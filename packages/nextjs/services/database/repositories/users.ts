@@ -4,6 +4,7 @@ import { InferInsertModel, and, eq, ilike, inArray, isNotNull, or, sql } from "d
 import { db } from "~~/services/database/config/postgresClient";
 import { lower, userChallenges, users } from "~~/services/database/config/schema";
 import { BatchUserStatus } from "~~/services/database/config/types";
+import { BATCH_POINTS, BUILD_POINTS, CHALLENGE_POINTS } from "~~/utils/buidl-points";
 
 type PickSocials<T> = {
   [K in keyof T as K extends `social${string}` ? K : never]?: T[K] extends string | null ? string : never;
@@ -248,10 +249,6 @@ export async function filterValidUserAddresses(addresses: string[]): Promise<str
     .where(inArray(users.userAddress, addresses));
   return rows.map(row => row.userAddress);
 }
-
-export const CHALLENGE_POINTS = 10; // Points per accepted challenge
-export const BATCH_POINTS = 20; // Points for being in a batch
-export const BUILD_POINTS = 5; // Points for _first_ build only
 
 export async function getUserPoints(userAddress: string) {
   const lowercaseAddress = userAddress.toLowerCase();

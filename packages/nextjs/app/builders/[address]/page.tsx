@@ -11,13 +11,8 @@ import { getBatchById } from "~~/services/database/repositories/batches";
 import { getBuildsByUserAddress } from "~~/services/database/repositories/builds";
 import { getAllChallenges } from "~~/services/database/repositories/challenges";
 import { getLatestSubmissionPerChallengeByUser } from "~~/services/database/repositories/userChallenges";
-import {
-  BATCH_POINTS,
-  BUILD_POINTS,
-  CHALLENGE_POINTS,
-  getUserByAddress,
-  getUserPoints,
-} from "~~/services/database/repositories/users";
+import { getUserByAddress, getUserPoints } from "~~/services/database/repositories/users";
+import { getTotalPoints } from "~~/utils/buidl-points";
 import { getShortAddressAndEns } from "~~/utils/short-address-and-ens";
 
 type Props = {
@@ -93,7 +88,7 @@ export default async function BuilderPage(props: { params: Promise<{ address: st
   // Filter out disabled and non-autograding challenges
   const filteredChallenges = challenges.filter(challenge => challenge.autograding === true && !challenge.disabled);
 
-  const totalPoints = filteredChallenges.length * CHALLENGE_POINTS + BATCH_POINTS + BUILD_POINTS;
+  const totalPoints = getTotalPoints(filteredChallenges.length);
 
   return (
     <>
