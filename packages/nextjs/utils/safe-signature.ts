@@ -1,5 +1,5 @@
 import Safe, { hashSafeMessage } from "@safe-global/protocol-kit";
-import { EIP712TypedData } from "@safe-global/safe-core-sdk-types";
+import { EIP712TypedData } from "@safe-global/types-kit";
 import * as chains from "viem/chains";
 import scaffoldConfig from "~~/scaffold.config";
 
