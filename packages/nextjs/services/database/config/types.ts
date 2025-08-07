@@ -58,6 +58,15 @@ export enum BuildCategory {
   PREDICTION_MARKETS = "Prediction Markets",
 }
 
+export type UTMParams = {
+  utm_source?: string;
+  utm_medium?: string;
+  utm_campaign?: string;
+  utm_term?: string;
+  utm_content?: string;
+  [key: string]: string | undefined;
+};
+
 export enum BatchNetwork {
   ARBITRUM = "arbitrum",
   OPTIMISM = "optimism",

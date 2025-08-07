@@ -1,4 +1,13 @@
-import { BatchNetwork, BatchStatus, BatchUserStatus, BuildCategory, BuildType, ReviewAction, UserRole } from "./types";
+import {
+  BatchNetwork,
+  BatchStatus,
+  BatchUserStatus,
+  BuildCategory,
+  BuildType,
+  ReviewAction,
+  UTMParams,
+  UserRole,
+} from "./types";
 import { SQL, relations, sql } from "drizzle-orm";
 import {
   AnyPgColumn,
@@ -49,6 +58,7 @@ export const users = pgTable(
     batchId: integer().references(() => batches.id),
     batchStatus: batchUserStatusEnum(),
     referrer: varchar({ length: 255 }),
+    originalUtmParams: jsonb("original_utm_params").$type<UTMParams>(),
   },
   table => [uniqueIndex("idUniqueIndex").on(lower(table.userAddress))],
 );

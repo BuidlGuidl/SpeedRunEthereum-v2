@@ -1,5 +1,5 @@
 {
-  "id": "4795c14b-af22-4cf3-9469-f1f47513946f",
+  "id": "ea452c21-b46e-4273-86b1-22e5449eb44c",
   "prevId": "b138afca-7a57-4c82-9be3-bf5e6c51f6ea",
   "version": "7",
   "dialect": "postgresql",
@@ -47,12 +47,6 @@
         "bg_subdomain": {
           "name": "bg_subdomain",
           "type": "varchar(255)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "network": {
-          "name": "network",
-          "type": "batch_network",
           "primaryKey": false,
           "notNull": true
         }
@@ -656,6 +650,12 @@
           "type": "varchar(255)",
           "primaryKey": false,
           "notNull": false
+        },
+        "original_utm_params": {
+          "name": "original_utm_params",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false
         }
       },
       "indexes": {
@@ -698,14 +698,6 @@
     }
   },
   "enums": {
-    "public.batch_network": {
-      "name": "batch_network",
-      "schema": "public",
-      "values": [
-        "arbitrum",
-        "optimism"
-      ]
-    },
     "public.batch_status_enum": {
       "name": "batch_status_enum",
       "schema": "public",
