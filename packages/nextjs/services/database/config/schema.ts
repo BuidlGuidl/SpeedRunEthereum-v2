@@ -120,6 +120,7 @@ export const builds = pgTable(
     imageUrl: varchar({ length: 255 }),
     githubUrl: varchar({ length: 255 }),
     submittedTimestamp: timestamp().notNull().defaultNow(),
+    bgGrant: boolean().default(false),
   },
   table => [index("build_type_idx").on(table.buildType), index("build_category_idx").on(table.buildCategory)],
 );

@@ -203,6 +203,11 @@ export const getBuildByBuildId = async (buildId: string) => {
   return build;
 };
 
+export const updateBuildGrantFlag = async (buildId: string, bgGrant: boolean) => {
+  const [updated] = await db.update(builds).set({ bgGrant }).where(eq(builds.id, buildId)).returning();
+  return updated;
+};
+
 export const getAllBuilds = async ({
   category,
   type,
