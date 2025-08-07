@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import { GroupedChallenges } from "./_components/GroupedChallenges";
+import { PointsBar } from "./_components/PointsBar";
 import { UserProfileCard } from "./_components/UserProfileCard";
 import { Builds } from "./_components/builds/Builds";
 import { Metadata } from "next";
@@ -100,7 +101,8 @@ export default async function BuilderPage(props: { params: Promise<{ address: st
       <div className="max-w-[1440px] w-full mx-auto px-4 py-8">
         <div className="grid grid-cols-1 xl:grid-cols-4 gap-6">
           <div>
-            <UserProfileCard user={user} batch={userBatch} points={points} totalPoints={totalPoints} />
+            <UserProfileCard user={user} batch={userBatch} />
+            <PointsBar points={points} totalPoints={totalPoints} />
           </div>
           <div className="xl:col-span-3">
             <GroupedChallenges
