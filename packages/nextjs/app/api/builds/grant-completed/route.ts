@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getBuildByBuildId, updateBuildGrantFlag } from "~~/services/database/repositories/builds";
-import { isUserAdmin } from "~~/services/database/repositories/users";
 import { recoverTypedDataAddress } from "viem";
 import { validateSafeSignature } from "~~/utils/safe-signature";
+import { getBuildByBuildId, updateBuildGrantFlag } from "~~/services/database/repositories/builds";
+import { isUserAdmin } from "~~/services/database/repositories/users";
 
 type GrantCompletedPayload = {
   grantId: string;
@@ -44,30 +44,32 @@ export async function POST(request: NextRequest) {
     };
 
     // EIP-712 must match signed struct exactly; include note only when present
-    const types = note !== undefined
-      ? {
-          Message: [
-            { name: "grantId", type: "string" },
-            { name: "action", type: "string" },
-            { name: "txHash", type: "string" },
-            { name: "txChainId", type: "string" },
-            { name: "link", type: "string" },
-            { name: "note", type: "string" },
-          ],
-        }
-      : {
-          Message: [
-            { name: "grantId", type: "string" },
-            { name: "action", type: "string" },
-            { name: "txHash", type: "string" },
-            { name: "txChainId", type: "string" },
-            { name: "link", type: "string" },
-          ],
-        };
+    const types =
+      note !== undefined
+        ? {
+            Message: [
+              { name: "grantId", type: "string" },
+              { name: "action", type: "string" },
+              { name: "txHash", type: "string" },
+              { name: "txChainId", type: "string" },
+              { name: "link", type: "string" },
+              { name: "note", type: "string" },
+            ],
+          }
+        : {
+            Message: [
+              { name: "grantId", type: "string" },
+              { name: "action", type: "string" },
+              { name: "txHash", type: "string" },
+              { name: "txChainId", type: "string" },
+              { name: "link", type: "string" },
+            ],
+          };
 
-    const message = note !== undefined
-      ? { grantId, action, txHash, txChainId, link, note }
-      : { grantId, action, txHash, txChainId, link };
+    const message =
+      note !== undefined
+        ? { grantId, action, txHash, txChainId, link, note }
+        : { grantId, action, txHash, txChainId, link };
 
     let isValidSignature = false;
     if (isSafeSignature) {
