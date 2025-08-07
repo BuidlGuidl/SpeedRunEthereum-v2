@@ -18,6 +18,7 @@ export const useCreateBatch = ({ onSuccess }: { onSuccess?: () => void }) => {
       const updatedBatch = {
         ...batch,
         contractAddress: batch.contractAddress || "",
+        network: batch.network,
       };
 
       const message = {

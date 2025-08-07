@@ -50,13 +50,24 @@ export async function fetchCreateBatch({
   contractAddress,
   telegramLink,
   bgSubdomain,
+  network,
 }: CreateBatchPayload) {
   const response = await fetch("/api/batches/create", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ address, signature, name, startDate, status, contractAddress, telegramLink, bgSubdomain }),
+    body: JSON.stringify({
+      address,
+      signature,
+      name,
+      startDate,
+      status,
+      contractAddress,
+      telegramLink,
+      bgSubdomain,
+      network,
+    }),
   });
 
   const data = await response.json();
@@ -70,14 +81,34 @@ export async function fetchCreateBatch({
 
 export async function fetchUpdateBatch(
   batchId: string,
-  { address, signature, name, startDate, status, contractAddress, telegramLink, bgSubdomain }: UpdateBatchPayload,
+  {
+    address,
+    signature,
+    name,
+    startDate,
+    status,
+    contractAddress,
+    telegramLink,
+    bgSubdomain,
+    network,
+  }: UpdateBatchPayload,
 ) {
   const response = await fetch(`/api/batches/${batchId}/update`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ address, signature, name, startDate, status, contractAddress, telegramLink, bgSubdomain }),
+    body: JSON.stringify({
+      address,
+      signature,
+      name,
+      startDate,
+      status,
+      contractAddress,
+      telegramLink,
+      bgSubdomain,
+      network,
+    }),
   });
 
   const data = await response.json();

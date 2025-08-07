@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { BatchStatus } from "~~/services/database/config/types";
+import { BatchNetwork, BatchStatus } from "~~/services/database/config/types";
 import { createBatch, getBatchByBgSubdomain } from "~~/services/database/repositories/batches";
 import { isUserAdmin } from "~~/services/database/repositories/users";
 import { isValidEIP712CreateBatchSignature } from "~~/services/eip712/batches";
@@ -13,11 +13,12 @@ export type CreateBatchPayload = {
   contractAddress?: string;
   telegramLink: string;
   bgSubdomain: string;
+  network: BatchNetwork;
 };
 
 export async function POST(req: Request) {
   try {
-    const { address, signature, name, startDate, status, contractAddress, telegramLink, bgSubdomain } =
+    const { address, signature, name, startDate, status, contractAddress, telegramLink, bgSubdomain, network } =
       (await req.json()) as CreateBatchPayload;
 
     if (!address || !signature || !name || !startDate || !status || !telegramLink || !bgSubdomain) {
@@ -44,6 +45,7 @@ export async function POST(req: Request) {
       contractAddress: contractAddress || "",
       telegramLink,
       bgSubdomain,
+      network: network,
     });
 
     if (!isValidSignature) {
@@ -57,6 +59,7 @@ export async function POST(req: Request) {
       contractAddress: contractAddress || null,
       telegramLink,
       bgSubdomain,
+      network,
     });
 
     return NextResponse.json({ batch }, { status: 200 });
