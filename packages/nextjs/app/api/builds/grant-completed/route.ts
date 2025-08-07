@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getBuildByBuildId, updateBuildGrantFlag } from "~~/services/database/repositories/builds";
 import { isUserAdmin } from "~~/services/database/repositories/users";
 import { recoverTypedDataAddress } from "viem";
+import { validateSafeSignature } from "~~/utils/safe-signature";
 
 function extractBuildIdFromLink(link: string): string | null {
   link = link.trim().replace(/^@/, "");
@@ -12,9 +13,9 @@ function extractBuildIdFromLink(link: string): string | null {
 export async function POST(request: NextRequest) {
   const raw = await request.text();
   console.log("RAW BODY:", raw);
-  let grantId, action, txHash, txChainId, link, note, signature, signer;
+  let grantId, action, txHash, txChainId, link, note, signature, signer, isSafeSignature;
   try {
-    ({ grantId, action, txHash, txChainId, link, note, signature, signer } = JSON.parse(raw));
+    ({ grantId, action, txHash, txChainId, link, note, signature, signer, isSafeSignature } = JSON.parse(raw));
   } catch (e) {
     console.error("JSON parse error:", e, "RAW BODY:", raw);
     return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
@@ -63,17 +64,34 @@ export async function POST(request: NextRequest) {
       ? { grantId, action, txHash, txChainId, link, note }
       : { grantId, action, txHash, txChainId, link };
 
-    // 4. Verify the signature
-    console.log("Step: signature validation");
-    const recovered = await recoverTypedDataAddress({
-      domain,
-      types,
-      primaryType: "Message",
-      message,
-      signature,
-    });
-    console.log("Recovered address:", recovered);
-    if (recovered.toLowerCase() !== signer.toLowerCase()) {
+    // 4. Verify the signature (Safe or EOA)
+    let isValidSignature = false;
+    if (isSafeSignature) {
+      // Safe expects the full typedData structure
+      const typedData = {
+        domain,
+        types,
+        primaryType: "Message",
+        message,
+      };
+      isValidSignature = await validateSafeSignature({
+        chainId: Number(txChainId),
+        safeAddress: signer,
+        typedData: typedData as any,
+        signature,
+      });
+    } else {
+      const recovered = await recoverTypedDataAddress({
+        domain,
+        types,
+        primaryType: "Message",
+        message,
+        signature,
+      });
+      console.log("Recovered address:", recovered);
+      isValidSignature = recovered.toLowerCase() === signer.toLowerCase();
+    }
+    if (!isValidSignature) {
       console.log("Step: signature mismatch");
       return NextResponse.json({ error: "Signature verification failed" }, { status: 401 });
     }
