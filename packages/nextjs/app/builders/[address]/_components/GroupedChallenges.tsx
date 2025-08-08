@@ -1,9 +1,12 @@
+"use client";
+
 import { ChallengeDetails } from "./ChallengeDetails";
 import { ChallengeDetailsStatus } from "./ChallengeDetailsStatus";
 import { ChallengeIconComputer, ChallengeIconRocket } from "./ChallengeGroupIcons";
 import { GroupedChallengeTitle } from "./GroupedChallengeTitle";
 import "./groupedChallenges.css";
 import { type Address } from "viem";
+import { useUserChallenges } from "~~/hooks/useUserChallenges";
 import { ChallengeId, ReviewAction } from "~~/services/database/config/types";
 import type { Challenges } from "~~/services/database/repositories/challenges";
 import type { UserChallenges } from "~~/services/database/repositories/userChallenges";
@@ -33,7 +36,7 @@ export type MappedChallenges = Challenges[number] & {
 export function GroupedChallenges({
   address,
   challenges,
-  userChallenges,
+  userChallenges: initialUserChallenges,
   userHasCompletedChallenges,
 }: {
   address: Address;
@@ -41,10 +44,14 @@ export function GroupedChallenges({
   userChallenges: UserChallenges;
   userHasCompletedChallenges: boolean;
 }) {
+  const { data: userChallenges } = useUserChallenges(address, { enableAutoRefresh: true });
+
+  const currentUserChallenges = userChallenges || initialUserChallenges;
+
   // Map challenges with user challenges
   const userMappedChallenges: MappedChallenges[] = challenges
     .map((challenge: Challenges[number]) => {
-      const userChallenge = userChallenges.find(uc => uc.challengeId === challenge.id);
+      const userChallenge = currentUserChallenges.find(uc => uc.challengeId === challenge.id);
 
       if (!userChallenge) return challenge;
 

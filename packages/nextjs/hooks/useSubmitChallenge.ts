@@ -1,5 +1,5 @@
 import { useRouter } from "next/navigation";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAccount, useSignTypedData } from "wagmi";
 import { submitChallenge } from "~~/services/api/challenges";
 import { EIP_712_TYPED_DATA__CHALLENGE_SUBMIT } from "~~/services/eip712/challenge";
@@ -45,6 +45,7 @@ const validateUrls = (params: SubmitChallengeParams) => {
 
 export const useSubmitChallenge = ({ onSuccess }: { onSuccess?: () => void }) => {
   const router = useRouter();
+  const queryClient = useQueryClient();
   const { address } = useAccount();
   const { signTypedDataAsync } = useSignTypedData();
 
@@ -72,6 +73,10 @@ export const useSubmitChallenge = ({ onSuccess }: { onSuccess?: () => void }) =>
     },
     onSuccess: () => {
       notification.success("Challenge submitted successfully!");
+      // Invalidate user challenges query to trigger auto-refresh
+      queryClient.invalidateQueries({
+        queryKey: ["userChallenges", address],
+      });
       router.push(`/builders/${address}`);
       router.refresh();
       onSuccess?.();
