@@ -46,6 +46,7 @@ const defaultBuildFormInputs: BuildFormInputs = {
   imageUrl: "",
   githubUrl: "",
   coBuilders: [],
+  bgGrant: false,
 };
 
 export const BuildFormModal = forwardRef<HTMLDialogElement, BuildFormModalProps>(
