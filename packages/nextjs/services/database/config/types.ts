@@ -66,3 +66,8 @@ export type UTMParams = {
   utm_content?: string;
   [key: string]: string | undefined;
 };
+
+export enum BatchNetwork {
+  ARBITRUM = "arbitrum",
+  OPTIMISM = "optimism",
+}

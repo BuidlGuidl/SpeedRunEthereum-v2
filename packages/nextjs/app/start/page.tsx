@@ -14,6 +14,7 @@ import {
   TargetIcon,
   ToolsIcon,
 } from "./_components/Icons";
+import { ProgressBasedPrompt } from "./_components/ProgressBasedPrompt";
 import { getAllChallenges } from "~~/services/database/repositories/challenges";
 import { getMetadata } from "~~/utils/scaffold-eth/getMetadata";
 
@@ -63,15 +64,7 @@ const StartLandingPage = async () => {
             </p>
           </div>
         </div>
-        {/* SHORTCUT CALL-TO-ACTION */}
-        <div className="mb-8 mx-auto w-80 h-40 bg-[url('/assets/start/window-1.svg')] bg-center bg-no-repeat lg:mb-0 lg:absolute lg:right-[5%] lg:-bottom-20">
-          <div className="pt-14 px-10 text-gray-600 md:pt-[3.25rem]">
-            <p className="mt-0 mb-1 md:text-lg">Already comfortable building on Ethereum?</p>
-            <a href="https://speedrunethereum.com/challenge/simple-nft-example" className="link">
-              Jump straight to Challenge #0
-            </a>
-          </div>
-        </div>
+        <ProgressBasedPrompt />
       </div>
 
       <div className="w-full h-[18px] bg-[url('/assets/start/color-border.svg')] dark:bg-[url('/assets/start/color-border-dark.svg')] bg-repeat-x"></div>

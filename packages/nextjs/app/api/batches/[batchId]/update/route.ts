@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { BatchStatus } from "~~/services/database/config/types";
+import { BatchNetwork, BatchStatus } from "~~/services/database/config/types";
 import { getBatchByBgSubdomain, getBatchById, updateBatch } from "~~/services/database/repositories/batches";
 import { isUserAdmin } from "~~/services/database/repositories/users";
 import { isValidEIP712UpdateBatchSignature } from "~~/services/eip712/batches";
@@ -13,6 +13,7 @@ export type UpdateBatchPayload = {
   contractAddress?: string;
   telegramLink: string;
   bgSubdomain: string;
+  network: BatchNetwork;
 };
 
 export async function PUT(request: Request, props: { params: Promise<{ batchId: string }> }) {
@@ -28,6 +29,7 @@ export async function PUT(request: Request, props: { params: Promise<{ batchId: 
       contractAddress,
       telegramLink,
       bgSubdomain,
+      network,
     }: UpdateBatchPayload = await request.json();
 
     if (!name || !startDate || !status || !telegramLink || !bgSubdomain) {
@@ -61,6 +63,7 @@ export async function PUT(request: Request, props: { params: Promise<{ batchId: 
       contractAddress: contractAddress || "",
       telegramLink,
       bgSubdomain,
+      network: network,
     });
 
     if (!isValidSignature) {
@@ -74,6 +77,7 @@ export async function PUT(request: Request, props: { params: Promise<{ batchId: 
       contractAddress,
       telegramLink,
       bgSubdomain,
+      network,
     });
 
     return NextResponse.json({ batch: updatedBatch });

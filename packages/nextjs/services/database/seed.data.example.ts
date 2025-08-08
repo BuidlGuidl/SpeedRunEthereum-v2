@@ -1,5 +1,6 @@
 import { batches, builds, challenges, userChallenges, users } from "./config/schema";
 import {
+  BatchNetwork,
   BatchStatus,
   BatchUserStatus,
   BuildCategory,
@@ -9,7 +10,7 @@ import {
   UserRole,
 } from "./config/types";
 
-export const SEED_DATA_VERSION = "1.1.4";
+export const SEED_DATA_VERSION = "1.1.5";
 
 // Using Drizzle's inferred insert types to ensure seed data
 // matches database schema requirements
@@ -349,6 +350,7 @@ export const seedBatches: (typeof batches.$inferInsert & { userAddresses?: strin
     contractAddress: "0x0000000000000000000000000000000000000000",
     bgSubdomain: "batch1",
     userAddresses: [seedUsers?.[0]?.userAddress, seedUsers?.[1]?.userAddress],
+    network: BatchNetwork.ARBITRUM,
   },
   {
     name: "Batch 2",
@@ -358,6 +360,7 @@ export const seedBatches: (typeof batches.$inferInsert & { userAddresses?: strin
     contractAddress: "0x0000000000000000000000000000000000000000",
     bgSubdomain: "batch2",
     userAddresses: [seedUsers?.[2]?.userAddress, seedUsers?.[3]?.userAddress],
+    network: BatchNetwork.OPTIMISM,
   },
   {
     name: "Batch 3",
@@ -366,6 +369,7 @@ export const seedBatches: (typeof batches.$inferInsert & { userAddresses?: strin
     telegramLink: "https://t.me/joinchat/3",
     contractAddress: "0x0000000000000000000000000000000000000000",
     bgSubdomain: "batch3",
+    network: BatchNetwork.ARBITRUM,
   },
 ];
 
