@@ -1,6 +1,6 @@
 import { forwardRef, useEffect, useMemo, useState } from "react";
 import { InputBase } from "~~/components/scaffold-eth";
-import { BatchStatus } from "~~/services/database/config/types";
+import { BatchNetwork, BatchStatus } from "~~/services/database/config/types";
 import { notification } from "~~/utils/scaffold-eth";
 
 const isSubdomainValid = (subdomain: string): boolean => {
@@ -25,6 +25,7 @@ type BatchModalContentProps = {
   defaultStartDate?: Date;
   defaultTelegramLink?: string;
   defaultRegistryAddress?: string;
+  defaultNetwork?: BatchNetwork;
   isPending: boolean;
   batchOperation: BatchOperation;
   updateBatch: (data: {
@@ -34,6 +35,7 @@ type BatchModalContentProps = {
     telegramLink: string;
     contractAddress: string;
     bgSubdomain: string;
+    network: BatchNetwork;
   }) => void;
 };
 
@@ -45,6 +47,7 @@ export const BatchModalContent = forwardRef<HTMLInputElement, BatchModalContentP
       defaultStartDate,
       defaultTelegramLink = "",
       defaultRegistryAddress = "",
+      defaultNetwork = BatchNetwork.ARBITRUM,
       updateBatch,
       modalId,
       batchOperation,
@@ -57,6 +60,7 @@ export const BatchModalContent = forwardRef<HTMLInputElement, BatchModalContentP
     const [startDate, setStartDate] = useState(defaultStartDate?.toISOString().split("T")[0] ?? "");
     const [telegramLink, setTelegramLink] = useState(defaultTelegramLink);
     const [registryAddress, setRegistryAddress] = useState(defaultRegistryAddress);
+    const [selectedNetwork, setSelectedNetwork] = useState(defaultNetwork);
     const [bgSubdomain, setBgSubdomain] = useState("");
 
     const generatedBgSubdomain = useMemo(() => {
@@ -93,6 +97,7 @@ export const BatchModalContent = forwardRef<HTMLInputElement, BatchModalContentP
         telegramLink,
         contractAddress: registryAddress,
         bgSubdomain,
+        network: selectedNetwork,
       });
     };
 
@@ -147,7 +152,7 @@ export const BatchModalContent = forwardRef<HTMLInputElement, BatchModalContentP
                   <label className="flex items-center gap-2 cursor-pointer">
                     <input
                       type="radio"
-                      name={`status-${defaultName}`}
+                      name={`status-${modalId}`}
                       className="radio radio-primary"
                       checked={status === BatchStatus.CLOSED}
                       onChange={() => setStatus(BatchStatus.CLOSED)}
@@ -157,7 +162,7 @@ export const BatchModalContent = forwardRef<HTMLInputElement, BatchModalContentP
                   <label className="flex items-center gap-2 cursor-pointer">
                     <input
                       type="radio"
-                      name={`status-${defaultName}`}
+                      name={`status-${modalId}`}
                       className="radio radio-primary"
                       checked={status === BatchStatus.OPEN}
                       onChange={() => setStatus(BatchStatus.OPEN)}
@@ -205,6 +210,26 @@ export const BatchModalContent = forwardRef<HTMLInputElement, BatchModalContentP
                   value={registryAddress}
                   onChange={setRegistryAddress}
                 />
+              </div>
+
+              <div className="form-control w-full">
+                <label className="label">
+                  <span className="label-text font-medium">Network</span>
+                </label>
+                <div className="flex gap-4">
+                  {Object.values(BatchNetwork).map(network => (
+                    <label key={network} className="flex items-center gap-2 cursor-pointer">
+                      <input
+                        type="radio"
+                        name={`network-${modalId}`}
+                        className="radio radio-primary"
+                        checked={selectedNetwork === network}
+                        onChange={() => setSelectedNetwork(network)}
+                      />
+                      <span>{network}</span>
+                    </label>
+                  ))}
+                </div>
               </div>
             </div>
 
