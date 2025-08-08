@@ -277,3 +277,35 @@ export function GirlIcon({ className }: { className?: string }) {
     </svg>
   );
 }
+
+export function ComputerIcon({ className }: { className?: string }) {
+  return (
+    <svg
+      width="43"
+      height="48"
+      viewBox="0 0 43 48"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      className={className}
+    >
+      <path
+        d="M42.6852 33.9586H36.0507V31.7374H38.2573V29.5308H5.08461V31.7374H7.29854V33.9586H0.656738V47.2277H42.6852V33.9586ZM9.49796 31.7374H33.8295V33.9586H9.49796V31.7374ZM40.4785 45.021H2.86341V36.1653H40.4785V45.021Z"
+        fill="currentColor"
+      />
+      <path d="M40.4771 2.98022H38.2559V29.5329H40.4771V2.98022Z" fill="currentColor" />
+      <path d="M36.0483 38.3711H24.9858V40.5923H36.0483V38.3711Z" fill="currentColor" />
+      <path d="M27.193 16.2622H24.9863V18.4689H27.193V16.2622Z" fill="currentColor" />
+      <path d="M27.1925 11.8318H24.9858V14.0385H27.1925V11.8318Z" fill="currentColor" />
+      <path d="M24.9881 18.4697H18.3535V20.6764H24.9881V18.4697Z" fill="currentColor" />
+      <path d="M18.3535 16.2622H16.1323V18.4689H18.3535V16.2622Z" fill="currentColor" />
+      <path d="M18.3525 11.8369H16.1313V14.0436H18.3525V11.8369Z" fill="currentColor" />
+      <path
+        d="M7.29736 27.3238H36.0567V5.19897H7.29736V27.3238ZM9.49678 7.40565H33.8283V25.1026H9.49678V7.40565Z"
+        fill="currentColor"
+      />
+      <path d="M11.7194 38.3711H7.2915V42.799H11.7194V38.3711Z" fill="currentColor" />
+      <path d="M38.2577 0.772217H5.08496V2.97889H38.2577V0.772217Z" fill="currentColor" />
+      <path d="M5.08496 2.98022H2.86377V29.5329H5.08496V2.98022Z" fill="currentColor" />
+    </svg>
+  );
+}
