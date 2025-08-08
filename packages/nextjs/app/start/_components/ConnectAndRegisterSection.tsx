@@ -47,9 +47,12 @@ export const ConnectAndRegisterSection = () => {
     );
   }
 
-  // If still loading user data, show nothing
   if (isLoadingUser) {
-    return null;
+    return (
+      <div className="flex justify-center">
+        <span className="loading loading-spinner loading-md"></span>
+      </div>
+    );
   }
 
   return (
@@ -74,9 +77,6 @@ export const ConnectAndRegisterSection = () => {
               )}
             </ConnectButton.Custom>
           </div>
-          <p className="mt-4 text-center text-sm">
-            Registration is free and only requires signing an offchain message in your wallet.
-          </p>
         </>
       ) : (
         <>
