@@ -18,7 +18,7 @@ export const ProgressBasedPrompt = () => {
           <>
             <p className="mt-0 mb-1 text-center lg:text-left md:text-lg">Already started your journey?</p>
             <Link href={`/builders/${connectedAddress}`} className="link">
-              Continue from portfolio
+              Continue from your Portfolio
             </Link>
           </>
         ) : (
