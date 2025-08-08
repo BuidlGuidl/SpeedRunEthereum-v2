@@ -1,6 +1,6 @@
 # 📈📉🏎️ Prediction Markets Challenge
 
-![readme-4](https://raw.githubusercontent.com/scaffold-eth/se-2-challenges/challenge-prediction-markets/extension/packages/nextjs/public/hero.png)
+![readme-4](https://speedrunethereum.com/hero/prediction-markets.png)
 
 # Introduction
 

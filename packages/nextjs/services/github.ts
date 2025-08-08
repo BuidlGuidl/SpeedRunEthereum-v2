@@ -17,6 +17,22 @@ export function parseGithubUrl(githubString: string): GithubRepoInfo {
   };
 }
 
+export async function fetchLocalChallengeReadme(githubString: string): Promise<string> {
+  const { branch } = parseGithubUrl(githubString);
+
+  const baseUrl = process.env.VERCEL_PROJECT_PRODUCTION_URL
+    ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
+    : `http://localhost:${process.env.PORT || 3000}`;
+
+  const branchWithoutChallengePrefix = branch.replace("challenge-", "");
+  const response = await fetch(`${baseUrl}/readme/${branchWithoutChallengePrefix}.md`);
+  if (!response.ok) {
+    throw new Error(`Failed to fetch README: ${response.statusText}`);
+  }
+
+  return response.text();
+}
+
 export async function fetchGithubChallengeReadme(githubString: string): Promise<string> {
   const { owner, repo, branch } = parseGithubUrl(githubString);
 

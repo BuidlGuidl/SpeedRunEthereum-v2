@@ -7,7 +7,7 @@ import remarkGfm from "remark-gfm";
 import { ArrowTopRightOnSquareIcon } from "@heroicons/react/24/outline";
 import { ChallengeId } from "~~/services/database/config/types";
 import { getAllChallenges, getChallengeById } from "~~/services/database/repositories/challenges";
-import { fetchGithubChallengeReadme, parseGithubUrl } from "~~/services/github";
+import { fetchLocalChallengeReadme, parseGithubUrl } from "~~/services/github";
 import { CHALLENGE_METADATA } from "~~/utils/challenges";
 import { getMetadata } from "~~/utils/scaffold-eth/getMetadata";
 
@@ -49,7 +49,7 @@ export default async function ChallengePage(props: { params: Promise<{ challenge
     return <div>No challenge content available</div>;
   }
 
-  const challengeReadme = await fetchGithubChallengeReadme(challenge.github);
+  const challengeReadme = await fetchLocalChallengeReadme(challenge.github);
   const { owner, repo, branch } = parseGithubUrl(challenge.github);
 
   return (
