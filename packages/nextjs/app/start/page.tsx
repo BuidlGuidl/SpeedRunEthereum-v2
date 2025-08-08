@@ -197,7 +197,7 @@ const StartLandingPage = async () => {
               <h2 className="m-0 text-center text-2xl font-medium md:text-4xl">Ready?</h2>
             </div>
             <Image
-              src="/assets/challenges/simpleNFT.svg"
+              src="/assets/start/ready-img.svg"
               alt="NFT"
               className="my-8 mx-auto md:max-w-md"
               width={650}
