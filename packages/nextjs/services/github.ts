@@ -17,6 +17,22 @@ export function parseGithubUrl(githubString: string): GithubRepoInfo {
   };
 }
 
+export async function fetchLocalChallengeReadme(githubString: string): Promise<string> {
+  const { branch } = parseGithubUrl(githubString);
+  const fs = await import("fs/promises");
+  const path = await import("path");
+
+  const branchWithoutChallengePrefix = branch.replace("challenge-", "");
+  const filePath = path.join(process.cwd(), "public", "readme", `${branchWithoutChallengePrefix}.md`);
+
+  try {
+    const content = await fs.readFile(filePath, "utf-8");
+    return content;
+  } catch (error) {
+    throw new Error(`Failed to read README file: ${filePath}. ${error}`);
+  }
+}
+
 export async function fetchGithubChallengeReadme(githubString: string): Promise<string> {
   const { owner, repo, branch } = parseGithubUrl(githubString);
 
