@@ -160,7 +160,7 @@ Here’s what happens when a new market is deployed:
 You’ll implement this logic in Checkpoints 2, 3, 4, and 6, under the Liquidity Provider tab.
 
 <details markdown='1'><summary>Have a look at the Liquidity Provider tab (click to expand)</summary>
-    <img src="https://raw.githubusercontent.com/scaffold-eth/se-2-challenges/challenge-prediction-markets/extension/packages/nextjs/public/lp1.png" alt="pm-lp1" />
+    <img src="https://speedrunethereum.com/challenge-prediction-markets/lp1.png" alt="pm-lp1" />
 </details>
 
 > ❗️In the current state your front-end is already implemented but the buttons of the different functions will likely break since there is no implementation code within your smart contracts yet. But soon there will! 🙂
@@ -174,7 +174,7 @@ In Checkpoint 5, you’ll become the Oracle — the one who reports the final ou
 > 🧙‍♂️ Oracles are how off-chain facts (like “Did the green car win?”) make their way into the blockchain world.
 
 <details markdown='1'><summary>Have a look at the Oracle tab (click to expand)</summary>
-    <img src="https://raw.githubusercontent.com/scaffold-eth/se-2-challenges/challenge-prediction-markets/extension/packages/nextjs/public/oracle1.png" alt="pm-oracle1" />
+    <img src="https://speedrunethereum.com/challenge-prediction-markets/oracle1.png" alt="pm-oracle1" />
 </details>
 
 ### 👥 Then It's Time to Trade!
@@ -192,7 +192,7 @@ In Checkpoints 7 to 9, you’ll build out the core user actions:
 You’ll have full trading functionality from end to end — all powered by your smart contracts.
 
 <details markdown='1'><summary>Have a look at the User tab (click to expand)</summary>
-    <img src="https://raw.githubusercontent.com/scaffold-eth/se-2-challenges/challenge-prediction-markets/extension/packages/nextjs/public/user1.png" alt="pm-user1" />
+    <img src="https://speedrunethereum.com/challenge-prediction-markets/user1.png" alt="pm-user1" />
 </details>
 
 > 🎉 You've made it this far in Scaffold-Eth Challenges 👏🏼 . As things get more complex, it might be good to review the design requirements of the challenge first! Check out the empty PredictionMarket.sol file to see aspects of each function. If you can explain how each function will work with one another, that's great! 😎
@@ -540,7 +540,7 @@ Once deployed, head over to the **Debug** page to inspect the initialized values
 
 The tab **Liquidity Provider** in the front-end should now also display the initial question, initial liquidity/probability and further relevant variables (see screenshot below how it should look like).
 
-![ch-6-lp2](https://raw.githubusercontent.com/scaffold-eth/se-2-challenges/challenge-prediction-markets/extension/packages/nextjs/public/lp2.png)
+![ch-6-lp2](https://speedrunethereum.com/challenge-prediction-markets/lp2.png)
 
 ## **Checkpoint 4: 💦 More Liquidity**
 
@@ -784,7 +784,7 @@ Now head over to the oracle tab in the UI and report the outcome (after you watc
 
 > 💡 Make sure you're connected with the correct oracle address — check `00_deploy_your_contract.ts` to find out which one is being used. (Hint: Add the first Hardhat account to your wallet or add your own account to interact as the oracle or contract owner. You can manually set your address in the deployment script or run `yarn account:import`.)
 
-![ch-6-oracle2](https://raw.githubusercontent.com/scaffold-eth/se-2-challenges/challenge-prediction-markets/extension/packages/nextjs/public/oracle2.png)
+![ch-6-oracle2](https://speedrunethereum.com/challenge-prediction-markets/oracle2.png)
 
 ## **Checkpoint 6: 📉💧 Resolve market and withdraw liquidity and trading revenue**
 
@@ -901,7 +901,7 @@ Then jump over to the Liquidity Provider tab and give your new function a try �
 
 > 🔍 Watch closely as tokens are burned and ETH flows back to the deployer.
 
-![ch-6-lp3](https://raw.githubusercontent.com/scaffold-eth/se-2-challenges/challenge-prediction-markets/extension/packages/nextjs/public/lp3.png)
+![ch-6-lp3](https://speedrunethereum.com/challenge-prediction-markets/lp3.png)
 
 Now that the **liquidity provider** and the **oracle** are fully implemented, it’s time to open the doors for users to jump in and **trade outcome tokens** — placing their bets and shaping the market in real time! 🛒📈
 
@@ -943,7 +943,7 @@ $$
 
 Check out the table below for how prices behave under different scenarios. Note that the prices of both outcomes always sum to **0.01 ETH**.
 
-![pm-priceTable](https://raw.githubusercontent.com/scaffold-eth/se-2-challenges/challenge-prediction-markets/extension/packages/nextjs/public/priceTable.png)
+![pm-priceTable](https://speedrunethereum.com/challenge-prediction-markets/priceTable.png)
 
 ### 💡 How It Works
 
@@ -1340,7 +1340,7 @@ And then run `yarn deploy` to test it in the front-end and see how the probabili
 
 > ❗️💡 Make sure you **use another account as the liquidity provider**, otherwise you are **restricted from selling the tokens**
 
-![ch-6-user2](https://raw.githubusercontent.com/scaffold-eth/se-2-challenges/challenge-prediction-markets/extension/packages/nextjs/public/user2.png)
+![ch-6-user2](https://speedrunethereum.com/challenge-prediction-markets/user2.png)
 
 ## **Checkpoint 9: Redeem winning tokens as a user**
 
@@ -1443,7 +1443,7 @@ yarn test --grep "Checkpoint9"
 
 Then run `yarn deploy` to test it on the front-end. Make sure to purchase some winning tokens beforehand and report the race. After that, you should be able to redeem your desired amount.
 
-![ch-6-user3](https://raw.githubusercontent.com/scaffold-eth/se-2-challenges/challenge-prediction-markets/extension/packages/nextjs/public/user3.png)
+![ch-6-user3](https://speedrunethereum.com/challenge-prediction-markets/user3.png)
 
 You’ve now built the full loop: provide liquidity, trade shares, resolve the market, and claim rewards.
 
