@@ -1,6 +1,5 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ChallengeId } from "~~/services/database/config/types";
 import { Challenges } from "~~/services/database/repositories/challenges";
 
 type ChallengeCardProps = {
@@ -13,18 +12,18 @@ export const ChallengeCard = ({ challenge }: ChallengeCardProps) => {
   }
 
   const firstSentence = challenge.description.split(".")[0] + ".";
-  const isComingSoon = challenge.id === ChallengeId.DEPLOY_TO_L2;
-  const isBuilderSuggestion = challenge.id === ChallengeId.MULTISIG || challenge.id === ChallengeId.SVG_NFT;
+  const isComingSoon = !challenge.github;
+  const isBuildIdea = challenge.github && !challenge.autograding;
 
   const cardContent = (
     <div
       className={`bg-base-100 rounded-xl shadow-md overflow-hidden transition hover:shadow-lg border-2 max-w-xs mx-auto flex flex-col ${
-        isBuilderSuggestion ? "border-[#FFCB7E] dark:border-[#D5853B]" : "border-base-300"
+        isBuildIdea ? "border-[#FFCB7E] dark:border-[#D5853B]" : "border-base-300"
       }`}
     >
       <div
         className={`w-full h-24 md:h-40 lg:h-48 flex items-center justify-center relative ${
-          isBuilderSuggestion ? "bg-[#FFE9C9] dark:bg-[#7E4510]" : "bg-base-200 dark:bg-teal-800"
+          isBuildIdea ? "bg-[#FFE9C9] dark:bg-[#7E4510]" : "bg-base-200 dark:bg-teal-800"
         }`}
       >
         {challenge.previewImage ? (
@@ -45,7 +44,7 @@ export const ChallengeCard = ({ challenge }: ChallengeCardProps) => {
             </span>
           </div>
         )}
-        {isBuilderSuggestion && (
+        {isBuildIdea && (
           <div className="absolute top-2 right-2">
             <span className="inline-flex items-center text-sm md:text-base text-teal-950 bg-[#FFBB54] px-3 md:px-4 py-1.5 rounded-full">
               Build Idea
