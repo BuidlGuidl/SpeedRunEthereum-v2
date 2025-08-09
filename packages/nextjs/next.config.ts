@@ -33,6 +33,11 @@ const nextConfig: NextConfig = {
         destination: "/challenge/dex",
         permanent: true,
       },
+      {
+        source: "/challenge/state-channels",
+        destination: "/",
+        permanent: true,
+      },
     ];
   },
 };
