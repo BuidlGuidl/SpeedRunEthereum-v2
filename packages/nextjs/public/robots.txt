@@ -1,5 +1,6 @@
 User-agent: *
 Disallow: /builders/
 Disallow: /builds/
+Disallow: /readme/
 Allow: /
 Sitemap: https://speedrunethereum.com/sitemap.xml
