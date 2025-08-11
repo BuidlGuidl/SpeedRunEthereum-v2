@@ -213,7 +213,6 @@ Using OpenZeppelin significantly reduces the boilerplate code and potential for 
 
 - [OpenZeppelin ERC721 Docs](https://docs.openzeppelin.com/contracts/5.x/api/token/erc721)
 - [OpenZeppelin ERC1155 Docs](https://docs.openzeppelin.com/contracts/5.x/api/token/erc1155)
-- [OpenSea ERC1155 Support](https://docs.opensea.io/docs/erc-1155)
 - [Mastering ERC721: Developer Guide to NFT Metadata & Best Practices](/guides/mastering-erc721)
 
 ---

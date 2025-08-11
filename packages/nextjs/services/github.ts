@@ -17,9 +17,31 @@ export function parseGithubUrl(githubString: string): GithubRepoInfo {
   };
 }
 
+export async function fetchLocalChallengeReadme(githubString: string): Promise<string> {
+  const { branch } = parseGithubUrl(githubString);
+  const fs = await import("fs/promises");
+  const path = await import("path");
+
+  const branchWithoutChallengePrefix = branch.replace("challenge-", "");
+  const filePath = path.join(process.cwd(), "public", "readme", `${branchWithoutChallengePrefix}.md`);
+
+  try {
+    const content = await fs.readFile(filePath, "utf-8");
+    return content;
+  } catch (error) {
+    throw new Error(`Failed to read README file: ${filePath}. ${error}`);
+  }
+}
+
 export async function fetchGithubChallengeReadme(githubString: string): Promise<string> {
   const { owner, repo, branch } = parseGithubUrl(githubString);
-  const readmeUrl = `${GITHUB_RAW_BASE_URL}/${owner}/${repo}/${branch}/README.md`;
+
+  // TODO: Remove this hotfix after github url scaffold-eth/se-2-challenges  works correctly
+  let correctOwner = owner;
+  if (owner === "scaffold-eth" && repo === "se-2-challenges") {
+    correctOwner = "BuidlGuidl";
+  }
+  const readmeUrl = `${GITHUB_RAW_BASE_URL}/${correctOwner}/${repo}/${branch}/README.md`;
 
   const response = await fetch(readmeUrl);
   if (!response.ok) {

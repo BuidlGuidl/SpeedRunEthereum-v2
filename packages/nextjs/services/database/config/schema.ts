@@ -1,4 +1,13 @@
-import { BatchStatus, BatchUserStatus, BuildCategory, BuildType, ReviewAction, UTMParams, UserRole } from "./types";
+import {
+  BatchNetwork,
+  BatchStatus,
+  BatchUserStatus,
+  BuildCategory,
+  BuildType,
+  ReviewAction,
+  UTMParams,
+  UserRole,
+} from "./types";
 import { SQL, relations, sql } from "drizzle-orm";
 import {
   AnyPgColumn,
@@ -27,6 +36,7 @@ export const batchStatusEnum = pgEnum("batch_status_enum", BatchStatus);
 export const batchUserStatusEnum = pgEnum("batch_user_status_enum", BatchUserStatus);
 export const buildTypeEnum = pgEnum("build_type_enum", BuildType);
 export const buildCategoryEnum = pgEnum("build_category_enum", BuildCategory);
+export const batchNetworkEnum = pgEnum("batch_network", BatchNetwork);
 
 export const users = pgTable(
   "users",
@@ -79,6 +89,7 @@ export const batches = pgTable("batches", {
   contractAddress: varchar({ length: 42 }),
   telegramLink: varchar({ length: 255 }).notNull(),
   bgSubdomain: varchar({ length: 255 }).notNull(),
+  network: batchNetworkEnum().notNull(),
 });
 
 export const userChallenges = pgTable(
