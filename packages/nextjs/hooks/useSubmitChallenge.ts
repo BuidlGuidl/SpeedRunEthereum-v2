@@ -73,7 +73,6 @@ export const useSubmitChallenge = ({ onSuccess }: { onSuccess?: () => void }) =>
     },
     onSuccess: () => {
       notification.success("Challenge submitted successfully!");
-      // Invalidate user challenges query to trigger auto-refresh
       queryClient.invalidateQueries({
         queryKey: ["userChallenges", address],
       });

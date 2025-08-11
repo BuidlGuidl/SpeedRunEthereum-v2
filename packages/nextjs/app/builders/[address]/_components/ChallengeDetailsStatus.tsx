@@ -40,14 +40,10 @@ export function ChallengeDetailsStatus({ challenge }: { challenge: MappedChallen
       <div className="pl-8">
         <p className="mt-2 mb-0 text-sm">{shortedDescription}.</p>
         <div className={`mt-3 flex items-center gap-2 px-2 py-1 rounded-md ${statusAlertClass}`}>
-          <div className="flex items-center gap-1">
+          <div>
             {isAccepted && "✅"}
             {isRejected && "❌"}
-            {isSubmitted && (
-              <>
-                <span className="loading loading-spinner loading-xs"></span>⏳
-              </>
-            )}
+            {isSubmitted && "⏳"}
           </div>
           <div className="flex items-center gap-4 text-xs">
             <DateWithTooltip timestamp={challenge.submittedAt || new Date()} />
