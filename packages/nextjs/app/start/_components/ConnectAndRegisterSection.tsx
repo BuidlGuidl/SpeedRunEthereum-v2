@@ -39,7 +39,7 @@ export const ConnectAndRegisterSection = () => {
         <div className="flex justify-center">
           <Link href={`/builders/${connectedAddress}`}>
             <button
-              className="w-[300px] h-[60px] text-gray-600 bg-[url('/assets/start/button-frame.svg')] bg-no-repeat bg-center bg-contain flex items-center justify-center"
+              className="w-[300px] h-[60px] text-gray-600 bg-[url('/assets/start/button-frame.svg')] bg-no-repeat bg-center bg-contain flex items-center justify-center hover:opacity-75"
               type="button"
             >
               Go to your Portfolio
