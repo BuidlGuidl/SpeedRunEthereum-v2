@@ -68,7 +68,7 @@ export const ConnectAndRegisterSection = () => {
             <ConnectButton.Custom>
               {({ openConnectModal }) => (
                 <button
-                  className="w-[300px] h-[60px] text-gray-600 bg-[url('/assets/start/button-frame.svg')] bg-no-repeat bg-center bg-contain flex items-center justify-center"
+                  className="w-[300px] h-[60px] text-gray-600 bg-[url('/assets/start/button-frame.svg')] bg-no-repeat bg-center bg-contain flex items-center justify-center hover:opacity-75"
                   onClick={openConnectModal}
                   type="button"
                 >
@@ -87,7 +87,7 @@ export const ConnectAndRegisterSection = () => {
           </p>
           <div className="flex justify-center">
             <button
-              className="w-[300px] h-[60px] text-gray-600 bg-[url('/assets/start/button-frame.svg')] bg-no-repeat bg-center bg-contain flex items-center justify-center"
+              className="w-[300px] h-[60px] text-gray-600 bg-[url('/assets/start/button-frame.svg')] bg-no-repeat bg-center bg-contain flex items-center justify-center hover:opacity-75"
               onClick={handleRegisterClick}
               disabled={isLoading}
             >
