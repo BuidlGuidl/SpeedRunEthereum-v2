@@ -4,7 +4,7 @@ import { InferInsertModel, and, eq, ilike, inArray, isNotNull, or, sql } from "d
 import { db } from "~~/services/database/config/postgresClient";
 import { lower, userChallenges, users } from "~~/services/database/config/schema";
 import { BatchUserStatus } from "~~/services/database/config/types";
-import { BATCH_POINTS, BUILD_POINTS, CHALLENGE_POINTS } from "~~/utils/buidl-points";
+import { BATCH_XP, BUILD_XP, CHALLENGE_XP } from "~~/utils/xp";
 
 type PickSocials<T> = {
   [K in keyof T as K extends `social${string}` ? K : never]?: T[K] extends string | null ? string : never;
@@ -267,9 +267,9 @@ export async function getUserPoints(userAddress: string) {
   const hasBatch = user?.batchStatus === BatchUserStatus.GRADUATE;
   const hasBuilds = user?.buildBuilders && user?.buildBuilders.length > 0;
 
-  const challengePoints = (acceptedChallengesCount || 0) * CHALLENGE_POINTS;
-  const batchPoints = hasBatch ? BATCH_POINTS : 0;
-  const buildPoints = hasBuilds ? BUILD_POINTS : 0;
+  const challengePoints = (acceptedChallengesCount || 0) * CHALLENGE_XP;
+  const batchPoints = hasBatch ? BATCH_XP : 0;
+  const buildPoints = hasBuilds ? BUILD_XP : 0;
 
   return challengePoints + batchPoints + buildPoints;
 }

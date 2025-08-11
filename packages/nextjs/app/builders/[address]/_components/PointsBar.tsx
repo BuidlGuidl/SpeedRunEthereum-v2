@@ -8,9 +8,9 @@ type PointsBarModalProps = {
 };
 
 const stats = [
-  { name: "Each Completed Challenge", stat: "+10 Points" },
-  { name: "Completed a Batch", stat: "+20 Points" },
-  { name: "First Build Submitted", stat: "+5 Points" },
+  { name: "Each Completed Challenge", stat: "+10 XP" },
+  { name: "Completed a Batch", stat: "+20 XP" },
+  { name: "First Build Submitted", stat: "+5 XP" },
 ];
 
 const PointsBarModal = forwardRef<HTMLDialogElement, PointsBarModalProps>(({ closeModal }, ref) => {
@@ -19,7 +19,7 @@ const PointsBarModal = forwardRef<HTMLDialogElement, PointsBarModalProps>(({ clo
       <div className="modal-box max-w-4xl w-[95%]">
         <form method="dialog" className="bg-secondary -mx-6 -mt-6 px-6 py-4 flex items-center justify-between">
           <div className="flex justify-between items-center">
-            <p className="font-bold text-xl m-0">How Buidl Points Are Calculated</p>
+            <p className="font-bold text-xl m-0">How XP is Calculated</p>
           </div>
           <button onClick={closeModal} className="btn btn-sm btn-circle btn-ghost text-xl h-auto">
             ✕
@@ -54,15 +54,14 @@ export function PointsBar({ points, totalPoints }: { points: number; totalPoints
   return (
     <div className="mt-4 px-6 pb-5 pt-4 bg-base-100 border border-gray-200 rounded-lg overflow-hidden">
       <div className="flex items-center justify-center gap-1.5 font-medium">
-        <p className="m-0">
+        <p className="m-0 font-light">
           {points} / {totalPoints}
         </p>
-        &bull;
         <button
           className="flex items-center hover:underline hover:opacity-75"
           onClick={() => modalRef.current?.showModal()}
         >
-          Buidl Points
+          <span className="font-bold">XP</span>
           <QuestionMarkCircleIcon className="w-5 h-5 ml-1" />
         </button>
       </div>

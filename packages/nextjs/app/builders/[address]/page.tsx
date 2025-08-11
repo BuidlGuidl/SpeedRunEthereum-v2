@@ -12,8 +12,8 @@ import { getBuildsByUserAddress } from "~~/services/database/repositories/builds
 import { getAllChallenges } from "~~/services/database/repositories/challenges";
 import { getLatestSubmissionPerChallengeByUser } from "~~/services/database/repositories/userChallenges";
 import { getUserByAddress, getUserPoints } from "~~/services/database/repositories/users";
-import { getTotalPoints } from "~~/utils/buidl-points";
 import { getShortAddressAndEns } from "~~/utils/short-address-and-ens";
+import { getTotalXP } from "~~/utils/xp";
 
 type Props = {
   params: Promise<{
@@ -88,7 +88,7 @@ export default async function BuilderPage(props: { params: Promise<{ address: st
   // Filter out disabled and non-autograding challenges
   const filteredChallenges = challenges.filter(challenge => challenge.autograding === true && !challenge.disabled);
 
-  const totalPoints = getTotalPoints(filteredChallenges.length);
+  const totalPoints = getTotalXP(filteredChallenges.length);
 
   return (
     <>
