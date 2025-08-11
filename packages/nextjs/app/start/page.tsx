@@ -176,7 +176,15 @@ const StartLandingPage = async () => {
             <div className="grid grid-cols-2 mb-8 lg:pt-6 md:grid-cols-2 lg:grid-cols-4 gap-6">
               {challenges
                 .filter(challenge => !challenge.disabled)
-                .sort((a, b) => a.sortOrder - b.sortOrder)
+                .sort((a, b) => {
+                  const aIsBuildIdea = a.github && !a.autograding;
+                  const bIsBuildIdea = b.github && !b.autograding;
+
+                  if (aIsBuildIdea && !bIsBuildIdea) return 1;
+                  if (!aIsBuildIdea && bIsBuildIdea) return -1;
+
+                  return a.sortOrder - b.sortOrder;
+                })
                 .map(challenge => (
                   <ChallengeCard key={challenge.id} challenge={challenge} />
                 ))}
