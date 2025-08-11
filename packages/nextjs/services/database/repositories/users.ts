@@ -1,10 +1,10 @@
 import { ReviewAction, UserRole } from "../config/types";
 import { ColumnSort, SortingState } from "@tanstack/react-table";
-import { InferInsertModel, and, isNotNull, or } from "drizzle-orm";
-import { eq, ilike, sql } from "drizzle-orm";
-import { inArray } from "drizzle-orm";
+import { InferInsertModel, and, eq, ilike, inArray, isNotNull, or, sql } from "drizzle-orm";
 import { db } from "~~/services/database/config/postgresClient";
 import { lower, userChallenges, users } from "~~/services/database/config/schema";
+import { BatchUserStatus } from "~~/services/database/config/types";
+import { BATCH_XP, BUILD_XP, CHALLENGE_XP } from "~~/utils/xp";
 
 type PickSocials<T> = {
   [K in keyof T as K extends `social${string}` ? K : never]?: T[K] extends string | null ? string : never;
@@ -248,4 +248,28 @@ export async function filterValidUserAddresses(addresses: string[]): Promise<str
     .from(users)
     .where(inArray(users.userAddress, addresses));
   return rows.map(row => row.userAddress);
+}
+
+export async function getUserPoints(userAddress: string) {
+  const lowercaseAddress = userAddress.toLowerCase();
+
+  const user = await db.query.users.findFirst({
+    where: eq(lower(users.userAddress), lowercaseAddress),
+    with: {
+      userChallenges: {
+        where: eq(userChallenges.reviewAction, ReviewAction.ACCEPTED),
+      },
+      buildBuilders: true,
+    },
+  });
+
+  const acceptedChallengesCount = user?.userChallenges.length || 0;
+  const hasBatch = user?.batchStatus === BatchUserStatus.GRADUATE;
+  const hasBuilds = user?.buildBuilders && user?.buildBuilders.length > 0;
+
+  const challengePoints = (acceptedChallengesCount || 0) * CHALLENGE_XP;
+  const batchPoints = hasBatch ? BATCH_XP : 0;
+  const buildPoints = hasBuilds ? BUILD_XP : 0;
+
+  return challengePoints + batchPoints + buildPoints;
 }
