@@ -1,13 +1,63 @@
+"use client";
+
+import { useEffect, useRef } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { ChallengeStatus } from "./ChallengeStatus";
 import type { MappedChallenges } from "./GroupedChallenges";
 import { DateWithTooltip } from "~~/components/DateWithTooltip";
 import { ReviewAction } from "~~/services/database/config/types";
 
 export function ChallengeDetailsStatus({ challenge }: { challenge: MappedChallenges }) {
+  const router = useRouter();
+  const intervalRef = useRef<NodeJS.Timeout | null>(null);
+  const startTimeRef = useRef<number | null>(null);
+
   const isSubmitted = challenge.reviewAction === ReviewAction.SUBMITTED;
   const isAccepted = challenge.reviewAction === ReviewAction.ACCEPTED;
   const isRejected = challenge.reviewAction === ReviewAction.REJECTED;
+
+  // Auto-refresh logic for submitted challenges
+  useEffect(() => {
+    if (isSubmitted) {
+      // Record start time when first submitted challenge is detected
+      if (!startTimeRef.current) {
+        startTimeRef.current = Date.now();
+      }
+
+      // Set up interval to refresh every 5 seconds
+      intervalRef.current = setInterval(() => {
+        // Stop polling after 1 minute (60,000ms)
+        const elapsed = Date.now() - (startTimeRef.current || 0);
+        if (elapsed > 60000) {
+          if (intervalRef.current) {
+            clearInterval(intervalRef.current);
+            intervalRef.current = null;
+          }
+          startTimeRef.current = null;
+          return;
+        }
+
+        console.log("🔄 Refreshing page for submitted challenge:", challenge.id);
+        router.refresh();
+      }, 5000);
+    } else {
+      // Clear interval if challenge is no longer submitted
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+        intervalRef.current = null;
+      }
+      startTimeRef.current = null;
+    }
+
+    // Cleanup function
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+        intervalRef.current = null;
+      }
+    };
+  }, [isSubmitted, challenge.id, router]);
 
   let badgeClass = "badge-warning";
   if (isAccepted) badgeClass = "badge-secondary";
