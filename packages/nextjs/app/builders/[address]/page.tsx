@@ -94,12 +94,12 @@ export default async function BuilderPage(props: { params: Promise<{ address: st
     <>
       <RouteRefresher />
       <div className="max-w-[1440px] w-full mx-auto px-4 py-8">
-        <div className="grid grid-cols-1 xl:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
           <div>
             <UserProfileCard user={user} batch={userBatch} />
             <PointsBar points={points} totalPoints={totalPoints} />
           </div>
-          <div className="xl:col-span-3">
+          <div className="lg:col-span-3">
             <GroupedChallenges
               address={address}
               challenges={filteredChallenges}

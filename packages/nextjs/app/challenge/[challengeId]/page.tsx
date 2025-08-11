@@ -98,7 +98,16 @@ export default async function ChallengePage(props: { params: Promise<{ challenge
       ) : (
         <div>Failed to load challenge content</div>
       )}
-      <SubmitChallengeButton challengeId={challenge.id} />
+      {challenge.autograding && <SubmitChallengeButton challengeId={challenge.id} />}
+      {challenge.externalLink && (
+        <div className="fixed bottom-8 inset-x-0 mx-auto w-fit">
+          <button className="btn btn-sm sm:btn-md btn-primary text-secondary px-3 sm:px-4 mt-2 text-xs sm:text-sm">
+            <a href={challenge.externalLink.link} target="_blank" rel="noopener noreferrer">
+              {challenge.externalLink.claim}
+            </a>
+          </button>
+        </div>
+      )}
     </div>
   );
 }
