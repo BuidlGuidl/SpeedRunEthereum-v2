@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { useAccount } from "wagmi";
 import { useUser } from "~~/hooks/useUser";
@@ -12,6 +13,7 @@ export const ConnectAndRegisterSection = () => {
   const { data: user, isLoading: isLoadingUser } = useUser(connectedAddress);
   const { handleRegister, isRegistering } = useUserRegister();
   const [isLocalLoading, setIsLocalLoading] = useState(false);
+  const router = useRouter();
 
   const isWalletConnected = !!connectedAddress;
   const isLoading = isLocalLoading || isRegistering;
@@ -24,6 +26,7 @@ export const ConnectAndRegisterSection = () => {
       console.error("Registration failed:", error);
     } finally {
       setIsLocalLoading(false);
+      router.push(`/builders/${connectedAddress}`);
     }
   };
 
@@ -39,7 +42,7 @@ export const ConnectAndRegisterSection = () => {
               className="w-[300px] h-[60px] text-gray-600 bg-[url('/assets/start/button-frame.svg')] bg-no-repeat bg-center bg-contain flex items-center justify-center"
               type="button"
             >
-              Go to your portfolio
+              Go to your Portfolio
             </button>
           </Link>
         </div>
@@ -61,7 +64,7 @@ export const ConnectAndRegisterSection = () => {
         <>
           <h3 className="mb-2 text-center font-medium text-xl">Start learning today!</h3>
           <p className="mt-2 text-center">
-            Connect your wallet and Register to start building your Ethereum developer portfolio.
+            Connect your wallet and register to start building your Ethereum developer portfolio.
           </p>
           <div className="flex justify-center">
             <ConnectButton.Custom>
