@@ -61,8 +61,7 @@ export const ConnectAndRegisterSection = () => {
         <>
           <h3 className="mb-2 text-center font-medium text-xl">Start learning today!</h3>
           <p className="mt-2 text-center">
-            Connect your wallet and register to start your journey. In the first challenge, you&apos;ll deploy your
-            first smart contract and mint an NFT on a testnet.
+            Connect your wallet and Register to start building your Ethereum developer portfolio.
           </p>
           <div className="flex justify-center">
             <ConnectButton.Custom>
@@ -82,8 +81,8 @@ export const ConnectAndRegisterSection = () => {
         <>
           <h3 className="mb-2 text-center font-medium text-xl">Almost there!</h3>
           <p className="mt-2 text-center">
-            You&apos;re almost there! Register as a builder to start your journey. In the first challenge, you&apos;ll
-            deploy your first smart contract and mint an NFT on a testnet.
+            Register as a builder to start your journey. In the first challenge, you&apos;ll deploy your first smart
+            contract and mint an NFT on a testnet.
           </p>
           <div className="flex justify-center">
             <button
