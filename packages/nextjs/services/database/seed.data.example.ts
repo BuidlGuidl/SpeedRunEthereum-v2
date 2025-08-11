@@ -62,7 +62,7 @@ export const seedChallenges: (typeof challenges.$inferInsert)[] = [
   {
     id: ChallengeId.SIMPLE_NFT_EXAMPLE,
     challengeName: "Simple NFT Example",
-    github: "scaffold-eth/se-2-challenges:challenge-0-simple-nft",
+    github: "scaffold-eth/se-2-challenges:challenge-simple-nft-example",
     autograding: true,
     description:
       "🎫 Create a simple NFT to learn basics of 🏗 scaffold-eth. You'll use 👷‍♀️ HardHat to compile and deploy smart contracts. Then, you'll use a template React app full of important Ethereum components and hooks. Finally, you'll deploy an NFT to a public network to share with friends! 🚀",
@@ -72,7 +72,7 @@ export const seedChallenges: (typeof challenges.$inferInsert)[] = [
   {
     id: ChallengeId.DECENTRALIZED_STAKING,
     challengeName: "Decentralized Staking App",
-    github: "scaffold-eth/se-2-challenges:challenge-1-decentralized-staking",
+    github: "scaffold-eth/se-2-challenges:challenge-decentralized-staking",
     autograding: true,
     description:
       "🦸 A superpower of Ethereum is allowing you, the builder, to create a simple set of rules that an adversarial group of players can use to work together. In this challenge, you create a decentralized application where users can coordinate a group funding effort. The users only have to trust the code.",
@@ -82,7 +82,7 @@ export const seedChallenges: (typeof challenges.$inferInsert)[] = [
   {
     id: ChallengeId.TOKEN_VENDOR,
     challengeName: "Token Vendor",
-    github: "scaffold-eth/se-2-challenges:challenge-2-token-vendor",
+    github: "scaffold-eth/se-2-challenges:challenge-token-vendor",
     autograding: true,
     description:
       '🤖 Smart contracts are kind of like "always on" vending machines that anyone can access. Let\'s make a decentralized, digital currency (an ERC20 token). Then, let\'s build an unstoppable vending machine that will buy and sell the currency. We\'ll learn about the "approve" pattern for ERC20s and how contract to contract interactions work.',
@@ -93,7 +93,7 @@ export const seedChallenges: (typeof challenges.$inferInsert)[] = [
   {
     id: ChallengeId.DICE_GAME,
     challengeName: "Dice Game",
-    github: "scaffold-eth/se-2-challenges:challenge-3-dice-game",
+    github: "scaffold-eth/se-2-challenges:challenge-dice-game",
     autograding: true,
     description:
       "🎰 Randomness is tricky on a public deterministic blockchain. The block hash is the result proof-of-work (for now) and some builders use this as a weak form of randomness.  In this challenge you will take advantage of a Dice Game contract by predicting the randomness in order to only roll winning dice!",
@@ -103,7 +103,7 @@ export const seedChallenges: (typeof challenges.$inferInsert)[] = [
   {
     id: ChallengeId.DEX,
     challengeName: "Build a DEX",
-    github: "scaffold-eth/se-2-challenges:challenge-4-dex",
+    github: "scaffold-eth/se-2-challenges:challenge-dex",
     autograding: true,
     description:
       "💵 Build an exchange that swaps ETH to tokens and tokens to ETH. 💰 This is possible because the smart contract holds reserves of both assets and has a price function based on the ratio of the reserves. Liquidity providers are issued a token that represents their share of the reserves and fees...",
@@ -111,22 +111,33 @@ export const seedChallenges: (typeof challenges.$inferInsert)[] = [
     previewImage: "/assets/challenges/dex.svg",
   },
   {
+    id: ChallengeId.OVER_COLLATERALIZED_LENDING,
+    challengeName: "Over-Collateralized Lending",
+    github: "scaffold-eth/se-2-challenges:challenge-over-collateralized-lending",
+    autograding: true,
+    description:
+      "💳 Build your own lending and borrowing platform. Let's write a contract that takes collateral and lets you borrow other assets against the value of the collateral. What happens when the collateral changes in value? We will be able to borrow more if it is higher, or if it is lower, we will also build a system for liquidating the debt position.",
+    sortOrder: 5,
+    previewImage: "/assets/challenges/overCollateralizedLending.svg",
+  },
+  {
+    id: ChallengeId.PREDICTION_MARKETS,
+    challengeName: "📈 Prediction Markets",
+    github: "scaffold-eth/se-2-challenges:challenge-prediction-markets",
+    autograding: true,
+    description:
+      "🔮 Build a prediction market where users can create questions about future outcomes for others to bet on. Users can also participate in existing markets to speculate on event results. 📊 Outcome shares can be traded, with prices adjusting dynamically based on market belief. This is possible because the smart contract acts as an automated market maker (like in the DEX challenge) and adjusts odds based on supply and demand.",
+    sortOrder: 6,
+    previewImage: "/assets/challenges/predictionMarkets.svg",
+  },
+  {
     id: ChallengeId.STABLECOINS,
     challengeName: "💰 Stablecoins",
     autograding: false,
     description:
       "🪙 Build your own decentralized stablecoin. Let's write a contract that takes collateral and issues MyUSD tokens based on the value of the collateral. What happens when the collateral changes in value? If it is higher, we will be able to borrow more tokens. If it is lower, we will also build a system for liquidating the MyUSD.",
-    sortOrder: 5,
+    sortOrder: 7,
     previewImage: "/assets/challenges/stablecoins.svg",
-  },
-  {
-    id: ChallengeId.PREDICTION_MARKETS,
-    challengeName: "📈 Prediction Markets",
-    autograding: false,
-    description:
-      "🔮 Build a prediction market where users can create questions about future outcomes for others to bet on. Users can also participate in existing markets to speculate on event results. 📊 Outcome shares can be traded, with prices adjusting dynamically based on market belief. This is possible because the smart contract acts as an automated market maker (like in the DEX challenge) and adjusts odds based on supply and demand.",
-    sortOrder: 6,
-    previewImage: "/assets/challenges/predictionMarkets.svg",
   },
   {
     id: ChallengeId.DEPLOY_TO_L2,
@@ -134,17 +145,17 @@ export const seedChallenges: (typeof challenges.$inferInsert)[] = [
     autograding: false,
     description:
       "🚀 Ethereum L2s make blockchain apps fast and cheap, bringing us closer to mainstream adoption! Most L2s are EVM compatible, meaning your app should work seamlessly across them with little to no changes—just deploy and go! In this challenge, you will deploy an app across multiple chains, including Optimism, Base, and Arbitrum, and experience the snappy, low-cost transactions while exploring how they make building scalable apps and games easier than ever.",
-    sortOrder: 7,
+    sortOrder: 8,
     previewImage: "/assets/challenges/deployToL2.svg",
   },
   {
     id: ChallengeId.MULTISIG,
     challengeName: "Multisig Wallet",
-    github: "scaffold-eth/se-2-challenges:challenge-6-multisig",
+    github: "scaffold-eth/se-2-challenges:challenge-multisig",
     autograding: false,
     description:
       '👩‍👩‍👧‍👧 Using a smart contract as a wallet we can secure assets by requiring multiple accounts to "vote" on transactions. The contract will keep track of transactions in an array of structs and owners will confirm or reject each one. Any transaction with enough confirmations can "execute".',
-    sortOrder: 8,
+    sortOrder: 9,
     previewImage: "/assets/challenges/multiSig.svg",
     externalLink: {
       link: "https://t.me/+zKllN8OlGuxmYzFh",
@@ -154,11 +165,11 @@ export const seedChallenges: (typeof challenges.$inferInsert)[] = [
   {
     id: ChallengeId.SVG_NFT,
     challengeName: "SVG NFT",
-    github: "scaffold-eth/se-2-challenges:challenge-7-svg-nft",
+    github: "scaffold-eth/se-2-challenges:challenge-svg-nft",
     autograding: false,
     description:
       "🎨 Create a dynamic SVG NFT using a smart contract. Your contract will generate on-chain SVG images and allow users to mint their unique NFTs. ✨ Customize your SVG graphics and metadata directly within the smart contract. 🚀 Share the minting URL once your project is live!",
-    sortOrder: 9,
+    sortOrder: 10,
     previewImage: "/assets/challenges/dynamicSvgNFT.svg",
     externalLink: {
       link: "https://t.me/+mUeITJ5u7Ig0ZWJh",
