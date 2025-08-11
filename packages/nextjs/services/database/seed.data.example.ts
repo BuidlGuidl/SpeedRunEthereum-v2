@@ -10,7 +10,7 @@ import {
   UserRole,
 } from "./config/types";
 
-export const SEED_DATA_VERSION = "1.1.5";
+export const SEED_DATA_VERSION = "1.1.6";
 
 // Using Drizzle's inferred insert types to ensure seed data
 // matches database schema requirements
