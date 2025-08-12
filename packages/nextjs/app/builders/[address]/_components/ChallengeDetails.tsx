@@ -40,9 +40,12 @@ export function ChallengeDetails({
         </div>
 
         {isProfileOwner && (
-          <Link href={`/challenge/${challenge.id}`} className="btn btn-primary btn-sm rounded-md">
-            Start
-          </Link>
+          <div className="shrink-0 flex flex-col items-center">
+            <Link href={`/challenge/${challenge.id}`} className="btn btn-primary btn-sm rounded-md">
+              Start
+            </Link>
+            <p className="text-base-content mt-2 mb-0 text-xs font-medium">+10 XP</p>
+          </div>
         )}
       </div>
     </div>

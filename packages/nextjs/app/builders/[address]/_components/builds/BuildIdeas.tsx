@@ -19,7 +19,9 @@ const BUILD_IDEAS = [
 export function BuildIdeas() {
   return (
     <div>
-      <p className="m-0 font-medium">Showcase your Ethereum builds and share them with the community!</p>
+      <p className="m-0 font-medium">
+        Showcase your Ethereum builds and share them with the community! Get +5 XP for the first build you submit.
+      </p>
       <p className="mt-2 mb-0">
         If you&apos;re just getting started or looking for your next idea, take a look at some recommended builds below:
       </p>

@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import { GroupedChallenges } from "./_components/GroupedChallenges";
+import { PointsBar } from "./_components/PointsBar";
 import { UserProfileCard } from "./_components/UserProfileCard";
 import { Builds } from "./_components/builds/Builds";
 import { Metadata } from "next";
@@ -10,8 +11,9 @@ import { getBatchById } from "~~/services/database/repositories/batches";
 import { getBuildsByUserAddress } from "~~/services/database/repositories/builds";
 import { getAllChallenges } from "~~/services/database/repositories/challenges";
 import { getLatestSubmissionPerChallengeByUser } from "~~/services/database/repositories/userChallenges";
-import { getUserByAddress } from "~~/services/database/repositories/users";
+import { getUserByAddress, getUserPoints } from "~~/services/database/repositories/users";
 import { getShortAddressAndEns } from "~~/utils/short-address-and-ens";
+import { getTotalXP } from "~~/utils/xp";
 
 type Props = {
   params: Promise<{
@@ -75,6 +77,7 @@ export default async function BuilderPage(props: { params: Promise<{ address: st
     userBatch = await getBatchById(user.batchId);
   }
   const builds = await getBuildsByUserAddress(address);
+  const points = await getUserPoints(address);
 
   if (!user) {
     notFound();
@@ -82,18 +85,24 @@ export default async function BuilderPage(props: { params: Promise<{ address: st
 
   const userHasCompletedChallenges = userCompletedChallenges.length > 0;
 
+  // Filter out disabled and non-autograding challenges
+  const filteredChallenges = challenges.filter(challenge => challenge.autograding === true && !challenge.disabled);
+
+  const totalPoints = getTotalXP(filteredChallenges.length);
+
   return (
     <>
       <RouteRefresher />
       <div className="max-w-[1440px] w-full mx-auto px-4 py-8">
-        <div className="grid grid-cols-1 xl:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
           <div>
             <UserProfileCard user={user} batch={userBatch} />
+            <PointsBar points={points} totalPoints={totalPoints} />
           </div>
-          <div className="xl:col-span-3">
+          <div className="lg:col-span-3">
             <GroupedChallenges
               address={address}
-              challenges={challenges}
+              challenges={filteredChallenges}
               userChallenges={userChallenges}
               userHasCompletedChallenges={userHasCompletedChallenges}
             />

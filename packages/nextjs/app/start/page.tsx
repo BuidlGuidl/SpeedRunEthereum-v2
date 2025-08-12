@@ -1,8 +1,11 @@
 /* eslint-disable react/no-unescaped-entities */
 import Image from "next/image";
 import HeroLogo from "../_assets/icons/HeroLogo";
+import { ChallengeCard } from "./_components/ChallengeCard";
+import { ConnectAndRegisterSection } from "./_components/ConnectAndRegisterSection";
 import {
   BoyIcon,
+  ComputerIcon,
   DiamondIcon,
   GirlIcon,
   LightbulbIcon,
@@ -11,7 +14,8 @@ import {
   TargetIcon,
   ToolsIcon,
 } from "./_components/Icons";
-import { StartChallengesButton } from "./_components/StartChallengesButton";
+import { ProgressBasedPrompt } from "./_components/ProgressBasedPrompt";
+import { getAllChallenges } from "~~/services/database/repositories/challenges";
 import { getMetadata } from "~~/utils/scaffold-eth/getMetadata";
 
 export const metadata = getMetadata({
@@ -20,9 +24,12 @@ export const metadata = getMetadata({
     "Build your first Ethereum apps with hands-on challenges. Learn smart contracts and dapp development through real, practical experience.",
 });
 
-const StartLandingPage = () => {
+const StartLandingPage = async () => {
+  const challenges = await getAllChallenges();
+
   return (
     <div className="bg-[#F9FEFF] dark:bg-base-200 overflow-hidden">
+      {/* HERO SECTION */}
       <div className="relative">
         <Image
           src="/assets/start/clouds-left.svg"
@@ -41,14 +48,14 @@ const StartLandingPage = () => {
           height={280}
         />
         <div className="relative z-10 px-6 lg:pb-12">
-          <p className="text-center mb-10 mt-16 dark:text-gray-200">
+          <p className="text-center mb-10 dark:text-gray-200">
             Learn how to build on <strong>Ethereum</strong>; the superpowers and the gotchas.
           </p>
           <div className="flex justify-center w-full">
             <HeroLogo className="max-w-[600px]" />
           </div>
           <div className="max-w-3xl mx-auto">
-            <p className="my-12 text-lg text-center md:my-14 md:text-center md:text-xl md:leading-relaxed">
+            <p className="my-10 text-lg md:my-14 md:text-center md:text-xl md:leading-relaxed">
               SpeedRunEthereum is a <TargetIcon className="inline-block w-6 h-6" /> hands-on series of challenges
               designed to help you <strong>learn by building</strong>. Each challenge delivers one key "aha" moment,{" "}
               <LightbulbIcon className="inline-block w-6 h-6" /> a mental unlock about how{" "}
@@ -57,20 +64,14 @@ const StartLandingPage = () => {
             </p>
           </div>
         </div>
-        <div className="mb-8 mx-auto w-80 h-40 bg-[url('/assets/start/window-1.svg')] bg-center bg-no-repeat lg:mb-0 lg:absolute lg:right-[5%] lg:-bottom-20">
-          <div className="pt-14 px-10 text-gray-600 md:pt-[3.25rem]">
-            <p className="mt-0 mb-1 text-center lg:text-left md:text-lg">Already comfortable building on Ethereum?</p>
-            <a href="https://speedrunethereum.com/challenge/simple-nft-example" className="link">
-              Jump straight to Challenge #0
-            </a>
-          </div>
-        </div>
+        <ProgressBasedPrompt />
       </div>
 
       <div className="w-full h-[18px] bg-[url('/assets/start/color-border.svg')] dark:bg-[url('/assets/start/color-border-dark.svg')] bg-repeat-x"></div>
+
       <div className="pt-12 bg-base-300 lg:pt-24">
         <div className="max-w-4xl mx-auto px-6 text-lg lg:pb-12">
-          <div className="mb-12 lg:mb-16 mt-2 lg:mt-4 flex flex-col items-center gap-4 lg:flex-row lg:gap-4 lg:justify-center">
+          <div className="mb-12 flex flex-col items-center gap-4 lg:flex-row lg:gap-4 lg:justify-center">
             <DiamondIcon />
             <h2 className="m-0 text-center text-2xl font-medium md:text-4xl">Why build on Ethereum?</h2>
           </div>
@@ -80,7 +81,7 @@ const StartLandingPage = () => {
           </p>
 
           <p className="mb-4">It works like this:</p>
-          <ul className="list-disc pl-6 mb-12 lg:mb-16 space-y-4">
+          <ul className="list-disc pl-6 mb-12 space-y-4">
             <li>
               🤖 You write logic in smart contracts and deploy them to the blockchain (decentralized, immutable,
               available to anyone forever!)
@@ -91,7 +92,7 @@ const StartLandingPage = () => {
             </li>
           </ul>
 
-          <div className="relative bg-base-200 px-4 border-2 border-primary rounded-lg lg:bg-transparent lg:border-0 lg:mx-auto lg:w-[470px] lg:h-[111px] lg:bg-[url('/assets/start/text-bubble-left.svg')] lg:bg-no-repeat">
+          <div className="relative bg-base-100 px-4 border-2 border-primary rounded-lg lg:bg-transparent lg:border-0 lg:mx-auto lg:w-[470px] lg:h-[111px] lg:bg-[url('/assets/start/text-bubble-left.svg')] lg:bg-no-repeat">
             <p className="lg:pt-3 lg:pl-3 lg:pr-6 lg:m-0 lg:text-gray-600">
               It's not just about digital assets; Ethereum lets you build systems where{" "}
               <strong>money itself is programmable</strong>.
@@ -99,7 +100,7 @@ const StartLandingPage = () => {
             <BoyIcon className="hidden absolute -right-12 bottom-6 lg:block" />
           </div>
 
-          <div className="relative mt-8 mb-2 bg-base-200 px-4 border-2 border-primary rounded-lg lg:bg-transparent lg:border-0 lg:mx-auto lg:w-[471px] lg:h-[97px] lg:bg-[url('/assets/start/text-bubble-right.svg')] lg:bg-no-repeat">
+          <div className="relative my-8 bg-base-100 px-4 border-2 border-primary rounded-lg lg:bg-transparent lg:border-0 lg:mx-auto lg:w-[471px] lg:h-[97px] lg:bg-[url('/assets/start/text-bubble-right.svg')] lg:bg-no-repeat">
             <p className="lg:pt-5 lg:pl-[1.5rem] lg:pr-1 lg:m-0 lg:text-gray-600">
               From payments and rewards to auctions and governance, logic becomes value.
             </p>
@@ -111,6 +112,8 @@ const StartLandingPage = () => {
           <div className="bg-base-100 absolute inset-0 top-auto w-full h-5" />
         </div>
       </div>
+
+      {/* HOW IT WORKS SECTION */}
       <div className="relative pt-12 bg-base-100 lg:pt-24">
         <Image
           src="/assets/start/clouds-left.svg"
@@ -129,7 +132,7 @@ const StartLandingPage = () => {
           height={280}
         />
         <div className="relative z-10 max-w-4xl mx-auto px-6 text-lg lg:pb-12">
-          <div className="mb-12 lg:mb-16 mt-4 flex flex-col items-center gap-4 lg:flex-row lg:gap-4 lg:justify-center">
+          <div className="mb-12 flex flex-col items-center gap-4 lg:flex-row lg:gap-4 lg:justify-center">
             <ToolsIcon />
             <h2 className="m-0 text-center text-2xl font-medium md:text-4xl">How does SpeedRunEthereum work?</h2>
           </div>
@@ -148,7 +151,7 @@ const StartLandingPage = () => {
             </a>
             , a powerful developer toolkit that gives you:
           </p>
-          <ul className="list-disc pl-6 mb-8 lg:mb-16 space-y-4">
+          <ul className="list-disc pl-6 mb-8 space-y-4">
             <li>⚙️ A full Ethereum dev environment with local blockchain</li>
             <li>🔌 A frontend connected to your contracts</li>
             <li>🔍 Built-in Debug tools, Faucets, wallet connection, and powerful hooks and components.</li>
@@ -161,29 +164,54 @@ const StartLandingPage = () => {
             </p>
           </div>
         </div>
+
+        {/* CHALLENGES OVERVIEW SECTION */}
+        <div className="bg-base-100 py-12 lg:py-24">
+          <div className="max-w-6xl mx-auto px-6">
+            <div className="mb-12 flex flex-col items-center gap-4 lg:flex-row lg:gap-4 lg:justify-center">
+              <ComputerIcon />
+              <h2 className="m-0 text-center text-2xl font-medium md:text-4xl">Challenges Overview</h2>
+            </div>
+
+            <div className="grid grid-cols-2 mb-8 lg:pt-6 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {challenges
+                .filter(challenge => !challenge.disabled)
+                .sort((a, b) => {
+                  const aIsBuildIdea = a.github && !a.autograding;
+                  const bIsBuildIdea = b.github && !b.autograding;
+
+                  if (aIsBuildIdea && !bIsBuildIdea) return 1;
+                  if (!aIsBuildIdea && bIsBuildIdea) return -1;
+
+                  return a.sortOrder - b.sortOrder;
+                })
+                .map(challenge => (
+                  <ChallengeCard key={challenge.id} challenge={challenge} />
+                ))}
+            </div>
+          </div>
+        </div>
+
         <div className="mt-14 lg:mt-12 relative h-[130px]">
           <div className="absolute inset-0 bg-[url('/assets/start/separation-trees.svg')] bg-repeat-x bg-[length:auto_130px] z-10" />
           <div className="bg-base-200 absolute inset-0 top-auto w-full h-24" />
         </div>
-      </div>
 
-      <div className="bg-base-200 py-12 lg:py-24">
-        <div className="max-w-4xl mx-auto px-6 text-lg lg:pb-12">
-          <div className="mb-12 lg:mb-16 flex flex-col items-center gap-4 lg:flex-row lg:gap-4 lg:justify-center">
-            <SpaceshipIcon />
-            <h2 className="m-0 text-center text-2xl font-medium md:text-4xl">Ready?</h2>
-          </div>
-          <Image
-            src="/assets/challenges/simpleNFT.svg"
-            alt="NFT"
-            className="my-8 mx-auto md:max-w-md"
-            width={650}
-            height={400}
-          />
-          <p className="mb-2 text-center font-medium">Start with Challenge #0: Simple NFT Example</p>
-          <p className="mt-2 text-center">You'll deploy your first smart contract and mint an NFT on a testnet.</p>
-          <div className="flex justify-center mt-8 mb-8 lg:mb-0 lg:mt-12">
-            <StartChallengesButton />
+        {/* CALL-TO-ACTION SECTION */}
+        <div className="bg-base-200 py-12 lg:py-24">
+          <div className="max-w-4xl mx-auto px-6 text-lg lg:pb-12">
+            <div className="mb-12 flex flex-col items-center gap-4 lg:flex-row lg:gap-4 lg:justify-center">
+              <SpaceshipIcon />
+              <h2 className="m-0 text-center text-2xl font-medium md:text-4xl">Ready?</h2>
+            </div>
+            <Image
+              src="/assets/start/ready-img.svg"
+              alt="NFT"
+              className="my-8 mx-auto md:max-w-md"
+              width={650}
+              height={400}
+            />
+            <ConnectAndRegisterSection />
           </div>
         </div>
       </div>

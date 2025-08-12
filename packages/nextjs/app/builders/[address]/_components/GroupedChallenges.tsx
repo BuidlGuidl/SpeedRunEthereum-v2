@@ -12,14 +12,7 @@ const basicChallengeIds = new Set<ChallengeId>([
   ChallengeId.SIMPLE_NFT_EXAMPLE,
   ChallengeId.DECENTRALIZED_STAKING,
   ChallengeId.TOKEN_VENDOR,
-]);
-
-const excludedChallengeIds = new Set<ChallengeId>([
-  ChallengeId.STATE_CHANNELS,
-  ChallengeId.STABLECOINS,
-  ChallengeId.DEPLOY_TO_L2,
-  ChallengeId.MULTISIG,
-  ChallengeId.SVG_NFT,
+  ChallengeId.DICE_GAME,
 ]);
 
 export type MappedChallenges = Challenges[number] & {
@@ -57,8 +50,7 @@ export function GroupedChallenges({
         frontendUrl: userChallenge.frontendUrl ?? null,
       };
     })
-    .sort((a, b) => a.sortOrder - b.sortOrder)
-    .filter(challenge => !excludedChallengeIds.has(challenge.id as ChallengeId));
+    .sort((a, b) => a.sortOrder - b.sortOrder);
 
   // Filter challenges into basic and advanced
   const basicChallenges = userMappedChallenges.filter(challenge => basicChallengeIds.has(challenge.id as ChallengeId));
