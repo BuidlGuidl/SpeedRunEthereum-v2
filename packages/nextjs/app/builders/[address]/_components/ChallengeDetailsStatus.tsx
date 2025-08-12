@@ -18,7 +18,7 @@ export function ChallengeDetailsStatus({ challenge }: { challenge: MappedChallen
   useIntervalRouterRefresh({
     enabled: isSubmitted,
     intervalMs: 5000,
-    maxDurationMs: 10000,
+    maxDurationMs: 60000,
     onTimeout: () => {
       setIsRefreshing(false);
       notification.warning(
