@@ -28,6 +28,7 @@ const ChallengeExpandedCard = ({
   }
 
   const { sortOrder } = challenge;
+  const isBuildIdea = challenge.github && !challenge.autograding;
 
   const reviewAction = userChallenge?.reviewAction;
 
@@ -44,14 +45,17 @@ const ChallengeExpandedCard = ({
                 </span>
               )}
             </div>
-
-            <span className="text-lg">Challenge #{sortOrder}</span>
+            {isBuildIdea ? (
+              <span className="badge badge-warning">Build Idea</span>
+            ) : (
+              <span className="text-lg">Challenge #{sortOrder}</span>
+            )}
             <h2 className="text-xl lg:text-2xl font-medium mt-0">{challenge.challengeName}</h2>
           </div>
           <div className="flex flex-col gap-8">
             <span className="text-sm lg:text-base leading-[1.5]">{challenge.description}</span>
             <div className="flex items-center">
-              {comingSoon && (
+              {comingSoon ? (
                 <button
                   disabled
                   className="inline-flex items-center text-xl lg:text-lg px-4 py-1 border-2 border-primary rounded-full bg-base-300 opacity-50 cursor-not-allowed"
@@ -61,20 +65,7 @@ const ChallengeExpandedCard = ({
                     <span className="ml-2 uppercase font-medium">Coming soon</span>
                   </div>
                 </button>
-              )}
-
-              {!comingSoon && challenge.externalLink?.link && (
-                // Redirect to externalLink if set (instead of challenge detail view)
-                <>
-                  <button className="flex items-center text-xl lg:text-lg px-4 py-1 border-2 border-primary rounded-full bg-base-300 hover:bg-accent/50 transition-colors">
-                    <a href={challenge.externalLink.link} target="_blank" rel="noopener noreferrer">
-                      {challenge.externalLink.claim}
-                    </a>
-                  </button>
-                </>
-              )}
-
-              {!comingSoon && !challenge.externalLink?.link && (
+              ) : (
                 <Link
                   href={`/challenge/${challengeId}`}
                   className="flex items-center text-xl lg:text-lg px-4 py-1 border-2 border-primary rounded-full bg-base-300 cursor-pointer hover:bg-accent/50"
