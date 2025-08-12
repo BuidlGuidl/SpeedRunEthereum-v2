@@ -14,14 +14,6 @@ const basicChallengeIds = new Set<ChallengeId>([
   ChallengeId.TOKEN_VENDOR,
 ]);
 
-const excludedChallengeIds = new Set<ChallengeId>([
-  ChallengeId.STATE_CHANNELS,
-  ChallengeId.STABLECOINS,
-  ChallengeId.DEPLOY_TO_L2,
-  ChallengeId.MULTISIG,
-  ChallengeId.SVG_NFT,
-]);
-
 export type MappedChallenges = Challenges[number] & {
   reviewAction?: ReviewAction | null;
   submittedAt?: Date;
@@ -33,7 +25,7 @@ export type MappedChallenges = Challenges[number] & {
 export function GroupedChallenges({
   address,
   challenges,
-  userChallenges: initialUserChallenges,
+  userChallenges,
   userHasCompletedChallenges,
 }: {
   address: Address;
@@ -41,12 +33,10 @@ export function GroupedChallenges({
   userChallenges: UserChallenges;
   userHasCompletedChallenges: boolean;
 }) {
-  const currentUserChallenges = initialUserChallenges;
-
   // Map challenges with user challenges
   const userMappedChallenges: MappedChallenges[] = challenges
     .map((challenge: Challenges[number]) => {
-      const userChallenge = currentUserChallenges.find(uc => uc.challengeId === challenge.id);
+      const userChallenge = userChallenges.find(uc => uc.challengeId === challenge.id);
 
       if (!userChallenge) return challenge;
 
@@ -59,8 +49,7 @@ export function GroupedChallenges({
         frontendUrl: userChallenge.frontendUrl ?? null,
       };
     })
-    .sort((a, b) => a.sortOrder - b.sortOrder)
-    .filter(challenge => !excludedChallengeIds.has(challenge.id as ChallengeId));
+    .sort((a, b) => a.sortOrder - b.sortOrder);
 
   // Filter challenges into basic and advanced
   const basicChallenges = userMappedChallenges.filter(challenge => basicChallengeIds.has(challenge.id as ChallengeId));
