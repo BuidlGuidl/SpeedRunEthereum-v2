@@ -12,6 +12,7 @@ const basicChallengeIds = new Set<ChallengeId>([
   ChallengeId.SIMPLE_NFT_EXAMPLE,
   ChallengeId.DECENTRALIZED_STAKING,
   ChallengeId.TOKEN_VENDOR,
+  ChallengeId.DICE_GAME,
 ]);
 
 export type MappedChallenges = Challenges[number] & {
