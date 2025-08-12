@@ -1,13 +1,31 @@
+"use client";
+
+import { useState } from "react";
 import Link from "next/link";
 import { ChallengeStatus } from "./ChallengeStatus";
 import type { MappedChallenges } from "./GroupedChallenges";
 import { DateWithTooltip } from "~~/components/DateWithTooltip";
+import { useIntervalRouterRefresh } from "~~/hooks/useIntervalRouterRefresh";
 import { ReviewAction } from "~~/services/database/config/types";
+import { notification } from "~~/utils/scaffold-eth";
 
 export function ChallengeDetailsStatus({ challenge }: { challenge: MappedChallenges }) {
+  const [isRefreshing, setIsRefreshing] = useState(true);
   const isSubmitted = challenge.reviewAction === ReviewAction.SUBMITTED;
   const isAccepted = challenge.reviewAction === ReviewAction.ACCEPTED;
   const isRejected = challenge.reviewAction === ReviewAction.REJECTED;
+
+  useIntervalRouterRefresh({
+    enabled: isSubmitted,
+    intervalMs: 5000,
+    maxDurationMs: 60000,
+    onTimeout: () => {
+      setIsRefreshing(false);
+      notification.warning(
+        `Refresh timed out. Please refresh the page manually or re-submit the ${challenge.challengeName} challenge`,
+      );
+    },
+  });
 
   let badgeClass = "badge-warning";
   if (isAccepted) badgeClass = "badge-secondary";
@@ -32,7 +50,10 @@ export function ChallengeDetailsStatus({ challenge }: { challenge: MappedChallen
             </Link>
           </h2>
         </div>
-        <div className={`badge badge-sm py-3 px-3 ${badgeClass}`}>{challenge.reviewAction}</div>
+        <div className={`badge badge-sm py-3 px-3 ${badgeClass} flex items-center gap-1`}>
+          {isSubmitted && isRefreshing && <span className="loading loading-spinner loading-xs"></span>}
+          {challenge.reviewAction}
+        </div>
       </div>
       <div className="pl-8">
         <p className="mt-2 mb-0 text-sm">{shortedDescription}.</p>
