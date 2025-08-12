@@ -44,7 +44,7 @@ export function ChallengeDetails({
             <Link href={`/challenge/${challenge.id}`} className="btn btn-primary btn-sm rounded-md">
               Start
             </Link>
-            <p className="text-base-content mt-2 mb-0 text-xs font-medium">+10 Points</p>
+            <p className="text-base-content mt-2 mb-0 text-xs font-medium">+10 XP</p>
           </div>
         )}
       </div>
