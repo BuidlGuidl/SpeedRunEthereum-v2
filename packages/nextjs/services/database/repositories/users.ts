@@ -2,7 +2,7 @@ import { ReviewAction, UserRole } from "../config/types";
 import { ColumnSort, SortingState } from "@tanstack/react-table";
 import { InferInsertModel, and, eq, ilike, inArray, isNotNull, or, sql } from "drizzle-orm";
 import { db } from "~~/services/database/config/postgresClient";
-import { lower, userChallenges, users } from "~~/services/database/config/schema";
+import { challenges, lower, userChallenges, users } from "~~/services/database/config/schema";
 import { BatchUserStatus } from "~~/services/database/config/types";
 import { BATCH_XP, BUILD_XP, CHALLENGE_XP } from "~~/utils/xp";
 
@@ -38,7 +38,7 @@ export async function getSortedUsersWithChallengesInfo(
 ) {
   const sortingQuery = sorting[0] as ColumnSort;
 
-  const challengesCompletedExpr = sql`(SELECT COUNT(DISTINCT uc.challenge_id) FROM ${userChallenges} uc WHERE uc.user_address = ${users.userAddress} AND uc.review_action = ${ReviewAction.ACCEPTED})`;
+  const challengesCompletedExpr = sql`(SELECT COUNT(DISTINCT uc.challenge_id) FROM ${userChallenges} uc INNER JOIN ${challenges} c ON uc.challenge_id = c.id WHERE uc.user_address = ${users.userAddress} AND uc.review_action = ${ReviewAction.ACCEPTED} AND c.disabled = false)`;
   const lastActivityIsoExpr = sql`to_char(
     COALESCE(
       (SELECT MAX(uc.submitted_at) FROM ${userChallenges} uc WHERE uc.user_address = ${users.userAddress}),
