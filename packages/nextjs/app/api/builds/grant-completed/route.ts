@@ -7,28 +7,18 @@ type GrantCompletedPayload = {
 };
 
 export async function POST(request: NextRequest) {
-  let payload: GrantCompletedPayload;
   try {
-    payload = (await request.json()) as GrantCompletedPayload;
-  } catch {
-    return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
-  }
+    const payload: GrantCompletedPayload = await request.json();
+    const { apiKey, buildId } = payload;
 
-  const { apiKey, buildId } = payload;
+    if (!apiKey || apiKey !== process.env.SRE_API_KEY) {
+      return NextResponse.json({ error: "Invalid apiKey" }, { status: 401 });
+    }
 
-  if (!apiKey) {
-    return NextResponse.json({ error: "Missing apiKey" }, { status: 400 });
-  }
+    if (!buildId) {
+      return NextResponse.json({ error: "Missing buildId" }, { status: 400 });
+    }
 
-  if (apiKey !== process.env.SRE_API_KEY) {
-    return NextResponse.json({ error: "Invalid apiKey" }, { status: 401 });
-  }
-
-  if (!buildId) {
-    return NextResponse.json({ error: "Missing buildId" }, { status: 400 });
-  }
-
-  try {
     const build = await getBuildByBuildId(buildId);
     if (!build) {
       return NextResponse.json({ error: "Build not found" }, { status: 404 });
