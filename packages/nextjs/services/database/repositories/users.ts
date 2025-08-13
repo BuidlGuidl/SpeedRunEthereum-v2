@@ -258,16 +258,20 @@ export async function getUserPoints(userAddress: string) {
     with: {
       userChallenges: {
         where: eq(userChallenges.reviewAction, ReviewAction.ACCEPTED),
+        with: {
+          challenge: true,
+        },
       },
       buildBuilders: true,
     },
   });
 
-  const acceptedChallengesCount = user?.userChallenges.length || 0;
+  const acceptedNonDisabledChallengesCount =
+    user?.userChallenges.filter(userChallenge => !userChallenge.challenge.disabled).length || 0;
   const hasBatch = user?.batchStatus === BatchUserStatus.GRADUATE;
   const hasBuilds = user?.buildBuilders && user?.buildBuilders.length > 0;
 
-  const challengePoints = (acceptedChallengesCount || 0) * CHALLENGE_XP;
+  const challengePoints = acceptedNonDisabledChallengesCount * CHALLENGE_XP;
   const batchPoints = hasBatch ? BATCH_XP : 0;
   const buildPoints = hasBuilds ? BUILD_XP : 0;
 
