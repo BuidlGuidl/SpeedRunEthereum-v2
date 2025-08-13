@@ -9,7 +9,7 @@ import { BuildCategory, BuildType } from "~~/services/database/config/types";
 import { Build } from "~~/services/database/repositories/builds";
 import { notification } from "~~/utils/scaffold-eth";
 
-export type BuildFormInputs = Omit<Build, "submittedTimestamp" | "id"> & {
+export type BuildFormInputs = Omit<Build, "submittedTimestamp" | "id" | "bgGrant"> & {
   coBuilders: string[];
 };
 

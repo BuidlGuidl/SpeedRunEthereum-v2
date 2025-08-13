@@ -1,0 +1,1 @@
+ALTER TABLE "builds" ADD COLUMN "bg_grant" boolean DEFAULT false;
