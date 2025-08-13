@@ -1,5 +1,3 @@
-const GITHUB_RAW_BASE_URL = "https://raw.githubusercontent.com";
-
 type GithubRepoInfo = {
   owner: string;
   repo: string;
@@ -17,38 +15,34 @@ export function parseGithubUrl(githubString: string): GithubRepoInfo {
   };
 }
 
-export async function fetchLocalChallengeReadme(githubString: string): Promise<string> {
-  const { branch } = parseGithubUrl(githubString);
-  const fs = await import("fs/promises");
-  const path = await import("path");
-
-  const branchWithoutChallengePrefix = branch.replace("challenge-", "");
-  const filePath = path.join(process.cwd(), "public", "readme", `${branchWithoutChallengePrefix}.md`);
-
-  try {
-    const content = await fs.readFile(filePath, "utf-8");
-    return content;
-  } catch (error) {
-    throw new Error(`Failed to read README file: ${filePath}. ${error}`);
-  }
-}
-
 export async function fetchGithubChallengeReadme(githubString: string): Promise<string> {
   const { owner, repo, branch } = parseGithubUrl(githubString);
 
-  // TODO: Remove this hotfix after github url scaffold-eth/se-2-challenges  works correctly
-  let correctOwner = owner;
-  if (owner === "scaffold-eth" && repo === "se-2-challenges") {
-    correctOwner = "BuidlGuidl";
-  }
-  const readmeUrl = `${GITHUB_RAW_BASE_URL}/${correctOwner}/${repo}/${branch}/README.md`;
+  const apiUrl = `https://api.github.com/repos/${owner}/${repo}/contents/README.md?ref=${branch}`;
 
-  const response = await fetch(readmeUrl);
+  const headers: Record<string, string> = {
+    Accept: "application/vnd.github.v3+json",
+    "User-Agent": "SpeedRunEthereum-v2",
+  };
+
+  if (process.env.GITHUB_PAT) {
+    headers["Authorization"] = `token ${process.env.GITHUB_PAT}`;
+  }
+
+  const response = await fetch(apiUrl, { headers });
+
   if (!response.ok) {
     throw new Error(`Failed to fetch README: ${response.statusText}`);
   }
 
-  return response.text();
+  const data = await response.json();
+
+  // The content is base64 encoded, so we need to decode it
+  if (data.content) {
+    return Buffer.from(data.content, "base64").toString("utf-8");
+  }
+
+  throw new Error("README content not found in response");
 }
 
 export const getGithubReadmeUrlFromBranchUrl = (branchUrl: string): string =>
