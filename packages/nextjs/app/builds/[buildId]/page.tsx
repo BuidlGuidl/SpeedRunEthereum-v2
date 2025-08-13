@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { MDXRemote } from "next-mdx-remote/rsc";
 import rehypeRaw from "rehype-raw";
@@ -38,7 +39,21 @@ export default async function BuildPage(props: { params: Promise<{ buildId: stri
                 <span className="text-base">{buildLikesAddress.length}</span>
               </div>
             </div>
-            <p className="line-clamp-4 mt-4">{build?.desc}</p>
+            <div className="flex flex-col space-y-4 w-full">
+              <p className="line-clamp-4">{build?.desc}</p>
+              {build?.bgGrant && (
+                <div className="inline-flex self-start w-fit items-center gap-1 px-2 py-1 bg-white rounded-full shadow-sm border border-gray-200">
+                  <Image
+                    src="/assets/bg-grant-badge.png"
+                    alt="BuidlGuidl Grant Badge"
+                    width={64}
+                    height={64}
+                    className="w-9 h-9 object-contain"
+                  />
+                  <span className="text-sm font-semibold text-[#8C97FE]">BuidlGuidl Grant Recipient</span>
+                </div>
+              )}
+            </div>
           </div>
           <div className="flex justify-center">
             {build?.imageUrl ? (

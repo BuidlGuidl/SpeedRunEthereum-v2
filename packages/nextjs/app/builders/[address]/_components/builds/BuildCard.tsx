@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { DeleteBuildButton } from "./DeleteBuildButton";
 import { EditBuildButton } from "./EditBuildButton";
@@ -18,7 +19,7 @@ export const BuildCard = ({ ownerAddress, build, likes, coBuilders }: Props) => 
         <EditBuildButton build={{ ...build, coBuilders }} buildId={build.id} ownerAddress={ownerAddress} />
         <DeleteBuildButton buildId={build.id} ownerAddress={ownerAddress} />
       </div>
-      <div className="w-full h-44 flex items-center justify-center">
+      <div className="w-full h-44 flex items-center justify-center relative">
         <Link href={`/builds/${build.id}`} className="w-full h-full block">
           {build.imageUrl ? (
             // eslint-disable-next-line @next/next/no-img-element
@@ -31,7 +32,21 @@ export const BuildCard = ({ ownerAddress, build, likes, coBuilders }: Props) => 
         </Link>
       </div>
       <div className="flex flex-col flex-1 px-6 py-4">
-        <h2 className="text-xl font-bold mb-2 leading-tight line-clamp-2">{build.name}</h2>
+        <div className="flex items-start gap-2 mb-2">
+          <h2 className="text-xl font-bold leading-tight line-clamp-2 flex-1 min-w-0">{build.name}</h2>
+          {build.bgGrant && (
+            <div className="inline-flex items-center gap-1 px-2 py-0.5 bg-white rounded-full shadow-sm border border-gray-200 flex-shrink-0 -mr-2">
+              <Image
+                src="/assets/bg-grant-badge.png"
+                alt="BuidlGuidl Grant Badge"
+                width={32}
+                height={32}
+                className="w-7 h-7 object-contain"
+              />
+              <span className="text-sm font-semibold text-[#8C97FE]">BG Grant</span>
+            </div>
+          )}
+        </div>
         <p className="text-sm my-1 line-clamp-4">{build.desc}</p>
         <div className="flex-1" />
         <div className="flex justify-between items-center pt-2 mt-2 w-full gap-2">
