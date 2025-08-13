@@ -11,9 +11,6 @@ import { fetchGithubChallengeReadme, parseGithubUrl } from "~~/services/github";
 import { CHALLENGE_METADATA } from "~~/utils/challenges";
 import { getMetadata } from "~~/utils/scaffold-eth/getMetadata";
 
-// 6 hours
-export const revalidate = 21600;
-
 export async function generateStaticParams() {
   const challenges = await getAllChallenges();
 
