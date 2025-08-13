@@ -72,19 +72,27 @@ export async function POST(req: NextRequest, props: { params: Promise<{ challeng
         try {
           const referrer = user?.referrer || undefined;
           const originalUtmParams = user?.originalUtmParams;
-          await trackPlausibleEvent(
-            PlausibleEvent.CHALLENGE_SUBMISSION,
-            {
-              challengeId,
-              originalReferrer: referrer,
-              originalUtmSource: originalUtmParams?.utm_source,
-              originalUtmMedium: originalUtmParams?.utm_medium,
-              originalUtmCampaign: originalUtmParams?.utm_campaign,
-              originalUtmTerm: originalUtmParams?.utm_term,
-              originalUtmContent: originalUtmParams?.utm_content,
-            },
-            req,
-          );
+
+          try {
+            await trackPlausibleEvent(
+              PlausibleEvent.CHALLENGE_SUBMISSION,
+              {
+                challengeId,
+                originalReferrer: referrer,
+                originalUtmSource: originalUtmParams?.utm_source,
+                originalUtmMedium: originalUtmParams?.utm_medium,
+                originalUtmCampaign: originalUtmParams?.utm_campaign,
+                originalUtmTerm: originalUtmParams?.utm_term,
+                originalUtmContent: originalUtmParams?.utm_content,
+              },
+              req,
+            );
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+          } catch (e) {
+            console.error(
+              `Error tracking plausible event ${PlausibleEvent.CHALLENGE_SUBMISSION} for user ${userAddress}`,
+            );
+          }
 
           // TODO: Won't work for simple-nft-example (update se-2-challenges branch OR update database (all relations!))
           const autoGraderChallengeId = `challenge-${challenge.id}`;
