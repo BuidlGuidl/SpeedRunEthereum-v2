@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
+import { useLocalStorage } from "usehooks-ts";
 import { useAccount } from "wagmi";
 import { useUser } from "~~/hooks/useUser";
 import { useUserRegister } from "~~/hooks/useUserRegister";
@@ -13,6 +14,9 @@ export const ConnectAndRegisterSection = () => {
   const { data: user, isLoading: isLoadingUser } = useUser(connectedAddress);
   const { handleRegister, isRegistering } = useUserRegister();
   const [isLocalLoading, setIsLocalLoading] = useState(false);
+  const [storedReferrer] = useLocalStorage<string | null>("originalReferrer", null);
+  const [storedUtmParams] = useLocalStorage<string | null>("originalUtmParams", null);
+  const parsedUtmParams = storedUtmParams ? JSON.parse(storedUtmParams) : undefined;
   const router = useRouter();
 
   const isWalletConnected = !!connectedAddress;
@@ -21,7 +25,7 @@ export const ConnectAndRegisterSection = () => {
   const handleRegisterClick = async () => {
     setIsLocalLoading(true);
     try {
-      await handleRegister(null);
+      await handleRegister({ referrer: storedReferrer, originalUtmParams: parsedUtmParams });
     } catch (error) {
       console.error("Registration failed:", error);
     } finally {

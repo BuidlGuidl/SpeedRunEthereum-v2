@@ -1,6 +1,7 @@
 import { useRouter } from "next/navigation";
 import { useMutation } from "@tanstack/react-query";
-import { useAccount, useSignTypedData } from "wagmi";
+import { useAccount } from "wagmi";
+import { useSignatureWithNotification } from "~~/hooks/useSignatureWithNotification";
 import { fetchUpdateBatch } from "~~/services/api/batches";
 import { BatchInsert } from "~~/services/database/repositories/batches";
 import { EIP_712_TYPED_DATA__UPDATE_BATCH } from "~~/services/eip712/batches";
@@ -9,7 +10,7 @@ import { notification } from "~~/utils/scaffold-eth";
 export const useUpdateBatch = ({ onSuccess }: { onSuccess?: () => void }) => {
   const router = useRouter();
   const { address } = useAccount();
-  const { signTypedDataAsync } = useSignTypedData();
+  const { signWithNotification } = useSignatureWithNotification();
 
   const { mutate: updateBatchMutation, isPending } = useMutation({
     mutationFn: async ({
@@ -29,7 +30,7 @@ export const useUpdateBatch = ({ onSuccess }: { onSuccess?: () => void }) => {
         network: batch.network,
       };
 
-      const signature = await signTypedDataAsync({
+      const signature = await signWithNotification({
         ...EIP_712_TYPED_DATA__UPDATE_BATCH,
         message,
       });

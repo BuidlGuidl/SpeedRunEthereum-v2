@@ -55,7 +55,7 @@ export const RegisterUser = () => {
           )}
           <button
             className="flex items-center justify-center py-1.5 lg:py-2 px-3 lg:px-4 border-2 border-primary rounded-full bg-base-300 hover:bg-base-200 transition-colors cursor-pointer mt-4 text-sm w-full"
-            onClick={() => handleRegister(storedReferrer, parsedUtmParams)}
+            onClick={() => handleRegister({ referrer: storedReferrer, originalUtmParams: parsedUtmParams })}
             disabled={isRegistering}
           >
             {isRegistering ? (

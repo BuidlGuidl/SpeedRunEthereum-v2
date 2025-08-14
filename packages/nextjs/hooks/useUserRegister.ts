@@ -1,5 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useAccount, useSignTypedData } from "wagmi";
+import { useAccount } from "wagmi";
+import { useSignatureWithNotification } from "~~/hooks/useSignatureWithNotification";
 import { registerUser } from "~~/services/api/users";
 import { EIP_712_TYPED_DATA__USER_REGISTER } from "~~/services/eip712/register";
 import { notification } from "~~/utils/scaffold-eth";
@@ -7,10 +8,22 @@ import { notification } from "~~/utils/scaffold-eth";
 export function useUserRegister() {
   const { address } = useAccount();
   const queryClient = useQueryClient();
-  const { signTypedDataAsync } = useSignTypedData();
+  const { signWithNotification } = useSignatureWithNotification();
 
-  const { mutate: register, isPending: isRegistering } = useMutation({
-    mutationFn: registerUser,
+  const { mutateAsync: userLocationMutation, isPending: isRegistering } = useMutation({
+    mutationFn: async ({
+      referrer,
+      originalUtmParams,
+    }: {
+      referrer: string | null;
+      originalUtmParams?: Record<string, string>;
+    }) => {
+      if (!address) throw new Error("Wallet not connected");
+
+      const signature = await signWithNotification(EIP_712_TYPED_DATA__USER_REGISTER);
+
+      return registerUser({ address, signature, referrer, originalUtmParams });
+    },
     onSuccess: user => {
       queryClient.setQueryData(["user", address], user);
       notification.success("Successfully registered!");
@@ -21,20 +34,8 @@ export function useUserRegister() {
     },
   });
 
-  const handleRegister = async (referrer: string | null, originalUtmParams?: Record<string, string>) => {
-    if (!address) return;
-
-    try {
-      const signature = await signTypedDataAsync(EIP_712_TYPED_DATA__USER_REGISTER);
-      register({ address, signature, referrer, originalUtmParams });
-    } catch (error) {
-      console.error("Error during signature:", error);
-      notification.error("Failed to sign message. Please try again.");
-    }
-  };
-
   return {
-    handleRegister,
+    handleRegister: userLocationMutation,
     isRegistering,
   };
 }
