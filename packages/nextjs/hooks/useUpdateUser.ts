@@ -24,7 +24,6 @@ export const useUpdateUser = ({ onSuccess }: { onSuccess?: () => void }) => {
     }) => {
       if (!address) throw new Error("Wallet not connected");
 
-      const loadingNotificationId = notification.loading("Awaiting for Wallet signature...");
       const message = {
         ...EIP_712_TYPED_DATA__UPDATE_USER.message,
         userAddress,
@@ -33,11 +32,16 @@ export const useUpdateUser = ({ onSuccess }: { onSuccess?: () => void }) => {
         batchStatus: batchStatus || "",
       };
 
-      const signature = await signTypedDataAsync({
-        ...EIP_712_TYPED_DATA__UPDATE_USER,
-        message,
-      });
-      notification.remove(loadingNotificationId);
+      let signature: `0x${string}` | undefined;
+      const loadingNotificationId = notification.loading("Awaiting for Wallet signature...");
+      try {
+        signature = await signTypedDataAsync({
+          ...EIP_712_TYPED_DATA__UPDATE_USER,
+          message,
+        });
+      } finally {
+        notification.remove(loadingNotificationId);
+      }
 
       const response = await fetch(`/api/users/${userAddress}/update`, {
         method: "PUT",

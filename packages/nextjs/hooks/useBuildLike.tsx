@@ -15,17 +15,21 @@ export function useBuildLike({ onSuccess }: { onSuccess?: () => void }) {
     mutationFn: async ({ buildId, action }: { buildId: string; action: "like" | "unlike" }) => {
       if (!address) throw new Error("Wallet not connected");
 
-      const loadingNotificationId = notification.loading("Awaiting for Wallet signature...");
       const message = {
         buildId,
         action,
       };
 
-      const signature = await signTypedDataAsync({
-        ...EIP_712_TYPED_DATA__LIKE_BUILD,
-        message,
-      });
-      notification.remove(loadingNotificationId);
+      let signature: `0x${string}` | undefined;
+      const loadingNotificationId = notification.loading("Awaiting for Wallet signature...");
+      try {
+        signature = await signTypedDataAsync({
+          ...EIP_712_TYPED_DATA__LIKE_BUILD,
+          message,
+        });
+      } finally {
+        notification.remove(loadingNotificationId);
+      }
 
       return likeBuild({ address, signature, buildId });
     },

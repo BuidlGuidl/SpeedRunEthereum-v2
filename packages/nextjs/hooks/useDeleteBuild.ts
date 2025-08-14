@@ -15,17 +15,21 @@ export function useDeleteBuild() {
     mutationFn: async ({ buildId, ownerAddress }: { buildId: string; ownerAddress: string }) => {
       if (!connectedAddress) throw new Error("Wallet not connected");
 
-      const loadingNotificationId = notification.loading("Awaiting for Wallet signature...");
       const message = {
         ...EIP_712_TYPED_DATA__DELETE_BUILD.message,
         id: buildId,
       };
 
-      const signature = await signTypedDataAsync({
-        ...EIP_712_TYPED_DATA__DELETE_BUILD,
-        message,
-      });
-      notification.remove(loadingNotificationId);
+      let signature: `0x${string}` | undefined;
+      const loadingNotificationId = notification.loading("Awaiting for Wallet signature...");
+      try {
+        signature = await signTypedDataAsync({
+          ...EIP_712_TYPED_DATA__DELETE_BUILD,
+          message,
+        });
+      } finally {
+        notification.remove(loadingNotificationId);
+      }
 
       return deleteBuildApi({ signatureAddress: connectedAddress, signature, buildId, userAddress: ownerAddress });
     },

@@ -54,17 +54,21 @@ export const useSubmitChallenge = ({ onSuccess }: { onSuccess?: () => void }) =>
 
       validateUrls(submitChallengeParams);
 
-      const loadingNotificationId = notification.loading("Awaiting for Wallet signature...");
       const message = {
         ...EIP_712_TYPED_DATA__CHALLENGE_SUBMIT.message,
         ...submitChallengeParams,
       };
 
-      const signature = await signTypedDataAsync({
-        ...EIP_712_TYPED_DATA__CHALLENGE_SUBMIT,
-        message,
-      });
-      notification.remove(loadingNotificationId);
+      let signature: `0x${string}` | undefined;
+      const loadingNotificationId = notification.loading("Awaiting for Wallet signature...");
+      try {
+        signature = await signTypedDataAsync({
+          ...EIP_712_TYPED_DATA__CHALLENGE_SUBMIT,
+          message,
+        });
+      } finally {
+        notification.remove(loadingNotificationId);
+      }
 
       return submitChallenge({
         userAddress: address,

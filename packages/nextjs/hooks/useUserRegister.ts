@@ -25,9 +25,13 @@ export function useUserRegister() {
     if (!address) return;
 
     try {
+      let signature: `0x${string}` | undefined;
       const loadingNotificationId = notification.loading("Awaiting for Wallet signature...");
-      const signature = await signTypedDataAsync(EIP_712_TYPED_DATA__USER_REGISTER);
-      notification.remove(loadingNotificationId);
+      try {
+        signature = await signTypedDataAsync(EIP_712_TYPED_DATA__USER_REGISTER);
+      } finally {
+        notification.remove(loadingNotificationId);
+      }
 
       register({ address, signature, referrer, originalUtmParams });
     } catch (error) {

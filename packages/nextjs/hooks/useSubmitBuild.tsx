@@ -28,17 +28,21 @@ export function useSubmitBuild({ onSuccess }: { onSuccess?: () => void }) {
         coBuilders: build.coBuilders || [],
       };
 
-      const loadingNotificationId = notification.loading("Awaiting for Wallet signature...");
       const message = {
         ...EIP_712_TYPED_DATA__SUBMIT_BUILD.message,
         ...buildWithDefaults,
       };
 
-      const signature = await signTypedDataAsync({
-        ...EIP_712_TYPED_DATA__SUBMIT_BUILD,
-        message,
-      });
-      notification.remove(loadingNotificationId);
+      let signature: `0x${string}` | undefined;
+      const loadingNotificationId = notification.loading("Awaiting for Wallet signature...");
+      try {
+        signature = await signTypedDataAsync({
+          ...EIP_712_TYPED_DATA__SUBMIT_BUILD,
+          message,
+        });
+      } finally {
+        notification.remove(loadingNotificationId);
+      }
 
       return submitBuild({ address, signature, ...build });
     },

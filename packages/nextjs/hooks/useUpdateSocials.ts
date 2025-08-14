@@ -26,17 +26,21 @@ export const useUpdateSocials = ({ onSuccess }: { onSuccess?: () => void }) => {
         ...socials,
       };
 
-      const loadingNotificationId = notification.loading("Awaiting for Wallet signature...");
       const message = {
         ...EIP_712_TYPED_DATA__UPDATE_SOCIALS.message,
         ...socialsWithDefaults,
       };
 
-      const signature = await signTypedDataAsync({
-        ...EIP_712_TYPED_DATA__UPDATE_SOCIALS,
-        message,
-      });
-      notification.remove(loadingNotificationId);
+      let signature: `0x${string}` | undefined;
+      const loadingNotificationId = notification.loading("Awaiting for Wallet signature...");
+      try {
+        signature = await signTypedDataAsync({
+          ...EIP_712_TYPED_DATA__UPDATE_SOCIALS,
+          message,
+        });
+      } finally {
+        notification.remove(loadingNotificationId);
+      }
 
       return updateSocials({
         userAddress: address,
