@@ -346,7 +346,6 @@ export const BuildFormModal = forwardRef<HTMLDialogElement, BuildFormModalProps>
                 {isPending ? (
                   <>
                     <span className="loading loading-spinner loading-sm"></span>
-                    {buttonText}
                   </>
                 ) : (
                   buttonText
