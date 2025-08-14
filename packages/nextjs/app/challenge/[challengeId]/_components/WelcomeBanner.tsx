@@ -1,5 +1,6 @@
 "use client";
 
+import { useLocalStorage } from "usehooks-ts";
 import { useAccount } from "wagmi";
 import { RainbowKitCustomConnectButton } from "~~/components/scaffold-eth/RainbowKitCustomConnectButton";
 import { useUser } from "~~/hooks/useUser";
@@ -9,6 +10,9 @@ export const WelcomeBanner = () => {
   const { address: connectedAddress } = useAccount();
   const { data: user, isLoading: isLoadingUser } = useUser(connectedAddress);
   const { handleRegister, isRegistering } = useUserRegister();
+  const [storedReferrer] = useLocalStorage<string | null>("originalReferrer", null);
+  const [storedUtmParams] = useLocalStorage<string | null>("originalUtmParams", null);
+  const parsedUtmParams = storedUtmParams ? JSON.parse(storedUtmParams) : undefined;
 
   if (user || isLoadingUser) {
     return null;
@@ -41,7 +45,16 @@ export const WelcomeBanner = () => {
           {!isWalletConnected ? (
             <RainbowKitCustomConnectButton />
           ) : (
-            <button className="btn btn-primary" onClick={() => handleRegister(null)} disabled={isRegistering}>
+            <button
+              className="btn btn-primary"
+              onClick={() =>
+                handleRegister({
+                  referrer: storedReferrer,
+                  originalUtmParams: parsedUtmParams,
+                })
+              }
+              disabled={isRegistering}
+            >
               {isRegistering ? (
                 <span className="loading loading-spinner loading-sm"></span>
               ) : (

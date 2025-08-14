@@ -9,8 +9,26 @@ export function useUserRegister() {
   const queryClient = useQueryClient();
   const { signTypedDataAsync } = useSignTypedData();
 
-  const { mutate: register, isPending: isRegistering } = useMutation({
-    mutationFn: registerUser,
+  const { mutateAsync: userLocationMutation, isPending: isRegistering } = useMutation({
+    mutationFn: async ({
+      referrer,
+      originalUtmParams,
+    }: {
+      referrer: string | null;
+      originalUtmParams?: Record<string, string>;
+    }) => {
+      if (!address) throw new Error("Wallet not connected");
+
+      let signature: `0x${string}` | undefined;
+      const loadingNotificationId = notification.loading("Awaiting for Wallet signature...");
+      try {
+        signature = await signTypedDataAsync(EIP_712_TYPED_DATA__USER_REGISTER);
+      } finally {
+        notification.remove(loadingNotificationId);
+      }
+
+      return registerUser({ address, signature, referrer, originalUtmParams });
+    },
     onSuccess: user => {
       queryClient.setQueryData(["user", address], user);
       notification.success("Successfully registered!");
@@ -21,27 +39,8 @@ export function useUserRegister() {
     },
   });
 
-  const handleRegister = async (referrer: string | null, originalUtmParams?: Record<string, string>) => {
-    if (!address) return;
-
-    try {
-      let signature: `0x${string}` | undefined;
-      const loadingNotificationId = notification.loading("Awaiting for Wallet signature...");
-      try {
-        signature = await signTypedDataAsync(EIP_712_TYPED_DATA__USER_REGISTER);
-      } finally {
-        notification.remove(loadingNotificationId);
-      }
-
-      register({ address, signature, referrer, originalUtmParams });
-    } catch (error) {
-      console.error("Error during signature:", error);
-      notification.error("Failed to sign message. Please try again.");
-    }
-  };
-
   return {
-    handleRegister,
+    handleRegister: userLocationMutation,
     isRegistering,
   };
 }
