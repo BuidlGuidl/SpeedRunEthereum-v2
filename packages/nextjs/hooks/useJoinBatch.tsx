@@ -25,7 +25,9 @@ export function useJoinBatch({ user }: { user?: UserByAddress }) {
     if (!user) return;
 
     try {
+      const loadingNotificationId = notification.loading("Awaiting for Wallet signature...");
       const signature = await signTypedDataAsync(EIP_712_TYPED_DATA__JOIN_BATCH);
+      notification.remove(loadingNotificationId);
       joinBatch({ address: user.userAddress, signature });
     } catch (error) {
       console.error("Error during signature:", error);

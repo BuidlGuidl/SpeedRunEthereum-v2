@@ -14,7 +14,9 @@ export function useUpdateEns() {
     mutationFn: async () => {
       if (!address) throw new Error("Wallet not connected");
 
+      const loadingNotificationId = notification.loading("Awaiting for Wallet signature...");
       const signature = await signTypedDataAsync(EIP_712_TYPED_DATA__UPDATE_ENS);
+      notification.remove(loadingNotificationId);
 
       const response = await fetch(`/api/users/${address}/update-ens`, {
         method: "PUT",

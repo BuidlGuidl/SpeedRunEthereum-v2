@@ -54,6 +54,7 @@ export const useSubmitChallenge = ({ onSuccess }: { onSuccess?: () => void }) =>
 
       validateUrls(submitChallengeParams);
 
+      const loadingNotificationId = notification.loading("Awaiting for Wallet signature...");
       const message = {
         ...EIP_712_TYPED_DATA__CHALLENGE_SUBMIT.message,
         ...submitChallengeParams,
@@ -63,6 +64,7 @@ export const useSubmitChallenge = ({ onSuccess }: { onSuccess?: () => void }) =>
         ...EIP_712_TYPED_DATA__CHALLENGE_SUBMIT,
         message,
       });
+      notification.remove(loadingNotificationId);
 
       return submitChallenge({
         userAddress: address,

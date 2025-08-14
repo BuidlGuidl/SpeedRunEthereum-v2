@@ -36,6 +36,7 @@ export function useUpdateBuild({ onSuccess }: { onSuccess?: () => void }) {
         coBuilders: build.coBuilders || [],
       };
 
+      const loadingNotificationId = notification.loading("Awaiting for Wallet signature...");
       const message = {
         buildId,
         ...EIP_712_TYPED_DATA__UPDATE_BUILD.message,
@@ -46,6 +47,7 @@ export function useUpdateBuild({ onSuccess }: { onSuccess?: () => void }) {
         ...EIP_712_TYPED_DATA__UPDATE_BUILD,
         message,
       });
+      notification.remove(loadingNotificationId);
 
       return updateBuild({ signatureAddress: connectedAddress, signature, build, userAddress: ownerAddress }, buildId);
     },

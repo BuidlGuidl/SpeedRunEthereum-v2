@@ -21,6 +21,7 @@ export const useCreateBatch = ({ onSuccess }: { onSuccess?: () => void }) => {
         network: batch.network,
       };
 
+      const loadingNotificationId = notification.loading("Awaiting for Wallet signature...");
       const message = {
         ...EIP_712_TYPED_DATA__CREATE_BATCH.message,
         ...updatedBatch,
@@ -30,6 +31,7 @@ export const useCreateBatch = ({ onSuccess }: { onSuccess?: () => void }) => {
         ...EIP_712_TYPED_DATA__CREATE_BATCH,
         message,
       });
+      notification.remove(loadingNotificationId);
 
       return fetchCreateBatch({ ...updatedBatch, address, signature });
     },

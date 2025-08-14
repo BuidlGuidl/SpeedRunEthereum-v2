@@ -28,6 +28,7 @@ export function useSubmitBuild({ onSuccess }: { onSuccess?: () => void }) {
         coBuilders: build.coBuilders || [],
       };
 
+      const loadingNotificationId = notification.loading("Awaiting for Wallet signature...");
       const message = {
         ...EIP_712_TYPED_DATA__SUBMIT_BUILD.message,
         ...buildWithDefaults,
@@ -37,6 +38,7 @@ export function useSubmitBuild({ onSuccess }: { onSuccess?: () => void }) {
         ...EIP_712_TYPED_DATA__SUBMIT_BUILD,
         message,
       });
+      notification.remove(loadingNotificationId);
 
       return submitBuild({ address, signature, ...build });
     },

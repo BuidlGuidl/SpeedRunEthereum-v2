@@ -15,6 +15,7 @@ export const useUpdateLocation = ({ onSuccess }: { onSuccess?: () => void }) => 
     mutationFn: async (location: UserLocation) => {
       if (!address) throw new Error("Wallet not connected");
 
+      const loadingNotificationId = notification.loading("Awaiting for Wallet signature...");
       const message = {
         ...EIP_712_TYPED_DATA__UPDATE_LOCATION.message,
         location: location || "",
@@ -24,6 +25,7 @@ export const useUpdateLocation = ({ onSuccess }: { onSuccess?: () => void }) => 
         ...EIP_712_TYPED_DATA__UPDATE_LOCATION,
         message,
       });
+      notification.remove(loadingNotificationId);
 
       return updateLocation({
         location: location || null,
