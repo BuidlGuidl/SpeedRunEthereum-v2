@@ -163,7 +163,7 @@ export function AllBuilds({ searchParams }: { searchParams: { category?: BuildCa
                             height={12}
                             className="w-3 h-3 object-contain"
                           />
-                          <span className="text-xs font-light text-black">BG Grant</span>
+                          <span className="text-xs font-light text-black leading-none">BG Grant</span>
                         </div>
                       </div>
                     )}
