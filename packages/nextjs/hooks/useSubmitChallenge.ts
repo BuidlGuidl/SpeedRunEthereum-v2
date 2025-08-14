@@ -1,6 +1,7 @@
 import { useRouter } from "next/navigation";
 import { useMutation } from "@tanstack/react-query";
-import { useAccount, useSignTypedData } from "wagmi";
+import { useAccount } from "wagmi";
+import { useSignatureWithNotification } from "~~/hooks/useSignatureWithNotification";
 import { submitChallenge } from "~~/services/api/challenges";
 import { EIP_712_TYPED_DATA__CHALLENGE_SUBMIT } from "~~/services/eip712/challenge";
 import { notification } from "~~/utils/scaffold-eth";
@@ -46,7 +47,7 @@ const validateUrls = (params: SubmitChallengeParams) => {
 export const useSubmitChallenge = ({ onSuccess }: { onSuccess?: () => void }) => {
   const router = useRouter();
   const { address } = useAccount();
-  const { signTypedDataAsync } = useSignTypedData();
+  const { signWithNotification } = useSignatureWithNotification();
 
   const { mutate: submitChallengeMutation, isPending } = useMutation({
     mutationFn: async (submitChallengeParams: SubmitChallengeParams) => {
@@ -59,16 +60,10 @@ export const useSubmitChallenge = ({ onSuccess }: { onSuccess?: () => void }) =>
         ...submitChallengeParams,
       };
 
-      let signature: `0x${string}` | undefined;
-      const loadingNotificationId = notification.loading("Awaiting for Wallet signature...");
-      try {
-        signature = await signTypedDataAsync({
-          ...EIP_712_TYPED_DATA__CHALLENGE_SUBMIT,
-          message,
-        });
-      } finally {
-        notification.remove(loadingNotificationId);
-      }
+      const signature = await signWithNotification({
+        ...EIP_712_TYPED_DATA__CHALLENGE_SUBMIT,
+        message,
+      });
 
       return submitChallenge({
         userAddress: address,

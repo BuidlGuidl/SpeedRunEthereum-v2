@@ -1,14 +1,14 @@
 import { useRouter } from "next/navigation";
 import { useMutation } from "@tanstack/react-query";
 import { useAccount } from "wagmi";
-import { useSignTypedData } from "wagmi";
+import { useSignatureWithNotification } from "~~/hooks/useSignatureWithNotification";
 import { likeBuild } from "~~/services/api/users/builds";
 import { EIP_712_TYPED_DATA__LIKE_BUILD } from "~~/services/eip712/builds";
 import { notification } from "~~/utils/scaffold-eth";
 
 export function useBuildLike({ onSuccess }: { onSuccess?: () => void }) {
   const { address } = useAccount();
-  const { signTypedDataAsync } = useSignTypedData();
+  const { signWithNotification } = useSignatureWithNotification();
   const router = useRouter();
 
   const { mutate: likeBuildMutation, isPending } = useMutation({
@@ -20,16 +20,10 @@ export function useBuildLike({ onSuccess }: { onSuccess?: () => void }) {
         action,
       };
 
-      let signature: `0x${string}` | undefined;
-      const loadingNotificationId = notification.loading("Awaiting for Wallet signature...");
-      try {
-        signature = await signTypedDataAsync({
-          ...EIP_712_TYPED_DATA__LIKE_BUILD,
-          message,
-        });
-      } finally {
-        notification.remove(loadingNotificationId);
-      }
+      const signature = await signWithNotification({
+        ...EIP_712_TYPED_DATA__LIKE_BUILD,
+        message,
+      });
 
       return likeBuild({ address, signature, buildId });
     },

@@ -1,6 +1,7 @@
 import { useRouter } from "next/navigation";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useAccount, useSignTypedData } from "wagmi";
+import { useAccount } from "wagmi";
+import { useSignatureWithNotification } from "~~/hooks/useSignatureWithNotification";
 import { EIP_712_TYPED_DATA__UPDATE_ENS } from "~~/services/eip712/ens";
 import { notification } from "~~/utils/scaffold-eth";
 
@@ -8,19 +9,13 @@ export function useUpdateEns() {
   const { address } = useAccount();
   const router = useRouter();
   const queryClient = useQueryClient();
-  const { signTypedDataAsync } = useSignTypedData();
+  const { signWithNotification } = useSignatureWithNotification();
 
   const { mutate: updateEns, isPending: isUpdatingEns } = useMutation({
     mutationFn: async () => {
       if (!address) throw new Error("Wallet not connected");
 
-      let signature: `0x${string}` | undefined;
-      const loadingNotificationId = notification.loading("Awaiting for Wallet signature...");
-      try {
-        signature = await signTypedDataAsync(EIP_712_TYPED_DATA__UPDATE_ENS);
-      } finally {
-        notification.remove(loadingNotificationId);
-      }
+      const signature = await signWithNotification(EIP_712_TYPED_DATA__UPDATE_ENS);
 
       const response = await fetch(`/api/users/${address}/update-ens`, {
         method: "PUT",

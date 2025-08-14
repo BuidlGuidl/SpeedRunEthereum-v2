@@ -1,5 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useAccount, useSignTypedData } from "wagmi";
+import { useAccount } from "wagmi";
+import { useSignatureWithNotification } from "~~/hooks/useSignatureWithNotification";
 import { registerUser } from "~~/services/api/users";
 import { EIP_712_TYPED_DATA__USER_REGISTER } from "~~/services/eip712/register";
 import { notification } from "~~/utils/scaffold-eth";
@@ -7,7 +8,7 @@ import { notification } from "~~/utils/scaffold-eth";
 export function useUserRegister() {
   const { address } = useAccount();
   const queryClient = useQueryClient();
-  const { signTypedDataAsync } = useSignTypedData();
+  const { signWithNotification } = useSignatureWithNotification();
 
   const { mutateAsync: userLocationMutation, isPending: isRegistering } = useMutation({
     mutationFn: async ({
@@ -19,13 +20,7 @@ export function useUserRegister() {
     }) => {
       if (!address) throw new Error("Wallet not connected");
 
-      let signature: `0x${string}` | undefined;
-      const loadingNotificationId = notification.loading("Awaiting for Wallet signature...");
-      try {
-        signature = await signTypedDataAsync(EIP_712_TYPED_DATA__USER_REGISTER);
-      } finally {
-        notification.remove(loadingNotificationId);
-      }
+      const signature = await signWithNotification(EIP_712_TYPED_DATA__USER_REGISTER);
 
       return registerUser({ address, signature, referrer, originalUtmParams });
     },

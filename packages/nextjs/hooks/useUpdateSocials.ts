@@ -1,6 +1,7 @@
 import { useRouter } from "next/navigation";
 import { useMutation } from "@tanstack/react-query";
-import { useAccount, useSignTypedData } from "wagmi";
+import { useAccount } from "wagmi";
+import { useSignatureWithNotification } from "~~/hooks/useSignatureWithNotification";
 import { updateSocials } from "~~/services/api/users";
 import { UserSocials } from "~~/services/database/repositories/users";
 import { EIP_712_TYPED_DATA__UPDATE_SOCIALS } from "~~/services/eip712/socials";
@@ -9,7 +10,7 @@ import { notification } from "~~/utils/scaffold-eth";
 export const useUpdateSocials = ({ onSuccess }: { onSuccess?: () => void }) => {
   const router = useRouter();
   const { address } = useAccount();
-  const { signTypedDataAsync } = useSignTypedData();
+  const { signWithNotification } = useSignatureWithNotification();
 
   const { mutate: updateSocialsMutation, isPending } = useMutation({
     mutationFn: async (socials: UserSocials) => {
@@ -31,16 +32,10 @@ export const useUpdateSocials = ({ onSuccess }: { onSuccess?: () => void }) => {
         ...socialsWithDefaults,
       };
 
-      let signature: `0x${string}` | undefined;
-      const loadingNotificationId = notification.loading("Awaiting for Wallet signature...");
-      try {
-        signature = await signTypedDataAsync({
-          ...EIP_712_TYPED_DATA__UPDATE_SOCIALS,
-          message,
-        });
-      } finally {
-        notification.remove(loadingNotificationId);
-      }
+      const signature = await signWithNotification({
+        ...EIP_712_TYPED_DATA__UPDATE_SOCIALS,
+        message,
+      });
 
       return updateSocials({
         userAddress: address,
