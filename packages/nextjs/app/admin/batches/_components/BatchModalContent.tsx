@@ -74,8 +74,7 @@ export const BatchModalContent = forwardRef<HTMLInputElement, BatchModalContentP
     const title = batchOperation === "add" ? "Add New Batch" : "Edit Batch";
 
     const buttonDefaultText = batchOperation === "add" ? "Add Batch" : "Update Batch";
-    const buttonLoadingText = batchOperation === "add" ? "Adding..." : "Updating...";
-    const buttonText = isPending ? buttonLoadingText : buttonDefaultText;
+    const buttonText = isPending ? <span className="loading loading-spinner loading-sm"></span> : buttonDefaultText;
 
     const handleUpdateBatch = () => {
       if (!name || !startDate || !telegramLink) {

@@ -67,14 +67,7 @@ export const SubmitChallengeModal = forwardRef<HTMLDialogElement, SubmitChalleng
                 disabled={!Boolean(frontendUrl && contractUrl) || isPending}
                 onClick={() => submitChallenge({ challengeId, frontendUrl, contractUrl })}
               >
-                {isPending ? (
-                  <>
-                    <span className="loading loading-spinner loading-xs"></span>
-                    Submitting...
-                  </>
-                ) : (
-                  "Submit Challenge"
-                )}
+                {isPending ? <span className="loading loading-spinner loading-xs"></span> : "Submit Challenge"}
               </button>
             </div>
           </div>

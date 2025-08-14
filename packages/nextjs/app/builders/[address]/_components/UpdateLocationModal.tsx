@@ -74,7 +74,7 @@ export const UpdateLocationModal = forwardRef<HTMLDivElement, UpdateLocationModa
                 onClick={() => updateLocation(selectedCountry)}
                 disabled={isPending || selectedCountry === (existingLocation ?? "")}
               >
-                Update Location
+                {isPending ? <span className="loading loading-spinner loading-sm"></span> : "Update Location"}
               </button>
             </div>
           </div>

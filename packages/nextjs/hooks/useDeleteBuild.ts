@@ -1,7 +1,7 @@
 import { useRouter } from "next/navigation";
 import { useMutation } from "@tanstack/react-query";
-import { useSignTypedData } from "wagmi";
 import { useAccount } from "wagmi";
+import { useSignatureWithNotification } from "~~/hooks/useSignatureWithNotification";
 import { deleteBuild as deleteBuildApi } from "~~/services/api/users/builds";
 import { EIP_712_TYPED_DATA__DELETE_BUILD } from "~~/services/eip712/builds";
 import { notification } from "~~/utils/scaffold-eth";
@@ -9,7 +9,7 @@ import { notification } from "~~/utils/scaffold-eth";
 export function useDeleteBuild() {
   const router = useRouter();
   const { address: connectedAddress } = useAccount();
-  const { signTypedDataAsync } = useSignTypedData();
+  const { signWithNotification } = useSignatureWithNotification();
 
   const { mutate: deleteBuild, isPending } = useMutation({
     mutationFn: async ({ buildId, ownerAddress }: { buildId: string; ownerAddress: string }) => {
@@ -20,7 +20,7 @@ export function useDeleteBuild() {
         id: buildId,
       };
 
-      const signature = await signTypedDataAsync({
+      const signature = await signWithNotification({
         ...EIP_712_TYPED_DATA__DELETE_BUILD,
         message,
       });

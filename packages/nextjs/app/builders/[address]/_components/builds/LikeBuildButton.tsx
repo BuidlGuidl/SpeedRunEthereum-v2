@@ -29,7 +29,9 @@ export const LikeBuildButton = ({ buildId, likes, onSuccess }: LikeBuildBtnProps
       onClick={() => likeBuildMutation({ buildId, action: isLiked ? "unlike" : "like" })}
       disabled={isPending}
     >
-      {isLiked ? (
+      {isPending ? (
+        <span className="loading loading-spinner loading-sm"></span>
+      ) : isLiked ? (
         <HeartIconSolid className="h-5 w-5 text-red-500 transition-transform duration-150 group-hover:scale-110" />
       ) : (
         <HeartIconOutline className="h-5 w-5 transition-transform duration-150 group-hover:scale-110 group-hover:text-red-500" />
