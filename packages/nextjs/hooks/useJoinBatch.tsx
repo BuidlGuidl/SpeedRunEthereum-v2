@@ -9,8 +9,20 @@ export function useJoinBatch({ user }: { user?: UserByAddress }) {
   const queryClient = useQueryClient();
   const { signTypedDataAsync } = useSignTypedData();
 
-  const { mutate: joinBatch, isPending: isJoiningBatch } = useMutation({
-    mutationFn: userJoinBatch,
+  const { mutateAsync: joinBatchMutation, isPending: isJoiningBatch } = useMutation({
+    mutationFn: async () => {
+      if (!user) throw new Error("User not found");
+
+      let signature: `0x${string}` | undefined;
+      const loadingNotificationId = notification.loading("Awaiting for Wallet signature...");
+      try {
+        signature = await signTypedDataAsync(EIP_712_TYPED_DATA__JOIN_BATCH);
+      } finally {
+        notification.remove(loadingNotificationId);
+      }
+
+      return userJoinBatch({ address: user.userAddress, signature });
+    },
     onSuccess: user => {
       queryClient.setQueryData(["user", user.userAddress], user);
       notification.success(<span>You&apos;ve successfully joined the batch</span>);
@@ -21,26 +33,8 @@ export function useJoinBatch({ user }: { user?: UserByAddress }) {
     },
   });
 
-  const handleJoinBatch = async () => {
-    if (!user) return;
-
-    try {
-      let signature: `0x${string}` | undefined;
-      const loadingNotificationId = notification.loading("Awaiting for Wallet signature...");
-      try {
-        signature = await signTypedDataAsync(EIP_712_TYPED_DATA__JOIN_BATCH);
-      } finally {
-        notification.remove(loadingNotificationId);
-      }
-      joinBatch({ address: user.userAddress, signature });
-    } catch (error) {
-      console.error("Error during signature:", error);
-      notification.error("Failed to sign message. Please try again.");
-    }
-  };
-
   return {
-    handleJoinBatch,
+    handleJoinBatch: joinBatchMutation,
     isJoiningBatch,
   };
 }
