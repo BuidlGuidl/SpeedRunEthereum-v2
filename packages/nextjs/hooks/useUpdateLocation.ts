@@ -1,6 +1,7 @@
 import { useRouter } from "next/navigation";
 import { useMutation } from "@tanstack/react-query";
-import { useAccount, useSignTypedData } from "wagmi";
+import { useAccount } from "wagmi";
+import { useSignatureWithNotification } from "~~/hooks/useSignatureWithNotification";
 import { updateLocation } from "~~/services/api/users";
 import { UserLocation } from "~~/services/database/repositories/users";
 import { EIP_712_TYPED_DATA__UPDATE_LOCATION } from "~~/services/eip712/location";
@@ -9,7 +10,7 @@ import { notification } from "~~/utils/scaffold-eth";
 export const useUpdateLocation = ({ onSuccess }: { onSuccess?: () => void }) => {
   const router = useRouter();
   const { address } = useAccount();
-  const { signTypedDataAsync } = useSignTypedData();
+  const { signWithNotification } = useSignatureWithNotification();
 
   const { mutateAsync: updateLocationMutation, isPending } = useMutation({
     mutationFn: async (location: UserLocation) => {
@@ -20,16 +21,10 @@ export const useUpdateLocation = ({ onSuccess }: { onSuccess?: () => void }) => 
         location: location || "",
       };
 
-      let signature: `0x${string}` | undefined;
-      const loadingNotificationId = notification.loading("Awaiting for Wallet signature...");
-      try {
-        signature = await signTypedDataAsync({
-          ...EIP_712_TYPED_DATA__UPDATE_LOCATION,
-          message,
-        });
-      } finally {
-        notification.remove(loadingNotificationId);
-      }
+      const signature = await signWithNotification({
+        ...EIP_712_TYPED_DATA__UPDATE_LOCATION,
+        message,
+      });
 
       return updateLocation({
         location: location || null,
