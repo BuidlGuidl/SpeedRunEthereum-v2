@@ -2,11 +2,7 @@
 import { ImageResponse } from "next/og";
 import { blo } from "blo";
 import { getAddress, isAddress } from "viem";
-import { ReviewAction } from "~~/services/database/config/types";
-import {
-  UserChallenges,
-  getLatestSubmissionPerChallengeByUser,
-} from "~~/services/database/repositories/userChallenges";
+import { getUserXP } from "~~/services/database/repositories/users";
 import { getShortAddressAndEns } from "~~/utils/short-address-and-ens";
 
 export async function GET(request: Request) {
@@ -21,14 +17,8 @@ export async function GET(request: Request) {
     const checksumAddress = getAddress(address);
 
     const { ensName, ensAvatar, shortAddress } = await getShortAddressAndEns(checksumAddress);
+    const userXP = await getUserXP(checksumAddress);
 
-    let challenges: UserChallenges = [];
-    try {
-      const allChallenges = await getLatestSubmissionPerChallengeByUser(address);
-      challenges = allChallenges.filter(challenge => challenge.reviewAction === ReviewAction.ACCEPTED);
-    } catch (error) {
-      console.error("Error fetching builder challenges", error);
-    }
     // punk size with scale = 1
     const PUNK_SIZE = 112;
     // punk size pixels in the original file
@@ -40,7 +30,7 @@ export async function GET(request: Request) {
     const backgroundPositionX = parseInt(part1, 16) % 100;
     const backgroundPositionY = parseInt(part2, 16) % 100;
 
-    const computedScale = 1;
+    const computedScale = 1.7;
 
     // Get the Punks image from the live site
     const baseUrl = process.env.VERCEL_PROJECT_PRODUCTION_URL
@@ -151,8 +141,8 @@ export async function GET(request: Request) {
                   marginTop: 30,
                   display: "flex",
                   overflow: "hidden",
-                  width: 117,
-                  height: 117,
+                  width: 200,
+                  height: 200,
                   borderRadius: "50%",
                   borderWidth: 5,
                   borderColor: "white",
@@ -200,12 +190,12 @@ export async function GET(request: Request) {
               style={{
                 marginTop: 5,
                 display: "flex",
-                fontSize: 28,
+                fontSize: 36,
                 textAlign: "center",
                 color: "#4a5565",
               }}
             >
-              Challenges Completed: {challenges.length}
+              {userXP} XP
             </div>
           </div>
 
