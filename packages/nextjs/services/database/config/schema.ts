@@ -25,6 +25,7 @@ import {
   uuid,
   varchar,
 } from "drizzle-orm/pg-core";
+import type { SideQuestsSnapshot } from "~~/services/onchainData/sideQuests";
 
 export function lower(address: AnyPgColumn): SQL {
   return sql`lower(${address})`;
@@ -59,6 +60,7 @@ export const users = pgTable(
     batchStatus: batchUserStatusEnum(),
     referrer: varchar({ length: 255 }),
     originalUtmParams: jsonb("original_utm_params").$type<UTMParams>(),
+    sideQuestsSnapshot: jsonb("sidequests_snapshot").$type<SideQuestsSnapshot>(),
   },
   table => [uniqueIndex("idUniqueIndex").on(lower(table.userAddress))],
 );

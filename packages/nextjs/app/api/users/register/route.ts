@@ -6,6 +6,7 @@ import { UserUpdate, createUser, isUserRegistered, updateUser } from "~~/service
 import { isValidEIP712UserRegisterSignature } from "~~/services/eip712/register";
 import { fetchOnchainData } from "~~/services/onchainData";
 import { PlausibleEvent, trackPlausibleEvent } from "~~/services/plausible";
+import { fetchSideQuestsSnapshot } from "~~/services/onchainData/sideQuests";
 
 type RegisterPayload = {
   address: string;
@@ -74,6 +75,14 @@ export async function POST(req: Request) {
             console.log(
               `ENS data updated for user ${address}: ${ensData.name ? `name: ${ensData.name}` : ""} ${ensData.avatar ? `avatar: ${ensData.avatar}` : ""}`,
             );
+          }
+
+          // Fetch Zerion snapshot and save to user
+          try {
+            const snapshot = await fetchSideQuestsSnapshot({ address, ensName: ensData.name });
+            await updateUser(address, { sideQuestsSnapshot: snapshot });
+          } catch (e) {
+            console.error("Failed to fetch or store sidequests snapshot for", address, e);
           }
         } catch (error) {
           console.error(`Error in background processing for user ${address}:`, error);
