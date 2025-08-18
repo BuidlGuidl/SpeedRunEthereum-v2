@@ -5,8 +5,7 @@ export type SideQuestKey =
   | "heldStablecoins"
   | "usedL2"
   | "sentMainnetTx"
-  | "mintedNFT"
-  | "stakedTokens";
+  | "mintedNFT";
 
 export type SideQuestEntry = {
   name: string;
@@ -22,24 +21,14 @@ export type SideQuestsSnapshot = { sideQuests: OnchainSideQuests };
 
 export type ZerionTransaction = {
   attributes?: {
-    from?: string;
-    to?: string;
     sent_from?: string;
     sent_to?: string;
     direction?: string;
-    status?: string;
-    chain_id?: string;
-    chain?: string;
     mined_at?: string;
     operation_type?: string;
-    tx_type?: string;
-    method?: { name?: string };
-    protocol?: { category?: string };
-    operations?: { type?: string }[];
     transfers?: {
       direction?: string;
       fungible_info?: { symbol?: string };
-      token?: { symbol?: string };
     }[];
     hash?: string;
   };
@@ -47,8 +36,6 @@ export type ZerionTransaction = {
     chain?: { data?: { id?: string } };
   };
 };
-
-const ENS_REVERSE = "0xa58e81fe9b61b5c3fe2afd33cf304c454abfc7cb";
 
 /* popular L2s const L2_CHAINS = new Set([
   "optimism","arbitrum","base","polygon","zksync",
@@ -103,7 +90,6 @@ const QUEST_NAMES: Record<SideQuestKey, string> = {
   usedL2          : "Used an L2",
   sentMainnetTx   : "Sent a Mainnet Tx",
   mintedNFT       : "Minted an NFT",
-  stakedTokens    : "Staked Tokens",
 };
 
 const encodeBase64 = (value: string) => Buffer.from(value, "utf8").toString("base64");
@@ -123,60 +109,55 @@ const getTxInfo = (tx: ZerionTransaction, user: string) => {
     to,
     chain,
     isOutgoing: attr.direction === "out" || from === user,
-    isSuccessful: ["success", "confirmed"].includes((attr.status ?? "").toLowerCase()),
     minedAt: attr.mined_at,
   };
 };
 
 const questCheckers: Record<
-  SideQuestKey,
+  Exclude<SideQuestKey, "ensRegistered">,
   (txInfo: ReturnType<typeof getTxInfo>) => boolean
 > = {
-  ensRegistered: ({ to, chain, attr }) =>
-    chain === "ethereum" &&
-    to === ENS_REVERSE &&
-    (attr.method?.name ?? "").toLowerCase().includes("setname"),
-
   contractDeployed: ({ attr }) =>
     (attr.operation_type ?? "").toLowerCase() === "deploy",
 
   swappedOnDex: ({ attr }) =>
     (attr.operation_type ?? "").toLowerCase() === "trade" ||
-    (attr.tx_type ?? "").toLowerCase().includes("swap") ||
-    (attr.protocol?.category ?? "").toLowerCase() === "dex" ||
-    (attr.operations ?? []).some(
-      (op) => (op.type ?? "").toLowerCase().includes("swap")
-    ),
+    // Check added to filter out NFT trades
+    (attr.transfers ?? []).some(tr => !!tr.fungible_info),
 
   heldStablecoins: ({ attr }) =>
     (attr.transfers ?? []).some((tr) => {
       const symbol =
-        (tr.fungible_info?.symbol ?? tr.token?.symbol ?? "").toUpperCase();
+        (tr.fungible_info?.symbol ?? "").toUpperCase();
       return tr.direction === "in" && (STABLES.has(symbol) || symbol.includes("USD"));
     }),
 
   usedL2: ({ isOutgoing, chain }) => isOutgoing && L2_CHAINS.has(chain),
 
-  sentMainnetTx: ({ isOutgoing, chain, isSuccessful }) =>
-    isOutgoing && isSuccessful && chain === "ethereum",
+  sentMainnetTx: ({ isOutgoing, chain }) =>
+    isOutgoing && chain === "ethereum",
 
   mintedNFT: ({ attr }) =>
     (attr.operation_type ?? "").toLowerCase() === "mint",
-
-  stakedTokens: ({ attr }) =>
-    (attr.operation_type ?? "").toLowerCase() === "stake",
 };
 
-async function fetchZerionTransactions(addr: string): Promise<ZerionTransaction[]> {
+async function fetchZerionTransactionsPage(
+  addr: string,
+  cursor?: string
+): Promise<{ txs: ZerionTransaction[]; nextCursor?: string }> {
   const key = process.env.ZERION_API_KEY;
-  if (!key) return [];
+  if (!key) return { txs: [] };
 
-  const url =
-    `https://api.zerion.io/v1/wallets/${addr}/transactions/` +
-    `?page[size]=100&filter[trash]=only_non_trash`;
+  const url = new URL(`https://api.zerion.io/v1/wallets/${addr}/transactions/`);
+  url.searchParams.set('page[size]', '100');
+  url.searchParams.set('filter[trash]', 'only_non_trash');
+
+  if (cursor) {
+    url.searchParams.set('page[after]', cursor);
+  }
 
   try {
-    const res = await fetch(url, {
+    const res = await fetch(url.toString(), {
       headers: {
         Accept: "application/json",
         Authorization: `Basic ${encodeBase64(`${key}:`)}`,
@@ -184,15 +165,74 @@ async function fetchZerionTransactions(addr: string): Promise<ZerionTransaction[
       cache: "no-store",
     });
 
-    if (!res.ok) return [];
+    if (!res.ok) return { txs: [] };
+
     const json = await res.json();
-    return (json.data ?? []).map((d: any) => ({
+    const txs = (json.data ?? []).map((d: any) => ({
       attributes: d.attributes,
       relationships: d.relationships,
     }));
+
+    // Extract next cursor from links.next if available
+    const nextCursor = json.links?.next ?
+      new URL(json.links.next).searchParams.get('page[after]') || undefined :
+      undefined;
+
+    return { txs, nextCursor };
   } catch {
-    return [];
+    return { txs: [] };
   }
+}
+
+async function fetchAllTransactionsUntilQuestsComplete(
+  address: string,
+  _ensName: string | null
+): Promise<ZerionTransaction[]> {
+  const user = address.toLowerCase();
+
+  // Initialize pending quests (ENS handled via database, not transactions)
+  const pendingQuests = new Set(Object.keys(questCheckers) as Array<keyof typeof questCheckers>);
+
+  const allTransactions: ZerionTransaction[] = [];
+  let cursor: string | undefined;
+  let hasMorePages = true;
+
+  while (hasMorePages && pendingQuests.size > 0) {
+    const { txs, nextCursor } = await fetchZerionTransactionsPage(address, cursor);
+
+    if (txs.length === 0) {
+      hasMorePages = false;
+      break;
+    }
+
+    allTransactions.push(...txs);
+
+    // Check if any pending quests are completed by these transactions
+    for (const tx of txs) {
+      const info = getTxInfo(tx, user);
+      if (!info.minedAt) continue;
+
+      for (const questKey of pendingQuests) {
+        if (questCheckers[questKey](info)) {
+          pendingQuests.delete(questKey);
+          if (pendingQuests.size === 0) {
+            // All quests completed, we can stop fetching
+            hasMorePages = false;
+            break;
+          }
+        }
+      }
+
+      if (pendingQuests.size === 0) break;
+    }
+
+    cursor = nextCursor;
+    if (!cursor) {
+      hasMorePages = false;
+    }
+  }
+
+  return allTransactions;
 }
 
 export function evaluateSideQuests(
@@ -213,43 +253,40 @@ export function evaluateSideQuests(
     completed.ensRegistered = { date: "pre-existing" };
   }
 
-  const questKeys = Object.keys(questCheckers) as SideQuestKey[];
+  const questKeys = Object.keys(questCheckers) as Array<keyof typeof questCheckers>;
 
-  for (const tx of [...txs].reverse()) { // oldest → newest
+  for (const tx of txs) {
     const info = getTxInfo(tx, user);
     if (!info.minedAt) continue;
 
     for (const key of questKeys) {
-      if (!completed[key] && questCheckers[key](info)) {
-        completed[key] = {
-          date: info.minedAt,
-          chain: info.chain,
-          txHash: info.attr.hash,
-        };
+      if (questCheckers[key](info)) {
+        if (!completed[key]) {
+          completed[key] = {
+            date: info.minedAt || now,
+            chain: info.chain,
+            txHash: info.attr.hash,
+          } as any;
+        }
       }
     }
 
-    if (questKeys.every((k) => completed[k])) break; // early exit
+    if (questKeys.every((k) => completed[k as SideQuestKey])) break; // early exit
   }
 
-  return questKeys.reduce((acc, key) => {
+  const outputKeys: SideQuestKey[] = ["ensRegistered", ...questKeys as SideQuestKey[]];
+
+  return outputKeys.reduce((acc, key) => {
     const completion = completed[key];
     acc[key] = {
       name: QUEST_NAMES[key],
       status: completion ? "completed" : "pending",
       lastUpdate: now,
-      completionDate: completion && completion.date !== "pre-existing" ? completion.date : undefined,
-      completionChain: completion?.chain,
-      completionTxHash: completion?.txHash,
+      // TODO: decide if keep or delete
+      completionDate: completion && completion.date !== "pre-existing" ? (completion.date as string) : undefined,
+      completionChain: (completion as any)?.chain,
+      completionTxHash: (completion as any)?.txHash,
     };
-
-    // Debug logging for completed quests TODO: remove
-    if (completion) {
-      console.log(`✅ ${QUEST_NAMES[key]}:`);
-      console.log(`   📅 Date: ${completion.date}`);
-      if (completion.chain) console.log(`   🔗 Chain: ${completion.chain}`);
-      if (completion.txHash) console.log(`   🔗 Tx: ${completion.txHash}`);
-    }
 
     return acc;
   }, {} as OnchainSideQuests);
@@ -262,6 +299,6 @@ export async function fetchSideQuestsSnapshot({
   address: string;
   ensName: string | null;
 }): Promise<SideQuestsSnapshot> {
-  const txs = await fetchZerionTransactions(address);
+  const txs = await fetchAllTransactionsUntilQuestsComplete(address, ensName);
   return { sideQuests: evaluateSideQuests(address, txs, { ensName }) };
 }
