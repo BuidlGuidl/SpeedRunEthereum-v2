@@ -72,7 +72,7 @@ const JoinBatchButton = ({ userChallenges = [], latestOpenBatch, isLoadingLatest
         <button
           disabled
           className={`flex justify-center text-violet bg-violet-light items-center text-sm sm:text-lg px-4 py-1 border-2 border-violet rounded-full hover:bg-opacity-80 disabled:opacity-70 disabled:hover:bg-opacity-100 ${lockReason ? "cursor-not-allowed hover:bg-violet-light" : ""}`}
-          onClick={handleJoinBatch}
+          onClick={() => handleJoinBatch()}
         >
           <PadLockIcon className="w-4 h-4 sm:w-6 sm:h-6 mr-2" fill="#606CCF" />
           <span className="uppercase">Locked</span>
@@ -113,11 +113,10 @@ const JoinBatchButton = ({ userChallenges = [], latestOpenBatch, isLoadingLatest
   return (
     <button
       className={`flex justify-center text-black bg-violet-light items-center text-sm sm:text-lg px-4 py-1 border-2 border-violet rounded-full hover:bg-opacity-80 disabled:opacity-70 disabled:hover:bg-opacity-100 disabled:cursor-not-allowed`}
-      onClick={handleJoinBatch}
+      onClick={() => handleJoinBatch()}
       disabled={isJoiningBatch}
     >
-      {!isJoiningBatch && <span>Get Telegram Access</span>}
-      {isJoiningBatch && <span className="mr-2">Getting Telegram Access...</span>}
+      {isJoiningBatch ? <span className="loading loading-spinner loading-sm"></span> : <span>Get Telegram Access</span>}
     </button>
   );
 };

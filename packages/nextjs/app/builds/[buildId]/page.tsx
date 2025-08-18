@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { MDXRemote } from "next-mdx-remote/rsc";
 import rehypeRaw from "rehype-raw";
@@ -38,7 +39,35 @@ export default async function BuildPage(props: { params: Promise<{ buildId: stri
                 <span className="text-base">{buildLikesAddress.length}</span>
               </div>
             </div>
-            <p className="line-clamp-4 mt-4">{build?.desc}</p>
+            <div className="flex flex-col space-y-4 w-full">
+              <p className="line-clamp-4">{build?.desc}</p>
+              {build?.bgGrant && (
+                <div className="flex self-center md:self-start flex-wrap items-center justify-center md:justify-start gap-2 px-3 py-2 bg-[#E2E5FD] text-black rounded-xl w-full md:w-auto">
+                  <div className="inline-flex items-center gap-2 px-2 py-1.5 bg-white rounded-full shadow-sm border border-[#D8D8D8] whitespace-nowrap shrink-0">
+                    <Image
+                      src="/assets/sparkle.png"
+                      alt="BG Grant"
+                      width={20}
+                      height={20}
+                      className="w-4 h-4 object-contain"
+                    />
+                    <span className="text-xs md:text-sm font-light text-black leading-none">BG Grant</span>
+                  </div>
+                  <span className="text-xs md:text-sm font-medium whitespace-normal break-words max-w-[340px] sm:max-w-[480px] md:max-w-none text-center md:text-left">
+                    This project received a{" "}
+                    <Link
+                      href="https://grants.buidlguidl.com/completed-grants"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="underline underline-offset-2"
+                    >
+                      small grant
+                    </Link>{" "}
+                    from BuidlGuidl
+                  </span>
+                </div>
+              )}
+            </div>
           </div>
           <div className="flex justify-center">
             {build?.imageUrl ? (

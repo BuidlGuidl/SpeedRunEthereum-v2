@@ -11,7 +11,7 @@ import { getBatchById } from "~~/services/database/repositories/batches";
 import { getBuildsByUserAddress } from "~~/services/database/repositories/builds";
 import { getAllChallenges } from "~~/services/database/repositories/challenges";
 import { getLatestSubmissionPerChallengeByUser } from "~~/services/database/repositories/userChallenges";
-import { getUserByAddress, getUserPoints } from "~~/services/database/repositories/users";
+import { getUserByAddress, getUserXP } from "~~/services/database/repositories/users";
 import { getShortAddressAndEns } from "~~/utils/short-address-and-ens";
 import { getTotalXP } from "~~/utils/xp";
 
@@ -77,7 +77,7 @@ export default async function BuilderPage(props: { params: Promise<{ address: st
     userBatch = await getBatchById(user.batchId);
   }
   const builds = await getBuildsByUserAddress(address);
-  const points = await getUserPoints(address);
+  const points = await getUserXP(address);
 
   if (!user) {
     notFound();

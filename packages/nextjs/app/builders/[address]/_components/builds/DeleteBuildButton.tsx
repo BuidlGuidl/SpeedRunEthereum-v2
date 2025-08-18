@@ -21,7 +21,7 @@ export const DeleteBuildButton = ({ buildId, ownerAddress }: { buildId: string; 
       aria-label="Delete"
       disabled={isPending}
     >
-      <TrashIcon className="h-5 w-5" />
+      {isPending ? <span className="loading loading-spinner loading-sm"></span> : <TrashIcon className="h-5 w-5" />}
     </button>
   );
 };

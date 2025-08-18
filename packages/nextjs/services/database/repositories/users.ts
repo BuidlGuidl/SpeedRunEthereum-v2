@@ -1,4 +1,5 @@
 import { ReviewAction, UserRole } from "../config/types";
+import { getLatestSubmissionPerChallengeByUser } from "./userChallenges";
 import { ColumnSort, SortingState } from "@tanstack/react-table";
 import { InferInsertModel, and, eq, ilike, inArray, isNotNull, or, sql } from "drizzle-orm";
 import { db } from "~~/services/database/config/postgresClient";
@@ -250,24 +251,22 @@ export async function filterValidUserAddresses(addresses: string[]): Promise<str
   return rows.map(row => row.userAddress);
 }
 
-export async function getUserPoints(userAddress: string) {
+export async function getUserXP(userAddress: string) {
   const lowercaseAddress = userAddress.toLowerCase();
 
   const user = await db.query.users.findFirst({
     where: eq(lower(users.userAddress), lowercaseAddress),
     with: {
-      userChallenges: {
-        where: eq(userChallenges.reviewAction, ReviewAction.ACCEPTED),
-        with: {
-          challenge: true,
-        },
-      },
       buildBuilders: true,
     },
   });
 
+  const userLatestSubmissions = await getLatestSubmissionPerChallengeByUser(lowercaseAddress);
+
   const acceptedNonDisabledChallengesCount =
-    user?.userChallenges.filter(userChallenge => !userChallenge.challenge.disabled).length || 0;
+    userLatestSubmissions.filter(
+      userSubmission => userSubmission.reviewAction === ReviewAction.ACCEPTED && !userSubmission.challenge.disabled,
+    ).length || 0;
   const hasBatch = user?.batchStatus === BatchUserStatus.GRADUATE;
   const hasBuilds = user?.buildBuilders && user?.buildBuilders.length > 0;
 

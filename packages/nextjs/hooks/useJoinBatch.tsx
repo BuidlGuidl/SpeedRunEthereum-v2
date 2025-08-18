@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useSignTypedData } from "wagmi";
+import { useSignatureWithNotification } from "~~/hooks/useSignatureWithNotification";
 import { userJoinBatch } from "~~/services/api/users";
 import { UserByAddress } from "~~/services/database/repositories/users";
 import { EIP_712_TYPED_DATA__JOIN_BATCH } from "~~/services/eip712/join-batch";
@@ -7,10 +7,16 @@ import { notification } from "~~/utils/scaffold-eth";
 
 export function useJoinBatch({ user }: { user?: UserByAddress }) {
   const queryClient = useQueryClient();
-  const { signTypedDataAsync } = useSignTypedData();
+  const { signWithNotification } = useSignatureWithNotification();
 
-  const { mutate: joinBatch, isPending: isJoiningBatch } = useMutation({
-    mutationFn: userJoinBatch,
+  const { mutateAsync: joinBatchMutation, isPending: isJoiningBatch } = useMutation({
+    mutationFn: async () => {
+      if (!user) throw new Error("User not found");
+
+      const signature = await signWithNotification(EIP_712_TYPED_DATA__JOIN_BATCH);
+
+      return userJoinBatch({ address: user.userAddress, signature });
+    },
     onSuccess: user => {
       queryClient.setQueryData(["user", user.userAddress], user);
       notification.success(<span>You&apos;ve successfully joined the batch</span>);
@@ -21,20 +27,8 @@ export function useJoinBatch({ user }: { user?: UserByAddress }) {
     },
   });
 
-  const handleJoinBatch = async () => {
-    if (!user) return;
-
-    try {
-      const signature = await signTypedDataAsync(EIP_712_TYPED_DATA__JOIN_BATCH);
-      joinBatch({ address: user.userAddress, signature });
-    } catch (error) {
-      console.error("Error during signature:", error);
-      notification.error("Failed to sign message. Please try again.");
-    }
-  };
-
   return {
-    handleJoinBatch,
+    handleJoinBatch: joinBatchMutation,
     isJoiningBatch,
   };
 }
