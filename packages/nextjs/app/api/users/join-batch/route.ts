@@ -65,19 +65,27 @@ export async function POST(req: Request) {
 
     const referrer = user?.referrer || undefined;
     const originalUtmParams = user?.originalUtmParams;
+
     waitUntil(
-      trackPlausibleEvent(
-        PlausibleEvent.JOIN_BATCH,
-        {
-          originalReferrer: referrer,
-          originalUtmSource: originalUtmParams?.utm_source,
-          originalUtmMedium: originalUtmParams?.utm_medium,
-          originalUtmCampaign: originalUtmParams?.utm_campaign,
-          originalUtmTerm: originalUtmParams?.utm_term,
-          originalUtmContent: originalUtmParams?.utm_content,
-        },
-        req,
-      ),
+      (async () => {
+        try {
+          await trackPlausibleEvent(
+            PlausibleEvent.JOIN_BATCH,
+            {
+              originalReferrer: referrer,
+              originalUtmSource: originalUtmParams?.utm_source,
+              originalUtmMedium: originalUtmParams?.utm_medium,
+              originalUtmCampaign: originalUtmParams?.utm_campaign,
+              originalUtmTerm: originalUtmParams?.utm_term,
+              originalUtmContent: originalUtmParams?.utm_content,
+            },
+            req,
+          );
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        } catch (e) {
+          console.error(`Error tracking plausible event ${PlausibleEvent.JOIN_BATCH} for user ${address}`);
+        }
+      })(),
     );
 
     return NextResponse.json({ user: updatedUser }, { status: 200 });
