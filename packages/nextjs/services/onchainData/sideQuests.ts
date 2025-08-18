@@ -121,9 +121,9 @@ const questCheckers: Record<
     (attr.operation_type ?? "").toLowerCase() === "deploy",
 
   swappedOnDex: ({ attr }) =>
-    (attr.operation_type ?? "").toLowerCase() === "trade" ||
-    // Check added to filter out NFT trades
-    (attr.transfers ?? []).some(tr => !!tr.fungible_info),
+    (attr.operation_type ?? "").toLowerCase() === "trade" &&
+    // Require a fungible transfer to avoid NFT marketplace trades
+    (attr.transfers ?? []).some(tr => Boolean(tr.fungible_info)),
 
   heldStablecoins: ({ attr }) =>
     (attr.transfers ?? []).some((tr) => {
