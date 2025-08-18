@@ -251,7 +251,7 @@ export async function filterValidUserAddresses(addresses: string[]): Promise<str
   return rows.map(row => row.userAddress);
 }
 
-export async function getUserPoints(userAddress: string) {
+export async function getUserXP(userAddress: string) {
   const lowercaseAddress = userAddress.toLowerCase();
 
   const user = await db.query.users.findFirst({
