@@ -29,6 +29,7 @@ export type ZerionTransaction = {
     transfers?: {
       direction?: string;
       fungible_info?: { symbol?: string };
+      nft_info?: Record<string, unknown>;
     }[];
     hash?: string;
   };
@@ -138,7 +139,9 @@ const questCheckers: Record<
     isOutgoing && chain === "ethereum",
 
   mintedNFT: ({ attr }) =>
-    (attr.operation_type ?? "").toLowerCase() === "mint",
+    (attr.operation_type ?? "").toLowerCase() === "mint" &&
+    // Require an NFT transfer to avoid WETH or other token mints
+    (attr.transfers ?? []).some(tr => Boolean(tr.nft_info)),
 };
 
 async function fetchZerionTransactionsPage(
