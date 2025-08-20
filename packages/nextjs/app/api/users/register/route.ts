@@ -5,8 +5,8 @@ import { users } from "~~/services/database/config/schema";
 import { UserUpdate, createUser, isUserRegistered, updateUser } from "~~/services/database/repositories/users";
 import { isValidEIP712UserRegisterSignature } from "~~/services/eip712/register";
 import { fetchOnchainData } from "~~/services/onchainData";
-import { PlausibleEvent, trackPlausibleEvent } from "~~/services/plausible";
 import { fetchSideQuestsSnapshot } from "~~/services/onchainData/sideQuests";
+import { PlausibleEvent, trackPlausibleEvent } from "~~/services/plausible";
 
 type RegisterPayload = {
   address: string;
