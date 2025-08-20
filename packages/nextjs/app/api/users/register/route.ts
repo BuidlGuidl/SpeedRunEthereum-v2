@@ -88,6 +88,7 @@ export async function POST(req: Request) {
           try {
             const snapshot = await fetchSideQuestsSnapshot({ address, ensName: ensData.name });
             await updateUser(address, { sideQuestsSnapshot: snapshot });
+            console.log(`Sidequests snapshot updated for user ${address}`);
           } catch (e) {
             console.error("Failed to fetch or store sidequests snapshot for", address, e);
           }
