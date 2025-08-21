@@ -490,14 +490,55 @@ Establish ongoing security incentives on platforms like **Immunefi** or **Hacken
 
 ### Notable Game Exploits
 
-| Protocol        | Date      | Loss   | Primary Vulnerability |
-| --------------- | --------- | ------ | --------------------- |
-| Ronin Network   | Mar 2022  | $625M  | Bridge key compromise |
-| Axie Infinity   | 2021-2022 | $45M+  | Economic design flaws |
-| DeFi Kingdoms   | 2022      | $6.5M  | Logic flaw in mining  |
-| Cream Finance   | Aug 2021  | $18.8M | Reentrancy (ERC-777)  |
-| PoWHC           | 2018      | $800K  | Integer overflow      |
-| Beanstalk Farms | Apr 2022  | $182M  | Governance takeover   |
+<table>
+  <thead>
+    <tr>
+      <th>Protocol</th>
+      <th>Date</th>
+      <th>Loss</th>
+      <th>Primary Vulnerability</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Ronin Network</td>
+      <td>Mar 2022</td>
+      <td>$625M</td>
+      <td>Bridge key compromise</td>
+    </tr>
+    <tr>
+      <td>Axie Infinity</td>
+      <td>2021-2022</td>
+      <td>$45M+</td>
+      <td>Economic design flaws</td>
+    </tr>
+    <tr>
+      <td>DeFi Kingdoms</td>
+      <td>2022</td>
+      <td>$6.5M</td>
+      <td>Logic flaw in mining</td>
+    </tr>
+    <tr>
+      <td>Cream Finance</td>
+      <td>Aug 2021</td>
+      <td>$18.8M</td>
+      <td>Reentrancy (ERC-777)</td>
+    </tr>
+    <tr>
+      <td>PoWHC</td>
+      <td>2018</td>
+      <td>$800K</td>
+      <td>Integer overflow</td>
+    </tr>
+    <tr>
+      <td>Beanstalk Farms</td>
+      <td>Apr 2022</td>
+      <td>$182M</td>
+      <td>Governance takeover</td>
+    </tr>
+  </tbody>
+
+</table>
 
 ### Key Lessons
 
