@@ -1,5 +1,5 @@
 ---
-title: "Commit-Reveal Scheme in Solidity: Preventing Front-Running Attacks"
+title: "Commit-Reveal Scheme in Solidity"
 description: "Learn how to implement the commit-reveal scheme in Solidity to prevent front-running attacks in blockchain games. Complete guide with code examples, security best practices, and real-world applications."
 image: "/assets/guides/commit-reveal-scheme-solidity.jpg"
 ---

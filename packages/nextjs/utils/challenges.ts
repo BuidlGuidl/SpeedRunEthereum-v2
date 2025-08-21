@@ -93,7 +93,7 @@ export const CHALLENGE_METADATA: Record<
       "Learn blockchain security by building an attack contract that exploits randomness vulnerabilities in a Solidity dice game. Hands-on security tutorial for developers.",
     guides: [
       {
-        title: "Commit-Reveal Scheme in Solidity: Preventing Front-Running Attacks",
+        title: "Commit-Reveal Scheme in Solidity",
         url: "/guides/commit-reveal-scheme",
       },
       {
