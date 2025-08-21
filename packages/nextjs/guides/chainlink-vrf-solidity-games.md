@@ -1,5 +1,5 @@
 ---
-title: "Implementing Chainlink VRF in SoliditySmart Contracts"
+title: "Chainlink VRF Implementation: Provably Fair Randomness for Smart Contracts"
 description: "Learn to implement Chainlink VRF v2 in Solidity smart contracts for provably fair randomness. Complete guide with code examples, security patterns, and best practices for Web3 developers."
 image: "/assets/guides/chainlink-vrf-in-smart-contracts.jpg"
 ---

@@ -1,5 +1,5 @@
 ---
-title: "Blockchain Game Security: Essential Vulnerabilities & Smart Contract Exploits Guide"
+title: "Blockchain Game Security: Comprehensive Vulnerability Defense Guide"
 description: "Master blockchain game security with this comprehensive guide to smart contract vulnerabilities, randomness exploits, and defense patterns. Includes Solidity examples and real-world attack scenarios for Web3 developers."
 image: "/assets/guides/blockchain-games-security.jpg"
 ---
