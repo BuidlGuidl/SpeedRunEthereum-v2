@@ -92,6 +92,8 @@ pragma solidity ^0.8.20;
 contract CommitRevealBase {
     uint256 public commitDeadline;
     uint256 public revealDeadline;
+    uint256 public constant STAKE_AMOUNT = 0.01 ether;
+    uint256 public constant PRIZE_AMOUNT = 0.02 ether;
 
     struct Commitment {
         bytes32 commitmentHash;
@@ -102,7 +104,7 @@ contract CommitRevealBase {
     mapping(address => Commitment) public commitments;
 
     event Committed(address indexed user, bytes32 commitment);
-    event Revealed(address indexed user, bytes32 revealedData);
+    event Revealed(address indexed user, uint256 guess, uint256 result, bool won);
 
     constructor(uint256 commitDuration, uint256 revealDuration) {
         commitDeadline = block.timestamp + commitDuration;
@@ -200,7 +202,7 @@ function generateSecret() {
 
 // Create commitment
 function createCommitment(guess, secret) {
-  return ethers.utils.keccak256(ethers.utils.defaultAbiCoder.encode(["uint256", "bytes32"], [guess, secret]));
+  return ethers.keccak256(ethers.AbiCoder.defaultAbiCoder().encode(["uint256", "bytes32"], [guess, secret]));
 }
 ```
 
@@ -307,6 +309,17 @@ function handleUnrevealedCommitments() external {
     }
 }
 
+// Internal helper functions
+function _refundStake(address player) internal {
+    (bool sent, ) = player.call{value: STAKE_AMOUNT}("");
+    require(sent, "Refund failed");
+}
+
+function _distributePrizes() internal {
+    // Prize distribution logic - implementation depends on game rules
+    // Example: distribute to revealed players proportionally
+}
+
 // Emergency functions for edge cases
 function emergencyWithdraw() external {
     require(block.timestamp > revealDeadline + 7 days, "Too early");
@@ -371,8 +384,10 @@ struct Commitment {
 }
 
 // Use constants for repeated values
-uint256 public constant STAKE_AMOUNT = 0.1 ether;
+uint256 public constant STAKE_AMOUNT = 0.01 ether;
 uint256 public constant MIN_COMMIT_DURATION = 1 hours;
+
+mapping(address => Commitment) public commitments;
 
 // Batch operations when possible
 function batchCommit(bytes32[] calldata commitments, address[] calldata players)
@@ -383,7 +398,7 @@ function batchCommit(bytes32[] calldata commitments, address[] calldata players)
 
     for (uint256 i = 0; i < commitments.length; i++) {
         // Individual commit logic without redundant checks
-        commits[players[i]] = Commitment({
+        commitments[players[i]] = Commitment({
             solutionHash: commitments[i],
             commitTime: uint32(block.timestamp),
             revealed: false
