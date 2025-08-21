@@ -64,13 +64,13 @@ contract VulnerableDiceGame {
     constructor() payable {}
 
     function rollDice() external payable {
-        require(msg.value == 1 ether, "Bet must be 1 ether");
+        require(msg.value == 0.01 ether, "Bet must be 0.01 ether");
 
         // VULNERABLE: Using block.timestamp for randomness
         uint256 roll = block.timestamp % 6 + 1;
 
-        if (roll <= 3) { // Player wins on 1, 2, or 3
-            (bool sent, ) = msg.sender.call{value: address(this).balance}("");
+        if (roll == 6) { // Player wins only on 6 (16.67% chance)
+            (bool sent, ) = msg.sender.call{value: msg.value * 2}("");
             require(sent, "Failed to send Ether");
         }
     }
@@ -95,50 +95,72 @@ This transforms a "game of chance" into a deterministic profit engine for miners
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.18;
 
-import "@chainlink/contracts/src/v0.8/vrf/VRFConsumerBaseV2.sol";
-import "@chainlink/contracts/src/v0.8/vrf/interfaces/VRFCoordinatorV2Interface.sol";
+import "@chainlink/contracts/src/v0.8/vrf/VRFConsumerBaseV2Plus.sol";
+import "@chainlink/contracts/src/v0.8/vrf/dev/libraries/VRFV2PlusClient.sol";
 
-contract SecureDiceGame is VRFConsumerBaseV2 {
-    VRFCoordinatorV2Interface COORDINATOR;
-    uint64 s_subscriptionId;
+contract SecureDiceGame is VRFConsumerBaseV2Plus {
+    IVRFCoordinatorV2Plus COORDINATOR;
+    uint256 s_subscriptionId;
     bytes32 s_keyHash;
     uint32 s_callbackGasLimit = 100000;
     uint16 s_requestConfirmations = 3;
     uint32 s_numWords = 1;
 
     mapping(uint256 => address) public s_players;
+    mapping(uint256 => uint256) public s_bets;
 
-    constructor(uint64 subscriptionId, address vrfCoordinator)
-        VRFConsumerBaseV2(vrfCoordinator) {
-        COORDINATOR = VRFCoordinatorV2Interface(vrfCoordinator);
+    event DiceRolled(address indexed player, uint256 requestId);
+    event GameResult(address indexed player, uint256 roll, bool won, uint256 payout);
+
+    constructor(uint256 subscriptionId, address vrfCoordinator, bytes32 keyHash)
+        VRFConsumerBaseV2Plus(vrfCoordinator) payable {
+        COORDINATOR = IVRFCoordinatorV2Plus(vrfCoordinator);
         s_subscriptionId = subscriptionId;
-        s_keyHash = 0x...; // Set appropriate key hash
+        s_keyHash = keyHash; // Network-specific key hash
     }
 
     function rollDice() external payable {
-        require(msg.value == 1 ether, "Bet must be 1 ether");
+        require(msg.value == 0.01 ether, "Bet must be 0.01 ether");
+        require(address(this).balance >= msg.value * 2, "Insufficient contract balance");
 
         uint256 requestId = COORDINATOR.requestRandomWords(
-            s_keyHash,
-            s_subscriptionId,
-            s_requestConfirmations,
-            s_callbackGasLimit,
-            s_numWords
+            VRFV2PlusClient.RandomWordsRequest({
+                keyHash: s_keyHash,
+                subId: s_subscriptionId,
+                requestConfirmations: s_requestConfirmations,
+                callbackGasLimit: s_callbackGasLimit,
+                numWords: s_numWords,
+                extraArgs: VRFV2PlusClient._argsToBytes(
+                    VRFV2PlusClient.ExtraArgsV1({nativePayment: false})
+                )
+            })
         );
+
         s_players[requestId] = msg.sender;
+        s_bets[requestId] = msg.value;
+
+        emit DiceRolled(msg.sender, requestId);
     }
 
-    function fulfillRandomWords(uint256 requestId, uint256[] memory randomWords)
+    function fulfillRandomWords(uint256 requestId, uint256[] calldata randomWords)
         internal override {
         address player = s_players[requestId];
+        uint256 bet = s_bets[requestId];
+
         require(player != address(0), "Invalid request");
+
         delete s_players[requestId];
+        delete s_bets[requestId];
 
         uint256 roll = (randomWords[0] % 6) + 1;
+        bool won = roll == 6; // Win only on 6
 
-        if (roll <= 3) {
-            (bool sent, ) = player.call{value: address(this).balance}("");
+        if (won) {
+            (bool sent, ) = player.call{value: bet * 2}("");
             require(sent, "Failed to send Ether");
+            emit GameResult(player, roll, true, bet * 2);
+        } else {
+            emit GameResult(player, roll, false, 0);
         }
     }
 }
@@ -218,6 +240,10 @@ function mintRareNFT(address to) public {
 import "@openzeppelin/contracts/access/Ownable.sol";
 
 contract SecureGame is Ownable {
+    uint256 public nextTokenId = 1;
+
+    constructor(address initialOwner) Ownable(initialOwner) {}
+
     function mintRareNFT(address to) public onlyOwner {
         _mint(to, nextTokenId++);
     }
@@ -266,19 +292,39 @@ function claimReward() external {
 
 ```solidity
 contract SecureCardGame {
-    mapping(address => bytes32) public commitments;
-    mapping(address => bool) public revealed;
+    struct Commitment {
+        bytes32 hash;
+        uint256 commitBlock;
+        bool revealed;
+    }
+
+    mapping(address => Commitment) public commitments;
+    mapping(uint256 => bool) public usedNonces;
+
+    uint256 public constant COMMIT_DURATION = 10; // blocks
+    uint256 public constant REVEAL_DURATION = 5;  // blocks
 
     function commitMove(bytes32 commitment) external {
-        commitments[msg.sender] = commitment;
+        commitments[msg.sender] = Commitment({
+            hash: commitment,
+            commitBlock: block.number,
+            revealed: false
+        });
     }
 
     function revealMove(uint8 move, uint256 nonce) external {
-        bytes32 hash = keccak256(abi.encodePacked(move, nonce, msg.sender));
-        require(hash == commitments[msg.sender], "Invalid reveal");
-        require(!revealed[msg.sender], "Already revealed");
+        Commitment storage commitment = commitments[msg.sender];
+        require(commitment.hash != bytes32(0), "No commitment");
+        require(!commitment.revealed, "Already revealed");
+        require(!usedNonces[nonce], "Nonce already used");
+        require(block.number >= commitment.commitBlock + COMMIT_DURATION, "Commit phase not ended");
+        require(block.number <= commitment.commitBlock + COMMIT_DURATION + REVEAL_DURATION, "Reveal phase ended");
 
-        revealed[msg.sender] = true;
+        bytes32 hash = keccak256(abi.encodePacked(move, nonce, msg.sender));
+        require(hash == commitment.hash, "Invalid reveal");
+
+        commitment.revealed = true;
+        usedNonces[nonce] = true;
         // Process the move...
     }
 }
@@ -291,30 +337,63 @@ contract SecureCardGame {
 **Defense: Time-Weighted Average Price (TWAP)**
 
 ```solidity
+interface IUniswapV2Pair {
+    function getReserves() external view returns (uint112, uint112, uint32);
+    function price0CumulativeLast() external view returns (uint256);
+    function price1CumulativeLast() external view returns (uint256);
+}
+
 contract SecurePriceOracle {
     struct Observation {
         uint32 blockTimestamp;
-        uint256 price0Cumulative;
-        uint256 price1Cumulative;
+        uint224 price0Cumulative;
+        uint224 price1Cumulative;
+        bool initialized;
     }
 
-    mapping(address => Observation) public pairObservations;
+    mapping(address => Observation[]) public pairObservations;
+    uint256 public constant MIN_OBSERVATIONS = 2;
+    uint256 public constant MAX_AGE = 1 hours;
+
+    function updateObservation(address pair) external {
+        uint256 price0Cumulative = IUniswapV2Pair(pair).price0CumulativeLast();
+        uint256 price1Cumulative = IUniswapV2Pair(pair).price1CumulativeLast();
+
+        pairObservations[pair].push(Observation({
+            blockTimestamp: uint32(block.timestamp),
+            price0Cumulative: uint224(price0Cumulative),
+            price1Cumulative: uint224(price1Cumulative),
+            initialized: true
+        }));
+    }
 
     function getTWAP(address pair, uint32 period) external view returns (uint256) {
-        Observation memory current = getCurrentObservation(pair);
-        Observation memory historical = pairObservations[pair];
+        Observation[] storage observations = pairObservations[pair];
+        require(observations.length >= MIN_OBSERVATIONS, "Insufficient observations");
 
-        uint32 timeElapsed = current.blockTimestamp - historical.blockTimestamp;
-        require(timeElapsed >= period, "Insufficient data");
+        Observation memory latest = observations[observations.length - 1];
+        require(block.timestamp - latest.blockTimestamp <= MAX_AGE, "Data too stale");
 
-        return (current.price0Cumulative - historical.price0Cumulative) / timeElapsed;
+        // Find observation from `period` seconds ago
+        Observation memory historical = observations[observations.length - 2];
+        for (uint i = observations.length - 1; i > 0; i--) {
+            if (latest.blockTimestamp - observations[i].blockTimestamp >= period) {
+                historical = observations[i];
+                break;
+            }
+        }
+
+        uint32 timeElapsed = latest.blockTimestamp - historical.blockTimestamp;
+        require(timeElapsed >= period, "Insufficient time elapsed");
+
+        return (latest.price0Cumulative - historical.price0Cumulative) / timeElapsed;
     }
 }
 ```
 
 ### 4.3 Economic Collapse: Real-World Case Studies
 
-#### Case Study 1: Axie Infinity - The $45M+ Economic Death Spiral
+#### Case Study 1: Axie Infinity - The Economic Death Spiral
 
 **The Setup:** Axie Infinity became a global phenomenon, with players in developing countries earning significant income during COVID-19. However, its economy was fundamentally flawed.
 
@@ -327,7 +406,7 @@ contract SecurePriceOracle {
 3. **Economic Death Spiral:** SLP supply far exceeded demand, crashing from $0.40 to under $0.01
 4. **Exploitation System:** High entry costs led to "scholarship" systems where asset owners exploited players for their earnings
 
-**The Impact:** The game transformed from "play-to-earn" into "grind-to-survive," demonstrating how economic design flaws can be more devastating than code vulnerabilities.
+**The Impact:** The game transformed from "play-to-earn" into "grind-to-survive," with SLP losing over 99% of its value and billions in market capitalization. This demonstrates how economic design flaws can be more devastating than code vulnerabilities.
 
 #### Case Study 2: DeFi Kingdoms - The $6.5M Logic Flaw
 
@@ -422,29 +501,68 @@ contract SecurePriceOracle {
 Instead of first-come-first-served transaction processing, collect all transactions within a time window and process them simultaneously:
 
 ```solidity
-contract BatchAuctionNFT {
+import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
+
+contract BatchAuctionNFT is ERC721 {
     struct Bid {
         address bidder;
         uint256 amount;
-        uint256 round;
     }
 
     mapping(uint256 => Bid[]) public roundBids;
-    uint256 public currentRound;
+    mapping(uint256 => mapping(address => uint256)) public bidderRefunds;
+    uint256 public currentRound = 1;
     uint256 public constant ROUND_DURATION = 1 hours;
+    uint256 public roundStartTime;
+
+    constructor() ERC721("BatchAuctionNFT", "BATCH") {
+        roundStartTime = block.timestamp;
+    }
 
     function submitBid() external payable {
+        require(msg.value > 0, "Bid must be positive");
+        require(block.timestamp < roundStartTime + (currentRound * ROUND_DURATION), "Round ended");
+
         roundBids[currentRound].push(Bid({
             bidder: msg.sender,
-            amount: msg.value,
-            round: currentRound
+            amount: msg.value
         }));
     }
 
     function processRound() external {
-        require(block.timestamp >= currentRound * ROUND_DURATION, "Round not ended");
-        // Process all bids at uniform clearing price
+        require(block.timestamp >= roundStartTime + (currentRound * ROUND_DURATION), "Round not ended");
+
+        Bid[] storage bids = roundBids[currentRound];
+        require(bids.length > 0, "No bids");
+
+        // Find highest bidder
+        uint256 highestBid = 0;
+        address winner;
+        for (uint i = 0; i < bids.length; i++) {
+            if (bids[i].amount > highestBid) {
+                highestBid = bids[i].amount;
+                winner = bids[i].bidder;
+            }
+        }
+
+        // Setup refunds for losing bidders
+        for (uint i = 0; i < bids.length; i++) {
+            if (bids[i].bidder != winner) {
+                bidderRefunds[currentRound][bids[i].bidder] = bids[i].amount;
+            }
+        }
+
+        // Mint NFT to winner
+        _mint(winner, currentRound);
         currentRound++;
+    }
+
+    function claimRefund(uint256 round) external {
+        uint256 refund = bidderRefunds[round][msg.sender];
+        require(refund > 0, "No refund available");
+
+        bidderRefunds[round][msg.sender] = 0;
+        payable(msg.sender).transfer(refund);
     }
 }
 ```
@@ -563,40 +681,62 @@ Establish ongoing security incentives on platforms like **Immunefi** or **Hacken
 **The Defense: Time-Locked Governance**
 
 ```solidity
-contract SecureGovernance {
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.18;
+
+import "@openzeppelin/contracts/governance/TimelockController.sol";
+
+contract SecureGovernance is TimelockController {
     uint256 public constant MIN_DELAY = 24 hours;
-    uint256 public constant MIN_QUORUM = 10; // 10% of total supply
+    bytes32 public constant PROPOSER_ROLE = keccak256("PROPOSER_ROLE");
+    bytes32 public constant EXECUTOR_ROLE = keccak256("EXECUTOR_ROLE");
 
-    struct Proposal {
-        bytes32 id;
-        uint256 eta; // Execution time
-        uint256 voteCount;
-        bool executed;
+    // Emergency pause functionality
+    bool public paused;
+    address public emergencyCouncil;
+
+    event EmergencyPause(address indexed pauser);
+    event Unpause(address indexed unpauser);
+
+    modifier onlyEmergencyCouncil() {
+        require(msg.sender == emergencyCouncil, "Not emergency council");
+        _;
     }
 
-    mapping(bytes32 => Proposal) public proposals;
-
-    function schedule(bytes32 id, uint256 delay) external {
-        require(delay >= MIN_DELAY, "Delay too short");
-        require(proposals[id].voteCount >= MIN_QUORUM, "Insufficient votes");
-
-        proposals[id].eta = block.timestamp + delay;
-        emit ProposalScheduled(id, block.timestamp + delay);
+    modifier whenNotPaused() {
+        require(!paused, "Contract paused");
+        _;
     }
 
-    function execute(bytes32 id) external {
-        Proposal storage proposal = proposals[id];
-        require(proposal.eta <= block.timestamp, "Timelock not expired");
-        require(!proposal.executed, "Already executed");
-        require(proposal.voteCount >= MIN_QUORUM, "Lost quorum");
+    constructor(
+        address[] memory proposers,
+        address[] memory executors,
+        address admin
+    ) TimelockController(MIN_DELAY, proposers, executors, admin) {}
 
-        proposal.executed = true;
-        // Execute proposal logic
+    function setEmergencyCouncil(address _council) external onlyRole(DEFAULT_ADMIN_ROLE) {
+        emergencyCouncil = _council;
     }
 
     function emergencyPause() external onlyEmergencyCouncil {
-        // Multi-sig emergency pause for critical threats
         paused = true;
+        emit EmergencyPause(msg.sender);
+    }
+
+    function unpause() external onlyRole(DEFAULT_ADMIN_ROLE) {
+        paused = false;
+        emit Unpause(msg.sender);
+    }
+
+    // Override to add pause functionality
+    function execute(
+        address target,
+        uint256 value,
+        bytes calldata payload,
+        bytes32 predecessor,
+        bytes32 salt
+    ) public payable override whenNotPaused {
+        super.execute(target, value, payload, predecessor, salt);
     }
 }
 ```
