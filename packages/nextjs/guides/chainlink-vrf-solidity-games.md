@@ -394,7 +394,7 @@ contract VRFExample is VRFConsumerBaseV2Plus {
         uint256[] calldata randomWords
     ) internal override {
         address requester = s_requesters[requestId];
-        
+
         // Graceful failure handling
         if (requester == address(0)) {
             s_failedRequests[requestId] = true;
@@ -562,7 +562,7 @@ main().catch(console.error);
 
 ## 8. Advanced Security Patterns
 
-### 8.0 Request Batching for High-Throughput Applications
+### 8.1 Request Batching for High-Throughput Applications
 
 For applications with many simultaneous users, batching requests improves efficiency:
 
@@ -582,7 +582,7 @@ contract BatchVRFExample is VRFConsumerBaseV2Plus {
 
     uint256 public constant MAX_BATCH_SIZE = 20;
     uint256 public constant BATCH_TIMEOUT = 5 minutes;
-    
+
     mapping(uint256 => BatchRequest) public batchRequests;
     mapping(address => uint256) public userBatches;
     mapping(address => uint256) public s_results;
@@ -613,7 +613,7 @@ contract BatchVRFExample is VRFConsumerBaseV2Plus {
 
         batchRequests[currentBatchId].users.push(msg.sender);
         userBatches[msg.sender] = currentBatchId;
-        
+
         emit UserJoinedBatch(msg.sender, currentBatchId);
     }
 
@@ -649,12 +649,12 @@ contract BatchVRFExample is VRFConsumerBaseV2Plus {
         // Distribute random results to all users in batch
         uint256 seed = randomWords[0];
         uint256 userCount = batch.users.length;
-        
+
         for (uint256 i = 0; i < userCount; i++) {
             uint256 userSeed = uint256(keccak256(abi.encode(seed, i, batch.users[i])));
             uint256 result = (userSeed % 6) + 1;
             s_results[batch.users[i]] = result;
-            
+
             // Clear user's batch assignment
             delete userBatches[batch.users[i]];
         }
@@ -678,7 +678,7 @@ contract BatchVRFExample is VRFConsumerBaseV2Plus {
 }
 ```
 
-### 8.01 Emergency Pause Mechanisms
+### 8.2 Emergency Pause Mechanisms
 
 Production applications need circuit breakers for critical situations:
 
@@ -712,7 +712,7 @@ contract SecureVRFExample is VRFConsumerBaseV2Plus, Pausable, AccessControl {
         i_vrfCoordinator = IVRFCoordinatorV2Plus(vrfCoordinator);
         i_subscriptionId = subscriptionId;
         i_keyHash = keyHash;
-        
+
         // Setup roles
         _grantRole(DEFAULT_ADMIN_ROLE, admin);
         _grantRole(EMERGENCY_ROLE, admin);
@@ -765,9 +765,7 @@ contract SecureVRFExample is VRFConsumerBaseV2Plus, Pausable, AccessControl {
 }
 ```
 
-## 8. Advanced Security Patterns
-
-### 8.1 Preventing Input Manipulation
+### 8.3 Preventing Input Manipulation
 
 **The Threat:** Users could see the VRF fulfillment transaction in the mempool and front-run it to change their input (e.g., increase bet size after seeing a winning number).
 
@@ -876,7 +874,7 @@ contract SecureBettingGame is VRFConsumerBaseV2Plus {
         // Settlement logic using the VRF result and revealed bet amount
         // Implementation depends on specific game rules
         emit BetSettled(player, true, betAmount * 2); // Example outcome
-        
+
         // Cleanup
         delete commitments[player];
         delete requestToPlayer[requestId];
@@ -884,7 +882,7 @@ contract SecureBettingGame is VRFConsumerBaseV2Plus {
 }
 ```
 
-### 8.2 Handling Callback Failures
+### 8.4 Handling Callback Failures
 
 **The Threat:** If `fulfillRandomWords` reverts, the randomness is lost forever and won't be retried.
 
@@ -936,7 +934,7 @@ contract RobustDiceGame is VRFConsumerBaseV2Plus {
 }
 ```
 
-### 8.3 Chain Reorganization Protection
+### 8.5 Chain Reorganization Protection
 
 **The Configuration:** The `REQUEST_CONFIRMATIONS` parameter protects against chain reorgs:
 
