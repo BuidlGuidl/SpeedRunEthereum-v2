@@ -27,7 +27,7 @@ The scale of the problem is staggering: the $625 million Ronin Network hack supp
 - **Public transparency:** All code and transactions are visible to attackers
 - **Composability risks:** Integration with DeFi protocols multiplies attack surfaces
 
-### The Multi-Layer Security Stack
+### 1.1 The Multi-Layer Security Stack
 
 Web3 game security isn't monolithic—it's a layered system where failure at any level can be catastrophic:
 
@@ -43,7 +43,7 @@ The most devastating attacks often combine vulnerabilities across multiple layer
 
 ## 2. The Randomness Problem: Your First Security Challenge
 
-### The Fundamental Flaw
+### 2.1 The Fundamental Flaw
 
 Most blockchain games need randomness - for dice rolls, card draws, loot drops, or procedural generation. The instinct is to use on-chain data like `block.timestamp`, but this creates a critical vulnerability.
 
@@ -53,7 +53,7 @@ Most blockchain games need randomness - for dice rolls, card draws, loot drops, 
 - Miners/validators can manipulate block properties
 - Transactions are visible in the mempool before execution
 
-### Vulnerable Dice Game Example
+### 2.2 Vulnerable Dice Game Example
 
 ```solidity
 // SPDX-License-Identifier: MIT
@@ -77,7 +77,7 @@ contract VulnerableDiceGame {
 }
 ```
 
-### Step-by-Step Attack Scenario
+### 2.3 Step-by-Step Attack Scenario
 
 **The Rigged Dice Game Attack:**
 
@@ -89,7 +89,7 @@ contract VulnerableDiceGame {
 
 This transforms a "game of chance" into a deterministic profit engine for miners/validators.
 
-### Secure Solution: Chainlink VRF
+### 2.4 Secure Solution: Chainlink VRF
 
 ```solidity
 // SPDX-License-Identifier: MIT
@@ -425,7 +425,7 @@ contract SecurePriceOracle {
 
 ## 5. Developer Security Checklist
 
-### Essential Security Patterns
+### 5.1 Essential Security Patterns
 
 <table>
   <thead>
@@ -469,7 +469,7 @@ contract SecurePriceOracle {
   </tbody>
 </table>
 
-### Security Best Practices
+### 5.2 Security Best Practices
 
 1. **Use Battle-Tested Libraries**
 
@@ -494,9 +494,9 @@ contract SecurePriceOracle {
    - Pause mechanisms for detected threats
    - Bug bounty programs for ongoing security
 
-### Advanced Mitigation Strategies
+### 5.3 Advanced Mitigation Strategies
 
-#### Batch Auctions for Front-Running Protection
+### 5.4 Batch Auctions for Front-Running Protection
 
 Instead of first-come-first-served transaction processing, collect all transactions within a time window and process them simultaneously:
 
@@ -567,7 +567,7 @@ contract BatchAuctionNFT is ERC721 {
 }
 ```
 
-#### Economic Audits and Game Theory Analysis
+### 5.5 Economic Audits and Game Theory Analysis
 
 Before launching, engage specialized firms to conduct economic modeling:
 
@@ -576,7 +576,7 @@ Before launching, engage specialized firms to conduct economic modeling:
 3. **Token Flow Modeling:** Ensure sustainable faucet/sink balance
 4. **Inflation Scenario Planning:** Model different growth and adoption curves
 
-#### Formal Verification for Critical Components
+### 5.6 Formal Verification for Critical Components
 
 For high-value functions, use mathematical proofs to verify correctness:
 
@@ -593,7 +593,7 @@ function calculateReward(uint256 stakeAmount, uint256 duration)
 }
 ```
 
-#### Bug Bounty Programs
+### 5.7 Bug Bounty Programs
 
 Establish ongoing security incentives on platforms like **Immunefi** or **HackenProof**:
 
@@ -606,7 +606,7 @@ Establish ongoing security incentives on platforms like **Immunefi** or **Hacken
 
 ## 6. Real-World Impact: Learning from Major Exploits
 
-### Notable Game Exploits
+### 6.1 Notable Game Exploits
 
 <table>
   <thead>
@@ -658,13 +658,13 @@ Establish ongoing security incentives on platforms like **Immunefi** or **Hacken
 
 </table>
 
-### Key Lessons
+### 6.2 Key Lessons
 
 - **Infrastructure matters:** The Ronin hack targeted bridge security, not game contracts
 - **Economic design is security:** Poor tokenomics can be as devastating as code bugs
 - **Composability amplifies risk:** DeFi integrations multiply potential attack vectors
 
-### Case Study 3: Beanstalk Governance Takeover - The $182M Flash Loan Attack
+### 6.3 Case Study: Beanstalk Governance Takeover - The $182M Flash Loan Attack
 
 **The Setup:** Beanstalk was a decentralized credit protocol with governance controlled by "Stalk" tokens, designed for rapid response to threats.
 
@@ -753,26 +753,26 @@ contract SecureGovernance is TimelockController {
 
 ## 7. Building Secure Games: A Practical Framework
 
-### Phase 1: Secure Foundation
+### 7.1 Secure Foundation
 
 - Choose audited libraries (OpenZeppelin)
 - Implement proper access controls
 - Use Chainlink VRF for randomness
 
-### Phase 2: Economic Security
+### 7.2 Economic Security
 
 - Design sustainable tokenomics with balanced faucets/sinks
 - Implement TWAP oracles and multi-source price feeds
 - Plan for time-locked governance with quorum requirements
 - Conduct economic modeling and game theory audits
 
-### Phase 3: Testing & Auditing
+### 7.3 Testing & Auditing
 
 - Comprehensive test coverage
 - Professional security audit
 - Bug bounty program
 
-### Phase 4: Monitoring & Response
+### 7.4 Monitoring & Response
 
 - Real-time monitoring
 - Emergency response procedures
