@@ -1,12 +1,12 @@
 ---
-title: "Blockchain Game Security: Comprehensive Vulnerability Defense Guide"
-description: "Master blockchain game security with this comprehensive guide to smart contract vulnerabilities, randomness exploits, and defense patterns. Includes Solidity examples and real-world attack scenarios for Web3 developers."
+title: "Blockchain Game Security: Comprehensive Vulnerability Defense Tutorial"
+description: "Master blockchain game security with this comprehensive tutorial to smart contract vulnerabilities, randomness exploits, and defense patterns. Includes Solidity examples and real-world attack scenarios for Web3 developers."
 image: "/assets/guides/blockchain-games-security.jpg"
 ---
 
 ## TL;DR: Blockchain Game Security Essentials
 
-- **Randomness is critical:** Never use `block.timestamp` or `blockhash` - use Chainlink VRF for secure randomness
+- **Randomness is critical:** Never use `block.timestamp` or `blockhash`, use Chainlink VRF for secure randomness
 - **Common vulnerabilities:** Reentrancy, integer overflow, access control flaws, and gas-based DoS attacks
 - **Economic exploits:** Front-running, oracle manipulation, and tokenomics instability can destroy games
 - **Defense patterns:** Checks-Effects-Interactions (CEI), OpenZeppelin libraries, TWAP oracles, and time-locked governance
@@ -45,7 +45,7 @@ The most devastating attacks often combine vulnerabilities across multiple layer
 
 ### 2.1 The Fundamental Flaw
 
-Most blockchain games need randomness - for dice rolls, card draws, loot drops, or procedural generation. The instinct is to use on-chain data like `block.timestamp`, but this creates a critical vulnerability.
+Most blockchain games need randomness for dice rolls, card draws, loot drops, or procedural generation. The instinct is to use on-chain data like `block.timestamp`, but this creates a critical vulnerability.
 
 **Why On-Chain Randomness Fails:**
 
@@ -496,7 +496,7 @@ contract SecurePriceOracle {
 
 ### 5.3 Advanced Mitigation Strategies
 
-### 5.4 Batch Auctions for Front-Running Protection
+#### 5.3.1 Batch Auctions for Front-Running Protection
 
 Instead of first-come-first-served transaction processing, collect all transactions within a time window and process them simultaneously:
 
@@ -567,7 +567,7 @@ contract BatchAuctionNFT is ERC721 {
 }
 ```
 
-### 5.5 Economic Audits and Game Theory Analysis
+#### 5.3.2 Economic Audits and Game Theory Analysis
 
 Before launching, engage specialized firms to conduct economic modeling:
 
@@ -576,7 +576,7 @@ Before launching, engage specialized firms to conduct economic modeling:
 3. **Token Flow Modeling:** Ensure sustainable faucet/sink balance
 4. **Inflation Scenario Planning:** Model different growth and adoption curves
 
-### 5.6 Formal Verification for Critical Components
+#### 5.3.3 Formal Verification for Critical Components
 
 For high-value functions, use mathematical proofs to verify correctness:
 
@@ -593,7 +593,7 @@ function calculateReward(uint256 stakeAmount, uint256 duration)
 }
 ```
 
-### 5.7 Bug Bounty Programs
+#### 5.3.4 Bug Bounty Programs
 
 Establish ongoing security incentives on platforms like **Immunefi** or **HackenProof**:
 
@@ -637,22 +637,22 @@ Establish ongoing security incentives on platforms like **Immunefi** or **Hacken
       <td>Logic flaw in mining</td>
     </tr>
     <tr>
-      <td>Cream Finance</td>
-      <td>Aug 2021</td>
-      <td>$18.8M</td>
-      <td>Reentrancy (ERC-777)</td>
+      <td>Axie Infinity</td>
+      <td>2021-2022</td>
+      <td>$45M+</td>
+      <td>Economic design flaws</td>
     </tr>
     <tr>
-      <td>PoWHC</td>
-      <td>2018</td>
-      <td>$800K</td>
-      <td>Integer overflow</td>
+      <td>DeFi Kingdoms</td>
+      <td>2022</td>
+      <td>$6.5M</td>
+      <td>Logic flaw in mining</td>
     </tr>
     <tr>
-      <td>Beanstalk Farms</td>
-      <td>Apr 2022</td>
-      <td>$182M</td>
-      <td>Governance takeover</td>
+      <td>Gods Unchained</td>
+      <td>2019</td>
+      <td>$500K+</td>
+      <td>Card duplication exploit</td>
     </tr>
   </tbody>
 
@@ -664,21 +664,22 @@ Establish ongoing security incentives on platforms like **Immunefi** or **Hacken
 - **Economic design is security:** Poor tokenomics can be as devastating as code bugs
 - **Composability amplifies risk:** DeFi integrations multiply potential attack vectors
 
-### 6.3 Case Study: Beanstalk Governance Takeover - The $182M Flash Loan Attack
+### 6.3 Case Study: DeFi Kingdoms Mining Exploit - The $6.5M Logic Flaw
 
-**The Setup:** Beanstalk was a decentralized credit protocol with governance controlled by "Stalk" tokens, designed for rapid response to threats.
+**The Setup:** DeFi Kingdoms was a blockchain game combining DeFi mechanics with NFT-based gameplay, where players could mine JEWEL tokens through various activities.
 
-**The Vulnerability:** Governance allowed immediate execution of proposals with super-majority votes, intended as an "emergency" feature.
+**The Vulnerability:** A smart contract flaw in the mining mechanism allowed players to manipulate the rate at which they could mine locked JEWEL tokens through multiple account exploitation.
 
 **The Attack Sequence:**
 
-1. **Flash Loan:** Attacker borrowed $1 billion in stablecoins
-2. **Governance Acquisition:** Used borrowed funds to purchase massive Stalk holdings (67% voting power)
-3. **Malicious Proposal:** Submitted and immediately passed BIP-18, transferring all protocol funds
-4. **Treasury Drainage:** Moved $182M to attacker's address
-5. **Flash Loan Repayment:** Returned borrowed funds, keeping $182M profit
+1. **Multiple Account Creation:** Attackers discovered they could create numerous accounts
+2. **Rate Manipulation:** Each account unfairly increased mining rates beyond intended limits
+3. **Token Inflation:** This released more JEWEL tokens than the economic model anticipated
+4. **Economic Collapse:** Unintended inflationary pressure crashed JEWEL's price from $20+ to under $1
 
-**The Defense: Time-Locked Governance**
+**The Impact:** The exploit demonstrated how technical vulnerabilities in blockchain games can trigger cascading economic failures, affecting both the game's tokenomics and player confidence.
+
+**The Defense: Robust Economic Modeling**
 
 ```solidity
 // SPDX-License-Identifier: MIT
@@ -780,9 +781,9 @@ contract SecureGovernance is TimelockController {
 
 ---
 
-## Conclusion: Security as a Core Game Mechanic
+## Wrapping Up: Security as a Core Game Mechanic
 
-In Web3 gaming, security isn't just a technical requirementit's a core game mechanic that affects player trust, asset value, and long-term sustainability. The most successful blockchain games are those that treat security as a first-class concern from day one.
+In Web3 gaming, security isn't just a technical requirement it's a core game mechanic that affects player trust, asset value, and long-term sustainability. The most successful blockchain games are those that treat security as a first-class concern from day one.
 
 **Remember:**
 
