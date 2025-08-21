@@ -1,7 +1,7 @@
 ---
 title: "Blockchain Game Security: Essential Vulnerabilities & Smart Contract Exploits Guide"
 description: "Master blockchain game security with this comprehensive guide to smart contract vulnerabilities, randomness exploits, and defense patterns. Includes Solidity examples and real-world attack scenarios for Web3 developers."
-image: "/assets/guides/blockchain-games-vulnerabilities.jpg"
+image: "/assets/guides/blockchain-games-security.jpg"
 ---
 
 ## TL;DR: Blockchain Game Security Essentials
@@ -21,6 +21,7 @@ Web3 gaming represents a paradigm shift where players truly own in-game assets a
 The scale of the problem is staggering: the $625 million Ronin Network hack supporting Axie Infinity serves as a stark reminder that security failures in Web3 gaming can have catastrophic consequences. In blockchain games, every smart contract function is a potential attack vector, and every economic mechanism must be bulletproof.
 
 **Why Game Security is Different:**
+
 - **Immutable code:** Smart contract bugs can't be patched like traditional software
 - **Financial stakes:** In-game assets have real monetary value
 - **Public transparency:** All code and transactions are visible to attackers
@@ -47,6 +48,7 @@ The most devastating attacks often combine vulnerabilities across multiple layer
 Most blockchain games need randomness - for dice rolls, card draws, loot drops, or procedural generation. The instinct is to use on-chain data like `block.timestamp`, but this creates a critical vulnerability.
 
 **Why On-Chain Randomness Fails:**
+
 - All blockchain data is public and predictable
 - Miners/validators can manipulate block properties
 - Transactions are visible in the mempool before execution
@@ -106,7 +108,7 @@ contract SecureDiceGame is VRFConsumerBaseV2 {
 
     mapping(uint256 => address) public s_players;
 
-    constructor(uint64 subscriptionId, address vrfCoordinator) 
+    constructor(uint64 subscriptionId, address vrfCoordinator)
         VRFConsumerBaseV2(vrfCoordinator) {
         COORDINATOR = VRFCoordinatorV2Interface(vrfCoordinator);
         s_subscriptionId = subscriptionId;
@@ -115,7 +117,7 @@ contract SecureDiceGame is VRFConsumerBaseV2 {
 
     function rollDice() external payable {
         require(msg.value == 1 ether, "Bet must be 1 ether");
-        
+
         uint256 requestId = COORDINATOR.requestRandomWords(
             s_keyHash,
             s_subscriptionId,
@@ -126,7 +128,7 @@ contract SecureDiceGame is VRFConsumerBaseV2 {
         s_players[requestId] = msg.sender;
     }
 
-    function fulfillRandomWords(uint256 requestId, uint256[] memory randomWords) 
+    function fulfillRandomWords(uint256 requestId, uint256[] memory randomWords)
         internal override {
         address player = s_players[requestId];
         require(player != address(0), "Invalid request");
@@ -275,7 +277,7 @@ contract SecureCardGame {
         bytes32 hash = keccak256(abi.encodePacked(move, nonce, msg.sender));
         require(hash == commitments[msg.sender], "Invalid reveal");
         require(!revealed[msg.sender], "Already revealed");
-        
+
         revealed[msg.sender] = true;
         // Process the move...
     }
@@ -301,10 +303,10 @@ contract SecurePriceOracle {
     function getTWAP(address pair, uint32 period) external view returns (uint256) {
         Observation memory current = getCurrentObservation(pair);
         Observation memory historical = pairObservations[pair];
-        
+
         uint32 timeElapsed = current.blockTimestamp - historical.blockTimestamp;
         require(timeElapsed >= period, "Insufficient data");
-        
+
         return (current.price0Cumulative - historical.price0Cumulative) / timeElapsed;
     }
 }
@@ -319,6 +321,7 @@ contract SecurePriceOracle {
 **The Vulnerability:** The game's economy relied on hyperinflation of Smooth Love Potion (SLP) tokens. Players earned SLP through battles, but the primary "sink" was breeding new Axies. This created a Ponzi-like structure dependent on constant new player growth.
 
 **The Collapse:**
+
 1. **Peak Hype:** SLP reached $0.40+ with massive demand for new Axies
 2. **Player Growth Slows:** New player acquisition stagnated, reducing Axie breeding demand
 3. **Economic Death Spiral:** SLP supply far exceeded demand, crashing from $0.40 to under $0.01
@@ -331,6 +334,7 @@ contract SecurePriceOracle {
 **The Vulnerability:** A smart contract flaw allowed players to use multiple accounts to manipulate the rate at which they could mine locked JEWEL tokens.
 
 **The Exploit:**
+
 1. Players discovered they could create multiple accounts
 2. Each account could unfairly increase mining rates
 3. This released more tokens than the economic model anticipated
@@ -389,16 +393,19 @@ contract SecurePriceOracle {
 ### Security Best Practices
 
 1. **Use Battle-Tested Libraries**
+
    - OpenZeppelin for standard contracts
    - Chainlink for oracles and randomness
    - Never reinvent security-critical components
 
 2. **Implement Defense in Depth**
+
    - Multiple layers of security checks
    - Circuit breakers for emergency stops
    - Time-locked governance for critical changes
 
 3. **Comprehensive Testing**
+
    - Unit tests for all functions
    - Integration tests with attack scenarios
    - Professional security audits before mainnet
@@ -421,11 +428,11 @@ contract BatchAuctionNFT {
         uint256 amount;
         uint256 round;
     }
-    
+
     mapping(uint256 => Bid[]) public roundBids;
     uint256 public currentRound;
     uint256 public constant ROUND_DURATION = 1 hours;
-    
+
     function submitBid() external payable {
         roundBids[currentRound].push(Bid({
             bidder: msg.sender,
@@ -433,7 +440,7 @@ contract BatchAuctionNFT {
             round: currentRound
         }));
     }
-    
+
     function processRound() external {
         require(block.timestamp >= currentRound * ROUND_DURATION, "Round not ended");
         // Process all bids at uniform clearing price
@@ -457,13 +464,13 @@ For high-value functions, use mathematical proofs to verify correctness:
 
 ```solidity
 // Example: Formally verified reward calculation
-function calculateReward(uint256 stakeAmount, uint256 duration) 
+function calculateReward(uint256 stakeAmount, uint256 duration)
     external pure returns (uint256) {
     // @notice: Formally verified to never overflow
     // @invariant: result <= stakeAmount * MAX_MULTIPLIER
     require(stakeAmount > 0, "Invalid stake");
     require(duration <= MAX_DURATION, "Duration too long");
-    
+
     return (stakeAmount * duration * REWARD_RATE) / PRECISION;
 }
 ```
@@ -483,19 +490,19 @@ Establish ongoing security incentives on platforms like **Immunefi** or **Hacken
 
 ### Notable Game Exploits
 
-| Protocol | Date | Loss | Primary Vulnerability |
-|----------|------|------|---------------------|
-| Ronin Network | Mar 2022 | $625M | Bridge key compromise |
-| Axie Infinity | 2021-2022 | $45M+ | Economic design flaws |
-| DeFi Kingdoms | 2022 | $6.5M | Logic flaw in mining |
-| Cream Finance | Aug 2021 | $18.8M | Reentrancy (ERC-777) |
-| PoWHC | 2018 | $800K | Integer overflow |
-| Beanstalk Farms | Apr 2022 | $182M | Governance takeover |
+| Protocol        | Date      | Loss   | Primary Vulnerability |
+| --------------- | --------- | ------ | --------------------- |
+| Ronin Network   | Mar 2022  | $625M  | Bridge key compromise |
+| Axie Infinity   | 2021-2022 | $45M+  | Economic design flaws |
+| DeFi Kingdoms   | 2022      | $6.5M  | Logic flaw in mining  |
+| Cream Finance   | Aug 2021  | $18.8M | Reentrancy (ERC-777)  |
+| PoWHC           | 2018      | $800K  | Integer overflow      |
+| Beanstalk Farms | Apr 2022  | $182M  | Governance takeover   |
 
 ### Key Lessons
 
 - **Infrastructure matters:** The Ronin hack targeted bridge security, not game contracts
-- **Economic design is security:** Poor tokenomics can be as devastating as code bugs  
+- **Economic design is security:** Poor tokenomics can be as devastating as code bugs
 - **Composability amplifies risk:** DeFi integrations multiply potential attack vectors
 
 ### Case Study 3: Beanstalk Governance Takeover - The $182M Flash Loan Attack
@@ -505,6 +512,7 @@ Establish ongoing security incentives on platforms like **Immunefi** or **Hacken
 **The Vulnerability:** Governance allowed immediate execution of proposals with super-majority votes, intended as an "emergency" feature.
 
 **The Attack Sequence:**
+
 1. **Flash Loan:** Attacker borrowed $1 billion in stablecoins
 2. **Governance Acquisition:** Used borrowed funds to purchase massive Stalk holdings (67% voting power)
 3. **Malicious Proposal:** Submitted and immediately passed BIP-18, transferring all protocol funds
@@ -517,34 +525,34 @@ Establish ongoing security incentives on platforms like **Immunefi** or **Hacken
 contract SecureGovernance {
     uint256 public constant MIN_DELAY = 24 hours;
     uint256 public constant MIN_QUORUM = 10; // 10% of total supply
-    
+
     struct Proposal {
         bytes32 id;
         uint256 eta; // Execution time
         uint256 voteCount;
         bool executed;
     }
-    
+
     mapping(bytes32 => Proposal) public proposals;
-    
+
     function schedule(bytes32 id, uint256 delay) external {
         require(delay >= MIN_DELAY, "Delay too short");
         require(proposals[id].voteCount >= MIN_QUORUM, "Insufficient votes");
-        
+
         proposals[id].eta = block.timestamp + delay;
         emit ProposalScheduled(id, block.timestamp + delay);
     }
-    
+
     function execute(bytes32 id) external {
         Proposal storage proposal = proposals[id];
         require(proposal.eta <= block.timestamp, "Timelock not expired");
         require(!proposal.executed, "Already executed");
         require(proposal.voteCount >= MIN_QUORUM, "Lost quorum");
-        
+
         proposal.executed = true;
         // Execute proposal logic
     }
-    
+
     function emergencyPause() external onlyEmergencyCouncil {
         // Multi-sig emergency pause for critical threats
         paused = true;
@@ -565,22 +573,26 @@ contract SecureGovernance {
 ## 7. Building Secure Games: A Practical Framework
 
 ### Phase 1: Secure Foundation
+
 - Choose audited libraries (OpenZeppelin)
 - Implement proper access controls
 - Use Chainlink VRF for randomness
 
 ### Phase 2: Economic Security
+
 - Design sustainable tokenomics with balanced faucets/sinks
 - Implement TWAP oracles and multi-source price feeds
 - Plan for time-locked governance with quorum requirements
 - Conduct economic modeling and game theory audits
 
 ### Phase 3: Testing & Auditing
+
 - Comprehensive test coverage
 - Professional security audit
 - Bug bounty program
 
 ### Phase 4: Monitoring & Response
+
 - Real-time monitoring
 - Emergency response procedures
 - Community security education
@@ -592,6 +604,7 @@ contract SecureGovernance {
 In Web3 gaming, security isn't just a technical requirementit's a core game mechanic that affects player trust, asset value, and long-term sustainability. The most successful blockchain games are those that treat security as a first-class concern from day one.
 
 **Remember:**
+
 - Security vulnerabilities in games can cause permanent financial losses
 - Use proven patterns and audited libraries
 - Test extensively with realistic attack scenarios
