@@ -34,7 +34,7 @@ Developers often turn to seemingly unpredictable block variables for randomness.
 ### Block.timestamp and Blockhash
 
 ```solidity
-// L NEVER DO THIS - Vulnerable to manipulation
+// NEVER DO THIS - Vulnerable to manipulation
 function badRandom() public view returns (uint256) {
     return uint256(keccak256(abi.encodePacked(
         blockhash(block.number - 1),
@@ -59,8 +59,8 @@ After Ethereum's Proof-of-Stake transition, `block.difficulty` became `block.pre
 **What is RANDAO?** It's a mechanism where validators contribute to a shared random number through cryptographic commitments. However, this doesn't solve the manipulation problem.
 
 ```solidity
-// L Still vulnerable - Don't use for valuable applications
-function stilBad() public view returns (uint256) {
+// Still vulnerable - Don't use for valuable applications
+function stillBad() public view returns (uint256) {
     return uint256(keccak256(abi.encodePacked(block.prevrandao, msg.sender)));
 }
 ```
@@ -89,41 +89,61 @@ function stilBad() public view returns (uint256) {
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.19;
 
-import "@chainlink/contracts/src/v0.8/vrf/VRFConsumerBaseV2.sol";
-import "@chainlink/contracts/src/v0.8/vrf/interfaces/VRFCoordinatorV2Interface.sol";
+import "@chainlink/contracts/src/v0.8/vrf/VRFConsumerBaseV2Plus.sol";
+import "@chainlink/contracts/src/v0.8/vrf/dev/libraries/VRFV2PlusClient.sol";
 
-contract SecureRandomGame is VRFConsumerBaseV2 {
-    VRFCoordinatorV2Interface COORDINATOR;
+contract SecureRandomGame is VRFConsumerBaseV2Plus {
+    IVRFCoordinatorV2Plus COORDINATOR;
 
-    uint64 s_subscriptionId;
-    bytes32 keyHash = 0x79d3d8832d904592c0bf9818b621522c988bb8b0c05cdc3b15aea1b6e8db0c15;
+    uint256 s_subscriptionId;
+    bytes32 s_keyHash; // Set in constructor for network compatibility
     uint32 callbackGasLimit = 100000;
     uint16 requestConfirmations = 3;
     uint32 numWords = 1;
 
     mapping(uint256 => address) public requestToPlayer;
 
-    constructor(uint64 subscriptionId, address vrfCoordinator)
-        VRFConsumerBaseV2(vrfCoordinator) {
-        COORDINATOR = VRFCoordinatorV2Interface(vrfCoordinator);
+    event DiceRolled(address indexed player, uint256 requestId);
+    event DiceResult(address indexed player, uint256 result);
+
+    constructor(
+        uint256 subscriptionId, 
+        address vrfCoordinator,
+        bytes32 keyHash
+    ) VRFConsumerBaseV2Plus(vrfCoordinator) {
+        COORDINATOR = IVRFCoordinatorV2Plus(vrfCoordinator);
         s_subscriptionId = subscriptionId;
+        s_keyHash = keyHash; // Network-specific key hash
     }
 
     function rollDice() external returns (uint256 requestId) {
         requestId = COORDINATOR.requestRandomWords(
-            keyHash,
-            s_subscriptionId,
-            requestConfirmations,
-            callbackGasLimit,
-            numWords
+            VRFV2PlusClient.RandomWordsRequest({
+                keyHash: s_keyHash,
+                subId: s_subscriptionId,
+                requestConfirmations: requestConfirmations,
+                callbackGasLimit: callbackGasLimit,
+                numWords: numWords,
+                extraArgs: VRFV2PlusClient._argsToBytes(
+                    VRFV2PlusClient.ExtraArgsV1({nativePayment: false})
+                )
+            })
         );
+        
         requestToPlayer[requestId] = msg.sender;
+        emit DiceRolled(msg.sender, requestId);
     }
 
-    function fulfillRandomWords(uint256 requestId, uint256[] memory randomWords)
+    function fulfillRandomWords(uint256 requestId, uint256[] calldata randomWords)
         internal override {
-        uint256 diceRoll = (randomWords[0] % 6) + 1;
         address player = requestToPlayer[requestId];
+        require(player != address(0), "Invalid request");
+        
+        delete requestToPlayer[requestId];
+        
+        uint256 diceRoll = (randomWords[0] % 6) + 1;
+        emit DiceResult(player, diceRoll);
+        
         // Process the provably fair dice roll
         processResult(player, diceRoll);
     }
@@ -164,36 +184,82 @@ contract CommitRevealLottery {
     }
 
     mapping(address => Commitment) public commitments;
-    uint256 public constant REVEAL_PERIOD = 100; // blocks
+    mapping(uint256 => bool) public usedNonces;
+    
+    uint256 public constant COMMIT_PERIOD = 100; // blocks
+    uint256 public constant REVEAL_PERIOD = 50;  // blocks
+    uint256 public constant MIN_PARTICIPANTS = 3;
+    
+    uint256 public lotteryStart;
     uint256 public revealDeadline;
     uint256 public randomSeed;
+    uint256 public participantCount;
+    
+    address[] public participants;
+    uint256 public revealedCount;
+
+    event CommitSubmitted(address indexed participant);
+    event SecretRevealed(address indexed participant);
+    event LotteryFinalized(uint256 randomSeed);
+
+    constructor() {
+        lotteryStart = block.number;
+        revealDeadline = lotteryStart + COMMIT_PERIOD + REVEAL_PERIOD;
+    }
 
     function commitSecret(bytes32 _hashedSecret) external {
-        require(block.number < revealDeadline - REVEAL_PERIOD, "Commit period ended");
+        require(block.number >= lotteryStart, "Lottery not started");
+        require(block.number < lotteryStart + COMMIT_PERIOD, "Commit period ended");
+        require(commitments[msg.sender].commit == bytes32(0), "Already committed");
 
         commitments[msg.sender] = Commitment({
             commit: _hashedSecret,
             blockNumber: block.number,
             revealed: false
         });
+        
+        participants.push(msg.sender);
+        participantCount++;
+        
+        emit CommitSubmitted(msg.sender);
     }
 
     function revealSecret(uint256 _secret, uint256 _nonce) external {
-        require(block.number >= revealDeadline - REVEAL_PERIOD, "Reveal period not started");
+        require(block.number >= lotteryStart + COMMIT_PERIOD, "Reveal period not started");
         require(block.number <= revealDeadline, "Reveal period ended");
+        require(!usedNonces[_nonce], "Nonce already used");
 
         Commitment storage commitment = commitments[msg.sender];
-        bytes32 hash = keccak256(abi.encodePacked(_secret, _nonce, msg.sender));
-        require(hash == commitment.commit, "Invalid reveal");
+        require(commitment.commit != bytes32(0), "No commitment found");
         require(!commitment.revealed, "Already revealed");
 
+        bytes32 hash = keccak256(abi.encodePacked(_secret, _nonce, msg.sender));
+        require(hash == commitment.commit, "Invalid reveal");
+
         commitment.revealed = true;
-        randomSeed = uint256(keccak256(abi.encodePacked(randomSeed, _secret)));
+        usedNonces[_nonce] = true;
+        revealedCount++;
+        
+        // More secure entropy combination
+        randomSeed = uint256(keccak256(abi.encodePacked(
+            randomSeed, 
+            _secret, 
+            msg.sender, 
+            block.timestamp,
+            commitment.blockNumber
+        )));
+        
+        emit SecretRevealed(msg.sender);
     }
 
     function getRandomNumber() external view returns (uint256) {
         require(block.number > revealDeadline, "Reveal period not finished");
+        require(revealedCount >= MIN_PARTICIPANTS, "Insufficient reveals");
         return randomSeed;
+    }
+
+    function isLotteryFinalized() external view returns (bool) {
+        return block.number > revealDeadline && revealedCount >= MIN_PARTICIPANTS;
     }
 }
 ```
