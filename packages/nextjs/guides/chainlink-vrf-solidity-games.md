@@ -23,7 +23,7 @@ Blockchain networks are deterministic by design every node must execute the same
 Many developers initially try using on-chain variables like `block.timestamp` or `blockhash`, but these approaches have critical vulnerabilities:
 
 ```solidity
-// L VULNERABLE: Predictable and manipulable
+// VULNERABLE: Predictable and manipulable
 function rollDice() external {
     uint256 roll = block.timestamp % 6 + 1;
     // Miners can manipulate timestamp to influence outcome
@@ -317,21 +317,22 @@ Different networks have varying security characteristics that affect VRF configu
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.19;
 
-import "@chainlink/contracts/src/v0.8/interfaces/VRFCoordinatorV2Interface.sol";
-import "@chainlink/contracts/src/v0.8/VRFConsumerBaseV2.sol";
+import "@chainlink/contracts/src/v0.8/vrf/VRFConsumerBaseV2Plus.sol";
+import "@chainlink/contracts/src/v0.8/vrf/dev/libraries/VRFV2PlusClient.sol";
 
 /**
- * @title Secure VRF Implementation using Chainlink VRF v2
+ * @title Secure VRF Implementation using Chainlink VRF v2Plus
  * @notice Demonstrates provably fair randomness in smart contracts
  */
-contract VRFExample is VRFConsumerBaseV2 {
+contract VRFExample is VRFConsumerBaseV2Plus {
     // Events for transparency
     event RandomnessRequested(uint256 indexed requestId, address indexed requester);
     event RandomnessFulfilled(uint256 indexed requestId, address indexed requester, uint256 result);
+    event RequestFailed(uint256 indexed requestId, address indexed requester);
 
     // VRF Configuration
-    VRFCoordinatorV2Interface private immutable i_vrfCoordinator;
-    uint64 private immutable i_subscriptionId;
+    IVRFCoordinatorV2Plus private immutable i_vrfCoordinator;
+    uint256 private immutable i_subscriptionId;
     bytes32 private immutable i_keyHash;
     uint32 private immutable i_callbackGasLimit;
     uint16 private constant REQUEST_CONFIRMATIONS = 3;
@@ -341,14 +342,15 @@ contract VRFExample is VRFConsumerBaseV2 {
     mapping(uint256 => address) public s_requesters;
     mapping(address => uint256) public s_results;
     mapping(address => uint256) public s_requestCount;
+    mapping(uint256 => bool) public s_failedRequests;
 
     constructor(
-        address vrfCoordinatorV2,
-        uint64 subscriptionId,
+        address vrfCoordinatorV2Plus,
+        uint256 subscriptionId,
         bytes32 keyHash,
         uint32 callbackGasLimit
-    ) VRFConsumerBaseV2(vrfCoordinatorV2) {
-        i_vrfCoordinator = VRFCoordinatorV2Interface(vrfCoordinatorV2);
+    ) VRFConsumerBaseV2Plus(vrfCoordinatorV2Plus) {
+        i_vrfCoordinator = IVRFCoordinatorV2Plus(vrfCoordinatorV2Plus);
         i_subscriptionId = subscriptionId;
         i_keyHash = keyHash;
         i_callbackGasLimit = callbackGasLimit;
@@ -359,16 +361,22 @@ contract VRFExample is VRFConsumerBaseV2 {
      * @return requestId The VRF request ID
      */
     function requestRandomness() external returns (uint256 requestId) {
-        // Request random words from Chainlink VRF
+        // Request random words from Chainlink VRF v2Plus
         requestId = i_vrfCoordinator.requestRandomWords(
-            i_keyHash,
-            i_subscriptionId,
-            REQUEST_CONFIRMATIONS,
-            i_callbackGasLimit,
-            NUM_WORDS
+            VRFV2PlusClient.RandomWordsRequest({
+                keyHash: i_keyHash,
+                subId: i_subscriptionId,
+                requestConfirmations: REQUEST_CONFIRMATIONS,
+                callbackGasLimit: i_callbackGasLimit,
+                numWords: NUM_WORDS,
+                extraArgs: VRFV2PlusClient._argsToBytes(
+                    VRFV2PlusClient.ExtraArgsV1({nativePayment: false})
+                )
+            })
         );
 
-        // Store the requester
+        // Store the requester with validation
+        require(s_requesters[requestId] == address(0), "Request ID collision");
         s_requesters[requestId] = msg.sender;
         s_requestCount[msg.sender]++;
 
@@ -383,10 +391,16 @@ contract VRFExample is VRFConsumerBaseV2 {
      */
     function fulfillRandomWords(
         uint256 requestId,
-        uint256[] memory randomWords
+        uint256[] calldata randomWords
     ) internal override {
         address requester = s_requesters[requestId];
-        require(requester != address(0), "Request not found");
+        
+        // Graceful failure handling
+        if (requester == address(0)) {
+            s_failedRequests[requestId] = true;
+            emit RequestFailed(requestId, address(0));
+            return;
+        }
 
         // Process the random number (example: convert to 1-6 range)
         uint256 result = (randomWords[0] % 6) + 1;
@@ -407,6 +421,17 @@ contract VRFExample is VRFConsumerBaseV2 {
 
     function getRequestCount(address requester) external view returns (uint256) {
         return s_requestCount[requester];
+    }
+
+    function isRequestFailed(uint256 requestId) external view returns (bool) {
+        return s_failedRequests[requestId];
+    }
+
+    // Get subscription balance
+    function getSubscriptionBalance() external view returns (uint256 balance) {
+        // Note: This would need to be implemented based on the specific coordinator
+        // For demonstration purposes, returning 0
+        return 0;
     }
 }
 ```
@@ -542,44 +567,113 @@ main().catch(console.error);
 For applications with many simultaneous users, batching requests improves efficiency:
 
 ```solidity
-contract BatchVRFExample is VRFConsumerBaseV2 {
+contract BatchVRFExample is VRFConsumerBaseV2Plus {
     struct BatchRequest {
         address[] users;
         uint256 timestamp;
         bool fulfilled;
     }
 
+    IVRFCoordinatorV2Plus private immutable i_vrfCoordinator;
+    uint256 private immutable i_subscriptionId;
+    bytes32 private immutable i_keyHash;
+    uint32 private constant CALLBACK_GAS_LIMIT = 500000;
+    uint16 private constant REQUEST_CONFIRMATIONS = 3;
+
     uint256 public constant MAX_BATCH_SIZE = 20;
+    uint256 public constant BATCH_TIMEOUT = 5 minutes;
+    
     mapping(uint256 => BatchRequest) public batchRequests;
     mapping(address => uint256) public userBatches;
+    mapping(address => uint256) public s_results;
     uint256 public currentBatchId;
+
+    event BatchCreated(uint256 indexed batchId, uint256 timestamp);
+    event UserJoinedBatch(address indexed user, uint256 indexed batchId);
+    event BatchFulfilled(uint256 indexed batchId, uint256 userCount);
+
+    constructor(
+        address vrfCoordinator,
+        uint256 subscriptionId,
+        bytes32 keyHash
+    ) VRFConsumerBaseV2Plus(vrfCoordinator) {
+        i_vrfCoordinator = IVRFCoordinatorV2Plus(vrfCoordinator);
+        i_subscriptionId = subscriptionId;
+        i_keyHash = keyHash;
+    }
 
     function joinBatch() external {
         require(userBatches[msg.sender] == 0, "Already in batch");
 
         if (currentBatchId == 0 ||
-            batchRequests[currentBatchId].users.length >= MAX_BATCH_SIZE) {
-            currentBatchId = requestNewBatch();
+            batchRequests[currentBatchId].users.length >= MAX_BATCH_SIZE ||
+            batchRequests[currentBatchId].fulfilled) {
+            currentBatchId = _requestNewBatch();
         }
 
         batchRequests[currentBatchId].users.push(msg.sender);
         userBatches[msg.sender] = currentBatchId;
+        
+        emit UserJoinedBatch(msg.sender, currentBatchId);
     }
 
-    function fulfillRandomWords(uint256 requestId, uint256[] memory randomWords)
+    function _requestNewBatch() internal returns (uint256 requestId) {
+        requestId = i_vrfCoordinator.requestRandomWords(
+            VRFV2PlusClient.RandomWordsRequest({
+                keyHash: i_keyHash,
+                subId: i_subscriptionId,
+                requestConfirmations: REQUEST_CONFIRMATIONS,
+                callbackGasLimit: CALLBACK_GAS_LIMIT,
+                numWords: 1,
+                extraArgs: VRFV2PlusClient._argsToBytes(
+                    VRFV2PlusClient.ExtraArgsV1({nativePayment: false})
+                )
+            })
+        );
+
+        batchRequests[requestId] = BatchRequest({
+            users: new address[](0),
+            timestamp: block.timestamp,
+            fulfilled: false
+        });
+
+        emit BatchCreated(requestId, block.timestamp);
+        return requestId;
+    }
+
+    function fulfillRandomWords(uint256 requestId, uint256[] calldata randomWords)
         internal override {
         BatchRequest storage batch = batchRequests[requestId];
         require(!batch.fulfilled, "Already fulfilled");
 
         // Distribute random results to all users in batch
         uint256 seed = randomWords[0];
-        for (uint256 i = 0; i < batch.users.length; i++) {
-            uint256 userSeed = uint256(keccak256(abi.encode(seed, i)));
+        uint256 userCount = batch.users.length;
+        
+        for (uint256 i = 0; i < userCount; i++) {
+            uint256 userSeed = uint256(keccak256(abi.encode(seed, i, batch.users[i])));
             uint256 result = (userSeed % 6) + 1;
             s_results[batch.users[i]] = result;
+            
+            // Clear user's batch assignment
+            delete userBatches[batch.users[i]];
         }
 
         batch.fulfilled = true;
+        emit BatchFulfilled(requestId, userCount);
+    }
+
+    function getUserResult(address user) external view returns (uint256) {
+        return s_results[user];
+    }
+
+    function getBatchInfo(uint256 batchId) external view returns (
+        uint256 userCount,
+        uint256 timestamp,
+        bool fulfilled
+    ) {
+        BatchRequest storage batch = batchRequests[batchId];
+        return (batch.users.length, batch.timestamp, batch.fulfilled);
     }
 }
 ```
@@ -589,20 +683,67 @@ contract BatchVRFExample is VRFConsumerBaseV2 {
 Production applications need circuit breakers for critical situations:
 
 ```solidity
-import "@openzeppelin/contracts/security/Pausable.sol";
+import "@openzeppelin/contracts/utils/Pausable.sol";
 import "@openzeppelin/contracts/access/AccessControl.sol";
+import "@chainlink/contracts/src/v0.8/vrf/VRFConsumerBaseV2Plus.sol";
+import "@chainlink/contracts/src/v0.8/vrf/dev/libraries/VRFV2PlusClient.sol";
 
-contract SecureVRFExample is VRFConsumerBaseV2, Pausable, AccessControl {
+contract SecureVRFExample is VRFConsumerBaseV2Plus, Pausable, AccessControl {
     bytes32 public constant PAUSER_ROLE = keccak256("PAUSER_ROLE");
     bytes32 public constant EMERGENCY_ROLE = keccak256("EMERGENCY_ROLE");
+
+    // VRF Configuration
+    IVRFCoordinatorV2Plus private immutable i_vrfCoordinator;
+    uint256 private immutable i_subscriptionId;
+    bytes32 private immutable i_keyHash;
+    uint32 private constant CALLBACK_GAS_LIMIT = 500000;
+
+    // Events
+    event EmergencyPause(address indexed pauser, uint256 timestamp);
+    event ApplicationPaused(address indexed pauser, string reason, uint256 timestamp);
+    event ApplicationUnpaused(address indexed unpauser, uint256 timestamp);
+
+    constructor(
+        address vrfCoordinator,
+        uint256 subscriptionId,
+        bytes32 keyHash,
+        address admin
+    ) VRFConsumerBaseV2Plus(vrfCoordinator) {
+        i_vrfCoordinator = IVRFCoordinatorV2Plus(vrfCoordinator);
+        i_subscriptionId = subscriptionId;
+        i_keyHash = keyHash;
+        
+        // Setup roles
+        _grantRole(DEFAULT_ADMIN_ROLE, admin);
+        _grantRole(EMERGENCY_ROLE, admin);
+        _grantRole(PAUSER_ROLE, admin);
+    }
 
     modifier emergencyStop() {
         require(!paused(), "Game paused");
         _;
     }
 
-    function requestRandomness() external emergencyStop returns (uint256) {
-        // Normal randomness request logic
+    function requestRandomness() external emergencyStop returns (uint256 requestId) {
+        requestId = i_vrfCoordinator.requestRandomWords(
+            VRFV2PlusClient.RandomWordsRequest({
+                keyHash: i_keyHash,
+                subId: i_subscriptionId,
+                requestConfirmations: 3,
+                callbackGasLimit: CALLBACK_GAS_LIMIT,
+                numWords: 1,
+                extraArgs: VRFV2PlusClient._argsToBytes(
+                    VRFV2PlusClient.ExtraArgsV1({nativePayment: false})
+                )
+            })
+        );
+        return requestId;
+    }
+
+    function fulfillRandomWords(uint256 requestId, uint256[] calldata randomWords)
+        internal override {
+        // Process randomness even when paused (critical for VRF completion)
+        // Your game logic here
     }
 
     // Immediate pause for critical security issues
@@ -633,41 +774,112 @@ contract SecureVRFExample is VRFConsumerBaseV2, Pausable, AccessControl {
 **The Defense:** Use commit-reveal patterns:
 
 ```solidity
-contract SecureBettingGame is VRFConsumerBaseV2 {
+contract SecureBettingGame is VRFConsumerBaseV2Plus {
     struct Commitment {
         bytes32 hashedBet;
         uint256 vrfRequestId;
+        uint256 commitBlock;
         bool fulfilled;
         bool revealed;
     }
 
+    IVRFCoordinatorV2Plus private immutable i_vrfCoordinator;
+    uint256 private immutable i_subscriptionId;
+    bytes32 private immutable i_keyHash;
+    uint32 private constant CALLBACK_GAS_LIMIT = 500000;
+
     mapping(address => Commitment) public commitments;
+    mapping(uint256 => address) public requestToPlayer;
+    mapping(uint256 => bool) public usedNonces;
+
+    uint256 public constant MIN_COMMIT_BLOCKS = 1;
+    uint256 public constant MAX_REVEAL_BLOCKS = 100;
+
+    event BetCommitted(address indexed player, bytes32 hashedBet);
+    event BetRevealed(address indexed player, uint256 betAmount);
+    event BetSettled(address indexed player, bool won, uint256 payout);
+
+    constructor(
+        address vrfCoordinator,
+        uint256 subscriptionId,
+        bytes32 keyHash
+    ) VRFConsumerBaseV2Plus(vrfCoordinator) {
+        i_vrfCoordinator = IVRFCoordinatorV2Plus(vrfCoordinator);
+        i_subscriptionId = subscriptionId;
+        i_keyHash = keyHash;
+    }
 
     // Step 1: Commit to bet before requesting randomness
     function commitBet(bytes32 hashedBet) external {
+        require(commitments[msg.sender].vrfRequestId == 0, "Already committed");
+
         commitments[msg.sender] = Commitment({
             hashedBet: hashedBet,
             vrfRequestId: 0,
+            commitBlock: block.number,
             fulfilled: false,
             revealed: false
         });
 
         // Request randomness AFTER commitment is locked
-        uint256 requestId = requestRandomness();
+        uint256 requestId = i_vrfCoordinator.requestRandomWords(
+            VRFV2PlusClient.RandomWordsRequest({
+                keyHash: i_keyHash,
+                subId: i_subscriptionId,
+                requestConfirmations: 3,
+                callbackGasLimit: CALLBACK_GAS_LIMIT,
+                numWords: 1,
+                extraArgs: VRFV2PlusClient._argsToBytes(
+                    VRFV2PlusClient.ExtraArgsV1({nativePayment: false})
+                )
+            })
+        );
+
         commitments[msg.sender].vrfRequestId = requestId;
+        requestToPlayer[requestId] = msg.sender;
+
+        emit BetCommitted(msg.sender, hashedBet);
+    }
+
+    function fulfillRandomWords(uint256 requestId, uint256[] calldata randomWords)
+        internal override {
+        address player = requestToPlayer[requestId];
+        if (player != address(0)) {
+            commitments[player].fulfilled = true;
+            // Store the random result for later use in settlement
+        }
     }
 
     // Step 2: Reveal bet after randomness is fulfilled
     function revealAndSettle(uint256 betAmount, uint256 nonce) external {
         Commitment storage commitment = commitments[msg.sender];
+        require(commitment.vrfRequestId != 0, "No commitment");
         require(commitment.fulfilled && !commitment.revealed, "Invalid state");
+        require(block.number >= commitment.commitBlock + MIN_COMMIT_BLOCKS, "Too early to reveal");
+        require(block.number <= commitment.commitBlock + MAX_REVEAL_BLOCKS, "Reveal period expired");
+        require(!usedNonces[nonce], "Nonce already used");
 
         // Verify the revealed bet matches the commitment
         bytes32 computedHash = keccak256(abi.encodePacked(betAmount, nonce, msg.sender));
         require(computedHash == commitment.hashedBet, "Invalid reveal");
 
         commitment.revealed = true;
-        // Now safely process the bet with the revealed amount...
+        usedNonces[nonce] = true;
+
+        emit BetRevealed(msg.sender, betAmount);
+
+        // Process settlement with revealed bet amount
+        _settleBet(msg.sender, betAmount, commitment.vrfRequestId);
+    }
+
+    function _settleBet(address player, uint256 betAmount, uint256 requestId) internal {
+        // Settlement logic using the VRF result and revealed bet amount
+        // Implementation depends on specific game rules
+        emit BetSettled(player, true, betAmount * 2); // Example outcome
+        
+        // Cleanup
+        delete commitments[player];
+        delete requestToPlayer[requestId];
     }
 }
 ```
@@ -679,34 +891,48 @@ contract SecureBettingGame is VRFConsumerBaseV2 {
 **The Defense:** Keep callback logic minimal and robust:
 
 ```solidity
-function fulfillRandomWords(
-    uint256 requestId,
-    uint256[] memory randomWords
-) internal override {
-    address player = s_rollers[requestId];
-    if (player == address(0)) return; // Graceful failure
+contract RobustDiceGame is VRFConsumerBaseV2Plus {
+    mapping(uint256 => address) public s_rollers;
+    mapping(uint256 => uint256) public s_rawResults;
+    mapping(address => uint256) public s_pendingResults;
+    mapping(address => uint256) public s_results;
 
-    // Store raw result - do complex logic in separate function
-    s_rawResults[requestId] = randomWords[0];
-    s_pendingResults[player] = requestId;
+    event RandomnessReceived(uint256 indexed requestId, address indexed player);
+    event DiceRolled(address indexed player, uint256 result);
 
-    emit RandomnessReceived(requestId, player);
-    // Let user call separate function to process their result
-}
+    function fulfillRandomWords(
+        uint256 requestId,
+        uint256[] calldata randomWords
+    ) internal override {
+        address player = s_rollers[requestId];
+        if (player == address(0)) return; // Graceful failure
 
-function processResult() external {
-    uint256 requestId = s_pendingResults[msg.sender];
-    require(requestId != 0, "No pending result");
+        // Store raw result - do complex logic in separate function
+        s_rawResults[requestId] = randomWords[0];
+        s_pendingResults[player] = requestId;
 
-    uint256 randomness = s_rawResults[requestId];
-    require(randomness != 0, "Result not ready");
+        emit RandomnessReceived(requestId, player);
+        // Let user call separate function to process their result
+    }
 
-    // Now do complex game logic safely
-    uint256 diceRoll = (randomness % 6) + 1;
-    s_results[msg.sender] = diceRoll;
+    function processResult() external {
+        uint256 requestId = s_pendingResults[msg.sender];
+        require(requestId != 0, "No pending result");
 
-    delete s_pendingResults[msg.sender];
-    delete s_rawResults[requestId];
+        uint256 randomness = s_rawResults[requestId];
+        require(randomness != 0, "Result not ready");
+
+        // Now do complex game logic safely
+        uint256 diceRoll = (randomness % 6) + 1;
+        s_results[msg.sender] = diceRoll;
+
+        // Cleanup
+        delete s_pendingResults[msg.sender];
+        delete s_rawResults[requestId];
+        delete s_rollers[requestId];
+
+        emit DiceRolled(msg.sender, diceRoll);
+    }
 }
 ```
 
@@ -730,7 +956,7 @@ Higher confirmations = more security but longer wait times.
 ### Efficient State Management
 
 ```solidity
-// L Expensive: Multiple storage writes
+// Expensive: Multiple storage writes
 function inefficientRoll() external {
     s_playerCount++;
     s_lastRollTime = block.timestamp;
@@ -773,7 +999,7 @@ function checkAndRefill() external {
 Implement comprehensive monitoring for production VRF applications:
 
 ```solidity
-contract MonitoredDiceGame is VRFConsumerBaseV2 {
+contract MonitoredDiceGame is VRFConsumerBaseV2Plus {
     // Health metrics
     uint256 public totalRequests;
     uint256 public totalFulfillments;
@@ -1088,11 +1314,11 @@ event SubscriptionRefilled(uint256 oldBalance, uint256 newBalance);
 ### Multi-Network Support
 
 ```solidity
-contract MultiNetworkVRF {
+contract MultiNetworkVRF is VRFConsumerBaseV2Plus {
     struct NetworkConfig {
         address vrfCoordinator;
         bytes32 keyHash;
-        uint64 subscriptionId;
+        uint256 subscriptionId; // V2Plus uses uint256
         uint16 requestConfirmations;
         uint32 callbackGasLimit;
     }
@@ -1100,26 +1326,26 @@ contract MultiNetworkVRF {
     mapping(uint256 => NetworkConfig) public networkConfigs;
     uint256 public immutable CHAIN_ID;
 
-    constructor() {
+    constructor(address vrfCoordinator) VRFConsumerBaseV2Plus(vrfCoordinator) {
         CHAIN_ID = block.chainid;
         _setupNetworkConfigs();
     }
 
     function _setupNetworkConfigs() private {
-        // Ethereum Mainnet
+        // Ethereum Mainnet (V2Plus addresses)
         networkConfigs[1] = NetworkConfig({
-            vrfCoordinator: 0x271682DEB8C4E0901D1a1550aD2e64D568E69909,
-            keyHash: 0x8af398995b04c28e9951adb9721ef74c74f93e6a478f39e7e0777be13527e7ef,
-            subscriptionId: YOUR_MAINNET_SUB_ID,
+            vrfCoordinator: 0xD7f86b4b8Cae7D942340FF628F82735b7a20893a, // V2Plus Mainnet
+            keyHash: 0x8077df514608a09f83e4e8d300645594e5d7234665448ba83f37e09966216f78,
+            subscriptionId: 0, // Set your actual subscription ID
             requestConfirmations: 3,
             callbackGasLimit: 500000
         });
 
-        // Sepolia Testnet
+        // Sepolia Testnet (V2Plus addresses)
         networkConfigs[11155111] = NetworkConfig({
-            vrfCoordinator: 0x8103B0A8A00be2DDC778e6e7eaa21791Cd364625,
-            keyHash: 0x474e34a077df58807dbe9c96d3c009b23b3c6d0cce433e59bbf5b34f823bc56c,
-            subscriptionId: YOUR_SEPOLIA_SUB_ID,
+            vrfCoordinator: 0x9DdfaCa8183c41ad55329BdeeD9F6A8d53168B1B, // V2Plus Sepolia
+            keyHash: 0x787d74caea10b2b357790d5b5247c2f63d1d91572a9846f780606e4d953677ae,
+            subscriptionId: 0, // Set your actual subscription ID
             requestConfirmations: 3,
             callbackGasLimit: 500000
         });
@@ -1152,13 +1378,18 @@ contract MultiNetworkVRF {
     function rollDice() external returns (uint256 requestId) {
         NetworkConfig memory config = getCurrentNetworkConfig();
 
-        requestId = VRFCoordinatorV2Interface(config.vrfCoordinator)
+        requestId = IVRFCoordinatorV2Plus(config.vrfCoordinator)
             .requestRandomWords(
-                config.keyHash,
-                config.subscriptionId,
-                config.requestConfirmations,
-                config.callbackGasLimit,
-                1
+                VRFV2PlusClient.RandomWordsRequest({
+                    keyHash: config.keyHash,
+                    subId: config.subscriptionId,
+                    requestConfirmations: config.requestConfirmations,
+                    callbackGasLimit: config.callbackGasLimit,
+                    numWords: 1,
+                    extraArgs: VRFV2PlusClient._argsToBytes(
+                        VRFV2PlusClient.ExtraArgsV1({nativePayment: false})
+                    )
+                })
             );
 
         // Rest of logic...
