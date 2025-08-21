@@ -7,8 +7,8 @@ image: "/assets/guides/chainlink-vrf-in-smart-contracts.jpg"
 ## TL;DR: Chainlink VRF for Solidity Smart Contracts
 
 - **Chainlink VRF** provides cryptographically secure, verifiable randomness for blockchain applications
-- **Never use** `block.timestamp`, `blockhash`, or other on-chain variables for randomnessthey're predictable and manipulable
-- **Two-step process:** Request randomness � Oracle fulfills with cryptographic proof � Your contract receives verified random numbers
+- **Never use** `block.timestamp`, `blockhash`, or other on-chain variables for randomness, they're predictable and manipulable
+- **Two-step process:** Request randomness -> Oracle fulfills with cryptographic proof -> Your contract receives verified random numbers
 - **Subscription model** is best for games with frequent randomness requests (lower gas costs)
 - **Security critical:** Use commit-reveal patterns, avoid input manipulation, and handle callback failures gracefully
 
@@ -72,10 +72,10 @@ VRF uses a **request-and-fulfill** pattern that ensures both unpredictability an
 ### The VRF Process
 
 ```
-1. REQUEST  � Your contract requests randomness + pays fee
-2. GENERATE � Oracle creates random number + cryptographic proof
-3. VERIFY   � On-chain verification of the proof
-4. FULFILL  � Verified random number delivered to your contract
+1. REQUEST.  Your contract requests randomness + pays fee
+2. GENERATE. Oracle creates random number + cryptographic proof
+3. VERIFY.   On-chain verification of the proof
+4. FULFILL.  Verified random number delivered to your contract
 ```
 
 ### Key VRF Components
@@ -465,8 +465,6 @@ contract VRFExample is VRFConsumerBaseV2Plus {
 
 ### Deployment Script
 
-Create `scripts/deploy.js`:
-
 ```javascript
 const { ethers } = require("hardhat");
 
@@ -495,15 +493,9 @@ main().catch(error => {
 });
 ```
 
-### Deploy to Sepolia
-
-```bash
-npx hardhat run scripts/deploy.js --network sepolia
-```
-
 ### Add Consumer to Subscription
 
-**Critical Step:** After deployment, you must add your contract as an authorized consumer:
+**Critical Step:** After deployment to a network, you must add your contract as an authorized consumer:
 
 1. Go to [vrf.chain.link](https://vrf.chain.link)
 2. Select your subscription
@@ -548,7 +540,7 @@ async function main() {
     await new Promise(resolve => setTimeout(resolve, 10000)); // Wait 10 seconds
     result = await vrfExample.getLastResult(signer.address);
     if (result > 0) {
-      console.log(`<� Dice result: ${result}`);
+      console.log(`Dice result: ${result}`);
       break;
     }
     console.log("Still waiting for result...");
@@ -1079,19 +1071,19 @@ contract MonitoredDiceGame is VRFConsumerBaseV2Plus {
 **Symptoms:** `rollDice()` transaction reverts
 **Causes & Solutions:**
 
-- Subscription not funded � Add LINK to subscription
-- Contract not added as consumer � Add contract address to subscription
-- Invalid key hash � Use correct network-specific key hash
-- Subscription ID wrong � Double-check your subscription ID
+- Subscription not funded. Add LINK to subscription
+- Contract not added as consumer. Add contract address to subscription
+- Invalid key hash. Use correct network-specific key hash
+- Subscription ID wrong. Double-check your subscription ID
 
 ### Request Never Fulfilled
 
 **Symptoms:** Request succeeds but `fulfillRandomWords` never called
 **Causes & Solutions:**
 
-- Callback gas limit too low � Increase `callbackGasLimit` (try 500,000)
-- Contract callback function reverts � Simplify `fulfillRandomWords` logic
-- Network congestion � Wait longer or increase gas price
+- Callback gas limit too low. Increase `callbackGasLimit` (try 500,000)
+- Contract callback function reverts. Simplify `fulfillRandomWords` logic
+- Network congestion. Wait longer or increase gas price
 
 ### Wrong Network Configuration
 
@@ -1629,7 +1621,7 @@ contract RobustDiceGame {
 
 ## Conclusion: Building Trust Through Verifiable Randomness
 
-Chainlink VRF transforms blockchain gaming by providing cryptographically secure randomness that players can verify and trust. By implementing the patterns in this guide, you're building games where outcomes are provably faira cornerstone of trustworthy Web3 gaming.
+Chainlink VRF transforms blockchain gaming by providing cryptographically secure randomness that players can verify and trust. By implementing the patterns in this guide, you're building games where outcomes are provably fair, a cornerstone of trustworthy Web3 gaming.
 
 **Key Takeaways:**
 
@@ -1641,7 +1633,7 @@ Chainlink VRF transforms blockchain gaming by providing cryptographically secure
 - Implement proper access controls and rate limiting
 - Plan for edge cases like reorgs and callback failures
 
-**Remember:** Security in randomness isn't just about the technologyit's about building player confidence in the fairness of your game.
+**Remember:** Security in randomness isn't just about the technology, it's about building player confidence in the fairness of your game.
 
 ---
 
