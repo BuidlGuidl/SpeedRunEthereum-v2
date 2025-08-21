@@ -496,7 +496,7 @@ contract SecurePriceOracle {
 
 ### 5.3 Advanced Mitigation Strategies
 
-#### 5.3.1 Batch Auctions for Front-Running Protection
+#### Batch Auctions for Front-Running Protection
 
 Instead of first-come-first-served transaction processing, collect all transactions within a time window and process them simultaneously:
 
@@ -567,7 +567,7 @@ contract BatchAuctionNFT is ERC721 {
 }
 ```
 
-#### 5.3.2 Economic Audits and Game Theory Analysis
+#### Economic Audits and Game Theory Analysis
 
 Before launching, engage specialized firms to conduct economic modeling:
 
@@ -576,7 +576,7 @@ Before launching, engage specialized firms to conduct economic modeling:
 3. **Token Flow Modeling:** Ensure sustainable faucet/sink balance
 4. **Inflation Scenario Planning:** Model different growth and adoption curves
 
-#### 5.3.3 Formal Verification for Critical Components
+#### Formal Verification for Critical Components
 
 For high-value functions, use mathematical proofs to verify correctness:
 
@@ -593,7 +593,7 @@ function calculateReward(uint256 stakeAmount, uint256 duration)
 }
 ```
 
-#### 5.3.4 Bug Bounty Programs
+#### Bug Bounty Programs
 
 Establish ongoing security incentives on platforms like **Immunefi** or **HackenProof**:
 
