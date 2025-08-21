@@ -37,7 +37,7 @@ export const AddressInfoDropdown = ({
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   blockExplorerAddressLink,
 }: AddressInfoDropdownProps) => {
-  const { disconnect } = useDisconnect();
+  const { disconnectAsync } = useDisconnect();
   const checkSumAddress = getAddress(address);
 
   const [addressCopied, setAddressCopied] = useState(false);
@@ -129,9 +129,9 @@ export const AddressInfoDropdown = ({
             <button
               className="menu-item text-error btn-sm !rounded-xl flex gap-3 py-3"
               type="button"
-              onClick={() => {
-                disconnect();
-                signOut();
+              onClick={async () => {
+                await disconnectAsync();
+                await signOut();
               }}
             >
               <ArrowLeftEndOnRectangleIcon className="h-6 w-4" /> <span>Disconnect</span>

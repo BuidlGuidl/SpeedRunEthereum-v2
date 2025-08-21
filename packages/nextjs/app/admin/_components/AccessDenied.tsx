@@ -5,7 +5,7 @@ import { signOut } from "next-auth/react";
 import { useDisconnect } from "wagmi";
 
 export const AccessDenied = () => {
-  const { disconnect } = useDisconnect();
+  const { disconnectAsync } = useDisconnect();
   return (
     <div className="flex flex-col items-center px-4 py-10 sm:py-20">
       <h1 className="text-3xl text-center font-extrabold mb-1">Access Denied</h1>
@@ -16,9 +16,9 @@ export const AccessDenied = () => {
         </Link>
         <button
           className="btn btn-primary border-2 border-primary"
-          onClick={() => {
-            disconnect();
-            signOut();
+          onClick={async () => {
+            await disconnectAsync();
+            await signOut();
           }}
         >
           Disconnect
