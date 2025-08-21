@@ -85,76 +85,9 @@ function stillBad() public view returns (uint256) {
 
 ### Basic Implementation
 
-```solidity
-// SPDX-License-Identifier: MIT
-pragma solidity ^0.8.19;
+For a complete Chainlink VRF implementation with detailed setup instructions, deployment scripts, and advanced patterns, see our dedicated guide: **[Chainlink VRF Implementation: Provably Fair Randomness for Smart Contracts](/guides/chainlink-vrf-solidity-games)**
 
-import "@chainlink/contracts/src/v0.8/vrf/VRFConsumerBaseV2Plus.sol";
-import "@chainlink/contracts/src/v0.8/vrf/dev/libraries/VRFV2PlusClient.sol";
-
-contract SecureRandomGame is VRFConsumerBaseV2Plus {
-    IVRFCoordinatorV2Plus COORDINATOR;
-
-    uint256 s_subscriptionId;
-    bytes32 s_keyHash; // Set in constructor for network compatibility
-    uint32 callbackGasLimit = 100000;
-    uint16 requestConfirmations = 3;
-    uint32 numWords = 1;
-
-    mapping(uint256 => address) public requestToPlayer;
-
-    event DiceRolled(address indexed player, uint256 requestId);
-    event DiceResult(address indexed player, uint256 result);
-
-    constructor(
-        uint256 subscriptionId, 
-        address vrfCoordinator,
-        bytes32 keyHash
-    ) VRFConsumerBaseV2Plus(vrfCoordinator) {
-        COORDINATOR = IVRFCoordinatorV2Plus(vrfCoordinator);
-        s_subscriptionId = subscriptionId;
-        s_keyHash = keyHash; // Network-specific key hash
-    }
-
-    function rollDice() external returns (uint256 requestId) {
-        requestId = COORDINATOR.requestRandomWords(
-            VRFV2PlusClient.RandomWordsRequest({
-                keyHash: s_keyHash,
-                subId: s_subscriptionId,
-                requestConfirmations: requestConfirmations,
-                callbackGasLimit: callbackGasLimit,
-                numWords: numWords,
-                extraArgs: VRFV2PlusClient._argsToBytes(
-                    VRFV2PlusClient.ExtraArgsV1({nativePayment: false})
-                )
-            })
-        );
-        
-        requestToPlayer[requestId] = msg.sender;
-        emit DiceRolled(msg.sender, requestId);
-    }
-
-    function fulfillRandomWords(uint256 requestId, uint256[] calldata randomWords)
-        internal override {
-        address player = requestToPlayer[requestId];
-        require(player != address(0), "Invalid request");
-        
-        delete requestToPlayer[requestId];
-        
-        uint256 diceRoll = (randomWords[0] % 6) + 1;
-        emit DiceResult(player, diceRoll);
-        
-        // Process the provably fair dice roll
-        processResult(player, diceRoll);
-    }
-
-    function processResult(address player, uint256 result) internal {
-        // Your game logic here
-    }
-}
-```
-
-### VRF Benefits
+**Key VRF Benefits:**
 
 - **Provably Fair:** Cryptographic proofs ensure randomness integrity
 - **Manipulation-Resistant:** Neither validators nor oracles can bias results
@@ -185,16 +118,16 @@ contract CommitRevealLottery {
 
     mapping(address => Commitment) public commitments;
     mapping(uint256 => bool) public usedNonces;
-    
+
     uint256 public constant COMMIT_PERIOD = 100; // blocks
     uint256 public constant REVEAL_PERIOD = 50;  // blocks
     uint256 public constant MIN_PARTICIPANTS = 3;
-    
+
     uint256 public lotteryStart;
     uint256 public revealDeadline;
     uint256 public randomSeed;
     uint256 public participantCount;
-    
+
     address[] public participants;
     uint256 public revealedCount;
 
@@ -217,10 +150,10 @@ contract CommitRevealLottery {
             blockNumber: block.number,
             revealed: false
         });
-        
+
         participants.push(msg.sender);
         participantCount++;
-        
+
         emit CommitSubmitted(msg.sender);
     }
 
@@ -239,16 +172,16 @@ contract CommitRevealLottery {
         commitment.revealed = true;
         usedNonces[_nonce] = true;
         revealedCount++;
-        
+
         // More secure entropy combination
         randomSeed = uint256(keccak256(abi.encodePacked(
-            randomSeed, 
-            _secret, 
-            msg.sender, 
+            randomSeed,
+            _secret,
+            msg.sender,
             block.timestamp,
             commitment.blockNumber
         )));
-        
+
         emit SecretRevealed(msg.sender);
     }
 

@@ -91,80 +91,13 @@ This transforms a "game of chance" into a deterministic profit engine for miners
 
 ### 2.4 Secure Solution: Chainlink VRF
 
-```solidity
-// SPDX-License-Identifier: MIT
-pragma solidity ^0.8.18;
+For a complete Chainlink VRF implementation with detailed setup instructions, deployment scripts, and advanced patterns, see our dedicated guide: **[Chainlink VRF Implementation: Provably Fair Randomness for Smart Contracts](/guides/chainlink-vrf-solidity-games)**
 
-import "@chainlink/contracts/src/v0.8/vrf/VRFConsumerBaseV2Plus.sol";
-import "@chainlink/contracts/src/v0.8/vrf/dev/libraries/VRFV2PlusClient.sol";
+**Key Security Benefits:**
 
-contract SecureDiceGame is VRFConsumerBaseV2Plus {
-    IVRFCoordinatorV2Plus COORDINATOR;
-    uint256 s_subscriptionId;
-    bytes32 s_keyHash;
-    uint32 s_callbackGasLimit = 100000;
-    uint16 s_requestConfirmations = 3;
-    uint32 s_numWords = 1;
-
-    mapping(uint256 => address) public s_players;
-    mapping(uint256 => uint256) public s_bets;
-
-    event DiceRolled(address indexed player, uint256 requestId);
-    event GameResult(address indexed player, uint256 roll, bool won, uint256 payout);
-
-    constructor(uint256 subscriptionId, address vrfCoordinator, bytes32 keyHash)
-        VRFConsumerBaseV2Plus(vrfCoordinator) payable {
-        COORDINATOR = IVRFCoordinatorV2Plus(vrfCoordinator);
-        s_subscriptionId = subscriptionId;
-        s_keyHash = keyHash; // Network-specific key hash
-    }
-
-    function rollDice() external payable {
-        require(msg.value == 0.01 ether, "Bet must be 0.01 ether");
-        require(address(this).balance >= msg.value * 2, "Insufficient contract balance");
-
-        uint256 requestId = COORDINATOR.requestRandomWords(
-            VRFV2PlusClient.RandomWordsRequest({
-                keyHash: s_keyHash,
-                subId: s_subscriptionId,
-                requestConfirmations: s_requestConfirmations,
-                callbackGasLimit: s_callbackGasLimit,
-                numWords: s_numWords,
-                extraArgs: VRFV2PlusClient._argsToBytes(
-                    VRFV2PlusClient.ExtraArgsV1({nativePayment: false})
-                )
-            })
-        );
-
-        s_players[requestId] = msg.sender;
-        s_bets[requestId] = msg.value;
-
-        emit DiceRolled(msg.sender, requestId);
-    }
-
-    function fulfillRandomWords(uint256 requestId, uint256[] calldata randomWords)
-        internal override {
-        address player = s_players[requestId];
-        uint256 bet = s_bets[requestId];
-
-        require(player != address(0), "Invalid request");
-
-        delete s_players[requestId];
-        delete s_bets[requestId];
-
-        uint256 roll = (randomWords[0] % 6) + 1;
-        bool won = roll == 6; // Win only on 6
-
-        if (won) {
-            (bool sent, ) = player.call{value: bet * 2}("");
-            require(sent, "Failed to send Ether");
-            emit GameResult(player, roll, true, bet * 2);
-        } else {
-            emit GameResult(player, roll, false, 0);
-        }
-    }
-}
-```
+- **Provably Fair:** Cryptographic proofs ensure randomness integrity
+- **Manipulation-Resistant:** Neither validators nor oracles can bias results
+- **Production-Ready:** Used by major DeFi protocols and gaming platforms
 
 ---
 
