@@ -105,7 +105,7 @@ export const CHALLENGE_METADATA: Record<
         url: "/guides/blockchain-randomness-solidity",
       },
       {
-        title: "Blockchain Game Security: Comprehensive Vulnerability Defense Tutorial",
+        title: "Blockchain Game Security: Vulnerability Defense Tutorial",
         url: "/guides/blockchain-games-vulnerabilities",
       },
     ],

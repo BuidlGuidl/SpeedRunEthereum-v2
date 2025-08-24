@@ -1,5 +1,5 @@
 ---
-title: "Blockchain Game Security: Comprehensive Vulnerability Defense Tutorial"
+title: "Blockchain Game Security: Vulnerability Defense Tutorial"
 description: "Master blockchain game security with this comprehensive tutorial to smart contract vulnerabilities, randomness exploits, and defense patterns. Includes Solidity examples and real-world attack scenarios for Web3 developers."
 image: "/assets/guides/blockchain-games-security.jpg"
 ---
