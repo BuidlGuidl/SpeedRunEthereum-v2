@@ -390,16 +390,16 @@ uint256 public constant MIN_COMMIT_DURATION = 1 hours;
 mapping(address => Commitment) public commitments;
 
 // Batch operations when possible
-function batchCommit(bytes32[] calldata commitments, address[] calldata players)
+function batchCommit(bytes32[] calldata commitmentHashes, address[] calldata players)
     external payable
 {
-    require(commitments.length == players.length, "Length mismatch");
+    require(commitmentHashes.length == players.length, "Length mismatch");
     require(msg.value == STAKE_AMOUNT * players.length, "Incorrect total stake");
 
-    for (uint256 i = 0; i < commitments.length; i++) {
+    for (uint256 i = 0; i < commitmentHashes.length; i++) {
         // Individual commit logic without redundant checks
         commitments[players[i]] = Commitment({
-            solutionHash: commitments[i],
+            solutionHash: commitmentHashes[i],
             commitTime: uint32(block.timestamp),
             revealed: false
         });
