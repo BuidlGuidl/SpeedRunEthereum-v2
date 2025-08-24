@@ -36,6 +36,8 @@ function rollDice() external {
 - **Public visibility:** All transaction data is visible in the mempool before execution
 - **Predictability:** "Random" values can be calculated in advance
 
+For more information read the article [**Secure Randomness in Solidity: Beyond Block Variables**](/guides/blockchain-randomness-solidity)
+
 ### The Solution: Verifiable Random Functions (VRF)
 
 Chainlink VRF solves this by combining:
