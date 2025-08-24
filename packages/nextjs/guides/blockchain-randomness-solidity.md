@@ -23,7 +23,7 @@ This fundamental constraint means any randomness derived from on-chain data is i
 
 ### The Determinism Problem
 
-Ethereum's strength is its predictability: every node executing the same transaction must arrive at identical results. This makes **on-chain randomness** an oxymoronany "random" value computable by one node can be computed by all nodes, including attackers.
+Ethereum's strength is its predictability: every node executing the same transaction must arrive at identical results. This makes **on-chain randomness** an oxymoron any "random" value computable by one node can be computed by all nodes, including attackers.
 
 ---
 
