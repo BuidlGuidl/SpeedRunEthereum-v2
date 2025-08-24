@@ -282,12 +282,12 @@ Commit-reveal schemes must protect against **replay attacks**, where attackers i
 
 ### Security Checklist
 
-- **Never use block variables for valuable applications**
-- **Implement proper access controls on randomness functions**
-- **Use sufficient confirmation blocks for VRF requests**
-- **Include nonces in commit-reveal to prevent replay attacks**
-- **Test randomness implementations thoroughly**
-- **Consider economic incentives for manipulation**
+- Never use block variables for valuable applications
+- Implement proper access controls on randomness functions
+- Use sufficient confirmation blocks for VRF requests
+- Include nonces in commit-reveal to prevent replay attacks
+- Test randomness implementations thoroughly
+- Consider economic incentives for manipulation
 
 ### Common Mistakes to Avoid
 
