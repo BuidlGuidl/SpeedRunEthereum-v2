@@ -89,6 +89,8 @@ contract VulnerableDiceGame {
 
 This transforms a "game of chance" into a deterministic profit engine for miners/validators.
 
+For a deeper understanding of why blockchain randomness is fundamentally challenging and the various approaches to solve it, see: **[Secure Randomness in Solidity: Beyond Block Variables](/guides/blockchain-randomness-solidity)**
+
 ### 2.4 Secure Solution: Chainlink VRF
 
 For a complete Chainlink VRF implementation with detailed setup instructions, deployment scripts, and advanced patterns, see our dedicated guide: **[Chainlink VRF Implementation: Provably Fair Randomness for Smart Contracts](/guides/chainlink-vrf-solidity-games)**
@@ -556,18 +558,6 @@ Establish ongoing security incentives on platforms like **Immunefi** or **Hacken
       <td>Mar 2022</td>
       <td>$625M</td>
       <td>Bridge key compromise</td>
-    </tr>
-    <tr>
-      <td>Axie Infinity</td>
-      <td>2021-2022</td>
-      <td>$45M+</td>
-      <td>Economic design flaws</td>
-    </tr>
-    <tr>
-      <td>DeFi Kingdoms</td>
-      <td>2022</td>
-      <td>$6.5M</td>
-      <td>Logic flaw in mining</td>
     </tr>
     <tr>
       <td>Axie Infinity</td>
