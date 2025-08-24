@@ -70,6 +70,8 @@ function stillBad() public view returns (uint256) {
 - **Validator Bias:** The proposing validator knows prevrandao in advance and can choose to skip their slot if the outcome is unfavorable.
 - **Same-Block Predictability:** All transactions in a block see the same prevrandao value.
 
+**Note:** The way to avoid this is using a future randao. For a practical implementation, see this [SE-2 extension](https://speedrunethereum.com/builds/1449d6d5-e014-531c-91f6-abb747281375).
+
 ---
 
 ## 3. The Gold Standard: Chainlink VRF
