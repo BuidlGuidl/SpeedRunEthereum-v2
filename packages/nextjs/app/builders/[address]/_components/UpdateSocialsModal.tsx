@@ -1,4 +1,5 @@
 import { forwardRef, useState } from "react";
+import { Toaster } from "react-hot-toast";
 import { InputBase } from "~~/components/scaffold-eth";
 import { useUpdateSocials } from "~~/hooks/useUpdateSocials";
 import { UserSocials } from "~~/services/database/repositories/users";
@@ -77,6 +78,7 @@ export const UpdateSocialsModal = forwardRef<HTMLDialogElement, UpdateSocialsMod
         <form method="dialog" className="modal-backdrop">
           <button onClick={closeModal}>close</button>
         </form>
+        <Toaster />
       </dialog>
     );
   },
