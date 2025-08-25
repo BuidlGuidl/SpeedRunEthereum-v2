@@ -130,8 +130,12 @@ export const AddressInfoDropdown = ({
               className="menu-item text-error btn-sm !rounded-xl flex gap-3 py-3"
               type="button"
               onClick={async () => {
-                await disconnectAsync();
-                await signOut();
+                try {
+                  await disconnectAsync();
+                  await signOut();
+                } catch (error) {
+                  console.error("Error during disconnecting/signing out:", error);
+                }
               }}
             >
               <ArrowLeftEndOnRectangleIcon className="h-6 w-4" /> <span>Disconnect</span>

@@ -33,8 +33,12 @@ export const RainbowKitCustomConnectButton = () => {
   useEffect(() => {
     const disconnectIfWrongAddress = async () => {
       if (sessionUserAddress && connectedAddress && connectedAddress !== sessionUserAddress) {
-        await disconnectAsync();
-        await signOut({ redirect: true, callbackUrl: "/" });
+        try {
+          await disconnectAsync();
+          await signOut({ redirect: true, callbackUrl: "/" });
+        } catch (error) {
+          console.error("Error during disconnecting/signing out:", error);
+        }
       }
     };
 

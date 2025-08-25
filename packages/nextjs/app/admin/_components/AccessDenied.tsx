@@ -17,8 +17,12 @@ export const AccessDenied = () => {
         <button
           className="btn btn-primary border-2 border-primary"
           onClick={async () => {
-            await disconnectAsync();
-            await signOut();
+            try {
+              await disconnectAsync();
+              await signOut();
+            } catch (error) {
+              console.error("Error during disconnecting/signing out:", error);
+            }
           }}
         >
           Disconnect
