@@ -16,7 +16,7 @@ image: "/assets/guides/commit-reveal-scheme-solidity.jpg"
 
 ## 1. The Front-Running Problem: When Transparency Becomes a Weakness
 
-Blockchain's transparency is both its greatest strength and, for game developers, a critical vulnerability. When you submit a transaction to play a dice game or make a move in rock-paper-scissors, that transaction sits in the public **mempool** before being mined.
+Blockchain's transparency is both its greatest strength and a critical vulnerability. When you submit for example a transaction to play a dice game or make a move in rock-paper-scissors, that transaction sits in the public **mempool** before being mined.
 
 This creates an exploit opportunity called **front-running**:
 
