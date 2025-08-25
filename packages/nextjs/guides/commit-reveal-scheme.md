@@ -106,42 +106,36 @@ contract CommitRevealBase {
     event Committed(address indexed user, bytes32 commitment);
     event Revealed(address indexed user, uint256 guess, uint256 result, bool won);
 
+    // Custom errors for gas efficiency
+    error CommitPhaseClosed();
+    error AlreadyCommitted();
+    error InsufficientStake();
+    error TransferFailed();
+
     constructor(uint256 commitDuration, uint256 revealDuration) {
         commitDeadline = block.timestamp + commitDuration;
         revealDeadline = commitDeadline + revealDuration;
     }
-}
-```
 
-### Generic Commit Function
+    function commit(bytes32 _commitment) external payable {
+        // === CHECKS ===
+        // All validations happen first
+        if (block.timestamp >= commitDeadline) revert CommitPhaseClosed();
+        if (commitments[msg.sender].commitTime != 0) revert AlreadyCommitted();
+        if (msg.value != STAKE_AMOUNT) revert InsufficientStake();
 
-The commit function follows the **Checks-Effects-Interactions (CEI)** pattern, a cornerstone of Solidity security, and uses **custom errors** for gas efficiency:
+        // === EFFECTS ===
+        // State changes happen only after all checks pass
+        commitments[msg.sender] = Commitment({
+            commitmentHash: _commitment,
+            commitTime: block.timestamp,
+            revealed: false
+        });
 
-```solidity
-// Custom errors for gas efficiency
-error CommitPhaseClosed();
-error AlreadyCommitted();
-error InsufficientStake();
-error TransferFailed();
-
-function commit(bytes32 _commitment) external payable {
-    // === CHECKS ===
-    // All validations happen first
-    if (block.timestamp >= commitDeadline) revert CommitPhaseClosed();
-    if (commitments[msg.sender].commitTime != 0) revert AlreadyCommitted();
-    if (msg.value != STAKE_AMOUNT) revert InsufficientStake();
-
-    // === EFFECTS ===
-    // State changes happen only after all checks pass
-    commitments[msg.sender] = Commitment({
-        commitmentHash: _commitment,
-        commitTime: block.timestamp,
-        revealed: false
-    });
-
-    // === INTERACTIONS ===
-    // External calls and events happen last
-    emit Committed(msg.sender, _commitment);
+        // === INTERACTIONS ===
+        // External calls and events happen last
+        emit Committed(msg.sender, _commitment);
+    }
 }
 ```
 
