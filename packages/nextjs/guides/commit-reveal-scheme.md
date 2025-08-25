@@ -115,15 +115,21 @@ contract CommitRevealBase {
 
 ### Generic Commit Function
 
-The commit function follows the **Checks-Effects-Interactions (CEI)** pattern, a cornerstone of Solidity security:
+The commit function follows the **Checks-Effects-Interactions (CEI)** pattern, a cornerstone of Solidity security, and uses **custom errors** for gas efficiency:
 
 ```solidity
+// Custom errors for gas efficiency
+error CommitPhaseClosed();
+error AlreadyCommitted();
+error InsufficientStake();
+error TransferFailed();
+
 function commit(bytes32 _commitment) external payable {
     // === CHECKS ===
     // All validations happen first
-    require(block.timestamp < commitDeadline, "Commit phase over");
-    require(commitments[msg.sender].commitTime == 0, "Already committed");
-    require(msg.value == STAKE_AMOUNT, "Must send exact stake amount");
+    if (block.timestamp >= commitDeadline) revert CommitPhaseClosed();
+    if (commitments[msg.sender].commitTime != 0) revert AlreadyCommitted();
+    if (msg.value != STAKE_AMOUNT) revert InsufficientStake();
 
     // === EFFECTS ===
     // State changes happen only after all checks pass
@@ -141,21 +147,30 @@ function commit(bytes32 _commitment) external payable {
 
 **Why CEI matters:** This pattern prevents reentrancy attacks by ensuring state changes occur before external interactions that could call back into the contract.
 
+**Why custom errors matter:** Using `if + revert + custom errors` instead of `require` with strings provides significant gas savings (~200-300 gas per revert) and better error handling. Custom errors are also more descriptive and can include parameters for debugging.
+
 ### Generic Reveal Function
 
 ```solidity
+// Additional custom errors for reveal function
+error CommitPhaseNotOver();
+error RevealPhaseOver();
+error NoCommitmentFound();
+error AlreadyRevealed();
+error InvalidReveal();
+
 function reveal(uint256 _guess, bytes32 _secret) external {
     // === CHECKS ===
-    require(block.timestamp >= commitDeadline, "Commit phase not over");
-    require(block.timestamp < revealDeadline, "Reveal phase over");
+    if (block.timestamp < commitDeadline) revert CommitPhaseNotOver();
+    if (block.timestamp >= revealDeadline) revert RevealPhaseOver();
 
     Commitment storage commitment = commitments[msg.sender];
-    require(commitment.commitTime != 0, "No commitment found");
-    require(!commitment.revealed, "Already revealed");
+    if (commitment.commitTime == 0) revert NoCommitmentFound();
+    if (commitment.revealed) revert AlreadyRevealed();
 
     // Verify the reveal matches the commitment
     bytes32 hash = keccak256(abi.encodePacked(_guess, _secret));
-    require(hash == commitment.commitmentHash, "Invalid reveal");
+    if (hash != commitment.commitmentHash) revert InvalidReveal();
 
     // === EFFECTS ===
     // Critical: Mark as revealed FIRST to prevent reentrancy
@@ -174,7 +189,7 @@ function reveal(uint256 _guess, bytes32 _secret) external {
     if (won) {
         // Use .call for Ether transfers (safer than .transfer)
         (bool sent, ) = msg.sender.call{value: PRIZE_AMOUNT}("");
-        require(sent, "Transfer failed");
+        if (!sent) revert TransferFailed();
     }
 
     emit Revealed(msg.sender, _guess, result, won);
@@ -274,9 +289,9 @@ async function autoReveal() {
 
 ```solidity
 // Always enforce deadlines strictly
-require(block.timestamp < commitDeadline, "Commit phase over");
-require(block.timestamp >= commitDeadline, "Commit phase not over yet");
-require(block.timestamp < revealDeadline, "Reveal phase over");
+if (block.timestamp >= commitDeadline) revert CommitPhaseClosed();
+if (block.timestamp < commitDeadline) revert CommitPhaseNotOver();
+if (block.timestamp >= revealDeadline) revert RevealPhaseOver();
 ```
 
 ### Handle Unrevealed Commitments
@@ -341,24 +356,23 @@ function emergencyWithdraw() external {
 ### Error Handling Strategies
 
 ```solidity
-// Custom errors (more gas efficient than require strings)
-error CommitPhaseClosed();
-error AlreadyCommitted();
-error InvalidReveal();
-error TransferFailed();
+// Custom errors with parameters for better debugging
+error InsufficientStake(uint256 provided, uint256 required);
+error ExcessPayment(uint256 excess);
 
 function commit(bytes32 _commitment) external payable {
     if (block.timestamp >= commitDeadline) revert CommitPhaseClosed();
     if (commitments[msg.sender].commitTime != 0) revert AlreadyCommitted();
 
-    // Handle partial payment gracefully
+    // Handle payment validation with detailed error information
     if (msg.value < STAKE_AMOUNT) {
-        revert("Insufficient stake");
+        revert InsufficientStake(msg.value, STAKE_AMOUNT);
     } else if (msg.value > STAKE_AMOUNT) {
         // Refund excess payment
         uint256 excess = msg.value - STAKE_AMOUNT;
         (bool sent, ) = msg.sender.call{value: excess}("");
         if (!sent) revert TransferFailed();
+        revert ExcessPayment(excess);
     }
 
     // Continue with commit logic...
@@ -390,11 +404,15 @@ uint256 public constant MIN_COMMIT_DURATION = 1 hours;
 mapping(address => Commitment) public commitments;
 
 // Batch operations when possible
+// Additional custom errors for batch operations
+error LengthMismatch();
+error IncorrectTotalStake();
+
 function batchCommit(bytes32[] calldata commitmentHashes, address[] calldata players)
     external payable
 {
-    require(commitmentHashes.length == players.length, "Length mismatch");
-    require(msg.value == STAKE_AMOUNT * players.length, "Incorrect total stake");
+    if (commitmentHashes.length != players.length) revert LengthMismatch();
+    if (msg.value != STAKE_AMOUNT * players.length) revert IncorrectTotalStake();
 
     for (uint256 i = 0; i < commitmentHashes.length; i++) {
         // Individual commit logic without redundant checks
@@ -427,7 +445,7 @@ uint256 public commitCount;
 mapping(address => bool) public hasCommitted;
 
 function commit(bytes32 _commitment) external payable {
-    require(!hasCommitted[msg.sender], "Already committed");
+    if (hasCommitted[msg.sender]) revert AlreadyCommitted();
     // ... standard commit logic ...
 
     commitCount++;
