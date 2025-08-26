@@ -25,7 +25,7 @@ import {
   uuid,
   varchar,
 } from "drizzle-orm/pg-core";
-import type { SideQuestsSnapshot } from "~~/services/onchainData/sideQuests";
+import type { SideQuestsSnapshot } from "~~/services/sideQuests/types";
 
 export function lower(address: AnyPgColumn): SQL {
   return sql`lower(${address})`;
