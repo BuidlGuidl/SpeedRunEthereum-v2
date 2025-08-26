@@ -11,14 +11,12 @@ type ZerionTransactionsResponse = {
   }[];
 };
 
-export type ZerionResult = ZerionTransactionsResponse["data"];
-
 /**
  * Fetches transactions from Zerion for a given wallet address.
  *
  * @see https://developers.zerion.io/reference/listwallettransactions
  */
-export async function fetchTransactions(address: string, params: Record<string, string> = {}): Promise<ZerionResult> {
+export async function fetchTransactions(address: string, params: Record<string, string> = {}) {
   const apiKey = process.env.ZERION_API_KEY;
   if (!apiKey) throw new Error("ZERION_API_KEY is not set");
 
