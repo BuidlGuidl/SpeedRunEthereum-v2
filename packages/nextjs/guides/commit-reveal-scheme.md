@@ -509,11 +509,35 @@ foundryup
 forge init my-commit-reveal-game
 ```
 
+**Scaffold-ETH 2** (Modern full-stack dapp toolkit):
+
+```bash
+npx create-eth@latest commit-reveal-game
+cd commit-reveal-game
+
+```
+
+And then the 3 magic commands to start the chain, deploy the contract and start the frontend (in 3 different terminals):
+
+```bash
+yarn chain
+yarn deploy
+yarn start
+```
+
+Key benefits for this guide:
+
+- Out-of-the-box local chain, deploy scripts, and UI components
+- First-class custom [hooks](https://docs.scaffoldeth.io/hooks/) for reading/writing to contracts (wagmi/viem wrappers)
+- Easy place to add your contract at `packages/hardhat/contracts/CommitReveal.sol`
+- Next.js frontend ready to wire `commit()` and `reveal()` in Debug page for quick iteration.
+
 **Key differences:**
 
 - **Remix:** Browser-based, instant setup, great for learning
 - **Hardhat:** Mature JS ecosystem, extensive plugin support
 - **Foundry:** Faster compilation, Solidity-native testing, gas optimization tools
+- **Scaffold-ETH 2:** An open-source, up-to-date toolkit for building dapps on EVM chains with different extensions (starter kits)
 
 ---
 
