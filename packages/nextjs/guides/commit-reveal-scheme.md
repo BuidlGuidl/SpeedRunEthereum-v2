@@ -143,6 +143,8 @@ contract CommitRevealBase {
 
 **Why custom errors matter:** Using `if + revert + custom errors` instead of `require` with strings provides significant gas savings (~200-300 gas per revert) and better error handling. Custom errors are also more descriptive and can include parameters for debugging.
 
+**⚠️ Critical Security Note:** The commitment hash must be generated **off-chain** (we'll show how in Section 4). If you generate the commitment on-chain, both the secret and guess will be immediately visible in the transaction data, defeating the entire purpose of the commit-reveal scheme!
+
 ### Generic Reveal Function
 
 ```solidity
