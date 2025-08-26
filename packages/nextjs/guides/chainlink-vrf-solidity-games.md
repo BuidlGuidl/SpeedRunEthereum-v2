@@ -89,6 +89,24 @@ VRF uses a **request-and-fulfill** pattern that ensures both unpredictability an
 
 ### Subscription vs Direct Funding
 
+Chainlink VRF offers two ways to pay for randomness requests:
+
+**Direct Funding Model:**
+
+- Attach LINK tokens directly to each randomness request
+- Simple: pay-as-you-go approach
+- Higher gas costs per request
+- Good for occasional usage
+
+**Subscription Model:**
+
+- Pre-fund a subscription with LINK tokens
+- Multiple consumer contracts can draw from the same balance
+- Lower gas costs per request
+- Better for frequent randomness requests
+
+A subscription ensures the VRF Coordinator can always pay oracle nodes. You deposit LINK once, and consumer contracts draw from this balance, reducing gas costs and avoiding per-request payments. Direct funding is simpler but requires attaching LINK to each request, making it less efficient for frequent randomness.
+
 <table>
   <thead>
     <tr>
@@ -120,8 +138,6 @@ VRF uses a **request-and-fulfill** pattern that ensures both unpredictability an
     </tr>
   </tbody>
 </table>
-
-For games, the **subscription model** is typically more efficient.
 
 ### Economic Security Model
 
