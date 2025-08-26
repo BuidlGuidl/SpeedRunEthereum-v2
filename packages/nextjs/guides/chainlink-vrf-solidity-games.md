@@ -205,6 +205,8 @@ Chainlink VRF v2.5 introduces several improvements over v2:
 
 ### Prerequisites
 
+**Option 1: Basic Hardhat Setup** (minimal learning setup):
+
 ```bash
 # Initialize your project
 mkdir vrf-dice-game && cd vrf-dice-game
@@ -219,7 +221,27 @@ npm install @chainlink/contracts
 npm install dotenv
 ```
 
+**Option 2: Scaffold-ETH 2** (full-stack dapp development):
+
+```bash
+# Create new Scaffold-ETH 2 project with built-in tooling
+npx create-eth@latest vrf-dice-game
+cd vrf-dice-game
+yarn install
+
+# Install Chainlink contracts
+yarn add @chainlink/contracts
+```
+
+Scaffold-ETH 2 provides additional benefits:
+
+- Built-in local blockchain (`yarn chain`)
+- Auto-deployment scripts (`yarn deploy`)
+- React frontend with wallet connection (`yarn start`)
+
 ### Environment Configuration
+
+**For Basic Hardhat Setup:**
 
 Create a `.env` file (never commit this!):
 
@@ -229,8 +251,6 @@ PRIVATE_KEY="YOUR_WALLET_PRIVATE_KEY"
 ETHERSCAN_API_KEY="YOUR_ETHERSCAN_API_KEY"
 VRF_SUBSCRIPTION_ID="YOUR_SUBSCRIPTION_ID"
 ```
-
-### Hardhat Configuration
 
 Update `hardhat.config.js`:
 
@@ -252,6 +272,40 @@ module.exports = {
   },
 };
 ```
+
+**For Scaffold-ETH 2:**
+
+Use the built-in account management flow (encrypted key in env). From the repo root:
+
+```bash
+# Generate a new deployer account (recommended)
+yarn generate
+
+# OR import an existing private key
+yarn account:import
+
+# Inspect configured account and balances
+yarn account
+```
+
+These commands store an encrypted key in `packages/hardhat/.env` as `DEPLOYER_PRIVATE_KEY_ENCRYPTED` and will prompt you for a password. Do not add plain private keys to files.
+
+Reference: [Scaffold-ETH 2 docs: Generate or add deployer account](https://docs.scaffoldeth.io/deploying/deploy-smart-contracts#2-generate-a-new-account-or-add-one-to-deploy-the-contracts-from)
+
+Update `packages/hardhat/.env` (create from `.env.example`) with your RPC/keys:
+
+```env
+# Your Alchemy/Infura API key for Sepolia
+ALCHEMY_API_KEY="YOUR_ALCHEMY_API_KEY"
+
+# Encrypted deployer key (auto-managed by yarn generate/account:import)
+DEPLOYER_PRIVATE_KEY_ENCRYPTED="..."
+
+# Your VRF subscription ID (get from vrf.chain.link)
+VRF_SUBSCRIPTION_ID="YOUR_SUBSCRIPTION_ID"
+```
+
+SE2's Hardhat configuration is already set up in `packages/hardhat/hardhat.config.ts` - no additional changes needed!
 
 ---
 
