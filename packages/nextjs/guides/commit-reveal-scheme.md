@@ -425,7 +425,7 @@ function batchCommit(bytes32[] calldata commitmentHashes, address[] calldata pla
 
 - **37 bytes** in optimized struct vs **65 bytes** in naive version
 - Saves ~**43% storage costs** per commitment
-- For 1000 players: **~$500 saved** (at 20 gwei gas)
+- Example (Ethereum mainnet): For 1000 players it could represent **~$125–250 saved** (at 5–10 gwei). Actual savings vary with gas and ETH price.
 
 ---
 
