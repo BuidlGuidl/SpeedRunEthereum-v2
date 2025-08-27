@@ -402,6 +402,9 @@ contract VRFExample is VRFConsumerBaseV2Plus {
     event RandomnessFulfilled(uint256 indexed requestId, address indexed requester, uint256 result);
     event RequestFailed(uint256 indexed requestId, address indexed requester);
 
+    // Custom errors for gas efficiency
+    error RequestIdCollision();
+
     // VRF Configuration
     IVRFCoordinatorV2Plus private immutable i_vrfCoordinator;
     uint256 private immutable i_subscriptionId;
@@ -448,7 +451,7 @@ contract VRFExample is VRFConsumerBaseV2Plus {
         );
 
         // Store the requester with validation
-        require(s_requesters[requestId] == address(0), "Request ID collision");
+        if (s_requesters[requestId] != address(0)) revert RequestIdCollision();
         s_requesters[requestId] = msg.sender;
         s_requestCount[msg.sender]++;
 
@@ -656,6 +659,10 @@ contract BatchVRFExample is VRFConsumerBaseV2Plus {
     event UserJoinedBatch(address indexed user, uint256 indexed batchId);
     event BatchFulfilled(uint256 indexed batchId, uint256 userCount);
 
+    // Custom errors for gas efficiency
+    error AlreadyInBatch();
+    error AlreadyFulfilled();
+
     constructor(
         address vrfCoordinator,
         uint256 subscriptionId,
@@ -667,7 +674,7 @@ contract BatchVRFExample is VRFConsumerBaseV2Plus {
     }
 
     function joinBatch() external {
-        require(userBatches[msg.sender] == 0, "Already in batch");
+        if (userBatches[msg.sender] != 0) revert AlreadyInBatch();
 
         if (currentBatchId == 0 ||
             batchRequests[currentBatchId].users.length >= MAX_BATCH_SIZE ||
@@ -708,7 +715,7 @@ contract BatchVRFExample is VRFConsumerBaseV2Plus {
     function fulfillRandomWords(uint256 requestId, uint256[] calldata randomWords)
         internal override {
         BatchRequest storage batch = batchRequests[requestId];
-        require(!batch.fulfilled, "Already fulfilled");
+        if (batch.fulfilled) revert AlreadyFulfilled();
 
         // Distribute random results to all users in batch
         uint256 seed = randomWords[0];
@@ -767,6 +774,9 @@ contract SecureVRFExample is VRFConsumerBaseV2Plus, Pausable, AccessControl {
     event ApplicationPaused(address indexed pauser, string reason, uint256 timestamp);
     event ApplicationUnpaused(address indexed unpauser, uint256 timestamp);
 
+    // Custom errors for gas efficiency
+    error GamePaused();
+
     constructor(
         address vrfCoordinator,
         uint256 subscriptionId,
@@ -784,7 +794,7 @@ contract SecureVRFExample is VRFConsumerBaseV2Plus, Pausable, AccessControl {
     }
 
     modifier emergencyStop() {
-        require(!paused(), "Game paused");
+        if (paused()) revert GamePaused();
         _;
     }
 
@@ -861,6 +871,15 @@ contract SecureBettingGame is VRFConsumerBaseV2Plus {
     event BetRevealed(address indexed player, uint256 betAmount);
     event BetSettled(address indexed player, bool won, uint256 payout);
 
+    // Custom errors for gas efficiency
+    error AlreadyCommitted();
+    error NoCommitment();
+    error InvalidState();
+    error TooEarlyToReveal();
+    error RevealPeriodExpired();
+    error NonceAlreadyUsed();
+    error InvalidReveal();
+
     constructor(
         address vrfCoordinator,
         uint256 subscriptionId,
@@ -873,7 +892,7 @@ contract SecureBettingGame is VRFConsumerBaseV2Plus {
 
     // Step 1: Commit to bet before requesting randomness
     function commitBet(bytes32 hashedBet) external {
-        require(commitments[msg.sender].vrfRequestId == 0, "Already committed");
+        if (commitments[msg.sender].vrfRequestId != 0) revert AlreadyCommitted();
 
         commitments[msg.sender] = Commitment({
             hashedBet: hashedBet,
@@ -915,15 +934,15 @@ contract SecureBettingGame is VRFConsumerBaseV2Plus {
     // Step 2: Reveal bet after randomness is fulfilled
     function revealAndSettle(uint256 betAmount, uint256 nonce) external {
         Commitment storage commitment = commitments[msg.sender];
-        require(commitment.vrfRequestId != 0, "No commitment");
-        require(commitment.fulfilled && !commitment.revealed, "Invalid state");
-        require(block.number >= commitment.commitBlock + MIN_COMMIT_BLOCKS, "Too early to reveal");
-        require(block.number <= commitment.commitBlock + MAX_REVEAL_BLOCKS, "Reveal period expired");
-        require(!usedNonces[nonce], "Nonce already used");
+        if (commitment.vrfRequestId == 0) revert NoCommitment();
+        if (!commitment.fulfilled || commitment.revealed) revert InvalidState();
+        if (block.number < commitment.commitBlock + MIN_COMMIT_BLOCKS) revert TooEarlyToReveal();
+        if (block.number > commitment.commitBlock + MAX_REVEAL_BLOCKS) revert RevealPeriodExpired();
+        if (usedNonces[nonce]) revert NonceAlreadyUsed();
 
         // Verify the revealed bet matches the commitment
         bytes32 computedHash = keccak256(abi.encodePacked(betAmount, nonce, msg.sender));
-        require(computedHash == commitment.hashedBet, "Invalid reveal");
+        if (computedHash != commitment.hashedBet) revert InvalidReveal();
 
         commitment.revealed = true;
         usedNonces[nonce] = true;
@@ -962,6 +981,10 @@ contract RobustDiceGame is VRFConsumerBaseV2Plus {
     event RandomnessReceived(uint256 indexed requestId, address indexed player);
     event DiceRolled(address indexed player, uint256 result);
 
+    // Custom errors for gas efficiency
+    error NoPendingResult();
+    error ResultNotReady();
+
     function fulfillRandomWords(
         uint256 requestId,
         uint256[] calldata randomWords
@@ -979,10 +1002,10 @@ contract RobustDiceGame is VRFConsumerBaseV2Plus {
 
     function processResult() external {
         uint256 requestId = s_pendingResults[msg.sender];
-        require(requestId != 0, "No pending result");
+        if (requestId == 0) revert NoPendingResult();
 
         uint256 randomness = s_rawResults[requestId];
-        require(randomness != 0, "Result not ready");
+        if (randomness == 0) revert ResultNotReady();
 
         // Now do complex game logic safely
         uint256 diceRoll = (randomness % 6) + 1;
@@ -1074,6 +1097,10 @@ contract MonitoredDiceGame is VRFConsumerBaseV2Plus {
 
     mapping(uint256 => uint256) public requestTimestamps;
 
+    // Custom errors for gas efficiency
+    error InvalidRequest();
+    error TooEarlyToMarkFailed();
+
     function rollDice() external returns (uint256 requestId) {
         requestId = i_vrfCoordinator.requestRandomWords(/*...*/);
         requestTimestamps[requestId] = block.timestamp;
@@ -1110,8 +1137,8 @@ contract MonitoredDiceGame is VRFConsumerBaseV2Plus {
 
     // Manual failure tracking for timeout scenarios
     function markRequestFailed(uint256 requestId) external onlyOwner {
-        require(requestTimestamps[requestId] > 0, "Invalid request");
-        require(block.timestamp > requestTimestamps[requestId] + MAX_FULFILLMENT_TIME, "Too early");
+        if (requestTimestamps[requestId] == 0) revert InvalidRequest();
+        if (block.timestamp <= requestTimestamps[requestId] + MAX_FULFILLMENT_TIME) revert TooEarlyToMarkFailed();
 
         failedFulfillments++;
         emit RequestFailed(requestId, block.timestamp);
@@ -1236,6 +1263,9 @@ contract GasOptimizedDiceGame is VRFConsumerBaseV2 {
         emit DiceResult(requestId, player, roll);
     }
 
+    // Custom errors for gas efficiency
+    error ArrayLengthMismatch();
+
     // Batch cleanup function (called by backend)
     function cleanupOldGames(address[] calldata players) external onlyOwner {
         for (uint256 i = 0; i < players.length; i++) {
@@ -1251,7 +1281,7 @@ contract GasOptimizedDiceGame is VRFConsumerBaseV2 {
         uint256[] calldata randomResults
     ) external onlyVRFCoordinator {
         uint256 length = requestIds.length;
-        require(length == randomResults.length, "Array length mismatch");
+        if (length != randomResults.length) revert ArrayLengthMismatch();
 
         for (uint256 i = 0; i < length; ) {
             address player = requestToPlayer[requestIds[i]];
@@ -1297,6 +1327,9 @@ contract AdaptiveGasDiceGame is VRFConsumerBaseV2 {
     uint256 public averageGasUsed;
     uint256 public gasUsageSamples;
 
+    // Custom errors for gas efficiency
+    error InvalidGasLimit();
+
     function fulfillRandomWords(uint256 requestId, uint256[] memory randomWords)
         internal override {
         uint256 gasStart = gasleft();
@@ -1326,7 +1359,7 @@ contract AdaptiveGasDiceGame is VRFConsumerBaseV2 {
     }
 
     function adjustGasLimit(uint32 newLimit) external onlyOwner {
-        require(newLimit >= 100000 && newLimit <= 2500000, "Invalid gas limit");
+        if (newLimit < 100000 || newLimit > 2500000) revert InvalidGasLimit();
         currentGasLimit = newLimit;
         emit GasLimitAdjusted(newLimit);
     }
@@ -1345,8 +1378,11 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 contract ProductionDiceGame is VRFConsumerBaseV2, Ownable {
     bool public gamePaused = false;
 
+    // Custom errors for gas efficiency
+    error GameIsPaused();
+
     modifier whenNotPaused() {
-        require(!gamePaused, "Game is paused");
+        if (gamePaused) revert GameIsPaused();
         _;
     }
 
@@ -1387,6 +1423,9 @@ contract MultiNetworkVRF is VRFConsumerBaseV2Plus {
 
     mapping(uint256 => NetworkConfig) public networkConfigs;
     uint256 public immutable CHAIN_ID;
+
+    // Custom errors for gas efficiency
+    error NetworkNotSupported();
 
     constructor(address vrfCoordinator) VRFConsumerBaseV2Plus(vrfCoordinator) {
         CHAIN_ID = block.chainid;
@@ -1433,7 +1472,7 @@ contract MultiNetworkVRF is VRFConsumerBaseV2Plus {
 
     function getCurrentNetworkConfig() public view returns (NetworkConfig memory) {
         NetworkConfig memory config = networkConfigs[CHAIN_ID];
-        require(config.vrfCoordinator != address(0), "Network not supported");
+        if (config.vrfCoordinator == address(0)) revert NetworkNotSupported();
         return config;
     }
 
@@ -1500,6 +1539,9 @@ async function main() {
 ### NFT Trait Generation
 
 ```solidity
+// Custom errors for gas efficiency
+error NoPlayers();
+
 function mintRandomNFT() external {
     uint256 requestId = requestRandomness();
     s_mintRequests[requestId] = msg.sender;
@@ -1521,11 +1563,11 @@ function fulfillRandomWords(uint256 requestId, uint256[] memory randomWords)
 ### Lottery Systems
 
 ```solidity
-function drawWinner() external onlyOwner {
-    require(players.length > 0, "No players");
-    uint256 requestId = requestRandomness();
-    s_lotteryRequests[requestId] = players.length;
-}
+    function drawWinner() external onlyOwner {
+        if (players.length == 0) revert NoPlayers();
+        uint256 requestId = requestRandomness();
+        s_lotteryRequests[requestId] = players.length;
+    }
 
 function fulfillRandomWords(uint256 requestId, uint256[] memory randomWords)
     internal override {
@@ -1608,11 +1650,11 @@ contract ProtectedDiceGame {
     mapping(address => uint256) public lastRollTime;
     uint256 public constant ROLL_COOLDOWN = 10 seconds;
 
+    // Custom errors for gas efficiency
+    error CooldownActive();
+
     function rollDice() external returns (uint256) {
-        require(
-            block.timestamp >= lastRollTime[msg.sender] + ROLL_COOLDOWN,
-            "Cooldown active"
-        );
+        if (block.timestamp < lastRollTime[msg.sender] + ROLL_COOLDOWN) revert CooldownActive();
 
         lastRollTime[msg.sender] = block.timestamp;
         return requestRandomness();
@@ -1656,6 +1698,11 @@ contract ReorgResistantGame {
 contract RobustDiceGame {
     mapping(uint256 => bool) public failedRequests;
 
+    // Custom errors for gas efficiency
+    error InternalOnly();
+    error InvalidRequest();
+    error RequestNotFailed();
+
     function fulfillRandomWords(uint256 requestId, uint256[] memory randomWords)
         internal override {
         try this.processRandomResult(requestId, randomWords[0]) {
@@ -1669,11 +1716,11 @@ contract RobustDiceGame {
 
     // External function for controlled processing
     function processRandomResult(uint256 requestId, uint256 randomResult) external {
-        require(msg.sender == address(this), "Internal only");
+        if (msg.sender != address(this)) revert InternalOnly();
 
         // Complex game logic that might fail
         address player = s_rollers[requestId];
-        require(player != address(0), "Invalid request");
+        if (player == address(0)) revert InvalidRequest();
 
         uint256 roll = (randomResult % 6) + 1;
         s_results[player] = roll;
@@ -1683,7 +1730,7 @@ contract RobustDiceGame {
 
     // Allow manual retry of failed requests
     function retryFailedRequest(uint256 requestId) external onlyOwner {
-        require(failedRequests[requestId], "Request not failed");
+        if (!failedRequests[requestId]) revert RequestNotFailed();
         // Retry logic...
     }
 }
