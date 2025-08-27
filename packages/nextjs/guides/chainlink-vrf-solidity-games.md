@@ -432,10 +432,10 @@ contract VRFExample is VRFConsumerBaseV2Plus {
     }
 
     /**
-     * @notice Request random numbers from Chainlink VRF
+     * @notice Roll dice using Chainlink VRF for provably fair randomness
      * @return requestId The VRF request ID
      */
-    function requestRandomness() external returns (uint256 requestId) {
+    function rollDice() external returns (uint256 requestId) {
         // Request random words from Chainlink VRF v2Plus
         requestId = i_vrfCoordinator.requestRandomWords(
             VRFV2PlusClient.RandomWordsRequest({
@@ -596,8 +596,8 @@ async function main() {
   const VRFExample = await ethers.getContractFactory("VRFExample");
   const vrfExample = VRFExample.attach(contractAddress);
 
-  console.log("Requesting randomness...");
-  const tx = await vrfExample.requestRandomness();
+  console.log("Rolling dice...");
+  const tx = await vrfExample.rollDice();
   const receipt = await tx.wait();
 
   // Extract request ID from events
