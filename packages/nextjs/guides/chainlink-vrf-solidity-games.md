@@ -650,9 +650,9 @@ contract BatchVRFExample is VRFConsumerBaseV2Plus {
     uint256 public constant MAX_BATCH_SIZE = 20;
     uint256 public constant BATCH_TIMEOUT = 5 minutes;
 
-    mapping(uint256 => BatchRequest) public batchRequests;
+    mapping(uint256 => BatchRequest) private batchRequests;
     mapping(address => uint256) public userBatches;
-    mapping(address => uint256) public s_results;
+    mapping(address => uint256) private s_results;
     uint256 public currentBatchId;
 
     event BatchCreated(uint256 indexed batchId, uint256 timestamp);
