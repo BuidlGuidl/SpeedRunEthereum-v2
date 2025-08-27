@@ -398,7 +398,7 @@ import "@chainlink/contracts/src/v0.8/vrf/dev/libraries/VRFV2PlusClient.sol";
  */
 contract VRFExample is VRFConsumerBaseV2Plus {
     // Events for transparency
-    event RandomnessRequested(uint256 indexed requestId, address indexed requester);
+    event DiceRollRequested(uint256 indexed requestId, address indexed requester);
     event RandomnessFulfilled(uint256 indexed requestId, address indexed requester, uint256 result);
     event RequestFailed(uint256 indexed requestId, address indexed requester);
 
@@ -455,7 +455,7 @@ contract VRFExample is VRFConsumerBaseV2Plus {
         s_requesters[requestId] = msg.sender;
         s_requestCount[msg.sender]++;
 
-        emit RandomnessRequested(requestId, msg.sender);
+        emit DiceRollRequested(requestId, msg.sender);
         return requestId;
     }
 
@@ -601,7 +601,7 @@ async function main() {
   const receipt = await tx.wait();
 
   // Extract request ID from events
-  const event = receipt.events?.find(e => e.event === "RandomnessRequested");
+  const event = receipt.events?.find(e => e.event === "DiceRollRequested");
   const requestId = event?.args?.requestId;
 
   console.log(`Request submitted! Request ID: ${requestId}`);
