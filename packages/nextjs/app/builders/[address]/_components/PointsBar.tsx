@@ -52,7 +52,7 @@ export function PointsBar({ points, totalPoints }: { points: number; totalPoints
   const modalRef = useRef<HTMLDialogElement>(null);
 
   return (
-    <div className="mt-4 px-6 pb-5 pt-4 bg-base-100 border border-gray-200 rounded-lg overflow-hidden">
+    <div className="p-6 bg-base-100 rounded-lg overflow-hidden">
       <div className="flex items-center justify-center gap-1.5 font-medium">
         <p className="m-0 font-light">
           {points} / {totalPoints}
@@ -66,7 +66,7 @@ export function PointsBar({ points, totalPoints }: { points: number; totalPoints
         </button>
       </div>
       <div className="mt-2 flex justify-center">
-        <progress className="progress progress-primary w-56 h-4" value={points} max={totalPoints}></progress>
+        <progress className="progress progress-primary w-full h-4" value={points} max={totalPoints}></progress>
       </div>
       <PointsBarModal ref={modalRef} closeModal={() => modalRef.current?.close()} />
     </div>
