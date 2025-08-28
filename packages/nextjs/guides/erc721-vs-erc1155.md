@@ -15,7 +15,7 @@ image: /assets/guides/erc1155vs721.jpg
 ## 1. Navigating Ethereum's NFT Standards
 
 Ethereum's NFT ecosystem is built on robust token standards that ensure interoperability and security.
-**ERC721** was the first standard for unique, non-fungible assets, powering the early NFT boom. As [NFT use cases](/guides/nft-use-cases) grew—especially in gaming and large-scale collectibles—**ERC1155** emerged to address the need for efficiency, batch operations, and multi-token management.
+**ERC721** was the first standard for unique, non-fungible assets, powering the early NFT boom. As [NFT use cases](/guides/nft-use-cases) grew (especially in gaming and large-scale collectibles), **ERC1155** emerged to address the need for efficiency, batch operations, and multi-token management.
 
 **This guide is designed to help you decide which standard is right for your project.** If you want a deep technical dive into ERC721 implementation, see our [Mastering ERC721: Developer Guide to NFT Metadata & Best Practices](/guides/mastering-erc721).
 
@@ -67,7 +67,7 @@ contract MyNFT is ERC721 {
 
 ## 3. ERC1155: The Multi-Token Standard
 
-**ERC1155** allows a single contract to manage multiple token types—fungible, non-fungible, and semi-fungible.
+**ERC1155** allows a single contract to manage multiple token types: fungible, non-fungible, and semi-fungible.
 
 **Key Features:**
 
