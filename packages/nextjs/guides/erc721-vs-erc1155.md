@@ -21,6 +21,10 @@ Ethereum's NFT ecosystem is built on robust token standards that ensure interope
 
 This guide compares ERC721 and ERC1155, helping you choose the right standard for your project.
 
+![ERC721 vs ERC1155 overview](/assets/guides/erc721-erc1155-overview.jpeg)
+
+_Figure: ERC721 vs ERC1155 overview._
+
 ---
 
 ## 2. ERC721: The Essence of Unique NFTs
@@ -93,6 +97,12 @@ contract MyGameItems is ERC1155 {
 
 ## 4. Key Differences: ERC721 vs. ERC1155
 
+![Side-by-side comparison of ERC721 and ERC1155](/assets/guides/erc721-erc1155-comparison.png)
+
+_Figure: Comparison of ERC721 and ERC1155 token types and their characteristics._
+
+<br />
+
 <table>
   <thead>
     <tr>
@@ -145,7 +155,17 @@ contract MyGameItems is ERC1155 {
   </tbody>
 </table>
 
----
+### Contract Architecture Comparison
+
+![Contract architecture comparison: ERC721 vs ERC1155](/assets/guides/contract-arquitecture-comparison.png)
+
+_Figure: ERC721 requires separate contracts for each collection, while ERC1155 can manage multiple token types in one contract._
+
+### Batch Operations Flow
+
+![Individual vs batch operations in ERC721 and ERC1155](/assets/guides/individual-batch-operations-erc721-erc1155.png)
+
+_Figure: ERC1155's batch operations allow multiple token operations in a single transaction, significantly reducing gas costs._
 
 ## 5. When to Use ERC721
 
