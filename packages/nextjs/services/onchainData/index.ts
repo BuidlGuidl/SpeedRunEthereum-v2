@@ -16,6 +16,7 @@ export async function fetchOnchainData(user: NonNullable<UserByAddress>): Promis
     onchainData.ensData = ensData;
   } catch (error) {
     console.error("Error fetching ENS data:", error);
+    throw error;
   }
 
   try {
@@ -28,6 +29,7 @@ export async function fetchOnchainData(user: NonNullable<UserByAddress>): Promis
     onchainData.sideQuestsSnapshot = sideQuestsSnapshot;
   } catch (error) {
     console.error("Error fetching side quests snapshot:", error);
+    throw error;
   }
 
   return onchainData;
