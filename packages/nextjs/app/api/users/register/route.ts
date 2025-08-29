@@ -63,20 +63,17 @@ export async function POST(req: Request) {
 
     after(async () => {
       try {
-        const { ensData } = await fetchOnchainData(address);
+        const { ensData, sideQuestsSnapshot } = await fetchOnchainData(user);
 
-        // Update user with ENS data if we have any
-        if (ensData.name || ensData.avatar) {
-          const updateData: UserUpdate = {
-            ens: ensData.name ?? undefined,
-            ensAvatar: ensData.avatar ?? undefined,
-          };
+        const updateData: UserUpdate = {
+          ens: ensData?.name || undefined,
+          ensAvatar: ensData?.avatar || undefined,
+          sideQuestsSnapshot,
+        };
 
-          await updateUser(address, updateData);
-          console.log(
-            `ENS data updated for user ${address}: ${ensData.name ? `name: ${ensData.name}` : ""} ${ensData.avatar ? `avatar: ${ensData.avatar}` : ""}`,
-          );
-        }
+        await updateUser(address, updateData);
+
+        console.log(`${Object.keys(updateData).join(", ")} updated for user ${address}`);
       } catch (error) {
         console.error(`Error in background processing for user ${address}:`, error);
       }

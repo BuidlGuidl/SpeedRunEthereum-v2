@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import { GroupedChallenges } from "./_components/GroupedChallenges";
 import { PointsBar } from "./_components/PointsBar";
+import { SideQuests } from "./_components/SideQuests";
 import { UserProfileCard } from "./_components/UserProfileCard";
 import { Builds } from "./_components/builds/Builds";
 import { Metadata } from "next";
@@ -12,6 +13,7 @@ import { getBuildsByUserAddress } from "~~/services/database/repositories/builds
 import { getAllChallenges } from "~~/services/database/repositories/challenges";
 import { getLatestSubmissionPerChallengeByUser } from "~~/services/database/repositories/userChallenges";
 import { getUserByAddress, getUserXP } from "~~/services/database/repositories/users";
+import { SIDEQUESTS } from "~~/services/sideQuests/schema";
 import { getShortAddressAndEns } from "~~/utils/short-address-and-ens";
 import { getTotalXP } from "~~/utils/xp";
 
@@ -87,17 +89,19 @@ export default async function BuilderPage(props: { params: Promise<{ address: st
 
   // Filter out disabled and non-autograding challenges
   const filteredChallenges = challenges.filter(challenge => challenge.autograding === true && !challenge.disabled);
+  const totalSideQuests = Object.keys(SIDEQUESTS).length;
 
-  const totalPoints = getTotalXP(filteredChallenges.length);
+  const totalPoints = getTotalXP(filteredChallenges.length, totalSideQuests);
 
   return (
     <>
       <RouteRefresher />
       <div className="max-w-[1440px] w-full mx-auto px-4 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-          <div>
+          <div className="flex flex-col gap-4">
             <UserProfileCard user={user} batch={userBatch} />
             <PointsBar points={points} totalPoints={totalPoints} />
+            <SideQuests snapshot={user.sideQuestsSnapshot} />
           </div>
           <div className="lg:col-span-3">
             <GroupedChallenges
