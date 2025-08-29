@@ -1,5 +1,6 @@
 import {
   checkContractDeployed,
+  checkEnsAvatarSet,
   checkEnsRegistered,
   checkMintedNFT,
   checkSentMainnetTx,
@@ -10,6 +11,7 @@ import { SideQuestId, SideQuestMeta } from "./types";
 
 export const SIDEQUEST_IDS = [
   "ensRegistered",
+  "ensAvatarSet",
   "contractDeployed",
   "swappedOnDex",
   "usedL2",
@@ -18,10 +20,11 @@ export const SIDEQUEST_IDS = [
 ] as const;
 
 export const SIDEQUESTS: Record<SideQuestId, SideQuestMeta> = {
-  ensRegistered: { name: "Register ENS", check: checkEnsRegistered },
-  contractDeployed: { name: "Deploy a Contract", check: checkContractDeployed },
-  swappedOnDex: { name: "Swap on a DEX", check: checkSwappedOnDex },
-  usedL2: { name: "Use an L2", check: checkUsedL2 },
-  sentMainnetTx: { name: "Send a Mainnet TX", check: checkSentMainnetTx },
-  mintedNFT: { name: "Mint an NFT", check: checkMintedNFT },
+  ensRegistered: { id: "ensRegistered", name: "Register an ENS name", check: checkEnsRegistered },
+  ensAvatarSet: { id: "ensAvatarSet", name: "Set an ENS avatar", check: checkEnsAvatarSet },
+  contractDeployed: { id: "contractDeployed", name: "Deploy a Contract", check: checkContractDeployed },
+  swappedOnDex: { id: "swappedOnDex", name: "Swap on a DEX", check: checkSwappedOnDex },
+  usedL2: { id: "usedL2", name: "Use an L2", check: checkUsedL2 },
+  sentMainnetTx: { id: "sentMainnetTx", name: "Send a Mainnet TX", check: checkSentMainnetTx },
+  mintedNFT: { id: "mintedNFT", name: "Mint an NFT", check: checkMintedNFT },
 } as const;

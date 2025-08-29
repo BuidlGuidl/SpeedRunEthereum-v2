@@ -6,6 +6,7 @@ export type SideQuestCheckArgs = {
 };
 
 export type SideQuestMeta = {
+  id: SideQuestId;
   name: string;
   check: (args: SideQuestCheckArgs) => Promise<boolean>;
   link?: string;
