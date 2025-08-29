@@ -1,5 +1,6 @@
 import {
   checkContractDeployed,
+  checkEnsAvatarSet,
   checkEnsRegistered,
   checkMintedNFT,
   checkSentMainnetTx,
@@ -10,6 +11,7 @@ import { SideQuestId, SideQuestMeta } from "./types";
 
 export const SIDEQUEST_IDS = [
   "ensRegistered",
+  "ensAvatarSet",
   "contractDeployed",
   "swappedOnDex",
   "usedL2",
@@ -19,6 +21,7 @@ export const SIDEQUEST_IDS = [
 
 export const SIDEQUESTS: Record<SideQuestId, SideQuestMeta> = {
   ensRegistered: { id: "ensRegistered", name: "Register an ENS name", check: checkEnsRegistered },
+  ensAvatarSet: { id: "ensAvatarSet", name: "Set an ENS avatar", check: checkEnsAvatarSet },
   contractDeployed: { id: "contractDeployed", name: "Deploy a Contract", check: checkContractDeployed },
   swappedOnDex: { id: "swappedOnDex", name: "Swap on a DEX", check: checkSwappedOnDex },
   usedL2: { id: "usedL2", name: "Use an L2", check: checkUsedL2 },

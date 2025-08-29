@@ -48,7 +48,7 @@ const CollapseSection = ({ title, quests, defaultExpanded = false, className = "
 };
 
 const QUEST_CATEGORIES = {
-  ENS_BASICS: [SIDEQUESTS.ensRegistered],
+  ENS_BASICS: [SIDEQUESTS.ensRegistered, SIDEQUESTS.ensAvatarSet],
   ETHEREUM_FIRST_STEPS: [
     SIDEQUESTS.contractDeployed,
     SIDEQUESTS.sentMainnetTx,

@@ -5,7 +5,11 @@ const L2_CHAIN_IDS =
   "abstract,arbitrum,base,blast,celo,linea,optimism,polygon-zkevm,scroll,zklink-nova,zksync-era,zora";
 
 export async function checkEnsRegistered({ user }: SideQuestCheckArgs) {
-  return !!user.ens;
+  return Boolean(user.ens);
+}
+
+export async function checkEnsAvatarSet({ user }: SideQuestCheckArgs) {
+  return Boolean(user.ensAvatar);
 }
 
 export async function checkContractDeployed({ user }: SideQuestCheckArgs) {
