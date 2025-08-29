@@ -1,5 +1,4 @@
-import { NextResponse } from "next/server";
-import { waitUntil } from "@vercel/functions";
+import { NextResponse, after } from "next/server";
 import { BatchUserStatus, ReviewAction } from "~~/services/database/config/types";
 import { getLatestOpenBatch } from "~~/services/database/repositories/batches";
 import { getLatestSubmissionPerChallengeByUser } from "~~/services/database/repositories/userChallenges";
@@ -66,27 +65,24 @@ export async function POST(req: Request) {
     const referrer = user?.referrer || undefined;
     const originalUtmParams = user?.originalUtmParams;
 
-    waitUntil(
-      (async () => {
-        try {
-          await trackPlausibleEvent(
-            PlausibleEvent.JOIN_BATCH,
-            {
-              originalReferrer: referrer,
-              originalUtmSource: originalUtmParams?.utm_source,
-              originalUtmMedium: originalUtmParams?.utm_medium,
-              originalUtmCampaign: originalUtmParams?.utm_campaign,
-              originalUtmTerm: originalUtmParams?.utm_term,
-              originalUtmContent: originalUtmParams?.utm_content,
-            },
-            req,
-          );
-          // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        } catch (e) {
-          console.error(`Error tracking plausible event ${PlausibleEvent.JOIN_BATCH} for user ${address}`);
-        }
-      })(),
-    );
+    after(async () => {
+      try {
+        await trackPlausibleEvent(
+          PlausibleEvent.JOIN_BATCH,
+          {
+            originalReferrer: referrer,
+            originalUtmSource: originalUtmParams?.utm_source,
+            originalUtmMedium: originalUtmParams?.utm_medium,
+            originalUtmCampaign: originalUtmParams?.utm_campaign,
+            originalUtmTerm: originalUtmParams?.utm_term,
+            originalUtmContent: originalUtmParams?.utm_content,
+          },
+          req,
+        );
+      } catch (e) {
+        console.error(`Error tracking plausible event ${PlausibleEvent.JOIN_BATCH} for user ${address}`);
+      }
+    });
 
     return NextResponse.json({ user: updatedUser }, { status: 200 });
   } catch (error) {
