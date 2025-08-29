@@ -2,7 +2,7 @@ import { type SideQuestCheckArgs } from "./types";
 import { fetchTransactions } from "~~/services/onchainData/zerion";
 
 const L2_CHAIN_IDS =
-  "abstract,arbitrum,base,blast,celo,linea,optimism,polygon-zkevm,scroll,zklink-nova,zksync-era,zora";
+  "abstract,arbitrum,base,blast,celo,linea,optimism,polygon,polygon-zkevm,scroll,zklink-nova,zksync-era,zora";
 
 export async function checkEnsRegistered({ user }: SideQuestCheckArgs) {
   return Boolean(user.ens);
