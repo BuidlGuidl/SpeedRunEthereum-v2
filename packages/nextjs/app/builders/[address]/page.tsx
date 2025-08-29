@@ -13,6 +13,7 @@ import { getBuildsByUserAddress } from "~~/services/database/repositories/builds
 import { getAllChallenges } from "~~/services/database/repositories/challenges";
 import { getLatestSubmissionPerChallengeByUser } from "~~/services/database/repositories/userChallenges";
 import { getUserByAddress, getUserXP } from "~~/services/database/repositories/users";
+import { SIDEQUESTS } from "~~/services/sideQuests/schema";
 import { getShortAddressAndEns } from "~~/utils/short-address-and-ens";
 import { getTotalXP } from "~~/utils/xp";
 
@@ -88,8 +89,9 @@ export default async function BuilderPage(props: { params: Promise<{ address: st
 
   // Filter out disabled and non-autograding challenges
   const filteredChallenges = challenges.filter(challenge => challenge.autograding === true && !challenge.disabled);
+  const totalSideQuests = Object.keys(SIDEQUESTS).length;
 
-  const totalPoints = getTotalXP(filteredChallenges.length);
+  const totalPoints = getTotalXP(filteredChallenges.length, totalSideQuests);
 
   return (
     <>

@@ -2,15 +2,17 @@
 
 import { forwardRef, useRef } from "react";
 import { QuestionMarkCircleIcon } from "@heroicons/react/24/outline";
+import { BATCH_XP, BUILD_XP, CHALLENGE_XP, SIDE_QUEST_XP } from "~~/utils/xp";
 
 type PointsBarModalProps = {
   closeModal: () => void;
 };
 
 const stats = [
-  { name: "Each Completed Challenge", stat: "+10 XP" },
-  { name: "Completed a Batch", stat: "+20 XP" },
-  { name: "First Build Submitted", stat: "+5 XP" },
+  { name: "Each Completed Challenge", stat: `+${CHALLENGE_XP} XP` },
+  { name: "Each Completed Side Quest", stat: `+${SIDE_QUEST_XP} XP` },
+  { name: "Completed a Batch", stat: `+${BATCH_XP} XP` },
+  { name: "First Build Submitted", stat: `+${BUILD_XP} XP` },
 ];
 
 const PointsBarModal = forwardRef<HTMLDialogElement, PointsBarModalProps>(({ closeModal }, ref) => {
@@ -27,7 +29,7 @@ const PointsBarModal = forwardRef<HTMLDialogElement, PointsBarModalProps>(({ clo
         </form>
 
         <div>
-          <dl className="mt-5 grid grid-cols-1 divide-gray-200 overflow-hidden rounded-lg bg-base-100 border border-gray-200 md:grid-cols-3 md:divide-x md:divide-y-0">
+          <dl className="mt-5 grid grid-cols-1 divide-gray-200 overflow-hidden rounded-lg bg-base-100 border border-gray-200 md:grid-cols-4 md:divide-x divide-y md:divide-y-0">
             {stats.map(item => (
               <div key={item.name} className="px-4 py-5 sm:p-6">
                 <dt className="text-base font-normal text-gray-500">{item.name}</dt>
