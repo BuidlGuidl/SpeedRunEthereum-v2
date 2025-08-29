@@ -73,7 +73,7 @@ export async function POST(req: Request) {
           const updateData: UserUpdate = {
             ens: ensData?.name || undefined,
             ensAvatar: ensData?.avatar || undefined,
-            sideQuestsSnapshot: sideQuestsSnapshot,
+            sideQuestsSnapshot,
           };
 
           await updateUser(address, updateData);

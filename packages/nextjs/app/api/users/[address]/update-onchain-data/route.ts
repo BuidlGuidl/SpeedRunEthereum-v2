@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { getUserByAddress, isUserAdmin, updateUser } from "~~/services/database/repositories/users";
+import { UserUpdate, getUserByAddress, isUserAdmin, updateUser } from "~~/services/database/repositories/users";
 import { isValidEIP712UpdateOnchainDataSignature } from "~~/services/eip712/onchain-data";
 import { fetchOnchainData } from "~~/services/onchainData";
 
@@ -31,26 +31,18 @@ export async function PUT(req: Request, props: { params: Promise<{ address: stri
     }
 
     try {
-      // Get current user data
       const currentUser = await getUserByAddress(addressToUpdate);
 
       if (!currentUser) {
         return NextResponse.json({ error: "User not found" }, { status: 404 });
       }
 
-      // Fetch all onchain data
       const { ensData, sideQuestsSnapshot } = await fetchOnchainData(currentUser);
 
-      // Prepare update data
-      const updateData: any = {};
-
-      if (ensData?.name) {
-        updateData.ens = ensData.name;
-      }
-
-      if (ensData?.avatar) {
-        updateData.ensAvatar = ensData.avatar;
-      }
+      const updateData: UserUpdate = {
+        ens: ensData?.name || undefined,
+        ensAvatar: ensData?.avatar || undefined,
+      };
 
       if (sideQuestsSnapshot) {
         // Merge existing completed side quests with new ones
@@ -58,7 +50,6 @@ export async function PUT(req: Request, props: { params: Promise<{ address: stri
         updateData.sideQuestsSnapshot = { ...existingSnapshot, ...sideQuestsSnapshot };
       }
 
-      // Update user with onchain data
       const user = await updateUser(addressToUpdate, updateData);
 
       return NextResponse.json({ user }, { status: 200 });

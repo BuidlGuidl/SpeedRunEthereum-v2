@@ -19,7 +19,12 @@ export async function fetchOnchainData(user: NonNullable<UserByAddress>): Promis
   }
 
   try {
-    const sideQuestsSnapshot = await fetchSideQuestsSnapshot(user);
+    const sideQuestsSnapshot = await fetchSideQuestsSnapshot({
+      ...user,
+      // Use fetched data if available since it's not saved to db yet
+      ens: onchainData.ensData?.name || user.ens,
+      ensAvatar: onchainData.ensData?.avatar || user.ensAvatar,
+    });
     onchainData.sideQuestsSnapshot = sideQuestsSnapshot;
   } catch (error) {
     console.error("Error fetching side quests snapshot:", error);
