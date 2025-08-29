@@ -31,23 +31,18 @@ export async function fetchTransactions(address: string, params: Record<string, 
     url.searchParams.set(key, value);
   });
 
-  try {
-    const res = await fetch(url.toString(), {
-      headers: {
-        Accept: "application/json",
-        Authorization: `Basic ${apiKey}`,
-      },
-      cache: "no-store",
-    });
+  const res = await fetch(url.toString(), {
+    headers: {
+      Accept: "application/json",
+      Authorization: `Basic ${apiKey}`,
+    },
+    cache: "no-store",
+  });
 
-    if (!res.ok) {
-      throw new Error(`Failed to fetch transactions from Zerion: ${res.statusText}`);
-    }
-
-    const jsonResponse = (await res.json()) as ZerionTransactionsResponse;
-    return jsonResponse.data;
-  } catch (err) {
-    console.error("Error fetching transactions", err);
-    throw err;
+  if (!res.ok) {
+    throw new Error(`Failed to fetch transactions from Zerion: ${res.statusText}`);
   }
+
+  const jsonResponse = (await res.json()) as ZerionTransactionsResponse;
+  return jsonResponse.data;
 }

@@ -17,8 +17,8 @@ export async function fetchSideQuestsSnapshot(user: NonNullable<UserByAddress>) 
       continue;
     }
 
-    const sideQuest = SIDEQUESTS[sideQuestId];
     try {
+      const sideQuest = SIDEQUESTS[sideQuestId];
       const completed = await sideQuest.check({ user });
       if (completed) {
         snapshot[sideQuestId] = { id: sideQuestId, completedAt: new Date() };
