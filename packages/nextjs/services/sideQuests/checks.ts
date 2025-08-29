@@ -18,7 +18,7 @@ export async function checkContractDeployed({ user }: SideQuestCheckArgs) {
     return txs.length > 0;
   } catch (err) {
     console.error("contractDeployed check failed", err);
-    return false;
+    throw err;
   }
 }
 
@@ -31,7 +31,7 @@ export async function checkSwappedOnDex({ user }: SideQuestCheckArgs) {
     return txs.length > 0;
   } catch (err) {
     console.error("swappedOnDex check failed", err);
-    return false;
+    throw err;
   }
 }
 
@@ -44,7 +44,7 @@ export async function checkMintedNFT({ user }: SideQuestCheckArgs) {
     return txs.length > 0;
   } catch (err) {
     console.error("mintedNFT check failed", err);
-    return false;
+    throw err;
   }
 }
 
@@ -56,7 +56,7 @@ export async function checkUsedL2({ user }: SideQuestCheckArgs) {
     return txs.length > 0;
   } catch (err) {
     console.error("usedL2 check failed", err);
-    return false;
+    throw err;
   }
 }
 
@@ -68,6 +68,6 @@ export async function checkSentMainnetTx({ user }: SideQuestCheckArgs) {
     return txs.length > 0;
   } catch (err) {
     console.error("sentMainnetTx check failed", err);
-    return false;
+    throw err;
   }
 }

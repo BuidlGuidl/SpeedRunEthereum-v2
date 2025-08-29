@@ -46,8 +46,8 @@ export async function fetchTransactions(address: string, params: Record<string, 
 
     const jsonResponse = (await res.json()) as ZerionTransactionsResponse;
     return jsonResponse.data;
-  } catch (_err) {
-    console.error("Error fetching transactions", _err);
-    return [];
+  } catch (err) {
+    console.error("Error fetching transactions", err);
+    throw err;
   }
 }
