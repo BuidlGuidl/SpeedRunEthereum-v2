@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { SIDEQUESTS } from "~~/services/sideQuests/schema";
-import { SideQuestId, SideQuestsSnapshot } from "~~/services/sideQuests/types";
+import { SideQuestsSnapshot } from "~~/services/sideQuests/types";
 
 type SideQuest = {
   id: string;
@@ -48,23 +48,29 @@ const CollapseSection = ({ title, quests, defaultExpanded = false, className = "
 };
 
 const QUEST_CATEGORIES = {
-  "ENS Setup Basics": ["ensRegistered"] as SideQuestId[],
-  "Eth First Steps": ["contractDeployed", "sentMainnetTx", "usedL2", "mintedNFT", "swappedOnDex"] as SideQuestId[],
+  ENS_BASICS: [SIDEQUESTS.ensRegistered],
+  ETHEREUM_FIRST_STEPS: [
+    SIDEQUESTS.contractDeployed,
+    SIDEQUESTS.sentMainnetTx,
+    SIDEQUESTS.usedL2,
+    SIDEQUESTS.mintedNFT,
+    SIDEQUESTS.swappedOnDex,
+  ],
 };
 
 export const SideQuests = ({ snapshot }: { snapshot: SideQuestsSnapshot | null }) => {
   const ensQuests = [
-    ...QUEST_CATEGORIES["ENS Setup Basics"].map(questId => ({
-      id: questId,
-      name: SIDEQUESTS[questId].name,
-      completed: Boolean(snapshot?.[questId]?.completedAt),
+    ...QUEST_CATEGORIES.ENS_BASICS.map(sideQuest => ({
+      id: sideQuest.id,
+      name: sideQuest.name,
+      completed: Boolean(snapshot?.[sideQuest.id]?.completedAt),
     })),
   ];
 
-  const devQuests = QUEST_CATEGORIES["Eth First Steps"].map(questId => ({
-    id: questId,
-    name: SIDEQUESTS[questId].name,
-    completed: Boolean(snapshot?.[questId]?.completedAt),
+  const devQuests = QUEST_CATEGORIES.ETHEREUM_FIRST_STEPS.map(sideQuest => ({
+    id: sideQuest.id,
+    name: sideQuest.name,
+    completed: Boolean(snapshot?.[sideQuest.id]?.completedAt),
   }));
 
   const totalQuests = ensQuests.length + devQuests.length;
@@ -79,9 +85,9 @@ export const SideQuests = ({ snapshot }: { snapshot: SideQuestsSnapshot | null }
         </div>
       </div>
 
-      <CollapseSection title="ENS Setup Basics" quests={ensQuests} defaultExpanded={true} className="mb-4" />
+      <CollapseSection title="ENS Basics" quests={ensQuests} defaultExpanded={true} className="mb-4" />
 
-      <CollapseSection title="Eth First Steps" quests={devQuests} defaultExpanded={false} />
+      <CollapseSection title="Ethereum First Steps" quests={devQuests} defaultExpanded={true} />
     </div>
   );
 };
