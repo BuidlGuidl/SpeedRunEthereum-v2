@@ -25,17 +25,25 @@ export const RainbowKitCustomConnectButton = () => {
   const { targetNetwork } = useTargetNetwork();
   const { address: connectedAddress } = useAccount();
   const { data: user, isLoading: isLoadingUser } = useUser(connectedAddress);
-  const { disconnect } = useDisconnect();
+  const { disconnectAsync } = useDisconnect();
   const { userAddress: sessionUserAddress } = useAuthSession();
   const isAdmin = user?.role === UserRole.ADMIN;
   const { isAdmin: isAdminFromSession } = useAuthSession();
 
   useEffect(() => {
-    if (sessionUserAddress && connectedAddress && connectedAddress !== sessionUserAddress) {
-      disconnect();
-      signOut({ redirect: true, callbackUrl: "/" });
-    }
-  }, [connectedAddress, sessionUserAddress, disconnect]);
+    const disconnectIfWrongAddress = async () => {
+      if (sessionUserAddress && connectedAddress && connectedAddress !== sessionUserAddress) {
+        try {
+          await disconnectAsync();
+          await signOut({ redirect: true, callbackUrl: "/" });
+        } catch (error) {
+          console.error("Error during disconnecting/signing out:", error);
+        }
+      }
+    };
+
+    disconnectIfWrongAddress();
+  }, [connectedAddress, sessionUserAddress, disconnectAsync]);
 
   return (
     <ConnectButton.Custom>
@@ -69,7 +77,10 @@ export const RainbowKitCustomConnectButton = () => {
           return (
             <div className="flex items-baseline gap-4">
               <RegisterUser />
-              <button className="flex items-center rounded-full bg-base-300" onClick={() => disconnect()}>
+              <button
+                className="flex items-center rounded-full bg-base-300"
+                onClick={async () => await disconnectAsync()}
+              >
                 <XMarkIcon className="w-6 h-6" />
               </button>
             </div>
