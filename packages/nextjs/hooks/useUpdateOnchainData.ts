@@ -2,22 +2,22 @@ import { useRouter } from "next/navigation";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAccount } from "wagmi";
 import { useSignatureWithNotification } from "~~/hooks/useSignatureWithNotification";
-import { EIP_712_TYPED_DATA__UPDATE_ENS } from "~~/services/eip712/ens";
+import { EIP_712_TYPED_DATA__UPDATE_ONCHAIN_DATA } from "~~/services/eip712/onchain-data";
 import { notification } from "~~/utils/scaffold-eth";
 
-export function useUpdateEns() {
+export function useUpdateOnchainData() {
   const { address } = useAccount();
   const router = useRouter();
   const queryClient = useQueryClient();
   const { signWithNotification } = useSignatureWithNotification();
 
-  const { mutate: updateEns, isPending: isUpdatingEns } = useMutation({
+  const { mutate: updateOnchainData, isPending: isUpdating } = useMutation({
     mutationFn: async () => {
       if (!address) throw new Error("Wallet not connected");
 
-      const signature = await signWithNotification(EIP_712_TYPED_DATA__UPDATE_ENS);
+      const signature = await signWithNotification(EIP_712_TYPED_DATA__UPDATE_ONCHAIN_DATA);
 
-      const response = await fetch(`/api/users/${address}/update-ens`, {
+      const response = await fetch(`/api/users/${address}/update-onchain-data`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -27,7 +27,7 @@ export function useUpdateEns() {
 
       if (!response.ok) {
         const error = await response.json();
-        throw new Error(error.error || "Failed to update ENS");
+        throw new Error(error.error || "Failed to update onchain data");
       }
 
       const data = await response.json();
@@ -36,27 +36,28 @@ export function useUpdateEns() {
     onSuccess: user => {
       queryClient.setQueryData(["user", address], user);
       router.refresh();
-      notification.success("ENS updated successfully!");
+
+      notification.success(`Onchain data updated successfully!`);
     },
     onError: (error: Error) => {
-      console.error("ENS update error:", error);
-      notification.error(error.message || "Failed to update ENS. Please try again.");
+      console.error("Onchain data update error:", error);
+      notification.error(error.message || "Failed to update profile data. Please try again.");
     },
   });
 
-  const handleUpdateEns = async () => {
+  const handleUpdateOnchainData = async () => {
     if (!address) return;
 
     try {
-      updateEns();
+      updateOnchainData();
     } catch (error) {
-      console.error("Error during ENS update:", error);
-      notification.error("Failed to update ENS. Please try again.");
+      console.error("Error during onchain data update:", error);
+      notification.error("Failed to update profile data. Please try again.");
     }
   };
 
   return {
-    handleUpdateEns,
-    isUpdatingEns,
+    handleUpdateOnchainData,
+    isUpdating,
   };
 }
