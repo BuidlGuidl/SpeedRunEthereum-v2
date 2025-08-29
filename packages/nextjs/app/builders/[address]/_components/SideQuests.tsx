@@ -79,7 +79,9 @@ export const SideQuests = ({ snapshot }: { snapshot: SideQuestsSnapshot | null }
   return (
     <div className="bg-base-100 rounded-lg p-6">
       <div className="flex justify-between items-center mb-6 text-lg">
-        <div className="font-bold">Side Quests</div>
+        <div className="font-bold">
+          Side Quests <span className="text-xs text-base-content/50">(+ 5 XP each)</span>
+        </div>
         <div>
           {completedQuests} / {totalQuests}
         </div>
