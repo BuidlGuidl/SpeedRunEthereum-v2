@@ -19,7 +19,7 @@ Generating secure randomness is one of the most challenging problems in smart co
 
 This fundamental constraint means any randomness derived from on-chain data is inherently **public and predictable**. Understanding this limitation is critical for building secure decentralized applications, especially blockchain games, NFT drops, and lottery systems.
 
-**The PRNG Problem:** Traditional computers use pseudorandom number generators (PRNGs) seeded with high-entropy sources like system clocks or hardware noise. Smart contracts can't access these node-specific values without breaking consensus, forcing reliance on public blockchain data.
+**The PRNG Problem:** Traditional computers use pseudorandom number generators (PRNGs) seeded with high-entropy sources like system clocks or hardware noise. These are node-specific values which are unique to each machine and invisible to the rest of the network. Smart contracts cannot access them without breaking consensus, forcing reliance on public blockchain data.
 
 ### The Determinism Problem
 
@@ -67,7 +67,7 @@ function stillBad() public view returns (uint256) {
 
 **Vulnerabilities:**
 
-- **Validator Bias:** The proposing validator knows prevrandao in advance and can choose to skip their slot if the outcome is unfavorable.
+- **Validator Bias:** The proposing validator knows prevrandao in advance and can choose to skip their slot if the outcome is unfavorable (but this comes at a cost: they lose proposer rewards).
 - **Same-Block Predictability:** All transactions in a block see the same prevrandao value.
 
 **Note:** The way to avoid this is using a future randao. For a practical implementation, see this [SE-2 extension](https://speedrunethereum.com/builds/1449d6d5-e014-531c-91f6-abb747281375).
