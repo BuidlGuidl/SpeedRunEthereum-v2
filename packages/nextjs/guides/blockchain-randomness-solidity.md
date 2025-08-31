@@ -110,6 +110,7 @@ For applications requiring maximum decentralization, **commit-reveal schemes** p
 3. **Reveal Phase:** Users reveal their secrets; contract verifies against commitments
 4. **Randomness Generation:** Combine revealed values to generate unpredictable outcomes
 
+For a deeper understanding, see our dedicated guide: **[Commit-Reveal Scheme: Decentralized Randomness without Oracles](/guides/commit-reveal-scheme)**
 
 ### Protecting Against Replay Attacks
 
