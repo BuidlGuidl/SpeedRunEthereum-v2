@@ -31,7 +31,7 @@ The scale of the problem is staggering: the $625 million Ronin Network hack supp
 
 Web3 game security isn't monolithic—it's a layered system where failure at any level can be catastrophic:
 
-1. **EVM Layer:** Fixed-size integer math can be exploited (overflow/underflow)
+1. **EVM Layer:** Modern Solidity (0.8.0+) automatically prevents fixed-size integer overflow/underflow. Legacy contracts (<0.8.0) remain vulnerable.
 2. **Smart Contract Layer:** Code vulnerabilities like reentrancy and access control flaws
 3. **Network Layer:** Public mempool enables front-running and MEV attacks
 4. **Economic Design Layer:** Poor tokenomics can collapse games regardless of code quality
@@ -148,9 +148,9 @@ function claimReward() public nonReentrant {
 
 ### 3.2 Integer Overflow/Underflow
 
-**The Risk:** Arithmetic operations that exceed variable limits can wrap around to unexpected values.
+**The Risk:** In legacy contracts (< Solidity 0.8.0), arithmetic operations that exceed variable limits can wrap around to unexpected values. Modern contracts (≥0.8.0) automatically prevent this.
 
-**Game Impact:** Players could underflow their item count to gain unlimited items.
+**Game Impact:** Players could underflow their item count to gain unlimited items (legacy contracts only).
 
 ```solidity
 // Custom errors for gas efficiency
@@ -163,11 +163,11 @@ function useHealthPotion() public {
     health[msg.sender] += 50;
 }
 
-// SECURE: Use Solidity 0.8.0+ (built-in overflow protection)
-// or SafeMath for older versions
+// SECURE: Use Solidity 0.8.0+ (automatic overflow protection)
+// or SafeMath for legacy versions
 function useHealthPotion() public {
     if (healthPotions[msg.sender] == 0) revert NoPotions();
-    healthPotions[msg.sender] -= 1; // Reverts on underflow
+    healthPotions[msg.sender] -= 1; // Automatically reverts on underflow in ≥0.8.0
     health[msg.sender] += 50;
 }
 ```
@@ -412,7 +412,7 @@ contract SecurePriceOracle {
     <tr>
       <td>Integer Overflow</td>
       <td>Safe Math</td>
-      <td>Solidity 0.8.0+ or SafeMath</td>
+      <td>Solidity 0.8.0+ (automatic) or SafeMath</td>
     </tr>
     <tr>
       <td>Access Control</td>
