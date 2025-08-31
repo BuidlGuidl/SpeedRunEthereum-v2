@@ -229,6 +229,8 @@ Commit-reveal schemes must protect against **replay attacks**, where attackers i
 
 ## 8. Testing Your Randomness
 
+Whenever you implement randomness, you must also test it thoroughly. Below is a compact example that checks the distribution of a six-sided dice roll.
+
 ```solidity
 // Example test for randomness distribution
 contract RandomnessTest {
@@ -250,6 +252,23 @@ contract RandomnessTest {
     }
 }
 ```
+
+### How it Works
+
+- Each call to `testDistribution` simulates rolling a dice.
+- The contract reduces any `randomValue` into a result between 1 and 6.
+- It increments counters so you can track how many times each outcome appeared.
+- With `getDistribution`, you can query the frequency of results.
+
+### Running the Test
+
+You can now feed random values into `testDistribution`:
+
+- From fuzz tests (e.g. Foundry/Hardhat).
+- From a real randomness source (e.g. block.prevrandao or Chainlink VRF).
+- From mock numbers you generate off-chain.
+
+Over thousands of runs, you’d expect a fair randomness source to show a roughly even distribution across 1–6.
 
 ---
 
