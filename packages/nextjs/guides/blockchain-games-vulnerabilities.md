@@ -31,7 +31,7 @@ The scale of the problem is staggering: the $625 million Ronin Network hack supp
 
 Web3 game security isn't monolithic—it's a layered system where failure at any level can be catastrophic:
 
-1. **EVM Layer:** Modern Solidity (0.8.0+) automatically prevents fixed-size integer overflow/underflow. Legacy contracts (<0.8.0) remain vulnerable.
+1. **EVM Layer:** Modern Solidity (0.8.0+) automatically prevents fixed-size integer overflow/underflow. Legacy contracts (versions before 0.8.0) remain vulnerable.
 2. **Smart Contract Layer:** Code vulnerabilities like reentrancy and access control flaws
 3. **Network Layer:** Public mempool enables front-running and MEV attacks
 4. **Economic Design Layer:** Poor tokenomics can collapse games regardless of code quality
