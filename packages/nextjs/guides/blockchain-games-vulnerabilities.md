@@ -61,17 +61,21 @@ pragma solidity ^0.8.18;
 
 // WARNING: This contract is vulnerable. DO NOT USE.
 contract VulnerableDiceGame {
+    // Custom errors for gas efficiency
+    error InvalidBetAmount(uint256 provided, uint256 required);
+    error TransferFailed();
+
     constructor() payable {}
 
     function rollDice() external payable {
-        require(msg.value == 0.01 ether, "Bet must be 0.01 ether");
+        if (msg.value != 0.01 ether) revert InvalidBetAmount(msg.value, 0.01 ether);
 
         // VULNERABLE: Using block.timestamp for randomness
         uint256 roll = block.timestamp % 6 + 1;
 
         if (roll == 6) { // Player wins only on 6 (16.67% chance)
             (bool sent, ) = msg.sender.call{value: msg.value * 2}("");
-            require(sent, "Failed to send Ether");
+            if (!sent) revert TransferFailed();
         }
     }
 }
@@ -112,14 +116,18 @@ For a complete Chainlink VRF implementation with detailed setup instructions, de
 **Game Impact:** Duplicate reward claims, infinite item minting, or treasury drainage.
 
 ```solidity
+// Custom errors for gas efficiency
+error NoReward();
+error TransferFailed();
+
 // VULNERABLE: Reentrancy attack vector
 function claimReward() public {
     uint256 reward = rewards[msg.sender];
-    require(reward > 0, "No reward");
+    if (reward == 0) revert NoReward();
 
     // DANGEROUS: External call before state update
     (bool success, ) = msg.sender.call{value: reward}("");
-    require(success);
+    if (!success) revert TransferFailed();
 
     rewards[msg.sender] = 0; // TOO LATE
 }
@@ -127,14 +135,14 @@ function claimReward() public {
 // SECURE: Checks-Effects-Interactions pattern
 function claimReward() public nonReentrant {
     uint256 reward = rewards[msg.sender];
-    require(reward > 0, "No reward");
+    if (reward == 0) revert NoReward();
 
     // Update state FIRST
     rewards[msg.sender] = 0;
 
     // Then make external call
     (bool success, ) = msg.sender.call{value: reward}("");
-    require(success);
+    if (!success) revert TransferFailed();
 }
 ```
 
@@ -145,9 +153,12 @@ function claimReward() public nonReentrant {
 **Game Impact:** Players could underflow their item count to gain unlimited items.
 
 ```solidity
+// Custom errors for gas efficiency
+error NoPotions();
+
 // VULNERABLE (Solidity < 0.8.0)
 function useHealthPotion() public {
-    require(healthPotions[msg.sender] > 0);
+    if (healthPotions[msg.sender] == 0) revert NoPotions();
     healthPotions[msg.sender] -= 1; // Could underflow to max value
     health[msg.sender] += 50;
 }
@@ -155,7 +166,7 @@ function useHealthPotion() public {
 // SECURE: Use Solidity 0.8.0+ (built-in overflow protection)
 // or SafeMath for older versions
 function useHealthPotion() public {
-    require(healthPotions[msg.sender] > 0, "No potions");
+    if (healthPotions[msg.sender] == 0) revert NoPotions();
     healthPotions[msg.sender] -= 1; // Reverts on underflow
     health[msg.sender] += 50;
 }
@@ -166,6 +177,9 @@ function useHealthPotion() public {
 **The Risk:** Missing or incorrect permission checks allow unauthorized actions.
 
 ```solidity
+// Custom errors for gas efficiency
+error UnauthorizedAccess();
+
 // VULNERABLE: Missing access control
 function mintRareNFT(address to) public {
     _mint(to, nextTokenId++); // Anyone can mint!
@@ -175,6 +189,9 @@ function mintRareNFT(address to) public {
 import "@openzeppelin/contracts/access/Ownable.sol";
 
 contract SecureGame is Ownable {
+    // Custom errors for gas efficiency
+    error UnauthorizedMint();
+
     uint256 public nextTokenId = 1;
 
     constructor(address initialOwner) Ownable(initialOwner) {}
@@ -190,6 +207,9 @@ contract SecureGame is Ownable {
 **The Risk:** Unbounded loops can exceed block gas limits, making functions uncallable.
 
 ```solidity
+// Custom errors for gas efficiency
+error NoReward();
+
 // VULNERABLE: Unbounded loop
 function distributeRewards() external {
     for (uint i = 0; i < players.length; i++) {
@@ -201,7 +221,7 @@ function distributeRewards() external {
 // SECURE: Pull-over-Push pattern
 function claimReward() external {
     uint256 reward = rewards[msg.sender];
-    require(reward > 0, "No reward");
+    if (reward == 0) revert NoReward();
     rewards[msg.sender] = 0;
     payable(msg.sender).transfer(reward);
 }
@@ -239,6 +259,14 @@ contract SecureCardGame {
     uint256 public constant COMMIT_DURATION = 10; // blocks
     uint256 public constant REVEAL_DURATION = 5;  // blocks
 
+    // Custom errors for gas efficiency
+    error NoCommitment();
+    error AlreadyRevealed();
+    error NonceAlreadyUsed();
+    error CommitPhaseNotEnded();
+    error RevealPhaseEnded();
+    error InvalidReveal();
+
     function commitMove(bytes32 commitment) external {
         commitments[msg.sender] = Commitment({
             hash: commitment,
@@ -249,14 +277,14 @@ contract SecureCardGame {
 
     function revealMove(uint8 move, uint256 nonce) external {
         Commitment storage commitment = commitments[msg.sender];
-        require(commitment.hash != bytes32(0), "No commitment");
-        require(!commitment.revealed, "Already revealed");
-        require(!usedNonces[nonce], "Nonce already used");
-        require(block.number >= commitment.commitBlock + COMMIT_DURATION, "Commit phase not ended");
-        require(block.number <= commitment.commitBlock + COMMIT_DURATION + REVEAL_DURATION, "Reveal phase ended");
+        if (commitment.hash == bytes32(0)) revert NoCommitment();
+        if (commitment.revealed) revert AlreadyRevealed();
+        if (usedNonces[nonce]) revert NonceAlreadyUsed();
+        if (block.number < commitment.commitBlock + COMMIT_DURATION) revert CommitPhaseNotEnded();
+        if (block.number > commitment.commitBlock + COMMIT_DURATION + REVEAL_DURATION) revert RevealPhaseEnded();
 
         bytes32 hash = keccak256(abi.encodePacked(move, nonce, msg.sender));
-        require(hash == commitment.hash, "Invalid reveal");
+        if (hash != commitment.hash) revert InvalidReveal();
 
         commitment.revealed = true;
         usedNonces[nonce] = true;
@@ -290,6 +318,11 @@ contract SecurePriceOracle {
     uint256 public constant MIN_OBSERVATIONS = 2;
     uint256 public constant MAX_AGE = 1 hours;
 
+    // Custom errors for gas efficiency
+    error InsufficientObservations();
+    error DataTooStale();
+    error InsufficientTimeElapsed();
+
     function updateObservation(address pair) external {
         uint256 price0Cumulative = IUniswapV2Pair(pair).price0CumulativeLast();
         uint256 price1Cumulative = IUniswapV2Pair(pair).price1CumulativeLast();
@@ -304,10 +337,10 @@ contract SecurePriceOracle {
 
     function getTWAP(address pair, uint32 period) external view returns (uint256) {
         Observation[] storage observations = pairObservations[pair];
-        require(observations.length >= MIN_OBSERVATIONS, "Insufficient observations");
+        if (observations.length < MIN_OBSERVATIONS) revert InsufficientObservations();
 
         Observation memory latest = observations[observations.length - 1];
-        require(block.timestamp - latest.blockTimestamp <= MAX_AGE, "Data too stale");
+        if (block.timestamp - latest.blockTimestamp > MAX_AGE) revert DataTooStale();
 
         // Find observation from `period` seconds ago
         Observation memory historical = observations[observations.length - 2];
@@ -319,7 +352,7 @@ contract SecurePriceOracle {
         }
 
         uint32 timeElapsed = latest.blockTimestamp - historical.blockTimestamp;
-        require(timeElapsed >= period, "Insufficient time elapsed");
+        if (timeElapsed < period) revert InsufficientTimeElapsed();
 
         return (latest.price0Cumulative - historical.price0Cumulative) / timeElapsed;
     }
@@ -454,9 +487,16 @@ contract BatchAuctionNFT is ERC721 {
         roundStartTime = block.timestamp;
     }
 
+    // Custom errors for gas efficiency
+    error InvalidBidAmount();
+    error RoundEnded();
+    error RoundNotEnded();
+    error NoBids();
+    error NoRefundAvailable();
+
     function submitBid() external payable {
-        require(msg.value > 0, "Bid must be positive");
-        require(block.timestamp < roundStartTime + (currentRound * ROUND_DURATION), "Round ended");
+        if (msg.value == 0) revert InvalidBidAmount();
+        if (block.timestamp >= roundStartTime + (currentRound * ROUND_DURATION)) revert RoundEnded();
 
         roundBids[currentRound].push(Bid({
             bidder: msg.sender,
@@ -465,10 +505,10 @@ contract BatchAuctionNFT is ERC721 {
     }
 
     function processRound() external {
-        require(block.timestamp >= roundStartTime + (currentRound * ROUND_DURATION), "Round not ended");
+        if (block.timestamp < roundStartTime + (currentRound * ROUND_DURATION)) revert RoundNotEnded();
 
         Bid[] storage bids = roundBids[currentRound];
-        require(bids.length > 0, "No bids");
+        if (bids.length == 0) revert NoBids();
 
         // Find highest bidder
         uint256 highestBid = 0;
@@ -494,7 +534,7 @@ contract BatchAuctionNFT is ERC721 {
 
     function claimRefund(uint256 round) external {
         uint256 refund = bidderRefunds[round][msg.sender];
-        require(refund > 0, "No refund available");
+        if (refund == 0) revert NoRefundAvailable();
 
         bidderRefunds[round][msg.sender] = 0;
         payable(msg.sender).transfer(refund);
@@ -516,13 +556,17 @@ Before launching, engage specialized firms to conduct economic modeling:
 For high-value functions, use mathematical proofs to verify correctness:
 
 ```solidity
+// Custom errors for gas efficiency
+error InvalidStake();
+error DurationTooLong();
+
 // Example: Formally verified reward calculation
 function calculateReward(uint256 stakeAmount, uint256 duration)
     external pure returns (uint256) {
     // @notice: Formally verified to never overflow
     // @invariant: result <= stakeAmount * MAX_MULTIPLIER
-    require(stakeAmount > 0, "Invalid stake");
-    require(duration <= MAX_DURATION, "Duration too long");
+    if (stakeAmount == 0) revert InvalidStake();
+    if (duration > MAX_DURATION) revert DurationTooLong();
 
     return (stakeAmount * duration * REWARD_RATE) / PRECISION;
 }
