@@ -116,6 +116,16 @@ For a complete Chainlink VRF implementation with detailed setup instructions, de
 
 **Game Impact:** Duplicate reward claims, infinite item minting, or treasury drainage.
 
+**Recommendation:** Always follow the Checks-Effects-Interactions (CEI) pattern. For production contracts that make external calls (ETH transfers, token transfers, hooks), consider adding OpenZeppelin's `ReentrancyGuard` (`nonReentrant`) as an extra safety layer.
+
+**Trade-offs:**
+
+- Slight additional gas for protected functions
+- You cannot call one `nonReentrant` function from another in the same contract
+- Not a substitute for CEI or pull-payment patterns
+
+**How it works (briefly):** `ReentrancyGuard` sets an internal status flag on function entry and clears it on exit; re-entrant calls while "entered" revert.
+
 ```solidity
 // Custom errors for gas efficiency
 error NoReward();
@@ -133,8 +143,9 @@ function claimReward() public {
     rewards[msg.sender] = 0; // TOO LATE
 }
 
-// SECURE: Checks-Effects-Interactions pattern
-function claimReward() public nonReentrant {
+// SECURE A: Checks-Effects-Interactions (CEI) only
+// assumes: mapping(address => uint256) rewards;
+function claimRewardCEI() public {
     uint256 reward = rewards[msg.sender];
     if (reward == 0) revert NoReward();
 
@@ -144,6 +155,26 @@ function claimReward() public nonReentrant {
     // Then make external call
     (bool success, ) = msg.sender.call{value: reward}("");
     if (!success) revert TransferFailed();
+}
+
+// SECURE B: CEI + ReentrancyGuard (recommended for production when making external calls)
+import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
+
+contract SecureRewards is ReentrancyGuard {
+    // Example storage
+    mapping(address => uint256) public rewards;
+
+    function claimReward() public nonReentrant {
+        uint256 reward = rewards[msg.sender];
+        if (reward == 0) revert NoReward();
+
+        // Update state FIRST
+        rewards[msg.sender] = 0;
+
+        // Then make external call
+        (bool success, ) = msg.sender.call{value: reward}("");
+        if (!success) revert TransferFailed();
+    }
 }
 ```
 
