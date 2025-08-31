@@ -83,15 +83,16 @@ contract VulnerableDiceGame {
 
 ### 2.3 Step-by-Step Attack Scenario
 
-**The Rigged Dice Game Attack:**
+**The Front-Running Dice Game Attack:**
 
-1. **Transaction Creation:** Attacker creates a transaction calling `rollDice()` with 1 ETH
-2. **Mempool Visibility:** Transaction enters public mempool where miners can see it
-3. **Outcome Calculation:** Miner calculates: `block.timestamp % 6 + 1` for potential blocks
-4. **Selective Mining:** Miner only includes the transaction in blocks where `roll <= 3` (winning condition)
-5. **Guaranteed Profit:** Attacker wins the contract balance risk-free
+1. **Transaction Creation:** Victim submits `rollDice()` transaction with 1 ETH bet
+2. **Mempool Visibility:** Transaction enters public mempool where attackers can see it
+3. **Outcome Preview:** Attacker calculates what the roll would be: `block.timestamp % 6 + 1`
+4. **Front-Running Attack:** If the victim's roll would win (roll = 6), attacker submits their own `rollDice()` transaction with higher gas price
+5. **Priority Processing:** Validator processes attacker's transaction first due to higher gas price
+6. **Attacker Wins:** Attacker collects the prize instead of the original player
 
-This transforms a "game of chance" into a deterministic profit engine for miners/validators.
+This transforms a "game of chance" into a front-running opportunity where attackers can consistently steal winning outcomes from legitimate players.
 
 For a deeper understanding of why blockchain randomness is fundamentally challenging and the various approaches to solve it, see: **[Secure Randomness in Solidity: Beyond Block Variables](/guides/blockchain-randomness-solidity)**
 
