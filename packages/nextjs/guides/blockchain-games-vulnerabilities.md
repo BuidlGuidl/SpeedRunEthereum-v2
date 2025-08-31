@@ -208,6 +208,8 @@ function useHealthPotion() public {
 
 **The Risk:** Missing or incorrect permission checks allow unauthorized actions.
 
+**Game Impact:** Malicious players could mint rare NFTs, generate unlimited in-game currency, or unlock special abilities meant only for admins or game masters.
+
 ```solidity
 // Custom errors for gas efficiency
 error UnauthorizedAccess();
@@ -237,6 +239,8 @@ contract SecureGame is Ownable {
 ### 3.4 Gas-Based Denial of Service
 
 **The Risk:** Unbounded loops can exceed block gas limits, making functions uncallable.
+
+**Game Impact:** If rewards are distributed in a single loop, a growing player base could freeze payouts entirely, meaning no one can claim winnings or in-game rewards. This effectively locks up the contract and stalls game progression.
 
 ```solidity
 // Custom errors for gas efficiency
