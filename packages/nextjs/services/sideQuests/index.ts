@@ -9,7 +9,7 @@ export type SideQuestCheckArgs = {
 };
 
 export async function fetchSideQuestsSnapshot(user: NonNullable<UserByAddress>) {
-  const snapshot: SideQuestsSnapshot = {};
+  const snapshot: SideQuestsSnapshot = { _lastCheckedAt: new Date() };
   const completedSidequests = user.sideQuestsSnapshot;
   for (const sideQuestId of SIDEQUEST_IDS) {
     // Skip if already completed
