@@ -160,11 +160,11 @@ Commit-reveal schemes must protect against **replay attacks**, where attackers i
       <td>Voting, auctions</td>
     </tr>
     <tr>
-      <td><strong>Block Variables</strong></td>
-      <td>Very Low</td>
+      <td><strong>Block Variables (block.prevrandao)</strong></td>
+      <td>Low</td>
       <td>High</td>
       <td>Good</td>
-      <td>Testing only</td>
+      <td>Simple apps, testing, non-critical randomness</td>
     </tr>
   </tbody>
 </table>
@@ -211,7 +211,7 @@ Commit-reveal schemes must protect against **replay attacks**, where attackers i
 
 ---
 
-## 7. Real-World Applications
+## 7. Real-World Applications (excerpt)
 
 ### Gaming and NFTs
 
