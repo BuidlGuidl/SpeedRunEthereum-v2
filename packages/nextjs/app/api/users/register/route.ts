@@ -2,17 +2,10 @@ import { NextResponse } from "next/server";
 import { waitUntil } from "@vercel/functions";
 import { InferInsertModel } from "drizzle-orm";
 import { users } from "~~/services/database/config/schema";
-import {
-  UserByAddress,
-  UserUpdate,
-  createUser,
-  isUserRegistered,
-  updateUser,
-} from "~~/services/database/repositories/users";
+import { UserUpdate, createUser, isUserRegistered, updateUser } from "~~/services/database/repositories/users";
 import { isValidEIP712UserRegisterSignature } from "~~/services/eip712/register";
 import { fetchOnchainData } from "~~/services/onchainData";
 import { PlausibleEvent, trackPlausibleEvent } from "~~/services/plausible";
-import { fetchSideQuestsSnapshot } from "~~/services/sideQuests";
 
 type RegisterPayload = {
   address: string;
@@ -75,30 +68,17 @@ export async function POST(req: Request) {
     waitUntil(
       (async () => {
         try {
-          const { ensData } = await fetchOnchainData(address);
+          const { ensData, sideQuestsSnapshot } = await fetchOnchainData(user);
 
-          // Update user with ENS data if we have any
-          let updatedUser: NonNullable<UserByAddress> = user;
-          if (ensData.name || ensData.avatar) {
-            const updateData: UserUpdate = {
-              ens: ensData.name ?? undefined,
-              ensAvatar: ensData.avatar ?? undefined,
-            };
+          const updateData: UserUpdate = {
+            ens: ensData?.name || undefined,
+            ensAvatar: ensData?.avatar || undefined,
+            sideQuestsSnapshot,
+          };
 
-            updatedUser = await updateUser(address, updateData);
-            console.log(
-              `ENS data updated for user ${address}: ${ensData.name ? `name: ${ensData.name}` : ""} ${ensData.avatar ? `avatar: ${ensData.avatar}` : ""}`,
-            );
-          }
+          await updateUser(address, updateData);
 
-          // Fetch Sidequests snapshot and save to user
-          try {
-            const snapshot = await fetchSideQuestsSnapshot(updatedUser);
-            await updateUser(address, { sideQuestsSnapshot: snapshot });
-            console.log(`Sidequests snapshot updated for user ${address}`);
-          } catch (e) {
-            console.error("Failed to fetch or store sidequests snapshot for", address, e);
-          }
+          console.log(`${Object.keys(updateData).join(", ")} updated for user ${address}`);
         } catch (error) {
           console.error(`Error in background processing for user ${address}:`, error);
         }
