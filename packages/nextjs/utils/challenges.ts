@@ -88,9 +88,27 @@ export const CHALLENGE_METADATA: Record<
     ],
   },
   [ChallengeId.DICE_GAME]: {
-    title: "Solidity Randomness and Security: Build a Dice Game",
+    title: "Exploit a Vulnerable Dice Game in Solidity",
     description:
-      "Learn about randomness challenges in blockchain and exploit vulnerabilities in a Solidity dice game. Essential security concepts for blockchain developers.",
+      "Learn blockchain security by building an attack contract that exploits randomness vulnerabilities in a Solidity dice game. Hands-on security tutorial for developers.",
+    guides: [
+      {
+        title: "Commit-Reveal Scheme in Solidity",
+        url: "/guides/commit-reveal-scheme",
+      },
+      {
+        title: "Chainlink VRF Implementation: Provably Fair Randomness for Smart Contracts",
+        url: "/guides/chainlink-vrf-solidity-games",
+      },
+      {
+        title: "Secure Randomness in Solidity: Beyond Block Variables",
+        url: "/guides/blockchain-randomness-solidity",
+      },
+      {
+        title: "Blockchain Game Security: Vulnerability Defense Tutorial",
+        url: "/guides/blockchain-games-vulnerabilities",
+      },
+    ],
   },
   [ChallengeId.DEX]: {
     title: "How to Build a Decentralized Exchange (DEX) in Solidity",
