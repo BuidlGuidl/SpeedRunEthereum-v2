@@ -57,6 +57,8 @@
     "zustand": "~5.0.0"
   },
   "devDependencies": {
+    "@playwright/test": "^1.55.0",
+    "@synthetixio/synpress": "^4.1.1",
     "@tailwindcss/typography": "^0.5.16",
     "@trivago/prettier-plugin-sort-imports": "~4.3.0",
     "@types/mime-types": "^2.1.4",
