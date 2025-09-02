@@ -9,7 +9,7 @@ export type SideQuestCheckArgs = {
 };
 
 export async function fetchSideQuestsSnapshot(user: NonNullable<UserByAddress>) {
-  const snapshot: SideQuestsSnapshot = {};
+  const snapshot: SideQuestsSnapshot = { _lastCheckedAt: new Date() };
   const completedSidequests = user.sideQuestsSnapshot;
   for (const sideQuestId of SIDEQUEST_IDS) {
     // Skip if already completed
@@ -17,10 +17,15 @@ export async function fetchSideQuestsSnapshot(user: NonNullable<UserByAddress>) 
       continue;
     }
 
-    const sideQuest = SIDEQUESTS[sideQuestId];
-    const completed = await sideQuest.check({ user });
-    if (completed) {
-      snapshot[sideQuestId] = { id: sideQuestId, completedAt: new Date() };
+    try {
+      const sideQuest = SIDEQUESTS[sideQuestId];
+      const completed = await sideQuest.check({ user });
+      if (completed) {
+        snapshot[sideQuestId] = { id: sideQuestId, completedAt: new Date() };
+      }
+    } catch (err) {
+      console.error(`Error checking side quest ${sideQuestId} for user ${user.userAddress}:`, err);
+      throw err;
     }
   }
   return snapshot;

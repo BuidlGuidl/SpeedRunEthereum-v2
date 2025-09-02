@@ -14,4 +14,6 @@ export type SideQuestMeta = {
 
 export type SideQuestId = (typeof SIDEQUEST_IDS)[number];
 
-export type SideQuestsSnapshot = Partial<Record<SideQuestId, { id: SideQuestId; completedAt: Date }>>;
+export type SideQuestsSnapshot = {
+  _lastCheckedAt: Date;
+} & Partial<Record<SideQuestId, { id: SideQuestId; completedAt: Date }>>;
