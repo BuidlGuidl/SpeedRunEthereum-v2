@@ -68,7 +68,9 @@ jobs:
           FIREBASE_STORAGE_BUCKET: your-project-id.appspot.com
 
       - name: Run Synpress E2E tests
-        run: yarn next:test-synpress
+        run: |
+          cd packages/nextjs
+          xvfb-run -a yarn test-synpress
         env:
           PLAYWRIGHT_TEST_BASE_URL: http://localhost:3000
           CI: true
