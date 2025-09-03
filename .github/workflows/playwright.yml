@@ -42,11 +42,12 @@ jobs:
       - name: Install dependencies
         run: yarn install --immutable
 
-      - name: Install Playwright Browsers
-        run: yarn next:playwright-install
+      # - name: Install Playwright Browsers
+      #   run: yarn next:playwright-install
 
       - name: Setup database
         run: |
+          yarn drizzle-kit migrate
           yarn db:reset
           yarn db:seed
 
