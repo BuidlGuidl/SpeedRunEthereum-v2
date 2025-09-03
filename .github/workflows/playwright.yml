@@ -47,6 +47,7 @@ jobs:
 
       - name: Setup database
         run: |
+          cp packages/nextjs/services/database/seed.data.example.ts packages/nextjs/services/database/seed.data.ts
           yarn drizzle-kit migrate
           yarn db:reset
           yarn db:seed
