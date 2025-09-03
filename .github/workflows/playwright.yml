@@ -1,0 +1,84 @@
+name: Playwright Tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch: # Allow manual trigger
+
+jobs:
+  test:
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+    env:
+      CI: true
+      NODE_ENV: test
+      POSTGRES_URL: postgresql://postgres:mysecretpassword@localhost:5432/postgres
+
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_PASSWORD: mysecretpassword
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: yarn
+
+      - name: Install dependencies
+        run: yarn install --immutable
+
+      - name: Install Playwright Browsers
+        run: yarn next:playwright-install
+
+      - name: Setup database
+        run: |
+          yarn db:reset
+          yarn db:seed
+
+      # - name: Run hardhat node, deploy contracts (& generate contracts typescript output)
+      #   run: yarn chain & yarn deploy
+
+      - name: Build Next.js application
+        run: yarn next:build
+
+      - name: Run smoke tests (fast)
+        run: yarn next:test-smoke
+        env:
+          PLAYWRIGHT_TEST_BASE_URL: http://localhost:3000
+
+      - name: Run full test suite
+        if: success()
+        run: yarn next:test-ci
+        env:
+          PLAYWRIGHT_TEST_BASE_URL: http://localhost:3000
+
+      # - name: Upload test results
+      #   uses: actions/upload-artifact@v4
+      #   if: ${{ !cancelled() }}
+      #   with:
+      #     name: playwright-report
+      #     path: packages/nextjs/playwright-report/
+      #     retention-days: 30
+
+      # - name: Upload test videos
+      #   uses: actions/upload-artifact@v4
+      #   if: failure()
+      #   with:
+      #     name: test-videos
+      #     path: packages/nextjs/test-results/
+      #     retention-days: 7
