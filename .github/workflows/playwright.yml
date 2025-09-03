@@ -45,6 +45,9 @@ jobs:
       - name: Install Playwright Browsers
         run: yarn next:playwright-install
 
+      # - name: Install Synpress (MetaMask extension)
+      #   run: yarn dlx @synthetixio/synpress install
+
       - name: Setup database
         run: |
           cp packages/nextjs/services/database/seed.data.example.ts packages/nextjs/services/database/seed.data.ts
@@ -63,6 +66,13 @@ jobs:
             "project_id": "your-project-id"
           }'
           FIREBASE_STORAGE_BUCKET: your-project-id.appspot.com
+
+      - name: Run Synpress E2E tests
+        run: yarn next:test-synpress
+        env:
+          PLAYWRIGHT_TEST_BASE_URL: http://localhost:3000
+          CI: true
+        continue-on-error: false
 
       - name: Run smoke tests (fast)
         run: yarn next:test-smoke
@@ -83,10 +93,10 @@ jobs:
       #     path: packages/nextjs/playwright-report/
       #     retention-days: 30
 
-      # - name: Upload test videos
+      # - name: Upload test videos and traces
       #   uses: actions/upload-artifact@v4
       #   if: failure()
       #   with:
-      #     name: test-videos
+      #     name: test-results
       #     path: packages/nextjs/test-results/
       #     retention-days: 7

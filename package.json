@@ -50,6 +50,7 @@
     "next:test-smoke": "yarn workspace @se-2/nextjs test-smoke",
     "next:test-debug": "yarn workspace @se-2/nextjs test-debug",
     "next:test-ui": "yarn workspace @se-2/nextjs test-ui",
+    "next:test-synpress": "yarn workspace @se-2/nextjs test-synpress",
     "vercel": "yarn workspace @se-2/nextjs vercel",
     "vercel:login": "yarn workspace @se-2/nextjs vercel:login",
     "vercel:yolo": "yarn workspace @se-2/nextjs vercel:yolo",
