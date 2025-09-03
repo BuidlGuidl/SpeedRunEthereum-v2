@@ -40,7 +40,10 @@ export const RegisterUser = () => {
       </button>
 
       {showTooltip && (
-        <div className="absolute top-full left-[-250px] mt-2 p-8 w-64 md:w-[290px] bg-base-200 rounded-xl shadow-lg border border-base-300 z-10 flex flex-col items-center text-center">
+        <div
+          data-testid="register-user-tooltip"
+          className="absolute top-full left-[-250px] mt-2 p-8 w-64 md:w-[290px] bg-base-200 rounded-xl shadow-lg border border-base-300 z-10 flex flex-col items-center text-center"
+        >
           <h3 className="text-lg font-bold mb-1">Register as a builder</h3>
           <p className="m-0 mb-4 text-sm font-light text-neutral">
             Sign a message with your wallet to create a builder profile.
@@ -57,6 +60,7 @@ export const RegisterUser = () => {
             className="flex items-center justify-center py-1.5 lg:py-2 px-3 lg:px-4 border-2 border-primary rounded-full bg-base-300 hover:bg-base-200 transition-colors cursor-pointer mt-4 text-sm w-full"
             onClick={() => handleRegister({ referrer: storedReferrer, originalUtmParams: parsedUtmParams })}
             disabled={isRegistering}
+            data-testid="register-user-tooltip-button"
           >
             {isRegistering ? (
               <span className="loading loading-spinner loading-sm"></span>
