@@ -13,6 +13,9 @@
     "lint": "next lint",
     "serve": "next start",
     "start": "next dev",
+    "test": "playwright test",
+    "test-cache": "yarn exec synpress",
+    "test-ui": "playwright test --ui",
     "vercel": "vercel --build-env YARN_ENABLE_IMMUTABLE_INSTALLS=false --build-env ENABLE_EXPERIMENTAL_COREPACK=1 --build-env VERCEL_TELEMETRY_DISABLED=1",
     "vercel:login": "vercel login",
     "vercel:yolo": "vercel --build-env YARN_ENABLE_IMMUTABLE_INSTALLS=false --build-env ENABLE_EXPERIMENTAL_COREPACK=1 --build-env NEXT_PUBLIC_IGNORE_BUILD_ERROR=true --build-env VERCEL_TELEMETRY_DISABLED=1"
@@ -57,8 +60,8 @@
     "zustand": "~5.0.0"
   },
   "devDependencies": {
-    "@playwright/test": "^1.55.0",
-    "@synthetixio/synpress": "^4.1.1",
+    "@playwright/test": "1.48.2",
+    "@synthetixio/synpress": "4.0.10",
     "@tailwindcss/typography": "^0.5.16",
     "@trivago/prettier-plugin-sort-imports": "~4.3.0",
     "@types/mime-types": "^2.1.4",
