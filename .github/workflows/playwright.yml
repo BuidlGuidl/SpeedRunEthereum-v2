@@ -57,6 +57,12 @@ jobs:
 
       - name: Build Next.js application
         run: yarn next:build
+        env:
+          FIREBASE_SERVICE_ACCOUNT_KEY: '{
+            "type": "service_account",
+            "project_id": "your-project-id"
+          }'
+          FIREBASE_STORAGE_BUCKET: your-project-id.appspot.com
 
       - name: Run smoke tests (fast)
         run: yarn next:test-smoke
