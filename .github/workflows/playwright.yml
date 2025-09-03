@@ -76,6 +76,11 @@ jobs:
           CI: true
         continue-on-error: false
 
+      - name: Rename Synpress cache folder
+        run: |
+          cd packages/nextjs
+          mv .cache-synpress/532f685e346606c2a803 .cache-synpress/08a20e3c7fc77e6ae298
+
       - name: Run smoke tests (fast)
         run: yarn next:test-smoke
         env:
