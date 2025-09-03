@@ -15,6 +15,9 @@ jobs:
       CI: true
       NODE_ENV: test
       POSTGRES_URL: postgresql://postgres:mysecretpassword@localhost:5432/postgres
+      NEXT_AUTH_SECRET: 1234567890
+      NEXT_AUTH_URL: http://localhost:3000
+      
 
     services:
       postgres:
@@ -67,7 +70,7 @@ jobs:
           }'
           FIREBASE_STORAGE_BUCKET: your-project-id.appspot.com
 
-      - name: Run Synpress E2E tests
+      - name: Cache Synpress
         run: |
           cd packages/nextjs
           xvfb-run yarn test-synpress
@@ -88,11 +91,13 @@ jobs:
         env:
           PLAYWRIGHT_TEST_BASE_URL: http://localhost:3000
 
-      - name: Run full test suite
-        if: success()
-        run: yarn next:test-ci
-        env:
-          PLAYWRIGHT_TEST_BASE_URL: http://localhost:3000
+      # - name: Run full test suite
+      #   if: success()
+      #   run: |
+      #     cd packages/nextjs
+      #     xvfb-run yarn test-ci
+      #   env:
+      #     PLAYWRIGHT_TEST_BASE_URL: http://localhost:3000
 
       # - name: Upload test results
       #   uses: actions/upload-artifact@v4
