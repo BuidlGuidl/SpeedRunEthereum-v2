@@ -51,13 +51,7 @@ export const HomepageClient = ({ challenges }: { challenges: Challenges }) => {
         />
 
         <OnboardingBatchesCard userChallenges={userChallenges} />
-        <ChallengeExpandedCard
-          key={ChallengeId.ORACLES}
-          challengeId={ChallengeId.ORACLES}
-          userChallenges={userChallenges}
-          challenges={challenges}
-          comingSoon
-        />
+
         <ChallengeExpandedCard
           key={ChallengeId.OVER_COLLATERALIZED_LENDING}
           challengeId={ChallengeId.OVER_COLLATERALIZED_LENDING}
@@ -79,6 +73,13 @@ export const HomepageClient = ({ challenges }: { challenges: Challenges }) => {
         <ChallengeExpandedCard
           key={ChallengeId.ZK_VOTING}
           challengeId={ChallengeId.ZK_VOTING}
+          userChallenges={userChallenges}
+          challenges={challenges}
+          comingSoon
+        />
+        <ChallengeExpandedCard
+          key={ChallengeId.ORACLES}
+          challengeId={ChallengeId.ORACLES}
           userChallenges={userChallenges}
           challenges={challenges}
           comingSoon

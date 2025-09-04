@@ -142,7 +142,7 @@ export const seedChallenges: (typeof challenges.$inferInsert)[] = [
   {
     id: ChallengeId.ZK_VOTING,
     challengeName: "🔒 ZK Voting",
-    autograding: false,
+    autograding: true,
     description:
       "🔒 Build your own decentralized voting system using zero-knowledge proofs. Let's write a contract that allows users to vote on a topic and the results will be computed off-chain using zero-knowledge proofs.",
     sortOrder: 8,
@@ -151,7 +151,6 @@ export const seedChallenges: (typeof challenges.$inferInsert)[] = [
   {
     id: ChallengeId.ORACLES,
     challengeName: "Oracles",
-    github: "scaffold-eth/se-2-challenges:challenge-oracles",
     autograding: true,
     description:
       "🔮 Build three powerful oracle systems bringing real-world data on-chain! Level up from simple whitelist oracles to staking-based systems, and finally to optimistic oracles with challenge periods. 🛡️ Learn crucial security trade-offs while implementing dispute resolution and economic incentives.",
