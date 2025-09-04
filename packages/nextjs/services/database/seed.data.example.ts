@@ -111,23 +111,13 @@ export const seedChallenges: (typeof challenges.$inferInsert)[] = [
     previewImage: "/assets/challenges/dex.svg",
   },
   {
-    id: ChallengeId.ORACLES,
-    challengeName: "Oracles",
-    github: "scaffold-eth/se-2-challenges:challenge-oracles",
-    autograding: true,
-    description:
-      "🔮 Build three powerful oracle systems bringing real-world data on-chain! Level up from simple whitelist oracles to staking-based systems, and finally to optimistic oracles with challenge periods. 🛡️ Learn crucial security trade-offs while implementing dispute resolution and economic incentives.",
-    sortOrder: 5,
-    previewImage: "/assets/challenges/oracles.svg",
-  },
-  {
     id: ChallengeId.OVER_COLLATERALIZED_LENDING,
     challengeName: "Over-Collateralized Lending",
     github: "scaffold-eth/se-2-challenges:challenge-over-collateralized-lending",
     autograding: true,
     description:
       "💳 Build your own lending and borrowing platform. Let's write a contract that takes collateral and lets you borrow other assets against the value of the collateral. What happens when the collateral changes in value? We will be able to borrow more if it is higher, or if it is lower, we will also build a system for liquidating the debt position.",
-    sortOrder: 6,
+    sortOrder: 5,
     previewImage: "/assets/challenges/overCollateralizedLending.svg",
   },
   {
@@ -137,7 +127,7 @@ export const seedChallenges: (typeof challenges.$inferInsert)[] = [
     autograding: true,
     description:
       "🔮 Build a prediction market where users can create questions about future outcomes for others to bet on. Users can also participate in existing markets to speculate on event results. 📊 Outcome shares can be traded, with prices adjusting dynamically based on market belief. This is possible because the smart contract acts as an automated market maker (like in the DEX challenge) and adjusts odds based on supply and demand.",
-    sortOrder: 7,
+    sortOrder: 6,
     previewImage: "/assets/challenges/predictionMarkets.svg",
   },
   {
@@ -146,7 +136,7 @@ export const seedChallenges: (typeof challenges.$inferInsert)[] = [
     autograding: false,
     description:
       "🪙 Build your own decentralized stablecoin. Let's write a contract that takes collateral and issues MyUSD tokens based on the value of the collateral. What happens when the collateral changes in value? If it is higher, we will be able to borrow more tokens. If it is lower, we will also build a system for liquidating the MyUSD.",
-    sortOrder: 8,
+    sortOrder: 7,
     previewImage: "/assets/challenges/stablecoins.svg",
   },
   {
@@ -155,8 +145,18 @@ export const seedChallenges: (typeof challenges.$inferInsert)[] = [
     autograding: false,
     description:
       "🔒 Build your own decentralized voting system using zero-knowledge proofs. Let's write a contract that allows users to vote on a topic and the results will be computed off-chain using zero-knowledge proofs.",
-    sortOrder: 9,
+    sortOrder: 8,
     previewImage: "/assets/challenges/zkVoting.svg",
+  },
+  {
+    id: ChallengeId.ORACLES,
+    challengeName: "Oracles",
+    github: "scaffold-eth/se-2-challenges:challenge-oracles",
+    autograding: true,
+    description:
+      "🔮 Build three powerful oracle systems bringing real-world data on-chain! Level up from simple whitelist oracles to staking-based systems, and finally to optimistic oracles with challenge periods. 🛡️ Learn crucial security trade-offs while implementing dispute resolution and economic incentives.",
+    sortOrder: 9,
+    previewImage: "/assets/challenges/oracles.svg",
   },
   {
     id: ChallengeId.MULTISIG,
