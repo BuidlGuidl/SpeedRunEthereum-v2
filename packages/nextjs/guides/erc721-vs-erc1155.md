@@ -15,11 +15,15 @@ image: /assets/guides/erc1155vs721.jpg
 ## 1. Navigating Ethereum's NFT Standards
 
 Ethereum's NFT ecosystem is built on robust token standards that ensure interoperability and security.
-**ERC721** was the first standard for unique, non-fungible assets, powering the early NFT boom. As [NFT use cases](/guides/nft-use-cases) grew—especially in gaming and large-scale collectibles—**ERC1155** emerged to address the need for efficiency, batch operations, and multi-token management.
+**ERC721** was the first standard for unique, non-fungible assets, powering the early NFT boom. As [NFT use cases](/guides/nft-use-cases) grew (especially in gaming and large-scale collectibles), **ERC1155** emerged to address the need for efficiency, batch operations, and multi-token management.
 
 **This guide is designed to help you decide which standard is right for your project.** If you want a deep technical dive into ERC721 implementation, see our [Mastering ERC721: Developer Guide to NFT Metadata & Best Practices](/guides/mastering-erc721).
 
 This guide compares ERC721 and ERC1155, helping you choose the right standard for your project.
+
+![ERC721 vs ERC1155 overview](/assets/guides/erc721-erc1155-overview.jpeg)
+
+_Figure: ERC721 vs ERC1155 overview._
 
 ---
 
@@ -63,7 +67,7 @@ contract MyNFT is ERC721 {
 
 ## 3. ERC1155: The Multi-Token Standard
 
-**ERC1155** allows a single contract to manage multiple token types—fungible, non-fungible, and semi-fungible.
+**ERC1155** allows a single contract to manage multiple token types: fungible, non-fungible, and semi-fungible.
 
 **Key Features:**
 
@@ -92,6 +96,12 @@ contract MyGameItems is ERC1155 {
 ---
 
 ## 4. Key Differences: ERC721 vs. ERC1155
+
+![Side-by-side comparison of ERC721 and ERC1155](/assets/guides/erc721-erc1155-comparison.png)
+
+_Figure: Comparison of ERC721 and ERC1155 token types and their characteristics._
+
+<br />
 
 <table>
   <thead>
@@ -145,7 +155,17 @@ contract MyGameItems is ERC1155 {
   </tbody>
 </table>
 
----
+### Contract Architecture Comparison
+
+![Contract architecture comparison: ERC721 vs ERC1155](/assets/guides/contract-arquitecture-comparison.png)
+
+_Figure: ERC721 requires separate contracts for each collection, while ERC1155 can manage multiple token types in one contract._
+
+### Batch Operations Flow
+
+![Individual vs batch operations in ERC721 and ERC1155](/assets/guides/individual-batch-operations-erc721-erc1155.png)
+
+_Figure: ERC1155's batch operations allow multiple token operations in a single transaction, significantly reducing gas costs._
 
 ## 5. When to Use ERC721
 

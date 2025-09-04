@@ -30,9 +30,13 @@ The magic? This LST is **liquid**! It's typically an ERC-20 token, so you can:
 - Put it to work in various yield farming strategies.
   ...all while your original ETH is still staked and earning baseline rewards! This is called **capital efficiency** – getting more mileage out of your assets.
 
+![Traditional Staking vs Liquid Staking](/assets/guides/traditional-staking-vs-liquid-staking.jpeg)
+
 ## How Does Liquid Staking Work? The Basic Flow
 
 While different protocols have their nuances, the general process looks like this:
+
+![Liquid Staking Process Flow](/assets/guides/general-lst-process.png)
 
 1.  **Deposit:** You deposit your ETH into a liquid staking protocol's smart contract (e.g., Lido, Rocket Pool).
 2.  **Staking by Protocol:** The protocol aggregates ETH from many users and stakes it with network validators. These validators do the work of securing the network.
@@ -42,6 +46,8 @@ While different protocols have their nuances, the general process looks like thi
 ## Meet the LST Flavors: Rebasing vs. Reward-Bearing (Crucial for Devs!)
 
 This is where things get interesting, especially if you're building smart contracts that interact with LSTs. LSTs primarily come in two main flavors based on how they distribute rewards:
+
+![LST Flavors: Rebasing vs Reward-Bearing](/assets/guides/lst-flavors.jpeg)
 
 ### 1. Rebasing LSTs (e.g., Lido's `stETH`)
 
@@ -64,6 +70,8 @@ This is where things get interesting, especially if you're building smart contra
   - Your `wstETH` balance remains constant.
   - The value of `wstETH` (its redemption value in `stETH`, and thus ETH) appreciates over time as the underlying `stETH` it represents continues to rebase and accrue rewards.
 - **Benefit:** `wstETH` behaves like a reward-bearing token in DeFi, making it much easier to integrate.
+
+![Which Type of LST for DeFi Integration](/assets/guides/type-of-lst.png)
 
 **Key Takeaway for Devs:** If you're building a contract that will hold or account for LSTs, you _must_ know if it's rebasing or reward-bearing/wrapped to handle its balance and value correctly! For rebasing, directly using `balanceOf()` can be misleading; protocols often interact with the share mechanism or use the wrapped version.
 
@@ -89,6 +97,10 @@ The real power of LSTs shines when you use them in the broader DeFi ecosystem:
 
 LSTs are powerful but come with their own set of risks. As a developer, being aware of these is crucial, especially if you're building protocols that integrate them.
 
+![LST Risks Mind Map](/assets/guides/lst-risks.jpg)
+
+### Understanding Risk Interconnections
+
 - **Smart Contract Risk:** The LST protocol itself could have a bug. This is true for any smart contract. Always look for audits!
 - **Oracle Risk:**
   - **Price Oracles:** DeFi protocols rely on oracles (like [Chainlink](https://chain.link/)) for LST/ETH prices. If these are manipulated or fail, it can lead to bad liquidations.
@@ -104,8 +116,11 @@ LSTs are powerful but come with their own set of risks. As a developer, being aw
 - **Composability ("Money Lego") Risk:** When you combine different DeFi protocols, the risks can compound. A bug or issue in one protocol can cascade and affect others that integrate with it. This is especially true for widely used LSTs.
   - **Rebasing tokens** add specific composability headaches if not handled correctly by the integrating protocol.
 - **Centralization & Governance Risks:**
+
   - Some LST protocols might have centralized elements (e.g., oracle committees, validator selection, upgradeable contracts via multisig).
   - Governance tokens could be concentrated, leading to risks of manipulation or decisions not in all users' best interests.
+
+  ![Risk Interconnections Flowchart](/assets/guides/risk-interconections.png)
 
 ## Integrating LSTs? Key Tips for Developers
 
