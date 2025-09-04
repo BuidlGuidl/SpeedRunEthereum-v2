@@ -112,11 +112,11 @@ export const seedChallenges: (typeof challenges.$inferInsert)[] = [
   },
   {
     id: ChallengeId.ORACLES,
-    challengeName: "Build Decentralized Oracle Systems",
+    challengeName: "Oracles",
     github: "scaffold-eth/se-2-challenges:challenge-oracles",
     autograding: true,
     description:
-      "Learn to build three fundamental oracle architectures: Whitelist, Staking, and Optimistic Oracles. Understand trade-offs between security, decentralization, and efficiency while implementing dispute resolution and economic incentive mechanisms.",
+      "🔮 Build three powerful oracle systems bringing real-world data on-chain! Level up from simple whitelist oracles to staking-based systems, and finally to optimistic oracles with challenge periods. 🛡️ Learn crucial security trade-offs while implementing dispute resolution and economic incentives.",
     sortOrder: 5,
     previewImage: "/assets/challenges/oracles.svg",
   },
