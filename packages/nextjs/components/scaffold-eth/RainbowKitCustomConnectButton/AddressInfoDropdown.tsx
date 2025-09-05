@@ -58,7 +58,7 @@ export const AddressInfoDropdown = ({
           className="btn btn-secondary min-h-0 py-1 lg:py-2 px-2 border-2 !border-primary shadow-md dropdown-toggle gap-0 !h-auto"
         >
           <BlockieAvatar address={checkSumAddress} size={30} ensImage={ensAvatar} />
-          <span className="ml-2 mr-1 text-sm lg:text-base font-medium">
+          <span className="ml-2 mr-1 text-sm lg:text-base font-medium" data-testid="account-address-or-ens">
             {isENS(displayName) ? displayName : checkSumAddress?.slice(0, 6) + "..." + checkSumAddress?.slice(-4)}
           </span>
           <ChevronDownIcon className="h-6 w-4" />
