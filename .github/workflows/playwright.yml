@@ -8,7 +8,7 @@ on:
   workflow_dispatch: # Allow manual trigger
 
 jobs:
-  test:
+  E2e tests:
     timeout-minutes: 60
     runs-on: ubuntu-latest
     env:
@@ -48,8 +48,6 @@ jobs:
       - name: Install Playwright Browsers
         run: yarn next:playwright-install
 
-      # - name: Install Synpress (MetaMask extension)
-      #   run: yarn dlx @synthetixio/synpress install
 
       - name: Setup database
         run: |
@@ -57,9 +55,6 @@ jobs:
           yarn drizzle-kit migrate
           yarn db:reset
           yarn db:seed
-
-      # - name: Run hardhat node, deploy contracts (& generate contracts typescript output)
-      #   run: yarn chain & yarn deploy
 
       - name: Build Next.js application
         run: yarn next:build
@@ -84,13 +79,17 @@ jobs:
           cd packages/nextjs
           mv .cache-synpress/532f685e346606c2a803 .cache-synpress/08a20e3c7fc77e6ae298
 
-      - name: Run smoke tests (fast)
-        run: |
-          cd packages/nextjs
-          xvfb-run yarn test-smoke
+      - name: Run playwright tests
+        run: xvfb-run yarn next:test
         env:
           PLAYWRIGHT_TEST_BASE_URL: http://localhost:3000
 
+      - name: List test report contents
+        run: |
+          echo "Contents of playwright-report directory:"
+          ls -la packages/nextjs/playwright-report/ || echo "playwright-report directory does not exist"
+          echo "Contents of test-results directory:"
+          ls -la packages/nextjs/test-results/ || echo "test-results directory does not exist"
 
       - name: Upload test results
         uses: actions/upload-artifact@v4
@@ -99,6 +98,10 @@ jobs:
           name: playwright-report
           path: packages/nextjs/playwright-report/
           retention-days: 30
+          if-no-files-found: warn
+          compression-level: 6
+          overwrite: false
+          include-hidden-files: false
 
       - name: Upload test videos and traces
         uses: actions/upload-artifact@v4
@@ -107,3 +110,4 @@ jobs:
           name: test-results
           path: packages/nextjs/test-results/
           retention-days: 7
+          if-no-files-found: ignore

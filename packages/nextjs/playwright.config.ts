@@ -26,7 +26,9 @@ export default defineConfig({
   /* Global timeout for the whole test run */
   globalTimeout: process.env.CI ? 20 * 60 * 1000 : undefined, // 20 minutes in CI
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
-  reporter: process.env.CI ? [["github"], ["html"], ["list"]] : [["html"], ["list"]],
+  reporter: process.env.CI
+    ? [["github"], ["html", { outputFolder: "playwright-report", open: "never" }], ["list"]]
+    : [["html", { outputFolder: "playwright-report", open: "never" }], ["list"]],
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     /* Base URL to use in actions like `await page.goto('/')`. */
