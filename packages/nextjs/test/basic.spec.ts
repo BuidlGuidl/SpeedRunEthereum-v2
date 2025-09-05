@@ -22,7 +22,7 @@ test.describe("End-to-End Integration Tests", () => {
 
     // Step 1: Connect wallet
     await page.getByTestId("connect-button").click();
-    await page.getByTestId("rk-walletx-option-io.metamask").waitFor({
+    await page.getByTestId("rk-wallet-option-io.metamask").waitFor({
       state: "visible",
       timeout: 30000,
     });
