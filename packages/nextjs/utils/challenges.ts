@@ -29,7 +29,7 @@ export const CHALLENGE_METADATA: Record<string, ChallengeStaticMetadata> = {
     ],
     skillLevel: SkillLevel.BEGINNER,
     timeToComplete: "30 - 60 minutes",
-    prerequisites: [{ text: "Basic web3 concepts", url: "https://www.youtube.com/watch?v=MlJPjJQZtC8" }],
+    prerequisites: [{ text: "Basics", url: "https://www.youtube.com/watch?v=MlJPjJQZtC8" }],
     guides: [
       {
         title: "ERC721 vs. ERC1155: Key Differences, Use Cases & How to Choose",
@@ -99,7 +99,7 @@ export const CHALLENGE_METADATA: Record<string, ChallengeStaticMetadata> = {
     timeToComplete: "30 - 60 minutes",
     prerequisites: [
       {
-        text: "Previous challenge",
+        text: "All previous challenges",
       },
     ],
     guides: [
@@ -136,7 +136,7 @@ export const CHALLENGE_METADATA: Record<string, ChallengeStaticMetadata> = {
     ],
     skillLevel: SkillLevel.BEGINNER,
     timeToComplete: "30 - 60 minutes",
-    prerequisites: [{ text: "Previous challenge" }],
+    prerequisites: [{ text: "All previous challenges" }],
     guides: [
       {
         title: "Commit-Reveal Scheme in Solidity",
@@ -167,14 +167,7 @@ export const CHALLENGE_METADATA: Record<string, ChallengeStaticMetadata> = {
     ],
     skillLevel: SkillLevel.INTERMEDIATE,
     timeToComplete: "1-3 hours",
-    prerequisites: [
-      {
-        text: "All previous challenges",
-      },
-      {
-        text: "Grit",
-      },
-    ],
+    prerequisites: [{ text: "All previous challenges" }],
     guides: [
       {
         title: "Automated Market Makers (AMMs): Math, Risks & Solidity Code",
@@ -206,7 +199,7 @@ export const CHALLENGE_METADATA: Record<string, ChallengeStaticMetadata> = {
     ],
     skillLevel: SkillLevel.INTERMEDIATE,
     timeToComplete: "2-4 hours",
-    prerequisites: [{ text: "All previous challenges" }, { text: "Determination" }],
+    prerequisites: [{ text: "All previous challenges" }],
   },
   [ChallengeId.STABLECOINS]: {
     title: "Build a Stablecoin in Solidity",
@@ -220,10 +213,7 @@ export const CHALLENGE_METADATA: Record<string, ChallengeStaticMetadata> = {
     ],
     skillLevel: SkillLevel.ADVANCED,
     timeToComplete: "2-4 hours",
-    prerequisites: [
-      { text: "Over-Collateralized Lending", url: "/challenge/over-collateralized-lending" },
-      { text: "Fervor" },
-    ],
+    prerequisites: [{ text: "All previous challenges" }],
   },
   [ChallengeId.PREDICTION_MARKETS]: {
     title: "Create a Prediction Market in Solidity",
@@ -237,7 +227,7 @@ export const CHALLENGE_METADATA: Record<string, ChallengeStaticMetadata> = {
     ],
     skillLevel: SkillLevel.ADVANCED,
     timeToComplete: "2-4 hours",
-    prerequisites: [{ text: "All previous challenges" }, { text: "Endurance" }],
+    prerequisites: [{ text: "All previous challenges" }],
   },
   [ChallengeId.DEPLOY_TO_L2]: {
     title: "Deploy Solidity Smart Contracts to Layer 2",

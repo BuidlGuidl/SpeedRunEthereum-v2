@@ -63,7 +63,7 @@ export function ChallengeHeader({ skills, skillLevel, timeToComplete, prerequisi
               <div className="flex-1">
                 <div className="text-sm">Prerequisites</div>
                 {prerequisites && prerequisites.length > 0 ? (
-                  <ul className="space-y-1 mt-1 list-disc text-sm pl-4">
+                  <ul className="space-y-1 mt-1 text-sm">
                     {prerequisites.map((item, idx) => (
                       <li key={`${item.text}-${idx}`} className="break-words whitespace-normal">
                         {item.url ? (
