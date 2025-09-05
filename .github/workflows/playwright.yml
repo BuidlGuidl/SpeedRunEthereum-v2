@@ -8,7 +8,7 @@ on:
   workflow_dispatch: # Allow manual trigger
 
 jobs:
-  E2e tests:
+  E2e_tests:
     timeout-minutes: 60
     runs-on: ubuntu-latest
     env:
