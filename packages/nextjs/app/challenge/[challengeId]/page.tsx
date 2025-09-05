@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import { ChallengeHeader } from "./_components/ChallengeHeader";
 import { SubmitChallengeButton } from "./_components/SubmitChallengeButton";
 import { WelcomeBanner } from "./_components/WelcomeBanner";
 import { MDXRemote } from "next-mdx-remote/rsc";
@@ -52,6 +53,12 @@ export default async function ChallengePage(props: { params: Promise<{ challenge
   return (
     <div className="flex flex-col items-center py-8 px-5 xl:p-12 relative max-w-[100vw]">
       <WelcomeBanner />
+      <ChallengeHeader
+        skills={staticMetadata?.skills}
+        skillLevel={staticMetadata?.skillLevel}
+        timeToComplete={staticMetadata?.timeToComplete}
+        prerequisites={staticMetadata?.prerequisites}
+      />
       {challengeReadme ? (
         <>
           <div className="prose dark:prose-invert max-w-fit break-words lg:max-w-[850px]">
