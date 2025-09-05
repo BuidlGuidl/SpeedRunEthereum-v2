@@ -68,7 +68,7 @@ jobs:
       - name: Cache Synpress
         run: |
           cd packages/nextjs
-          xvfb-run yarn test-synpress
+          xvfb-run yarn cache-synpress
         env:
           PLAYWRIGHT_TEST_BASE_URL: http://localhost:3000
           CI: true

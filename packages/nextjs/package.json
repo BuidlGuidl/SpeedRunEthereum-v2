@@ -14,7 +14,7 @@
     "serve": "next start",
     "start": "next dev",
     "test": "playwright test",
-    "test-synpress": "yarn exec synpress",
+    "cache-synpress": "yarn exec synpress",
     "test-ui": "playwright test --ui",
     "vercel": "vercel --build-env YARN_ENABLE_IMMUTABLE_INSTALLS=false --build-env ENABLE_EXPERIMENTAL_COREPACK=1 --build-env VERCEL_TELEMETRY_DISABLED=1",
     "vercel:login": "vercel login",
