@@ -11,6 +11,9 @@ image: "/assets/guides/approve-pattern.jpg"
 - **Best practices:** Use the "approve-to-zero-then-set" pattern, avoid unlimited approvals, leverage ERC20Permit if available, and regularly review allowances.
 - **For devs:** Guide users to safe patterns, use OpenZeppelin, and educate on risks.
 
+![ERC20 Token Transfer Process](/assets/guides/erc20-token-transfer-process.png)
+_Figure: High-level ERC20 approve and transferFrom sequence._
+
 ---
 
 ## 1. Why Token Approvals are Important
@@ -35,6 +38,9 @@ The ERC20 standard defines three key functions for delegated transfers:
 
 1. User calls `approve(spender, amount)` on the token contract.
 2. dApp contract calls `transferFrom(user, dApp, amount)` to pull tokens.
+
+![Basic approve/transferFrom flow](/assets/guides/basic-approve-transferFrom-flow.png)
+_Figure: Wallet approves a spender, then the dApp pulls tokens via transferFrom._
 
 **Solidity Example:**
 
@@ -78,6 +84,9 @@ IERC20(token).transferFrom(user, dApp, amount); // dApp spends tokens
 
 > **UI Spoofing Warning:** Attackers may use fake UIs or compromised frontends to trick you into approving malicious contracts. Always double-check spender addresses and be wary of unexpected approval requests.
 
+![Allowance race condition and safe pattern](/assets/guides/race-condition.png)
+_Figure: Naive N→M allowance change can be front‑run; approve‑to‑zero‑then‑set removes the window._
+
 ### Real-World Exploits: Why Security Matters
 
 - **SHOPX Protocol (2022):** Lost $7M due to an unlimited approval exploit—attackers drained user wallets after a contract vulnerability.
@@ -112,6 +121,10 @@ These incidents show that improper use of approve/allowance can have devastating
   - If supported, use `permit()` for gasless, signature-based approvals—improves UX and security.
 - **Leverage Permit2 for Universal Signature Approvals:**
   - [Permit2](https://docs.uniswap.org/contracts/permit2/overview) (by Uniswap) enables signature-based approvals for any ERC20 token, even those not supporting EIP-2612. Users grant a one-time approval to the Permit2 contract, then sign off-chain messages for granular, time-limited approvals to DApps. This improves UX but introduces a powerful master approval—users and DApps must treat Permit2 with the same caution as any major contract. Always verify spender addresses and signature details.
+
+![Permit2 flow](/assets/guides/permit2-flow.png)
+_Figure: One-time token approval to Permit2, followed by per-action signatures authorizing dApps._
+
 - **Explore Temporary Approvals (ERC-7674):**
   - The emerging [ERC-7674](https://eips.ethereum.org/EIPS/eip-7674) standard enables temporary, transaction-scoped approvals using EIP-1153 transient storage. This pattern, once widely adopted, will allow for highly secure, single-transaction approvals that vanish after use, reducing the risk of standing permissions.
 - **Use OpenZeppelin Libraries:**
@@ -123,6 +136,9 @@ These incidents show that improper use of approve/allowance can have devastating
   - Encourage users to review and revoke allowances when no longer needed.
 - **General Security Hygiene:**
   - Use reentrancy guards where appropriate, validate all inputs (especially addresses), and always use audited libraries for token interactions.
+
+![Enhancing Token Approval Security](/assets/guides/enhance-token-approval-security.png)
+_Figure: Visual summary of layered practices to secure token approvals._
 
 ### Advanced Mitigation Strategies
 
