@@ -1,9 +1,9 @@
-"use client";
-
-import type { ReactNode } from "react";
+import { MDXRemote } from "next-mdx-remote/rsc";
+import rehypeRaw from "rehype-raw";
+import remarkGfm from "remark-gfm";
 import { CheckCircleIcon, ClockIcon, NumberedListIcon } from "@heroicons/react/24/outline";
 import SkillLevelIcon from "~~/app/_components/SkillLevelIcon";
-import { SkillLevel } from "~~/services/database/config/types";
+import { SkillLevel } from "~~/utils/challenges";
 
 type Props = {
   title?: string;
@@ -25,11 +25,25 @@ export function ChallengeHeader({ skills, skillLevel, timeToComplete, prerequisi
           <div className="font-semibold mb-3 text-primary">Skills you&apos;ll gain</div>
           <div className="flex-1 flex items-center">
             {skills && skills.length > 0 ? (
-              <ul className="space-y-3 text-sm">
+              <ul className="space-y-2 text-sm">
                 {skills.slice(0, 4).map(skill => (
                   <li key={skill} className="flex items-start gap-2">
-                    <CheckCircleIcon className="w-5 h-5 text-primary mt-0.5 shrink-0" />
-                    <span className="flex-1 min-w-0 break-words whitespace-normal">{renderInlineMarkdown(skill)}</span>
+                    <CheckCircleIcon className="w-5 h-5 text-primary self-start shrink-0" />
+                    <div className="flex-1 min-w-0 break-words whitespace-normal leading-5">
+                      <MDXRemote
+                        source={skill}
+                        options={{
+                          mdxOptions: {
+                            rehypePlugins: [rehypeRaw],
+                            remarkPlugins: [remarkGfm],
+                            format: "md",
+                          },
+                        }}
+                        components={{
+                          p: (props: any) => <p className="m-0">{props.children}</p>,
+                        }}
+                      />
+                    </div>
                   </li>
                 ))}
               </ul>
@@ -46,7 +60,7 @@ export function ChallengeHeader({ skills, skillLevel, timeToComplete, prerequisi
               <SkillLevelIcon level={skillLevel} className="w-8 h-8 text-primary" />
               <div className="flex-1">
                 <div className="text-sm">Skill level</div>
-                <div className="font-semibold">{formatSkillLevel(skillLevel)}</div>
+                <div className="font-semibold">{skillLevel}</div>
               </div>
             </div>
 
@@ -67,7 +81,12 @@ export function ChallengeHeader({ skills, skillLevel, timeToComplete, prerequisi
                     {prerequisites.map((item, idx) => (
                       <li key={`${item.text}-${idx}`} className="break-words whitespace-normal">
                         {item.url ? (
-                          <a href={item.url} className="link text-primary font-semibold">
+                          <a
+                            href={item.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="link text-primary font-semibold"
+                          >
                             {item.text}
                           </a>
                         ) : (
@@ -86,34 +105,4 @@ export function ChallengeHeader({ skills, skillLevel, timeToComplete, prerequisi
       </div>
     </div>
   );
-}
-function formatSkillLevel(level?: SkillLevel): string {
-  if (!level) return "-";
-  switch (level) {
-    case SkillLevel.BEGINNER:
-      return "Beginner";
-    case SkillLevel.INTERMEDIATE:
-      return "Intermediate";
-    case SkillLevel.ADVANCED:
-      return "Advanced";
-    default:
-      return String(level);
-  }
-}
-function renderInlineMarkdown(text: string): ReactNode[] {
-  const result: ReactNode[] = [];
-  const regex = /\*\*(.+?)\*\*/g;
-  let lastIndex = 0;
-  let match: RegExpExecArray | null;
-  while ((match = regex.exec(text)) !== null) {
-    if (match.index > lastIndex) {
-      result.push(text.slice(lastIndex, match.index));
-    }
-    result.push(<strong key={`b-${result.length}`}>{match[1]}</strong>);
-    lastIndex = regex.lastIndex;
-  }
-  if (lastIndex < text.length) {
-    result.push(text.slice(lastIndex));
-  }
-  return result;
 }

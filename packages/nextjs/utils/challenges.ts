@@ -1,10 +1,18 @@
-import { ChallengeId, ReviewAction, SkillLevel } from "~~/services/database/config/types";
+import { ChallengeId, ReviewAction } from "~~/services/database/config/types";
 
 export const REVIEW_ACTION_BADGE_CLASSES: Record<ReviewAction, string> = {
   [ReviewAction.ACCEPTED]: "badge-success",
   [ReviewAction.REJECTED]: "badge-error dark:bg-[#6E2A2A] dark:text-gray-200",
   [ReviewAction.SUBMITTED]: "badge-warning",
 } as const;
+
+export const SKILL_LEVELS = {
+  BEGINNER: "Beginner",
+  INTERMEDIATE: "Intermediate",
+  ADVANCED: "Advanced",
+} as const;
+
+export type SkillLevel = (typeof SKILL_LEVELS)[keyof typeof SKILL_LEVELS];
 
 type ChallengeStaticMetadata = {
   title: string;
@@ -27,7 +35,7 @@ export const CHALLENGE_METADATA: Record<string, ChallengeStaticMetadata> = {
       "Mint and transfer NFTs; Understand **ownership** in the Ethereum context",
       "Deploy to Sepolia and ship a Next.js app",
     ],
-    skillLevel: SkillLevel.BEGINNER,
+    skillLevel: SKILL_LEVELS.BEGINNER,
     timeToComplete: "30 - 60 minutes",
     prerequisites: [{ text: "Basics", url: "https://www.youtube.com/watch?v=MlJPjJQZtC8" }],
     guides: [
@@ -59,7 +67,7 @@ export const CHALLENGE_METADATA: Record<string, ChallengeStaticMetadata> = {
       "Interact with external smart contracts",
       "Use **events** to track and display onchain activity on the frontend",
     ],
-    skillLevel: SkillLevel.BEGINNER,
+    skillLevel: SKILL_LEVELS.BEGINNER,
     timeToComplete: "30 - 60 minutes",
     prerequisites: [
       {
@@ -95,7 +103,7 @@ export const CHALLENGE_METADATA: Record<string, ChallengeStaticMetadata> = {
       "Design and build a **token vending machine** that can buy and sell custom tokens",
       "See how to confirm token balances onchain and offchain",
     ],
-    skillLevel: SkillLevel.BEGINNER,
+    skillLevel: SKILL_LEVELS.BEGINNER,
     timeToComplete: "30 - 60 minutes",
     prerequisites: [
       {
@@ -134,7 +142,7 @@ export const CHALLENGE_METADATA: Record<string, ChallengeStaticMetadata> = {
       "Learn how to analyze a smart contract to **identify a vulnerability**",
       "Create an **attacking contract** to exploit a vulnerability in another contract",
     ],
-    skillLevel: SkillLevel.BEGINNER,
+    skillLevel: SKILL_LEVELS.BEGINNER,
     timeToComplete: "30 - 60 minutes",
     prerequisites: [{ text: "All previous challenges" }],
     guides: [
@@ -165,7 +173,7 @@ export const CHALLENGE_METADATA: Record<string, ChallengeStaticMetadata> = {
       "Learn about liquidity pools and impermanent loss",
       "Design and build functions for swapping tokens and providing/withdrawing liquidity",
     ],
-    skillLevel: SkillLevel.INTERMEDIATE,
+    skillLevel: SKILL_LEVELS.INTERMEDIATE,
     timeToComplete: "1-3 hours",
     prerequisites: [{ text: "All previous challenges" }],
     guides: [
@@ -197,7 +205,7 @@ export const CHALLENGE_METADATA: Record<string, ChallengeStaticMetadata> = {
       "Develop a **liquidation mechanism** to maintain the protocol's solvency",
       "Create and execute **flash loans**, a unique on-chain financial primitive",
     ],
-    skillLevel: SkillLevel.INTERMEDIATE,
+    skillLevel: SKILL_LEVELS.INTERMEDIATE,
     timeToComplete: "2-4 hours",
     prerequisites: [{ text: "All previous challenges" }],
   },
@@ -211,7 +219,7 @@ export const CHALLENGE_METADATA: Record<string, ChallengeStaticMetadata> = {
       "Learn how to manage supply and demand using dynamic interest rates",
       "Implement a **share-based system** for efficient interest calculation",
     ],
-    skillLevel: SkillLevel.ADVANCED,
+    skillLevel: SKILL_LEVELS.ADVANCED,
     timeToComplete: "2-4 hours",
     prerequisites: [{ text: "All previous challenges" }],
   },
@@ -225,7 +233,7 @@ export const CHALLENGE_METADATA: Record<string, ChallengeStaticMetadata> = {
       "Use **ERC20 tokens** to represent shares in probabilistic outcomes",
       "Develop a pricing mechanism where token prices reflect the **implied probability** of an event",
     ],
-    skillLevel: SkillLevel.ADVANCED,
+    skillLevel: SKILL_LEVELS.ADVANCED,
     timeToComplete: "2-4 hours",
     prerequisites: [{ text: "All previous challenges" }],
   },

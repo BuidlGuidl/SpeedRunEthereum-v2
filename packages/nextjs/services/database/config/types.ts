@@ -26,12 +26,6 @@ export enum ChallengeId {
   STATE_CHANNELS = "state-channels",
 }
 
-export enum SkillLevel {
-  BEGINNER = "beginner",
-  INTERMEDIATE = "intermediate",
-  ADVANCED = "advanced",
-}
-
 export enum BatchStatus {
   CLOSED = "closed",
   OPEN = "open",
