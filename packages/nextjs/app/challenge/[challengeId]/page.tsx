@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
+import { ConnectAndRegisterBanner } from "./_components/ConnectAndRegisterBanner";
 import { SubmitChallengeButton } from "./_components/SubmitChallengeButton";
-import { WelcomeBanner } from "./_components/WelcomeBanner";
 import { MDXRemote } from "next-mdx-remote/rsc";
 import rehypeRaw from "rehype-raw";
 import remarkGfm from "remark-gfm";
@@ -51,7 +51,6 @@ export default async function ChallengePage(props: { params: Promise<{ challenge
 
   return (
     <div className="flex flex-col items-center py-8 px-5 xl:p-12 relative max-w-[100vw]">
-      <WelcomeBanner />
       {challengeReadme ? (
         <>
           <div className="prose dark:prose-invert max-w-fit break-words lg:max-w-[850px]">
@@ -95,7 +94,12 @@ export default async function ChallengePage(props: { params: Promise<{ challenge
       ) : (
         <div>Failed to load challenge content</div>
       )}
-      {challenge.autograding && <SubmitChallengeButton challengeId={challenge.id} />}
+      {challenge.autograding && (
+        <>
+          <ConnectAndRegisterBanner />
+          <SubmitChallengeButton challengeId={challenge.id} />
+        </>
+      )}
       {challenge.externalLink && (
         <div className="fixed bottom-8 inset-x-0 mx-auto w-fit">
           <button className="btn btn-sm sm:btn-md btn-primary text-secondary px-3 sm:px-4 mt-2 text-xs sm:text-sm">
