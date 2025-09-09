@@ -53,7 +53,7 @@ export const ConnectAndRegisterBanner = () => {
               <RainbowKitCustomConnectButton />
             ) : (
               <button
-                className="flex items-center justify-center py-1.5 lg:py-2 px-3 lg:px-8 border-2 border-primary rounded-full bg-base-300 hover:bg-base-200 transition-colors cursor-pointer mt-4"
+                className="flex items-center justify-center py-1.5 lg:py-2 px-3 lg:px-8 border-2 border-primary rounded-full bg-base-300 hover:bg-base-200 transition-colors cursor-pointer"
                 onClick={() =>
                   handleRegister({
                     referrer: storedReferrer,
