@@ -1,5 +1,4 @@
-import { NextRequest, NextResponse } from "next/server";
-import { waitUntil } from "@vercel/functions";
+import { NextRequest, NextResponse, after } from "next/server";
 import { submitToAutograder } from "~~/services/autograder";
 import { ChallengeId, ReviewAction } from "~~/services/database/config/types";
 import { getChallengeById } from "~~/services/database/repositories/challenges";
@@ -66,73 +65,65 @@ export async function POST(req: NextRequest, props: { params: Promise<{ challeng
       return NextResponse.json({ error: "Failed to create submission" }, { status: 500 });
     }
 
-    // Use waitUntil for background processing
-    waitUntil(
-      (async () => {
+    // Use after for background processing
+    after(async () => {
+      try {
+        const autoGraderChallengeId = `challenge-${challenge.id}`;
+
+        const gradingResult = await submitToAutograder({
+          challengeId: autoGraderChallengeId,
+          contractUrl,
+        });
+
+        // Update the existing submission with the grading result
+        const updateResult = await updateUserChallengeById(submissionId, {
+          reviewAction: gradingResult.success ? ReviewAction.ACCEPTED : ReviewAction.REJECTED,
+          reviewComment: gradingResult.feedback,
+        });
+
+        // Check if the update was successful
+        if (!updateResult) {
+          console.error("Failed to update submission with grading result");
+          return;
+        }
+
+        console.log(`Background autograding completed for user ${userAddress}, challenge ${challengeId}`);
+      } catch (error) {
+        console.error("Error in background autograding:", error);
+        // Update the existing submission with the grading result
         try {
-          // TODO: Won't work for simple-nft-example (update se-2-challenges branch OR update database (all relations!))
-          const autoGraderChallengeId = `challenge-${challenge.id}`;
-
-          const gradingResult = await submitToAutograder({
-            challengeId: autoGraderChallengeId,
-            contractUrl,
-          });
-
-          // Update the existing submission with the grading result
-          const updateResult = await updateUserChallengeById(submissionId, {
-            reviewAction: gradingResult.success ? ReviewAction.ACCEPTED : ReviewAction.REJECTED,
-            reviewComment: gradingResult.feedback,
-          });
-
-          // Check if the update was successful
-          if (!updateResult) {
-            return NextResponse.json({ error: "Failed to update submission with grading result" }, { status: 500 });
-          }
-
-          console.log(`Background autograding completed for user ${userAddress}, challenge ${challengeId}`);
-        } catch (error) {
-          console.error("Error in background autograding:", error);
-          // Update the existing submission with the grading result
-          const updateResult = await updateUserChallengeById(submissionId, {
+          await updateUserChallengeById(submissionId, {
             reviewAction: ReviewAction.REJECTED,
             reviewComment: "There was an error while grading your submission. Please try again later.",
           });
-          if (!updateResult) {
-            return NextResponse.json(
-              { error: "Failed to update submission with grading result in error" },
-              { status: 500 },
-            );
-          }
+        } catch (updateError) {
+          console.error("Failed to update submission with error state:", updateError);
         }
-      })(),
-    );
+      }
+    });
 
-    waitUntil(
-      (async () => {
-        try {
-          const referrer = user?.referrer || undefined;
-          const originalUtmParams = user?.originalUtmParams;
+    after(async () => {
+      try {
+        const referrer = user?.referrer || undefined;
+        const originalUtmParams = user?.originalUtmParams;
 
-          await trackPlausibleEvent(
-            PlausibleEvent.CHALLENGE_SUBMISSION,
-            {
-              challengeId,
-              originalReferrer: referrer,
-              originalUtmSource: originalUtmParams?.utm_source,
-              originalUtmMedium: originalUtmParams?.utm_medium,
-              originalUtmCampaign: originalUtmParams?.utm_campaign,
-              originalUtmTerm: originalUtmParams?.utm_term,
-              originalUtmContent: originalUtmParams?.utm_content,
-            },
-            req,
-          );
-        } catch (e) {
-          console.error(
-            `Error tracking plausible event ${PlausibleEvent.CHALLENGE_SUBMISSION} for user ${userAddress}`,
-          );
-        }
-      })(),
-    );
+        await trackPlausibleEvent(
+          PlausibleEvent.CHALLENGE_SUBMISSION,
+          {
+            challengeId,
+            originalReferrer: referrer,
+            originalUtmSource: originalUtmParams?.utm_source,
+            originalUtmMedium: originalUtmParams?.utm_medium,
+            originalUtmCampaign: originalUtmParams?.utm_campaign,
+            originalUtmTerm: originalUtmParams?.utm_term,
+            originalUtmContent: originalUtmParams?.utm_content,
+          },
+          req,
+        );
+      } catch (e) {
+        console.error(`Error tracking plausible event ${PlausibleEvent.CHALLENGE_SUBMISSION} for user ${userAddress}`);
+      }
+    });
 
     // Return response immediately
     return NextResponse.json({

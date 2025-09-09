@@ -13,61 +13,36 @@ export async function checkEnsAvatarSet({ user }: SideQuestCheckArgs) {
 }
 
 export async function checkContractDeployed({ user }: SideQuestCheckArgs) {
-  try {
-    const txs = await fetchTransactions(user.userAddress, { "filter[operation_types]": "deploy" });
-    return txs.length > 0;
-  } catch (err) {
-    console.error("contractDeployed check failed", err);
-    return false;
-  }
+  const txs = await fetchTransactions(user.userAddress, { "filter[operation_types]": "deploy" });
+  return txs.length > 0;
 }
 
 export async function checkSwappedOnDex({ user }: SideQuestCheckArgs) {
-  try {
-    const txs = await fetchTransactions(user.userAddress, {
-      "filter[operation_types]": "trade",
-      "filter[asset_types]": "fungible",
-    });
-    return txs.length > 0;
-  } catch (err) {
-    console.error("swappedOnDex check failed", err);
-    return false;
-  }
+  const txs = await fetchTransactions(user.userAddress, {
+    "filter[operation_types]": "trade",
+    "filter[asset_types]": "fungible",
+  });
+  return txs.length > 0;
 }
 
 export async function checkMintedNFT({ user }: SideQuestCheckArgs) {
-  try {
-    const txs = await fetchTransactions(user.userAddress, {
-      "filter[operation_types]": "mint",
-      "filter[asset_types]": "nft",
-    });
-    return txs.length > 0;
-  } catch (err) {
-    console.error("mintedNFT check failed", err);
-    return false;
-  }
+  const txs = await fetchTransactions(user.userAddress, {
+    "filter[operation_types]": "mint",
+    "filter[asset_types]": "nft",
+  });
+  return txs.length > 0;
 }
 
 export async function checkUsedL2({ user }: SideQuestCheckArgs) {
-  try {
-    const txs = await fetchTransactions(user.userAddress, {
-      "filter[chain_ids]": L2_CHAIN_IDS,
-    });
-    return txs.length > 0;
-  } catch (err) {
-    console.error("usedL2 check failed", err);
-    return false;
-  }
+  const txs = await fetchTransactions(user.userAddress, {
+    "filter[chain_ids]": L2_CHAIN_IDS,
+  });
+  return txs.length > 0;
 }
 
 export async function checkSentMainnetTx({ user }: SideQuestCheckArgs) {
-  try {
-    const txs = await fetchTransactions(user.userAddress, {
-      "filter[chain_ids]": "ethereum",
-    });
-    return txs.length > 0;
-  } catch (err) {
-    console.error("sentMainnetTx check failed", err);
-    return false;
-  }
+  const txs = await fetchTransactions(user.userAddress, {
+    "filter[chain_ids]": "ethereum",
+  });
+  return txs.length > 0;
 }

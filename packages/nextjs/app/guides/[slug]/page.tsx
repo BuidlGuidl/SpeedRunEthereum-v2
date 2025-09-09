@@ -30,11 +30,11 @@ export default async function GuidePage(props: { params: Promise<{ slug: string 
   }
 
   return (
-    <div className="flex flex-col gap-8 p-4 max-w-[900px] mx-auto">
-      <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-8 px-4 pb-4 max-w-[900px] mx-auto">
+      <div className="rounded-b-xl bg-white dark:bg-base-100/50 shadow-sm p-6 sm:p-12">
         <h1 className="text-4xl font-bold">{guide.title}</h1>
+        <div className="prose dark:prose-invert max-w-none mt-4">{guide.content}</div>
       </div>
-      <div className="prose dark:prose-invert max-w-none">{guide.content}</div>
     </div>
   );
 }
