@@ -1,5 +1,4 @@
-import { NextResponse } from "next/server";
-import { waitUntil } from "@vercel/functions";
+import { NextResponse, after } from "next/server";
 import { InferInsertModel } from "drizzle-orm";
 import { users } from "~~/services/database/config/schema";
 import { UserUpdate, createUser, isUserRegistered, updateUser } from "~~/services/database/repositories/users";
@@ -43,50 +42,42 @@ export async function POST(req: Request) {
     const user = await createUser(userToCreate);
 
     // Background processing
-    waitUntil(
-      (async () => {
-        try {
-          await trackPlausibleEvent(
-            PlausibleEvent.SIGNUP_SRE,
-            {
-              originalReferrer: referrer ?? undefined,
-              originalUtmSource: originalUtmParams?.utm_source,
-              originalUtmMedium: originalUtmParams?.utm_medium,
-              originalUtmCampaign: originalUtmParams?.utm_campaign,
-              originalUtmTerm: originalUtmParams?.utm_term,
-              originalUtmContent: originalUtmParams?.utm_content,
-            },
-            req,
-          );
-          // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        } catch (e) {
-          console.error(`Error tracking plausible event ${PlausibleEvent.SIGNUP_SRE} for user ${address}`);
-        }
-      })(),
-    );
+    after(async () => {
+      try {
+        await trackPlausibleEvent(
+          PlausibleEvent.SIGNUP_SRE,
+          {
+            originalReferrer: referrer ?? undefined,
+            originalUtmSource: originalUtmParams?.utm_source,
+            originalUtmMedium: originalUtmParams?.utm_medium,
+            originalUtmCampaign: originalUtmParams?.utm_campaign,
+            originalUtmTerm: originalUtmParams?.utm_term,
+            originalUtmContent: originalUtmParams?.utm_content,
+          },
+          req,
+        );
+      } catch (e) {
+        console.error(`Error tracking plausible event ${PlausibleEvent.SIGNUP_SRE} for user ${address}`);
+      }
+    });
 
-    waitUntil(
-      (async () => {
-        try {
-          const { ensData } = await fetchOnchainData(address);
+    after(async () => {
+      try {
+        const { ensData, sideQuestsSnapshot } = await fetchOnchainData(user);
 
-          // Update user with ENS data if we have any
-          if (ensData.name || ensData.avatar) {
-            const updateData: UserUpdate = {
-              ens: ensData.name ?? undefined,
-              ensAvatar: ensData.avatar ?? undefined,
-            };
+        const updateData: UserUpdate = {
+          ens: ensData?.name || undefined,
+          ensAvatar: ensData?.avatar || undefined,
+          sideQuestsSnapshot,
+        };
 
-            await updateUser(address, updateData);
-            console.log(
-              `ENS data updated for user ${address}: ${ensData.name ? `name: ${ensData.name}` : ""} ${ensData.avatar ? `avatar: ${ensData.avatar}` : ""}`,
-            );
-          }
-        } catch (error) {
-          console.error(`Error in background processing for user ${address}:`, error);
-        }
-      })(),
-    );
+        await updateUser(address, updateData);
+
+        console.log(`${Object.keys(updateData).join(", ")} updated for user ${address}`);
+      } catch (error) {
+        console.error(`Error in background processing for user ${address}:`, error);
+      }
+    });
 
     return NextResponse.json({ user }, { status: 200 });
   } catch (error) {

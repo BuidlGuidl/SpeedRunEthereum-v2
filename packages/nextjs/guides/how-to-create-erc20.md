@@ -174,13 +174,23 @@ Once you have your `YourToken.sol` code and an environment set up:
 
 **Approve/transferFrom:**
 
+The delegated transfer mechanism allows third-party contracts (like DEXes) to transfer tokens on behalf of users. This is essential for DeFi applications.
+
 1. Owner calls `approve(spender, amount)`.
 
 2. Spender calls `transferFrom(owner, to, amount)`.
 
 3. Contract checks allowance and balances, updates them, and emits events.
 
+![ERC20 Approval and TransferFrom Flow](/assets/guides/erc20-approval-transfer.png)
+_Figure: Detailed sequence diagram showing the approve and transferFrom flow between Owner, Spender, YourToken contract, and Recipient._
+
 ## Important Tips and Best Practices
+
+Building secure and transparent tokens requires following established best practices and understanding potential security considerations.
+
+![Building Secure and Transparent Tokens](/assets/guides/secure-transparent-tokens.png)
+_Figure: Six-step chain process for building secure and transparent tokens, from OpenZeppelin usage to verification on explorers._
 
 - **Use OpenZeppelin if you are not a solidity wizard:** For standard contracts like ERC20, rely on OpenZeppelin's audited and community-vetted implementations. This significantly reduces security risks.
 - **Understand decimals:** The decimals property (defaulting to 18) is crucial. Remember that on-chain amounts are typically handled in their smallest unit (e.g., 1 token = 1 times 10<sup>18</sup> base units). User interfaces then use the decimals value for display.
