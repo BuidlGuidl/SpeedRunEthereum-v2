@@ -11,19 +11,22 @@ export function useAllBuildsInfiniteQuery({
   categoryFilter,
   typeFilter,
   nameFilter,
+  sortOrder,
 }: {
   categoryFilter: BuildCategory;
   typeFilter: BuildType;
   nameFilter: string;
+  sortOrder: string;
 }) {
   const { data, isLoading, isFetching, isFetched, refetch, fetchNextPage, hasNextPage } = useInfiniteQuery({
-    queryKey: ["all-builds", nameFilter, categoryFilter, typeFilter],
+    queryKey: ["all-builds", nameFilter, categoryFilter, typeFilter, sortOrder],
     queryFn: async ({ pageParam = 0 }) => {
       const start = (pageParam as number) * FETCH_SIZE;
       const response = await fetchBuilds({
         name: nameFilter,
         category: categoryFilter as BuildCategory,
         type: typeFilter as BuildType,
+        sortOrder,
         start,
         size: FETCH_SIZE,
       });

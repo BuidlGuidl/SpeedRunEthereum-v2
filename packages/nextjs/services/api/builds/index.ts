@@ -5,12 +5,14 @@ export const fetchBuilds = async ({
   category,
   type,
   name,
+  sortOrder,
   start,
   size,
 }: {
   category?: BuildCategory;
   type?: BuildType;
   name?: string;
+  sortOrder?: string;
   start?: number;
   size?: number;
 }) => {
@@ -18,6 +20,7 @@ export const fetchBuilds = async ({
   if (name) params.append("name", name);
   if (category) params.append("category", category);
   if (type) params.append("type", type);
+  if (sortOrder) params.append("sortOrder", sortOrder);
   if (start) params.append("start", start.toString());
   if (size) params.append("size", size.toString());
   const response = await fetch(`/api/builds?${params}`);
@@ -27,7 +30,20 @@ export const fetchBuilds = async ({
   }
 
   const buildsData = (await response.json()) as {
-    data: Array<Build & { likes: Array<{ userAddress: string }> }>;
+    data: Array<
+      Build & {
+        likes: Array<{ userAddress: string }>;
+        builders: Array<{
+          userAddress: string;
+          isOwner: boolean;
+          user?: {
+            userAddress: string;
+            ens?: string | null;
+            ensAvatar?: string | null;
+          } | null;
+        }>;
+      }
+    >;
     meta: {
       totalRowCount: string;
     };

@@ -212,12 +212,14 @@ export const getAllBuilds = async ({
   category,
   type,
   nameSearch,
+  sortOrder,
   start,
   size,
 }: {
   category?: BuildCategory;
   type?: BuildType;
   nameSearch?: string;
+  sortOrder?: string;
   start?: number;
   size?: number;
 }) => {
@@ -229,13 +231,37 @@ export const getAllBuilds = async ({
     ),
     with: {
       likes: true,
+      builders: {
+        with: {
+          user: true,
+        },
+      },
     },
-    orderBy: (builds, { desc, sql }) => [desc(sql`(SELECT COUNT(*) FROM build_likes WHERE build_id = ${builds.id})`)],
+    orderBy: (builds, { desc, asc, sql }) => {
+      switch (sortOrder) {
+        case "name":
+          return [asc(builds.name)];
+        case "date":
+          return [desc(builds.submittedTimestamp)];
+        case "likes":
+        default:
+          return [desc(sql`(SELECT COUNT(*) FROM build_likes WHERE build_id = ${builds.id})`)];
+      }
+    },
     limit: size || 48,
     offset: start,
   });
 
-  const countQuery = db.select({ count: sql<number>`count(*)` }).from(builds);
+  const countQuery = db
+    .select({ count: sql<number>`count(*)` })
+    .from(builds)
+    .where(
+      and(
+        category ? eq(builds.buildCategory, category) : undefined,
+        type ? eq(builds.buildType, type) : undefined,
+        nameSearch ? ilike(builds.name, `%${nameSearch}%`) : undefined,
+      ),
+    );
 
   const [buildsData, countResult] = await Promise.all([query, countQuery]);
 

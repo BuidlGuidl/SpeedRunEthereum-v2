@@ -7,15 +7,36 @@ import { usePathname, useRouter } from "next/navigation";
 import { LoadingSkeleton } from "./LoadingSkeleton";
 import { useDebounceValue } from "usehooks-ts";
 import { LikeBuildButton } from "~~/app/builders/[address]/_components/builds/LikeBuildButton";
+import { Address } from "~~/components/scaffold-eth";
 import { useAllBuildsInfiniteQuery } from "~~/hooks/useAllBuildsInfiniteQuery";
 import { BuildCategory, BuildType } from "~~/services/database/config/types";
+import { Build } from "~~/services/database/repositories/builds";
 
-export function AllBuilds({ searchParams }: { searchParams: { category?: BuildCategory; type?: BuildType } }) {
+// Extended Build type that includes the builders relation from the API
+type BuildWithRelations = Build & {
+  likes: Array<{ userAddress: string }>;
+  builders: Array<{
+    userAddress: string;
+    isOwner: boolean;
+    user?: {
+      userAddress: string;
+      ens?: string | null;
+      ensAvatar?: string | null;
+    } | null;
+  }>;
+};
+
+export function AllBuilds({
+  searchParams,
+}: {
+  searchParams: { category?: BuildCategory; type?: BuildType; sortOrder?: string };
+}) {
   const router = useRouter();
   const pathname = usePathname();
   const [categoryFilter, setCategoryFilter] = useState(searchParams.category || "");
   const [typeFilter, setTypeFilter] = useState(searchParams.type || "");
   const [nameFilter, setNameFilter] = useState("");
+  const [sortOrder, setSortOrder] = useState(searchParams.sortOrder || "likes");
 
   const [debouncedFilter] = useDebounceValue(nameFilter.length >= 3 ? nameFilter : "", 500);
 
@@ -23,6 +44,7 @@ export function AllBuilds({ searchParams }: { searchParams: { category?: BuildCa
     categoryFilter: categoryFilter as BuildCategory,
     typeFilter: typeFilter as BuildType,
     nameFilter: debouncedFilter,
+    sortOrder,
   });
 
   const handleCategoryChange = (category: BuildCategory) => {
@@ -55,13 +77,20 @@ export function AllBuilds({ searchParams }: { searchParams: { category?: BuildCa
     router.replace(`${pathname}?${newSearchParams.toString()}`);
   };
 
+  const handleSortOrderChange = (order: string) => {
+    setSortOrder(order);
+    const newSearchParams = new URLSearchParams(searchParams);
+    newSearchParams.set("sortOrder", order);
+    router.replace(`${pathname}?${newSearchParams.toString()}`);
+  };
+
   return (
     <div className="py-12 px-6 max-w-7xl mx-auto w-full">
       <div className="flex items-center gap-3">
         <h1 className="m-0 text-2xl font-bold lg:text-4xl">All Builds</h1>
       </div>
       <div className="mt-8">
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-3 lg:grid-cols-4 lg:gap-6">
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-4 lg:grid-cols-5 lg:gap-6">
           <div>
             <p className="mt-0 mb-1 text-sm lg:mb-2">
               {nameFilter ? "Filtering" : "Filter"} By Name{" "}
@@ -116,6 +145,19 @@ export function AllBuilds({ searchParams }: { searchParams: { category?: BuildCa
           </div>
 
           <div>
+            <p className="mt-0 mb-1 text-sm lg:mb-2">Sort By</p>
+            <select
+              className="select select-sm select-bordered w-full"
+              value={sortOrder}
+              onChange={e => handleSortOrderChange(e.target.value)}
+            >
+              <option value="likes">Most Liked</option>
+              <option value="name">Name (A-Z)</option>
+              <option value="date">Newest First</option>
+            </select>
+          </div>
+
+          <div>
             <p className="mt-0 mb-1 text-sm lg:mb-2">Total Builds</p>
             {isLoading ? (
               <div className="skeleton rounded-md w-24 h-7"></div>
@@ -126,7 +168,7 @@ export function AllBuilds({ searchParams }: { searchParams: { category?: BuildCa
         </div>
         <hr className="hidden my-6 border-base-300 lg:block" />
         <div className="mt-6">
-          <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4 lg:gap-6">
+          <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3 lg:gap-6">
             {isLoading && (
               <>
                 <LoadingSkeleton />
@@ -137,7 +179,7 @@ export function AllBuilds({ searchParams }: { searchParams: { category?: BuildCa
             )}
             {isFetched &&
               Boolean(builds.length > 0) &&
-              builds.map(build => (
+              (builds as BuildWithRelations[]).map(build => (
                 <div
                   key={build.id}
                   className="relative flex flex-col bg-base-300 rounded-xl shadow-md overflow-hidden transition hover:shadow-lg"
@@ -173,6 +215,23 @@ export function AllBuilds({ searchParams }: { searchParams: { category?: BuildCa
                       <h2 className="text-xl font-bold leading-tight line-clamp-2 flex-1">{build.name}</h2>
                     </div>
                     <p className="text-sm my-1 line-clamp-4">{build.desc}</p>
+
+                    {/* Builders section */}
+                    {build.builders && build.builders.length > 0 && (
+                      <div className="grid grid-cols-2 gap-2 mt-4 mb-2">
+                        {build.builders.map(builder => (
+                          <div key={builder.userAddress} className="min-w-0">
+                            <Address
+                              address={builder.userAddress}
+                              cachedEns={builder.user?.ens}
+                              cachedEnsAvatar={builder.user?.ensAvatar}
+                              size="xs"
+                            />
+                          </div>
+                        ))}
+                      </div>
+                    )}
+
                     <div className="flex-1" />
                     <div className="flex justify-between items-center pt-2 mt-2 w-full gap-2">
                       <Link className="btn btn-sm btn-outline grow" href={`/builds/${build.id}`}>
@@ -200,7 +259,7 @@ export function AllBuilds({ searchParams }: { searchParams: { category?: BuildCa
               </>
             )}
             {isFetched && builds.length === 0 && (
-              <div role="alert" className="alert alert-info md:col-span-2 lg:col-span-4">
+              <div role="alert" className="alert alert-info md:col-span-2 lg:col-span-3">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
