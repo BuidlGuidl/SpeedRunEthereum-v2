@@ -79,7 +79,13 @@ export const RainbowKitCustomConnectButton = () => {
               <RegisterUser />
               <button
                 className="flex items-center rounded-full bg-base-300"
-                onClick={async () => await disconnectAsync()}
+                onClick={async () => {
+                  try {
+                    await disconnectAsync();
+                  } catch (error) {
+                    console.error("Error during disconnecting:", error);
+                  }
+                }}
               >
                 <XMarkIcon className="w-6 h-6" />
               </button>
