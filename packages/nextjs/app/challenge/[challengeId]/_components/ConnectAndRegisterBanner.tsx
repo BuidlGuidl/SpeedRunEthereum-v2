@@ -21,7 +21,7 @@ export const ConnectAndRegisterBanner = () => {
   const isWalletConnected = !!connectedAddress;
 
   return (
-    <div className="fixed bottom-8 inset-x-0 mx-auto w-fit max-w-[100%] p-2">
+    <div className="fixed bottom-8 inset-x-0 mx-auto w-fit max-w-[100%] md:max-w-[650px] p-2">
       <div className="bg-base-100 border border-primary/30 rounded-lg p-4 shadow-lg">
         <div className="text-center space-y-3">
           <div className="text-sm font-semibold text-primary">🚀 Ready to submit your challenge?</div>
@@ -31,7 +31,7 @@ export const ConnectAndRegisterBanner = () => {
               <>
                 <p>
                   You&apos;re viewing this challenge as a <span className="font-bold">guest</span>. Want to start
-                  building your portfolio?
+                  building your <span className="font-bold">onchain portfolio</span>?
                 </p>
                 <p>
                   <span className="font-bold">Connect your wallet and register</span> to unlock the full
@@ -41,8 +41,8 @@ export const ConnectAndRegisterBanner = () => {
             ) : (
               <>
                 <p>
-                  <span className="font-bold">Register</span> to submit challenges, track your progress and start
-                  building your portfolio.
+                  <span className="font-bold">Register</span> to submit challenges, track your progress, join our batch
+                  program, connect with other developers, and start building your onchain portfolio.
                 </p>
               </>
             )}
