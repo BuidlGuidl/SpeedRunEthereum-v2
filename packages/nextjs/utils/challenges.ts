@@ -21,7 +21,7 @@ type ChallengeStaticMetadata = {
   skills?: string[];
   skillLevel?: SkillLevel;
   timeToComplete?: string;
-  helpfulLinks?: { text: string; url?: string }[];
+  helpfulLinks?: { text: string; url: string }[];
 };
 
 export const CHALLENGE_METADATA: Record<string, ChallengeStaticMetadata> = {

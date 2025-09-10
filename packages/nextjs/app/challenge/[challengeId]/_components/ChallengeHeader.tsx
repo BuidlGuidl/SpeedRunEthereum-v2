@@ -80,18 +80,14 @@ export function ChallengeHeader({ skills, skillLevel, timeToComplete, helpfulLin
                   <ul className="space-y-1 mt-1 text-sm">
                     {helpfulLinks.map((item, idx) => (
                       <li key={`${item.text}-${idx}`} className="break-words whitespace-normal">
-                        {item.url ? (
-                          <a
-                            href={item.url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="link text-primary font-semibold"
-                          >
-                            {item.text}
-                          </a>
-                        ) : (
-                          <span className="text-primary font-semibold">{item.text}</span>
-                        )}
+                        <a
+                          href={item.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="link text-primary font-semibold"
+                        >
+                          {item.text}
+                        </a>
                       </li>
                     ))}
                   </ul>
