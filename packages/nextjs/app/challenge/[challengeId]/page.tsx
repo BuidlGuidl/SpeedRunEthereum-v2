@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import { ChallengeHeader } from "./_components/ChallengeHeader";
 import { ConnectAndRegisterBanner } from "./_components/ConnectAndRegisterBanner";
 import { SubmitChallengeButton } from "./_components/SubmitChallengeButton";
 import { MDXRemote } from "next-mdx-remote/rsc";
@@ -7,7 +8,7 @@ import remarkGfm from "remark-gfm";
 import { ArrowTopRightOnSquareIcon } from "@heroicons/react/24/outline";
 import { ChallengeId } from "~~/services/database/config/types";
 import { getAllChallenges, getChallengeById } from "~~/services/database/repositories/challenges";
-import { fetchGithubChallengeReadme, parseGithubUrl } from "~~/services/github";
+import { fetchGithubChallengeReadme, parseGithubUrl, splitChallengeReadme } from "~~/services/github";
 import { CHALLENGE_METADATA } from "~~/utils/challenges";
 import { getMetadata } from "~~/utils/scaffold-eth/getMetadata";
 
@@ -47,6 +48,7 @@ export default async function ChallengePage(props: { params: Promise<{ challenge
   }
 
   const challengeReadme = await fetchGithubChallengeReadme(challenge.github);
+  const { headerImageMdx, restMdx } = splitChallengeReadme(challengeReadme);
   const { owner, repo, branch } = parseGithubUrl(challenge.github);
 
   return (
@@ -55,7 +57,7 @@ export default async function ChallengePage(props: { params: Promise<{ challenge
         <>
           <div className="prose dark:prose-invert max-w-fit break-words lg:max-w-[850px]">
             <MDXRemote
-              source={challengeReadme}
+              source={headerImageMdx}
               options={{
                 mdxOptions: {
                   rehypePlugins: [rehypeRaw],
@@ -65,6 +67,25 @@ export default async function ChallengePage(props: { params: Promise<{ challenge
               }}
             />
           </div>
+          <ChallengeHeader
+            skills={staticMetadata?.skills}
+            skillLevel={staticMetadata?.skillLevel}
+            timeToComplete={staticMetadata?.timeToComplete}
+            helpfulLinks={staticMetadata?.helpfulLinks}
+          />
+          <div className="prose dark:prose-invert max-w-fit break-words lg:max-w-[850px]">
+            <MDXRemote
+              source={restMdx}
+              options={{
+                mdxOptions: {
+                  rehypePlugins: [rehypeRaw],
+                  remarkPlugins: [remarkGfm],
+                  format: "md",
+                },
+              }}
+            />
+          </div>
+
           <a
             href={`https://github.com/${owner}/${repo}/tree/${branch}`}
             className="block mt-2"
