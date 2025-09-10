@@ -8,39 +8,9 @@ import remarkGfm from "remark-gfm";
 import { ArrowTopRightOnSquareIcon } from "@heroicons/react/24/outline";
 import { ChallengeId } from "~~/services/database/config/types";
 import { getAllChallenges, getChallengeById } from "~~/services/database/repositories/challenges";
-import { fetchGithubChallengeReadme, parseGithubUrl } from "~~/services/github";
+import { fetchGithubChallengeReadme, parseGithubUrl, splitChallengeReadme } from "~~/services/github";
 import { CHALLENGE_METADATA } from "~~/utils/challenges";
 import { getMetadata } from "~~/utils/scaffold-eth/getMetadata";
-
-function splitChallengeReadme(readme: string): { headerImageMdx: string; restMdx: string } {
-  const content = readme.replace(/\r\n?/g, "\n");
-  const h1Index = content.search(/^#\s.+$/m);
-  if (h1Index < 0) return { headerImageMdx: "", restMdx: content };
-
-  const h1LineEnd = (() => {
-    const n = content.indexOf("\n", h1Index);
-    return n === -1 ? content.length : n + 1;
-  })();
-
-  const afterH1 = content.slice(h1LineEnd);
-  const imgMatch = afterH1.match(/(?:!\[[^\]]*\]\([^\)]+\)|<img[\s\S]*?>)/);
-
-  if (!imgMatch || imgMatch.index === undefined) {
-    return {
-      headerImageMdx: content.slice(h1Index, h1LineEnd),
-      restMdx: content.slice(h1LineEnd),
-    };
-  }
-
-  const imgAbsEnd = h1LineEnd + imgMatch.index + imgMatch[0].length;
-  const lineEnd = content.indexOf("\n", imgAbsEnd);
-  const end = lineEnd === -1 ? imgAbsEnd : lineEnd + 1;
-
-  return {
-    headerImageMdx: content.slice(h1Index, end),
-    restMdx: content.slice(end),
-  };
-}
 
 export async function generateStaticParams() {
   const challenges = await getAllChallenges();
