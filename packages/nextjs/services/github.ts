@@ -80,3 +80,20 @@ export const fetchGithubBuildReadme = async (githubUrl: string): Promise<string 
     return undefined;
   }
 };
+
+export const splitChallengeReadme = (readme: string): { headerImageMdx: string; restMdx: string } => {
+  const content = readme.replace(/\r\n?/g, "\n");
+
+  const h1 = "^#\\s.+\\n";
+  const optionalBlank = "(?:[ \\t]*\\n)?";
+  // ![](url) or <img src="url" />
+  const img = "(?:!\\[[^\\]]*\\]\\([^\\)]+\\)|<img[\\s\\S]*?>)";
+  const trailing = "\\s*(?:\\n|$)";
+  const pattern = new RegExp(h1 + optionalBlank + img + trailing, "m");
+
+  const match = content.match(pattern);
+  if (!match || match.index === undefined) {
+    return { headerImageMdx: "", restMdx: content };
+  }
+  return { headerImageMdx: match[0], restMdx: content.slice(match.index + match[0].length) };
+};

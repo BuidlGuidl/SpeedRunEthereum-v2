@@ -1,13 +1,14 @@
 import { notFound } from "next/navigation";
+import { ChallengeHeader } from "./_components/ChallengeHeader";
+import { ConnectAndRegisterBanner } from "./_components/ConnectAndRegisterBanner";
 import { SubmitChallengeButton } from "./_components/SubmitChallengeButton";
-import { WelcomeBanner } from "./_components/WelcomeBanner";
 import { MDXRemote } from "next-mdx-remote/rsc";
 import rehypeRaw from "rehype-raw";
 import remarkGfm from "remark-gfm";
 import { ArrowTopRightOnSquareIcon } from "@heroicons/react/24/outline";
 import { ChallengeId } from "~~/services/database/config/types";
 import { getAllChallenges, getChallengeById } from "~~/services/database/repositories/challenges";
-import { fetchGithubChallengeReadme, parseGithubUrl } from "~~/services/github";
+import { fetchGithubChallengeReadme, parseGithubUrl, splitChallengeReadme } from "~~/services/github";
 import { CHALLENGE_METADATA } from "~~/utils/challenges";
 import { getMetadata } from "~~/utils/scaffold-eth/getMetadata";
 
@@ -47,16 +48,16 @@ export default async function ChallengePage(props: { params: Promise<{ challenge
   }
 
   const challengeReadme = await fetchGithubChallengeReadme(challenge.github);
+  const { headerImageMdx, restMdx } = splitChallengeReadme(challengeReadme);
   const { owner, repo, branch } = parseGithubUrl(challenge.github);
 
   return (
     <div className="flex flex-col items-center py-8 px-5 xl:p-12 relative max-w-[100vw]">
-      <WelcomeBanner />
       {challengeReadme ? (
         <>
           <div className="prose dark:prose-invert max-w-fit break-words lg:max-w-[850px]">
             <MDXRemote
-              source={challengeReadme}
+              source={headerImageMdx}
               options={{
                 mdxOptions: {
                   rehypePlugins: [rehypeRaw],
@@ -66,6 +67,25 @@ export default async function ChallengePage(props: { params: Promise<{ challenge
               }}
             />
           </div>
+          <ChallengeHeader
+            skills={staticMetadata?.skills}
+            skillLevel={staticMetadata?.skillLevel}
+            timeToComplete={staticMetadata?.timeToComplete}
+            helpfulLinks={staticMetadata?.helpfulLinks}
+          />
+          <div className="prose dark:prose-invert max-w-fit break-words lg:max-w-[850px]">
+            <MDXRemote
+              source={restMdx}
+              options={{
+                mdxOptions: {
+                  rehypePlugins: [rehypeRaw],
+                  remarkPlugins: [remarkGfm],
+                  format: "md",
+                },
+              }}
+            />
+          </div>
+
           <a
             href={`https://github.com/${owner}/${repo}/tree/${branch}`}
             className="block mt-2"
@@ -95,7 +115,12 @@ export default async function ChallengePage(props: { params: Promise<{ challenge
       ) : (
         <div>Failed to load challenge content</div>
       )}
-      {challenge.autograding && <SubmitChallengeButton challengeId={challenge.id} />}
+      {challenge.autograding && (
+        <>
+          <ConnectAndRegisterBanner />
+          <SubmitChallengeButton challengeId={challenge.id} />
+        </>
+      )}
       {challenge.externalLink && (
         <div className="fixed bottom-8 inset-x-0 mx-auto w-fit">
           <button className="btn btn-sm sm:btn-md btn-primary text-secondary px-3 sm:px-4 mt-2 text-xs sm:text-sm">
