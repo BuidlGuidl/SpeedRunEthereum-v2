@@ -7,8 +7,6 @@ export type RoadmapSection = {
   title: string;
   description: string;
   challengeIds: ChallengeId[];
-  // Optional per‑challenge XP overrides; defaults to CHALLENGE_XP when not provided
-  xpOverrides?: Partial<Record<ChallengeId, number>>;
 };
 
 export const roadmap: RoadmapSection[] = [
@@ -53,7 +51,7 @@ export const roadmap: RoadmapSection[] = [
 
 export const faqs: Array<{ q: string; a: string }> = [
   {
-    q: "Is this course really free?",
+    q: "Is this course free?",
     a: "Yes! SpeedRunEthereum is completely free. Our mission is to make Web3 development accessible to everyone. You'll get access to all challenges, guides, and community support at no cost.",
   },
   {

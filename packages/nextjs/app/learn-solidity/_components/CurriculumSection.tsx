@@ -6,6 +6,7 @@ import { CheckCircleIcon, ClockIcon } from "@heroicons/react/24/outline";
 import SkillLevelIcon from "~~/app/_components/SkillLevelIcon";
 import { roadmap } from "~~/app/learn-solidity/_components/data";
 import type { CurriculumGroup as Group, RoadmapSection as SectionData } from "~~/app/learn-solidity/_components/data";
+import type { ChallengeId } from "~~/services/database/config/types";
 import { Challenges } from "~~/services/database/repositories/challenges";
 import { CHALLENGE_METADATA } from "~~/utils/challenges";
 import type { SkillLevel } from "~~/utils/challenges";
@@ -41,9 +42,7 @@ export const CurriculumSection = ({ challenges }: { challenges: Challenges }) =>
               {roadmap
                 .filter((s: SectionData) => s.group === group)
                 .map((section: SectionData) => {
-                  const totalXp = section.challengeIds
-                    .map(id => section.xpOverrides?.[id] ?? CHALLENGE_XP)
-                    .reduce((a, b) => a + b, 0);
+                  const totalXp = section.challengeIds.length * CHALLENGE_XP;
                   return (
                     <div key={section.title} className="card bg-base-100 shadow-md overflow-hidden">
                       <div className="card-body p-5">
@@ -59,14 +58,14 @@ export const CurriculumSection = ({ challenges }: { challenges: Challenges }) =>
                           <div>
                             <h5 className="font-semibold mb-2 text-primary">🎯 Challenges</h5>
                             <ul className="space-y-2">
-                              {section.challengeIds.map((id: string) => {
+                              {section.challengeIds.map((id: ChallengeId) => {
                                 const ch = challengeById[id];
                                 if (!ch) return null;
-                                const xp =
-                                  section.xpOverrides?.[id as unknown as keyof typeof section.xpOverrides] ??
-                                  CHALLENGE_XP;
+
+                                const xp = CHALLENGE_XP;
                                 const meta = CHALLENGE_METADATA[id];
                                 const desc = meta?.description || ch.description;
+
                                 return (
                                   <li key={id}>
                                     <Link
