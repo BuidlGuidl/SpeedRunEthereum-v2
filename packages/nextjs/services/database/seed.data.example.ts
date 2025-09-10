@@ -143,7 +143,7 @@ export const seedChallenges: (typeof challenges.$inferInsert)[] = [
   {
     id: ChallengeId.ZK_VOTING,
     challengeName: "🔒 ZK Voting",
-    autograding: true,
+    autograding: false,
     description:
       "🔒 Build your own decentralized voting system using zero-knowledge proofs. Let's write a contract that allows users to vote on a topic and the results will be computed off-chain using zero-knowledge proofs.",
     sortOrder: 8,
@@ -152,7 +152,7 @@ export const seedChallenges: (typeof challenges.$inferInsert)[] = [
   {
     id: ChallengeId.ORACLES,
     challengeName: "Oracles",
-    autograding: true,
+    autograding: false,
     description:
       "🔮 Build three powerful oracle systems bringing real-world data on-chain! Level up from simple whitelist oracles to staking-based systems, and finally to optimistic oracles with challenge periods. 🛡️ Learn crucial security trade-offs while implementing dispute resolution and economic incentives.",
     sortOrder: 9,
@@ -165,7 +165,7 @@ export const seedChallenges: (typeof challenges.$inferInsert)[] = [
     autograding: false,
     description:
       '👩‍👩‍👧‍👧 Using a smart contract as a wallet we can secure assets by requiring multiple accounts to "vote" on transactions. The contract will keep track of transactions in an array of structs and owners will confirm or reject each one. Any transaction with enough confirmations can "execute".',
-    sortOrder: 10,
+    sortOrder: 100,
     previewImage: "/assets/challenges/multiSig.svg",
     externalLink: {
       link: "https://t.me/+zKllN8OlGuxmYzFh",
@@ -179,7 +179,7 @@ export const seedChallenges: (typeof challenges.$inferInsert)[] = [
     autograding: false,
     description:
       "🎨 Create a dynamic SVG NFT using a smart contract. Your contract will generate on-chain SVG images and allow users to mint their unique NFTs. ✨ Customize your SVG graphics and metadata directly within the smart contract. 🚀 Share the minting URL once your project is live!",
-    sortOrder: 11,
+    sortOrder: 101,
     previewImage: "/assets/challenges/dynamicSvgNFT.svg",
     externalLink: {
       link: "https://t.me/+mUeITJ5u7Ig0ZWJh",
