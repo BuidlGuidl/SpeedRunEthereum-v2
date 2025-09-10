@@ -7,11 +7,14 @@ import { getAllChallenges } from "~~/services/database/repositories/challenges";
 import { getAllGuides } from "~~/services/guides";
 import { getMetadata } from "~~/utils/scaffold-eth/getMetadata";
 
-export const metadata = getMetadata({
-  title: "Learn Solidity with our free Web3 Developer Course",
-  description:
-    "Master Solidity with a guided curriculum, real-world challenges, and curated guides. Learn by building on Ethereum.",
-});
+export const metadata = {
+  ...getMetadata({
+    title: "Learn Solidity with our free Web3 Developer Course",
+    description:
+      "Master Solidity with a guided curriculum, real-world challenges, and curated guides. Learn by building on Ethereum.",
+  }),
+  alternates: { canonical: "/learn-solidity" },
+};
 
 export default async function LearnSolidityPage() {
   const [challenges] = await Promise.all([getAllChallenges(), getAllGuides()]);

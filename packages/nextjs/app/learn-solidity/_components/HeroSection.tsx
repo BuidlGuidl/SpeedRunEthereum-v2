@@ -8,9 +8,9 @@ export const HeroSection = () => {
       <div className="absolute inset-0 bg-[url('/assets/home_header_clouds.svg')] bg-top bg-repeat-x bg-[length:auto_200px] sm:bg-[length:auto_300px]" />
       <div className="relative container mx-auto px-6 py-16 md:py-24 text-center">
         <h1 className="text-4xl md:text-6xl font-bold leading-tight">
-          Become a Web3 Developer
+          Learn Solidity with our
           <br className="hidden md:block" />
-          <span className="text-primary"> with our Free Solidity Course</span>
+          <span className="text-primary"> Web3 Developer Course</span>
         </h1>
         <p className="mt-6 max-w-3xl mx-auto text-base-content/80 md:text-lg">
           Master Solidity with our hands-on tutorials. Build real dApps, complete interactive challenges, and create
