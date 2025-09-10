@@ -127,16 +127,17 @@ export const seedChallenges: (typeof challenges.$inferInsert)[] = [
     autograding: true,
     description:
       "🔮 Build a prediction market where users can create questions about future outcomes for others to bet on. Users can also participate in existing markets to speculate on event results. 📊 Outcome shares can be traded, with prices adjusting dynamically based on market belief. This is possible because the smart contract acts as an automated market maker (like in the DEX challenge) and adjusts odds based on supply and demand.",
-    sortOrder: 6,
+    sortOrder: 7,
     previewImage: "/assets/challenges/predictionMarkets.svg",
   },
   {
     id: ChallengeId.STABLECOINS,
     challengeName: "💰 Stablecoins",
-    autograding: false,
+    github: "scaffold-eth/se-2-challenges:challenge-stablecoins",
+    autograding: true,
     description:
       "🪙 Build your own decentralized stablecoin. Let's write a contract that takes collateral and issues MyUSD tokens based on the value of the collateral. What happens when the collateral changes in value? If it is higher, we will be able to borrow more tokens. If it is lower, we will also build a system for liquidating the MyUSD.",
-    sortOrder: 7,
+    sortOrder: 6,
     previewImage: "/assets/challenges/stablecoins.svg",
   },
   {
