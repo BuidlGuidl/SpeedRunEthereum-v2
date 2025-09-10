@@ -56,7 +56,7 @@ export default async function ChallengePage(props: { params: Promise<{ challenge
         skills={staticMetadata?.skills}
         skillLevel={staticMetadata?.skillLevel}
         timeToComplete={staticMetadata?.timeToComplete}
-        prerequisites={staticMetadata?.prerequisites}
+        helpfulLinks={staticMetadata?.helpfulLinks}
       />
       {challengeReadme ? (
         <>

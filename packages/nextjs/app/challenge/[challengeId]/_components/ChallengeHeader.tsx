@@ -1,7 +1,7 @@
 import { MDXRemote } from "next-mdx-remote/rsc";
 import rehypeRaw from "rehype-raw";
 import remarkGfm from "remark-gfm";
-import { CheckCircleIcon, ClockIcon, NumberedListIcon } from "@heroicons/react/24/outline";
+import { CheckCircleIcon, ClockIcon, LinkIcon } from "@heroicons/react/24/outline";
 import SkillLevelIcon from "~~/app/_components/SkillLevelIcon";
 import { SkillLevel } from "~~/utils/challenges";
 
@@ -10,10 +10,10 @@ type Props = {
   skills?: string[];
   skillLevel?: SkillLevel;
   timeToComplete?: string;
-  prerequisites?: { text: string; url?: string }[];
+  helpfulLinks?: { text: string; url?: string }[];
 };
 
-export function ChallengeHeader({ skills, skillLevel, timeToComplete, prerequisites }: Props) {
+export function ChallengeHeader({ skills, skillLevel, timeToComplete, helpfulLinks }: Props) {
   if (!skills || skills.length === 0) {
     return null;
   }
@@ -73,12 +73,12 @@ export function ChallengeHeader({ skills, skillLevel, timeToComplete, prerequisi
             </div>
 
             <div className="flex items-start gap-3">
-              <NumberedListIcon className="w-8 h-8 text-primary mt-1" />
+              <LinkIcon className="w-8 h-8 text-primary mt-1" />
               <div className="flex-1">
-                <div className="text-sm">Prerequisites</div>
-                {prerequisites && prerequisites.length > 0 ? (
+                <div className="text-sm">Helpful links</div>
+                {helpfulLinks && helpfulLinks.length > 0 ? (
                   <ul className="space-y-1 mt-1 text-sm">
-                    {prerequisites.map((item, idx) => (
+                    {helpfulLinks.map((item, idx) => (
                       <li key={`${item.text}-${idx}`} className="break-words whitespace-normal">
                         {item.url ? (
                           <a

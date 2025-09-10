@@ -21,7 +21,7 @@ type ChallengeStaticMetadata = {
   skills?: string[];
   skillLevel?: SkillLevel;
   timeToComplete?: string;
-  prerequisites?: { text: string; url?: string }[];
+  helpfulLinks?: { text: string; url?: string }[];
 };
 
 export const CHALLENGE_METADATA: Record<string, ChallengeStaticMetadata> = {
@@ -36,8 +36,11 @@ export const CHALLENGE_METADATA: Record<string, ChallengeStaticMetadata> = {
       "Deploy to Sepolia and ship a Next.js app",
     ],
     skillLevel: SKILL_LEVELS.BEGINNER,
-    timeToComplete: "30 - 60 minutes",
-    prerequisites: [{ text: "Basics", url: "https://www.youtube.com/watch?v=MlJPjJQZtC8" }],
+    timeToComplete: "1 - 4 hours",
+    helpfulLinks: [
+      { text: "Blockchain Basics", url: "https://www.youtube.com/watch?v=MlJPjJQZtC8" },
+      { text: "Web2 to Web3 Series", url: "https://www.youtube.com/playlist?list=PLJz1HruEnenAf80uOfDwBPqaliJkjKg69" },
+    ],
     guides: [
       {
         title: "ERC721 vs. ERC1155: Key Differences, Use Cases & How to Choose",
@@ -68,10 +71,15 @@ export const CHALLENGE_METADATA: Record<string, ChallengeStaticMetadata> = {
       "Use **events** to track and display onchain activity on the frontend",
     ],
     skillLevel: SKILL_LEVELS.BEGINNER,
-    timeToComplete: "30 - 60 minutes",
-    prerequisites: [
+    timeToComplete: "3 - 8 hours",
+    helpfulLinks: [
       {
-        text: "Previous challenge",
+        text: "Previous Challenge",
+        url: "/challenge/simple-nft-example",
+      },
+      {
+        text: "Solidity by Example",
+        url: "https://solidity-by-example.org/",
       },
     ],
     guides: [
@@ -104,10 +112,15 @@ export const CHALLENGE_METADATA: Record<string, ChallengeStaticMetadata> = {
       "See how to confirm token balances onchain and offchain",
     ],
     skillLevel: SKILL_LEVELS.BEGINNER,
-    timeToComplete: "30 - 60 minutes",
-    prerequisites: [
+    timeToComplete: "3 - 8 hours",
+    helpfulLinks: [
       {
-        text: "All previous challenges",
+        text: "Previous Challenge",
+        url: "/challenge/decentralized-staking",
+      },
+      {
+        text: "ERC20 Token Standard",
+        url: "https://ethereum.org/developers/docs/standards/tokens/erc-20/",
       },
     ],
     guides: [
@@ -143,8 +156,8 @@ export const CHALLENGE_METADATA: Record<string, ChallengeStaticMetadata> = {
       "Create an **attacking contract** to exploit a vulnerability in another contract",
     ],
     skillLevel: SKILL_LEVELS.BEGINNER,
-    timeToComplete: "30 - 60 minutes",
-    prerequisites: [{ text: "All previous challenges" }],
+    timeToComplete: "2 - 6 hours",
+    helpfulLinks: [{ text: "Randomness in Solidity", url: "/guides/blockchain-randomness-solidity" }],
     guides: [
       {
         title: "Commit-Reveal Scheme in Solidity",
@@ -174,8 +187,14 @@ export const CHALLENGE_METADATA: Record<string, ChallengeStaticMetadata> = {
       "Design and build functions for swapping tokens and providing/withdrawing liquidity",
     ],
     skillLevel: SKILL_LEVELS.INTERMEDIATE,
-    timeToComplete: "1-3 hours",
-    prerequisites: [{ text: "All previous challenges" }],
+    timeToComplete: "3 - 10 hours",
+    helpfulLinks: [
+      { text: "Video Overview", url: "https://www.youtube.com/watch?v=eP5w6Ger1EQ" },
+      {
+        text: "Original Tutorial",
+        url: "https://medium.com/@austin_48503/%EF%B8%8F-minimum-viable-exchange-d84f30bd0c90",
+      },
+    ],
     guides: [
       {
         title: "Automated Market Makers (AMMs): Math, Risks & Solidity Code",
@@ -206,8 +225,11 @@ export const CHALLENGE_METADATA: Record<string, ChallengeStaticMetadata> = {
       "Create and execute **flash loans**, a unique on-chain financial primitive",
     ],
     skillLevel: SKILL_LEVELS.INTERMEDIATE,
-    timeToComplete: "2-4 hours",
-    prerequisites: [{ text: "All previous challenges" }],
+    timeToComplete: "4 - 10 hours",
+    helpfulLinks: [
+      { text: "DeFiSaver (simulation)", url: "https://app.defisaver.com/aave" },
+      { text: "Flash Loan Exploits", url: "/guides/flash-loan-exploits" },
+    ],
   },
   [ChallengeId.STABLECOINS]: {
     title: "Build a Stablecoin in Solidity",
@@ -220,8 +242,17 @@ export const CHALLENGE_METADATA: Record<string, ChallengeStaticMetadata> = {
       "Implement a **share-based system** for efficient interest calculation",
     ],
     skillLevel: SKILL_LEVELS.ADVANCED,
-    timeToComplete: "2-4 hours",
-    prerequisites: [{ text: "All previous challenges" }],
+    timeToComplete: "4 - 12 hours",
+    helpfulLinks: [
+      {
+        text: "RAI Overview",
+        url: "https://ameensol.medium.com/a-money-god-raises-rai-is-live-on-ethereum-mainnet-f9aff2b1d331",
+      },
+      {
+        text: "LUSD Documentation",
+        url: "https://docs.liquity.org/liquity-v1/faq/borrowing",
+      },
+    ],
   },
   [ChallengeId.PREDICTION_MARKETS]: {
     title: "Create a Prediction Market in Solidity",
@@ -234,8 +265,14 @@ export const CHALLENGE_METADATA: Record<string, ChallengeStaticMetadata> = {
       "Develop a pricing mechanism where token prices reflect the **implied probability** of an event",
     ],
     skillLevel: SKILL_LEVELS.ADVANCED,
-    timeToComplete: "2-4 hours",
-    prerequisites: [{ text: "All previous challenges" }],
+    timeToComplete: "4 - 12 hours",
+    helpfulLinks: [
+      {
+        text: "Terminology",
+        url: "https://projects.iq.harvard.edu/files/yiling/files/ec-tutorial-prediction-markets-2007-1.pdf",
+      },
+      { text: "Polymarket", url: "https://polymarket.com/" },
+    ],
   },
   [ChallengeId.DEPLOY_TO_L2]: {
     title: "Deploy Solidity Smart Contracts to Layer 2",
