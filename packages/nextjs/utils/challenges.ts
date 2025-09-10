@@ -183,8 +183,8 @@ export const CHALLENGE_METADATA: Record<string, ChallengeStaticMetadata> = {
       "Step-by-step tutorial to build your own DEX with liquidity pools, token swapping, and automated market making in Solidity.",
     skills: [
       "Build and understand an **Automated Market Maker (AMM)**",
-      "Learn about liquidity pools and impermanent loss",
-      "Design and build functions for swapping tokens and providing/withdrawing liquidity",
+      "Learn about **liquidity pools** and **impermanent loss**",
+      "Design and build functions for **swapping tokens** and providing/withdrawing liquidity",
     ],
     skillLevel: SKILL_LEVELS.INTERMEDIATE,
     timeToComplete: "3 - 10 hours",

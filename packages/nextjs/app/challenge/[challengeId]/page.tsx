@@ -12,6 +12,36 @@ import { fetchGithubChallengeReadme, parseGithubUrl } from "~~/services/github";
 import { CHALLENGE_METADATA } from "~~/utils/challenges";
 import { getMetadata } from "~~/utils/scaffold-eth/getMetadata";
 
+function splitChallengeReadme(readme: string): { headerImageMdx: string; restMdx: string } {
+  const content = readme.replace(/\r\n?/g, "\n");
+  const h1Index = content.search(/^#\s.+$/m);
+  if (h1Index < 0) return { headerImageMdx: "", restMdx: content };
+
+  const h1LineEnd = (() => {
+    const n = content.indexOf("\n", h1Index);
+    return n === -1 ? content.length : n + 1;
+  })();
+
+  const afterH1 = content.slice(h1LineEnd);
+  const imgMatch = afterH1.match(/(?:!\[[^\]]*\]\([^\)]+\)|<img[\s\S]*?>)/);
+
+  if (!imgMatch || imgMatch.index === undefined) {
+    return {
+      headerImageMdx: content.slice(h1Index, h1LineEnd),
+      restMdx: content.slice(h1LineEnd),
+    };
+  }
+
+  const imgAbsEnd = h1LineEnd + imgMatch.index + imgMatch[0].length;
+  const lineEnd = content.indexOf("\n", imgAbsEnd);
+  const end = lineEnd === -1 ? imgAbsEnd : lineEnd + 1;
+
+  return {
+    headerImageMdx: content.slice(h1Index, end),
+    restMdx: content.slice(end),
+  };
+}
+
 export async function generateStaticParams() {
   const challenges = await getAllChallenges();
 
@@ -48,21 +78,16 @@ export default async function ChallengePage(props: { params: Promise<{ challenge
   }
 
   const challengeReadme = await fetchGithubChallengeReadme(challenge.github);
+  const { headerImageMdx, restMdx } = splitChallengeReadme(challengeReadme);
   const { owner, repo, branch } = parseGithubUrl(challenge.github);
 
   return (
     <div className="flex flex-col items-center py-8 px-5 xl:p-12 relative max-w-[100vw]">
-      <ChallengeHeader
-        skills={staticMetadata?.skills}
-        skillLevel={staticMetadata?.skillLevel}
-        timeToComplete={staticMetadata?.timeToComplete}
-        helpfulLinks={staticMetadata?.helpfulLinks}
-      />
       {challengeReadme ? (
         <>
           <div className="prose dark:prose-invert max-w-fit break-words lg:max-w-[850px]">
             <MDXRemote
-              source={challengeReadme}
+              source={headerImageMdx}
               options={{
                 mdxOptions: {
                   rehypePlugins: [rehypeRaw],
@@ -72,6 +97,25 @@ export default async function ChallengePage(props: { params: Promise<{ challenge
               }}
             />
           </div>
+          <ChallengeHeader
+            skills={staticMetadata?.skills}
+            skillLevel={staticMetadata?.skillLevel}
+            timeToComplete={staticMetadata?.timeToComplete}
+            helpfulLinks={staticMetadata?.helpfulLinks}
+          />
+          <div className="prose dark:prose-invert max-w-fit break-words lg:max-w-[850px]">
+            <MDXRemote
+              source={restMdx}
+              options={{
+                mdxOptions: {
+                  rehypePlugins: [rehypeRaw],
+                  remarkPlugins: [remarkGfm],
+                  format: "md",
+                },
+              }}
+            />
+          </div>
+
           <a
             href={`https://github.com/${owner}/${repo}/tree/${branch}`}
             className="block mt-2"
