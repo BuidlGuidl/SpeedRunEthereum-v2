@@ -20,8 +20,18 @@ export const SIDEQUEST_IDS = [
 ] as const;
 
 export const SIDEQUESTS: Record<SideQuestId, SideQuestMeta> = {
-  ensRegistered: { id: "ensRegistered", name: "Register an ENS name", check: checkEnsRegistered },
-  ensAvatarSet: { id: "ensAvatarSet", name: "Set an ENS avatar", check: checkEnsAvatarSet },
+  ensRegistered: {
+    id: "ensRegistered",
+    name: "Register an ENS name",
+    check: checkEnsRegistered,
+    link: "/guides/register-ens-domain-set-avatar#3-how-to-register-an-ens-address-eth",
+  },
+  ensAvatarSet: {
+    id: "ensAvatarSet",
+    name: "Set an ENS avatar",
+    check: checkEnsAvatarSet,
+    link: "/guides/register-ens-domain-set-avatar#6-set-your-ens-avatar-three-options",
+  },
   contractDeployed: { id: "contractDeployed", name: "Deploy a Contract", check: checkContractDeployed },
   swappedOnDex: { id: "swappedOnDex", name: "Swap on a DEX", check: checkSwappedOnDex },
   usedL2: { id: "usedL2", name: "Use an L2", check: checkUsedL2 },

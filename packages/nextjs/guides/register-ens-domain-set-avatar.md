@@ -28,6 +28,8 @@ ENS (Ethereum Name Service) lets you replace `0x...` addresses with a **human‑
 
 ---
 
+<span id="3-how-to-register-an-ens-address-eth"></span>
+
 ## 3. How to Register an ENS Address (.eth)
 
 You’ll use the official **ENS Manager** at [ENS App](https://app.ens.domains) and complete a secure, two‑step process ([commit -> reveal](/guides/commit-reveal-scheme)) that prevents front‑running.
@@ -109,6 +111,8 @@ Steps
 - Select your ENS name from the dropdown and confirm the transaction
 
 ---
+
+<span id="6-set-your-ens-avatar-three-options"></span>
 
 ## 6. Set Your ENS Avatar (Three Options)
 
