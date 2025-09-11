@@ -30,7 +30,7 @@ export const SIDEQUESTS: Record<SideQuestId, SideQuestMeta> = {
     id: "ensAvatarSet",
     name: "Set an ENS avatar",
     check: checkEnsAvatarSet,
-    link: "/guides/register-ens-domain-set-avatar#6-set-your-ens-avatar-three-options",
+    link: "/guides/register-ens-domain-set-avatar#6-set-your-ens-avatar",
   },
   contractDeployed: { id: "contractDeployed", name: "Deploy a Contract", check: checkContractDeployed },
   swappedOnDex: { id: "swappedOnDex", name: "Swap on a DEX", check: checkSwappedOnDex },

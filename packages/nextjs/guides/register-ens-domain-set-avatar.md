@@ -11,6 +11,7 @@ image: "/assets/guides/how-to-register-ens-set-avatar.jpg"
 - **Set Primary Name (reverse record)** to map your wallet → `yourname.eth`
 - **Set ENS avatar** via NFT (eip155 URI), IPFS (`ipfs://...`), or HTTPS (`https://...`) in text records
 - Use a **fresh address** if you want to avoid linking prior on‑chain history
+- Bookmark **renewal reminders**; consider multi‑year registrations (renew anytime). After expiration: 90‑day grace, then a premium decay, then normal price
 
 ---
 
@@ -65,6 +66,10 @@ _Figure: Choose registration duration and optionally set your Primary Name._
 - You can register for multiple years to reduce renewal overhead
 - Can pay with credit and debit card if you don't have ETH
 
+> **Primary Name not showing in dapps?**
+>
+> Ensure the reverse record (Primary Name) is set to your ENS and your wallet is connected on the same chain
+
 ---
 
 ## 4. Pricing and Annual Costs
@@ -112,15 +117,30 @@ Steps
 
 ---
 
-<span id="6-set-your-ens-avatar-three-options"></span>
+<span id="6-set-your-ens-avatar"></span>
 
-## 6. Set Your ENS Avatar (Three Options)
+## 6. Set Your ENS Avatar
+
+### 6.1. Set the avatar picture through the UI
+
+![Set ENS avatar in the ENS profile UI](/assets/guides/ens-profile-set-avatar.jpg)
+_Figure: Using the ENS App UI to set your avatar._
+
+- Open your name in [ENS App](https://app.ens.domains)
+- Go to your ENS name “Profile” and click on "Edit profile"
+- Click on the camera icon and select your avatar from an NFT or uploading an image
+- Confirm the first off-chain message and then sign the onchain transaction
+
+![ENS avatar: off-chain signature then on-chain transaction](/assets/guides/offchain-onchain-signatures.jpg)
+_Figure: First you sign an off‑chain message, then confirm the on‑chain records update._
+
+### 6.2. Add/edit your text records
 
 ENS stores avatars as a standard text record with key `avatar`. You can point it to an NFT, an IPFS file, or a standard HTTPS URL.
 
-Where to set it
+To set your text record, open your name in [ENS App](https://app.ens.domains):
 
-- Open your name in [ENS App](https://app.ens.domains) → “Records” → “Add/Edit Text Records” → Key: `avatar` → Value per method below → Save
+“Records” → Edit Text Records” → Key: `avatar` → Value per method below → Save
 
 Option A) NFT avatar (eip155 URI, verifiable on‑chain)
 
@@ -148,35 +168,14 @@ Notes
 
 ---
 
-## 7. Troubleshooting
-
-> **“Do I need to renew my ENS?”**
-
-Yes. Renew anytime. After expiration: 90‑day grace, then a premium decay, then normal price
-
-> **“Primary Name not showing in dapps?”**
-
-Ensure the reverse record (Primary Name) is set to your ENS and your wallet is connected on the same chain
-
----
-
-## 8. Official ENS Guides
+## 7. Official ENS Guides
 
 - [How to Register a .eth name](https://support.ens.domains/en/articles/7882582-how-to-register-a-eth-name)
 - [How to Set an Avatar](https://support.ens.domains/en/articles/7883271-how-to-set-an-avatar)
 
 ---
 
-## 9. Best Practices
-
-- Use a fresh wallet if you don’t want to link prior history
-- Set your Primary Name so dapps resolve `yourname.eth`
-- Prefer NFT or IPFS avatars for decentralization and verifiability
-- Bookmark renewal reminders; consider multi‑year registrations
-
----
-
-## 10. Related guides
+## 8. Related guides
 
 - [NFT Use Cases](/guides/nft-use-cases)
 - [ERC721 vs. ERC1155](/guides/erc721-vs-erc1155)
