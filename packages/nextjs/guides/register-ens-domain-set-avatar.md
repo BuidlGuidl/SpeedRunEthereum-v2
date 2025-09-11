@@ -6,11 +6,11 @@ image: "/assets/guides/how-to-register-ens-set-avatar.jpg"
 
 ## TL;DR:
 
-- **Register ENS address (.eth)** at the [official app](https://app.ens.domains), then complete the 2‑tx commit–reveal flow
+- **Register your .eth domain** at the [official app](https://app.ens.domains), completing the 2‑tx commit–reveal flow.
 - **Pricing:** $5/yr (5+ chars), $160/yr (4 chars), $640/yr (3 chars) + gas.
-- **Set Primary Name (reverse record)** to map your wallet → `yourname.eth`
-- **Set ENS avatar** via NFT (eip155 URI), IPFS (`ipfs://...`), or HTTPS (`https://...`) in text records
-- Use a **fresh address** if you want to avoid linking prior on‑chain history
+- **Set Primary Name (reverse record)** to map your wallet address to your ENS name `yourname.eth`.
+- **Set your ENS avatar** via ENS Manager App.
+- Use a **fresh address** if you want to avoid linking prior on‑chain history.
 - Bookmark **renewal reminders**; consider multi‑year registrations (renew anytime). After expiration: 90‑day grace, then a premium decay, then normal price
 
 ---
@@ -45,7 +45,7 @@ _Figure: Search for a name and see availability._
 
 ### 3.2. Request to Register (Commit)
 
-- Click “Request to Register” and confirm the first transaction (0 ETH + gas)
+- Click "Begin” and confirm the first transaction (0 ETH + gas)
 - This posts a cryptographic commitment (your name + a secret) on‑chain
 
 ![Select years and set Primary Name during checkout](/assets/guides/register-ens-domain.jpg)
