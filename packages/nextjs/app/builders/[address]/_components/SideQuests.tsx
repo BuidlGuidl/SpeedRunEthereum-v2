@@ -8,6 +8,7 @@ type SideQuest = {
   id: string;
   name: string;
   completed: boolean;
+  link?: string;
 };
 
 type CollapseSectionProps = {
@@ -38,7 +39,13 @@ const CollapseSection = ({ title, quests, defaultExpanded = false, className = "
                 readOnly
                 className="checkbox checkbox-primary checkbox-sm cursor-default"
               />
-              <label className="text-base flex-1">{quest.name}</label>
+              {quest.link ? (
+                <a href={quest.link} className="text-base flex-1 link link-primary" target="_blank" rel="noreferrer">
+                  {quest.name}
+                </a>
+              ) : (
+                <label className="text-base flex-1">{quest.name}</label>
+              )}
             </div>
           ))}
         </div>
@@ -64,6 +71,7 @@ export const SideQuests = ({ snapshot }: { snapshot: SideQuestsSnapshot | null }
       id: sideQuest.id,
       name: sideQuest.name,
       completed: Boolean(snapshot?.[sideQuest.id]?.completedAt),
+      link: sideQuest.link,
     })),
   ];
 
@@ -71,6 +79,7 @@ export const SideQuests = ({ snapshot }: { snapshot: SideQuestsSnapshot | null }
     id: sideQuest.id,
     name: sideQuest.name,
     completed: Boolean(snapshot?.[sideQuest.id]?.completedAt),
+    link: sideQuest.link,
   }));
 
   const totalQuests = ensQuests.length + devQuests.length;
