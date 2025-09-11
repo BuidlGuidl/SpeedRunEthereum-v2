@@ -10,7 +10,7 @@ import {
   UserRole,
 } from "./config/types";
 
-export const SEED_DATA_VERSION = "1.1.6";
+export const SEED_DATA_VERSION = "1.1.7";
 
 // Using Drizzle's inferred insert types to ensure seed data
 // matches database schema requirements
@@ -127,26 +127,36 @@ export const seedChallenges: (typeof challenges.$inferInsert)[] = [
     autograding: true,
     description:
       "🔮 Build a prediction market where users can create questions about future outcomes for others to bet on. Users can also participate in existing markets to speculate on event results. 📊 Outcome shares can be traded, with prices adjusting dynamically based on market belief. This is possible because the smart contract acts as an automated market maker (like in the DEX challenge) and adjusts odds based on supply and demand.",
-    sortOrder: 6,
+    sortOrder: 7,
     previewImage: "/assets/challenges/predictionMarkets.svg",
   },
   {
     id: ChallengeId.STABLECOINS,
     challengeName: "💰 Stablecoins",
-    autograding: false,
+    github: "scaffold-eth/se-2-challenges:challenge-stablecoins",
+    autograding: true,
     description:
       "🪙 Build your own decentralized stablecoin. Let's write a contract that takes collateral and issues MyUSD tokens based on the value of the collateral. What happens when the collateral changes in value? If it is higher, we will be able to borrow more tokens. If it is lower, we will also build a system for liquidating the MyUSD.",
-    sortOrder: 7,
+    sortOrder: 6,
     previewImage: "/assets/challenges/stablecoins.svg",
   },
   {
-    id: ChallengeId.DEPLOY_TO_L2,
-    challengeName: "⚡ Deploy to Layer 2",
+    id: ChallengeId.ZK_VOTING,
+    challengeName: "🔒 ZK Voting",
     autograding: false,
     description:
-      "🚀 Ethereum L2s make blockchain apps fast and cheap, bringing us closer to mainstream adoption! Most L2s are EVM compatible, meaning your app should work seamlessly across them with little to no changes—just deploy and go! In this challenge, you will deploy an app across multiple chains, including Optimism, Base, and Arbitrum, and experience the snappy, low-cost transactions while exploring how they make building scalable apps and games easier than ever.",
+      "🔒 Build your own decentralized voting system using zero-knowledge proofs. Let's write a contract that allows users to vote on a topic and the results will be computed off-chain using zero-knowledge proofs.",
     sortOrder: 8,
-    previewImage: "/assets/challenges/deployToL2.svg",
+    previewImage: "/assets/challenges/zkVoting.svg",
+  },
+  {
+    id: ChallengeId.ORACLES,
+    challengeName: "Oracles",
+    autograding: false,
+    description:
+      "🔮 Build three powerful oracle systems bringing real-world data on-chain! Level up from simple whitelist oracles to staking-based systems, and finally to optimistic oracles with challenge periods. 🛡️ Learn crucial security trade-offs while implementing dispute resolution and economic incentives.",
+    sortOrder: 9,
+    previewImage: "/assets/challenges/oracles.svg",
   },
   {
     id: ChallengeId.MULTISIG,
@@ -155,7 +165,7 @@ export const seedChallenges: (typeof challenges.$inferInsert)[] = [
     autograding: false,
     description:
       '👩‍👩‍👧‍👧 Using a smart contract as a wallet we can secure assets by requiring multiple accounts to "vote" on transactions. The contract will keep track of transactions in an array of structs and owners will confirm or reject each one. Any transaction with enough confirmations can "execute".',
-    sortOrder: 9,
+    sortOrder: 100,
     previewImage: "/assets/challenges/multiSig.svg",
     externalLink: {
       link: "https://t.me/+zKllN8OlGuxmYzFh",
@@ -169,7 +179,7 @@ export const seedChallenges: (typeof challenges.$inferInsert)[] = [
     autograding: false,
     description:
       "🎨 Create a dynamic SVG NFT using a smart contract. Your contract will generate on-chain SVG images and allow users to mint their unique NFTs. ✨ Customize your SVG graphics and metadata directly within the smart contract. 🚀 Share the minting URL once your project is live!",
-    sortOrder: 10,
+    sortOrder: 101,
     previewImage: "/assets/challenges/dynamicSvgNFT.svg",
     externalLink: {
       link: "https://t.me/+mUeITJ5u7Ig0ZWJh",

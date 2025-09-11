@@ -274,10 +274,15 @@ export const CHALLENGE_METADATA: Record<string, ChallengeStaticMetadata> = {
       { text: "Polymarket", url: "https://polymarket.com/" },
     ],
   },
-  [ChallengeId.DEPLOY_TO_L2]: {
-    title: "Deploy Solidity Smart Contracts to Layer 2",
+  [ChallengeId.ZK_VOTING]: {
+    title: "Build a Privacy-Preserving ZK Voting dApp",
     description:
-      "Learn how to deploy and interact with Solidity smart contracts on Ethereum Layer 2 solutions for better scalability and lower gas costs.",
+      "Learn how to build a privacy-preserving ZK voting dApp where members vote anonymously using zero-knowledge proofs, Merkle trees, and nullifier hashes to prevent double voting.",
+  },
+  [ChallengeId.ORACLES]: {
+    title: "Build Decentralized Oracle Systems in Solidity",
+    description:
+      "Learn to build three fundamental oracle architectures: Whitelist, Staking, and Optimistic Oracles. Understand trade-offs between security, decentralization, and efficiency while implementing dispute resolution and economic incentive mechanisms.",
   },
   [ChallengeId.MULTISIG]: {
     title: "Build a Multisignature Wallet in Solidity",
