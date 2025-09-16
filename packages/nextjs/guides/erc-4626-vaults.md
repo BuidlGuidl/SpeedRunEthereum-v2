@@ -10,7 +10,7 @@ image: "/assets/guides/erc4626-vaults.jpg"
 - **Security hinges on `totalAssets()`**: it drives pricing for `convertToShares`/`convertToAssets`.
 - **Top risks**: first-depositor inflation, reentrancy, fee-on-transfer/rebasing tokens, oracle manipulation, rounding drift.
 - **Custom features** (fees, caps, queues, RBAC) add complexity. Design cautiously, test heavily.
-- **Build with audited libs**, implement CEI + reentrancy guards (see [OpenZeppelin ReentrancyGuard](https://docs.openzeppelin.com/contracts/5.x/api/security#ReentrancyGuard)), and write invariants/fuzz tests.
+- **Build with audited libs**, implement [Checks-Effects-Interactions(CEI)](https://docs.soliditylang.org/en/latest/security-considerations.html#reentrancy) + reentrancy guards (see [OpenZeppelin ReentrancyGuard](https://docs.openzeppelin.com/contracts/5.x/api/security#ReentrancyGuard)), and write invariants/fuzz tests.
 
 ---
 
