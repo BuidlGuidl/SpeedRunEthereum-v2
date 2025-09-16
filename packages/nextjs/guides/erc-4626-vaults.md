@@ -167,26 +167,34 @@ contract SecureVault is ReentrancyGuard {
     IERC4626Minimal public immutable vault; // wrap/extend your base ERC4626
     IERC20 public immutable underlying;
 
+    // Custom errors for gas-efficient reverts
+    error ZeroAssets();
+    error ZeroShares();
+    error TransferInFailed();
+    error TransferOutFailed();
+
     constructor(IERC4626Minimal _vault) {
         vault = _vault;
         underlying = IERC20(_vault.asset());
     }
 
     function deposit(uint256 assets, address receiver) external nonReentrant returns (uint256 shares) {
-        require(assets > 0, "ZERO_ASSETS");
+        if (assets == 0) revert ZeroAssets();
         shares = vault.previewDeposit(assets);
-        require(shares > 0, "ZERO_SHARES");
+        if (shares == 0) revert ZeroShares();
         // Pull tokens AFTER computing shares; follow CEI
-        require(underlying.transferFrom(msg.sender, address(this), assets), "TRANSFER_IN_FAIL");
+        bool ok = underlying.transferFrom(msg.sender, address(this), assets);
+        if (!ok) revert TransferInFailed();
         // Forward to underlying vault or perform accounting, then mint shares (in your ERC4626 impl)
         return shares;
     }
 
     function withdraw(uint256 assets, address receiver, address owner) external nonReentrant returns (uint256 shares) {
-        require(assets > 0, "ZERO_ASSETS");
+        if (assets == 0) revert ZeroAssets();
         shares = vault.previewWithdraw(assets);
         // Burn shares and push assets out in your ERC4626 impl
-        require(underlying.transfer(receiver, assets), "TRANSFER_OUT_FAIL");
+        bool ok = underlying.transfer(receiver, assets);
+        if (!ok) revert TransferOutFailed();
         return shares;
     }
 }
@@ -200,7 +208,7 @@ contract SecureVault is ReentrancyGuard {
 
 _Figure: CEI + nonReentrant skeleton: previews drive pricing, and token transfers occur after state calculations._
 
-### Mini Snippets: Roles and Fee Sweep (Illustrative)
+### Optional: RBAC and Simple Fee Handling (Illustrative)
 
 ```solidity
 // Role example (names vary by project)
@@ -216,26 +224,25 @@ contract Roles is AccessControl {
         _grantRole(FEE_SETTER_ROLE, admin);
     }
 }
+```
 
-// Fee sweep sketch (performed at harvest/checkpoints)
-interface IFeeSink { function onFees(uint256 amount) external; }
+> Optional pattern: accrue fees when gains are realized (for example, after `harvest`), and base fees on realized PnL only.
 
-contract FeeSweep {
-    IERC20 public immutable asset;
-    IFeeSink public feeRecipient;
-    uint256 public feeBps; // e.g., management/performance component after calc
+```solidity
+// Inside your ERC4626 vault (sketch)
+uint256 public feeBps; // basis points, e.g. 100 = 1%
+address public feeRecipient;
 
-    constructor(IERC20 _asset, IFeeSink _recipient, uint256 _feeBps) {
-        asset = _asset; feeRecipient = _recipient; feeBps = _feeBps;
-    }
-
-    function sweepFees(uint256 grossGain) external {
-        uint256 fee = (grossGain * feeBps) / 10_000;
-        if (fee > 0) {
-            require(asset.transfer(address(feeRecipient), fee), "FEE_XFER_FAIL");
-            feeRecipient.onFees(fee);
-        }
-    }
+function _accrueFees(uint256 realizedGainAssets) internal {
+    uint256 feeAssets = (realizedGainAssets * feeBps) / 10_000;
+    if (feeAssets == 0) return;
+    // Option A: mint fee shares against the gain
+    uint256 feeShares = previewDeposit(feeAssets);
+    _mint(feeRecipient, feeShares);
+    // Option B: alternatively transfer assets to feeRecipient after harvest
+    // IERC20 token = IERC20(asset()); // ERC4626 underlying asset
+    // bool ok = token.transfer(feeRecipient, feeAssets);
+    // if (!ok) revert TransferOutFailed();
 }
 ```
 
