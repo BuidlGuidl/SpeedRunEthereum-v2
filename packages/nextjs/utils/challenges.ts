@@ -99,6 +99,10 @@ export const CHALLENGE_METADATA: Record<string, ChallengeStaticMetadata> = {
         title: "A Developer's Guide to Liquid Staking Tokens (LSTs)",
         url: "/guides/liquid-staking-tokens",
       },
+      {
+        title: "ERC4626 Vaults Explained: Secure Tokenized Vault Design, Risks & Best Practices",
+        url: "/guides/erc-4626-vaults",
+      },
     ],
   },
   [ChallengeId.TOKEN_VENDOR]: {
