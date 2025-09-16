@@ -6,10 +6,10 @@ image: "/assets/guides/erc4626-vaults.jpg"
 
 ## TL;DR:
 
-- **ERC4626 standardizes tokenized vaults**: deposit assets, mint shares; redeem shares for assets.
+- **ERC4626 standardizes tokenized vaults**: deposit assets, mint shares, then redeem shares for assets.
 - **Security hinges on `totalAssets()`**: it drives pricing for `convertToShares`/`convertToAssets`.
 - **Top risks**: first-depositor inflation, reentrancy, fee-on-transfer/rebasing tokens, oracle manipulation, rounding drift.
-- **Custom features** (fees, caps, queues, RBAC) add complexity—design cautiously, test heavily.
+- **Custom features** (fees, caps, queues, RBAC) add complexity. Design cautiously, test heavily.
 - **Build with audited libs**, implement CEI + reentrancy guards, and write invariants/fuzz tests.
 
 ---
@@ -29,7 +29,7 @@ Core interface highlights:
 
 ![ERC4626 asset/share flow with strategy yield loop](/assets/guides/erc4626-asset-share-flow-diagram.png)
 
-_Figure: ERC4626 flow—deposit assets to mint shares; redeem shares to withdraw assets; strategies feed yield back to the vault._
+_Figure: ERC4626 flow: deposit assets to mint shares, redeem shares to withdraw assets, and strategies feed yield back to the vault._
 
 ---
 
@@ -51,7 +51,7 @@ Best practices:
 
 ![Sequence: deposit/redeem using totalAssets with oracle sanity checks](/assets/guides/erc4626-totalassets-oracle-sequence-diagram.png)
 
-_Figure: totalAssets() drives conversions; oracle reads should be sanity-checked and resistant to manipulation._
+_Figure: totalAssets() drives conversions, and oracle reads should be sanity-checked and resistant to manipulation._
 
 ---
 
@@ -70,62 +70,62 @@ _Figure: totalAssets() drives conversions; oracle reads should be sanity-checked
     <tr>
       <td><strong>Share Price Manipulation</strong></td>
       <td>First depositor mints 1 share, then sends large assets directly</td>
-      <td>Subsequent users get tiny shares; attacker exits with most assets</td>
-      <td>Seed with non-trivial liquidity; virtual shares/assets; min deposit; make `totalAssets()` robust</td>
+      <td>Subsequent users get tiny shares and the attacker exits with most assets</td>
+      <td>Seed with non-trivial liquidity, use virtual shares/assets, require a minimum deposit, and make `totalAssets()` robust</td>
     </tr>
     <tr>
       <td><strong>Direct Transfers to Vault</strong></td>
       <td>Assets sent to vault address outside `deposit()`</td>
       <td>Skews `totalAssets()` and share pricing if not reconciled</td>
-      <td>Reconcile external transfers; ignore unsolicited assets or treat via controlled accounting</td>
+      <td>Reconcile external transfers, ignore unsolicited assets, or handle them with controlled accounting</td>
     </tr>
     <tr>
       <td><strong>Reentrancy</strong></td>
       <td>ERC777 hooks or external calls inside hooks</td>
       <td>State corruption, theft</td>
-      <td>CEI pattern; `nonReentrant`; minimize/guard external calls</td>
+      <td>Follow CEI and `nonReentrant`, and minimize or guard external calls</td>
     </tr>
     <tr>
       <td><strong>Hook-based Reentrancy</strong></td>
       <td>Custom `beforeWithdraw`/`afterDeposit` hooks call out</td>
       <td>Cross-function reentry into sensitive logic</td>
-      <td>Avoid external calls in hooks; or guard hook paths with `nonReentrant` and strict CEI</td>
+      <td>Avoid external calls in hooks, or guard hook paths with `nonReentrant` and strict CEI</td>
     </tr>
     <tr>
       <td><strong>Non-standard Assets</strong></td>
       <td>Fee-on-transfer or rebasing tokens</td>
       <td>Price drift, accounting mismatches</td>
-      <td>Use actual-received amounts; adapt math to rebasing; prefer wrapped or disallow</td>
+      <td>Use actual-received amounts, adapt math to rebasing, and prefer wrapped tokens or disallow incompatible assets</td>
     </tr>
     <tr>
       <td><strong>Oracle Manipulation</strong></td>
       <td>Spot price manipulation or downtime</td>
       <td>Cheap mints / expensive redemptions</td>
-      <td>Decentralized oracles; TWAPs; deviation checks; circuit breakers</td>
+      <td>Use decentralized oracles, TWAPs, deviation checks, and circuit breakers</td>
     </tr>
     <tr>
       <td><strong>Rounding & Precision</strong></td>
       <td>Integer division in conversions</td>
       <td>Dust accumulation, unfairness</td>
-      <td>Multiply before divide; conservative rounding; fuzz tests</td>
+      <td>Multiply before divide, use conservative rounding, and add fuzz tests</td>
     </tr>
     <tr>
       <td><strong>DoS & Gas</strong></td>
       <td>Complex strategies in deposit/withdraw</td>
       <td>TX failures under load</td>
-      <td>Optimize strategies; isolate heavy ops; profile gas</td>
+      <td>Optimize strategies, isolate heavy operations, and profile gas</td>
     </tr>
     <tr>
       <td><strong>Malicious Token Behavior</strong></td>
       <td>Tokens revert/blacklist on `transfer/transferFrom`</td>
       <td>Deposits/withdrawals can brick</td>
-      <td>Vet assets; use `SafeERC20`; allow admin to disable/unwrap problematic tokens</td>
+      <td>Vet assets, use `SafeERC20`, and allow admins to disable or unwrap problematic tokens</td>
     </tr>
     <tr>
       <td><strong>MEV Timing / Front-running</strong></td>
       <td>Front-running deposits before a large, profitable `harvest()` and back-running withdrawals immediately after</td>
       <td>Attacker captures yield without long-term risk, diluting returns for legitimate LPs</td>
-      <td>Smooth accruals over time; use private transactions for harvests (e.g., Flashbots); short-term withdrawal lockups/fees</td>
+      <td>Smooth accruals over time, use private transactions for harvests (for example, Flashbots), and consider short-term withdrawal lockups or fees</td>
     </tr>
   </tbody>
 </table>
@@ -144,7 +144,7 @@ _Figure: totalAssets() drives conversions; oracle reads should be sanity-checked
 
 ![Customization flow: caps, harvest, fee accrual/sweep, RBAC controls](/assets/guides/erc4626-customization-caps-fees-rbac-diagram.png)
 
-_Figure: Customization flow with caps, fee accrual/sweep, and RBAC controls._
+_Figure: Customization flow with caps, fee accrual and sweep, and RBAC controls._
 
 ## 5. Solidity Example: Guarded Deposit/Withdraw Skeleton
 
@@ -198,7 +198,7 @@ contract SecureVault is ReentrancyGuard {
 
 ![CEI + nonReentrant deposit/withdraw with previews and token transfers](/assets/guides/erc4626-cei-nonreentrant-sequence-diagram.png)
 
-_Figure: CEI + nonReentrant skeleton—previews drive pricing; token transfers occur after state calculations._
+_Figure: CEI + nonReentrant skeleton: previews drive pricing, and token transfers occur after state calculations._
 
 ### Mini Snippets: Roles and Fee Sweep (Illustrative)
 
