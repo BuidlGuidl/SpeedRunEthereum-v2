@@ -1,7 +1,7 @@
+---
 title: "ERC4626 Vaults: Secure Design, Risks & Best Practices"
 description: "Developer guide to ERC4626 vaults: core functions, key risks (inflation, reentrancy, oracle), and secure fees, caps, queues with Solidity examples."
 image: "/assets/guides/liquid-staking-tokens.jpg"
-
 ---
 
 ## TL;DR:
