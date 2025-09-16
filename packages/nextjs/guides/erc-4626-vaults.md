@@ -10,13 +10,13 @@ image: "/assets/guides/erc4626-vaults.jpg"
 - **Security hinges on `totalAssets()`**: it drives pricing for `convertToShares`/`convertToAssets`.
 - **Top risks**: first-depositor inflation, reentrancy, fee-on-transfer/rebasing tokens, oracle manipulation, rounding drift.
 - **Custom features** (fees, caps, queues, RBAC) add complexity. Design cautiously, test heavily.
-- **Build with audited libs**, implement CEI + reentrancy guards, and write invariants/fuzz tests.
+- **Build with audited libs**, implement CEI + reentrancy guards (see [OpenZeppelin ReentrancyGuard](https://docs.openzeppelin.com/contracts/5.x/api/security#ReentrancyGuard)), and write invariants/fuzz tests.
 
 ---
 
 ## 1. What Is ERC4626?
 
-ERC4626 (Tokenized Vault Standard) unifies how vaults issue transferable “shares” representing a proportional claim on underlying assets. This makes integrations easier across DeFi.
+[ERC4626](https://eips.ethereum.org/EIPS/eip-4626) (Tokenized Vault Standard) unifies how vaults issue transferable “shares” representing a proportional claim on underlying assets. This makes integrations easier across DeFi.
 
 Core interface highlights:
 
@@ -262,7 +262,7 @@ contract FeeSweep {
 - **Rounding discipline** (favor vault; multiply then divide)
 - **Admin safety** (RBAC + multisig + timelocks)
 - **Comprehensive tests** (unit, fuzz, invariants, integration)
-- **Use `SafeERC20`** for transfers; validate return values consistently
+- **Use `SafeERC20`** for transfers (from [OpenZeppelin SafeERC20](https://docs.openzeppelin.com/contracts/5.x/api/token/erc20#SafeERC20)) and validate return values consistently
 - **Follow EIP-4626 rounding guidance** (conservative rounding that favors the vault)
 
 ---
