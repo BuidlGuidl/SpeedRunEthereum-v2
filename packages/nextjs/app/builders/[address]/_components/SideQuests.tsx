@@ -40,7 +40,13 @@ const CollapseSection = ({ title, quests, defaultExpanded = false, className = "
                 className="checkbox checkbox-primary checkbox-sm cursor-default"
               />
               {quest.link ? (
-                <a href={quest.link} className="text-base flex-1 link link-primary" target="_blank" rel="noreferrer">
+                <a
+                  href={quest.link}
+                  className="text-base flex-1 link link-primary text-left tooltip tooltip-top"
+                  data-tip="Read guide"
+                  target="_blank"
+                  rel="noreferrer"
+                >
                   {quest.name}
                 </a>
               ) : (
