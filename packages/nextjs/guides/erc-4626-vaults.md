@@ -25,6 +25,8 @@ Core interface highlights:
 - `convertToShares(assets)` / `convertToAssets(shares)`
 - `deposit`, `mint`, `withdraw`, `redeem`
 
+For an audited reference implementation and deeper guidance, see the [OpenZeppelin ERC4626 documentation](https://docs.openzeppelin.com/contracts/5.x/erc4626).
+
 > Tip: In most vaults, the share price is implicitly `totalAssets() / totalSupply()`. Precision and rounding rules matter.
 
 ![ERC4626 asset/share flow with strategy yield loop](/assets/guides/erc4626-asset-share-flow-diagram.png)
@@ -261,7 +263,7 @@ function _accrueFees(uint256 realizedGainAssets) internal {
 
 ## 7. Best Practices Checklist
 
-- **Use audited libraries** (Solmate, OpenZeppelin)
+- **Use audited libraries** (Solmate, OpenZeppelin). See [OZ ERC4626.sol](https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/token/ERC20/extensions/ERC4626.sol) and the [OZ ERC4626 docs](https://docs.openzeppelin.com/contracts/5.x/erc4626))
 - **Initialize fairly** (seed liquidity or virtual shares)
 - **Follow CEI** and add **`nonReentrant`**
 - **Handle non-standard tokens** (actual received; rebasing math)
