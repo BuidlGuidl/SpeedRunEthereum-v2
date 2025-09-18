@@ -1,3 +1,5 @@
+import { createElement } from "react";
+import type { ComponentPropsWithoutRef } from "react";
 import { notFound } from "next/navigation";
 import { ChallengeHeader } from "./_components/ChallengeHeader";
 import { ConnectAndRegisterBanner } from "./_components/ConnectAndRegisterBanner";
@@ -58,6 +60,10 @@ export default async function ChallengePage(props: { params: Promise<{ challenge
           <div className="prose dark:prose-invert max-w-fit break-words lg:max-w-[850px]">
             <MDXRemote
               source={headerImageMdx}
+              components={{
+                a: (props: ComponentPropsWithoutRef<"a">) =>
+                  createElement("a", { ...props, target: "_blank", rel: "noopener" }),
+              }}
               options={{
                 mdxOptions: {
                   rehypePlugins: [rehypeRaw],
@@ -76,6 +82,10 @@ export default async function ChallengePage(props: { params: Promise<{ challenge
           <div className="prose dark:prose-invert max-w-fit break-words lg:max-w-[850px]">
             <MDXRemote
               source={restMdx}
+              components={{
+                a: (props: ComponentPropsWithoutRef<"a">) =>
+                  createElement("a", { ...props, target: "_blank", rel: "noopener" }),
+              }}
               options={{
                 mdxOptions: {
                   rehypePlugins: [rehypeRaw],
