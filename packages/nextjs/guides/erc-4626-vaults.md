@@ -263,7 +263,7 @@ function _accrueFees(uint256 realizedGainAssets) internal {
 
 ## 7. Best Practices Checklist
 
-- **Use audited libraries** (Solmate, OpenZeppelin). See [OZ ERC4626.sol](https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/token/ERC20/extensions/ERC4626.sol) and the [OZ ERC4626 docs](https://docs.openzeppelin.com/contracts/5.x/erc4626))
+- **Use audited libraries** (Solmate, OpenZeppelin). See [OZ ERC4626.sol](https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/token/ERC20/extensions/ERC4626.sol) and the [OZ ERC4626 docs](https://docs.openzeppelin.com/contracts/5.x/erc4626)
 - **Initialize fairly** (seed liquidity or virtual shares)
 - **Follow CEI** and add **`nonReentrant`**
 - **Handle non-standard tokens** (actual received; rebasing math)
