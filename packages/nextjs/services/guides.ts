@@ -1,4 +1,5 @@
-import { ReactElement } from "react";
+import { ReactElement, createElement } from "react";
+import type { ComponentPropsWithoutRef } from "react";
 import fs from "fs";
 import { compileMDX } from "next-mdx-remote/rsc";
 import path from "path";
@@ -33,7 +34,13 @@ export async function getGuideBySlug(slug: string): Promise<Guide | null> {
     const fileContents = fs.readFileSync(fullPath, "utf8");
     const { frontmatter, content } = await compileMDX<GuideMetadata>({
       source: fileContents,
-      options: { parseFrontmatter: true },
+      options: {
+        parseFrontmatter: true,
+      },
+      components: {
+        a: (props: ComponentPropsWithoutRef<"a">) =>
+          createElement("a", { ...props, target: "_blank", rel: "noopener" }),
+      },
     });
 
     return {
