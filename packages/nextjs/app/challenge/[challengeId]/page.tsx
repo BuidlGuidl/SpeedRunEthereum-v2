@@ -60,10 +60,6 @@ export default async function ChallengePage(props: { params: Promise<{ challenge
           <div className="prose dark:prose-invert max-w-fit break-words lg:max-w-[850px]">
             <MDXRemote
               source={headerImageMdx}
-              components={{
-                a: (props: ComponentPropsWithoutRef<"a">) =>
-                  createElement("a", { ...props, target: "_blank", rel: "noopener" }),
-              }}
               options={{
                 mdxOptions: {
                   rehypePlugins: [rehypeRaw],
