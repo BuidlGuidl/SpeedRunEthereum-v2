@@ -12,7 +12,7 @@ export enum UserRole {
 }
 
 export enum ChallengeId {
-  SIMPLE_NFT_EXAMPLE = "simple-nft-example",
+  TOKENIZATION = "tokenization",
   DECENTRALIZED_STAKING = "decentralized-staking",
   TOKEN_VENDOR = "token-vendor",
   DICE_GAME = "dice-game",

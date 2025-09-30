@@ -60,14 +60,14 @@ export const seedUsers: (typeof users.$inferInsert)[] = [
 
 export const seedChallenges: (typeof challenges.$inferInsert)[] = [
   {
-    id: ChallengeId.SIMPLE_NFT_EXAMPLE,
-    challengeName: "Simple NFT Example",
-    github: "scaffold-eth/se-2-challenges:challenge-simple-nft-example",
+    id: ChallengeId.TOKENIZATION,
+    challengeName: "Tokenization",
+    github: "scaffold-eth/se-2-challenges:challenge-tokenization",
     autograding: true,
     description:
-      "🎫 Create a simple NFT to learn basics of 🏗 scaffold-eth. You'll use 👷‍♀️ HardHat to compile and deploy smart contracts. Then, you'll use a template React app full of important Ethereum components and hooks. Finally, you'll deploy an NFT to a public network to share with friends! 🚀",
+      "🎫 Create a unique token to learn the basics of 🏗️ Scaffold-ETH 2. You'll use 👷‍♀️ HardHat to compile and deploy smart contracts. Then, you'll use a template React app full of important Ethereum components and hooks. Finally, you'll deploy an NFT to a public network to share with friends! 🚀",
     sortOrder: 0,
-    previewImage: "/assets/challenges/simpleNFT.svg",
+    previewImage: "/assets/challenges/tokenization.svg",
   },
   {
     id: ChallengeId.DECENTRALIZED_STAKING,
@@ -202,7 +202,7 @@ export const seedChallenges: (typeof challenges.$inferInsert)[] = [
 export const seedUserChallenges: (typeof userChallenges.$inferInsert)[] = [
   {
     userAddress: seedUsers?.[0]?.userAddress,
-    challengeId: ChallengeId.SIMPLE_NFT_EXAMPLE,
+    challengeId: ChallengeId.TOKENIZATION,
     frontendUrl: "https://dreary-use.surge.sh/",
     contractUrl: "https://sepolia.etherscan.io/address/0x7f918d7b7d0fe0d3a8de3c0570ed4e154c0096e0",
     reviewComment: "Dummy review, nice work",
@@ -242,7 +242,7 @@ export const seedUserChallenges: (typeof userChallenges.$inferInsert)[] = [
   },
   {
     userAddress: seedUsers?.[1]?.userAddress,
-    challengeId: ChallengeId.SIMPLE_NFT_EXAMPLE,
+    challengeId: ChallengeId.TOKENIZATION,
     frontendUrl: "http://simple-nft-ryuufarhan.surge.sh/",
     contractUrl: "https://goerli.etherscan.io/address/0x861346d67b728949bcb69595638a78723a2adae3",
     reviewComment: "Dummy review, nice work",
@@ -251,7 +251,7 @@ export const seedUserChallenges: (typeof userChallenges.$inferInsert)[] = [
   },
   {
     userAddress: seedUsers?.[1]?.userAddress,
-    challengeId: ChallengeId.SIMPLE_NFT_EXAMPLE,
+    challengeId: ChallengeId.TOKENIZATION,
     frontendUrl: "http://clumsy-week.surge.sh",
     contractUrl: "https://goerli.etherscan.io/address/0xe3DF14f1482074916A8Aeb40d84898C879b2B5f6",
     reviewComment: "Dummy review, nice work",
@@ -296,7 +296,7 @@ export const seedUserChallenges: (typeof userChallenges.$inferInsert)[] = [
   },
   {
     userAddress: seedUsers?.[3]?.userAddress,
-    challengeId: ChallengeId.SIMPLE_NFT_EXAMPLE,
+    challengeId: ChallengeId.TOKENIZATION,
     frontendUrl: "https://kind-fifth.surge.sh/",
     contractUrl: "https://goerli.etherscan.io/address/0xb9487f8d9E336a9468fcbb50dAF39587D0EBCA63",
     reviewComment: "Dummy review, nice work",
@@ -324,7 +324,7 @@ export const seedUserChallenges: (typeof userChallenges.$inferInsert)[] = [
   },
   {
     userAddress: seedUsers?.[4]?.userAddress,
-    challengeId: ChallengeId.SIMPLE_NFT_EXAMPLE,
+    challengeId: ChallengeId.TOKENIZATION,
     frontendUrl: "https://sepolia-optimism.etherscan.io/address/0x82b4935ebe7a5d802cf465a3495da1aff96f1153#code",
     contractUrl: "https://sepolia-optimism.etherscan.io/address/0x82b4935ebe7a5d802cf465a3495da1aff96f1153#code",
     submittedAt: new Date(1736437841322),

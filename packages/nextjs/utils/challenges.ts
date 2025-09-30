@@ -25,7 +25,7 @@ type ChallengeStaticMetadata = {
 };
 
 export const CHALLENGE_METADATA: Record<string, ChallengeStaticMetadata> = {
-  [ChallengeId.SIMPLE_NFT_EXAMPLE]: {
+  [ChallengeId.TOKENIZATION]: {
     title: "Learn How to Create an NFT in Solidity",
     description:
       "Build your first NFT smart contract in Solidity. Step-by-step tutorial to mint and deploy NFTs on Ethereum using Scaffold-ETH.",
@@ -75,7 +75,7 @@ export const CHALLENGE_METADATA: Record<string, ChallengeStaticMetadata> = {
     helpfulLinks: [
       {
         text: "Previous Challenge",
-        url: "/challenge/simple-nft-example",
+        url: "/challenge/tokenization",
       },
       {
         text: "Solidity by Example",

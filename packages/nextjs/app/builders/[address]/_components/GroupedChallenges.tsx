@@ -9,7 +9,7 @@ import type { Challenges } from "~~/services/database/repositories/challenges";
 import type { UserChallenges } from "~~/services/database/repositories/userChallenges";
 
 const basicChallengeIds = new Set<ChallengeId>([
-  ChallengeId.SIMPLE_NFT_EXAMPLE,
+  ChallengeId.TOKENIZATION,
   ChallengeId.DECENTRALIZED_STAKING,
   ChallengeId.TOKEN_VENDOR,
   ChallengeId.DICE_GAME,
