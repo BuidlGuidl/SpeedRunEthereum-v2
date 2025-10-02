@@ -271,7 +271,10 @@ export async function getUserXP(userAddress: string) {
   const hasBuilds = user?.buildBuilders && user?.buildBuilders.length > 0;
 
   const challengePoints = acceptedNonDisabledChallengesCount * CHALLENGE_XP;
-  const sideQuestPoints = Object.keys(user?.sideQuestsSnapshot || {}).length * SIDE_QUEST_XP;
+  const completedSideQuestsCount = Object.keys(user?.sideQuestsSnapshot || {}).filter(
+    key => key !== "_lastCheckedAt",
+  ).length;
+  const sideQuestPoints = completedSideQuestsCount * SIDE_QUEST_XP;
   const batchPoints = hasBatch ? BATCH_XP : 0;
   const buildPoints = hasBuilds ? BUILD_XP : 0;
 
