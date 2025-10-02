@@ -20,8 +20,8 @@ export const HomepageClient = ({ challenges }: { challenges: Challenges }) => {
       <Hero />
       <div className="bg-base-200">
         <ChallengeExpandedCard
-          key={ChallengeId.SIMPLE_NFT_EXAMPLE}
-          challengeId={ChallengeId.SIMPLE_NFT_EXAMPLE}
+          key={ChallengeId.TOKENIZATION}
+          challengeId={ChallengeId.TOKENIZATION}
           userChallenges={userChallenges}
           challenges={challenges}
         />

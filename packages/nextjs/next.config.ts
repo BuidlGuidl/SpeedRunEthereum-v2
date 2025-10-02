@@ -29,6 +29,11 @@ const nextConfig: NextConfig = {
   async redirects() {
     return [
       {
+        source: "/challenge/simple-nft-example",
+        destination: "/challenge/tokenization",
+        permanent: true,
+      },
+      {
         source: "/challenge/minimum-viable-exchange",
         destination: "/challenge/dex",
         permanent: true,

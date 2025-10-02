@@ -181,4 +181,4 @@ Notes
 - [ERC721 vs. ERC1155](/guides/erc721-vs-erc1155)
 - [Mastering ERC721](/guides/mastering-erc721)
 
-- New to NFTs? Try the hands‑on challenges: [Simple NFT Example](/challenge/simple-nft-example) and [SVG NFT](/challenge/svg-nft)
+- New to NFTs? Try the hands‑on challenges: [Tokenization](/challenge/tokenization) and [SVG NFT](/challenge/svg-nft)
