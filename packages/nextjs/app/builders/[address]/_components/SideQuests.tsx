@@ -1,6 +1,8 @@
 "use client";
 
 import { useState } from "react";
+import { RefreshEnsButton } from "./RefreshEnsButton";
+import { UserByAddress } from "~~/services/database/repositories/users";
 import { SIDEQUESTS } from "~~/services/sideQuests/schema";
 import { SideQuestsSnapshot } from "~~/services/sideQuests/types";
 
@@ -16,6 +18,17 @@ type CollapseSectionProps = {
   quests: SideQuest[];
   defaultExpanded?: boolean;
   className?: string;
+};
+
+const QUEST_CATEGORIES = {
+  ENS_BASICS: [SIDEQUESTS.ensRegistered, SIDEQUESTS.ensAvatarSet],
+  ETHEREUM_FIRST_STEPS: [
+    SIDEQUESTS.sentMainnetTx,
+    SIDEQUESTS.usedL2,
+    SIDEQUESTS.swappedOnDex,
+    SIDEQUESTS.mintedNFT,
+    SIDEQUESTS.contractDeployed,
+  ],
 };
 
 const CollapseSection = ({ title, quests, defaultExpanded = false, className = "" }: CollapseSectionProps) => {
@@ -60,18 +73,13 @@ const CollapseSection = ({ title, quests, defaultExpanded = false, className = "
   );
 };
 
-const QUEST_CATEGORIES = {
-  ENS_BASICS: [SIDEQUESTS.ensRegistered, SIDEQUESTS.ensAvatarSet],
-  ETHEREUM_FIRST_STEPS: [
-    SIDEQUESTS.sentMainnetTx,
-    SIDEQUESTS.usedL2,
-    SIDEQUESTS.swappedOnDex,
-    SIDEQUESTS.mintedNFT,
-    SIDEQUESTS.contractDeployed,
-  ],
-};
-
-export const SideQuests = ({ snapshot }: { snapshot: SideQuestsSnapshot | null }) => {
+export const SideQuests = ({
+  snapshot,
+  user,
+}: {
+  snapshot: SideQuestsSnapshot | null;
+  user: NonNullable<UserByAddress>;
+}) => {
   const ensQuests = [
     ...QUEST_CATEGORIES.ENS_BASICS.map(sideQuest => ({
       id: sideQuest.id,
@@ -88,17 +96,14 @@ export const SideQuests = ({ snapshot }: { snapshot: SideQuestsSnapshot | null }
     link: sideQuest.link,
   }));
 
-  const totalQuests = ensQuests.length + devQuests.length;
-  const completedQuests = [...ensQuests, ...devQuests].filter(q => q.completed).length;
-
   return (
     <div className="bg-base-100 rounded-lg p-6">
       <div className="flex justify-between items-center mb-6 text-lg">
         <div className="font-bold">
           Side Quests <span className="text-xs text-base-content/50">(+ 5 XP each)</span>
         </div>
-        <div>
-          {completedQuests} / {totalQuests}
+        <div className="text-center">
+          <RefreshEnsButton user={user} />
         </div>
       </div>
 

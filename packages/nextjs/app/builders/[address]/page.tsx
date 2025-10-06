@@ -101,7 +101,7 @@ export default async function BuilderPage(props: { params: Promise<{ address: st
           <div className="flex flex-col gap-4">
             <UserProfileCard user={user} batch={userBatch} />
             <PointsBar points={points} totalPoints={totalPoints} />
-            <SideQuests snapshot={user.sideQuestsSnapshot} />
+            <SideQuests snapshot={user.sideQuestsSnapshot} user={user} />
           </div>
           <div className="lg:col-span-3">
             <GroupedChallenges
