@@ -102,9 +102,7 @@ export const SideQuests = ({
         <div className="font-bold">
           Side Quests <span className="text-xs text-base-content/50">(+ 5 XP each)</span>
         </div>
-        <div className="text-center">
-          <RefreshEnsButton user={user} />
-        </div>
+        <RefreshEnsButton user={user} />
       </div>
 
       <CollapseSection title="ENS Basics" quests={ensQuests} defaultExpanded={true} className="mb-4" />
