@@ -6,7 +6,7 @@ import { MetaMask, metaMaskFixtures } from "@synthetixio/synpress/playwright";
 const test = testWithSynpress(metaMaskFixtures(basicSetup));
 const { expect } = test;
 
-test.describe("End-to-End Integration Tests", () => {
+test.describe("User Onboarding Flow", () => {
   test("Should complete full user onboarding flow: connect wallet, register user, and verify address display", async ({
     context,
     page,
