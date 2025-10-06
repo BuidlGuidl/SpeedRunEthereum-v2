@@ -58,6 +58,7 @@ export const RainbowKitCustomConnectButton = () => {
             <button
               className="flex items-center py-1.5 lg:py-2 px-3 lg:px-4 border-2 border-primary rounded-full bg-base-300 hover:bg-base-200 transition-colors cursor-pointer"
               onClick={openConnectModal}
+              data-testid="connect-button"
               type="button"
             >
               Connect <span className="hidden md:inline-block md:ml-1">Wallet</span>
