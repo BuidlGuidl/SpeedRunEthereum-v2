@@ -10,7 +10,7 @@ import {
   UserRole,
 } from "./config/types";
 
-export const SEED_DATA_VERSION = "1.1.6";
+export const SEED_DATA_VERSION = "1.1.7";
 
 // Using Drizzle's inferred insert types to ensure seed data
 // matches database schema requirements
@@ -60,14 +60,14 @@ export const seedUsers: (typeof users.$inferInsert)[] = [
 
 export const seedChallenges: (typeof challenges.$inferInsert)[] = [
   {
-    id: ChallengeId.SIMPLE_NFT_EXAMPLE,
-    challengeName: "Simple NFT Example",
-    github: "scaffold-eth/se-2-challenges:challenge-simple-nft-example",
+    id: ChallengeId.TOKENIZATION,
+    challengeName: "Tokenization",
+    github: "scaffold-eth/se-2-challenges:challenge-tokenization",
     autograding: true,
     description:
-      "🎫 Create a simple NFT to learn basics of 🏗 scaffold-eth. You'll use 👷‍♀️ HardHat to compile and deploy smart contracts. Then, you'll use a template React app full of important Ethereum components and hooks. Finally, you'll deploy an NFT to a public network to share with friends! 🚀",
+      "🎫 Create a unique token to learn the basics of 🏗️ Scaffold-ETH 2. You'll use 👷‍♀️ HardHat to compile and deploy smart contracts. Then, you'll use a template React app full of important Ethereum components and hooks. Finally, you'll deploy an NFT to a public network to share with friends! 🚀",
     sortOrder: 0,
-    previewImage: "/assets/challenges/simpleNFT.svg",
+    previewImage: "/assets/challenges/tokenization.svg",
   },
   {
     id: ChallengeId.DECENTRALIZED_STAKING,
@@ -127,26 +127,36 @@ export const seedChallenges: (typeof challenges.$inferInsert)[] = [
     autograding: true,
     description:
       "🔮 Build a prediction market where users can create questions about future outcomes for others to bet on. Users can also participate in existing markets to speculate on event results. 📊 Outcome shares can be traded, with prices adjusting dynamically based on market belief. This is possible because the smart contract acts as an automated market maker (like in the DEX challenge) and adjusts odds based on supply and demand.",
-    sortOrder: 6,
+    sortOrder: 7,
     previewImage: "/assets/challenges/predictionMarkets.svg",
   },
   {
     id: ChallengeId.STABLECOINS,
     challengeName: "💰 Stablecoins",
-    autograding: false,
+    github: "scaffold-eth/se-2-challenges:challenge-stablecoins",
+    autograding: true,
     description:
       "🪙 Build your own decentralized stablecoin. Let's write a contract that takes collateral and issues MyUSD tokens based on the value of the collateral. What happens when the collateral changes in value? If it is higher, we will be able to borrow more tokens. If it is lower, we will also build a system for liquidating the MyUSD.",
-    sortOrder: 7,
+    sortOrder: 6,
     previewImage: "/assets/challenges/stablecoins.svg",
   },
   {
-    id: ChallengeId.DEPLOY_TO_L2,
-    challengeName: "⚡ Deploy to Layer 2",
+    id: ChallengeId.ZK_VOTING,
+    challengeName: "🔒 ZK Voting",
     autograding: false,
     description:
-      "🚀 Ethereum L2s make blockchain apps fast and cheap, bringing us closer to mainstream adoption! Most L2s are EVM compatible, meaning your app should work seamlessly across them with little to no changes—just deploy and go! In this challenge, you will deploy an app across multiple chains, including Optimism, Base, and Arbitrum, and experience the snappy, low-cost transactions while exploring how they make building scalable apps and games easier than ever.",
+      "🔒 Build your own decentralized voting system using zero-knowledge proofs. Let's write a contract that allows users to vote on a topic and the results will be computed off-chain using zero-knowledge proofs.",
     sortOrder: 8,
-    previewImage: "/assets/challenges/deployToL2.svg",
+    previewImage: "/assets/challenges/zkVoting.svg",
+  },
+  {
+    id: ChallengeId.ORACLES,
+    challengeName: "Oracles",
+    autograding: false,
+    description:
+      "🔮 Build three powerful oracle systems bringing real-world data on-chain! Level up from simple whitelist oracles to staking-based systems, and finally to optimistic oracles with challenge periods. 🛡️ Learn crucial security trade-offs while implementing dispute resolution and economic incentives.",
+    sortOrder: 9,
+    previewImage: "/assets/challenges/oracles.svg",
   },
   {
     id: ChallengeId.MULTISIG,
@@ -155,7 +165,7 @@ export const seedChallenges: (typeof challenges.$inferInsert)[] = [
     autograding: false,
     description:
       '👩‍👩‍👧‍👧 Using a smart contract as a wallet we can secure assets by requiring multiple accounts to "vote" on transactions. The contract will keep track of transactions in an array of structs and owners will confirm or reject each one. Any transaction with enough confirmations can "execute".',
-    sortOrder: 9,
+    sortOrder: 100,
     previewImage: "/assets/challenges/multiSig.svg",
     externalLink: {
       link: "https://t.me/+zKllN8OlGuxmYzFh",
@@ -169,7 +179,7 @@ export const seedChallenges: (typeof challenges.$inferInsert)[] = [
     autograding: false,
     description:
       "🎨 Create a dynamic SVG NFT using a smart contract. Your contract will generate on-chain SVG images and allow users to mint their unique NFTs. ✨ Customize your SVG graphics and metadata directly within the smart contract. 🚀 Share the minting URL once your project is live!",
-    sortOrder: 10,
+    sortOrder: 101,
     previewImage: "/assets/challenges/dynamicSvgNFT.svg",
     externalLink: {
       link: "https://t.me/+mUeITJ5u7Ig0ZWJh",
@@ -192,7 +202,7 @@ export const seedChallenges: (typeof challenges.$inferInsert)[] = [
 export const seedUserChallenges: (typeof userChallenges.$inferInsert)[] = [
   {
     userAddress: seedUsers?.[0]?.userAddress,
-    challengeId: ChallengeId.SIMPLE_NFT_EXAMPLE,
+    challengeId: ChallengeId.TOKENIZATION,
     frontendUrl: "https://dreary-use.surge.sh/",
     contractUrl: "https://sepolia.etherscan.io/address/0x7f918d7b7d0fe0d3a8de3c0570ed4e154c0096e0",
     reviewComment: "Dummy review, nice work",
@@ -232,7 +242,7 @@ export const seedUserChallenges: (typeof userChallenges.$inferInsert)[] = [
   },
   {
     userAddress: seedUsers?.[1]?.userAddress,
-    challengeId: ChallengeId.SIMPLE_NFT_EXAMPLE,
+    challengeId: ChallengeId.TOKENIZATION,
     frontendUrl: "http://simple-nft-ryuufarhan.surge.sh/",
     contractUrl: "https://goerli.etherscan.io/address/0x861346d67b728949bcb69595638a78723a2adae3",
     reviewComment: "Dummy review, nice work",
@@ -241,7 +251,7 @@ export const seedUserChallenges: (typeof userChallenges.$inferInsert)[] = [
   },
   {
     userAddress: seedUsers?.[1]?.userAddress,
-    challengeId: ChallengeId.SIMPLE_NFT_EXAMPLE,
+    challengeId: ChallengeId.TOKENIZATION,
     frontendUrl: "http://clumsy-week.surge.sh",
     contractUrl: "https://goerli.etherscan.io/address/0xe3DF14f1482074916A8Aeb40d84898C879b2B5f6",
     reviewComment: "Dummy review, nice work",
@@ -286,7 +296,7 @@ export const seedUserChallenges: (typeof userChallenges.$inferInsert)[] = [
   },
   {
     userAddress: seedUsers?.[3]?.userAddress,
-    challengeId: ChallengeId.SIMPLE_NFT_EXAMPLE,
+    challengeId: ChallengeId.TOKENIZATION,
     frontendUrl: "https://kind-fifth.surge.sh/",
     contractUrl: "https://goerli.etherscan.io/address/0xb9487f8d9E336a9468fcbb50dAF39587D0EBCA63",
     reviewComment: "Dummy review, nice work",
@@ -314,7 +324,7 @@ export const seedUserChallenges: (typeof userChallenges.$inferInsert)[] = [
   },
   {
     userAddress: seedUsers?.[4]?.userAddress,
-    challengeId: ChallengeId.SIMPLE_NFT_EXAMPLE,
+    challengeId: ChallengeId.TOKENIZATION,
     frontendUrl: "https://sepolia-optimism.etherscan.io/address/0x82b4935ebe7a5d802cf465a3495da1aff96f1153#code",
     contractUrl: "https://sepolia-optimism.etherscan.io/address/0x82b4935ebe7a5d802cf465a3495da1aff96f1153#code",
     submittedAt: new Date(1736437841322),

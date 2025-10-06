@@ -248,6 +248,6 @@ There's no one-size-fits-all answer.
 
 ---
 
-**Want to see these standards in action? [Try the Simple NFT Example Challenge!](/challenge/simple-nft-example)**
+**Want to see these standards in action? [Try the Tokenization Challenge!](/challenge/tokenization)**
 
 **Already comfortable with the basics? [Try the SVG NFT Challenge!](/challenge/svg-nft)**

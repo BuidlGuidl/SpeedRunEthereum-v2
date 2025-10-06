@@ -6,7 +6,7 @@ image: /assets/guides/solidity-nft-security.jpg
 
 Non-Fungible Tokens (NFTs) have exploded in popularity, representing billions of dollars in digital assets. However, with great value comes great risk. Smart contract vulnerabilities can lead to devastating losses for both creators and collectors. If you're developing NFT projects using Solidity, prioritizing security isn't just advisable—it's essential.
 
-This guide outlines 10 crucial security best practices to help you protect your NFT smart contracts, minimize vulnerabilities, and build trust with your users. Whether you've just completed a [Simple NFT Example Challenge](/challenge/simple-nft-example) or are working on a complex collection, these principles will help you safeguard your digital creations.
+This guide outlines 10 crucial security best practices to help you protect your NFT smart contracts, minimize vulnerabilities, and build trust with your users. Whether you've just completed a [Tokenization Challenge](/challenge/tokenization) or are working on a complex collection, these principles will help you safeguard your digital creations.
 
 ## Quick Checklist
 
@@ -167,6 +167,6 @@ Securing your NFT smart contracts is not a one-time task but an ongoing commitme
 
 ---
 
-**Want to put these security best practices to the test in your own NFT project? [Try the Simple NFT Example Challenge!](/challenge/simple-nft-example)**
+**Want to put these security best practices to the test in your own NFT project? [Try the Tokenization Challenge!](/challenge/tokenization)**
 
 **Already comfortable with the NFT basics? [Try the SVG NFT Challenge!](/challenge/svg-nft)**

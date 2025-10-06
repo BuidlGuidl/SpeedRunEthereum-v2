@@ -6,18 +6,41 @@ export const REVIEW_ACTION_BADGE_CLASSES: Record<ReviewAction, string> = {
   [ReviewAction.SUBMITTED]: "badge-warning",
 } as const;
 
-export const CHALLENGE_METADATA: Record<
-  string,
-  {
-    title: string;
-    description: string;
-    guides?: { title: string; url: string }[];
-  }
-> = {
-  [ChallengeId.SIMPLE_NFT_EXAMPLE]: {
+export const SKILL_LEVELS = {
+  BEGINNER: "Beginner",
+  INTERMEDIATE: "Intermediate",
+  ADVANCED: "Advanced",
+} as const;
+
+export type SkillLevel = (typeof SKILL_LEVELS)[keyof typeof SKILL_LEVELS];
+
+type ChallengeStaticMetadata = {
+  title: string;
+  description: string;
+  guides?: { title: string; url: string }[];
+  skills?: string[];
+  skillLevel?: SkillLevel;
+  timeToComplete?: string;
+  helpfulLinks?: { text: string; url: string }[];
+};
+
+export const CHALLENGE_METADATA: Record<string, ChallengeStaticMetadata> = {
+  [ChallengeId.TOKENIZATION]: {
     title: "Learn How to Create an NFT in Solidity",
     description:
       "Build your first NFT smart contract in Solidity. Step-by-step tutorial to mint and deploy NFTs on Ethereum using Scaffold-ETH.",
+    skills: [
+      "Compile and deploy your first **smart contract**",
+      "Use burner wallets, faucets and gas on localhost",
+      "Mint and transfer NFTs; Understand **ownership** in the Ethereum context",
+      "Deploy to Sepolia and ship a Next.js app",
+    ],
+    skillLevel: SKILL_LEVELS.BEGINNER,
+    timeToComplete: "1 - 4 hours",
+    helpfulLinks: [
+      { text: "Blockchain Basics", url: "https://www.youtube.com/watch?v=MlJPjJQZtC8" },
+      { text: "Web2 to Web3 Series", url: "https://www.youtube.com/playlist?list=PLJz1HruEnenAf80uOfDwBPqaliJkjKg69" },
+    ],
     guides: [
       {
         title: "ERC721 vs. ERC1155: Key Differences, Use Cases & How to Choose",
@@ -41,6 +64,24 @@ export const CHALLENGE_METADATA: Record<
     title: "Build a Decentralized Staking Application in Solidity",
     description:
       "Learn to build a decentralized staking application with Solidity. Create smart contracts for coordinating group funding on Ethereum.",
+    skills: [
+      "Design and implement a decentralized application (dApp) with a state machine",
+      "Handle and send ETH in a smart contract using **payable** functions",
+      "Interact with external smart contracts",
+      "Use **events** to track and display onchain activity on the frontend",
+    ],
+    skillLevel: SKILL_LEVELS.BEGINNER,
+    timeToComplete: "3 - 8 hours",
+    helpfulLinks: [
+      {
+        text: "Previous Challenge",
+        url: "/challenge/tokenization",
+      },
+      {
+        text: "Solidity by Example",
+        url: "https://solidity-by-example.org/",
+      },
+    ],
     guides: [
       {
         title: "Beyond APY: Building Sustainable Tokenomics for Your Staking Protocol",
@@ -58,12 +99,34 @@ export const CHALLENGE_METADATA: Record<
         title: "A Developer's Guide to Liquid Staking Tokens (LSTs)",
         url: "/guides/liquid-staking-tokens",
       },
+      {
+        title: "ERC4626 Vaults Explained: Secure Tokenized Vault Design, Risks & Best Practices",
+        url: "/guides/erc-4626-vaults",
+      },
     ],
   },
   [ChallengeId.TOKEN_VENDOR]: {
     title: "Create an ERC20 Token and Vendor Contract in Solidity",
     description:
       "Learn to create your own ERC20 token and build a decentralized vending machine using Solidity smart contracts on Ethereum.",
+    skills: [
+      "Build a custom token on the **ERC20** standard",
+      "Learn how to perform secure contract-to-contract token transfers",
+      "Design and build a **token vending machine** that can buy and sell custom tokens",
+      "See how to confirm token balances onchain and offchain",
+    ],
+    skillLevel: SKILL_LEVELS.BEGINNER,
+    timeToComplete: "3 - 8 hours",
+    helpfulLinks: [
+      {
+        text: "Previous Challenge",
+        url: "/challenge/decentralized-staking",
+      },
+      {
+        text: "ERC20 Token Standard",
+        url: "https://ethereum.org/developers/docs/standards/tokens/erc-20/",
+      },
+    ],
     guides: [
       {
         title: "How to Create a ERC20 Token: Complete Solidity Tutorial",
@@ -91,6 +154,14 @@ export const CHALLENGE_METADATA: Record<
     title: "Exploit a Vulnerable Dice Game in Solidity",
     description:
       "Learn blockchain security by building an attack contract that exploits randomness vulnerabilities in a Solidity dice game. Hands-on security tutorial for developers.",
+    skills: [
+      "Understand why randomness is tricky on the blockchain",
+      "Learn how to analyze a smart contract to **identify a vulnerability**",
+      "Create an **attacking contract** to exploit a vulnerability in another contract",
+    ],
+    skillLevel: SKILL_LEVELS.BEGINNER,
+    timeToComplete: "2 - 6 hours",
+    helpfulLinks: [{ text: "Randomness in Solidity", url: "/guides/blockchain-randomness-solidity" }],
     guides: [
       {
         title: "Commit-Reveal Scheme in Solidity",
@@ -114,6 +185,20 @@ export const CHALLENGE_METADATA: Record<
     title: "How to Build a Decentralized Exchange (DEX) in Solidity",
     description:
       "Step-by-step tutorial to build your own DEX with liquidity pools, token swapping, and automated market making in Solidity.",
+    skills: [
+      "Build and understand an **Automated Market Maker (AMM)**",
+      "Learn about **liquidity pools** and **impermanent loss**",
+      "Design and build functions for **swapping tokens** and providing/withdrawing liquidity",
+    ],
+    skillLevel: SKILL_LEVELS.INTERMEDIATE,
+    timeToComplete: "3 - 10 hours",
+    helpfulLinks: [
+      { text: "Video Overview", url: "https://www.youtube.com/watch?v=eP5w6Ger1EQ" },
+      {
+        text: "Original Tutorial",
+        url: "https://medium.com/@austin_48503/%EF%B8%8F-minimum-viable-exchange-d84f30bd0c90",
+      },
+    ],
     guides: [
       {
         title: "Automated Market Makers (AMMs): Math, Risks & Solidity Code",
@@ -133,6 +218,76 @@ export const CHALLENGE_METADATA: Record<
       },
     ],
   },
+  [ChallengeId.OVER_COLLATERALIZED_LENDING]: {
+    title: "Build an Over-Collateralized Lending Platform in Solidity",
+    description:
+      "Learn how to create an over-collateralized lending platform using Solidity smart contracts on Ethereum.",
+    skills: [
+      "Understand how over-collateralized lending works",
+      "Build a **money market** protocol for borrowing assets",
+      "Develop a **liquidation mechanism** to maintain the protocol's solvency",
+      "Create and execute **flash loans**, a unique on-chain financial primitive",
+    ],
+    skillLevel: SKILL_LEVELS.INTERMEDIATE,
+    timeToComplete: "4 - 10 hours",
+    helpfulLinks: [
+      { text: "DeFiSaver (simulation)", url: "https://app.defisaver.com/aave" },
+      { text: "Flash Loan Exploits", url: "/guides/flash-loan-exploits" },
+    ],
+  },
+  [ChallengeId.STABLECOINS]: {
+    title: "Build a Stablecoin in Solidity",
+    description:
+      "Learn how to create a stablecoin using Solidity smart contracts on Ethereum. Understand stability mechanisms and price oracles.",
+    skills: [
+      "Understand how collateralization levels and liquidations work together in an **algorithmic stablecoin** system",
+      "Build the main engine that helps to provide **incentives** for maintaining a stablecoin's peg",
+      "Learn how to manage supply and demand using dynamic interest rates",
+      "Implement a **share-based system** for efficient interest calculation",
+    ],
+    skillLevel: SKILL_LEVELS.ADVANCED,
+    timeToComplete: "4 - 12 hours",
+    helpfulLinks: [
+      {
+        text: "RAI Overview",
+        url: "https://ameensol.medium.com/a-money-god-raises-rai-is-live-on-ethereum-mainnet-f9aff2b1d331",
+      },
+      {
+        text: "LUSD Documentation",
+        url: "https://docs.liquity.org/liquity-v1/faq/borrowing",
+      },
+    ],
+  },
+  [ChallengeId.PREDICTION_MARKETS]: {
+    title: "Create a Prediction Market in Solidity",
+    description:
+      "Learn to build decentralized prediction markets using Solidity. Understand market creation, betting mechanics, and outcome resolution.",
+    skills: [
+      "Design and build a complete onchain **prediction market** from creation to settlement",
+      "Implement a simple **oracle** to report real-world event outcomes on-chain",
+      "Use **ERC20 tokens** to represent shares in probabilistic outcomes",
+      "Develop a pricing mechanism where token prices reflect the **implied probability** of an event",
+    ],
+    skillLevel: SKILL_LEVELS.ADVANCED,
+    timeToComplete: "4 - 12 hours",
+    helpfulLinks: [
+      {
+        text: "Terminology",
+        url: "https://projects.iq.harvard.edu/files/yiling/files/ec-tutorial-prediction-markets-2007-1.pdf",
+      },
+      { text: "Polymarket", url: "https://polymarket.com/" },
+    ],
+  },
+  [ChallengeId.ZK_VOTING]: {
+    title: "Build a Privacy-Preserving ZK Voting dApp",
+    description:
+      "Learn how to build a privacy-preserving ZK voting dApp where members vote anonymously using zero-knowledge proofs, Merkle trees, and nullifier hashes to prevent double voting.",
+  },
+  [ChallengeId.ORACLES]: {
+    title: "Build Decentralized Oracle Systems in Solidity",
+    description:
+      "Learn to build three fundamental oracle architectures: Whitelist, Staking, and Optimistic Oracles. Understand trade-offs between security, decentralization, and efficiency while implementing dispute resolution and economic incentive mechanisms.",
+  },
   [ChallengeId.MULTISIG]: {
     title: "Build a Multisignature Wallet in Solidity",
     description:
@@ -142,20 +297,5 @@ export const CHALLENGE_METADATA: Record<
     title: "Create On-Chain SVG NFTs with Solidity",
     description:
       "Learn to generate on-chain SVG graphics and create fully on-chain NFTs using Solidity smart contracts. Advanced NFT development tutorial.",
-  },
-  [ChallengeId.STABLECOINS]: {
-    title: "Build a Stablecoin in Solidity",
-    description:
-      "Learn how to create a stablecoin using Solidity smart contracts on Ethereum. Understand stability mechanisms and price oracles.",
-  },
-  [ChallengeId.PREDICTION_MARKETS]: {
-    title: "Create a Prediction Market in Solidity",
-    description:
-      "Learn to build decentralized prediction markets using Solidity. Understand market creation, betting mechanics, and outcome resolution.",
-  },
-  [ChallengeId.DEPLOY_TO_L2]: {
-    title: "Deploy Solidity Smart Contracts to Layer 2",
-    description:
-      "Learn how to deploy and interact with Solidity smart contracts on Ethereum Layer 2 solutions for better scalability and lower gas costs.",
   },
 };

@@ -12,15 +12,16 @@ export enum UserRole {
 }
 
 export enum ChallengeId {
-  SIMPLE_NFT_EXAMPLE = "simple-nft-example",
+  TOKENIZATION = "tokenization",
   DECENTRALIZED_STAKING = "decentralized-staking",
   TOKEN_VENDOR = "token-vendor",
   DICE_GAME = "dice-game",
   DEX = "dex",
   OVER_COLLATERALIZED_LENDING = "over-collateralized-lending",
-  STABLECOINS = "stablecoins",
   PREDICTION_MARKETS = "prediction-markets",
-  DEPLOY_TO_L2 = "deploy-to-l2",
+  STABLECOINS = "stablecoins",
+  ZK_VOTING = "zk-voting",
+  ORACLES = "oracles",
   MULTISIG = "multisig",
   SVG_NFT = "svg-nft",
   STATE_CHANNELS = "state-channels",

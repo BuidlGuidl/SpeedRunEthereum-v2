@@ -20,8 +20,8 @@ export const HomepageClient = ({ challenges }: { challenges: Challenges }) => {
       <Hero />
       <div className="bg-base-200">
         <ChallengeExpandedCard
-          key={ChallengeId.SIMPLE_NFT_EXAMPLE}
-          challengeId={ChallengeId.SIMPLE_NFT_EXAMPLE}
+          key={ChallengeId.TOKENIZATION}
+          challengeId={ChallengeId.TOKENIZATION}
           userChallenges={userChallenges}
           challenges={challenges}
         />
@@ -51,6 +51,7 @@ export const HomepageClient = ({ challenges }: { challenges: Challenges }) => {
         />
 
         <OnboardingBatchesCard userChallenges={userChallenges} />
+
         <ChallengeExpandedCard
           key={ChallengeId.OVER_COLLATERALIZED_LENDING}
           challengeId={ChallengeId.OVER_COLLATERALIZED_LENDING}
@@ -70,8 +71,15 @@ export const HomepageClient = ({ challenges }: { challenges: Challenges }) => {
           challenges={challenges}
         />
         <ChallengeExpandedCard
-          key={ChallengeId.DEPLOY_TO_L2}
-          challengeId={ChallengeId.DEPLOY_TO_L2}
+          key={ChallengeId.ZK_VOTING}
+          challengeId={ChallengeId.ZK_VOTING}
+          userChallenges={userChallenges}
+          challenges={challenges}
+          comingSoon
+        />
+        <ChallengeExpandedCard
+          key={ChallengeId.ORACLES}
+          challengeId={ChallengeId.ORACLES}
           userChallenges={userChallenges}
           challenges={challenges}
           comingSoon

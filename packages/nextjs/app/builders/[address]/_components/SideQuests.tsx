@@ -8,6 +8,7 @@ type SideQuest = {
   id: string;
   name: string;
   completed: boolean;
+  link?: string;
 };
 
 type CollapseSectionProps = {
@@ -38,7 +39,19 @@ const CollapseSection = ({ title, quests, defaultExpanded = false, className = "
                 readOnly
                 className="checkbox checkbox-primary checkbox-sm cursor-default"
               />
-              <label className="text-base flex-1">{quest.name}</label>
+              {quest.link ? (
+                <a
+                  href={quest.link}
+                  className="text-base flex-1 link link-primary text-left tooltip tooltip-top"
+                  data-tip="Read guide"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  {quest.name}
+                </a>
+              ) : (
+                <label className="text-base flex-1">{quest.name}</label>
+              )}
             </div>
           ))}
         </div>
@@ -50,11 +63,11 @@ const CollapseSection = ({ title, quests, defaultExpanded = false, className = "
 const QUEST_CATEGORIES = {
   ENS_BASICS: [SIDEQUESTS.ensRegistered, SIDEQUESTS.ensAvatarSet],
   ETHEREUM_FIRST_STEPS: [
-    SIDEQUESTS.contractDeployed,
     SIDEQUESTS.sentMainnetTx,
     SIDEQUESTS.usedL2,
-    SIDEQUESTS.mintedNFT,
     SIDEQUESTS.swappedOnDex,
+    SIDEQUESTS.mintedNFT,
+    SIDEQUESTS.contractDeployed,
   ],
 };
 
@@ -64,6 +77,7 @@ export const SideQuests = ({ snapshot }: { snapshot: SideQuestsSnapshot | null }
       id: sideQuest.id,
       name: sideQuest.name,
       completed: Boolean(snapshot?.[sideQuest.id]?.completedAt),
+      link: sideQuest.link,
     })),
   ];
 
@@ -71,6 +85,7 @@ export const SideQuests = ({ snapshot }: { snapshot: SideQuestsSnapshot | null }
     id: sideQuest.id,
     name: sideQuest.name,
     completed: Boolean(snapshot?.[sideQuest.id]?.completedAt),
+    link: sideQuest.link,
   }));
 
   const totalQuests = ensQuests.length + devQuests.length;

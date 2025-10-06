@@ -38,7 +38,7 @@ export const getChallengeDependenciesInfo = ({
 };
 
 export const JOIN_BATCH_DEPENDENCIES = [
-  ChallengeId.SIMPLE_NFT_EXAMPLE,
+  ChallengeId.TOKENIZATION,
   ChallengeId.DECENTRALIZED_STAKING,
   ChallengeId.TOKEN_VENDOR,
   ChallengeId.DICE_GAME,
