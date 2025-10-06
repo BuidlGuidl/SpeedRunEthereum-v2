@@ -14,12 +14,12 @@ export const RefreshEnsButton = ({ user }: { user: NonNullable<UserByAddress> })
 
   return (
     <button
-      className="btn-ghost hover:bg-transparent hover:opacity-80 tooltip"
+      className="btn-ghost hover:bg-transparent hover:opacity-80 tooltip tooltip-top z-50"
       onClick={handleUpdateOnchainData}
       disabled={isUpdating}
-      data-tip={`${isUpdating ? "Updating profile..." : "Refresh ENS and side quests from on-chain data"}`}
+      data-tip={`${isUpdating ? "Updating profile..." : "Refresh Side Quests from on-chain data"}`}
     >
-      <ArrowPathIcon className={`w-4 h-4 ${isUpdating ? "animate-spin opacity-50" : ""}`} />
+      <ArrowPathIcon className={`w-5 h-5 ${isUpdating ? "animate-spin opacity-50" : ""}`} />
     </button>
   );
 };
