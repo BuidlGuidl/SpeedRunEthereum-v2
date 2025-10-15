@@ -124,7 +124,19 @@ yarn next:test-ui
 
 Before running tests, ensure you have:
 
-1. **Database running**: Make sure your Postgres database is up and seeded
+1. **Install Playwright browsers** (only needed the first time):
+
+   ```bash
+   yarn next:playwright-install
+   ```
+
+2. **Build wallet cache**: Set up the Synpress cache for MetaMask integration
+
+   ```bash
+   yarn next:cache-synpress
+   ```
+
+3. **Database running**: Make sure your Postgres database is up and seeded
    ```bash
    docker compose up -d
    yarn drizzle-kit migrate
