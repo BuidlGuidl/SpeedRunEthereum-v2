@@ -140,7 +140,11 @@ Before running tests, ensure you have:
 If you encounter an error like `Error: Cache for 08a20e3c7fc77e6ae298 does not exist. Create it first!`, you need to rename your cache folder:
 
 1. Navigate to `packages/nextjs/.cache-synpress/`
-2. Rename the existing cache folder to match the error message (e.g., rename `532f685e346606c2a803` to `08a20e3c7fc77e6ae298`)
+2. Rename the existing cache folder to match the error message (e.g., rename `532f685e346606c2a803` to `08a20e3c7fc77e6ae298`), or use this command from the root folder:
+
+```
+mv packages/nextjs/.cache-synpress/532f685e346606c2a803 packages/nextjs/.cache-synpress/08a20e3c7fc77e6ae298
+```
 
 #### User Registration Issues
 
