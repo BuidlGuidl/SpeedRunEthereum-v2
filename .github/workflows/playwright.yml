@@ -15,8 +15,9 @@ jobs:
       CI: true
       NODE_ENV: test
       POSTGRES_URL: postgresql://postgres:mysecretpassword@localhost:5432/postgres
-      NEXT_AUTH_SECRET: 1234567890
-      NEXT_AUTH_URL: http://localhost:3000
+      NEXTAUTH_SECRET: 1234567890
+      NEXTAUTH_URL: http://localhost:3000
+      ZERION_API_KEY: test_api_key_for_ci
       
 
     services:
