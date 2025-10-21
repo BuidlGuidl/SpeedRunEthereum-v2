@@ -41,27 +41,12 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 22
-          cache: yarn
 
       - name: Install dependencies
         run: yarn install --immutable
 
-      - name: Get Playwright version
-        id: playwright-version
-        run: echo "version=$(cd packages/nextjs && npx playwright --version | grep -o '[0-9]\+\.[0-9]\+\.[0-9]\+')" >> $GITHUB_OUTPUT
-
-      - name: Cache Playwright browsers
-        uses: actions/cache@v4
-        id: playwright-cache
-        with:
-          path: ~/.cache/ms-playwright
-          key: playwright-${{ runner.os }}-${{ steps.playwright-version.outputs.version }}
-          restore-keys: |
-            playwright-${{ runner.os }}-
-
-      - name: Install Playwright Browsers
-        if: steps.playwright-cache.outputs.cache-hit != 'true'
-        run: yarn next:playwright-install
+      - name: Install Playwright Browsers (Chromium only)
+        run: cd packages/nextjs && npx playwright install chromium
 
 
       - name: Setup database
