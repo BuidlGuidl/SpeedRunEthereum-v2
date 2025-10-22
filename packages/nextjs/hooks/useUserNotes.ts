@@ -1,6 +1,11 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useSignMessage } from "wagmi";
+import { useAccount } from "wagmi";
+import { useSignatureWithNotification } from "~~/hooks/useSignatureWithNotification";
 import { createUserNote, deleteUserNote, fetchUserNotes } from "~~/services/api/user-notes";
+import {
+  EIP_712_TYPED_DATA__CREATE_USER_NOTE,
+  EIP_712_TYPED_DATA__DELETE_USER_NOTE,
+} from "~~/services/eip712/userNotes";
 import { notification } from "~~/utils/scaffold-eth";
 
 const QUERY_KEY = "userNotes";
@@ -15,24 +20,29 @@ export function useUserNotes(userAddress: string) {
 
 export function useCreateUserNote() {
   const queryClient = useQueryClient();
-  const { signMessageAsync } = useSignMessage();
+  const { address } = useAccount();
+  const { signWithNotification } = useSignatureWithNotification();
 
-  return useMutation({
+  const { mutateAsync: createUserNoteMutation, isPending } = useMutation({
     mutationFn: async ({ userAddress, comment }: { userAddress: string; comment: string }) => {
+      if (!address) throw new Error("Wallet not connected");
+
       const message = {
-        action: "Create User Note",
+        ...EIP_712_TYPED_DATA__CREATE_USER_NOTE.message,
         userAddress,
         comment,
       };
 
-      const signature = await signMessageAsync({
-        message: JSON.stringify(message),
+      const signature = await signWithNotification({
+        ...EIP_712_TYPED_DATA__CREATE_USER_NOTE,
+        message,
       });
 
       return createUserNote({
-        address: userAddress,
+        address,
         signature,
         comment,
+        userAddress,
       });
     },
     onSuccess: (_, variables) => {
@@ -43,25 +53,31 @@ export function useCreateUserNote() {
       notification.error(error.message);
     },
   });
+
+  return { createUserNote: createUserNoteMutation, isPending };
 }
 
 export function useDeleteUserNote() {
   const queryClient = useQueryClient();
-  const { signMessageAsync } = useSignMessage();
+  const { address } = useAccount();
+  const { signWithNotification } = useSignatureWithNotification();
 
-  return useMutation({
+  const { mutateAsync: deleteUserNoteMutation, isPending } = useMutation({
     mutationFn: async ({ userAddress, noteId }: { userAddress: string; noteId: number }) => {
+      if (!address) throw new Error("Wallet not connected");
+
       const message = {
-        action: "Delete User Note",
+        ...EIP_712_TYPED_DATA__DELETE_USER_NOTE.message,
         noteId: noteId.toString(),
       };
 
-      const signature = await signMessageAsync({
-        message: JSON.stringify(message),
+      const signature = await signWithNotification({
+        ...EIP_712_TYPED_DATA__DELETE_USER_NOTE,
+        message,
       });
 
       return deleteUserNote(userAddress, noteId, {
-        address: userAddress,
+        address,
         signature,
       });
     },
@@ -73,4 +89,6 @@ export function useDeleteUserNote() {
       notification.error(error.message);
     },
   });
+
+  return { deleteUserNote: deleteUserNoteMutation, isPending };
 }

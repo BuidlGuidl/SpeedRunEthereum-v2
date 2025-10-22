@@ -11,8 +11,8 @@ export async function fetchUserNotes(userAddress: string): Promise<UserNoteWithA
   return data.notes as UserNoteWithAuthor[];
 }
 
-export async function createUserNote(payload: CreateUserNotePayload): Promise<{ note: any }> {
-  const response = await fetch(`/api/users/${payload.address}/notes`, {
+export async function createUserNote(payload: CreateUserNotePayload & { userAddress: string }): Promise<{ note: any }> {
+  const response = await fetch(`/api/users/${payload.userAddress}/notes`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

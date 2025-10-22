@@ -1,10 +1,7 @@
-import { isValidEip712Signature } from "./common";
+import { EIP_712_DOMAIN, isValidEip712Signature } from "./common";
 
 export const EIP_712_TYPED_DATA__CREATE_USER_NOTE = {
-  domain: {
-    name: "SpeedRunEthereum",
-    version: "1",
-  },
+  domain: EIP_712_DOMAIN,
   types: {
     Message: [
       { name: "action", type: "string" },
@@ -19,10 +16,7 @@ export const EIP_712_TYPED_DATA__CREATE_USER_NOTE = {
 } as const;
 
 export const EIP_712_TYPED_DATA__DELETE_USER_NOTE = {
-  domain: {
-    name: "SpeedRunEthereum",
-    version: "1",
-  },
+  domain: EIP_712_DOMAIN,
   types: {
     Message: [
       { name: "action", type: "string" },
