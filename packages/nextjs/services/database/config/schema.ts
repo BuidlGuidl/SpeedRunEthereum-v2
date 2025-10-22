@@ -117,6 +117,18 @@ export const userChallenges = pgTable(
   ],
 );
 
+export const userNotes = pgTable("user_notes", {
+  id: serial().primaryKey(),
+  userAddress: varchar({ length: 42 })
+    .notNull()
+    .references(() => users.userAddress),
+  authorAddress: varchar({ length: 42 })
+    .notNull()
+    .references(() => users.userAddress),
+  comment: text().notNull(),
+  createdAt: timestamp().defaultNow().notNull(),
+});
+
 export const builds = pgTable(
   "builds",
   {
@@ -178,6 +190,8 @@ export const usersRelations = relations(users, ({ many, one }) => ({
   }),
   buildBuilders: many(buildBuilders),
   buildLikes: many(buildLikes),
+  userNotes: many(userNotes, { relationName: "userNotes" }),
+  authoredNotes: many(userNotes, { relationName: "authoredNotes" }),
 }));
 
 export const challengesRelations = relations(challenges, ({ many }) => ({
@@ -223,5 +237,18 @@ export const buildBuildersRelations = relations(buildBuilders, ({ one }) => ({
   user: one(users, {
     fields: [buildBuilders.userAddress],
     references: [users.userAddress],
+  }),
+}));
+
+export const userNotesRelations = relations(userNotes, ({ one }) => ({
+  user: one(users, {
+    fields: [userNotes.userAddress],
+    references: [users.userAddress],
+    relationName: "userNotes",
+  }),
+  author: one(users, {
+    fields: [userNotes.authorAddress],
+    references: [users.userAddress],
+    relationName: "authoredNotes",
   }),
 }));
