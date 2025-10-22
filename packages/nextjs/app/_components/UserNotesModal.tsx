@@ -4,15 +4,15 @@ import { useRef, useState } from "react";
 import { Address } from "~~/components/scaffold-eth/Address/Address";
 import { useCreateUserNote, useDeleteUserNote, useUserNotes } from "~~/hooks/useUserNotes";
 import { UserByAddress } from "~~/services/database/repositories/users";
+import { formatDate } from "~~/utils/date";
 
 export const USER_NOTES_MODAL_ID = "user-notes-modal";
 
 type UserNotesModalProps = {
   user: NonNullable<UserByAddress>;
-  onSuccess?: () => void;
 };
 
-export const UserNotesModal = ({ user, onSuccess }: UserNotesModalProps) => {
+export const UserNotesModal = ({ user }: UserNotesModalProps) => {
   const modalRef = useRef<HTMLInputElement>(null);
   const [newComment, setNewComment] = useState("");
 
@@ -31,7 +31,6 @@ export const UserNotesModal = ({ user, onSuccess }: UserNotesModalProps) => {
       {
         onSuccess: () => {
           setNewComment("");
-          onSuccess?.();
         },
       },
     );
@@ -43,18 +42,6 @@ export const UserNotesModal = ({ user, onSuccess }: UserNotesModalProps) => {
       noteId,
     });
   };
-
-  const formatDate = (date: string) => {
-    return new Date(date).toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "short",
-      day: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-    });
-  };
-
-  console.log(notes);
 
   return (
     <div className="w-full">
@@ -104,9 +91,7 @@ export const UserNotesModal = ({ user, onSuccess }: UserNotesModalProps) => {
                 {notes.map(note => (
                   <div key={note.id} className="bg-base-200 rounded-lg p-4">
                     <div className="flex justify-between items-start mb-2">
-                      <span className="text-xs text-base-content/60">
-                        {formatDate(new Date(note.createdAt).toISOString())}
-                      </span>
+                      <span className="text-xs text-base-content/60">{formatDate(note.createdAt)}</span>
                       <button
                         className="btn btn-xs btn-error btn-outline"
                         disabled={isDeleting}
