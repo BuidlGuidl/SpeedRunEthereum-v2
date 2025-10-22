@@ -25,7 +25,7 @@ export const UserNotesIndicator = ({ user }: UserNotesIndicatorProps) => {
     <label
       htmlFor={USER_NOTES_MODAL_ID}
       className="absolute top-[-15px] right-[-15px] btn btn-sm btn-circle btn-warning cursor-pointer tooltip tooltip-left items-center justify-center flex"
-      data-tip="private notes"
+      data-tip="Private notes"
     >
       <div className="">{notesCount}</div>
     </label>

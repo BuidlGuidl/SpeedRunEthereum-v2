@@ -1,6 +1,6 @@
 import { DeleteUserNotePayload } from "~~/app/api/users/[address]/notes/[noteId]/route";
 import { CreateUserNotePayload } from "~~/app/api/users/[address]/notes/route";
-import { UserNoteWithAuthor } from "~~/services/database/repositories/userNotes";
+import { UserNote, UserNoteWithAuthor } from "~~/services/database/repositories/userNotes";
 
 export async function fetchUserNotes(userAddress: string): Promise<UserNoteWithAuthor[]> {
   const response = await fetch(`/api/users/${userAddress}/notes`);
@@ -11,7 +11,9 @@ export async function fetchUserNotes(userAddress: string): Promise<UserNoteWithA
   return data.notes as UserNoteWithAuthor[];
 }
 
-export async function createUserNote(payload: CreateUserNotePayload & { userAddress: string }): Promise<{ note: any }> {
+export async function createUserNote(
+  payload: CreateUserNotePayload & { userAddress: string },
+): Promise<{ note: UserNote }> {
   const response = await fetch(`/api/users/${payload.userAddress}/notes`, {
     method: "POST",
     headers: {

@@ -43,7 +43,7 @@ export const UserProfileCard = ({ user, batch }: UserProfileCardProps) => {
 
             {batch && (
               <div
-                className={`-mt-1 rounded-sm px-2 py-0.5 fon t-semibold ${
+                className={`-mt-1 rounded-sm px-2 py-0.5 font-semibold ${
                   user.batchStatus === BatchUserStatus.GRADUATE
                     ? "bg-green-500/30"
                     : "text-yellow-600 dark:text-yellow-400 bg-warning/30"
