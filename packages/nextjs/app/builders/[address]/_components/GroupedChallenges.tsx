@@ -98,7 +98,7 @@ export function GroupedChallenges({
                   key={challenge.id}
                   address={address}
                   challenge={challenge}
-                  comingSoon={challenge.id === ChallengeId.ZK_VOTING || challenge.id === ChallengeId.ORACLES}
+                  comingSoon={challenge.id === ChallengeId.ORACLES}
                 />
               );
             })}
