@@ -143,7 +143,8 @@ export const seedChallenges: (typeof challenges.$inferInsert)[] = [
   {
     id: ChallengeId.ZK_VOTING,
     challengeName: "🔒 ZK Voting",
-    autograding: false,
+    autograding: true,
+    github: "scaffold-eth/se-2-challenges:challenge-zk-voting",
     description:
       "🔒 Build your own decentralized voting system using zero-knowledge proofs. Let's write a contract that allows users to vote on a topic and the results will be computed off-chain using zero-knowledge proofs.",
     sortOrder: 8,

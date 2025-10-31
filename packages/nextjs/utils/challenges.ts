@@ -282,6 +282,21 @@ export const CHALLENGE_METADATA: Record<string, ChallengeStaticMetadata> = {
     title: "Build a Privacy-Preserving ZK Voting dApp",
     description:
       "Learn how to build a privacy-preserving ZK voting dApp where members vote anonymously using zero-knowledge proofs, Merkle trees, and nullifier hashes to prevent double voting.",
+    skills: [
+      "Design a **commitment + nullifier** scheme to enforce one-person-one-vote",
+      "Register voters in a **Lean Incremental Merkle Tree (LeanIMT)** and prove membership",
+      "Write Noir **ZK circuits** and generate a **Solidity verifier** with Barretenberg",
+      "Wire proofs to the contract and submit votes from a **burner wallet** to avoid linkage",
+    ],
+    skillLevel: SKILL_LEVELS.ADVANCED,
+    timeToComplete: "6 - 16 hours",
+    helpfulLinks: [
+      { text: "Noir Docs (Getting Started)", url: "https://noir-lang.org/docs/getting_started/quick_start" },
+      {
+        text: "Vitalik: Blockchain Voting (limits & MACI context)",
+        url: "https://vitalik.eth.limo/general/2021/05/25/voting2.html",
+      },
+    ],
   },
   [ChallengeId.ORACLES]: {
     title: "Build Decentralized Oracle Systems in Solidity",

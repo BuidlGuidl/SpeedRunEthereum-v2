@@ -75,7 +75,6 @@ export const HomepageClient = ({ challenges }: { challenges: Challenges }) => {
           challengeId={ChallengeId.ZK_VOTING}
           userChallenges={userChallenges}
           challenges={challenges}
-          comingSoon
         />
         <ChallengeExpandedCard
           key={ChallengeId.ORACLES}
