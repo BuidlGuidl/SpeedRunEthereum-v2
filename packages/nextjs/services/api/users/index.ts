@@ -22,18 +22,22 @@ export async function registerUser({
   signature,
   referrer,
   originalUtmParams,
+  originPath,
+  originTrigger,
 }: {
   address: string;
   signature: string;
   referrer: string | null;
   originalUtmParams?: Record<string, string>;
+  originPath?: string;
+  originTrigger?: string;
 }) {
   const response = await fetch("/api/users/register", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ address, signature, referrer, originalUtmParams }),
+    body: JSON.stringify({ address, signature, referrer, originalUtmParams, originPath, originTrigger }),
   });
 
   const data = await response.json();

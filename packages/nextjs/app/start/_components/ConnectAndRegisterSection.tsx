@@ -25,7 +25,11 @@ export const ConnectAndRegisterSection = () => {
   const handleRegisterClick = async () => {
     setIsLocalLoading(true);
     try {
-      await handleRegister({ referrer: storedReferrer, originalUtmParams: parsedUtmParams });
+      await handleRegister({
+        referrer: storedReferrer,
+        originalUtmParams: parsedUtmParams,
+        originTrigger: "start_register_button",
+      });
     } catch (error) {
       console.error("Registration failed:", error);
     } finally {
