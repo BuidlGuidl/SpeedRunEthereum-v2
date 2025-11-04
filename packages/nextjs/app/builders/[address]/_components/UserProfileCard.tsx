@@ -1,10 +1,11 @@
 "use client";
 
-import { RefreshEnsButton } from "./RefreshEnsButton";
 import { UserLocation } from "./UserLocation";
+import { UserNotesIndicator } from "./UserNotesIndicator";
 import { UserSocials } from "./UserSocials";
 import EditIcon from "~~/app/_assets/icons/EditIcon";
 import { UPDATE_USER_MODAL_ID, UpdateUserModal } from "~~/app/_components/UpdateUserModal";
+import { UserNotesModal } from "~~/app/_components/UserNotesModal";
 import { PunkBlockie } from "~~/components/PunkBlockie";
 import { Address } from "~~/components/scaffold-eth/Address/Address";
 import { useAuthSession } from "~~/hooks/useAuthSession";
@@ -24,20 +25,20 @@ export const UserProfileCard = ({ user, batch }: UserProfileCardProps) => {
     <>
       <div className="bg-base-100 rounded-lg p-6">
         <div className="flex flex-col md:flex-row justify-around lg:flex-col items-center gap-4">
-          {user.ensAvatar ? (
-            <div className="w-[224px] h-[224px] relative">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={user.ensAvatar} alt={user.userAddress} className="absolute inset-0" />
-            </div>
-          ) : (
-            <PunkBlockie address={user.userAddress} scale={2} />
-          )}
+          <div className="relative">
+            {user.ensAvatar ? (
+              <div className="w-[224px] h-[224px] relative">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={user.ensAvatar} alt={user.userAddress} className="absolute inset-0" />
+              </div>
+            ) : (
+              <PunkBlockie address={user.userAddress} scale={2} />
+            )}
+            {isAdmin && <UserNotesIndicator user={user} />}
+          </div>
           <div className="flex flex-col items-center gap-4">
             <div className="text-neutral">
               <Address address={user.userAddress} hideAvatar size="xl" cachedEns={user.ens} />
-              <div className="text-center">
-                <RefreshEnsButton user={user} />
-              </div>
             </div>
 
             {batch && (
@@ -70,6 +71,7 @@ export const UserProfileCard = ({ user, batch }: UserProfileCardProps) => {
           </div>
         </div>
         <UpdateUserModal user={user} />
+        {isAdmin && <UserNotesModal user={user} />}
       </div>
     </>
   );

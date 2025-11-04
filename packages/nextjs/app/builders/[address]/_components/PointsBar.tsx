@@ -32,7 +32,7 @@ const PointsBarModal = forwardRef<HTMLDialogElement, PointsBarModalProps>(({ clo
           <dl className="mt-5 grid grid-cols-1 divide-gray-200 overflow-hidden rounded-lg bg-base-100 border border-gray-200 md:grid-cols-4 md:divide-x divide-y md:divide-y-0">
             {stats.map(item => (
               <div key={item.name} className="px-4 py-5 sm:p-6">
-                <dt className="text-base font-normal text-gray-500">{item.name}</dt>
+                <dt className="text-base font-normal text-base-content">{item.name}</dt>
                 <dd className="mt-1 flex items-baseline justify-between md:block lg:flex">
                   <div className="flex items-baseline text-2xl font-semibold text-primary">{item.stat}</div>
                 </dd>

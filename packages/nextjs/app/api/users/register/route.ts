@@ -11,11 +11,14 @@ type RegisterPayload = {
   signature: `0x${string}`;
   referrer: string | null;
   originalUtmParams?: Record<string, string>;
+  eventPath?: string;
+  eventTrigger?: string;
 };
 
 export async function POST(req: Request) {
   try {
-    const { address, signature, referrer, originalUtmParams } = (await req.json()) as RegisterPayload;
+    const { address, signature, referrer, originalUtmParams, eventPath, eventTrigger } =
+      (await req.json()) as RegisterPayload;
 
     if (!address || !signature) {
       return NextResponse.json({ error: "Address and signature are required" }, { status: 400 });
@@ -53,8 +56,11 @@ export async function POST(req: Request) {
             originalUtmCampaign: originalUtmParams?.utm_campaign,
             originalUtmTerm: originalUtmParams?.utm_term,
             originalUtmContent: originalUtmParams?.utm_content,
+            eventPath: eventPath ?? undefined,
+            eventTrigger: eventTrigger ?? undefined,
           },
           req,
+          eventPath ? `https://speedrunethereum.com${eventPath}` : undefined,
         );
       } catch (e) {
         console.error(`Error tracking plausible event ${PlausibleEvent.SIGNUP_SRE} for user ${address}`);

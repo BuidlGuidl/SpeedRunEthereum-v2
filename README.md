@@ -99,3 +99,71 @@ FIREBASE_STORAGE_BUCKET=your-project-id.appspot.com
 Replace the content of `FIREBASE_SERVICE_ACCOUNT_KEY` with the JSON content from your service account key file (wrap the json in single quotes).
 
 The `FIREBASE_STORAGE_BUCKET` should be set to your Firebase Storage bucket name, typically in the format `your-project-id.appspot.com`.
+
+## Testing
+
+This project uses [Playwright](https://playwright.dev/) with [Synpress](https://github.com/Synthetixio/synpress) for end-to-end testing with MetaMask integration.
+
+### Running Tests
+
+To run tests locally, you have two options:
+
+#### 1. Run tests in headless mode:
+
+```bash
+yarn next:test
+```
+
+#### 2. Run tests with UI (interactive mode):
+
+```bash
+yarn next:test-ui
+```
+
+### Test Setup Requirements
+
+Before running tests, ensure you have:
+
+1. **Install Playwright browsers** (only needed the first time):
+
+   ```bash
+   yarn next:playwright-install
+   ```
+
+2. **Build wallet cache**: Set up the Synpress cache for MetaMask integration
+
+   ```bash
+   yarn next:cache-synpress
+   ```
+
+3. **Database running**: Make sure your Postgres database is up and seeded
+   ```bash
+   docker compose up -d
+   yarn drizzle-kit migrate
+   yarn db:seed
+   ```
+
+> **Note**: The tests will automatically start the dev server, so you don't need to run it manually.
+
+### Troubleshooting
+
+#### Cache Issues
+
+If you encounter an error like `Error: Cache for 08a20e3c7fc77e6ae298 does not exist. Create it first!`, you need to rename your cache folder:
+
+1. Navigate to `packages/nextjs/.cache-synpress/`
+2. Rename the existing cache folder to match the error message (e.g., rename `532f685e346606c2a803` to `08a20e3c7fc77e6ae298`), or use this command from the root folder:
+
+```
+mv packages/nextjs/.cache-synpress/532f685e346606c2a803 packages/nextjs/.cache-synpress/08a20e3c7fc77e6ae298
+```
+
+#### User Registration Issues
+
+Since tests register a test user, you may need to reset the database between test runs:
+
+```bash
+yarn db:seed
+```
+
+This will clear existing data and reseed the database with fresh test data.

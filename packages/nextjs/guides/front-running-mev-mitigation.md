@@ -131,7 +131,7 @@ _Figure: Commit-reveal scheme: users first commit a hash, then reveal trade deta
 
 - **How it works:** Instead of broadcasting a transaction to the public mempool, users send it to a private relay. Beyond simply hiding transactions, modern relays can enable **MEV-Share**. This allows your transaction to be safely back-run by searchers who bid for the opportunity, and a portion of the MEV they generate is shared back with you as a rebate. You are protected from front-running and can even earn back some of your trading costs.
 - **User Guide:**
-  1. Add a Private RPC to MetaMask (examples: [Flashbots Protect](https://docs.flashbots.net/flashbots-protect/overview) or [mevblocker.io](https://mevblocker.io/)):
+  1. Add a Private RPC to MetaMask, examples: [Flashbots Protect](https://docs.flashbots.net/flashbots-protect/overview), [mevblocker.io](https://mevblocker.io/), or [dRPC](https://drpc.org/blog/mev-protection-nodes/) (MEV protection only on paid plans):
      - Network Name: Flashbots Protect
      - RPC URL: `https://rpc.flashbots.net/fast`
      - Chain ID: 1

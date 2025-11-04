@@ -24,8 +24,8 @@ export const ProgressBasedPrompt = () => {
         ) : (
           <>
             <p className="mt-0 mb-1 text-center lg:text-left md:text-lg">Already comfortable building on Ethereum?</p>
-            <Link href="/challenge/simple-nft-example" className="link">
-              Jump straight to Challenge #0
+            <Link href="/challenge/tokenization" className="link">
+              Jump to the first challenge
             </Link>
           </>
         )}

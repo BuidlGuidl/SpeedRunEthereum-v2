@@ -6,7 +6,7 @@ image: /assets/guides/nfts_in_web3.jpg
 
 NFTs (Non-Fungible Tokens) are often associated with digital art and collectibles, but their potential in the Web3 ecosystem goes far beyond profile pictures and rare images. As unique, verifiable digital assets on the blockchain, NFTs are revolutionizing industries and enabling new forms of ownership, interaction, and value exchange.
 
-Whether you're just starting with the [Simple NFT Example Challenge](/challenge/simple-nft-example) or looking to build advanced NFT-powered applications, understanding the variety of NFT use cases will help you unlock the full potential of this technology.
+Whether you're just starting with the [Tokenization Challenge](/challenge/tokenization) or looking to build advanced NFT-powered applications, understanding the variety of NFT use cases will help you unlock the full potential of this technology.
 
 Let's explore some of the most compelling NFT use cases beyond the art world.
 
@@ -131,6 +131,6 @@ NFTs are a cornerstone of the decentralized web, enabling:
 
 ---
 
-**Ready to build your first NFT? [Try the Simple NFT Example Challenge!](/challenge/simple-nft-example)**
+**Ready to build your first NFT? [Try the Tokenization Challenge!](/challenge/tokenization)**
 
 **Already comfortable with the basics? [Try the SVG NFT Challenge!](/challenge/svg-nft)**

@@ -1,0 +1,62 @@
+import { defineConfig, devices } from "@playwright/test";
+
+/**
+ * Read environment variables from file.
+ * https://github.com/motdotla/dotenv
+ */
+// import dotenv from 'dotenv';
+// import path from 'path';
+// dotenv.config({ path: path.resolve(__dirname, '.env') });
+
+/**
+ * See https://playwright.dev/docs/test-configuration.
+ */
+export default defineConfig({
+  testDir: "./test",
+  /* Run tests in files in parallel */
+  fullyParallel: false, // Synpress requires sequential execution
+  /* Fail the build on CI if you accidentally left test.only in the source code. */
+  forbidOnly: !!process.env.CI,
+  /* Retry on CI only */
+  retries: process.env.CI ? 2 : 0,
+  /* Opt out of parallel tests on CI. */
+  workers: 1, // Synpress requires single worker
+  /* Timeout for each test */
+  timeout: 60 * 1000, // 60 seconds
+  /* Global timeout for the whole test run */
+  globalTimeout: process.env.CI ? 20 * 60 * 1000 : undefined, // 20 minutes in CI
+  /* Reporter to use. See https://playwright.dev/docs/test-reporters */
+  reporter: process.env.CI
+    ? [["github"], ["html", { outputFolder: "playwright-report", open: "never" }], ["list"]]
+    : [["html", { outputFolder: "playwright-report", open: "never" }], ["list"]],
+  /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
+  use: {
+    /* Base URL to use in actions like `await page.goto('/')`. */
+    baseURL: process.env.PLAYWRIGHT_TEST_BASE_URL || "http://localhost:3000",
+
+    /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
+    trace: "on-first-retry",
+    /* Record video on failure in CI */
+    // video: process.env.CI ? "retain-on-failure" : "off",
+    /* Take screenshot on failure */
+    screenshot: "only-on-failure",
+    /* Action timeout */
+    actionTimeout: 30 * 1000, // 30 seconds
+    /* Navigation timeout */
+    navigationTimeout: 30 * 1000, // 30 seconds
+  },
+
+  projects: [
+    {
+      name: "chromium",
+      use: { ...devices["Desktop Chrome"] },
+    },
+  ],
+
+  /* Run your local dev server before starting the tests */
+  webServer: {
+    command: process.env.CI ? "yarn serve" : "yarn start",
+    url: "http://localhost:3000",
+    reuseExistingServer: !process.env.CI,
+  },
+});
