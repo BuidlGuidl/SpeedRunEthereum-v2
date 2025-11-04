@@ -14,25 +14,25 @@ export function useUserRegister() {
     mutationFn: async ({
       referrer,
       originalUtmParams,
-      originTrigger,
+      eventTrigger,
     }: {
       referrer: string | null;
       originalUtmParams?: Record<string, string>;
-      originTrigger?: string;
+      eventTrigger?: string;
     }) => {
       if (!address) throw new Error("Wallet not connected");
 
       const signature = await signWithNotification(EIP_712_TYPED_DATA__USER_REGISTER);
 
-      const originPath = typeof window !== "undefined" ? window.location.pathname : undefined;
+      const eventPath = typeof window !== "undefined" ? window.location.pathname : undefined;
 
       return registerUser({
         address,
         signature,
         referrer,
         originalUtmParams,
-        originPath,
-        originTrigger,
+        eventPath,
+        eventTrigger,
       });
     },
     onSuccess: user => {

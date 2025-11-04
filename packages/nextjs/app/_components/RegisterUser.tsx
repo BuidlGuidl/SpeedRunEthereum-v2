@@ -62,7 +62,7 @@ export const RegisterUser = () => {
               handleRegister({
                 referrer: storedReferrer,
                 originalUtmParams: parsedUtmParams,
-                originTrigger: "header_register_tooltip_button",
+                eventTrigger: "header_register_tooltip_button",
               })
             }
             disabled={isRegistering}

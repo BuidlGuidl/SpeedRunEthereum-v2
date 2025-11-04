@@ -28,7 +28,7 @@ export const ConnectAndRegisterSection = () => {
       await handleRegister({
         referrer: storedReferrer,
         originalUtmParams: parsedUtmParams,
-        originTrigger: "start_register_button",
+        eventTrigger: "start_register_button",
       });
     } catch (error) {
       console.error("Registration failed:", error);
