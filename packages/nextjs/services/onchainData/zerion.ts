@@ -17,6 +17,8 @@ type ZerionTransactionsResponse = {
  * @see https://developers.zerion.io/reference/listwallettransactions
  */
 export async function fetchTransactions(address: string, params: Record<string, string> = {}) {
+  if (process.env.CI) return [];
+
   const apiKey = process.env.ZERION_API_KEY;
   if (!apiKey) throw new Error("ZERION_API_KEY is not set");
 

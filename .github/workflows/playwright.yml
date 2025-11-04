@@ -1,0 +1,113 @@
+name: Playwright Tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch: # Allow manual trigger
+
+jobs:
+  E2e_tests:
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+    env:
+      CI: true
+      NODE_ENV: test
+      POSTGRES_URL: postgresql://postgres:mysecretpassword@localhost:5432/postgres
+      NEXTAUTH_SECRET: 1234567890
+      NEXTAUTH_URL: http://localhost:3000
+      ZERION_API_KEY: test_api_key_for_ci
+      
+
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_PASSWORD: mysecretpassword
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install dependencies
+        run: yarn install --immutable
+
+      - name: Install Playwright Browsers (Chromium only)
+        run: cd packages/nextjs && npx playwright install chromium
+
+
+      - name: Setup database
+        run: |
+          cp packages/nextjs/services/database/seed.data.example.ts packages/nextjs/services/database/seed.data.ts
+          yarn drizzle-kit migrate
+          yarn db:reset
+          yarn db:seed
+
+      - name: Build Next.js application
+        run: yarn next:build
+        env:
+          FIREBASE_SERVICE_ACCOUNT_KEY: '{
+            "type": "service_account",
+            "project_id": "your-project-id"
+          }'
+          FIREBASE_STORAGE_BUCKET: your-project-id.appspot.com
+
+      - name: Cache Synpress
+        run: |
+          cd packages/nextjs
+          xvfb-run yarn cache-synpress
+        env:
+          PLAYWRIGHT_TEST_BASE_URL: http://localhost:3000
+          CI: true
+        continue-on-error: false
+
+      - name: Rename Synpress cache folder
+        run: |
+          cd packages/nextjs
+          mv .cache-synpress/532f685e346606c2a803 .cache-synpress/08a20e3c7fc77e6ae298
+
+      - name: Run playwright tests
+        run: xvfb-run yarn next:test
+        env:
+          PLAYWRIGHT_TEST_BASE_URL: http://localhost:3000
+
+      - name: List test report contents
+        run: |
+          echo "Contents of playwright-report directory:"
+          ls -la packages/nextjs/playwright-report/ || echo "playwright-report directory does not exist"
+          echo "Contents of test-results directory:"
+          ls -la packages/nextjs/test-results/ || echo "test-results directory does not exist"
+
+      - name: Upload test results
+        uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: playwright-report
+          path: packages/nextjs/playwright-report/
+          retention-days: 30
+          if-no-files-found: warn
+          compression-level: 6
+          overwrite: false
+          include-hidden-files: false
+
+      - name: Upload test videos and traces
+        uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: test-results
+          path: packages/nextjs/test-results/
+          retention-days: 7
+          if-no-files-found: ignore
