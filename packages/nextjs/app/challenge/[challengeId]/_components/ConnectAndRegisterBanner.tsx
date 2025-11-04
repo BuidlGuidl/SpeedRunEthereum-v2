@@ -58,6 +58,7 @@ export const ConnectAndRegisterBanner = () => {
                   handleRegister({
                     referrer: storedReferrer,
                     originalUtmParams: parsedUtmParams,
+                    eventTrigger: "challenge_banner_register_button",
                   })
                 }
                 disabled={isRegistering}
