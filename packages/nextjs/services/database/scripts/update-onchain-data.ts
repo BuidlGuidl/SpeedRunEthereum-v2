@@ -9,7 +9,11 @@ import { fetchOnchainData } from "~~/services/onchainData";
 
 dotenv.config({ path: path.resolve(__dirname, "../../../.env.development") });
 
-if (!process.env.POSTGRES_URL || !process.env.NEXT_PUBLIC_ALCHEMY_API_KEY || !process.env.ZERION_API_KEY) {
+if (
+  !process.env.POSTGRES_URL ||
+  !process.env.NEXT_PUBLIC_ALCHEMY_API_KEY ||
+  (!process.env.CI && !process.env.ZERION_API_KEY)
+) {
   console.error(
     "Error: POSTGRES_URL, NEXT_PUBLIC_ALCHEMY_API_KEY, or ZERION_API_KEY environment variables are not set",
   );
