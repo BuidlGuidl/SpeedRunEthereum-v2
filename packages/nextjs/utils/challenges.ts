@@ -74,10 +74,6 @@ export const CHALLENGE_METADATA: Record<string, ChallengeStaticMetadata> = {
     timeToComplete: "3 - 8 hours",
     helpfulLinks: [
       {
-        text: "Previous Challenge",
-        url: "/challenge/tokenization",
-      },
-      {
         text: "Solidity by Example",
         url: "https://solidity-by-example.org/",
       },
@@ -118,10 +114,6 @@ export const CHALLENGE_METADATA: Record<string, ChallengeStaticMetadata> = {
     skillLevel: SKILL_LEVELS.BEGINNER,
     timeToComplete: "3 - 8 hours",
     helpfulLinks: [
-      {
-        text: "Previous Challenge",
-        url: "/challenge/decentralized-staking",
-      },
       {
         text: "ERC20 Token Standard",
         url: "https://ethereum.org/developers/docs/standards/tokens/erc-20/",
@@ -296,6 +288,12 @@ export const CHALLENGE_METADATA: Record<string, ChallengeStaticMetadata> = {
         text: "Vitalik: Blockchain Voting (limits & MACI context)",
         url: "https://vitalik.eth.limo/general/2021/05/25/voting2.html",
       },
+      {
+        text: "ZK-kit Binary Merkle Root (Noir)",
+        url: "https://github.com/zk-kit/zk-kit.noir/blob/main/packages/binary-merkle-root/src/lib.nr",
+      },
+      { text: "LeanIMT Visual Explanation", url: "https://hackmd.io/@vplasencia/S1whLBN16" },
+      { text: "Barretenberg bb (UltraHonk) Docs", url: "https://barretenberg.aztec.network/docs/getting_started/" },
     ],
   },
   [ChallengeId.ORACLES]: {

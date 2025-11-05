@@ -10,7 +10,6 @@ import type { ChallengeId } from "~~/services/database/config/types";
 import { Challenges } from "~~/services/database/repositories/challenges";
 import { CHALLENGE_METADATA } from "~~/utils/challenges";
 import type { SkillLevel } from "~~/utils/challenges";
-import { CHALLENGE_XP } from "~~/utils/xp";
 
 export const CurriculumSection = ({ challenges }: { challenges: Challenges }) => {
   const challengeById = Object.fromEntries(challenges.map(c => [c.id, c]));
@@ -25,7 +24,7 @@ export const CurriculumSection = ({ challenges }: { challenges: Challenges }) =>
       </div>
 
       {(["fundamentals", "advanced"] as Group[]).map((group: Group) => {
-        const groupLabel = group === "fundamentals" ? "🌟 Solidity Fundamentals" : "🚀 Advanced Solidity Concepts";
+        const groupLabel = group === "fundamentals" ? "🧱 Solidity Fundamentals" : "⚡ Advanced Solidity Concepts";
         const groupDesc =
           group === "fundamentals"
             ? "Master the core concepts of Ethereum development and smart contract basics."
@@ -34,24 +33,22 @@ export const CurriculumSection = ({ challenges }: { challenges: Challenges }) =>
         return (
           <div key={group} className="mb-12 rounded-2xl p-4 md:p-6 bg-accent mx-auto lg:max-w-5xl xl:max-w-6xl">
             <div className="text-center mb-5">
-              <h3 className="text-2xl md:text-3xl font-bold text-primary-content">{groupLabel}</h3>
-              <p className="text-primary-content">{groupDesc}</p>
+              <h3 className="text-2xl md:text-3xl font-bold text-[#026262]">{groupLabel}</h3>
+              <p className="text-[#026262]">{groupDesc}</p>
             </div>
 
             <div className="space-y-5">
               {roadmap
                 .filter((s: SectionData) => s.group === group)
                 .map((section: SectionData) => {
-                  const totalXp = section.challengeIds.length * CHALLENGE_XP;
                   return (
                     <div key={section.title} className="card bg-base-100 shadow-md overflow-hidden">
                       <div className="card-body p-5">
-                        <div className="flex items-start justify-between">
+                        <div className="flex items-start">
                           <div>
                             <h4 className="card-title text-xl mb-1">{section.title}</h4>
                             <p className="text-sm text-base-content/80">{section.description}</p>
                           </div>
-                          <span className="badge badge-outline ml-4">{totalXp} XP</span>
                         </div>
 
                         <div className="grid md:grid-cols-2 gap-5 mt-4 lg:max-w-none">
@@ -62,7 +59,6 @@ export const CurriculumSection = ({ challenges }: { challenges: Challenges }) =>
                                 const ch = challengeById[id];
                                 if (!ch) return null;
 
-                                const xp = CHALLENGE_XP;
                                 const meta = CHALLENGE_METADATA[id];
                                 const desc = meta?.description || ch.description;
 
@@ -72,14 +68,11 @@ export const CurriculumSection = ({ challenges }: { challenges: Challenges }) =>
                                       href={`/challenge/${ch.id}`}
                                       className="block p-3 rounded-lg bg-base-200 hover:bg-base-300 transition-colors"
                                     >
-                                      <div className="flex items-center justify-between gap-3">
+                                      <div className="flex items-center gap-3">
                                         <div className="min-w-0">
                                           <div className="font-medium">{ch.challengeName}</div>
                                           <div className="text-xs text-base-content/70 leading-snug">{desc}</div>
                                         </div>
-                                        <span className="badge badge-secondary shrink-0 whitespace-nowrap">
-                                          +{xp} XP
-                                        </span>
                                       </div>
                                     </Link>
                                   </li>

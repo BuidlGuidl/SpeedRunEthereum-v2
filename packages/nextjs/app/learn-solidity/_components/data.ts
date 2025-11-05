@@ -13,8 +13,8 @@ export const roadmap: RoadmapSection[] = [
   {
     group: "fundamentals",
     title: "Ethereum & Scaffold-ETH Fundamentals",
-    description: "Learn the basics of smart contracts, NFTs, and the Ethereum environment.",
-    challengeIds: [ChallengeId.SIMPLE_NFT_EXAMPLE],
+    description: "Learn the basics of smart contracts, tokenization, the Ethereum environment and Scaffold-ETH.",
+    challengeIds: [ChallengeId.TOKENIZATION],
   },
   {
     group: "fundamentals",
@@ -47,6 +47,13 @@ export const roadmap: RoadmapSection[] = [
     description: "Build prediction markets and integrate external data sources through oracles.",
     challengeIds: [ChallengeId.PREDICTION_MARKETS],
   },
+  {
+    group: "advanced",
+    title: "Privacy & ZK Voting",
+    description:
+      "Build a privacy-preserving voting dApp with commitments, nullifiers, Merkle proofs, and a Noir-based verifier.",
+    challengeIds: [ChallengeId.ZK_VOTING],
+  },
 ];
 
 export const faqs: Array<{ q: string; a: string }> = [
@@ -64,7 +71,7 @@ export const faqs: Array<{ q: string; a: string }> = [
   },
   {
     q: "What tools do I need?",
-    a: "You'll use Scaffold-ETH 2, which provides everything you need: a local blockchain, frontend, and debugging tools. We'll guide you through the setup in Challenge #0.",
+    a: "You'll use Scaffold-ETH 2, which provides everything you need: a local blockchain, frontend, and debugging tools. We'll guide you through the setup in the Tokenization Challenge.",
   },
   {
     q: "Will I get a certificate?",

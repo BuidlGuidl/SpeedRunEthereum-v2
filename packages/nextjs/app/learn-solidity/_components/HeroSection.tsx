@@ -1,6 +1,4 @@
-// Local proxy to render the shared CourseStats inside the hero without creating
-// import cycles at the page level.
-import { CourseStats as HeroStatsProxy } from "./CourseStats";
+import { DynamicCtaButton } from "./DynamicCtaButton";
 
 export const HeroSection = () => {
   return (
@@ -27,9 +25,8 @@ export const HeroSection = () => {
             <span className="w-2 h-2 bg-primary rounded-full" /> Build Real Projects
           </div>
         </div>
-        {/* Course stats below hero copy */}
         <div className="mt-8">
-          <HeroStatsProxy />
+          <DynamicCtaButton />
         </div>
       </div>
       <div className="relative h-[130px]">
