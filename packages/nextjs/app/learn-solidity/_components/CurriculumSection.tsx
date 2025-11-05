@@ -82,7 +82,7 @@ export const CurriculumSection = ({ challenges }: { challenges: Challenges }) =>
                           </div>
                           <div>
                             <h5 className="font-semibold mb-2 text-primary">📚 Recommended Resources</h5>
-                            <ul className="space-y-1">
+                            <ul className="space-y-1 list-disc pl-5 marker:text-base-content/50">
                               {(() => {
                                 const guideLinks = section.challengeIds.flatMap(
                                   id => CHALLENGE_METADATA[id]?.guides ?? [],
@@ -96,8 +96,8 @@ export const CurriculumSection = ({ challenges }: { challenges: Challenges }) =>
                                   new Map(combined.map(item => [item.url, item])).values(),
                                 );
                                 return uniqueByUrl.map(item => (
-                                  <li key={item.url}>
-                                    <Link href={item.url} className="text-primary hover:underline text-sm">
+                                  <li key={item.url} className="pl-1 text-sm text-primary">
+                                    <Link href={item.url} className="hover:underline">
                                       {item.title}
                                     </Link>
                                   </li>
