@@ -74,10 +74,6 @@ export const CHALLENGE_METADATA: Record<string, ChallengeStaticMetadata> = {
     timeToComplete: "3 - 8 hours",
     helpfulLinks: [
       {
-        text: "Previous Challenge",
-        url: "/challenge/tokenization",
-      },
-      {
         text: "Solidity by Example",
         url: "https://solidity-by-example.org/",
       },
@@ -118,10 +114,6 @@ export const CHALLENGE_METADATA: Record<string, ChallengeStaticMetadata> = {
     skillLevel: SKILL_LEVELS.BEGINNER,
     timeToComplete: "3 - 8 hours",
     helpfulLinks: [
-      {
-        text: "Previous Challenge",
-        url: "/challenge/decentralized-staking",
-      },
       {
         text: "ERC20 Token Standard",
         url: "https://ethereum.org/developers/docs/standards/tokens/erc-20/",
