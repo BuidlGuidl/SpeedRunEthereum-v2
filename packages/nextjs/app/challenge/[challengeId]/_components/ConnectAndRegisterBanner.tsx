@@ -35,7 +35,7 @@ export const ConnectAndRegisterBanner = () => {
                 </p>
                 <p>
                   <span className="font-bold">Connect your wallet and register</span> to unlock the full
-                  SpeedRunEthereum experience.
+                  Speedrun Ethereum experience.
                 </p>
               </>
             ) : (

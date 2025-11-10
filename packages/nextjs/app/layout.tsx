@@ -13,7 +13,7 @@ const spaceGrotesk = Space_Grotesk({
 });
 
 export const metadata = getMetadata({
-  title: "Speed Run Ethereum",
+  title: "Speedrun Ethereum",
   description: "Learn Solidity development to build dapps on Ethereum with hands-on blockchain challenges.",
 });
 

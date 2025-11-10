@@ -40,7 +40,7 @@ export const queryClient = new QueryClient({
 });
 
 const getSiweMessageOptions: GetSiweMessageOptions = () => ({
-  statement: "Sign in to SpeedRunEthereum",
+  statement: "Sign in to Speedrun Ethereum",
 });
 
 export const ScaffoldEthAppWithProviders = ({ children }: { children: React.ReactNode }) => {

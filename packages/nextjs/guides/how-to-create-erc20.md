@@ -201,7 +201,7 @@ _Figure: Six-step chain process for building secure and transparent tokens, from
 
 🚀 **Ready to apply this knowledge?**
 
-The ERC20 token you've designed is the perfect starting point for more advanced challenges on SpeedRunEthereum:
+The ERC20 token you've designed is the perfect starting point for more advanced challenges on Speedrun Ethereum:
 
 - [**Token Vendor Challenge**](https://speedrunethereum.com/challenge/token-vendor)**:** Take the token you just conceptualized and build a TokenVendor.sol smart contract. This vendor will act like a vending machine, selling your ERC20 tokens to users in exchange for ETH.
 - [**Minimum Viable Exchange (DEX) Challenge**](https://speedrunethereum.com/challenge/dex)**:** Go even further by building a basic decentralized exchange. Users will be able to trade ETH for your token and your token back for ETH, learning about liquidity provision and automated market-making concepts.

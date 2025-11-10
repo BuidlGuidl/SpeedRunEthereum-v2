@@ -320,7 +320,7 @@ export const seedUserChallenges: (typeof userChallenges.$inferInsert)[] = [
     contractUrl: "https://sepolia-optimism.etherscan.io/address/0xad5e878a62D5B77277aCDC321614a9727815B4C8#code",
     submittedAt: new Date(1736441361988),
     reviewComment:
-      "<p>You have successfully passed challenge 2!</p><p>You have passed the first three challenges on SpeedRunEthereum and can now join the BuidlGuidl!</p>",
+      "<p>You have successfully passed challenge 2!</p><p>You have passed the first three challenges on Speedrun Ethereum and can now join the BuidlGuidl!</p>",
     reviewAction: ReviewAction.REJECTED,
   },
   {
