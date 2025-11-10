@@ -34,8 +34,8 @@ export const ConnectAndRegisterBanner = () => {
                   building your <span className="font-bold">onchain portfolio</span>?
                 </p>
                 <p>
-                  <span className="font-bold">Connect your wallet and register</span> to unlock the full
-                  Speedrun Ethereum experience.
+                  <span className="font-bold">Connect your wallet and register</span> to unlock the full Speedrun
+                  Ethereum experience.
                 </p>
               </>
             ) : (
