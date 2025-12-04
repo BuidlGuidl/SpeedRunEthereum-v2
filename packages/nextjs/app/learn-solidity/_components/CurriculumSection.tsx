@@ -89,7 +89,9 @@ export const CurriculumSection = ({ challenges }: { challenges: Challenges }) =>
                                 );
                                 const helpfulLinks = section.challengeIds
                                   .flatMap(id => CHALLENGE_METADATA[id]?.helpfulLinks ?? [])
-                                  .filter(l => !l.url || !l.url.startsWith("/guides"))
+                                  .filter(
+                                    l => !l.url || (!l.url.startsWith("/guides") && !l.url.includes("/challenge/")),
+                                  )
                                   .map(l => ({ title: l.text, url: l.url ?? "#" }));
                                 const combined = [...guideLinks, ...helpfulLinks];
                                 const uniqueByUrl = Array.from(
