@@ -38,20 +38,15 @@ export const Footer = () => {
           <div className="flex justify-center items-center gap-2 text-sm w-full flex-col md:flex-row">
             <div className="flex justify-center items-center gap-2">
               <div className="text-center">
-                <Link href="/guides" className="link">
-                  Solidity Guides
+                <Link href="/learn-solidity" className="link">
+                  Solidity Course
                 </Link>
               </div>
               <span>·</span>
               <div className="text-center">
-                <a
-                  href="https://github.com/BuidlGuidl/SpeedRunEthereum-v2"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="link"
-                >
-                  Fork me
-                </a>
+                <Link href="/guides" className="link">
+                  Solidity Guides
+                </Link>
               </div>
             </div>
             <span className="hidden md:block">·</span>
