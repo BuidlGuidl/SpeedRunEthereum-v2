@@ -1,7 +1,7 @@
 import { RecoverTypedDataAddressParameters, recoverTypedDataAddress } from "viem";
 
 export const EIP_712_DOMAIN = {
-  name: "SpeedRunEthereum",
+  name: "Speedrun Ethereum",
   version: "1",
   chainId: 1,
   verifyingContract: "0x0000000000000000000000000000000000000000",
