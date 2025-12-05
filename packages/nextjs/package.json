@@ -37,7 +37,7 @@
     "drizzle-orm": "^0.42.0",
     "firebase-admin": "^13.4.0",
     "mime-types": "^3.0.1",
-    "next": "~15.4.5",
+    "next": "~15.4.8",
     "next-auth": "^4.24.11",
     "next-mdx-remote": "^5.0.0",
     "next-nprogress-bar": "~2.3.13",
