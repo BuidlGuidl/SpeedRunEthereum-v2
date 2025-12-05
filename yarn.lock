@@ -4072,10 +4072,10 @@ __metadata:
     postcss: ~8.4.45
     prettier: ~3.3.3
     qrcode.react: ~4.0.1
-    react: ~19.1.1
+    react: ~19.1.2
     react-copy-to-clipboard: ~5.1.0
     react-country-flag: ^3.1.0
-    react-dom: ~19.1.1
+    react-dom: ~19.1.2
     react-dropzone: ^14.3.8
     react-flags-select: ^2.4.0
     react-hot-toast: ~2.4.0
@@ -16385,14 +16385,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-dom@npm:~19.1.1":
-  version: 19.1.1
-  resolution: "react-dom@npm:19.1.1"
+"react-dom@npm:~19.1.2":
+  version: 19.1.2
+  resolution: "react-dom@npm:19.1.2"
   dependencies:
     scheduler: ^0.26.0
   peerDependencies:
-    react: ^19.1.1
-  checksum: 71d63df955e99bb58470c6ae12ebb82fa80e2a73147c387b73a31c17bcff803ce8aded52ae0c4391c9b413be0aa449249d8be7d063136826d1f0caba9720a907
+    react: ^19.1.2
+  checksum: a89e90dc7a3a97e9661b7d055560e654c010f6833152a7f66c79d7589ec3fa69e4d88f06c72521eefa048e806b0de397426a3ffbe1d498926acc1195f529a87a
   languageName: node
   linkType: hard
 
@@ -16524,10 +16524,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react@npm:~19.1.1":
-  version: 19.1.1
-  resolution: "react@npm:19.1.1"
-  checksum: f2f18fea5deac87b1167365bd5160bcba64d383c26a37afa905b714ca424f423ef97d8daf53f041ab9ac25a06357fafcf0b5d3b6b84c9d1eace0e621bfeae629
+"react@npm:~19.1.2":
+  version: 19.1.2
+  resolution: "react@npm:19.1.2"
+  checksum: 00f8b26b10044f3a1204285f800a62a7d849e7c00e5af34706bea131fa7ee648c8a0ed69f42df43d799c1379efd409895905b588eaca408bfb8be3ba5d9c5ae9
   languageName: node
   linkType: hard
 
