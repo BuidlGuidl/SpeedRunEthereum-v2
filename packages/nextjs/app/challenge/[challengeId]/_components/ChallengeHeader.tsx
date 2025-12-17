@@ -1,7 +1,7 @@
 import { MDXRemote } from "next-mdx-remote/rsc";
 import rehypeRaw from "rehype-raw";
 import remarkGfm from "remark-gfm";
-import { CheckCircleIcon, ClockIcon, LinkIcon } from "@heroicons/react/24/outline";
+import { CheckCircleIcon, ClockIcon, LinkIcon, UserGroupIcon } from "@heroicons/react/24/outline";
 import SkillLevelIcon from "~~/app/_components/SkillLevelIcon";
 import { SkillLevel } from "~~/utils/challenges";
 
@@ -11,9 +11,10 @@ type Props = {
   skillLevel?: SkillLevel;
   timeToComplete?: string;
   helpfulLinks?: { text: string; url?: string }[];
+  completedByCount?: number;
 };
 
-export function ChallengeHeader({ skills, skillLevel, timeToComplete, helpfulLinks }: Props) {
+export function ChallengeHeader({ skills, skillLevel, timeToComplete, helpfulLinks, completedByCount }: Props) {
   if (!skills || skills.length === 0) {
     return null;
   }
@@ -69,6 +70,16 @@ export function ChallengeHeader({ skills, skillLevel, timeToComplete, helpfulLin
               <div className="flex-1">
                 <div className="text-sm">Time to complete</div>
                 <div className="font-semibold">{timeToComplete || "—"}</div>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-3">
+              <UserGroupIcon className="w-8 h-8 text-primary" />
+              <div className="flex-1">
+                <div className="text-sm">Completed by</div>
+                <div className="font-semibold">
+                  {completedByCount ? `${completedByCount} builder${completedByCount > 1 ? "s" : ""}` : "—"}
+                </div>
               </div>
             </div>
 
