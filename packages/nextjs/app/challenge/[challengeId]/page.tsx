@@ -9,7 +9,11 @@ import rehypeRaw from "rehype-raw";
 import remarkGfm from "remark-gfm";
 import { ArrowTopRightOnSquareIcon } from "@heroicons/react/24/outline";
 import { ChallengeId } from "~~/services/database/config/types";
-import { getAllChallenges, getChallengeById } from "~~/services/database/repositories/challenges";
+import {
+  getAllChallenges,
+  getChallengeById,
+  getCountOfCompletedChallenge,
+} from "~~/services/database/repositories/challenges";
 import { fetchGithubChallengeReadme, parseGithubUrl, splitChallengeReadme } from "~~/services/github";
 import { CHALLENGE_METADATA } from "~~/utils/challenges";
 import { getMetadata } from "~~/utils/scaffold-eth/getMetadata";
@@ -44,6 +48,7 @@ export default async function ChallengePage(props: { params: Promise<{ challenge
 
   const staticMetadata = CHALLENGE_METADATA[challenge.id];
   const guides = staticMetadata?.guides;
+  const countOfCompletedChallenge = await getCountOfCompletedChallenge(challenge.id as ChallengeId);
 
   if (!challenge.github) {
     return <div>No challenge content available</div>;
@@ -74,6 +79,7 @@ export default async function ChallengePage(props: { params: Promise<{ challenge
             skillLevel={staticMetadata?.skillLevel}
             timeToComplete={staticMetadata?.timeToComplete}
             helpfulLinks={staticMetadata?.helpfulLinks}
+            completedByCount={countOfCompletedChallenge}
           />
           <div className="prose dark:prose-invert max-w-fit break-words lg:max-w-[850px]">
             <MDXRemote
