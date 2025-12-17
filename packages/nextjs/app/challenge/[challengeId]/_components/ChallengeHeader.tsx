@@ -24,7 +24,7 @@ export function ChallengeHeader({ skills, skillLevel, timeToComplete, helpfulLin
         {/* Left card: Skills */}
         <div className="rounded-2xl border border-primary/10 bg-base-100 p-6 shadow-center h-full flex flex-col">
           <div className="font-semibold mb-3 text-primary">Skills you&apos;ll gain</div>
-          <div className="flex-1 flex items-center">
+          <div className="flex-1 flex">
             {skills && skills.length > 0 ? (
               <ul className="space-y-2 text-sm">
                 {skills.slice(0, 4).map(skill => (
