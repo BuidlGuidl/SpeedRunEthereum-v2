@@ -20,8 +20,8 @@ export const roadmap: RoadmapSection[] = [
     group: "fundamentals",
     title: "Building DeFi Primitives",
     description:
-      "Dive into the core concepts of decentralized finance by building your own staking app and token vendor.",
-    challengeIds: [ChallengeId.DECENTRALIZED_STAKING, ChallengeId.TOKEN_VENDOR],
+      "Dive into the core concepts of decentralized finance by building your own crowdfunding app and token vendor.",
+    challengeIds: [ChallengeId.CROWDFUNDING, ChallengeId.TOKEN_VENDOR],
   },
   {
     group: "fundamentals",
@@ -59,7 +59,7 @@ export const roadmap: RoadmapSection[] = [
 export const faqs: Array<{ q: string; a: string }> = [
   {
     q: "Is this course free?",
-    a: "Yes! SpeedRunEthereum is completely free. Our mission is to make Web3 development accessible to everyone. You'll get access to all challenges, guides, and community support at no cost.",
+    a: "Yes! Speedrun Ethereum is completely free. Our mission is to make Web3 development accessible to everyone. You'll get access to all challenges, guides, and community support at no cost.",
   },
   {
     q: "Do I need prior programming experience?",
@@ -75,6 +75,6 @@ export const faqs: Array<{ q: string; a: string }> = [
   },
   {
     q: "Will I get a certificate?",
-    a: "You'll build a public portfolio of completed challenges and projects on the blockchain. This serves as proof of your skills to potential employers and is often more valuable than a traditional certificate. You will also receive a BuidlGuidl Batch NFT if you complete SpeedRunEthereum and successfully finish one of our batch programs.",
+    a: "You'll build a public portfolio of completed challenges and projects on the blockchain. This serves as proof of your skills to potential employers and is often more valuable than a traditional certificate. You will also receive a BuidlGuidl Batch NFT if you complete Speedrun Ethereum and successfully finish one of our batch programs.",
   },
 ];

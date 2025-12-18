@@ -4,7 +4,7 @@ description: "Master scalable Solidity staking with O(1) reward distribution. Th
 image: /assets/guides/scalable-staking-rewards-solidity.jpg
 ---
 
-So, you're building a decentralized staking contract – maybe as part of the [Speedrun Ethereum "Decentralized Staking" challenge](https://speedrunethereum.com/challenge/decentralized-staking) or for your own DeFi project. You want users to stake their tokens and earn rewards. Simple, right?
+So, you're building a decentralized staking contract and you want users to be able to stake their tokens and earn rewards. Simple, right?
 
 Well, what happens when you have thousands, or even millions, of stakers? If you try to loop through everyone to distribute rewards, your gas costs will go through the roof! 🤯 This is known as an O(n) problem – the more users, the more gas. It's just not sustainable.
 
@@ -124,7 +124,7 @@ While powerful, implementing this pattern correctly requires attention to detail
 
 The Lazy Reward Calculation Pattern is an essential tool in any DeFi Solidity developer's arsenal. It directly addresses the scalability and gas cost issues inherent in naive reward distribution methods. By understanding how `rewardPerTokenStored` and `userRewardPerTokenPaid` work together, you can build staking systems that are fair, efficient, and capable of supporting a large, vibrant community. By mastering this O(1) approach, you can significantly enhance the viability and user experience of your staking contracts.
 
-As you continue your journey with Solidity, especially if you're working through challenges like Speedrun Ethereum's Decentralized Staking, integrating this pattern can elevate your contracts from simple examples to production-grade solutions.
+As you continue your journey with Solidity, especially if you're working through challenges like Speedrun Ethereum's [Stablecoin Challenge](https://speedrunethereum.com/challenge/stablecoins), integrating this pattern can elevate your contracts from simple examples to production-grade solutions.
 
 ---
 

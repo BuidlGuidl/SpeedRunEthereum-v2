@@ -13,7 +13,7 @@ export enum UserRole {
 
 export enum ChallengeId {
   TOKENIZATION = "tokenization",
-  DECENTRALIZED_STAKING = "decentralized-staking",
+  CROWDFUNDING = "crowdfunding",
   TOKEN_VENDOR = "token-vendor",
   DICE_GAME = "dice-game",
   DEX = "dex",

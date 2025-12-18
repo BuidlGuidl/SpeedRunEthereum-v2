@@ -6,7 +6,7 @@ image: /assets/guides/sustainable-tokenomics.jpg
 
 So you're designing a staking protocol, or looking to improve an existing one. You know that offering rewards (APY) is key to attracting users. But if your strategy is just "offer the highest APY by printing tons of tokens," you might be setting yourself up for a short-lived hype cycle followed by a painful crash.
 
-Mercenary capital flows in, and flows out just as quickly when the next shiny high-APY farm appears. If you're new to staking mechanisms, check out our [Decentralized Staking challenge](https://speedrunethereum.com/challenge/decentralized-staking) for a hands-on introduction.
+Mercenary capital flows in, and flows out just as quickly when the next shiny high-APY farm appears. If you're new to staking mechanisms, check out our [Stablecoins challenge](https://speedrunethereum.com/challenge/stablecoins) for a hands-on introduction.
 
 To build something that lasts, you need **advanced tokenomics**. This isn't just about the APY percentage; it's about engineering a sustainable economic system for your protocol and its token.
 
