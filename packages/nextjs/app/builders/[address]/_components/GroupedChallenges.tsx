@@ -10,7 +10,7 @@ import type { UserChallenges } from "~~/services/database/repositories/userChall
 
 const basicChallengeIds = new Set<ChallengeId>([
   ChallengeId.TOKENIZATION,
-  ChallengeId.DECENTRALIZED_STAKING,
+  ChallengeId.CROWDFUNDING,
   ChallengeId.TOKEN_VENDOR,
   ChallengeId.DICE_GAME,
 ]);

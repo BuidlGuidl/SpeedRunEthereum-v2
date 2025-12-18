@@ -26,7 +26,7 @@ export const WhyWorks = () => {
     <section className="bg-base-300">
       <div className="container mx-auto px-6 py-16">
         <div className="text-center mb-10">
-          <h3 className="text-2xl md:text-3xl font-bold">Why SpeedRunEthereum Works</h3>
+          <h3 className="text-2xl md:text-3xl font-bold">Why Speedrun Ethereum Works</h3>
           <p className="text-base-content/70 mt-2">
             Our hands-on approach gets you building real projects from day one
           </p>

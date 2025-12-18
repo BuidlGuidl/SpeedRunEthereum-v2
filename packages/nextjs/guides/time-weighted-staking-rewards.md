@@ -221,4 +221,4 @@ Building these advanced systems demands extra care:
 - **[OpenZeppelin Contracts](https://docs.openzeppelin.com/contracts/):** For secure, standard components.
 - **[Chainlink Documentation](https://docs.chain.link/):** For all things oracles.
 - **[Solidity by Example](https://solidity-by-example.org/):** For practical patterns.
-- **[Speedrun Ethereum Staking challenge](https://speedrunethereum.com/challenge/decentralized-staking):** Keep building and learning!
+- **[Speedrun Ethereum Stablecoins challenge](https://speedrunethereum.com/challenge/stablecoins):** Keep building and learning!

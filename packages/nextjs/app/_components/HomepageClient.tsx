@@ -26,8 +26,8 @@ export const HomepageClient = ({ challenges }: { challenges: Challenges }) => {
           challenges={challenges}
         />
         <ChallengeExpandedCard
-          key={ChallengeId.DECENTRALIZED_STAKING}
-          challengeId={ChallengeId.DECENTRALIZED_STAKING}
+          key={ChallengeId.CROWDFUNDING}
+          challengeId={ChallengeId.CROWDFUNDING}
           userChallenges={userChallenges}
           challenges={challenges}
         />

@@ -11,7 +11,7 @@ image: "/assets/guides/sustainable-erc20-supply.jpg"
 - **Staking, vesting, and governance** are key for sustainable ecosystems.
 - **Use OpenZeppelin** for secure, standard-compliant contracts.
 - **Balance incentives** to avoid unsustainable inflation or mercenary behavior.
-- **Learn by building:** Try the [Decentralized Staking Challenge](https://speedrunethereum.com/challenge/decentralized-staking) on SpeedRunEthereum.
+- **Learn by building:** Try the [Token Vendor](https://speedrunethereum.com/challenge/token-vendor) on Speedrun Ethereum.
 
 ---
 
@@ -248,24 +248,23 @@ Staking lets users lock tokens for rewards, governance, or access. It reduces ci
 > - High staking rewards attract users, but if funded only by inflation, can lead to long-term devaluation.
 > - The best staking models fund rewards from real protocol revenue, not just new token emissions.
 
-> **Try it yourself:** [Decentralized Staking Challenge](https://speedrunethereum.com/challenge/decentralized-staking)
+> **Try it yourself:** Go build a staking protocol using insights from the following guides:
+>
+> - [Beyond APY: Building Sustainable Tokenomics for Your Staking Protocol](https://speedrunethereum.com/guides/sustainable-tokenomics-staking-protocols)
+> - [Time-Weighted Staking Rewards: Aligning Incentives in DeFi Protocols](https://speedrunethereum.com/guides/time-weighted-staking-rewards)
+> - [Scalable Solidity Staking: O(1) Reward Distribution](https://speedrunethereum.com/guides/scalable-gas-solidity-staking)
+> - [A Developer's Guide to Liquid Staking Tokens (LSTs)](https://speedrunethereum.com/guides/liquid-staking-tokens)
+      
 
 ---
 
 ## 7. Real-World Examples: Successes & Pitfalls
 
-- **Success:** MakerDAO (MKR/DAI) – Dual-token, deflationary buybacks, strong governance.
-- **Success:** Uniswap (UNI) – Fixed supply, clear governance, wide distribution.
-- **Success:** Chainlink (LINK) – Utility for oracles, staking, and security.
+- **Success:** MakerDAO (MKR/DAI) – Dual-token, deflationary buybacks, strong governance. Shows the power of integrated utility and value accrual.
+- **Success:** Uniswap (UNI) – Fixed supply, clear governance, wide distribution. Simplicity and transparency win.
+- **Success:** Chainlink (LINK) – Utility for oracles, staking, and security. Utility drives demand.
 - **Failure:** Luna/TerraUSD – Overly complex, unsustainable incentives, poor risk management.
 - **Common pitfalls:** No real utility, excessive team allocation, short/no vesting, unsustainable rewards, centralization.
-
-> **Lessons from the Field:**
->
-> - **MakerDAO (MKR/DAI):** Dual-token, deflationary buybacks, strong governance. Shows the power of integrated utility and value accrual.
-> - **Uniswap (UNI):** Fixed supply, clear governance, wide distribution. Simplicity and transparency win.
-> - **Chainlink (LINK):** Real utility for oracles, staking, and security. Utility drives demand.
-> - **Luna/TerraUSD:** Overly complex, unsustainable incentives, poor risk management. Complexity and unsustainable rewards can be fatal.
 
 ---
 
@@ -338,8 +337,8 @@ Sustainable ERC20 tokenomics require thoughtful design—balancing supply, deman
 
 **Ready to build?**
 
-- [Decentralized Staking Challenge](https://speedrunethereum.com/challenge/decentralized-staking)
 - [Token Vendor Challenge](https://speedrunethereum.com/challenge/token-vendor)
 - [Minimum Viable Exchange (Dex) Challenge](https://speedrunethereum.com/challenge/dex)
+- [Stablecoins Challenge](https://speedrunethereum.com/challenge/stablecoins)
 
 **Good luck building sustainable, valuable ERC20 ecosystems!**

@@ -10,7 +10,7 @@ import {
   UserRole,
 } from "./config/types";
 
-export const SEED_DATA_VERSION = "1.1.7";
+export const SEED_DATA_VERSION = "1.1.8";
 
 // Using Drizzle's inferred insert types to ensure seed data
 // matches database schema requirements
@@ -70,14 +70,14 @@ export const seedChallenges: (typeof challenges.$inferInsert)[] = [
     previewImage: "/assets/challenges/tokenization.svg",
   },
   {
-    id: ChallengeId.DECENTRALIZED_STAKING,
-    challengeName: "Decentralized Staking App",
-    github: "scaffold-eth/se-2-challenges:challenge-decentralized-staking",
+    id: ChallengeId.CROWDFUNDING,
+    challengeName: "Crowdfunding App",
+    github: "scaffold-eth/se-2-challenges:challenge-crowdfunding",
     autograding: true,
     description:
-      "🦸 A superpower of Ethereum is allowing you, the builder, to create a simple set of rules that an adversarial group of players can use to work together. In this challenge, you create a decentralized application where users can coordinate a group funding effort. The users only have to trust the code.",
+      "🦸 A superpower of Ethereum is allowing you, the builder, to create a simple set of rules that an adversarial group of players can use to work together. In this challenge, you create a decentralized application where users can coordinate a group funding effort. The users only have to trust the code, not each other.",
     sortOrder: 1,
-    previewImage: "/assets/challenges/stakingToken.svg",
+    previewImage: "/assets/challenges/crowdfunding.svg",
   },
   {
     id: ChallengeId.TOKEN_VENDOR,
@@ -225,7 +225,7 @@ export const seedUserChallenges: (typeof userChallenges.$inferInsert)[] = [
   },
   {
     userAddress: seedUsers?.[0]?.userAddress,
-    challengeId: ChallengeId.DECENTRALIZED_STAKING,
+    challengeId: ChallengeId.CROWDFUNDING,
     frontendUrl: "https://chunky-beam.surge.sh/",
     contractUrl: "https://sepolia.etherscan.io/address/0xbF35fC995A2Cc4F1508B5F769922623dE7f220d6",
     reviewComment: "Dummy review, it's working great",
@@ -270,7 +270,7 @@ export const seedUserChallenges: (typeof userChallenges.$inferInsert)[] = [
   },
   {
     userAddress: seedUsers?.[2]?.userAddress,
-    challengeId: ChallengeId.DECENTRALIZED_STAKING,
+    challengeId: ChallengeId.CROWDFUNDING,
     frontendUrl: "https://tasteful-plough.surge.sh",
     contractUrl: "https://goerli.etherscan.io/address/0xf3384118b56827271979A879e2d5A4d28569eb48",
     reviewComment: "Dummy review, it's working great",
@@ -306,7 +306,7 @@ export const seedUserChallenges: (typeof userChallenges.$inferInsert)[] = [
   },
   {
     userAddress: seedUsers?.[3]?.userAddress,
-    challengeId: ChallengeId.DECENTRALIZED_STAKING,
+    challengeId: ChallengeId.CROWDFUNDING,
     frontendUrl: "https://stupid-beginner.surge.sh",
     contractUrl: "https://goerli.etherscan.io/address/0xd68edd04EbB81c6f187A526F3656C18dD0258cd8",
     reviewComment: "Dummy review, it's working great",
@@ -334,7 +334,7 @@ export const seedUserChallenges: (typeof userChallenges.$inferInsert)[] = [
   },
   {
     userAddress: seedUsers?.[4]?.userAddress,
-    challengeId: ChallengeId.DECENTRALIZED_STAKING,
+    challengeId: ChallengeId.CROWDFUNDING,
     frontendUrl: "https://sepolia-optimism.etherscan.io/address/0x75CCfC494667c91F4926213A04619f93812885b2#code",
     contractUrl: "https://sepolia-optimism.etherscan.io/address/0x75CCfC494667c91F4926213A04619f93812885b2#code",
     submittedAt: new Date(1736440199150),
