@@ -63,7 +63,7 @@ export const CHALLENGE_METADATA: Record<string, ChallengeStaticMetadata> = {
   [ChallengeId.CROWDFUNDING]: {
     title: "Build a Crowdfunding Application in Solidity",
     description:
-      "Learn to build a crowdfunding application with Solidity. Step-by-step tutorial to help adversarial parties to work together to fund a project using Solidity smart contracts on Ethereum.",
+      "Learn to build a crowdfunding application with Solidity. Step-by-step tutorial to help adversarial parties work together to fund a project using Solidity smart contracts on Ethereum.",
     skills: [
       "Design and implement a decentralized application (dApp) with a state machine",
       "Handle and send ETH in a smart contract using **payable** functions",
