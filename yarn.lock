@@ -2876,10 +2876,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@next/env@npm:15.4.8":
-  version: 15.4.8
-  resolution: "@next/env@npm:15.4.8"
-  checksum: 6e77946eeb18f8dc31471a3b2c74875be519a1295c3d905f5e47a49ea97e4e6e89d9d2dcc8816a2415a5fc354a8a288b8883f11747d7faabee16add5a39a205e
+"@next/env@npm:15.4.10":
+  version: 15.4.10
+  resolution: "@next/env@npm:15.4.10"
+  checksum: b89dd1279a53c69d86630b63cb550cbacaed28b8e423f73c492581a17cb4c1bda4429ab3c19b3ec24c2a65f06e55d954b553c6553ee94eb2867c628a3d291e04
   languageName: node
   linkType: hard
 
@@ -4062,7 +4062,7 @@ __metadata:
     eslint-plugin-prettier: ~5.2.1
     firebase-admin: ^13.4.0
     mime-types: ^3.0.1
-    next: ~15.4.8
+    next: ~15.4.10
     next-auth: ^4.24.11
     next-mdx-remote: ^5.0.0
     next-nprogress-bar: ~2.3.13
@@ -4072,10 +4072,10 @@ __metadata:
     postcss: ~8.4.45
     prettier: ~3.3.3
     qrcode.react: ~4.0.1
-    react: ~19.1.2
+    react: ~19.1.4
     react-copy-to-clipboard: ~5.1.0
     react-country-flag: ^3.1.0
-    react-dom: ~19.1.2
+    react-dom: ~19.1.4
     react-dropzone: ^14.3.8
     react-flags-select: ^2.4.0
     react-hot-toast: ~2.4.0
@@ -14712,11 +14712,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"next@npm:~15.4.8":
-  version: 15.4.8
-  resolution: "next@npm:15.4.8"
+"next@npm:~15.4.10":
+  version: 15.4.10
+  resolution: "next@npm:15.4.10"
   dependencies:
-    "@next/env": 15.4.8
+    "@next/env": 15.4.10
     "@next/swc-darwin-arm64": 15.4.8
     "@next/swc-darwin-x64": 15.4.8
     "@next/swc-linux-arm64-gnu": 15.4.8
@@ -14767,7 +14767,7 @@ __metadata:
       optional: true
   bin:
     next: dist/bin/next
-  checksum: 9e0acac942310a9fbc8dd76aa05a30d457c0c3521683d6285e581bcecb53ee9efdef1a7a1df694d71fd0653b5397138745cd095265da3963de6115d2358a99fa
+  checksum: 11f76f5de9f0e734dd3925a48821e29291d82191a099d2e35695d51acbcbd4ee965d2842748e4a95cfdf55f38e3edb2180fd3be4adbe36b01936a7130ad60a11
   languageName: node
   linkType: hard
 
@@ -16385,14 +16385,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-dom@npm:~19.1.2":
-  version: 19.1.2
-  resolution: "react-dom@npm:19.1.2"
+"react-dom@npm:~19.1.4":
+  version: 19.1.4
+  resolution: "react-dom@npm:19.1.4"
   dependencies:
     scheduler: ^0.26.0
   peerDependencies:
-    react: ^19.1.2
-  checksum: a89e90dc7a3a97e9661b7d055560e654c010f6833152a7f66c79d7589ec3fa69e4d88f06c72521eefa048e806b0de397426a3ffbe1d498926acc1195f529a87a
+    react: ^19.1.4
+  checksum: 7b2c9d0bbea29cafc30f29c8061f90609fbc085cb17ddfcbec8e50cbf71bb80d4012d48b934ac622c884678545eb5bace37917f58c52bc50b228133ed6d0ea28
   languageName: node
   linkType: hard
 
@@ -16524,10 +16524,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react@npm:~19.1.2":
-  version: 19.1.2
-  resolution: "react@npm:19.1.2"
-  checksum: 00f8b26b10044f3a1204285f800a62a7d849e7c00e5af34706bea131fa7ee648c8a0ed69f42df43d799c1379efd409895905b588eaca408bfb8be3ba5d9c5ae9
+"react@npm:~19.1.4":
+  version: 19.1.4
+  resolution: "react@npm:19.1.4"
+  checksum: 6b4fb102b9723df56fc5d30a46c9f9ed9435422c7df4eb55617d2fa7eaf9d527ee63f827b261608fad5946e4d88fb708240bd9fe01f08d62851ec090b4233462
   languageName: node
   linkType: hard
 
