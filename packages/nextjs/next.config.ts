@@ -43,6 +43,11 @@ const nextConfig: NextConfig = {
         destination: "/",
         permanent: true,
       },
+      {
+        source: "/challenge/decentralized-staking",
+        destination: "/challenge/crowdfunding",
+        permanent: true,
+      },
     ];
   },
 };
