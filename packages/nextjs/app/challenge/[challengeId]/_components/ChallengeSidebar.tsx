@@ -63,10 +63,10 @@ export function ChallengeSidebar({ headings }: ChallengeSidebarProps) {
 
   return (
     <>
-      {/* Mobile hamburger button */}
+      {/* Mobile hamburger button - positioned in header area, right of logo */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="lg:hidden fixed top-20 left-4 z-50 btn btn-circle btn-sm btn-primary shadow-lg"
+        className="lg:hidden fixed top-3 left-44 z-50 btn btn-circle btn-sm btn-primary shadow-lg"
         aria-label="Toggle navigation menu"
       >
         {isOpen ? <XMarkIcon className="w-5 h-5" /> : <Bars3Icon className="w-5 h-5" />}
