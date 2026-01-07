@@ -138,7 +138,7 @@ To compile, deploy, and test your `YourToken.sol` contract, you'll need a develo
    - **What it is:** For more complex projects or a professional workflow, a local setup using Hardhat is common. Hardhat is an Ethereum development environment that facilitates compiling, deploying, testing, and debugging.
    - **Scaffold-ETH 2:** A great starting point, it bundles Hardhat with a pre-configured frontend (Next.JS) and many useful scripts, allowing you to get up and running quickly. [Scaffold-ETH 2 repository](https://github.com/scaffold-eth/scaffold-eth-2).
    - **How it works (general approach):** You'd typically place your .sol files in a contracts directory, write deployment scripts, and use command-line tasks to compile, deploy, and test.
-   - **Quick setup with Scaffold-ETH 2:** The SpeedRunEthereum challenges, like the [Token Vendor challenge](https://speedrunethereum.com/challenge/token-vendor), provide excellent, step-by-step instructions on cloning and setting up a Scaffold-ETH 2 environment. It will speed up your development and learning process.
+   - **Quick setup with Scaffold-ETH 2:** The Speedrun Ethereum challenges, like the [Token Vendor challenge](https://speedrunethereum.com/challenge/token-vendor), provide excellent, step-by-step instructions on cloning and setting up a Scaffold-ETH 2 environment. It will speed up your development and learning process.
 
 Choose the environment that best suits your current needs. For this tutorial, the Solidity code remains the same regardless of your choice.
 

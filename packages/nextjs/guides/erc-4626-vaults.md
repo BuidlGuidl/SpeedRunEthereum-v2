@@ -283,4 +283,4 @@ function _accrueFees(uint256 realizedGainAssets) internal {
 - Understand LP risks: [Impermanent Loss Explained](/guides/impermanent-loss-math-explained)
 - Build tokens first: [How to Create an ERC20 Token](/guides/how-to-create-erc20)
 
-Ready to practice? Try the [Decentralized Staking Challenge](/challenge/decentralized-staking) in Speedrun Ethereum.
+Ready to practice? Try the [Crowdfunding Challenge](/challenge/crowdfunding) in Speedrun Ethereum.

@@ -331,5 +331,5 @@ Bonding curves are a powerful tool for building fair, liquid, and transparent to
 
 **Want to try it yourself?**
 
-- [SpeedRunEthereum Token Vendor Challenge](https://speedrunethereum.com/challenge/token-vendor)
+- [Speedrun Ethereum Token Vendor Challenge](https://speedrunethereum.com/challenge/token-vendor)
 - [Minimum Viable Exchange (Dex) Challenge](https://speedrunethereum.com/challenge/dex)

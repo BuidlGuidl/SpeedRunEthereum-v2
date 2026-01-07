@@ -39,7 +39,7 @@ export const getChallengeDependenciesInfo = ({
 
 export const JOIN_BATCH_DEPENDENCIES = [
   ChallengeId.TOKENIZATION,
-  ChallengeId.DECENTRALIZED_STAKING,
+  ChallengeId.CROWDFUNDING,
   ChallengeId.TOKEN_VENDOR,
   ChallengeId.DICE_GAME,
   ChallengeId.DEX,
