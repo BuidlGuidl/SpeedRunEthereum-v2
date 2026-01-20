@@ -19,25 +19,6 @@ import { fetchGithubChallengeReadme, parseGithubUrl, splitChallengeReadme } from
 import { CHALLENGE_METADATA } from "~~/utils/challenges";
 import { getMetadata } from "~~/utils/scaffold-eth/getMetadata";
 
-// Extract H2 headings from markdown content
-function extractHeadings(markdown: string): Heading[] {
-  const h2Regex = /^##\s+(.+)$/gm;
-  const headings: Heading[] = [];
-  let match;
-  while ((match = h2Regex.exec(markdown)) !== null) {
-    const text = match[1];
-    const id = text
-      .toLowerCase()
-      .replace(/[\u{1F300}-\u{1F9FF}]/gu, "")
-      .replace(/[^\w\s-]/g, "")
-      .trim()
-      .replace(/\s+/g, "-");
-    headings.push({ id, text });
-  }
-  return headings;
-}
-
-// Generate ID from heading text (must match extractHeadings logic)
 function generateHeadingId(text: string): string {
   return text
     .toLowerCase()
@@ -45,6 +26,18 @@ function generateHeadingId(text: string): string {
     .replace(/[^\w\s-]/g, "")
     .trim()
     .replace(/\s+/g, "-");
+}
+
+function extractHeadings(markdown: string): Heading[] {
+  const h2Regex = /^##\s+(.+)$/gm;
+  const headings: Heading[] = [];
+  let match;
+  while ((match = h2Regex.exec(markdown)) !== null) {
+    const text = match[1];
+    const id = generateHeadingId(text);
+    headings.push({ id, text });
+  }
+  return headings;
 }
 
 export async function generateStaticParams() {
@@ -94,7 +87,7 @@ export default async function ChallengePage(props: { params: Promise<{ challenge
   const createH2WithId = ({ children, ...props }: { children?: ReactNode }) => {
     const text = String(children);
     const id = generateHeadingId(text);
-    return createElement("h2", { ...props, id }, children);
+    return createElement("h2", { ...props, id, style: { scrollMarginTop: "80px" } }, children);
   };
 
   return (
