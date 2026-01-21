@@ -202,6 +202,23 @@ export const CHALLENGE_METADATA: Record<string, ChallengeStaticMetadata> = {
       },
     ],
   },
+  [ChallengeId.ORACLES]: {
+    title: "Build Decentralized Oracle Systems in Solidity",
+    description:
+      "Learn to build three fundamental oracle architectures: Whitelist, Staking, and Optimistic Oracles. Understand trade-offs between security, decentralization, and efficiency while implementing dispute resolution and economic incentive mechanisms.",
+    skills: [
+      "Deeply understand how different oracle architectures work and their trade-offs",
+      "Design and build a whitelist oracle that allows only trusted addresses to submit data",
+      "Implement a staking-based oracle that rewards validators for providing accurate data",
+      "Create an optimistic oracle that uses challenge-response mechanisms to resolve disputes",
+    ],
+    skillLevel: SKILL_LEVELS.INTERMEDIATE,
+    timeToComplete: "4 - 12 hours",
+    helpfulLinks: [
+      { text: "Chainlink Oracles", url: "https://docs.chain.link/" },
+      { text: "UMA Protocol", url: "https://docs.uma.xyz/" },
+    ],
+  },
   [ChallengeId.OVER_COLLATERALIZED_LENDING]: {
     title: "Build an Over-Collateralized Lending Platform in Solidity",
     description:
@@ -281,11 +298,6 @@ export const CHALLENGE_METADATA: Record<string, ChallengeStaticMetadata> = {
         url: "https://vitalik.eth.limo/general/2021/05/25/voting2.html",
       },
     ],
-  },
-  [ChallengeId.ORACLES]: {
-    title: "Build Decentralized Oracle Systems in Solidity",
-    description:
-      "Learn to build three fundamental oracle architectures: Whitelist, Staking, and Optimistic Oracles. Understand trade-offs between security, decentralization, and efficiency while implementing dispute resolution and economic incentive mechanisms.",
   },
   [ChallengeId.MULTISIG]: {
     title: "Build a Multisignature Wallet in Solidity",
