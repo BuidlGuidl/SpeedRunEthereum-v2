@@ -93,7 +93,7 @@ export function GroupedChallenges({
                 return <ChallengeDetailsStatus key={challenge.id} challenge={challenge} />;
               }
 
-              return <ChallengeDetails key={challenge.id} address={address} challenge={challenge} comingSoon={false} />;
+              return <ChallengeDetails key={challenge.id} address={address} challenge={challenge} />;
             })}
           </div>
         </div>
