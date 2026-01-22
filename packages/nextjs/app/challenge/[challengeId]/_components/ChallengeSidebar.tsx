@@ -81,10 +81,10 @@ export function ChallengeSidebar({ headings }: ChallengeSidebarProps) {
       {/* Sidebar */}
       <nav
         className={`
-          fixed left-0 top-0 h-full w-72 pt-20 z-40
+          fixed left-0 top-0 h-full w-72 pt-4 z-40
           bg-base-100 border-r border-base-300 overflow-y-auto
           transition-transform duration-300 ease-in-out
-          lg:sticky lg:top-0 lg:h-screen lg:pt-4 lg:w-64 lg:shrink-0 lg:translate-x-0 lg:border-r-0 lg:bg-transparent
+          lg:sticky lg:top-0 lg:h-screen lg:w-64 lg:shrink-0 lg:translate-x-0 lg:border-r-0 lg:bg-transparent
           ${isOpen ? "translate-x-0" : "-translate-x-full"}
         `}
       >
