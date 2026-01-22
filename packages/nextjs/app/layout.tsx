@@ -4,6 +4,7 @@ import PlausibleProvider from "next-plausible";
 import AcquisitionTracker from "~~/components/AcquisitionTracker";
 import { ScaffoldEthAppWithProviders } from "~~/components/ScaffoldEthAppWithProviders";
 import { ThemeProvider } from "~~/components/ThemeProvider";
+import { SidebarProvider } from "~~/contexts/SidebarContext";
 import "~~/styles/globals.css";
 import { getMetadata } from "~~/utils/scaffold-eth/getMetadata";
 
@@ -25,8 +26,10 @@ const ScaffoldEthApp = ({ children }: { children: React.ReactNode }) => {
       </head>
       <body>
         <ThemeProvider enableSystem>
-          <AcquisitionTracker />
-          <ScaffoldEthAppWithProviders>{children}</ScaffoldEthAppWithProviders>
+          <SidebarProvider>
+            <AcquisitionTracker />
+            <ScaffoldEthAppWithProviders>{children}</ScaffoldEthAppWithProviders>
+          </SidebarProvider>
         </ThemeProvider>
       </body>
     </html>

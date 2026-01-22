@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
+import { XMarkIcon } from "@heroicons/react/24/outline";
+import { useSidebar } from "~~/contexts/SidebarContext";
 
 export type Heading = {
   id: string;
@@ -14,7 +15,20 @@ type ChallengeSidebarProps = {
 
 export function ChallengeSidebar({ headings }: ChallengeSidebarProps) {
   const [activeId, setActiveId] = useState<string>("");
-  const [isOpen, setIsOpen] = useState(false);
+  const sidebar = useSidebar();
+  const isOpen = sidebar?.isOpen ?? false;
+
+  const setIsOpen = (open: boolean) => {
+    sidebar?.setIsOpen(open);
+  };
+
+  // Register sidebar on mount, unregister on unmount
+  useEffect(() => {
+    sidebar?.setHasSidebar(true);
+    return () => {
+      sidebar?.setHasSidebar(false);
+    };
+  }, [sidebar]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -61,17 +75,6 @@ export function ChallengeSidebar({ headings }: ChallengeSidebarProps) {
 
   return (
     <>
-      {/* Mobile hamburger button */}
-      {!isOpen && (
-        <button
-          onClick={() => setIsOpen(true)}
-          className="lg:hidden fixed top-3 left-44 z-50 btn btn-circle btn-sm btn-primary shadow-lg"
-          aria-label="Toggle navigation menu"
-        >
-          <Bars3Icon className="w-5 h-5" />
-        </button>
-      )}
-
       {/* Mobile overlay */}
       {isOpen && <div className="lg:hidden fixed inset-0 bg-black/50 z-40" onClick={() => setIsOpen(false)} />}
 

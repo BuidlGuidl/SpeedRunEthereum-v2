@@ -6,7 +6,9 @@ import { usePathname } from "next/navigation";
 import Logo from "./Logo";
 import clsx from "clsx";
 import { useAccount } from "wagmi";
+import { Bars3Icon } from "@heroicons/react/24/outline";
 import { RainbowKitCustomConnectButton } from "~~/components/scaffold-eth";
+import { useSidebar } from "~~/contexts/SidebarContext";
 import { useUser } from "~~/hooks/useUser";
 import { UserRole } from "~~/services/database/config/types";
 import { UserByAddress } from "~~/services/database/repositories/users";
@@ -95,6 +97,7 @@ export const Header = () => {
 
   const { address: connectedAddress } = useAccount();
   const { data: user } = useUser(connectedAddress);
+  const sidebar = useSidebar();
 
   return (
     <div
@@ -109,6 +112,16 @@ export const Header = () => {
             <Link href="/" className={clsx("ml-2 lg:ml-6 lg:mr-4 lg:my-2", isStartPage && "lg:hidden")}>
               <Logo className="w-36 lg:w-48" />
             </Link>
+          )}
+          {/* Hamburger button - shown only on challenge pages with sidebar */}
+          {sidebar?.hasSidebar && !sidebar.isOpen && (
+            <button
+              onClick={() => sidebar.setIsOpen(true)}
+              className="lg:hidden ml-4 btn btn-circle btn-sm btn-primary shadow-lg"
+              aria-label="Toggle navigation menu"
+            >
+              <Bars3Icon className="w-5 h-5" />
+            </button>
           )}
           <ul className="hidden lg:flex flex-nowrap px-1 gap-2">
             <HeaderMenuLinks hideItemsByLabel={["Home"]} user={user} />
