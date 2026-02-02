@@ -108,7 +108,7 @@ export const HomepageClient = ({ challenges }: { challenges: Challenges }) => {
           />
           <AfterSreCard
             title="Capture the Flag"
-            description="Join our CTF game and hack your way through 12 Smart Contract challenges."
+            description="Join our CTF game and hack your way through 24 Smart Contract challenges."
             externalLink="https://ctf.buidlguidl.com"
             buttonText="Start"
             previewImage="/assets/challenges/ctf.svg"
