@@ -2,7 +2,7 @@
 
 ![SRE Thumbnail](./packages/nextjs/public/thumbnail.png)
 
-New version of [Speedrun Ethereum](https://github.com/BuidlGuidl/SpeedRunEthereum) built with [Scaffold-ETH 2](https://github.com/scaffold-eth/scaffold-eth-2). An expanded experience for builders where you'll be able to unlock your builder profile after completing a few challenges. This will open the gates to:
+New version of [Speedrun Ethereum](https://github.com/BuidlGuidl/SpeedrunEthereum-v2) built with [Scaffold-ETH 2](https://github.com/scaffold-eth/scaffold-eth-2). An expanded experience for builders where you'll be able to unlock your builder profile after completing a few challenges. This will open the gates to:
 
 - Interact with other BuidlGuidl curriculums like [ETH Tech Tree](https://www.ethtechtree.com/) and [BuidlGuidl CTF](https://ctf.buidlguidl.com/)
 - Share your builds and discover what other builders are up to

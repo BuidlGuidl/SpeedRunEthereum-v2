@@ -10,7 +10,7 @@ import {
   UserRole,
 } from "./config/types";
 
-export const SEED_DATA_VERSION = "1.1.7";
+export const SEED_DATA_VERSION = "1.1.8";
 
 // Using Drizzle's inferred insert types to ensure seed data
 // matches database schema requirements
@@ -70,14 +70,14 @@ export const seedChallenges: (typeof challenges.$inferInsert)[] = [
     previewImage: "/assets/challenges/tokenization.svg",
   },
   {
-    id: ChallengeId.DECENTRALIZED_STAKING,
-    challengeName: "Decentralized Staking App",
-    github: "scaffold-eth/se-2-challenges:challenge-decentralized-staking",
+    id: ChallengeId.CROWDFUNDING,
+    challengeName: "Crowdfunding App",
+    github: "scaffold-eth/se-2-challenges:challenge-crowdfunding",
     autograding: true,
     description:
-      "🦸 A superpower of Ethereum is allowing you, the builder, to create a simple set of rules that an adversarial group of players can use to work together. In this challenge, you create a decentralized application where users can coordinate a group funding effort. The users only have to trust the code.",
+      "🦸 A superpower of Ethereum is allowing you, the builder, to create a simple set of rules that an adversarial group of players can use to work together. In this challenge, you create a decentralized application where users can coordinate a group funding effort. The users only have to trust the code, not each other.",
     sortOrder: 1,
-    previewImage: "/assets/challenges/stakingToken.svg",
+    previewImage: "/assets/challenges/crowdfunding.svg",
   },
   {
     id: ChallengeId.TOKEN_VENDOR,
@@ -111,13 +111,23 @@ export const seedChallenges: (typeof challenges.$inferInsert)[] = [
     previewImage: "/assets/challenges/dex.svg",
   },
   {
+    id: ChallengeId.ORACLES,
+    challengeName: "Oracles",
+    github: "scaffold-eth/se-2-challenges:challenge-oracles",
+    autograding: true,
+    description:
+      "🔮 Build three powerful oracle systems bringing real-world data on-chain! Level up from simple whitelist oracles to staking-based systems, and finally to optimistic oracles with challenge periods. 🛡️ Learn crucial security trade-offs while implementing dispute resolution and economic incentives.",
+    sortOrder: 5,
+    previewImage: "/assets/challenges/oracles.svg",
+  },
+  {
     id: ChallengeId.OVER_COLLATERALIZED_LENDING,
     challengeName: "Over-Collateralized Lending",
     github: "scaffold-eth/se-2-challenges:challenge-over-collateralized-lending",
     autograding: true,
     description:
       "💳 Build your own lending and borrowing platform. Let's write a contract that takes collateral and lets you borrow other assets against the value of the collateral. What happens when the collateral changes in value? We will be able to borrow more if it is higher, or if it is lower, we will also build a system for liquidating the debt position.",
-    sortOrder: 5,
+    sortOrder: 6,
     previewImage: "/assets/challenges/overCollateralizedLending.svg",
   },
   {
@@ -137,7 +147,7 @@ export const seedChallenges: (typeof challenges.$inferInsert)[] = [
     autograding: true,
     description:
       "🪙 Build your own decentralized stablecoin. Let's write a contract that takes collateral and issues MyUSD tokens based on the value of the collateral. What happens when the collateral changes in value? If it is higher, we will be able to borrow more tokens. If it is lower, we will also build a system for liquidating the MyUSD.",
-    sortOrder: 6,
+    sortOrder: 8,
     previewImage: "/assets/challenges/stablecoins.svg",
   },
   {
@@ -147,17 +157,8 @@ export const seedChallenges: (typeof challenges.$inferInsert)[] = [
     github: "scaffold-eth/se-2-challenges:challenge-zk-voting",
     description:
       "🔒 Build your own decentralized voting system using zero-knowledge proofs. Let's write a contract that allows users to vote on a topic and the results will be computed off-chain using zero-knowledge proofs.",
-    sortOrder: 8,
-    previewImage: "/assets/challenges/zkVoting.svg",
-  },
-  {
-    id: ChallengeId.ORACLES,
-    challengeName: "Oracles",
-    autograding: false,
-    description:
-      "🔮 Build three powerful oracle systems bringing real-world data on-chain! Level up from simple whitelist oracles to staking-based systems, and finally to optimistic oracles with challenge periods. 🛡️ Learn crucial security trade-offs while implementing dispute resolution and economic incentives.",
     sortOrder: 9,
-    previewImage: "/assets/challenges/oracles.svg",
+    previewImage: "/assets/challenges/zkVoting.svg",
   },
   {
     id: ChallengeId.MULTISIG,
@@ -225,7 +226,7 @@ export const seedUserChallenges: (typeof userChallenges.$inferInsert)[] = [
   },
   {
     userAddress: seedUsers?.[0]?.userAddress,
-    challengeId: ChallengeId.DECENTRALIZED_STAKING,
+    challengeId: ChallengeId.CROWDFUNDING,
     frontendUrl: "https://chunky-beam.surge.sh/",
     contractUrl: "https://sepolia.etherscan.io/address/0xbF35fC995A2Cc4F1508B5F769922623dE7f220d6",
     reviewComment: "Dummy review, it's working great",
@@ -270,7 +271,7 @@ export const seedUserChallenges: (typeof userChallenges.$inferInsert)[] = [
   },
   {
     userAddress: seedUsers?.[2]?.userAddress,
-    challengeId: ChallengeId.DECENTRALIZED_STAKING,
+    challengeId: ChallengeId.CROWDFUNDING,
     frontendUrl: "https://tasteful-plough.surge.sh",
     contractUrl: "https://goerli.etherscan.io/address/0xf3384118b56827271979A879e2d5A4d28569eb48",
     reviewComment: "Dummy review, it's working great",
@@ -306,7 +307,7 @@ export const seedUserChallenges: (typeof userChallenges.$inferInsert)[] = [
   },
   {
     userAddress: seedUsers?.[3]?.userAddress,
-    challengeId: ChallengeId.DECENTRALIZED_STAKING,
+    challengeId: ChallengeId.CROWDFUNDING,
     frontendUrl: "https://stupid-beginner.surge.sh",
     contractUrl: "https://goerli.etherscan.io/address/0xd68edd04EbB81c6f187A526F3656C18dD0258cd8",
     reviewComment: "Dummy review, it's working great",
@@ -334,7 +335,7 @@ export const seedUserChallenges: (typeof userChallenges.$inferInsert)[] = [
   },
   {
     userAddress: seedUsers?.[4]?.userAddress,
-    challengeId: ChallengeId.DECENTRALIZED_STAKING,
+    challengeId: ChallengeId.CROWDFUNDING,
     frontendUrl: "https://sepolia-optimism.etherscan.io/address/0x75CCfC494667c91F4926213A04619f93812885b2#code",
     contractUrl: "https://sepolia-optimism.etherscan.io/address/0x75CCfC494667c91F4926213A04619f93812885b2#code",
     submittedAt: new Date(1736440199150),

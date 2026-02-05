@@ -60,10 +60,10 @@ export const CHALLENGE_METADATA: Record<string, ChallengeStaticMetadata> = {
       },
     ],
   },
-  [ChallengeId.DECENTRALIZED_STAKING]: {
-    title: "Build a Decentralized Staking Application in Solidity",
+  [ChallengeId.CROWDFUNDING]: {
+    title: "Build a Crowdfunding Application in Solidity",
     description:
-      "Learn to build a decentralized staking application with Solidity. Create smart contracts for coordinating group funding on Ethereum.",
+      "Learn to build a crowdfunding application with Solidity. Step-by-step tutorial to help adversarial parties work together to fund a project using Solidity smart contracts on Ethereum.",
     skills: [
       "Design and implement a decentralized application (dApp) with a state machine",
       "Handle and send ETH in a smart contract using **payable** functions",
@@ -84,24 +84,8 @@ export const CHALLENGE_METADATA: Record<string, ChallengeStaticMetadata> = {
     ],
     guides: [
       {
-        title: "Beyond APY: Building Sustainable Tokenomics for Your Staking Protocol",
-        url: "/guides/sustainable-tokenomics-staking-protocols",
-      },
-      {
-        title: "Time-Weighted Staking Rewards: Aligning Incentives in DeFi Protocols",
-        url: "/guides/time-weighted-staking-rewards",
-      },
-      {
-        title: "Scalable Solidity Staking: O(1) Reward Distribution",
-        url: "/guides/scalable-gas-solidity-staking",
-      },
-      {
-        title: "A Developer's Guide to Liquid Staking Tokens (LSTs)",
-        url: "/guides/liquid-staking-tokens",
-      },
-      {
-        title: "ERC4626 Vaults Explained: Secure Tokenized Vault Design, Risks & Best Practices",
-        url: "/guides/erc-4626-vaults",
+        title: "Solidity Contract-to-Contract Interactions Guide",
+        url: "/guides/solidity-contract-to-contract-interactions",
       },
     ],
   },
@@ -120,7 +104,7 @@ export const CHALLENGE_METADATA: Record<string, ChallengeStaticMetadata> = {
     helpfulLinks: [
       {
         text: "Previous Challenge",
-        url: "/challenge/decentralized-staking",
+        url: "/challenge/crowdfunding",
       },
       {
         text: "ERC20 Token Standard",
@@ -218,6 +202,23 @@ export const CHALLENGE_METADATA: Record<string, ChallengeStaticMetadata> = {
       },
     ],
   },
+  [ChallengeId.ORACLES]: {
+    title: "Build Decentralized Oracle Systems in Solidity",
+    description:
+      "Learn to build three fundamental oracle architectures: Whitelist, Staking, and Optimistic Oracles. Understand trade-offs between security, decentralization, and efficiency while implementing dispute resolution and economic incentive mechanisms.",
+    skills: [
+      "Deeply understand how different oracle architectures work and their trade-offs",
+      "Design and build a whitelist oracle that allows only trusted addresses to submit data",
+      "Implement a staking-based oracle that rewards validators for providing accurate data",
+      "Create an optimistic oracle that uses challenge-response mechanisms to resolve disputes",
+    ],
+    skillLevel: SKILL_LEVELS.INTERMEDIATE,
+    timeToComplete: "4 - 12 hours",
+    helpfulLinks: [
+      { text: "Chainlink Oracles", url: "https://docs.chain.link/" },
+      { text: "UMA Protocol", url: "https://docs.uma.xyz/" },
+    ],
+  },
   [ChallengeId.OVER_COLLATERALIZED_LENDING]: {
     title: "Build an Over-Collateralized Lending Platform in Solidity",
     description:
@@ -297,11 +298,6 @@ export const CHALLENGE_METADATA: Record<string, ChallengeStaticMetadata> = {
         url: "https://vitalik.eth.limo/general/2021/05/25/voting2.html",
       },
     ],
-  },
-  [ChallengeId.ORACLES]: {
-    title: "Build Decentralized Oracle Systems in Solidity",
-    description:
-      "Learn to build three fundamental oracle architectures: Whitelist, Staking, and Optimistic Oracles. Understand trade-offs between security, decentralization, and efficiency while implementing dispute resolution and economic incentive mechanisms.",
   },
   [ChallengeId.MULTISIG]: {
     title: "Build a Multisignature Wallet in Solidity",

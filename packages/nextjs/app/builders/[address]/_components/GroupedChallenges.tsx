@@ -10,7 +10,7 @@ import type { UserChallenges } from "~~/services/database/repositories/userChall
 
 const basicChallengeIds = new Set<ChallengeId>([
   ChallengeId.TOKENIZATION,
-  ChallengeId.DECENTRALIZED_STAKING,
+  ChallengeId.CROWDFUNDING,
   ChallengeId.TOKEN_VENDOR,
   ChallengeId.DICE_GAME,
 ]);
@@ -93,14 +93,7 @@ export function GroupedChallenges({
                 return <ChallengeDetailsStatus key={challenge.id} challenge={challenge} />;
               }
 
-              return (
-                <ChallengeDetails
-                  key={challenge.id}
-                  address={address}
-                  challenge={challenge}
-                  comingSoon={challenge.id === ChallengeId.ORACLES}
-                />
-              );
+              return <ChallengeDetails key={challenge.id} address={address} challenge={challenge} />;
             })}
           </div>
         </div>
