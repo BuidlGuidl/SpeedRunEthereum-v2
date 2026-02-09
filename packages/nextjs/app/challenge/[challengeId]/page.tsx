@@ -2,7 +2,7 @@ import { createElement } from "react";
 import type { ComponentPropsWithoutRef, ReactNode } from "react";
 import { notFound } from "next/navigation";
 import { ChallengeHeader } from "./_components/ChallengeHeader";
-import { ChallengeSidebar, Heading } from "./_components/ChallengeSidebar";
+import { ChallengeSidebar } from "./_components/ChallengeSidebar";
 import { ConnectAndRegisterBanner } from "./_components/ConnectAndRegisterBanner";
 import { SubmitChallengeButton } from "./_components/SubmitChallengeButton";
 import { MDXRemote } from "next-mdx-remote/rsc";
@@ -16,29 +16,8 @@ import {
   getCountOfCompletedChallenge,
 } from "~~/services/database/repositories/challenges";
 import { fetchGithubChallengeReadme, parseGithubUrl, splitChallengeReadme } from "~~/services/github";
-import { CHALLENGE_METADATA } from "~~/utils/challenges";
+import { CHALLENGE_METADATA, extractHeadings, generateHeadingId } from "~~/utils/challenges";
 import { getMetadata } from "~~/utils/scaffold-eth/getMetadata";
-
-function generateHeadingId(text: string): string {
-  return text
-    .toLowerCase()
-    .replace(/[\u{1F300}-\u{1F9FF}]/gu, "")
-    .replace(/[^\w\s-]/g, "")
-    .trim()
-    .replace(/\s+/g, "-");
-}
-
-function extractHeadings(markdown: string): Heading[] {
-  const h2Regex = /^##\s+(.+)$/gm;
-  const headings: Heading[] = [];
-  let match;
-  while ((match = h2Regex.exec(markdown)) !== null) {
-    const text = match[1];
-    const id = generateHeadingId(text);
-    headings.push({ id, text });
-  }
-  return headings;
-}
 
 export async function generateStaticParams() {
   const challenges = await getAllChallenges();

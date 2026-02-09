@@ -3,11 +3,7 @@
 import { useEffect, useState } from "react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import { useSidebar } from "~~/contexts/SidebarContext";
-
-export type Heading = {
-  id: string;
-  text: string;
-};
+import type { Heading } from "~~/utils/challenges";
 
 type ChallengeSidebarProps = {
   headings: Heading[];
@@ -22,7 +18,6 @@ export function ChallengeSidebar({ headings }: ChallengeSidebarProps) {
     sidebar?.setIsOpen(open);
   };
 
-  // Register sidebar on mount, unregister on unmount
   useEffect(() => {
     sidebar?.setHasSidebar(true);
     return () => {
@@ -35,7 +30,6 @@ export function ChallengeSidebar({ headings }: ChallengeSidebarProps) {
       entries => {
         const visibleEntries = entries.filter(entry => entry.isIntersecting);
         if (visibleEntries.length > 0) {
-          // Sort by their position in the document and take the topmost one
           const topEntry = visibleEntries.reduce((prev, curr) => {
             return prev.boundingClientRect.top < curr.boundingClientRect.top ? prev : curr;
           });
@@ -75,10 +69,8 @@ export function ChallengeSidebar({ headings }: ChallengeSidebarProps) {
 
   return (
     <>
-      {/* Mobile overlay */}
       {isOpen && <div className="lg:hidden fixed inset-0 bg-black/50 z-40" onClick={() => setIsOpen(false)} />}
 
-      {/* Sidebar */}
       <nav
         className={`
           fixed left-0 top-0 h-full w-72 pt-4 z-40
@@ -88,7 +80,6 @@ export function ChallengeSidebar({ headings }: ChallengeSidebarProps) {
           ${isOpen ? "translate-x-0" : "-translate-x-full"}
         `}
       >
-        {/* Close button for mobile */}
         <button
           onClick={() => setIsOpen(false)}
           className="lg:hidden absolute top-4 right-4 btn btn-circle btn-sm btn-ghost"
