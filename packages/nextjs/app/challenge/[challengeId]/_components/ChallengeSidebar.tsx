@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
-import { useSidebar } from "~~/contexts/SidebarContext";
+import { useGlobalState } from "~~/services/store/store";
 import type { Heading } from "~~/utils/challenges";
 
 type ChallengeSidebarProps = {
@@ -11,19 +11,14 @@ type ChallengeSidebarProps = {
 
 export function ChallengeSidebar({ headings }: ChallengeSidebarProps) {
   const [activeId, setActiveId] = useState<string>("");
-  const sidebar = useSidebar();
-  const isOpen = sidebar?.isOpen ?? false;
-
-  const setIsOpen = (open: boolean) => {
-    sidebar?.setIsOpen(open);
-  };
+  const { sidebarIsOpen, setSidebarIsOpen, setHasSidebar } = useGlobalState();
 
   useEffect(() => {
-    sidebar?.setHasSidebar(true);
+    setHasSidebar(true);
     return () => {
-      sidebar?.setHasSidebar(false);
+      setHasSidebar(false);
     };
-  }, [sidebar]);
+  }, [setHasSidebar]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -59,7 +54,7 @@ export function ChallengeSidebar({ headings }: ChallengeSidebarProps) {
     if (element) {
       element.scrollIntoView({ behavior: "smooth" });
       setActiveId(id);
-      setIsOpen(false);
+      setSidebarIsOpen(false);
     }
   };
 
@@ -69,7 +64,9 @@ export function ChallengeSidebar({ headings }: ChallengeSidebarProps) {
 
   return (
     <>
-      {isOpen && <div className="lg:hidden fixed inset-0 bg-black/50 z-40" onClick={() => setIsOpen(false)} />}
+      {sidebarIsOpen && (
+        <div className="lg:hidden fixed inset-0 bg-black/50 z-40" onClick={() => setSidebarIsOpen(false)} />
+      )}
 
       <nav
         className={`
@@ -77,11 +74,11 @@ export function ChallengeSidebar({ headings }: ChallengeSidebarProps) {
           bg-base-100 border-r border-base-300 overflow-y-auto
           transition-transform duration-300 ease-in-out
           lg:sticky lg:top-0 lg:h-screen lg:w-64 lg:shrink-0 lg:translate-x-0 lg:border-r-0 lg:bg-transparent
-          ${isOpen ? "translate-x-0" : "-translate-x-full"}
+          ${sidebarIsOpen ? "translate-x-0" : "-translate-x-full"}
         `}
       >
         <button
-          onClick={() => setIsOpen(false)}
+          onClick={() => setSidebarIsOpen(false)}
           className="lg:hidden absolute top-4 right-4 btn btn-circle btn-sm btn-ghost"
           aria-label="Close navigation menu"
         >

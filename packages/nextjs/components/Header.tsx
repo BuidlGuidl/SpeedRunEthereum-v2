@@ -8,10 +8,10 @@ import clsx from "clsx";
 import { useAccount } from "wagmi";
 import { Bars3Icon } from "@heroicons/react/24/outline";
 import { RainbowKitCustomConnectButton } from "~~/components/scaffold-eth";
-import { useSidebar } from "~~/contexts/SidebarContext";
 import { useUser } from "~~/hooks/useUser";
 import { UserRole } from "~~/services/database/config/types";
 import { UserByAddress } from "~~/services/database/repositories/users";
+import { useGlobalState } from "~~/services/store/store";
 
 type HeaderMenuLink = {
   label: string;
@@ -97,7 +97,7 @@ export const Header = () => {
 
   const { address: connectedAddress } = useAccount();
   const { data: user } = useUser(connectedAddress);
-  const sidebar = useSidebar();
+  const { hasSidebar, sidebarIsOpen, setSidebarIsOpen } = useGlobalState();
 
   return (
     <div
@@ -114,9 +114,9 @@ export const Header = () => {
             </Link>
           )}
           {/* Hamburger button - shown only on challenge pages with sidebar */}
-          {sidebar?.hasSidebar && !sidebar.isOpen && (
+          {hasSidebar && !sidebarIsOpen && (
             <button
-              onClick={() => sidebar.setIsOpen(true)}
+              onClick={() => setSidebarIsOpen(true)}
               className="lg:hidden ml-4 btn btn-circle btn-sm btn-primary shadow-lg"
               aria-label="Toggle navigation menu"
             >
