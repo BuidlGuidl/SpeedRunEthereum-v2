@@ -22,8 +22,6 @@ type GlobalState = {
   setTargetNetwork: (newTargetNetwork: ChainWithAttributes) => void;
   sidebarIsOpen: boolean;
   setSidebarIsOpen: (open: boolean) => void;
-  hasSidebar: boolean;
-  setHasSidebar: (has: boolean) => void;
 };
 
 export const useGlobalState = create<GlobalState>(set => ({
@@ -39,6 +37,4 @@ export const useGlobalState = create<GlobalState>(set => ({
   setTargetNetwork: (newTargetNetwork: ChainWithAttributes) => set(() => ({ targetNetwork: newTargetNetwork })),
   sidebarIsOpen: false,
   setSidebarIsOpen: (open: boolean) => set({ sidebarIsOpen: open }),
-  hasSidebar: false,
-  setHasSidebar: (has: boolean) => set({ hasSidebar: has }),
 }));

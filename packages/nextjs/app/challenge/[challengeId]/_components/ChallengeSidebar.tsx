@@ -11,14 +11,7 @@ type ChallengeSidebarProps = {
 
 export function ChallengeSidebar({ headings }: ChallengeSidebarProps) {
   const [activeId, setActiveId] = useState<string>("");
-  const { sidebarIsOpen, setSidebarIsOpen, setHasSidebar } = useGlobalState();
-
-  useEffect(() => {
-    setHasSidebar(true);
-    return () => {
-      setHasSidebar(false);
-    };
-  }, [setHasSidebar]);
+  const { sidebarIsOpen, setSidebarIsOpen } = useGlobalState();
 
   useEffect(() => {
     const observer = new IntersectionObserver(

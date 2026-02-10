@@ -94,10 +94,11 @@ export const Header = () => {
   const pathname = usePathname();
   const isHomepage = pathname === "/";
   const isStartPage = pathname === "/start";
+  const isChallengePage = pathname.startsWith("/challenge/");
 
   const { address: connectedAddress } = useAccount();
   const { data: user } = useUser(connectedAddress);
-  const { hasSidebar, sidebarIsOpen, setSidebarIsOpen } = useGlobalState();
+  const { sidebarIsOpen, setSidebarIsOpen } = useGlobalState();
 
   return (
     <div
@@ -113,8 +114,7 @@ export const Header = () => {
               <Logo className="w-36 lg:w-48" />
             </Link>
           )}
-          {/* Hamburger button - shown only on challenge pages with sidebar */}
-          {hasSidebar && !sidebarIsOpen && (
+          {isChallengePage && !sidebarIsOpen && (
             <button
               onClick={() => setSidebarIsOpen(true)}
               className="lg:hidden ml-4 btn btn-circle btn-sm btn-primary shadow-lg"
