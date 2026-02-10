@@ -6,10 +6,12 @@ import { usePathname } from "next/navigation";
 import Logo from "./Logo";
 import clsx from "clsx";
 import { useAccount } from "wagmi";
+import { Bars3Icon } from "@heroicons/react/24/outline";
 import { RainbowKitCustomConnectButton } from "~~/components/scaffold-eth";
 import { useUser } from "~~/hooks/useUser";
 import { UserRole } from "~~/services/database/config/types";
 import { UserByAddress } from "~~/services/database/repositories/users";
+import { useGlobalState } from "~~/services/store/store";
 
 type HeaderMenuLink = {
   label: string;
@@ -92,9 +94,11 @@ export const Header = () => {
   const pathname = usePathname();
   const isHomepage = pathname === "/";
   const isStartPage = pathname === "/start";
+  const isChallengePage = pathname.startsWith("/challenge/");
 
   const { address: connectedAddress } = useAccount();
   const { data: user } = useUser(connectedAddress);
+  const { sidebarIsOpen, setSidebarIsOpen } = useGlobalState();
 
   return (
     <div
@@ -109,6 +113,15 @@ export const Header = () => {
             <Link href="/" className={clsx("ml-2 lg:ml-6 lg:mr-4 lg:my-2", isStartPage && "lg:hidden")}>
               <Logo className="w-36 lg:w-48" />
             </Link>
+          )}
+          {isChallengePage && !sidebarIsOpen && (
+            <button
+              onClick={() => setSidebarIsOpen(true)}
+              className="lg:hidden ml-4 btn btn-circle btn-sm btn-primary shadow-lg"
+              aria-label="Toggle navigation menu"
+            >
+              <Bars3Icon className="w-5 h-5" />
+            </button>
           )}
           <ul className="hidden lg:flex flex-nowrap px-1 gap-2">
             <HeaderMenuLinks hideItemsByLabel={["Home"]} user={user} />

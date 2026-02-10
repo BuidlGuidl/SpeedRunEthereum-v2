@@ -1,5 +1,10 @@
 import { ChallengeId, ReviewAction } from "~~/services/database/config/types";
 
+export type Heading = {
+  id: string;
+  text: string;
+};
+
 export const REVIEW_ACTION_BADGE_CLASSES: Record<ReviewAction, string> = {
   [ReviewAction.ACCEPTED]: "badge-success",
   [ReviewAction.REJECTED]: "badge-error dark:bg-[#6E2A2A] dark:text-gray-200",
@@ -310,3 +315,24 @@ export const CHALLENGE_METADATA: Record<string, ChallengeStaticMetadata> = {
       "Learn to generate on-chain SVG graphics and create fully on-chain NFTs using Solidity smart contracts. Advanced NFT development tutorial.",
   },
 };
+
+export function generateHeadingId(text: string): string {
+  return text
+    .toLowerCase()
+    .replace(/[\u{1F300}-\u{1F9FF}]/gu, "")
+    .replace(/[^\w\s-]/g, "")
+    .trim()
+    .replace(/\s+/g, "-");
+}
+
+export function extractHeadings(markdown: string): Heading[] {
+  const h2Regex = /^##\s+(.+)$/gm;
+  const headings: Heading[] = [];
+  let match;
+  while ((match = h2Regex.exec(markdown)) !== null) {
+    const text = match[1];
+    const id = generateHeadingId(text);
+    headings.push({ id, text });
+  }
+  return headings;
+}
