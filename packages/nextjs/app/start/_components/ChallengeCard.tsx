@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Challenges } from "~~/services/database/repositories/challenges";
+import { CHALLENGE_METADATA } from "~~/utils/challenges";
 
 type ChallengeCardProps = {
   challenge: Challenges[0];
@@ -48,6 +49,13 @@ export const ChallengeCard = ({ challenge }: ChallengeCardProps) => {
           <div className="absolute top-2 right-2">
             <span className="inline-flex items-center text-sm md:text-base text-teal-950 bg-[#FFBB54] px-3 md:px-4 py-1.5 rounded-full">
               Build Idea
+            </span>
+          </div>
+        )}
+        {CHALLENGE_METADATA[challenge.id]?.isAiAssisted && (
+          <div className="absolute top-2 left-2">
+            <span className="tooltip tooltip-right" data-tip="AI-assisted challenge">
+              🤖
             </span>
           </div>
         )}

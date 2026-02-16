@@ -5,7 +5,7 @@ import NewIcon from "../_assets/icons/NewIcon";
 import { ChallengeId } from "~~/services/database/config/types";
 import { Challenges } from "~~/services/database/repositories/challenges";
 import { UserChallenges } from "~~/services/database/repositories/userChallenges";
-import { REVIEW_ACTION_BADGE_CLASSES } from "~~/utils/challenges";
+import { CHALLENGE_METADATA, REVIEW_ACTION_BADGE_CLASSES } from "~~/utils/challenges";
 
 type ChallengeExpandedCardProps = {
   challengeId: ChallengeId;
@@ -48,7 +48,14 @@ const ChallengeExpandedCard = ({
             {isBuildIdea ? (
               <span className="badge badge-warning">Build Idea</span>
             ) : (
-              <span className="text-lg">Challenge #{sortOrder}</span>
+              <span className="text-lg">
+                Challenge #{sortOrder}
+                {CHALLENGE_METADATA[challengeId]?.isAiAssisted && (
+                  <span className="tooltip ml-2" data-tip="AI-assisted challenge">
+                    🤖
+                  </span>
+                )}
+              </span>
             )}
             <h2 className="text-xl lg:text-2xl font-medium mt-0">{challenge.challengeName}</h2>
           </div>
