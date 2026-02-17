@@ -48,16 +48,12 @@ const ChallengeExpandedCard = ({
             {isBuildIdea ? (
               <span className="badge badge-warning">Build Idea</span>
             ) : (
-              <span className="text-lg">
-                Challenge #{sortOrder}
-                {CHALLENGE_METADATA[challengeId]?.isAiAssisted && (
-                  <span className="tooltip ml-2" data-tip="AI-assisted challenge">
-                    🤖
-                  </span>
-                )}
-              </span>
+              <span className="text-lg">Challenge #{sortOrder}</span>
             )}
             <h2 className="text-xl lg:text-2xl font-medium mt-0">{challenge.challengeName}</h2>
+            {CHALLENGE_METADATA[challengeId]?.isAiAssisted && (
+              <span className="badge bg-base-300 badge-md sm:badge-lg py-3 mb-3">🤖 AI-assisted</span>
+            )}
           </div>
           <div className="flex flex-col gap-8">
             <span className="text-sm lg:text-base leading-[1.5]">{challenge.description}</span>
