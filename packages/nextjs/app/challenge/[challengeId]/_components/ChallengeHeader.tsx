@@ -1,7 +1,7 @@
 import { MDXRemote } from "next-mdx-remote/rsc";
 import rehypeRaw from "rehype-raw";
 import remarkGfm from "remark-gfm";
-import { CheckCircleIcon, ClockIcon, LinkIcon, UserGroupIcon } from "@heroicons/react/24/outline";
+import { CheckCircleIcon, ClockIcon, LinkIcon, SparklesIcon, UserGroupIcon } from "@heroicons/react/24/outline";
 import SkillLevelIcon from "~~/app/_components/SkillLevelIcon";
 import { SkillLevel } from "~~/utils/challenges";
 
@@ -12,9 +12,17 @@ type Props = {
   timeToComplete?: string;
   helpfulLinks?: { text: string; url?: string }[];
   completedByCount?: number;
+  isAiAssisted?: boolean;
 };
 
-export function ChallengeHeader({ skills, skillLevel, timeToComplete, helpfulLinks, completedByCount }: Props) {
+export function ChallengeHeader({
+  skills,
+  skillLevel,
+  timeToComplete,
+  helpfulLinks,
+  completedByCount,
+  isAiAssisted,
+}: Props) {
   if (!skills || skills.length === 0) {
     return null;
   }
@@ -57,6 +65,15 @@ export function ChallengeHeader({ skills, skillLevel, timeToComplete, helpfulLin
         {/* Right card: Details */}
         <div className="rounded-2xl border border-primary/10 bg-secondary/20 p-6 shadow-center flex flex-col justify-center">
           <div className="space-y-4 text-md">
+            {isAiAssisted && (
+              <div className="flex items-center gap-3">
+                <SparklesIcon className="w-8 h-8 text-primary" />
+                <div className="flex-1">
+                  <div className="font-semibold">AI Assisted</div>
+                </div>
+              </div>
+            )}
+
             <div className="flex items-center gap-3">
               <SkillLevelIcon level={skillLevel} className="w-8 h-8 text-primary" />
               <div className="flex-1">
