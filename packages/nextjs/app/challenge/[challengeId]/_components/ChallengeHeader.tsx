@@ -123,12 +123,14 @@ export function ChallengeHeader({
         <div className="mt-4 rounded-2xl border border-primary/10 bg-base-100 p-6 shadow-center flex items-start gap-4">
           <SparklesIcon className="w-8 h-8 text-primary shrink-0 mt-0.5" />
           <div>
-            <div className="font-semibold text-primary mb-1">AI Assisted</div>
             <p className="text-sm opacity-80 m-0">
-              This challenge supports AI-assisted learning. Open it in Claude Code or Cursor and type{" "}
-              <code className="bg-base-300 px-1.5 py-0.5 rounded text-xs font-semibold">/start</code> to get a
-              step-by-step guided experience. Feel free to ask questions, request hints, or get explanations at any
-              point along the way.
+              This challenge is ready for <span className="font-bold">AI-assisted</span> learning. Open it in Claude
+              Code or Cursor and ask questions, request hints, or get explanations at any point along the way.{" "}
+              <p className="mb-0">
+                You can also type{" "}
+                <code className="bg-base-300 px-1.5 py-0.5 rounded text-xs font-semibold">/start</code> if you prefer a
+                guided experience.
+              </p>
             </p>
           </div>
         </div>
