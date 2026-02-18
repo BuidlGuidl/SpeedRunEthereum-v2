@@ -13,11 +13,6 @@ export function BuildIdeas() {
         </Link>
         .
       </p>
-      <div className="mt-4">
-        <Link href="/build-prompts" className="btn btn-primary btn-sm">
-          Browse Build Prompts
-        </Link>
-      </div>
     </div>
   );
 }

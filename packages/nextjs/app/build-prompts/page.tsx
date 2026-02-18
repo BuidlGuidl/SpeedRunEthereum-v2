@@ -1,4 +1,5 @@
 import { BuildPrompts } from "./_components/BuildPrompts";
+import { getAllBuildPrompts } from "~~/services/build-prompts";
 import { getMetadata } from "~~/utils/scaffold-eth/getMetadata";
 
 export const metadata = getMetadata({
@@ -7,5 +8,6 @@ export const metadata = getMetadata({
 });
 
 export default function BuildPromptsPage() {
-  return <BuildPrompts />;
+  const prompts = getAllBuildPrompts();
+  return <BuildPrompts prompts={prompts} />;
 }

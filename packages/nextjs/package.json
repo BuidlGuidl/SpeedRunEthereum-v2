@@ -36,6 +36,7 @@
     "dotenv": "^16.4.7",
     "drizzle-orm": "^0.42.0",
     "firebase-admin": "^13.4.0",
+    "gray-matter": "^4.0.3",
     "mime-types": "^3.0.1",
     "next": "~15.4.10",
     "next-auth": "^4.24.11",
