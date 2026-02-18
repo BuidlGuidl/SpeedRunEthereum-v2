@@ -19,10 +19,12 @@ export function Builds({
   address,
   builds,
   userHasCompletedChallenges,
+  buildIdeas,
 }: {
   address: string;
   builds: BuildByUser[];
   userHasCompletedChallenges: boolean;
+  buildIdeas: { name: string; description: string; imageUrl?: string }[];
 }) {
   const { address: connectedAddress } = useAccount();
 
@@ -60,7 +62,7 @@ export function Builds({
             ))}
           </div>
         )}
-        {!hasBuilds && isProfileOwner && <BuildIdeas />}
+        {!hasBuilds && isProfileOwner && <BuildIdeas buildIdeas={buildIdeas} />}
       </div>
     </div>
   );
