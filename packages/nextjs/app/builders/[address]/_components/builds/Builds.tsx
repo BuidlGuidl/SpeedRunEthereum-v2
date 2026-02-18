@@ -1,9 +1,11 @@
 "use client";
 
+import Link from "next/link";
 import { BuildCard } from "./BuildCard";
 import { BuildIdeas } from "./BuildIdeas";
 import { SubmitNewBuildButton } from "./SubmitNewBuildButton";
 import { useAccount } from "wagmi";
+import { SparklesIcon } from "@heroicons/react/24/outline";
 import { Build } from "~~/services/database/repositories/builds";
 
 type BuildByUser = {
@@ -34,7 +36,13 @@ export function Builds({
   return (
     <div className="mt-20">
       <div className="mb-4 flex justify-between items-center">
-        <h2 className="text-2xl font-bold mb-0 text-neutral">Builds</h2>
+        <div className="flex items-center gap-3">
+          <h2 className="text-2xl font-bold mb-0 text-neutral">Builds</h2>
+          <Link href="/build-prompts" className="flex items-center gap-1 text-sm text-primary link">
+            <SparklesIcon className="w-4 h-4" />
+            Build Prompts
+          </Link>
+        </div>
         <SubmitNewBuildButton isProfileOwner userHasCompletedChallenges={userHasCompletedChallenges} />
       </div>
       <div className="p-6 bg-base-100 rounded-lg">
