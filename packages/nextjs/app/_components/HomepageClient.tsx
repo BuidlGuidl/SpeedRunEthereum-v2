@@ -82,18 +82,6 @@ export const HomepageClient = ({ challenges }: { challenges: Challenges }) => {
           userChallenges={userChallenges}
           challenges={challenges}
         />
-        <ChallengeExpandedCard
-          key={ChallengeId.MULTISIG}
-          challengeId={ChallengeId.MULTISIG}
-          userChallenges={userChallenges}
-          challenges={challenges}
-        />
-        <ChallengeExpandedCard
-          key={ChallengeId.SVG_NFT}
-          challengeId={ChallengeId.SVG_NFT}
-          userChallenges={userChallenges}
-          challenges={challenges}
-        />
 
         <div className="flex flex-col xl:flex-row justify-center mx-auto relative">
           <AfterSreLine />

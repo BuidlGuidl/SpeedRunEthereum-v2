@@ -1,6 +1,7 @@
 ---
 name: "Multisig Wallet"
 description: "Secure assets by requiring multiple accounts to 'vote' on transactions."
+imageUrl: "/assets/challenges/multiSig.svg"
 ---
 
 Build a Multisig Wallet dApp using Scaffold-ETH 2.

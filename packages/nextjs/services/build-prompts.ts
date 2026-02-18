@@ -8,6 +8,7 @@ export type BuildPrompt = {
   slug: string;
   name: string;
   description: string;
+  imageUrl?: string;
   prompt: string;
 };
 
@@ -28,6 +29,7 @@ export function getAllBuildPrompts(): BuildPrompt[] {
       slug,
       name: data.name,
       description: data.description,
+      imageUrl: data.imageUrl,
       prompt: content.trim(),
     };
   });

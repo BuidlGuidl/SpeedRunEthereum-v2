@@ -1,6 +1,7 @@
 ---
 name: "SVG NFT"
 description: "Tinker around with cutting edge smart contracts that render SVGs in Solidity."
+imageUrl: "/assets/challenges/dynamicSvgNFT.svg"
 ---
 
 Build an SVG NFT dApp using Scaffold-ETH 2.
