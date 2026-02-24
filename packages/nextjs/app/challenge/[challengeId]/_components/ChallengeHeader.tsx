@@ -124,7 +124,7 @@ export function ChallengeHeader({
           <SparklesIcon className="w-8 h-8 text-primary shrink-0 mt-0.5" />
           <div>
             <p className="text-sm opacity-80 m-0">
-              This challenge is ready for <span className="font-bold">AI-assisted</span> learning. Open it in your
+              This challenge ships with <span className="font-bold">context-aware AI</span> support. Open it in your
               preferred AI coding tool and ask questions, request hints, or get explanations at any point along the way.
             </p>
           </div>
