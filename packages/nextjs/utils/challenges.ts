@@ -27,6 +27,7 @@ type ChallengeStaticMetadata = {
   skillLevel?: SkillLevel;
   timeToComplete?: string;
   helpfulLinks?: { text: string; url: string }[];
+  isAiAssisted?: boolean;
 };
 
 export const CHALLENGE_METADATA: Record<string, ChallengeStaticMetadata> = {
@@ -34,6 +35,7 @@ export const CHALLENGE_METADATA: Record<string, ChallengeStaticMetadata> = {
     title: "Learn How to Create an NFT in Solidity",
     description:
       "Build your first NFT smart contract in Solidity. Step-by-step tutorial to mint and deploy NFTs on Ethereum using Scaffold-ETH.",
+    isAiAssisted: true,
     skills: [
       "Compile and deploy your first **smart contract**",
       "Use burner wallets, faucets and gas on localhost",
@@ -69,6 +71,7 @@ export const CHALLENGE_METADATA: Record<string, ChallengeStaticMetadata> = {
     title: "Build a Crowdfunding Application in Solidity",
     description:
       "Learn to build a crowdfunding application with Solidity. Step-by-step tutorial to help adversarial parties work together to fund a project using Solidity smart contracts on Ethereum.",
+    isAiAssisted: true,
     skills: [
       "Design and implement a decentralized application (dApp) with a state machine",
       "Handle and send ETH in a smart contract using **payable** functions",
