@@ -1,7 +1,7 @@
 import { MDXRemote } from "next-mdx-remote/rsc";
 import rehypeRaw from "rehype-raw";
 import remarkGfm from "remark-gfm";
-import { CheckCircleIcon, ClockIcon, LinkIcon, UserGroupIcon } from "@heroicons/react/24/outline";
+import { CheckCircleIcon, ClockIcon, LinkIcon, SparklesIcon, UserGroupIcon } from "@heroicons/react/24/outline";
 import SkillLevelIcon from "~~/app/_components/SkillLevelIcon";
 import { SkillLevel } from "~~/utils/challenges";
 
@@ -12,9 +12,17 @@ type Props = {
   timeToComplete?: string;
   helpfulLinks?: { text: string; url?: string }[];
   completedByCount?: number;
+  isAiAssisted?: boolean;
 };
 
-export function ChallengeHeader({ skills, skillLevel, timeToComplete, helpfulLinks, completedByCount }: Props) {
+export function ChallengeHeader({
+  skills,
+  skillLevel,
+  timeToComplete,
+  helpfulLinks,
+  completedByCount,
+  isAiAssisted,
+}: Props) {
   if (!skills || skills.length === 0) {
     return null;
   }
@@ -110,6 +118,18 @@ export function ChallengeHeader({ skills, skillLevel, timeToComplete, helpfulLin
           </div>
         </div>
       </div>
+
+      {isAiAssisted && (
+        <div className="mt-4 rounded-2xl border border-primary/10 bg-base-100 p-6 shadow-center flex items-start gap-4">
+          <SparklesIcon className="w-8 h-8 text-primary shrink-0 mt-0.5" />
+          <div>
+            <p className="text-sm opacity-80 m-0">
+              This challenge ships with <span className="font-bold">context-aware AI</span> support. Open it in your
+              preferred AI coding tool and ask questions, request hints, or get explanations at any point along the way.
+            </p>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

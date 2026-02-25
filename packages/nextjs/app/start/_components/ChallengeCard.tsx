@@ -1,6 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
+import { SparklesIcon } from "@heroicons/react/24/solid";
 import { Challenges } from "~~/services/database/repositories/challenges";
+import { CHALLENGE_METADATA } from "~~/utils/challenges";
 
 type ChallengeCardProps = {
   challenge: Challenges[0];
@@ -52,10 +54,15 @@ export const ChallengeCard = ({ challenge }: ChallengeCardProps) => {
           </div>
         )}
       </div>
-      <div className="px-4 pb-1 pt-1 flex-1 flex items-start bg-base-100 dark:bg-teal-950">
-        <p className="text-sm md:text-base text-base-content/90 line-clamp-4 font-normal leading-tight md:leading-normal">
+      <div className="p-4 flex-1 flex flex-col items-start bg-base-100 dark:bg-teal-950">
+        {CHALLENGE_METADATA[challenge.id]?.isAiAssisted && (
+          <span className="badge badge-sm sm:badge-md bg-base-300 flex mb-2 py-3">
+            <SparklesIcon className="w-4 h-4 mr-1" /> AI-assisted
+          </span>
+        )}
+        <div className="text-sm md:text-base text-base-content/90 line-clamp-4 font-normal leading-tight md:leading-normal">
           {firstSentence}
-        </p>
+        </div>
       </div>
     </div>
   );

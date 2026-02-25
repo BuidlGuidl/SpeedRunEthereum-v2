@@ -2,10 +2,11 @@ import Image from "next/image";
 import Link from "next/link";
 import CrossedSwordsIcon from "../_assets/icons/CrossedSwordsIcon";
 import NewIcon from "../_assets/icons/NewIcon";
+import { SparklesIcon } from "@heroicons/react/24/solid";
 import { ChallengeId } from "~~/services/database/config/types";
 import { Challenges } from "~~/services/database/repositories/challenges";
 import { UserChallenges } from "~~/services/database/repositories/userChallenges";
-import { REVIEW_ACTION_BADGE_CLASSES } from "~~/utils/challenges";
+import { CHALLENGE_METADATA, REVIEW_ACTION_BADGE_CLASSES } from "~~/utils/challenges";
 
 type ChallengeExpandedCardProps = {
   challengeId: ChallengeId;
@@ -51,6 +52,11 @@ const ChallengeExpandedCard = ({
               <span className="text-lg">Challenge #{sortOrder}</span>
             )}
             <h2 className="text-xl lg:text-2xl font-medium mt-0">{challenge.challengeName}</h2>
+            {CHALLENGE_METADATA[challengeId]?.isAiAssisted && (
+              <span className="badge bg-base-300 badge-md sm:badge-lg py-3 mb-3">
+                <SparklesIcon className="w-4 h-4 mr-1" /> AI-assisted
+              </span>
+            )}
           </div>
           <div className="flex flex-col gap-8">
             <span className="text-sm lg:text-base leading-[1.5]">{challenge.description}</span>
