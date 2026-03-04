@@ -101,6 +101,7 @@ export const CHALLENGE_METADATA: Record<string, ChallengeStaticMetadata> = {
     title: "Create an ERC20 Token and Vendor Contract in Solidity",
     description:
       "Learn to create your own ERC20 token and build a decentralized vending machine using Solidity smart contracts on Ethereum.",
+    isAiAssisted: true,
     skills: [
       "Build a custom token on the **ERC20** standard",
       "Learn how to perform secure contract-to-contract token transfers",
@@ -146,6 +147,7 @@ export const CHALLENGE_METADATA: Record<string, ChallengeStaticMetadata> = {
     title: "Exploit a Vulnerable Dice Game in Solidity",
     description:
       "Learn blockchain security by building an attack contract that exploits randomness vulnerabilities in a Solidity dice game. Hands-on security tutorial for developers.",
+    isAiAssisted: true,
     skills: [
       "Understand why randomness is tricky on the blockchain",
       "Learn how to analyze a smart contract to **identify a vulnerability**",
