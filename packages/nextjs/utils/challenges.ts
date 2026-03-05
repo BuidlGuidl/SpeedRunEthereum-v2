@@ -179,6 +179,7 @@ export const CHALLENGE_METADATA: Record<string, ChallengeStaticMetadata> = {
     title: "How to Build a Decentralized Exchange (DEX) in Solidity",
     description:
       "Step-by-step tutorial to build your own DEX with liquidity pools, token swapping, and automated market making in Solidity.",
+    isAiAssisted: true,
     skills: [
       "Build and understand an **Automated Market Maker (AMM)**",
       "Learn about **liquidity pools** and **impermanent loss**",
