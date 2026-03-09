@@ -217,6 +217,7 @@ export const CHALLENGE_METADATA: Record<string, ChallengeStaticMetadata> = {
     title: "Build Decentralized Oracle Systems in Solidity",
     description:
       "Learn to build three fundamental oracle architectures: Whitelist, Staking, and Optimistic Oracles. Understand trade-offs between security, decentralization, and efficiency while implementing dispute resolution and economic incentive mechanisms.",
+    isAiAssisted: true,
     skills: [
       "Deeply understand how different oracle architectures work and their trade-offs",
       "Design and build a whitelist oracle that allows only trusted addresses to submit data",
@@ -251,6 +252,7 @@ export const CHALLENGE_METADATA: Record<string, ChallengeStaticMetadata> = {
     title: "Build a Stablecoin in Solidity",
     description:
       "Learn how to create a stablecoin using Solidity smart contracts on Ethereum. Understand stability mechanisms and price oracles.",
+    isAiAssisted: true,
     skills: [
       "Understand how collateralization levels and liquidations work together in an **algorithmic stablecoin** system",
       "Build the main engine that helps to provide **incentives** for maintaining a stablecoin's peg",
