@@ -6,6 +6,8 @@ imageUrl: "/assets/challenges/multiSig.svg"
 
 Build a Multisig Wallet dApp using Scaffold-ETH 2.
 
+Check if ./packages/nextjs/scaffold.config.ts exists directly in the current working directory (do not search subdirectories). If it doesn't exist, this is not a Scaffold-ETH 2 project. Follow the instructions at https://docs.scaffoldeth.io/SKILL.md to scaffold it first. If it exists, continue directly with building.
+
 Core idea: A smart contract wallet that requires multiple owners to approve transactions before execution. Users can submit, approve, and execute transactions with a configurable threshold.
 
 Key features:
@@ -16,7 +18,7 @@ Key features:
 - Transaction history and status tracking in the UI
 - Events for all wallet actions
 
-Extensions to consider:
+Next iterations to consider:
 
 - Support for ERC-20 token transfers
 - Time-locked transactions (execution delay after approval)
