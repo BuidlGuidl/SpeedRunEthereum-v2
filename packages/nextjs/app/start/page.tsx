@@ -1,5 +1,6 @@
 /* eslint-disable react/no-unescaped-entities */
 import Image from "next/image";
+import Link from "next/link";
 import HeroLogo from "../_assets/icons/HeroLogo";
 import { ChallengeCard } from "./_components/ChallengeCard";
 import { ConnectAndRegisterSection } from "./_components/ConnectAndRegisterSection";
@@ -15,6 +16,8 @@ import {
   ToolsIcon,
 } from "./_components/Icons";
 import { ProgressBasedPrompt } from "./_components/ProgressBasedPrompt";
+import { SparklesIcon } from "@heroicons/react/24/outline";
+import { getAllBuildPrompts } from "~~/services/build-prompts";
 import { getAllChallenges } from "~~/services/database/repositories/challenges";
 import { getMetadata } from "~~/utils/scaffold-eth/getMetadata";
 
@@ -26,6 +29,7 @@ export const metadata = getMetadata({
 
 const StartLandingPage = async () => {
   const challenges = await getAllChallenges();
+  const buildPrompts = getAllBuildPrompts();
 
   return (
     <div className="bg-[#F9FEFF] dark:bg-base-200 overflow-hidden">
@@ -175,20 +179,50 @@ const StartLandingPage = async () => {
 
             <div className="grid grid-cols-2 mb-8 lg:pt-6 md:grid-cols-2 lg:grid-cols-4 gap-6">
               {challenges
-                .filter(challenge => !challenge.disabled)
-                .sort((a, b) => {
-                  const aIsBuildIdea = a.github && !a.autograding;
-                  const bIsBuildIdea = b.github && !b.autograding;
-
-                  if (aIsBuildIdea && !bIsBuildIdea) return 1;
-                  if (!aIsBuildIdea && bIsBuildIdea) return -1;
-
-                  return a.sortOrder - b.sortOrder;
-                })
+                .filter(challenge => !challenge.disabled && !(challenge.github && !challenge.autograding))
+                .sort((a, b) => a.sortOrder - b.sortOrder)
                 .map(challenge => (
                   <ChallengeCard key={challenge.id} challenge={challenge} />
                 ))}
             </div>
+
+            {buildPrompts.length > 0 && (
+              <div className="mt-8">
+                <h3 className="text-xl font-medium text-center mb-6 mt-24 flex items-center justify-center gap-2">
+                  Looking for your next idea? Check out our{" "}
+                  <Link href="/build-prompts" className="link text-primary flex items-center gap-1">
+                    <SparklesIcon className="w-4 h-4" /> AI-ready build prompts
+                  </Link>
+                  .
+                </h3>
+                <div className="flex flex-wrap justify-center gap-6">
+                  {buildPrompts.map(prompt => (
+                    <Link
+                      key={prompt.slug}
+                      href="/build-prompts"
+                      className="bg-base-100 rounded-xl shadow-md overflow-hidden transition hover:shadow-lg border-2 border-[#FFCB7E] dark:border-[#D5853B] w-[calc(50%-12px)] md:w-56 lg:w-64 flex flex-col"
+                    >
+                      {prompt.imageUrl && (
+                        <div className="w-full h-24 md:h-40 lg:h-48 flex items-center justify-center bg-[#FFE9C9] dark:bg-[#7E4510]">
+                          <Image
+                            src={prompt.imageUrl}
+                            alt={prompt.name}
+                            width={200}
+                            height={128}
+                            className="w-full h-full object-contain p-3 md:p-4"
+                          />
+                        </div>
+                      )}
+                      <div className="px-4 pb-3 pt-2 flex-1 flex flex-col bg-base-100 dark:bg-teal-950">
+                        <p className="text-sm md:text-base text-base-content/90 font-normal leading-tight md:leading-normal">
+                          {prompt.description}
+                        </p>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         </div>
 
