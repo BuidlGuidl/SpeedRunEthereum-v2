@@ -217,6 +217,7 @@ export const CHALLENGE_METADATA: Record<string, ChallengeStaticMetadata> = {
     title: "Build Decentralized Oracle Systems in Solidity",
     description:
       "Learn to build three fundamental oracle architectures: Whitelist, Staking, and Optimistic Oracles. Understand trade-offs between security, decentralization, and efficiency while implementing dispute resolution and economic incentive mechanisms.",
+    isAiAssisted: true,
     skills: [
       "Deeply understand how different oracle architectures work and their trade-offs",
       "Design and build a whitelist oracle that allows only trusted addresses to submit data",
@@ -234,6 +235,7 @@ export const CHALLENGE_METADATA: Record<string, ChallengeStaticMetadata> = {
     title: "Build an Over-Collateralized Lending Platform in Solidity",
     description:
       "Learn how to create an over-collateralized lending platform using Solidity smart contracts on Ethereum.",
+    isAiAssisted: true,
     skills: [
       "Understand how over-collateralized lending works",
       "Build a **money market** protocol for borrowing assets",
@@ -251,6 +253,7 @@ export const CHALLENGE_METADATA: Record<string, ChallengeStaticMetadata> = {
     title: "Build a Stablecoin in Solidity",
     description:
       "Learn how to create a stablecoin using Solidity smart contracts on Ethereum. Understand stability mechanisms and price oracles.",
+    isAiAssisted: true,
     skills: [
       "Understand how collateralization levels and liquidations work together in an **algorithmic stablecoin** system",
       "Build the main engine that helps to provide **incentives** for maintaining a stablecoin's peg",
@@ -274,6 +277,7 @@ export const CHALLENGE_METADATA: Record<string, ChallengeStaticMetadata> = {
     title: "Create a Prediction Market in Solidity",
     description:
       "Learn to build decentralized prediction markets using Solidity. Understand market creation, betting mechanics, and outcome resolution.",
+    isAiAssisted: true,
     skills: [
       "Design and build a complete onchain **prediction market** from creation to settlement",
       "Implement a simple **oracle** to report real-world event outcomes on-chain",
@@ -294,6 +298,7 @@ export const CHALLENGE_METADATA: Record<string, ChallengeStaticMetadata> = {
     title: "Build a Privacy-Preserving ZK Voting dApp",
     description:
       "Learn how to build a privacy-preserving ZK voting dApp where members vote anonymously using zero-knowledge proofs, Merkle trees, and nullifier hashes to prevent double voting.",
+    isAiAssisted: true,
     skills: [
       "Design a **commitment + nullifier** scheme to enforce one-person-one-vote",
       "Register voters in a **Lean Incremental Merkle Tree (LeanIMT)** and prove membership",
