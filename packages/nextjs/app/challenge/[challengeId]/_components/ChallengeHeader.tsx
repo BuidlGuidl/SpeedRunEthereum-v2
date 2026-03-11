@@ -1,7 +1,14 @@
 import { MDXRemote } from "next-mdx-remote/rsc";
 import rehypeRaw from "rehype-raw";
 import remarkGfm from "remark-gfm";
-import { CheckCircleIcon, ClockIcon, LinkIcon, SparklesIcon, UserGroupIcon } from "@heroicons/react/24/outline";
+import {
+  AcademicCapIcon,
+  CheckCircleIcon,
+  ClockIcon,
+  LinkIcon,
+  SparklesIcon,
+  UserGroupIcon,
+} from "@heroicons/react/24/outline";
 import SkillLevelIcon from "~~/app/_components/SkillLevelIcon";
 import { SkillLevel } from "~~/utils/challenges";
 
@@ -13,6 +20,7 @@ type Props = {
   helpfulLinks?: { text: string; url?: string }[];
   completedByCount?: number;
   isAiAssisted?: boolean;
+  isAiGuided?: boolean;
 };
 
 export function ChallengeHeader({
@@ -22,6 +30,7 @@ export function ChallengeHeader({
   helpfulLinks,
   completedByCount,
   isAiAssisted,
+  isAiGuided,
 }: Props) {
   if (!skills || skills.length === 0) {
     return null;
@@ -119,6 +128,18 @@ export function ChallengeHeader({
         </div>
       </div>
 
+      {isAiGuided && (
+        <div className="mt-4 rounded-2xl border border-primary/10 bg-base-100 p-6 shadow-center flex items-start gap-4">
+          <AcademicCapIcon className="w-8 h-8 text-primary shrink-0 mt-0.5" />
+          <div>
+            <p className="text-sm opacity-80 m-0">
+              This challenge ships with <span className="font-bold">AI-guided</span> support. Type{" "}
+              <code className="bg-base-300 px-1.5 py-0.5 rounded text-xs font-mono">/start</code> in your Claude
+              terminal or Cursor chat to get step-by-step guidance through the challenge.
+            </p>
+          </div>
+        </div>
+      )}
       {isAiAssisted && (
         <div className="mt-4 rounded-2xl border border-primary/10 bg-base-100 p-6 shadow-center flex items-start gap-4">
           <SparklesIcon className="w-8 h-8 text-primary shrink-0 mt-0.5" />

@@ -28,6 +28,7 @@ type ChallengeStaticMetadata = {
   timeToComplete?: string;
   helpfulLinks?: { text: string; url: string }[];
   isAiAssisted?: boolean;
+  isAiGuided?: boolean;
 };
 
 export const CHALLENGE_METADATA: Record<string, ChallengeStaticMetadata> = {
@@ -36,6 +37,7 @@ export const CHALLENGE_METADATA: Record<string, ChallengeStaticMetadata> = {
     description:
       "Build your first NFT smart contract in Solidity. Step-by-step tutorial to mint and deploy NFTs on Ethereum using Scaffold-ETH.",
     isAiAssisted: true,
+    isAiGuided: true,
     skills: [
       "Compile and deploy your first **smart contract**",
       "Use burner wallets, faucets and gas on localhost",
