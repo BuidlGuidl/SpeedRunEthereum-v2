@@ -131,10 +131,9 @@ export function ChallengeHeader({
             </p>
             {isAiGuided && (
               <p className="text-sm opacity-80 mt-2 mb-0">
-                <span className="font-bold">(Optional)</span> It also offers{" "}
-                <span className="font-bold">AI-guided</span> step-by-step mode, currently available in{" "}
-                <span className="font-bold">Claude Code</span> and <span className="font-bold">Cursor</span> via{" "}
-                <code className="bg-base-300 px-1.5 py-0.5 rounded text-xs font-mono">/start</code>.
+                If you prefer an <span className="font-bold">AI-guided</span> experience, you can run{" "}
+                <code className="bg-base-300 px-1.5 py-0.5 rounded text-xs font-mono">/start</code> in{" "}
+                <span className="italic">Claude Code</span> or <span className="italic">Cursor</span>.
               </p>
             )}
           </div>
