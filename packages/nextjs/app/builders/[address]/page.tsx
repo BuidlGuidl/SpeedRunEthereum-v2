@@ -7,6 +7,7 @@ import { Builds } from "./_components/builds/Builds";
 import { Metadata } from "next";
 import { isAddress } from "viem";
 import { RouteRefresher } from "~~/components/RouteRefresher";
+import { getAllBuildPrompts } from "~~/services/build-prompts";
 import { ReviewAction } from "~~/services/database/config/types";
 import { getBatchById } from "~~/services/database/repositories/batches";
 import { getBuildsByUserAddress } from "~~/services/database/repositories/builds";
@@ -86,6 +87,7 @@ export default async function BuilderPage(props: { params: Promise<{ address: st
   }
 
   const userHasCompletedChallenges = userCompletedChallenges.length > 0;
+  const buildIdeas = getAllBuildPrompts().map(({ name, description, imageUrl }) => ({ name, description, imageUrl }));
 
   // Filter out disabled and non-autograding challenges
   const filteredChallenges = challenges.filter(challenge => challenge.autograding === true && !challenge.disabled);
@@ -110,7 +112,12 @@ export default async function BuilderPage(props: { params: Promise<{ address: st
               userChallenges={userChallenges}
               userHasCompletedChallenges={userHasCompletedChallenges}
             />
-            <Builds address={address} builds={builds} userHasCompletedChallenges={userHasCompletedChallenges} />
+            <Builds
+              address={address}
+              builds={builds}
+              userHasCompletedChallenges={userHasCompletedChallenges}
+              buildIdeas={buildIdeas}
+            />
           </div>
         </div>
       </div>
