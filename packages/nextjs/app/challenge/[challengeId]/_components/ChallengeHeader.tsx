@@ -13,6 +13,7 @@ type Props = {
   helpfulLinks?: { text: string; url?: string }[];
   completedByCount?: number;
   isAiAssisted?: boolean;
+  isAiGuided?: boolean;
 };
 
 export function ChallengeHeader({
@@ -22,6 +23,7 @@ export function ChallengeHeader({
   helpfulLinks,
   completedByCount,
   isAiAssisted,
+  isAiGuided,
 }: Props) {
   if (!skills || skills.length === 0) {
     return null;
@@ -119,7 +121,7 @@ export function ChallengeHeader({
         </div>
       </div>
 
-      {isAiAssisted && (
+      {(isAiAssisted || isAiGuided) && (
         <div className="mt-4 rounded-2xl border border-primary/10 bg-base-100 p-6 shadow-center flex items-start gap-4">
           <SparklesIcon className="w-8 h-8 text-primary shrink-0 mt-0.5" />
           <div>
@@ -127,6 +129,13 @@ export function ChallengeHeader({
               This challenge ships with <span className="font-bold">context-aware AI</span> support. Open it in your
               preferred AI coding tool and ask questions, request hints, or get explanations at any point along the way.
             </p>
+            {isAiGuided && (
+              <p className="text-sm opacity-80 mt-2 mb-0">
+                If you prefer an <span className="font-bold">AI-guided</span> experience, you can run{" "}
+                <code className="bg-base-300 px-1.5 py-0.5 rounded text-xs font-mono">/start</code> in{" "}
+                <span className="italic">Claude Code</span> or <span className="italic">Cursor</span>.
+              </p>
+            )}
           </div>
         </div>
       )}

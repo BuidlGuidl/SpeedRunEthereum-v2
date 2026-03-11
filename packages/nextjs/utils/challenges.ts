@@ -28,6 +28,7 @@ type ChallengeStaticMetadata = {
   timeToComplete?: string;
   helpfulLinks?: { text: string; url: string }[];
   isAiAssisted?: boolean;
+  isAiGuided?: boolean;
 };
 
 export const CHALLENGE_METADATA: Record<string, ChallengeStaticMetadata> = {
