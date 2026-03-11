@@ -1,14 +1,7 @@
 import { MDXRemote } from "next-mdx-remote/rsc";
 import rehypeRaw from "rehype-raw";
 import remarkGfm from "remark-gfm";
-import {
-  AcademicCapIcon,
-  CheckCircleIcon,
-  ClockIcon,
-  LinkIcon,
-  SparklesIcon,
-  UserGroupIcon,
-} from "@heroicons/react/24/outline";
+import { CheckCircleIcon, ClockIcon, LinkIcon, SparklesIcon, UserGroupIcon } from "@heroicons/react/24/outline";
 import SkillLevelIcon from "~~/app/_components/SkillLevelIcon";
 import { SkillLevel } from "~~/utils/challenges";
 
@@ -128,19 +121,7 @@ export function ChallengeHeader({
         </div>
       </div>
 
-      {isAiGuided && (
-        <div className="mt-4 rounded-2xl border border-primary/10 bg-base-100 p-6 shadow-center flex items-start gap-4">
-          <AcademicCapIcon className="w-8 h-8 text-primary shrink-0 mt-0.5" />
-          <div>
-            <p className="text-sm opacity-80 m-0">
-              This challenge ships with <span className="font-bold">AI-guided</span> support. Type{" "}
-              <code className="bg-base-300 px-1.5 py-0.5 rounded text-xs font-mono">/start</code> in your Claude
-              terminal or Cursor chat to get step-by-step guidance through the challenge.
-            </p>
-          </div>
-        </div>
-      )}
-      {isAiAssisted && (
+      {(isAiAssisted || isAiGuided) && (
         <div className="mt-4 rounded-2xl border border-primary/10 bg-base-100 p-6 shadow-center flex items-start gap-4">
           <SparklesIcon className="w-8 h-8 text-primary shrink-0 mt-0.5" />
           <div>
@@ -148,6 +129,13 @@ export function ChallengeHeader({
               This challenge ships with <span className="font-bold">context-aware AI</span> support. Open it in your
               preferred AI coding tool and ask questions, request hints, or get explanations at any point along the way.
             </p>
+            {isAiGuided && (
+              <p className="text-sm opacity-80 mt-2 mb-0">
+                It also offers <span className="font-bold">AI-guided</span> step-by-step mode, currently available in{" "}
+                <span className="font-bold">Claude Code</span> and <span className="font-bold">Cursor</span> via{" "}
+                <code className="bg-base-300 px-1.5 py-0.5 rounded text-xs font-mono">/start</code>.
+              </p>
+            )}
           </div>
         </div>
       )}

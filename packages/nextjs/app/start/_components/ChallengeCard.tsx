@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { AcademicCapIcon, SparklesIcon } from "@heroicons/react/24/solid";
+import { SparklesIcon } from "@heroicons/react/24/solid";
 import { Challenges } from "~~/services/database/repositories/challenges";
 import { CHALLENGE_METADATA } from "~~/utils/challenges";
 
@@ -56,12 +56,7 @@ export const ChallengeCard = ({ challenge }: ChallengeCardProps) => {
       </div>
       <div className="p-4 flex-1 flex flex-col items-start bg-base-100 dark:bg-teal-950">
         <div className="flex flex-wrap gap-1 mb-2">
-          {CHALLENGE_METADATA[challenge.id]?.isAiGuided && (
-            <span className="badge badge-sm sm:badge-md bg-base-300 flex py-3">
-              <AcademicCapIcon className="w-4 h-4 mr-1" /> AI-guided
-            </span>
-          )}
-          {CHALLENGE_METADATA[challenge.id]?.isAiAssisted && (
+          {(CHALLENGE_METADATA[challenge.id]?.isAiAssisted || CHALLENGE_METADATA[challenge.id]?.isAiGuided) && (
             <span className="badge badge-sm sm:badge-md bg-base-300 flex py-3">
               <SparklesIcon className="w-4 h-4 mr-1" /> AI-assisted
             </span>
