@@ -32,7 +32,7 @@ A token launchpad where anyone can create a new ERC-20 token with an automated b
   - `getEstimatedBuy(ethAmount)` view — preview how many tokens an ETH amount would buy.
   - `getEstimatedSell(tokenAmount)` view — preview how much ETH selling would return.
 - **Events:** Emit `TokenCreated`, `Trade(buyer, isBuy, ethAmount, tokenAmount, newPrice)` events. These power the frontend activity feed.
-- **Agent Autonomy:** Use integral math (area under the curve) for accurate buy/sell calculations instead of a flat spot price, so large orders are priced fairly across the curve. Keep precision safe using `1e18` scaling. Ensure the contract always holds exactly enough ETH to buy back all outstanding tokens (creator fees must come from the trader's side, not the reserve).
+- **Agent Autonomy:** Use integral math (area under the curve) for accurate buy/sell calculations instead of a flat spot price, so large orders are priced fairly across the curve. When solving the quadratic equation for buy amount, the discriminant (BASE_PRICE² + 2 * SLOPE * totalIntegral) must NOT be divided by any scaling factor before taking the square root — premature division destroys precision because the two terms can differ by many orders of magnitude. Verify that buying 1 ETH of tokens at initial supply returns a non-trivial token amount (not zero or dust). Ensure the contract always holds exactly enough ETH to buy back all outstanding tokens (creator fees must come from the trader's side, not the reserve).
 
 ## 5. 🖥️ Frontend Spec
 - **Required Views:**
