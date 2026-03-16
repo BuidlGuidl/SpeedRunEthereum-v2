@@ -20,11 +20,11 @@ A protocol that locks a high-value ERC-721 NFT into a vault and issues ERC-20 to
 ## 4. 📜 Smart Contract Spec
 - **Architecture:** Vault contract that receives/locks an ERC-721 token, linked to an ERC-20 contract.
 - **Core Functions:**
-  - `depositNFT()` — locks an ERC-721 and mints all ERC-20 fractions to the depositor.
-  - `listFractionsForSale(amount, pricePerFraction)` — depositor/holder lists fractions at a fixed ETH price.
-  - `buyFractions(amount)` payable — anyone buys listed fractions by sending the correct ETH.
-  - `buyout()` — anyone deposits full ETH valuation to unlock the NFT.
-  - `claimBuyout()` — fraction holders burn tokens for proportional ETH.
+  - `depositNFT()`: locks an ERC-721 and mints all ERC-20 fractions to the depositor.
+  - `listFractionsForSale(amount, pricePerFraction)`: depositor/holder lists fractions at a fixed ETH price.
+  - `buyFractions(amount)` payable: anyone buys listed fractions by sending the correct ETH.
+  - `buyout()`: anyone deposits full ETH valuation to unlock the NFT.
+  - `claimBuyout()`: fraction holders burn tokens for proportional ETH.
 - **Agent Autonomy:** Manage the complex interface interactions (IERC721 receiver). Keep the buyout logic safe and simple.
 
 ## 5. 🖥️ Frontend Spec
