@@ -56,9 +56,9 @@ export const ChallengeCard = ({ challenge }: ChallengeCardProps) => {
       </div>
       <div className="p-4 flex-1 flex flex-col items-start bg-base-100 dark:bg-teal-950">
         <div className="flex flex-wrap gap-1 mb-2">
-          {(CHALLENGE_METADATA[challenge.id]?.isAiAssisted || CHALLENGE_METADATA[challenge.id]?.isAiGuided) && (
+          {CHALLENGE_METADATA[challenge.id]?.isAiReady && (
             <span className="badge badge-sm sm:badge-md bg-base-300 flex py-3">
-              <SparklesIcon className="w-4 h-4 mr-1" /> AI-assisted
+              <SparklesIcon className="w-4 h-4 mr-1" /> AI-ready
             </span>
           )}
         </div>
