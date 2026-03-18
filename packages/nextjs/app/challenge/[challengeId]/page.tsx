@@ -3,6 +3,7 @@ import type { ComponentPropsWithoutRef, ReactNode } from "react";
 import { notFound } from "next/navigation";
 import { ChallengeHeader } from "./_components/ChallengeHeader";
 import { ChallengeSidebar } from "./_components/ChallengeSidebar";
+import { ChatWidget } from "./_components/ChatWidget";
 import { ConnectAndRegisterBanner } from "./_components/ConnectAndRegisterBanner";
 import { SubmitChallengeButton } from "./_components/SubmitChallengeButton";
 import { MDXRemote } from "next-mdx-remote/rsc";
@@ -162,6 +163,9 @@ export default async function ChallengePage(props: { params: Promise<{ challenge
           </div>
         )}
       </div>
+      {staticMetadata?.isAiAssisted && challenge.github && (
+        <ChatWidget challengeId={challenge.id} github={challenge.github} />
+      )}
     </div>
   );
 }
