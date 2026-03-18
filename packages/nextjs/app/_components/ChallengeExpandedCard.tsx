@@ -53,9 +53,9 @@ const ChallengeExpandedCard = ({
             )}
             <h2 className="text-xl lg:text-2xl font-medium mt-0">{challenge.challengeName}</h2>
             <div className="flex flex-wrap gap-1 mb-3">
-              {(CHALLENGE_METADATA[challengeId]?.isAiAssisted || CHALLENGE_METADATA[challengeId]?.isAiGuided) && (
+              {CHALLENGE_METADATA[challengeId]?.isAiReady && (
                 <span className="badge bg-base-300 badge-md sm:badge-lg py-3">
-                  <SparklesIcon className="w-4 h-4 mr-1" /> AI-assisted
+                  <SparklesIcon className="w-4 h-4 mr-1" /> AI-ready
                 </span>
               )}
             </div>

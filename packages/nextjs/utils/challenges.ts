@@ -27,8 +27,7 @@ type ChallengeStaticMetadata = {
   skillLevel?: SkillLevel;
   timeToComplete?: string;
   helpfulLinks?: { text: string; url: string }[];
-  isAiAssisted?: boolean;
-  isAiGuided?: boolean;
+  isAiReady?: boolean;
 };
 
 export const CHALLENGE_METADATA: Record<string, ChallengeStaticMetadata> = {
@@ -36,7 +35,7 @@ export const CHALLENGE_METADATA: Record<string, ChallengeStaticMetadata> = {
     title: "Learn How to Create an NFT in Solidity",
     description:
       "Build your first NFT smart contract in Solidity. Step-by-step tutorial to mint and deploy NFTs on Ethereum using Scaffold-ETH.",
-    isAiAssisted: true,
+    isAiReady: true,
     skills: [
       "Compile and deploy your first **smart contract**",
       "Use burner wallets, faucets and gas on localhost",
@@ -72,7 +71,7 @@ export const CHALLENGE_METADATA: Record<string, ChallengeStaticMetadata> = {
     title: "Build a Crowdfunding Application in Solidity",
     description:
       "Learn to build a crowdfunding application with Solidity. Step-by-step tutorial to help adversarial parties work together to fund a project using Solidity smart contracts on Ethereum.",
-    isAiAssisted: true,
+    isAiReady: true,
     skills: [
       "Design and implement a decentralized application (dApp) with a state machine",
       "Handle and send ETH in a smart contract using **payable** functions",
@@ -102,7 +101,7 @@ export const CHALLENGE_METADATA: Record<string, ChallengeStaticMetadata> = {
     title: "Create an ERC20 Token and Vendor Contract in Solidity",
     description:
       "Learn to create your own ERC20 token and build a decentralized vending machine using Solidity smart contracts on Ethereum.",
-    isAiAssisted: true,
+    isAiReady: true,
     skills: [
       "Build a custom token on the **ERC20** standard",
       "Learn how to perform secure contract-to-contract token transfers",
@@ -148,7 +147,7 @@ export const CHALLENGE_METADATA: Record<string, ChallengeStaticMetadata> = {
     title: "Exploit a Vulnerable Dice Game in Solidity",
     description:
       "Learn blockchain security by building an attack contract that exploits randomness vulnerabilities in a Solidity dice game. Hands-on security tutorial for developers.",
-    isAiAssisted: true,
+    isAiReady: true,
     skills: [
       "Understand why randomness is tricky on the blockchain",
       "Learn how to analyze a smart contract to **identify a vulnerability**",
@@ -180,7 +179,7 @@ export const CHALLENGE_METADATA: Record<string, ChallengeStaticMetadata> = {
     title: "How to Build a Decentralized Exchange (DEX) in Solidity",
     description:
       "Step-by-step tutorial to build your own DEX with liquidity pools, token swapping, and automated market making in Solidity.",
-    isAiAssisted: true,
+    isAiReady: true,
     skills: [
       "Build and understand an **Automated Market Maker (AMM)**",
       "Learn about **liquidity pools** and **impermanent loss**",
@@ -218,7 +217,7 @@ export const CHALLENGE_METADATA: Record<string, ChallengeStaticMetadata> = {
     title: "Build Decentralized Oracle Systems in Solidity",
     description:
       "Learn to build three fundamental oracle architectures: Whitelist, Staking, and Optimistic Oracles. Understand trade-offs between security, decentralization, and efficiency while implementing dispute resolution and economic incentive mechanisms.",
-    isAiAssisted: true,
+    isAiReady: true,
     skills: [
       "Deeply understand how different oracle architectures work and their trade-offs",
       "Design and build a whitelist oracle that allows only trusted addresses to submit data",
@@ -236,7 +235,7 @@ export const CHALLENGE_METADATA: Record<string, ChallengeStaticMetadata> = {
     title: "Build an Over-Collateralized Lending Platform in Solidity",
     description:
       "Learn how to create an over-collateralized lending platform using Solidity smart contracts on Ethereum.",
-    isAiAssisted: true,
+    isAiReady: true,
     skills: [
       "Understand how over-collateralized lending works",
       "Build a **money market** protocol for borrowing assets",
@@ -254,7 +253,7 @@ export const CHALLENGE_METADATA: Record<string, ChallengeStaticMetadata> = {
     title: "Build a Stablecoin in Solidity",
     description:
       "Learn how to create a stablecoin using Solidity smart contracts on Ethereum. Understand stability mechanisms and price oracles.",
-    isAiAssisted: true,
+    isAiReady: true,
     skills: [
       "Understand how collateralization levels and liquidations work together in an **algorithmic stablecoin** system",
       "Build the main engine that helps to provide **incentives** for maintaining a stablecoin's peg",
@@ -278,7 +277,7 @@ export const CHALLENGE_METADATA: Record<string, ChallengeStaticMetadata> = {
     title: "Create a Prediction Market in Solidity",
     description:
       "Learn to build decentralized prediction markets using Solidity. Understand market creation, betting mechanics, and outcome resolution.",
-    isAiAssisted: true,
+    isAiReady: true,
     skills: [
       "Design and build a complete onchain **prediction market** from creation to settlement",
       "Implement a simple **oracle** to report real-world event outcomes on-chain",
@@ -299,7 +298,7 @@ export const CHALLENGE_METADATA: Record<string, ChallengeStaticMetadata> = {
     title: "Build a Privacy-Preserving ZK Voting dApp",
     description:
       "Learn how to build a privacy-preserving ZK voting dApp where members vote anonymously using zero-knowledge proofs, Merkle trees, and nullifier hashes to prevent double voting.",
-    isAiAssisted: true,
+    isAiReady: true,
     skills: [
       "Design a **commitment + nullifier** scheme to enforce one-person-one-vote",
       "Register voters in a **Lean Incremental Merkle Tree (LeanIMT)** and prove membership",
