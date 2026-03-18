@@ -1,7 +1,6 @@
 ---
 name: "Token Staking Protocol"
 description: "Lock ERC-20 tokens to earn yield rewards over time with a DeFi staking mechanism."
-imageUrl: "/assets/challenges/tokenVendor.svg"
 ---
 
 # SPEC: Token Staking Protocol

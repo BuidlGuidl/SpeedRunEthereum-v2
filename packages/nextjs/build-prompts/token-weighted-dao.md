@@ -1,7 +1,6 @@
 ---
 name: "Token-Weighted DAO"
 description: "Decentralized governance where token holders submit proposals and vote with automatic execution."
-imageUrl: "/assets/challenges/zkVoting.svg"
 ---
 
 # SPEC: Token-Weighted DAO

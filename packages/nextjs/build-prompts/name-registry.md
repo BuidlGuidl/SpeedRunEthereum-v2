@@ -1,7 +1,6 @@
 ---
 name: "On-Chain Name Registry"
 description: "Decentralized mapping system linking human-readable names to Ethereum addresses, similar to ENS."
-imageUrl: "/assets/challenges/state.svg"
 ---
 
 # SPEC: On-Chain Name Registry

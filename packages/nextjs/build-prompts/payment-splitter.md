@@ -1,7 +1,6 @@
 ---
 name: "Payment Splitter"
 description: "Self-serve revenue splitting. Create a split, share the address, and let team members claim their share on-chain."
-imageUrl: "/assets/challenges/tokenVendor.svg"
 ---
 
 # SPEC: Payment Splitter

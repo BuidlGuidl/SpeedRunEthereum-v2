@@ -1,7 +1,7 @@
 ---
 name: "Bonding Curve Token Launch"
 description: "pump.fun-style launchpad where anyone can create a token with an automated bonding curve. Price rises with every buy."
-imageUrl: "/assets/challenges/tokenVendor.svg"
+imageUrl: "/assets/challenges/token-launcher.png"
 ---
 
 # SPEC: Bonding Curve Token Launch
