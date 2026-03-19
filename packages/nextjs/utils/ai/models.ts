@@ -10,7 +10,7 @@ type GoogleModelId = Parameters<typeof google>[0];
 const MODEL_CONFIGS = {
   openai: {
     provider: openai,
-    modelId: "gpt-4o-mini" satisfies OpenAIModelId as OpenAIModelId,
+    modelId: "gpt-4.1-nano" satisfies OpenAIModelId as OpenAIModelId,
   },
   google: {
     provider: google,
