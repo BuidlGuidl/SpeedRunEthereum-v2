@@ -162,7 +162,7 @@ export default async function ChallengePage(props: { params: Promise<{ challenge
           </div>
         )}
       </div>
-      {staticMetadata?.isAiAssisted && challenge.github && (
+      {staticMetadata?.isAiReady && challenge.github && (
         <ChatWidget challengeId={challenge.id} github={challenge.github} />
       )}
     </div>
