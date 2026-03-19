@@ -75,19 +75,21 @@ export function ChatWidget({ challengeId, github }: ChatWidgetProps) {
         className={`fixed right-0 top-0 h-full w-full sm:w-[420px] z-50 flex flex-col bg-white dark:bg-[#0f1729] border-l border-primary/10 shadow-[-8px_0_30px_-12px_rgba(8,132,132,0.15)] transition-transform duration-300 ease-in-out ${isOpen ? "translate-x-0" : "translate-x-full"}`}
       >
         {/* Header */}
-        <div className="bg-secondary px-5 py-4 flex items-center justify-between shrink-0">
-          <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-full bg-primary/15 flex items-center justify-center">
-              <SparklesIcon className="w-4 h-4 text-secondary-content" />
+        <div className="bg-secondary px-3 py-6 shrink-0 flex items-start justify-between gap-2">
+          <div className="flex items-start gap-3">
+            <div className="w-5 h-5 shrink-0 flex items-center justify-center mt-[3px]">
+              <SparklesIcon className="w-5 h-5 text-secondary-content" />
             </div>
-            <div>
-              <h3 className="font-semibold text-secondary-content text-sm leading-tight">AI Teaching Assistant</h3>
-              <p className="text-[11px] text-secondary-content/60">Guides you, won&apos;t give answers</p>
+            <div className="min-w-0">
+              <h3 className="font-semibold text-secondary-content text-sm leading-tight mb-0">AI Teaching Assistant</h3>
+              <p className="text-[11px] text-secondary-content/60 leading-tight m-0">
+                Guides you, won&apos;t give answers
+              </p>
             </div>
           </div>
           <button
             onClick={() => setIsOpen(false)}
-            className="btn btn-sm btn-circle btn-ghost text-secondary-content hover:bg-primary/10"
+            className="btn btn-xs btn-circle btn-ghost text-secondary-content hover:bg-primary/10 mt-[3px]"
             aria-label="Close chat"
           >
             <XMarkIcon className="w-5 h-5" />
