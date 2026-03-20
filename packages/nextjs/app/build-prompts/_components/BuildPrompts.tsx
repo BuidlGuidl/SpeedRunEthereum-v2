@@ -2,7 +2,6 @@
 
 import { forwardRef, useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import CopyToClipboard from "react-copy-to-clipboard";
 import { ClipboardDocumentIcon, EyeIcon } from "@heroicons/react/24/outline";
 import { CheckCircleIcon } from "@heroicons/react/24/solid";
 import { BuildPrompt } from "~~/services/build-prompts";
@@ -23,27 +22,25 @@ function CopyButton({
     return () => clearTimeout(timerRef.current);
   }, []);
 
+  const handleCopy = () => {
+    navigator.clipboard.writeText(text);
+    setCopied(true);
+    clearTimeout(timerRef.current);
+    timerRef.current = setTimeout(() => setCopied(false), 2000);
+  };
+
   return (
-    <CopyToClipboard
-      text={text}
-      onCopy={() => {
-        setCopied(true);
-        clearTimeout(timerRef.current);
-        timerRef.current = setTimeout(() => setCopied(false), 2000);
-      }}
-    >
-      <button className={`btn ${copied ? "btn-success" : "btn-primary"} ${className ?? ""}`}>
-        {copied ? (
-          <>
-            <CheckCircleIcon className={iconSize} /> Copied!
-          </>
-        ) : (
-          <>
-            <ClipboardDocumentIcon className={iconSize} /> Copy
-          </>
-        )}
-      </button>
-    </CopyToClipboard>
+    <button onClick={handleCopy} className={`btn ${copied ? "btn-success" : "btn-primary"} ${className ?? ""}`}>
+      {copied ? (
+        <>
+          <CheckCircleIcon className={iconSize} /> Copied!
+        </>
+      ) : (
+        <>
+          <ClipboardDocumentIcon className={iconSize} /> Copy
+        </>
+      )}
+    </button>
   );
 }
 
