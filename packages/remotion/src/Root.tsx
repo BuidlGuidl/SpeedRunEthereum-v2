@@ -2,10 +2,10 @@ import { Composition } from "remotion";
 import { BuildPromptsDemo } from "./BuildPromptsDemo";
 
 // Total duration calculation:
-// Scenes: 210 + 120 + 300 + 240 + 555 + 150 = 1575 frames
-// Minus transitions: 5 transitions × 15 frames = 75 frames
-// Total: 1575 - 75 = 1500 frames = 50 seconds
-const TOTAL_DURATION = 1500;
+// Scenes: 210 + 180 + 240 + 555 + 150 = 1335 frames
+// Minus transitions: 4 transitions × 15 frames = 60 frames
+// Total: 1335 - 60 = 1275 frames ≈ 42.5 seconds
+const TOTAL_DURATION = 1275;
 
 export const RemotionRoot: React.FC = () => {
   return (

@@ -38,14 +38,14 @@ export const GlowLabel: React.FC<GlowLabelProps> = ({
         backdropFilter: "blur(10px)",
         border: `2px solid ${color}66`,
         borderRadius: 20,
-        padding: "20px 56px",
+        padding: "24px 64px",
         boxShadow: `0 0 40px ${color}44, 0 0 80px ${color}22`,
       }}
     >
       <span
         style={{
           fontFamily: "Inter, sans-serif",
-          fontSize: 48,
+          fontSize: 56,
           fontWeight: 700,
           color: "#fff",
           letterSpacing: "-0.02em",

@@ -107,11 +107,11 @@ export const IntroScene: React.FC = () => {
         >
           <div
             style={{
-              fontSize: 68,
+              fontSize: 80,
               fontWeight: 900,
               color: colors.textPrimary,
               lineHeight: 1.15,
-              maxWidth: 1200,
+              maxWidth: 1600,
               letterSpacing: "-0.03em",
               textShadow: "0 4px 40px rgba(255,255,255,0.9)",
             }}
@@ -126,7 +126,7 @@ export const IntroScene: React.FC = () => {
             >
               1shot
             </span>{" "}
-            production decentralized apps?
+            production dapps?
           </div>
         </div>
       )}

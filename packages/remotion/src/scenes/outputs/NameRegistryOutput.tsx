@@ -56,10 +56,10 @@ export const NameRegistryOutput: React.FC = () => {
           <div style={{ fontSize: 18, color: colors.registrarTeal, fontWeight: 700, marginBottom: 8, letterSpacing: "0.1em" }}>
             ON-CHAIN NAME REGISTRY
           </div>
-          <div style={{ fontSize: 44, fontWeight: 700, color: "#fff", marginBottom: 8 }}>
+          <div style={{ fontSize: 52, fontWeight: 700, color: "#fff", marginBottom: 8 }}>
             Claim your on-chain identity
           </div>
-          <div style={{ fontSize: 18, color: colors.textSecondary }}>
+          <div style={{ fontSize: 22, color: colors.textSecondary }}>
             Decentralized names → Ethereum addresses. No middlemen.
           </div>
         </div>
@@ -86,7 +86,7 @@ export const NameRegistryOutput: React.FC = () => {
               style={{
                 flex: 1,
                 padding: "20px 28px",
-                fontSize: 24,
+                fontSize: 28,
                 color: searchChars > 0 ? "#fff" : colors.textMuted,
                 fontFamily: "monospace",
               }}
@@ -144,10 +144,10 @@ export const NameRegistryOutput: React.FC = () => {
 
         {/* Registered names dashboard */}
         <div style={{ maxWidth: 800, margin: "0 auto" }}>
-          <div style={{ fontSize: 20, fontWeight: 700, color: "#fff", marginBottom: 16 }}>
+          <div style={{ fontSize: 24, fontWeight: 700, color: "#fff", marginBottom: 20 }}>
             Your Names
           </div>
-          <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
             {registeredNames.map((name, i) => {
               const rowEntrance = spring({ frame, fps, delay: 60 + i * 10, config: { damping: 200 } });
               return (
@@ -157,7 +157,7 @@ export const NameRegistryOutput: React.FC = () => {
                     display: "flex",
                     justifyContent: "space-between",
                     alignItems: "center",
-                    padding: "16px 24px",
+                    padding: "20px 28px",
                     background: "#1e293b",
                     borderRadius: 12,
                     border: "1px solid #334155",
@@ -181,8 +181,8 @@ export const NameRegistryOutput: React.FC = () => {
                       🏷
                     </div>
                     <div>
-                      <div style={{ fontSize: 18, fontWeight: 700, color: "#fff" }}>{name.name}</div>
-                      <div style={{ fontSize: 13, color: colors.textMuted, fontFamily: "monospace" }}>
+                      <div style={{ fontSize: 22, fontWeight: 700, color: "#fff" }}>{name.name}</div>
+                      <div style={{ fontSize: 15, color: colors.textMuted, fontFamily: "monospace" }}>
                         → {name.address}
                       </div>
                     </div>

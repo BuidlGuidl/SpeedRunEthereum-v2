@@ -105,7 +105,7 @@ export const StreamingPaymentsOutput: React.FC = () => {
           </div>
           <div
             style={{
-              fontSize: 80,
+              fontSize: 96,
               fontWeight: 900,
               color: "#fff",
               fontFamily: "monospace",
@@ -115,17 +115,17 @@ export const StreamingPaymentsOutput: React.FC = () => {
           >
             Ξ {ethFormatted}
           </div>
-          <div style={{ fontSize: 18, color: colors.textSecondary, marginTop: 8 }}>
+          <div style={{ fontSize: 22, color: colors.textSecondary, marginTop: 8 }}>
             streaming right now, every second
           </div>
         </div>
 
         {/* Active Streams */}
         <div style={{ maxWidth: 900, margin: "0 auto" }}>
-          <div style={{ fontSize: 20, fontWeight: 700, color: "#fff", marginBottom: 20 }}>
+          <div style={{ fontSize: 24, fontWeight: 700, color: "#fff", marginBottom: 24 }}>
             Active Streams
           </div>
-          <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
             {streams.map((stream, i) => {
               const rowEntrance = spring({ frame, fps, delay: 20 + i * 10, config: { damping: 200 } });
               const streamedAmount = (stream.total * stream.progress).toFixed(4);
@@ -135,7 +135,7 @@ export const StreamingPaymentsOutput: React.FC = () => {
                   style={{
                     background: "#1e293b",
                     borderRadius: 14,
-                    padding: "20px 28px",
+                    padding: "24px 32px",
                     border: "1px solid #334155",
                     opacity: rowEntrance,
                     transform: `translateY(${interpolate(rowEntrance, [0, 1], [20, 0])}px)`,
@@ -143,13 +143,13 @@ export const StreamingPaymentsOutput: React.FC = () => {
                 >
                   <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 12 }}>
                     <div>
-                      <div style={{ fontSize: 18, fontWeight: 700, color: "#fff" }}>{stream.name}</div>
+                      <div style={{ fontSize: 22, fontWeight: 700, color: "#fff" }}>{stream.name}</div>
                       <div style={{ fontSize: 13, color: colors.textMuted, marginTop: 4 }}>
                         Rate: {stream.rate}
                       </div>
                     </div>
                     <div style={{ textAlign: "right" }}>
-                      <div style={{ fontSize: 20, fontWeight: 700, color: stream.color, fontFamily: "monospace" }}>
+                      <div style={{ fontSize: 24, fontWeight: 700, color: stream.color, fontFamily: "monospace" }}>
                         {streamedAmount} ETH
                       </div>
                       <div style={{ fontSize: 13, color: colors.textMuted }}>
@@ -160,7 +160,7 @@ export const StreamingPaymentsOutput: React.FC = () => {
                   {/* Progress bar */}
                   <div
                     style={{
-                      height: 8,
+                      height: 12,
                       borderRadius: 4,
                       background: "#0f172a",
                       overflow: "hidden",

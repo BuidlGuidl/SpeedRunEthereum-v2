@@ -70,7 +70,8 @@ export const CTAScene: React.FC = () => {
         flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
-        gap: 48,
+        gap: 64,
+        paddingBottom: 40,
       }}
     >
       {/* Subtle gradient orb */}
@@ -93,7 +94,7 @@ export const CTAScene: React.FC = () => {
         style={{
           display: "grid",
           gridTemplateColumns: "1fr 1fr",
-          gap: 24,
+          gap: 20,
           opacity: gridEntrance,
           transform: `scale(${interpolate(gridEntrance, [0, 1], [0.7, 1])})`,
         }}
@@ -137,7 +138,7 @@ export const CTAScene: React.FC = () => {
       >
         <div
           style={{
-            fontSize: 68,
+            fontSize: 78,
             fontWeight: 900,
             color: colors.textPrimary,
             lineHeight: 1.2,
@@ -148,7 +149,7 @@ export const CTAScene: React.FC = () => {
         </div>
         <div
           style={{
-            fontSize: 68,
+            fontSize: 78,
             fontWeight: 900,
             lineHeight: 1.2,
             letterSpacing: "-0.02em",
@@ -157,7 +158,7 @@ export const CTAScene: React.FC = () => {
             WebkitTextFillColor: "transparent",
           }}
         >
-          Copy. Paste. Ship.
+          Copy. Paste. Adapt. Ship.
         </div>
       </div>
 
@@ -173,7 +174,7 @@ export const CTAScene: React.FC = () => {
             padding: "20px 60px",
             borderRadius: 9999,
             background: colors.primary,
-            fontSize: 32,
+            fontSize: 38,
             fontWeight: 700,
             color: colors.textWhite,
             letterSpacing: "0.02em",
@@ -200,7 +201,7 @@ export const CTAScene: React.FC = () => {
         style={{
           position: "absolute",
           bottom: 70,
-          fontSize: 24,
+          fontSize: 30,
           color: colors.primary,
           fontWeight: 700,
           opacity: urlEntrance,

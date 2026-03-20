@@ -71,42 +71,31 @@ export const BuildPromptsPageScene: React.FC = () => {
   const pageScale = interpolate(pageEntrance, [0, 1], [0.3, 1]);
   const pageOpacity = pageEntrance;
 
-  // Accordion expand (frame 40-70)
-  const accordionOpen = interpolate(frame, [40, 70], [0, 1], {
-    extrapolateLeft: "clamp",
-    extrapolateRight: "clamp",
-    easing: Easing.out(Easing.quad),
-  });
+  // Accordion already expanded from the start
+  const accordionOpen = 1;
 
-  // Scroll down to show content (frame 60-90)
-  const scrollY = interpolate(frame, [60, 90], [0, -120], {
-    extrapolateLeft: "clamp",
-    extrapolateRight: "clamp",
-    easing: Easing.inOut(Easing.quad),
-  });
+  // No scroll needed — content fits with accordion already open
+  const scrollY = 0;
 
-  // Copy button click (frame 160)
-  const copyClick = frame >= 160;
+  // Copy button click (frame 80)
+  const copyClick = frame >= 80;
 
   // Exit zoom — after click, zoom out into transition
-  const exitZoom = interpolate(frame, [200, 260], [1, 3], {
+  const exitZoom = interpolate(frame, [110, 160], [1, 3], {
     extrapolateLeft: "clamp",
     extrapolateRight: "clamp",
     easing: Easing.in(Easing.quad),
   });
-  const exitOpacity = interpolate(frame, [220, 260], [1, 0], {
+  const exitOpacity = interpolate(frame, [130, 160], [1, 0], {
     extrapolateLeft: "clamp",
     extrapolateRight: "clamp",
   });
 
-  // Cursor — targets the center of the "Copy Prompt" button
-  // After accordion expands + scroll, the button sits at ~y:415
+  // Cursor — goes straight to copy button
   const cursorPositions = [
     { x: 1100, y: 350, frame: 0 },       // start off to the side
-    { x: 960, y: 260, frame: 30 },        // move to accordion header
-    { x: 960, y: 260, frame: 40 },        // hover before expand
-    { x: 960, y: 415, frame: 120 },       // glide down to copy button
-    { x: 960, y: 415, frame: 160 },       // click on copy button
+    { x: 960, y: 480, frame: 40 },       // glide to copy button
+    { x: 960, y: 480, frame: 80 },       // click on copy button
   ];
 
   return (

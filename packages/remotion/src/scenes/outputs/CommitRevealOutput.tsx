@@ -116,11 +116,12 @@ export const CommitRevealOutput: React.FC = () => {
         {/* Battle area */}
         <div
           style={{
-            flex: 1,
             display: "flex",
-            alignItems: "center",
+            alignItems: "flex-start",
             justifyContent: "center",
             gap: 160,
+            marginTop: 30,
+            paddingTop: 40,
           }}
         >
           {/* Player 1 */}
@@ -171,6 +172,7 @@ export const CommitRevealOutput: React.FC = () => {
               fontWeight: 900,
               color: colors.arcadeYellow,
               textShadow: `0 0 20px ${colors.arcadeYellow}44`,
+              paddingTop: 100,
             }}
           >
             VS
@@ -242,7 +244,7 @@ export const CommitRevealOutput: React.FC = () => {
                 textShadow: `0 0 20px ${colors.tradingGreen}44`,
               }}
             >
-              🎉 YOU WIN! +0.5 ETH
+              🎉 YOU WIN! +5 USDC
             </div>
           </div>
         )}
@@ -250,7 +252,7 @@ export const CommitRevealOutput: React.FC = () => {
         {/* Bet amount */}
         <div style={{ textAlign: "center", marginBottom: 100 }}>
           <span style={{ fontSize: 20, color: colors.textMuted }}>
-            Bet: 0.5 ETH each • Winner takes all
+            Bet: 5 USDC each • Winner takes all
           </span>
         </div>
       </div>

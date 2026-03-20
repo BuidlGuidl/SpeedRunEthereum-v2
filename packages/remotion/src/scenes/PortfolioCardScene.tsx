@@ -39,28 +39,18 @@ export const PortfolioCardScene: React.FC = () => {
     config: { damping: 200 },
   });
 
-  // Card hover glow (frame 50-80)
-  const hoverGlow = interpolate(frame, [50, 70], [0, 1], {
-    extrapolateLeft: "clamp",
-    extrapolateRight: "clamp",
-  });
+  // Card hover glow — constant subtle glow
+  const hoverGlow = 0.6;
 
-  // Zoom into card (frame 90-120)
-  const zoomScale = interpolate(frame, [90, 120], [1, 3], {
-    extrapolateLeft: "clamp",
-    extrapolateRight: "clamp",
-    easing: Easing.inOut(Easing.quad),
-  });
-  const zoomOpacity = interpolate(frame, [105, 120], [1, 0], {
-    extrapolateLeft: "clamp",
-    extrapolateRight: "clamp",
-  });
+  // No zoom — card stays full size, slide transition handles exit
+  const zoomScale = 1;
+  const zoomOpacity = 1;
 
   // Cursor positions
   const cursorPositions = [
     { x: 1200, y: 600, frame: 0 },
-    { x: 980, y: 480, frame: 40 },
-    { x: 960, y: 500, frame: 85 },
+    { x: 960, y: 490, frame: 20 },
+    { x: 960, y: 490, frame: 38 },
   ];
 
   return (
@@ -80,25 +70,15 @@ export const PortfolioCardScene: React.FC = () => {
           opacity: zoomOpacity,
         }}
       >
-        {/* Context label */}
-        <div
-          style={{
-            opacity: labelEntrance,
-            fontSize: 24,
-            color: colors.textSecondary,
-            fontWeight: 400,
-          }}
-        >
-          Your builder profile shows build ideas...
-        </div>
+
 
         {/* Portfolio card replica — SRE light style */}
         <div
           style={{
             transform: `translateY(${cardY}px)`,
             opacity: cardEntrance,
-            width: 380,
-            borderRadius: 16,
+            width: 900,
+            borderRadius: 24,
             overflow: "hidden",
             background: colors.bgCard,
             border: `1px solid ${colors.accent}44`,
@@ -110,7 +90,7 @@ export const PortfolioCardScene: React.FC = () => {
           {/* Image area */}
           <div
             style={{
-              padding: "20px 0",
+              padding: "40px 0",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
@@ -127,10 +107,10 @@ export const PortfolioCardScene: React.FC = () => {
           </div>
 
           {/* Card content */}
-          <div style={{ padding: "16px 24px 20px" }}>
+          <div style={{ padding: "32px 48px 40px" }}>
             <div
               style={{
-                fontSize: 22,
+                fontSize: 48,
                 fontWeight: 700,
                 color: colors.textPrimary,
                 lineHeight: 1.3,
@@ -140,9 +120,9 @@ export const PortfolioCardScene: React.FC = () => {
             </div>
             <div
               style={{
-                fontSize: 14,
+                fontSize: 28,
                 color: colors.textSecondary,
-                marginTop: 6,
+                marginTop: 12,
                 lineHeight: 1.5,
               }}
             >
@@ -152,7 +132,6 @@ export const PortfolioCardScene: React.FC = () => {
         </div>
       </div>
 
-      <AnimatedCursor positions={cursorPositions} clickAtEnd color={colors.primary} />
     </AbsoluteFill>
   );
 };
