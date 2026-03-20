@@ -48,7 +48,7 @@ function PromptCard({ prompt, onView }: { prompt: BuildPrompt; onView: (p: Build
   return (
     <div className="relative flex flex-col bg-base-300 rounded-xl shadow-md overflow-hidden transition hover:shadow-lg">
       {prompt.imageUrl && (
-        <div className="pt-5 pb-4 w-full flex items-center justify-center bg-base-200">
+        <div className="pt-5 pb-4 w-full flex items-center justify-center bg-[#F8FDFF] dark:bg-[#098b8b]">
           <Image alt={prompt.name} src={prompt.imageUrl} width={652} height={401} className="w-3/4 mx-auto" />
         </div>
       )}
@@ -123,7 +123,7 @@ export function BuildPrompts({ prompts }: { prompts: BuildPrompt[] }) {
       <p className="mt-2 text-base-content/70">
         AI-ready prompts for Ethereum build ideas. Copy a prompt into your AI agent and start building.
       </p>
-      <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="mt-8 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-2 lg:grid-cols-3">
         {prompts.map(prompt => (
           <PromptCard key={prompt.slug} prompt={prompt} onView={openModal} />
         ))}
