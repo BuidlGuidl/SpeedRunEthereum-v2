@@ -1,6 +1,7 @@
 ---
 name: "Quadratic Funding Pool"
 description: "Grant allocation system distributing matching funds based on unique contributor count, not just total raised."
+imageUrl: "/assets/build-prompts/quadratic-funding.png"
 ---
 
 # SPEC: Quadratic Funding Pool

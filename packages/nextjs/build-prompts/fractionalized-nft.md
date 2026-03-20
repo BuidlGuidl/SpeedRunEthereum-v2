@@ -1,6 +1,7 @@
 ---
 name: "Fractionalized NFT Vault"
 description: "Lock a high-value NFT into a vault and issue ERC-20 tokens representing partial, tradable ownership."
+imageUrl: "/assets/build-prompts/fractionalized-vault.png"
 ---
 
 # SPEC: Fractionalized NFT Vault
