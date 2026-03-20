@@ -134,14 +134,14 @@ export function ChatWidget({ challengeId, github }: ChatWidgetProps) {
                 </div>
               )}
               <div
-                className={`chat-bubble text-sm leading-relaxed ${
+                className={`chat-bubble ${
                   message.role === "user"
-                    ? "chat-bubble-primary"
-                    : "bg-base-200 dark:bg-[#1a2236] text-base-content border border-primary/5"
+                    ? "chat-bubble-primary text-[13px] leading-relaxed"
+                    : "chat-prose-compact bg-base-200 dark:bg-[#1a2236] text-base-content border border-primary/5"
                 }`}
               >
                 {message.role === "assistant" ? (
-                  <div className="prose prose-sm dark:prose-invert max-w-none overflow-hidden break-words [&>*:first-child]:mt-0 [&>*:last-child]:mb-0 [&>p]:my-1.5 [&>ul]:my-1.5 [&>ol]:my-1.5 [&_pre]:my-2 [&_pre]:text-xs [&_pre]:overflow-x-auto [&_pre]:max-w-full [&_code]:text-xs [&_code]:break-all">
+                  <div className="prose dark:prose-invert max-w-none overflow-hidden break-words [&>*:first-child]:mt-0 [&>*:last-child]:mb-0 [&>p]:my-1.5 [&>ul]:my-1.5 [&>ol]:my-1.5 [&_li]:my-0.5 [&_pre]:my-2 [&_pre]:overflow-x-auto [&_pre]:max-w-full">
                     {message.parts.map((part, i) => {
                       if (part.type === "text") {
                         return <Markdown key={i}>{part.text}</Markdown>;
