@@ -9,6 +9,7 @@ export type BuildPrompt = {
   name: string;
   description: string;
   imageUrl?: string;
+  featured?: boolean;
   prompt: string;
 };
 
@@ -30,6 +31,7 @@ export function getAllBuildPrompts(): BuildPrompt[] {
       name: data.name,
       description: data.description,
       imageUrl: data.imageUrl,
+      featured: data.featured ?? false,
       prompt: content.trim(),
     };
   });

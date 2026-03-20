@@ -24,7 +24,7 @@ export function Builds({
   address: string;
   builds: BuildByUser[];
   userHasCompletedChallenges: boolean;
-  buildIdeas: { name: string; description: string; imageUrl?: string }[];
+  buildIdeas: { name: string; description: string; imageUrl?: string; featured?: boolean }[];
 }) {
   const { address: connectedAddress } = useAccount();
 

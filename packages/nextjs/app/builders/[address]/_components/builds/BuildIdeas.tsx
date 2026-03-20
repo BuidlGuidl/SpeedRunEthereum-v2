@@ -5,6 +5,7 @@ type BuildIdea = {
   name: string;
   description: string;
   imageUrl?: string;
+  featured?: boolean;
 };
 
 export function BuildIdeas({ buildIdeas }: { buildIdeas: BuildIdea[] }) {
@@ -22,7 +23,7 @@ export function BuildIdeas({ buildIdeas }: { buildIdeas: BuildIdea[] }) {
       </p>
       <div className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-3">
         {buildIdeas
-          .filter(build => build.imageUrl)
+          .filter(build => build.featured)
           .map(build => (
             <Link
               key={build.name}
