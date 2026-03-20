@@ -46,9 +46,9 @@ function CopyButton({
 
 function PromptCard({ prompt, onView }: { prompt: BuildPrompt; onView: (p: BuildPrompt) => void }) {
   return (
-    <div className="relative flex flex-col bg-base-300 rounded-xl shadow-md overflow-hidden transition hover:shadow-lg">
+    <div className="relative flex flex-col bg-base-300 dark:bg-[#066e6e] rounded-xl shadow-md overflow-hidden transition hover:shadow-lg">
       {prompt.imageUrl && (
-        <div className="pt-5 pb-4 w-full flex items-center justify-center bg-[#F8FDFF] dark:bg-[#098b8b]">
+        <div className="pt-5 pb-4 w-full flex items-center justify-center bg-[#F8FDFF] dark:bg-[#088888]">
           <Image alt={prompt.name} src={prompt.imageUrl} width={652} height={401} className="w-3/4 mx-auto" />
         </div>
       )}
