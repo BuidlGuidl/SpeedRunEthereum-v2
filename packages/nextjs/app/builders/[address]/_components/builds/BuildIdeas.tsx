@@ -1,14 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
+import { BuildPromptSummary } from "~~/services/build-prompts";
 
-type BuildIdea = {
-  name: string;
-  description: string;
-  imageUrl?: string;
-  featured?: boolean;
-};
-
-export function BuildIdeas({ buildIdeas }: { buildIdeas: BuildIdea[] }) {
+export function BuildIdeas({ buildIdeas }: { buildIdeas: BuildPromptSummary[] }) {
   return (
     <div>
       <p className="m-0 font-medium">

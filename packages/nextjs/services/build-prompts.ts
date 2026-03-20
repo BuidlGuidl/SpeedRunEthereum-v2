@@ -13,8 +13,18 @@ export type BuildPrompt = {
   prompt: string;
 };
 
+export type BuildPromptSummary = {
+  name: string;
+  description: string;
+  imageUrl?: string;
+  featured?: boolean;
+};
+
 export function getAllBuildPrompts(): BuildPrompt[] {
-  const fileNames = fs.readdirSync(buildPromptsDirectory).filter(f => f.endsWith(".md"));
+  const fileNames = fs
+    .readdirSync(buildPromptsDirectory)
+    .filter(f => f.endsWith(".md"))
+    .sort();
 
   return fileNames.map(fileName => {
     const slug = fileName.replace(/\.md$/, "");
