@@ -170,7 +170,7 @@ export const convertDetailsToMdx = (markdown: string): string => {
         const { summary, content } = convertSingleBlock(raw);
         // Recursively convert nested details in tab content
         const converted = convertDetailsToMdx(content);
-        return `<Tab label={${JSON.stringify(summary)}}>\n\n${converted}\n\n</Tab>`;
+        return `<Tab label="${summary}">\n\n${converted}\n\n</Tab>`;
       });
       text = text.slice(0, groupStart) + `<Tabs>\n${tabs.join("\n")}\n</Tabs>` + text.slice(groupEnd);
     } else {
