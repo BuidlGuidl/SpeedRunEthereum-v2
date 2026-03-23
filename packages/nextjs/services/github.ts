@@ -125,6 +125,8 @@ export const convertDetailsToMdx = (markdown: string): string => {
           blocks.push({ start: blockStart, end: tag.pos + tag.len });
           blockStart = -1;
         }
+        // Clamp depth to 0 to handle stray </details> in source
+        if (depth < 0) depth = 0;
       }
     }
     return blocks;
@@ -190,6 +192,9 @@ export const convertDetailsToMdx = (markdown: string): string => {
         text.slice(groupEnd);
     }
   }
+
+  // Remove any orphaned </details> left over from unbalanced source markup
+  text = text.replace(/^\s*<\/details>\s*$/gim, "");
 
   return text;
 };
