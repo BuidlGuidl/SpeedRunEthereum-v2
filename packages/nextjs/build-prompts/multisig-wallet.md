@@ -2,6 +2,7 @@
 name: "Multisig Wallet"
 description: "Secure assets by requiring multiple accounts to 'vote' on transactions."
 imageUrl: "/assets/build-prompts/multiSig.svg"
+featured: true
 ---
 
 # SPEC: Multisig Wallet

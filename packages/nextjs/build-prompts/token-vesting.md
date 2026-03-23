@@ -1,6 +1,7 @@
 ---
 name: "Token Vesting Schedule"
 description: "Linear token unlocking over time to prevent sudden market dumping for team members and investors."
+imageUrl: "/assets/build-prompts/token-vesting.png"
 ---
 
 # SPEC: Token Vesting Schedule

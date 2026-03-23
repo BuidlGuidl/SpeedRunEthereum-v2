@@ -1,6 +1,7 @@
 ---
 name: "Streaming Payments"
 description: "Payroll protocol where tokens are continuously streamed to recipients by the second, withdrawable anytime."
+imageUrl: "/assets/build-prompts/streaming-payments.png"
 ---
 
 # SPEC: Streaming Payments

@@ -9,11 +9,22 @@ export type BuildPrompt = {
   name: string;
   description: string;
   imageUrl?: string;
+  featured?: boolean;
   prompt: string;
 };
 
+export type BuildPromptSummary = {
+  name: string;
+  description: string;
+  imageUrl?: string;
+  featured?: boolean;
+};
+
 export function getAllBuildPrompts(): BuildPrompt[] {
-  const fileNames = fs.readdirSync(buildPromptsDirectory).filter(f => f.endsWith(".md"));
+  const fileNames = fs
+    .readdirSync(buildPromptsDirectory)
+    .filter(f => f.endsWith(".md"))
+    .sort();
 
   return fileNames.map(fileName => {
     const slug = fileName.replace(/\.md$/, "");
@@ -30,6 +41,7 @@ export function getAllBuildPrompts(): BuildPrompt[] {
       name: data.name,
       description: data.description,
       imageUrl: data.imageUrl,
+      featured: data.featured ?? false,
       prompt: content.trim(),
     };
   });

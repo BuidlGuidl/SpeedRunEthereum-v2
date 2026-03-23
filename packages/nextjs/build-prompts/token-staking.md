@@ -1,6 +1,7 @@
 ---
 name: "Token Staking Protocol"
 description: "Lock ERC-20 tokens to earn yield rewards over time with a DeFi staking mechanism."
+imageUrl: "/assets/build-prompts/token-staking.png"
 ---
 
 # SPEC: Token Staking Protocol
