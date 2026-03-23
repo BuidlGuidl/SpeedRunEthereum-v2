@@ -4,6 +4,8 @@ import { notFound } from "next/navigation";
 import { ChallengeHeader } from "./_components/ChallengeHeader";
 import { ChallengeSidebar } from "./_components/ChallengeSidebar";
 import { ConnectAndRegisterBanner } from "./_components/ConnectAndRegisterBanner";
+import { Details as MdxDetails, Summary as MdxSummary } from "./_components/MdxDetails";
+import { Tab as MdxTab, Tabs as MdxTabs } from "./_components/MdxTabs";
 import { SubmitChallengeButton } from "./_components/SubmitChallengeButton";
 import { MDXRemote } from "next-mdx-remote/rsc";
 import rehypeRaw from "rehype-raw";
@@ -15,7 +17,12 @@ import {
   getChallengeById,
   getCountOfCompletedChallenge,
 } from "~~/services/database/repositories/challenges";
-import { fetchGithubChallengeReadme, parseGithubUrl, splitChallengeReadme } from "~~/services/github";
+import {
+  convertDetailsToMdx,
+  fetchGithubChallengeReadme,
+  parseGithubUrl,
+  splitChallengeReadme,
+} from "~~/services/github";
 import { CHALLENGE_METADATA, extractHeadings, generateHeadingId } from "~~/utils/challenges";
 import { getMetadata } from "~~/utils/scaffold-eth/getMetadata";
 
@@ -55,7 +62,8 @@ export default async function ChallengePage(props: { params: Promise<{ challenge
     return <div>No challenge content available</div>;
   }
 
-  const challengeReadme = await fetchGithubChallengeReadme(challenge.github);
+  const rawReadme = await fetchGithubChallengeReadme(challenge.github);
+  const challengeReadme = convertDetailsToMdx(rawReadme);
   const { headerImageMdx, restMdx } = splitChallengeReadme(challengeReadme);
   const { owner, repo, branch } = parseGithubUrl(challenge.github);
 
@@ -81,11 +89,30 @@ export default async function ChallengePage(props: { params: Promise<{ challenge
             <div className="prose dark:prose-invert max-w-fit break-words lg:max-w-[850px]">
               <MDXRemote
                 source={headerImageMdx}
+                components={{
+                  Tabs: MdxTabs,
+                  Tab: MdxTab,
+                  Details: MdxDetails,
+                  Summary: MdxSummary,
+                }}
                 options={{
                   mdxOptions: {
-                    rehypePlugins: [rehypeRaw],
+                    rehypePlugins: [
+                      [
+                        rehypeRaw,
+                        {
+                          passThrough: [
+                            "mdxJsxFlowElement",
+                            "mdxJsxTextElement",
+                            "mdxjsEsm",
+                            "mdxFlowExpression",
+                            "mdxTextExpression",
+                          ],
+                        },
+                      ],
+                    ],
                     remarkPlugins: [remarkGfm],
-                    format: "md",
+                    format: "mdx",
                   },
                 }}
               />
@@ -105,12 +132,29 @@ export default async function ChallengePage(props: { params: Promise<{ challenge
                   a: (props: ComponentPropsWithoutRef<"a">) =>
                     createElement("a", { ...props, target: "_blank", rel: "noopener" }),
                   h2: createH2WithId,
+                  Tabs: MdxTabs,
+                  Tab: MdxTab,
+                  Details: MdxDetails,
+                  Summary: MdxSummary,
                 }}
                 options={{
                   mdxOptions: {
-                    rehypePlugins: [rehypeRaw],
+                    rehypePlugins: [
+                      [
+                        rehypeRaw,
+                        {
+                          passThrough: [
+                            "mdxJsxFlowElement",
+                            "mdxJsxTextElement",
+                            "mdxjsEsm",
+                            "mdxFlowExpression",
+                            "mdxTextExpression",
+                          ],
+                        },
+                      ],
+                    ],
                     remarkPlugins: [remarkGfm],
-                    format: "md",
+                    format: "mdx",
                   },
                 }}
               />

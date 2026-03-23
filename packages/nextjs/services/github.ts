@@ -81,6 +81,17 @@ export const fetchGithubBuildReadme = async (githubUrl: string): Promise<string 
   }
 };
 
+/**
+ * Convert HTML <details>/<summary> blocks into MDX-compatible <Details> components.
+ * MDX parser chokes on raw HTML that doesn't follow JSX rules.
+ */
+export const convertDetailsToMdx = (markdown: string): string => {
+  return markdown.replace(
+    /<details[^>]*>\s*<summary>([\s\S]*?)<\/summary>([\s\S]*?)<\/details>/gi,
+    (_, title, content) => `<Details>\n<Summary>${title.trim()}</Summary>\n\n${content.trim()}\n\n</Details>`,
+  );
+};
+
 export const splitChallengeReadme = (readme: string): { headerImageMdx: string; restMdx: string } => {
   const content = readme.replace(/\r\n?/g, "\n");
 
