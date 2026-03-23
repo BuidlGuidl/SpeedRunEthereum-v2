@@ -89,7 +89,12 @@ export const fetchGithubBuildReadme = async (githubUrl: string): Promise<string 
  */
 export const convertDetailsToMdx = (markdown: string): string => {
   // Strip markdown='1' attribute (Kramdown-only, not needed in MDX)
-  let text = markdown.replace(/<details\s+markdown='1'>/gi, "<details>");
+  // Also remove leading indentation from <details> and </details> tags
+  // so they don't get parsed as part of markdown list items
+  let text = markdown
+    .replace(/<details\s+markdown='1'>/gi, "<details>")
+    .replace(/^[ \t]+(<\/?details[^>]*>)/gim, "$1")
+    .replace(/^[ \t]+(<\/?summary>)/gim, "$1");
 
   // Parse all top-level <details> blocks with nesting support
   const parseDetailsBlocks = (input: string): { start: number; end: number }[] => {
