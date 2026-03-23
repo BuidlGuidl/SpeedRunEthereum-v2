@@ -199,6 +199,16 @@ export const seedChallenges: (typeof challenges.$inferInsert)[] = [
     previewImage: "/assets/challenges/state.svg",
     disabled: true,
   },
+  {
+    id: ChallengeId.TOKENIZATION_FOUNDRY,
+    challengeName: "Tokenization-foundry",
+    github: "scaffold-eth/se-2-challenges:challenge-tokenization-foundry",
+    autograding: true,
+    description:
+      "🎫 Create a unique token to learn the basics of 🏗️ Scaffold-ETH 2. You'll use 👷‍♀️ HardHat to compile and deploy smart contracts. Then, you'll use a template React app full of important Ethereum components and hooks. Finally, you'll deploy an NFT to a public network to share with friends! 🚀",
+    sortOrder: 0,
+    previewImage: "/assets/challenges/tokenization.svg",
+  },
 ];
 
 export const seedUserChallenges: (typeof userChallenges.$inferInsert)[] = [

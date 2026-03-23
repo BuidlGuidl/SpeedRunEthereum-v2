@@ -67,6 +67,42 @@ export const CHALLENGE_METADATA: Record<string, ChallengeStaticMetadata> = {
       },
     ],
   },
+  [ChallengeId.TOKENIZATION_FOUNDRY]: {
+    title: "Learn How to Create an NFT in Solidity",
+    description:
+      "Build your first NFT smart contract in Solidity. Step-by-step tutorial to mint and deploy NFTs on Ethereum using Scaffold-ETH.",
+    isAiReady: true,
+    skills: [
+      "Compile and deploy your first **smart contract**",
+      "Use burner wallets, faucets and gas on localhost",
+      "Mint and transfer NFTs; Understand **ownership** in the Ethereum context",
+      "Deploy to Sepolia and ship a Next.js app",
+    ],
+    skillLevel: SKILL_LEVELS.BEGINNER,
+    timeToComplete: "1 - 4 hours",
+    helpfulLinks: [
+      { text: "Blockchain Basics", url: "https://www.youtube.com/watch?v=MlJPjJQZtC8" },
+      { text: "Web2 to Web3 Series", url: "https://www.youtube.com/playlist?list=PLJz1HruEnenAf80uOfDwBPqaliJkjKg69" },
+    ],
+    guides: [
+      {
+        title: "ERC721 vs. ERC1155: Key Differences, Use Cases & How to Choose",
+        url: "/guides/erc721-vs-erc1155",
+      },
+      {
+        title: "Mastering ERC721: Developer Guide to NFT Metadata & Best Practices",
+        url: "/guides/mastering-erc721",
+      },
+      {
+        title: "NFTs in Web3: Understanding Use Cases Beyond Digital Art",
+        url: "/guides/nft-use-cases",
+      },
+      {
+        title: "Solidity NFT Security: 10 Best Practices to Protect Your Collectibles",
+        url: "/guides/solidity-nft-security",
+      },
+    ],
+  },
   [ChallengeId.CROWDFUNDING]: {
     title: "Build a Crowdfunding Application in Solidity",
     description:
