@@ -94,7 +94,9 @@ export const convertDetailsToMdx = (markdown: string): string => {
   let text = markdown
     .replace(/<details\s+markdown='1'>/gi, "<details>")
     .replace(/^[ \t]+(<\/?details[^>]*>)/gim, "$1")
-    .replace(/^[ \t]+(<\/?summary>)/gim, "$1");
+    .replace(/^[ \t]+(<\/?summary>)/gim, "$1")
+    // Self-close void HTML elements for MDX compatibility (<br> → <br/>)
+    .replace(/<(br|hr|img|input|meta|link)(\s[^>]*)?\s*(?<!\/)>/gi, "<$1$2/>");
 
   // Parse all top-level <details> blocks with nesting support
   const parseDetailsBlocks = (input: string): { start: number; end: number }[] => {
@@ -193,8 +195,12 @@ export const convertDetailsToMdx = (markdown: string): string => {
     }
   }
 
-  // Remove any orphaned </details> left over from unbalanced source markup
-  text = text.replace(/^\s*<\/details>\s*$/gim, "");
+  // Remove any orphaned </details> (lowercase only) left over from unbalanced source markup
+  text = text.replace(/^\s*<\/details>\s*$/gm, "");
+
+  // Break list context before <Details>/<Tabs> blocks so MDX doesn't
+  // treat them as list continuations. An empty <div/> forces a new block.
+  text = text.replace(/^(- .+\n(?:\n)?)(<Details>|<Tabs>)/gm, "$1<div></div>\n\n$2");
 
   return text;
 };
