@@ -38,6 +38,11 @@ export const HeaderMenuLinks = ({ hideItemsByLabel, user }: { hideItemsByLabel?:
         availableForRoles: [UserRole.USER, UserRole.BUILDER, UserRole.ADMIN],
       },
       {
+        label: "Build Prompts",
+        href: "/build-prompts",
+        availableForRoles: [UserRole.USER, UserRole.BUILDER, UserRole.ADMIN],
+      },
+      {
         label: "Builders",
         href: "/builders",
         availableForRoles: [UserRole.BUILDER, UserRole.ADMIN],
