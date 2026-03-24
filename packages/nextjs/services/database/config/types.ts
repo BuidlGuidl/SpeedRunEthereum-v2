@@ -25,7 +25,6 @@ export enum ChallengeId {
   MULTISIG = "multisig",
   SVG_NFT = "svg-nft",
   STATE_CHANNELS = "state-channels",
-  TOKENIZATION_FOUNDRY = "tokenization-foundry",
 }
 
 export enum BatchStatus {
