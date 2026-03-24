@@ -1,6 +1,28 @@
 "use client";
 
-import { Children, type ReactElement, type ReactNode, isValidElement, useState } from "react";
+import { Children, type ReactElement, type ReactNode, isValidElement, useCallback, useSyncExternalStore } from "react";
+
+const STORAGE_KEY = "sre-tab-preference";
+
+function getStoredLabel(): string | null {
+  if (typeof window === "undefined") return null;
+  return localStorage.getItem(STORAGE_KEY);
+}
+
+function setStoredLabel(label: string) {
+  localStorage.setItem(STORAGE_KEY, label);
+  window.dispatchEvent(new Event("sre-tab-change"));
+}
+
+function subscribeToTabChange(callback: () => void) {
+  const handler = () => callback();
+  window.addEventListener("sre-tab-change", handler);
+  window.addEventListener("storage", handler);
+  return () => {
+    window.removeEventListener("sre-tab-change", handler);
+    window.removeEventListener("storage", handler);
+  };
+}
 
 export type MdxTabProps = {
   label: string;
@@ -19,7 +41,17 @@ type TabsProps = {
 
 export function Tabs({ children, variant = "lifted" }: TabsProps) {
   const tabItems = Children.toArray(children).filter(isValidElement) as ReactElement<MdxTabProps>[];
-  const [active, setActive] = useState(0);
+
+  const storedLabel = useSyncExternalStore(subscribeToTabChange, getStoredLabel, () => null);
+
+  const activeIndex = Math.max(
+    0,
+    tabItems.findIndex(item => item.props.label === storedLabel),
+  );
+
+  const handleClick = useCallback((label: string) => {
+    setStoredLabel(label);
+  }, []);
 
   return (
     <div className="not-prose my-4 w-full max-w-full">
@@ -28,8 +60,8 @@ export function Tabs({ children, variant = "lifted" }: TabsProps) {
           <a
             key={i}
             role="tab"
-            className={`tab tab-sm ${active === i ? "tab-active [--tab-bg:oklch(var(--p))] text-white dark:text-secondary" : ""}`}
-            onClick={() => setActive(i)}
+            className={`tab tab-sm ${activeIndex === i ? "tab-active [--tab-bg:oklch(var(--p))] text-white dark:text-secondary" : ""}`}
+            onClick={() => handleClick(item.props.label)}
           >
             {item.props.label}
           </a>
@@ -37,7 +69,7 @@ export function Tabs({ children, variant = "lifted" }: TabsProps) {
       </div>
       {tabItems.length > 0 && (
         <div className="bg-base-200 border-primary rounded-box border border-t  p-6">
-          <div className="prose dark:prose-invert max-w-none">{tabItems[active]?.props.children}</div>
+          <div className="prose dark:prose-invert max-w-none">{tabItems[activeIndex]?.props.children}</div>
         </div>
       )}
     </div>
