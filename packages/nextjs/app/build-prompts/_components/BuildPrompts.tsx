@@ -121,7 +121,18 @@ export function BuildPrompts({ prompts }: { prompts: BuildPrompt[] }) {
     <div className="py-12 px-6 max-w-6xl mx-auto w-full">
       <h1 className="m-0 text-2xl font-bold lg:text-4xl">Build Prompts</h1>
       <p className="mt-2 text-base-content/70">
-        AI-ready prompts for Ethereum build ideas. Copy a prompt into your AI agent and start building.
+        Full project specs designed for AI coding agents. Each prompt contains everything an AI needs to scaffold a
+        working dApp on{" "}
+        <a href="https://scaffoldeth.io" target="_blank" rel="noopener noreferrer" className="link">
+          Scaffold-ETH 2
+        </a>
+        : smart contract architecture, frontend views, and on-chain interaction logic.
+      </p>
+      <p className="mt-1 text-base-content/70">
+        Pick a build, copy the prompt into your AI coding agent (Claude, Cursor, Codex, etc.), and tweak the
+        customization parameters to make it yours before sending. Every spec also includes{" "}
+        <span className="font-semibold">Next Iterations</span> you can ask the agent to add once your base project is
+        running.
       </p>
       <div className="mt-8 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-2 lg:grid-cols-3">
         {prompts.map(prompt => (
