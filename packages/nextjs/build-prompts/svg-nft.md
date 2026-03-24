@@ -2,6 +2,7 @@
 name: "SVG NFT"
 description: "Tinker around with cutting edge smart contracts that render SVGs in Solidity."
 imageUrl: "/assets/build-prompts/dynamicSvgNFT.svg"
+featured: true
 ---
 
 # SPEC: SVG NFT
