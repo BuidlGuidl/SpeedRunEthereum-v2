@@ -1,28 +1,7 @@
 "use client";
 
-import { Children, type ReactElement, type ReactNode, isValidElement, useCallback, useSyncExternalStore } from "react";
-
-const STORAGE_KEY = "sre-tab-preference";
-
-function getStoredLabel(): string | null {
-  if (typeof window === "undefined") return null;
-  return localStorage.getItem(STORAGE_KEY);
-}
-
-function setStoredLabel(label: string) {
-  localStorage.setItem(STORAGE_KEY, label);
-  window.dispatchEvent(new Event("sre-tab-change"));
-}
-
-function subscribeToTabChange(callback: () => void) {
-  const handler = () => callback();
-  window.addEventListener("sre-tab-change", handler);
-  window.addEventListener("storage", handler);
-  return () => {
-    window.removeEventListener("sre-tab-change", handler);
-    window.removeEventListener("storage", handler);
-  };
-}
+import { Children, type ReactElement, type ReactNode, isValidElement, useCallback } from "react";
+import { useLocalStorage } from "usehooks-ts";
 
 export type MdxTabProps = {
   label: string;
@@ -42,16 +21,19 @@ type TabsProps = {
 export function Tabs({ children, variant = "lifted" }: TabsProps) {
   const tabItems = Children.toArray(children).filter(isValidElement) as ReactElement<MdxTabProps>[];
 
-  const storedLabel = useSyncExternalStore(subscribeToTabChange, getStoredLabel, () => null);
+  const [storedLabel, setStoredLabel] = useLocalStorage("sre-tab-preference", "");
 
   const activeIndex = Math.max(
     0,
     tabItems.findIndex(item => item.props.label === storedLabel),
   );
 
-  const handleClick = useCallback((label: string) => {
-    setStoredLabel(label);
-  }, []);
+  const handleClick = useCallback(
+    (label: string) => {
+      setStoredLabel(label);
+    },
+    [setStoredLabel],
+  );
 
   return (
     <div className="not-prose my-4 w-full max-w-full">
