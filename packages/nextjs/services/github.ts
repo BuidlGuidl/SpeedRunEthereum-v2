@@ -83,12 +83,25 @@ export const fetchGithubBuildReadme = async (githubUrl: string): Promise<string 
 
 /**
  * Prepare raw README markdown for MDX rendering.
- * Self-closes void HTML elements and strips Kramdown attributes.
+ * - Strips Kramdown attributes
+ * - Self-closes void HTML elements
+ * - Converts <details>/<summary> to <Details>/<Summary> MDX components
+ *   (MDX can't handle raw HTML <details> — it tries to parse them as JSX
+ *   and fails on the mixed markdown/HTML content inside)
  */
 export const prepareMdxReadme = (markdown: string): string => {
-  return markdown
-    .replace(/<details\s+markdown='1'>/gi, "<details>")
-    .replace(/<(br|hr|img|input|meta|link)(\s[^>]*)?\s*(?<!\/)>/gi, "<$1$2/>");
+  return (
+    markdown
+      // Strip Kramdown-only attribute
+      .replace(/<details\s+markdown='1'>/gi, "<details>")
+      // Self-close void HTML elements for MDX compatibility
+      .replace(/<(br|hr|img|input|meta|link)(\s[^>]*)?\s*(?<!\/)>/gi, "<$1$2/>")
+      // Convert <details>/<summary> to MDX components
+      .replace(/<details([^>]*)>/gi, "<Details$1>")
+      .replace(/<\/details>/gi, "</Details>")
+      .replace(/<summary>/gi, "<Summary>")
+      .replace(/<\/summary>/gi, "</Summary>")
+  );
 };
 
 export const splitChallengeReadme = (readme: string): { headerImageMdx: string; restMdx: string } => {
