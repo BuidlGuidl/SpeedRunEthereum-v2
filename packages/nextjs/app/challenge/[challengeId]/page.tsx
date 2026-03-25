@@ -17,12 +17,7 @@ import {
   getChallengeById,
   getCountOfCompletedChallenge,
 } from "~~/services/database/repositories/challenges";
-import {
-  convertDetailsToMdx,
-  fetchGithubChallengeReadme,
-  parseGithubUrl,
-  splitChallengeReadme,
-} from "~~/services/github";
+import { fetchGithubChallengeReadme, parseGithubUrl, prepareMdxReadme, splitChallengeReadme } from "~~/services/github";
 import { CHALLENGE_METADATA, extractHeadings, generateHeadingId } from "~~/utils/challenges";
 import { getMetadata } from "~~/utils/scaffold-eth/getMetadata";
 
@@ -63,7 +58,7 @@ export default async function ChallengePage(props: { params: Promise<{ challenge
   }
 
   const rawReadme = await fetchGithubChallengeReadme(challenge.github);
-  const challengeReadme = convertDetailsToMdx(rawReadme);
+  const challengeReadme = prepareMdxReadme(rawReadme);
   const { headerImageMdx, restMdx } = splitChallengeReadme(challengeReadme);
   const { owner, repo, branch } = parseGithubUrl(challenge.github);
 
