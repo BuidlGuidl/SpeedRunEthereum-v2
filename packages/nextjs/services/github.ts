@@ -82,26 +82,20 @@ export const fetchGithubBuildReadme = async (githubUrl: string): Promise<string 
 };
 
 /**
- * Prepare raw README markdown for MDX rendering.
- * - Strips Kramdown attributes
- * - Self-closes void HTML elements
- * - Converts <details>/<summary> to <Details>/<Summary> MDX components
- *   (MDX can't handle raw HTML <details> — it tries to parse them as JSX
- *   and fails on the mixed markdown/HTML content inside)
+ * Check if a README contains MDX components (like <Tabs>) that require
+ * MDX format parsing instead of plain markdown.
+ */
+export const hasMdxComponents = (markdown: string): boolean => {
+  return /<Tabs[\s>]/m.test(markdown);
+};
+
+/**
+ * Prepare a README that contains MDX components for rendering.
+ * Self-closes void HTML elements for JSX compatibility.
+ * Only needed for READMEs with MDX components (e.g. <Tabs>/<Tab>).
  */
 export const prepareMdxReadme = (markdown: string): string => {
-  return (
-    markdown
-      // Strip Kramdown-only attribute
-      .replace(/<details\s+markdown='1'>/gi, "<details>")
-      // Self-close void HTML elements for MDX compatibility
-      .replace(/<(br|hr|img|input|meta|link)(\s[^>]*)?\s*(?<!\/)>/gi, "<$1$2/>")
-      // Convert <details><summary>text</summary> ... </details> to MDX components.
-      // MDX needs block-level JSX on its own lines with blank line spacing,
-      // so we split the inline pattern into properly separated lines.
-      .replace(/<details[^>]*>\s*<summary>([\s\S]*?)<\/summary>/gi, "<Details>\n<Summary>$1</Summary>\n\n")
-      .replace(/<\/details>/gi, "\n</Details>")
-  );
+  return markdown.replace(/<(br|hr|img|input|meta|link)(\s[^>]*)?\s*(?<!\/)>/gi, "<$1$2/>");
 };
 
 export const splitChallengeReadme = (readme: string): { headerImageMdx: string; restMdx: string } => {

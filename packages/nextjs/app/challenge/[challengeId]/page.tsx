@@ -4,7 +4,6 @@ import { notFound } from "next/navigation";
 import { ChallengeHeader } from "./_components/ChallengeHeader";
 import { ChallengeSidebar } from "./_components/ChallengeSidebar";
 import { ConnectAndRegisterBanner } from "./_components/ConnectAndRegisterBanner";
-import { Details as MdxDetails, Summary as MdxSummary } from "./_components/MdxDetails";
 import { Tab as MdxTab, Tabs as MdxTabs } from "./_components/MdxTabs";
 import { SubmitChallengeButton } from "./_components/SubmitChallengeButton";
 import { MDXRemote } from "next-mdx-remote/rsc";
@@ -17,7 +16,13 @@ import {
   getChallengeById,
   getCountOfCompletedChallenge,
 } from "~~/services/database/repositories/challenges";
-import { fetchGithubChallengeReadme, parseGithubUrl, prepareMdxReadme, splitChallengeReadme } from "~~/services/github";
+import {
+  fetchGithubChallengeReadme,
+  hasMdxComponents,
+  parseGithubUrl,
+  prepareMdxReadme,
+  splitChallengeReadme,
+} from "~~/services/github";
 import { CHALLENGE_METADATA, extractHeadings, generateHeadingId } from "~~/utils/challenges";
 import { getMetadata } from "~~/utils/scaffold-eth/getMetadata";
 
@@ -58,7 +63,8 @@ export default async function ChallengePage(props: { params: Promise<{ challenge
   }
 
   const rawReadme = await fetchGithubChallengeReadme(challenge.github);
-  const challengeReadme = prepareMdxReadme(rawReadme);
+  const isMdx = hasMdxComponents(rawReadme);
+  const challengeReadme = isMdx ? prepareMdxReadme(rawReadme) : rawReadme;
   const { headerImageMdx, restMdx } = splitChallengeReadme(challengeReadme);
   const { owner, repo, branch } = parseGithubUrl(challenge.github);
 
@@ -84,30 +90,27 @@ export default async function ChallengePage(props: { params: Promise<{ challenge
             <div className="prose dark:prose-invert max-w-fit break-words lg:max-w-[850px]">
               <MDXRemote
                 source={headerImageMdx}
-                components={{
-                  Tabs: MdxTabs,
-                  Tab: MdxTab,
-                  Details: MdxDetails,
-                  Summary: MdxSummary,
-                }}
+                components={isMdx ? { Tabs: MdxTabs, Tab: MdxTab } : undefined}
                 options={{
                   mdxOptions: {
-                    rehypePlugins: [
-                      [
-                        rehypeRaw,
-                        {
-                          passThrough: [
-                            "mdxJsxFlowElement",
-                            "mdxJsxTextElement",
-                            "mdxjsEsm",
-                            "mdxFlowExpression",
-                            "mdxTextExpression",
+                    rehypePlugins: isMdx
+                      ? [
+                          [
+                            rehypeRaw,
+                            {
+                              passThrough: [
+                                "mdxJsxFlowElement",
+                                "mdxJsxTextElement",
+                                "mdxjsEsm",
+                                "mdxFlowExpression",
+                                "mdxTextExpression",
+                              ],
+                            },
                           ],
-                        },
-                      ],
-                    ],
+                        ]
+                      : [rehypeRaw],
                     remarkPlugins: [remarkGfm],
-                    format: "mdx",
+                    format: isMdx ? "mdx" : "md",
                   },
                 }}
               />
@@ -127,29 +130,28 @@ export default async function ChallengePage(props: { params: Promise<{ challenge
                   a: (props: ComponentPropsWithoutRef<"a">) =>
                     createElement("a", { ...props, target: "_blank", rel: "noopener" }),
                   h2: createH2WithId,
-                  Tabs: MdxTabs,
-                  Tab: MdxTab,
-                  Details: MdxDetails,
-                  Summary: MdxSummary,
+                  ...(isMdx ? { Tabs: MdxTabs, Tab: MdxTab } : {}),
                 }}
                 options={{
                   mdxOptions: {
-                    rehypePlugins: [
-                      [
-                        rehypeRaw,
-                        {
-                          passThrough: [
-                            "mdxJsxFlowElement",
-                            "mdxJsxTextElement",
-                            "mdxjsEsm",
-                            "mdxFlowExpression",
-                            "mdxTextExpression",
+                    rehypePlugins: isMdx
+                      ? [
+                          [
+                            rehypeRaw,
+                            {
+                              passThrough: [
+                                "mdxJsxFlowElement",
+                                "mdxJsxTextElement",
+                                "mdxjsEsm",
+                                "mdxFlowExpression",
+                                "mdxTextExpression",
+                              ],
+                            },
                           ],
-                        },
-                      ],
-                    ],
+                        ]
+                      : [rehypeRaw],
                     remarkPlugins: [remarkGfm],
-                    format: "mdx",
+                    format: isMdx ? "mdx" : "md",
                   },
                 }}
               />
