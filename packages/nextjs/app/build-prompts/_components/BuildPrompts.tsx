@@ -124,28 +124,23 @@ export function BuildPrompts({ prompts }: { prompts: BuildPrompt[] }) {
 
   return (
     <div className="py-12 px-6 max-w-6xl mx-auto w-full">
-      <h1 className="m-0 text-2xl font-bold lg:text-4xl">Build Prompts</h1>
-      <p className="mt-2 text-base-content/70">
-        Full project specs designed for AI coding agents. Each prompt contains everything an AI needs to scaffold a
-        working dApp on{" "}
+      <h1 className="m-0 text-2xl font-bold lg:text-4xl text-center">Build Prompts</h1>
+      <p className="mt-4 text-base-content/70 text-center max-w-2xl mx-auto">
+        Full project specs for AI coding agents. Pick a build, copy the prompt into your favorite AI (Claude, Cursor,
+        Codex, etc.), and tweak the parameters to scaffold a working dApp on{" "}
         <a href="https://scaffoldeth.io" target="_blank" rel="noopener noreferrer" className="link">
           Scaffold-ETH 2
         </a>
-        : smart contract architecture, frontend views, and on-chain interaction logic.
+        .
       </p>
-      <p className="mt-1 text-base-content/70">
-        Pick a build, copy the prompt into your AI coding agent (Claude, Cursor, Codex, etc.), and tweak the
-        customization parameters to make it yours before sending. Every spec also includes &ldquo;Next Iterations&rdquo;
-        you can ask the agent to add once your base project is running.
-      </p>
-      <p className="mt-1 text-base-content/70">
+      <p className="mt-1 text-base-content/70 text-center max-w-2xl mx-auto">
         {connectedAddress ? (
           <>
-            Once it&apos;s live, you can submit it to your{" "}
+            Once it&apos;s live, you can add it to your{" "}
             <Link href={`/builders/${connectedAddress}`} className="link">
               portfolio
-            </Link>{" "}
-            to show it off.
+            </Link>
+            .
           </>
         ) : (
           <>
@@ -153,7 +148,7 @@ export function BuildPrompts({ prompts }: { prompts: BuildPrompt[] }) {
             <button onClick={openConnectModal} className="link cursor-pointer">
               connect your wallet
             </button>{" "}
-            to submit it to your portfolio and show it off.
+            to add it to your portfolio.
           </>
         )}
       </p>
