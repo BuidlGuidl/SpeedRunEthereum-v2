@@ -5,7 +5,6 @@ import {
   staticFile,
   useCurrentFrame,
   useVideoConfig,
-  spring,
   interpolate,
   Easing,
 } from "remotion";
@@ -14,91 +13,216 @@ import { colors } from "../theme";
 import { AnimatedCursor } from "../components/AnimatedCursor";
 
 const { fontFamily } = loadFont("normal", {
-  weights: ["400", "700"],
+  weights: ["400", "700", "900"],
   subsets: ["latin"],
 });
 
-const PROMPT_PREVIEW = `# SPEC: Bonding Curve Token Launch
+/**
+ * Scene 1+2 — Intro Hook + Choose & Copy
+ *
+ * Phase 0: Hook text overlay
+ * Phase 1: Full Build Prompts page scrolls up in 3D perspective
+ * Phase 2: Cursor clicks View → crossfade to detail → clicks Copy
+ *
+ * Timeline (370 frames ≈ 12.3s at 30fps):
+ *   0–80    : Hook text appears and holds
+ *   70–170  : 3D scroll-in (tilted, scrolling up, text fades out)
+ *   170–195 : Settle flat, minor breathing
+ *   195–210 : Cursor moves to View button
+ *   210     : Click View + pulse
+ *   220–235 : Crossfade to detail modal
+ *   235–270 : Cursor moves to Copy button
+ *   270     : Click Copy → Copied overlay
+ *   305–350 : Exit zoom/fade
+ */
 
-## 1. Objective
-A token launchpad where anyone can create a new ERC-20 token
-with an automated bonding curve. The price rises mathematically
-with each purchase...
+// Video viewport
+const VIDEO_W = 1920;
+const VIDEO_H = 1080;
 
-## 4. Smart Contract Spec
-- Architecture: A TokenFactory contract that deploys new
-  BondingCurveToken instances...
-- buy() payable: calculate how many tokens the sent ETH buys
-- sell(amount): burn tokens, return ETH value...`;
+// Screenshot window (centered in video)
+const CONTAINER_W = 1600;
+const CONTAINER_H = 900;
+const OFFSET_X = (VIDEO_W - CONTAINER_W) / 2; // 160
+const OFFSET_Y = (VIDEO_H - CONTAINER_H) / 2; // 90
 
-const OTHER_PROMPTS = [
-  {
-    name: "On-Chain Name Registry",
-    desc: "Decentralized mapping system linking human-readable names to Ethereum addresses, similar to ENS.",
-  },
-  {
-    name: "Streaming Payments",
-    desc: "Payroll protocol where tokens are continuously streamed to recipients by the second, withdrawable anytime.",
-  },
-  {
-    name: "Commit-Reveal Game",
-    desc: "Rock-Paper-Scissors betting game using cryptographic hashing to prevent blockchain front-running.",
-  },
-];
+// ─── Full-page screenshot (build-prompts-full-page.png) ───
+// This is a 1920×2001 screenshot. We render it at CONTAINER_W (1600px) wide
+// inside the overflow:hidden container. The page content appears slightly
+// scaled down (1600/1920 = 0.833x). After scrolling to the top, we can
+// see the header + first 2 rows of cards in the 900px viewport.
+const FULL_PAGE_W = 1920;
+const FULL_PAGE_H = 2001;
+const FP_RENDER_SCALE = CONTAINER_W / FULL_PAGE_W; // 0.8333
+const FP_RENDERED_H = FULL_PAGE_H * FP_RENDER_SCALE; // ~1668
+
+// ─── Detail screenshot (new-build-prompts-page-detail.png, 1899×951) ───
+const DETAIL_IMG_W = 1899;
+const DETAIL_IMG_H = 951;
+const DETAIL_SCALE = Math.max(CONTAINER_W / DETAIL_IMG_W, CONTAINER_H / DETAIL_IMG_H);
+const DETAIL_CROP_X = (DETAIL_IMG_W * DETAIL_SCALE - CONTAINER_W) / 2;
+
+/**
+ * Maps a pixel coordinate from the full-page screenshot (1920×2001)
+ * to video coordinates, accounting for render scale, scroll, and zoom.
+ */
+function fullPageToVideo(
+  imgX: number,
+  imgY: number,
+  scrollOffset: number,
+  zoom: number,
+) {
+  // Position in the rendered (pre-zoom) image
+  const renderX = imgX * FP_RENDER_SCALE;
+  const renderY = imgY * FP_RENDER_SCALE + scrollOffset;
+  // Apply zoom from top-center origin
+  const zoomedX = (renderX - CONTAINER_W / 2) * zoom + CONTAINER_W / 2;
+  const zoomedY = renderY * zoom;
+  return {
+    x: Math.round(OFFSET_X + zoomedX),
+    y: Math.round(OFFSET_Y + zoomedY),
+  };
+}
+
+/** Maps a pixel from the detail screenshot (1899×951) to video coords */
+function detailToVideo(imgX: number, imgY: number) {
+  return {
+    x: Math.round(OFFSET_X + imgX * DETAIL_SCALE - DETAIL_CROP_X),
+    y: Math.round(OFFSET_Y + imgY * DETAIL_SCALE),
+  };
+}
+
+// Button coordinates (precisely measured from the original screenshots)
+// View button on first card in full-page image (1920×2001)
+const VIEW_BTN_IMG = { x: 517, y: 651 };
+// Copy button in detail image (1899×951)
+const COPY_BTN_VIDEO = detailToVideo(950, 833);
 
 export const ChooseAndCopyScene: React.FC = () => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
 
-  // === LEFT SIDE: Card entrance ===
-  const cardEntrance = spring({
-    frame,
-    fps,
-    delay: 5,
-    config: { damping: 200 },
+  // ============================================================
+  // PHASE 0: Hook text overlay
+  // ============================================================
+  const textOpacity = interpolate(frame, [0, 15, 80, 110], [0, 1, 1, 0], {
+    extrapolateLeft: "clamp",
+    extrapolateRight: "clamp",
   });
-  const cardY = interpolate(cardEntrance, [0, 1], [60, 0]);
 
-  // Card click highlight (frame 30)
-  const cardClicked = frame >= 30;
-  const clickPulse = cardClicked
-    ? interpolate(frame, [30, 38], [0, 1], {
+  // ============================================================
+  // Floating background particles
+  // ============================================================
+  const particles = Array.from({ length: 8 }, (_, i) => {
+    const baseX = (i * 240 + 80) % VIDEO_W;
+    const baseY = 80 + (i * 170) % 750;
+    const offsetY = Math.sin(frame * 0.03 + i * 1.2) * 25;
+    const size = 6 + (i % 4) * 5;
+    return { x: baseX, y: baseY + offsetY, size };
+  });
+
+  // ============================================================
+  // PHASE 1: 3D Scroll-In
+  // ============================================================
+  const maxScroll = FP_RENDERED_H - CONTAINER_H; // ~768
+
+  const scrollStart = 70;
+  const scrollEnd = 170;
+
+  // 3D tilt → flat
+  const rotateX = interpolate(frame, [scrollStart, scrollEnd], [25, 0], {
+    extrapolateLeft: "clamp",
+    extrapolateRight: "clamp",
+    easing: Easing.out(Easing.quad),
+  });
+
+  // Container scale during fly-in
+  const perspScale = interpolate(frame, [scrollStart, scrollEnd], [0.82, 1], {
+    extrapolateLeft: "clamp",
+    extrapolateRight: "clamp",
+    easing: Easing.out(Easing.quad),
+  });
+
+  // Scroll: bottom → top
+  const scrollY = interpolate(frame, [scrollStart, scrollEnd], [-maxScroll, 0], {
+    extrapolateLeft: "clamp",
+    extrapolateRight: "clamp",
+    easing: (t: number) => t * t * (3 - 2 * t),
+  });
+
+  // Entrance opacity
+  const screenshotOpacity = interpolate(frame, [scrollStart, scrollStart + 15], [0, 1], {
+    extrapolateLeft: "clamp",
+    extrapolateRight: "clamp",
+  });
+
+  // ============================================================
+  // PHASE 2: Cursor interactions on full-page, then detail
+  // ============================================================
+
+  // No separate zoom-in — the view stays flat after the scroll,
+  // keeping the full-page screenshot visible without any flicker.
+  // The crossfade to the detail only happens on the View click.
+
+  // View button position (accounting for scroll at rest, no extra zoom)
+  const viewBtn = fullPageToVideo(VIEW_BTN_IMG.x, VIEW_BTN_IMG.y, 0, 1);
+
+  // View button click
+  const viewClickFrame = 210;
+  const viewClicked = frame >= viewClickFrame;
+  const viewClickProgress = viewClicked
+    ? interpolate(frame, [viewClickFrame, viewClickFrame + 10], [0, 1], {
         extrapolateLeft: "clamp",
         extrapolateRight: "clamp",
       })
     : 0;
 
-  // === RIGHT SIDE: Prompts panel slides in ===
-  const panelEntrance = spring({
+  // Crossfade: full-page → detail (on View click)
+  const crossfadeStart = 220;
+  const crossfadeDuration = 15;
+  const detailOpacity = interpolate(
     frame,
-    fps,
-    delay: 35,
-    config: { damping: 16, stiffness: 120, mass: 1 },
-  });
-  const panelX = interpolate(panelEntrance, [0, 1], [1200, 0]);
+    [crossfadeStart, crossfadeStart + crossfadeDuration],
+    [0, 1],
+    { extrapolateLeft: "clamp", extrapolateRight: "clamp" }
+  );
 
-  // Copy button click (frame 100)
-  const copyClick = frame >= 100;
+  // Copy button click (on detail image)
+  const copyClickFrame = 270;
+  const copyClicked = frame >= copyClickFrame;
+  const copiedOpacity = interpolate(
+    frame,
+    [copyClickFrame, copyClickFrame + 8],
+    [0, 1],
+    { extrapolateLeft: "clamp", extrapolateRight: "clamp" }
+  );
 
   // Exit zoom
-  const exitZoom = interpolate(frame, [130, 170], [1, 2.5], {
+  const exitStart = 305;
+  const exitZoom = interpolate(frame, [exitStart, exitStart + 40], [1, 2.5], {
     extrapolateLeft: "clamp",
     extrapolateRight: "clamp",
     easing: Easing.in(Easing.quad),
   });
-  const exitOpacity = interpolate(frame, [140, 170], [1, 0], {
-    extrapolateLeft: "clamp",
-    extrapolateRight: "clamp",
-  });
+  const exitOpacity = interpolate(
+    frame,
+    [exitStart + 10, exitStart + 40],
+    [1, 0],
+    { extrapolateLeft: "clamp", extrapolateRight: "clamp" }
+  );
 
-  // Cursor positions
+  // Cursor keyframes
   const cursorPositions = [
-    { x: 750, y: 550, frame: 0 }, // start from Token Launcher card area
-    { x: 400, y: 420, frame: 20 }, // hover card center
-    { x: 400, y: 420, frame: 30 }, // click card
-    { x: 1350, y: 630, frame: 75 }, // move to copy button on right
-    { x: 1350, y: 630, frame: 100 }, // click copy
+    { x: 700, y: 300, frame: 185 },
+    { x: viewBtn.x, y: viewBtn.y, frame: 205 },
+    { x: viewBtn.x, y: viewBtn.y, frame: viewClickFrame },
+    { x: COPY_BTN_VIDEO.x, y: COPY_BTN_VIDEO.y, frame: 258 },
+    { x: COPY_BTN_VIDEO.x, y: COPY_BTN_VIDEO.y, frame: copyClickFrame },
   ];
+
+  // Copied overlay position (in container space on detail image)
+  const copiedBtnRelX = 950 * DETAIL_SCALE - DETAIL_CROP_X;
+  const copiedBtnRelY = 833 * DETAIL_SCALE;
 
   return (
     <AbsoluteFill
@@ -106,263 +230,209 @@ export const ChooseAndCopyScene: React.FC = () => {
         background: `linear-gradient(180deg, ${colors.bgPrimary} 0%, ${colors.bgSecondary} 100%)`,
         fontFamily,
         overflow: "hidden",
+        perspective: 2000,
         transform: `scale(${exitZoom})`,
         opacity: exitOpacity,
-        transformOrigin: "75% 50%",
+        transformOrigin: "50% 60%",
       }}
     >
-      {/* === LEFT HALF: Portfolio Card === */}
+      {/* Floating background particles */}
+      {particles.map((p, i) => (
+        <div
+          key={i}
+          style={{
+            position: "absolute",
+            left: p.x,
+            top: p.y,
+            width: p.size,
+            height: p.size,
+            borderRadius: 2,
+            background: i % 2 === 0 ? colors.accent : colors.primaryLight,
+            opacity: 0.15,
+            zIndex: 0,
+          }}
+        />
+      ))}
+
+      {/* Hook text overlay */}
+      {textOpacity > 0 && (
+        <div
+          style={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            zIndex: 20,
+            opacity: textOpacity,
+            textAlign: "center",
+          }}
+        >
+          <div
+            style={{
+              fontSize: 80,
+              fontWeight: 900,
+              color: colors.textPrimary,
+              lineHeight: 1.15,
+              maxWidth: 1600,
+              letterSpacing: "-0.03em",
+              textShadow: "0 4px 40px rgba(255,255,255,0.9)",
+            }}
+          >
+            What if your AI agent could{" "}
+            <span
+              style={{
+                background: `linear-gradient(135deg, ${colors.primary}, ${colors.accent})`,
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+              }}
+            >
+              1shot
+            </span>{" "}
+            production dapps?
+          </div>
+        </div>
+      )}
+
+      {/* Screenshot container */}
       <div
         style={{
           position: "absolute",
-          left: 0,
-          top: 0,
-          width: "40%",
-          height: "100%",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
+          top: "50%",
+          left: "50%",
+          transform: `
+            translate(-50%, -50%)
+            rotateX(${rotateX}deg)
+            scale(${perspScale})
+          `,
+          transformOrigin: "center bottom",
+          opacity: screenshotOpacity,
+          width: CONTAINER_W,
+          height: CONTAINER_H,
+          borderRadius: 16,
+          overflow: "hidden",
+          boxShadow: `
+            0 30px 90px rgba(0,0,0,0.15),
+            0 0 40px ${colors.accentGlow}
+          `,
+          border: `2px solid ${colors.accent}44`,
+          zIndex: 10,
         }}
       >
-        <div
+        {/* Full-page screenshot */}
+        <Img
+          src={staticFile("build-prompts-full-page.png")}
           style={{
-            transform: `translateY(${cardY}px)`,
-            opacity: cardEntrance,
-            width: 520,
-            borderRadius: 24,
-            overflow: "hidden",
-            background: colors.bgCard,
-            border: cardClicked
-              ? `3px solid ${colors.accent}`
-              : `1px solid ${colors.accent}44`,
-            boxShadow: cardClicked
-              ? `0 0 ${30 + clickPulse * 30}px ${colors.accentGlow}, 0 12px 40px rgba(0,0,0,0.12)`
-              : "0 4px 20px rgba(0,0,0,0.08)",
-            transition: "border 0.2s ease",
+            width: CONTAINER_W,
+            display: "block",
+            transform: `translateY(${scrollY}px)`,
           }}
-        >
-          {/* Image */}
+        />
+
+        {/* Detail modal screenshot (fades in on View click) */}
+        {frame >= crossfadeStart - 5 && (
           <div
             style={{
-              padding: "30px 0",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              background: colors.bgSecondary,
+              position: "absolute",
+              top: 0,
+              left: 0,
+              width: "100%",
+              height: "100%",
+              opacity: detailOpacity,
             }}
           >
             <Img
-              src={staticFile("token-launcher.png")}
-              style={{ width: "75%", opacity: 1 }}
+              src={staticFile("new-build-prompts-page-detail.png")}
+              style={{
+                width: "100%",
+                height: "100%",
+                objectFit: "cover",
+                objectPosition: "top center",
+                display: "block",
+              }}
             />
           </div>
-          {/* Content */}
-          <div style={{ padding: "24px 36px 32px" }}>
-            <div
+        )}
+
+        {/* Subtle click ring on View button */}
+        {viewClicked && viewClickProgress < 1 && (
+          <div
+            style={{
+              position: "absolute",
+              left: viewBtn.x - OFFSET_X - 40,
+              top: viewBtn.y - OFFSET_Y - 14,
+              width: 80,
+              height: 28,
+              borderRadius: 14,
+              background: `rgba(103, 221, 222, ${0.25 * (1 - viewClickProgress)})`,
+              border: `2px solid rgba(103, 221, 222, ${0.7 * (1 - viewClickProgress)})`,
+              transform: `scale(${1 + viewClickProgress * 0.3})`,
+              pointerEvents: "none",
+              zIndex: 25,
+            }}
+          />
+        )}
+
+        {/* "Copied!" text swap — matches original button style */}
+        {copyClicked && (
+          <div
+            style={{
+              position: "absolute",
+              left: copiedBtnRelX - 55,
+              top: copiedBtnRelY - 20,
+              height: 32,
+              paddingLeft: 12,
+              paddingRight: 16,
+              borderRadius: 8,
+              background: "#088484",
+              display: "flex",
+              alignItems: "center",
+              gap: 6,
+              opacity: copiedOpacity,
+            }}
+          >
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+              <path
+                d="M3 7.5L5.5 10L11 4"
+                stroke="white"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+            <span
               style={{
-                fontSize: 36,
-                fontWeight: 700,
-                color: colors.textPrimary,
-                lineHeight: 1.3,
+                color: "white",
+                fontSize: 14,
+                fontWeight: 600,
               }}
             >
-              Bonding Curve Token Launch
-            </div>
-            <div
-              style={{
-                fontSize: 20,
-                color: colors.textSecondary,
-                marginTop: 10,
-                lineHeight: 1.5,
-              }}
-            >
-              pump.fun-style launchpad where anyone can create a token with an
-              automated bonding curve.
-            </div>
+              Copied!
+            </span>
           </div>
-        </div>
+        )}
       </div>
 
-      {/* === RIGHT HALF: Build Prompts Panel === */}
+      {/* Bottom teal bar */}
       <div
         style={{
           position: "absolute",
-          right: 0,
-          top: 0,
-          width: "60%",
-          height: "100%",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          transform: `translateX(${panelX}px)`,
+          bottom: 0,
+          width: "100%",
+          height: 60,
+          background: `linear-gradient(180deg, ${colors.accent}44, ${colors.primary})`,
+          zIndex: 0,
         }}
-      >
-        <div style={{ width: 900, maxWidth: "95%", transform: "scale(1.05)", transformOrigin: "center center" }}>
-          {/* Header */}
-          <h1
-            style={{
-              fontSize: 42,
-              fontWeight: 700,
-              color: colors.primary,
-              margin: "0 0 8px 0",
-            }}
-          >
-            Build Prompts
-          </h1>
-          <p
-            style={{
-              fontSize: 16,
-              color: colors.textSecondary,
-              marginBottom: 20,
-              margin: "0 0 20px 0",
-            }}
-          >
-            AI-ready prompts for Ethereum build ideas. Copy a prompt into your AI
-            agent and start building.
-          </p>
+      />
 
-          {/* Expanded accordion */}
-          <div
-            style={{
-              background: colors.bgCard,
-              borderRadius: 12,
-              overflow: "hidden",
-              border: `2px solid ${colors.accent}`,
-              boxShadow: `0 4px 20px ${colors.accentGlow}`,
-              marginBottom: 10,
-            }}
-          >
-            <div style={{ padding: "14px 18px" }}>
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                }}
-              >
-                <div
-                  style={{
-                    fontSize: 22,
-                    fontWeight: 700,
-                    color: colors.textPrimary,
-                  }}
-                >
-                  Bonding Curve Token Launch
-                </div>
-                <div style={{ fontSize: 14, color: colors.primary }}>▲</div>
-              </div>
-              <div
-                style={{
-                  fontSize: 14,
-                  color: colors.textSecondary,
-                  marginTop: 4,
-                }}
-              >
-                pump.fun-style launchpad where anyone can create a token with an
-                automated bonding curve. Price rises with every buy.
-              </div>
-            </div>
-
-            {/* Code block */}
-            <div style={{ padding: "0 18px 14px" }}>
-              <div
-                style={{
-                  background: colors.bgCode,
-                  borderRadius: 8,
-                  padding: 16,
-                  fontSize: 14,
-                  color: colors.textPrimary,
-                  whiteSpace: "pre-wrap",
-                  lineHeight: 1.5,
-                  maxHeight: 280,
-                  overflow: "hidden",
-                  fontFamily: "'Fira Code', monospace",
-                  border: `1px solid ${colors.accent}22`,
-                }}
-              >
-                {PROMPT_PREVIEW}
-              </div>
-
-              {/* Copy button */}
-              <div
-                style={{
-                  marginTop: 10,
-                  padding: "12px 0",
-                  borderRadius: 9999,
-                  textAlign: "center",
-                  fontSize: 18,
-                  fontWeight: 700,
-                  background: copyClick ? colors.success : colors.primary,
-                  color: colors.textWhite,
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  gap: 8,
-                }}
-              >
-                {copyClick ? (
-                  <>
-                    <span style={{ fontSize: 16 }}>✓</span> Copied!
-                  </>
-                ) : (
-                  <>
-                    <span style={{ fontSize: 16 }}>📋</span> Copy Prompt
-                  </>
-                )}
-              </div>
-            </div>
-          </div>
-
-          {/* Collapsed prompts */}
-          {OTHER_PROMPTS.map((p, i) => (
-            <div
-              key={i}
-              style={{
-                background: colors.bgCard,
-                borderRadius: 10,
-                padding: "12px 18px",
-                marginBottom: 8,
-                border: `1px solid ${colors.accent}33`,
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-              }}
-            >
-              <div>
-                <div
-                  style={{
-                    fontSize: 18,
-                    fontWeight: 700,
-                    color: colors.textPrimary,
-                  }}
-                >
-                  {p.name}
-                </div>
-                <div
-                  style={{
-                    fontSize: 13,
-                    color: colors.textSecondary,
-                    marginTop: 2,
-                  }}
-                >
-                  {p.desc}
-                </div>
-              </div>
-              <div style={{ fontSize: 14, color: colors.primary, marginLeft: 12 }}>
-                ▼
-              </div>
-            </div>
-          ))}
+      {/* Cursor (zIndex must be above the container's zIndex:10) */}
+      {frame >= 185 && frame < exitStart && (
+        <div style={{ position: "absolute", inset: 0, zIndex: 30, pointerEvents: "none" }}>
+          <AnimatedCursor
+            positions={cursorPositions}
+            clickAtEnd
+            color={colors.primary}
+          />
         </div>
-      </div>
-
-      {/* Cursor */}
-      {frame < 160 && (
-        <AnimatedCursor
-          positions={cursorPositions}
-          clickAtEnd
-          color={colors.primary}
-        />
       )}
     </AbsoluteFill>
   );
