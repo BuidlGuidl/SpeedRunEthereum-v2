@@ -91,11 +91,22 @@ export const hasMdxComponents = (markdown: string): boolean => {
 
 /**
  * Prepare a README that contains MDX components for rendering.
- * Self-closes void HTML elements for JSX compatibility.
  * Only needed for READMEs with MDX components (e.g. <Tabs>/<Tab>).
+ * - Self-closes void HTML elements for JSX compatibility
+ * - Converts remaining <details>/<summary> to <Details>/<Summary> components
+ *   (MDX can't parse raw HTML <details> — treats them as JSX and fails)
  */
 export const prepareMdxReadme = (markdown: string): string => {
-  return markdown.replace(/<(br|hr|img|input|meta|link)(\s[^>]*)?\s*(?<!\/)>/gi, "<$1$2/>");
+  return (
+    markdown
+      // Strip Kramdown-only attribute
+      .replace(/<details\s+markdown='1'>/gi, "<details>")
+      // Self-close void HTML elements
+      .replace(/<(br|hr|img|input|meta|link)(\s[^>]*)?\s*(?<!\/)>/gi, "<$1$2/>")
+      // Convert <details><summary>text</summary> to block-level MDX components
+      .replace(/<details[^>]*>\s*<summary>([\s\S]*?)<\/summary>/gi, "<Details>\n<Summary>$1</Summary>\n\n")
+      .replace(/<\/details>/gi, "\n</Details>")
+  );
 };
 
 export const splitChallengeReadme = (readme: string): { headerImageMdx: string; restMdx: string } => {
