@@ -106,6 +106,9 @@ export const prepareMdxReadme = (markdown: string): string => {
       // Convert <details><summary>text</summary> to block-level MDX components
       .replace(/<details[^>]*>\s*<summary>([\s\S]*?)<\/summary>/gi, "<Details>\n<Summary>$1</Summary>\n\n")
       .replace(/<\/details>/gi, "\n</Details>")
+      // Strip redundant bold label at start of Tab content (e.g. **Hardhat** when label="Hardhat")
+      // Convention: each <Tab> has a bold label as first line for GitHub readability; SRE strips it
+      .replace(/<Tab label="([^"]+)">\s*\n\n\*\*\1\*\*/gi, '<Tab label="$1">\n\n')
   );
 };
 
