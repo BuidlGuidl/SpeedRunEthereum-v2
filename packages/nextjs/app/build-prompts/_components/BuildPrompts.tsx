@@ -2,6 +2,9 @@
 
 import { forwardRef, useEffect, useRef, useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
+import { useConnectModal } from "@rainbow-me/rainbowkit";
+import { useAccount } from "wagmi";
 import { ClipboardDocumentIcon, EyeIcon } from "@heroicons/react/24/outline";
 import { CheckCircleIcon } from "@heroicons/react/24/solid";
 import { BuildPrompt } from "~~/services/build-prompts";
@@ -103,6 +106,8 @@ const PromptModal = forwardRef<HTMLDialogElement, PromptModalProps>(({ closeModa
 PromptModal.displayName = "PromptModal";
 
 export function BuildPrompts({ prompts }: { prompts: BuildPrompt[] }) {
+  const { address: connectedAddress } = useAccount();
+  const { openConnectModal } = useConnectModal();
   const [selected, setSelected] = useState<BuildPrompt | null>(null);
   const modalRef = useRef<HTMLDialogElement>(null);
 
@@ -130,9 +135,27 @@ export function BuildPrompts({ prompts }: { prompts: BuildPrompt[] }) {
       </p>
       <p className="mt-1 text-base-content/70">
         Pick a build, copy the prompt into your AI coding agent (Claude, Cursor, Codex, etc.), and tweak the
-        customization parameters to make it yours before sending. Every spec also includes{" "}
-        <span className="font-semibold">Next Iterations</span> you can ask the agent to add once your base project is
-        running.
+        customization parameters to make it yours before sending. Every spec also includes &ldquo;Next Iterations&rdquo;
+        you can ask the agent to add once your base project is running.
+      </p>
+      <p className="mt-1 text-base-content/70">
+        {connectedAddress ? (
+          <>
+            Once it&apos;s live, you can submit it to your{" "}
+            <Link href={`/builders/${connectedAddress}`} className="link">
+              portfolio
+            </Link>{" "}
+            to show it off.
+          </>
+        ) : (
+          <>
+            Once it&apos;s live,{" "}
+            <button onClick={openConnectModal} className="link cursor-pointer">
+              connect your wallet
+            </button>{" "}
+            to submit it to your portfolio and show it off.
+          </>
+        )}
       </p>
       <div className="mt-8 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-2 lg:grid-cols-3">
         {prompts.map(prompt => (
