@@ -28,7 +28,7 @@ A smart contract that generates and renders SVG artwork entirely on-chain. Each 
 - **Core Functions:** Mint function with unique generative properties per token. On-chain metadata using base64-encoded JSON (`tokenURI` returns data URI).
 - **Agent Autonomy:** You have complete creative freedom over the internal SVG generation logic. Use string.concat to assemble dynamic attributes (colors, shapes, text) based on the Token ID. Ensure the final Base64 JSON and SVG strings are formatted perfectly without breaking newlines.
   **Max contract size:** Take into account the contract length. The contracts with a lot of SVG code are easier to go beyond that limit. Split the SVG renderer code into contracts or libraries.
-  **EIP-4883:** Use https://eips.ethereum.org/EIPS/eip-4883. Most important part **function renderTokenById(uint256 id) external view returns (string memory);** renderTokenById must return the SVG body for the specified token id and must either be an empty string or valid SVG element(s).
+  **EIP-4883:** Use https://eips.ethereum.org/EIPS/eip-4883. Most important part `function renderTokenById(uint256 id) external view returns (string memory);` renderTokenById must return the SVG body for the specified token id and must either be an empty string or valid SVG element(s) (allowing composability).
 
 ## 5. Frontend Spec
 
