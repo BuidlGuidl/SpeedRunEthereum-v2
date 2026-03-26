@@ -18,9 +18,10 @@ import {
   getCountOfCompletedChallenge,
 } from "~~/services/database/repositories/challenges";
 import {
-  convertDetailsToMdx,
   fetchGithubChallengeReadme,
+  hasMdxComponents,
   parseGithubUrl,
+  prepareMdxReadme,
   splitChallengeReadme,
 } from "~~/services/github";
 import { CHALLENGE_METADATA, extractHeadings, generateHeadingId } from "~~/utils/challenges";
@@ -63,7 +64,8 @@ export default async function ChallengePage(props: { params: Promise<{ challenge
   }
 
   const rawReadme = await fetchGithubChallengeReadme(challenge.github);
-  const challengeReadme = convertDetailsToMdx(rawReadme);
+  const isMdx = hasMdxComponents(rawReadme);
+  const challengeReadme = isMdx ? prepareMdxReadme(rawReadme) : rawReadme;
   const { headerImageMdx, restMdx } = splitChallengeReadme(challengeReadme);
   const { owner, repo, branch } = parseGithubUrl(challenge.github);
 
@@ -89,30 +91,29 @@ export default async function ChallengePage(props: { params: Promise<{ challenge
             <div className="prose dark:prose-invert max-w-fit break-words lg:max-w-[850px]">
               <MDXRemote
                 source={headerImageMdx}
-                components={{
-                  Tabs: MdxTabs,
-                  Tab: MdxTab,
-                  Details: MdxDetails,
-                  Summary: MdxSummary,
-                }}
+                components={
+                  isMdx ? { Tabs: MdxTabs, Tab: MdxTab, Details: MdxDetails, Summary: MdxSummary } : undefined
+                }
                 options={{
                   mdxOptions: {
-                    rehypePlugins: [
-                      [
-                        rehypeRaw,
-                        {
-                          passThrough: [
-                            "mdxJsxFlowElement",
-                            "mdxJsxTextElement",
-                            "mdxjsEsm",
-                            "mdxFlowExpression",
-                            "mdxTextExpression",
+                    rehypePlugins: isMdx
+                      ? [
+                          [
+                            rehypeRaw,
+                            {
+                              passThrough: [
+                                "mdxJsxFlowElement",
+                                "mdxJsxTextElement",
+                                "mdxjsEsm",
+                                "mdxFlowExpression",
+                                "mdxTextExpression",
+                              ],
+                            },
                           ],
-                        },
-                      ],
-                    ],
+                        ]
+                      : [rehypeRaw],
                     remarkPlugins: [remarkGfm],
-                    format: "mdx",
+                    format: isMdx ? "mdx" : "md",
                   },
                 }}
               />
@@ -132,29 +133,28 @@ export default async function ChallengePage(props: { params: Promise<{ challenge
                   a: (props: ComponentPropsWithoutRef<"a">) =>
                     createElement("a", { ...props, target: "_blank", rel: "noopener" }),
                   h2: createH2WithId,
-                  Tabs: MdxTabs,
-                  Tab: MdxTab,
-                  Details: MdxDetails,
-                  Summary: MdxSummary,
+                  ...(isMdx ? { Tabs: MdxTabs, Tab: MdxTab, Details: MdxDetails, Summary: MdxSummary } : {}),
                 }}
                 options={{
                   mdxOptions: {
-                    rehypePlugins: [
-                      [
-                        rehypeRaw,
-                        {
-                          passThrough: [
-                            "mdxJsxFlowElement",
-                            "mdxJsxTextElement",
-                            "mdxjsEsm",
-                            "mdxFlowExpression",
-                            "mdxTextExpression",
+                    rehypePlugins: isMdx
+                      ? [
+                          [
+                            rehypeRaw,
+                            {
+                              passThrough: [
+                                "mdxJsxFlowElement",
+                                "mdxJsxTextElement",
+                                "mdxjsEsm",
+                                "mdxFlowExpression",
+                                "mdxTextExpression",
+                              ],
+                            },
                           ],
-                        },
-                      ],
-                    ],
+                        ]
+                      : [rehypeRaw],
                     remarkPlugins: [remarkGfm],
-                    format: "mdx",
+                    format: isMdx ? "mdx" : "md",
                   },
                 }}
               />
