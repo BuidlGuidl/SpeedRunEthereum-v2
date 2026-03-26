@@ -8,6 +8,13 @@ export type MdxTabProps = {
   children?: ReactNode;
 };
 
+/**
+ * Convention: In challenge READMEs, each <Tab> starts with a bold label
+ * matching the tab's label prop (e.g. **Hardhat** inside <Tab label="Hardhat">).
+ * This makes the content readable on GitHub where <Tabs>/<Tab> JSX renders as
+ * plain text. SRE strips these redundant bold labels at build time via
+ * `prepareMdxReadme` in services/github.ts since the tab UI already shows the label.
+ */
 export function Tab(props: MdxTabProps) {
   void props;
   return null;
