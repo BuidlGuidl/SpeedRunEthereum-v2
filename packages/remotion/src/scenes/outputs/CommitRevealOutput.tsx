@@ -143,26 +143,8 @@ export const CommitRevealOutput: React.FC = () => {
               {isCommitPhase ? "🔒" : hands[selectedHand]}
             </div>
             <div style={{ fontSize: 28, fontWeight: 700, color: "#fff", marginTop: 20 }}>You</div>
-            {isCommitPhase && (
-              <div
-                style={{
-                  fontSize: 11,
-                  color: colors.textMuted,
-                  fontFamily: "monospace",
-                  marginTop: 8,
-                  width: 180,
-                  overflow: "hidden",
-                  textOverflow: "ellipsis",
-                }}
-              >
-                {player1Hash}
-              </div>
-            )}
-            {isResultPhase && (
-              <div style={{ fontSize: 20, color: colors.textSecondary, marginTop: 8 }}>
-                {handNames[selectedHand]}
-              </div>
-            )}
+
+
           </div>
 
           {/* VS */}
@@ -198,26 +180,8 @@ export const CommitRevealOutput: React.FC = () => {
               {revealProgress > 0.5 ? hands[opponentHand] : "🔒"}
             </div>
             <div style={{ fontSize: 28, fontWeight: 700, color: "#fff", marginTop: 20 }}>Opponent</div>
-            {isCommitPhase && (
-              <div
-                style={{
-                  fontSize: 11,
-                  color: colors.textMuted,
-                  fontFamily: "monospace",
-                  marginTop: 8,
-                  width: 180,
-                  overflow: "hidden",
-                  textOverflow: "ellipsis",
-                }}
-              >
-                {player2Hash}
-              </div>
-            )}
-            {isResultPhase && (
-              <div style={{ fontSize: 20, color: colors.textSecondary, marginTop: 8 }}>
-                {handNames[opponentHand]}
-              </div>
-            )}
+
+
           </div>
         </div>
 
@@ -249,12 +213,7 @@ export const CommitRevealOutput: React.FC = () => {
           </div>
         )}
 
-        {/* Bet amount */}
-        <div style={{ textAlign: "center", marginBottom: 100 }}>
-          <span style={{ fontSize: 20, color: colors.textMuted }}>
-            Bet: 5 USDC each • Winner takes all
-          </span>
-        </div>
+
       </div>
 
       <GlowLabel text="Commit-Reveal Game" color={colors.arcadePurple} delay={15} />

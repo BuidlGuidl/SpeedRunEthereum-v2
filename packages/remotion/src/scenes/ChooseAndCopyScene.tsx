@@ -269,16 +269,18 @@ export const ChooseAndCopyScene: React.FC = () => {
         >
           <div
             style={{
-              fontSize: 80,
+              fontSize: 92,
               fontWeight: 900,
               color: colors.textPrimary,
               lineHeight: 1.15,
-              maxWidth: 1600,
               letterSpacing: "-0.03em",
               textShadow: "0 4px 40px rgba(255,255,255,0.9)",
+              whiteSpace: "nowrap",
             }}
           >
-            What if your AI agent could{" "}
+            Ship Ethereum apps faster
+            <br />
+            with{" "}
             <span
               style={{
                 background: `linear-gradient(135deg, ${colors.primary}, ${colors.accent})`,
@@ -286,9 +288,8 @@ export const ChooseAndCopyScene: React.FC = () => {
                 WebkitTextFillColor: "transparent",
               }}
             >
-              1shot
-            </span>{" "}
-            production dapps?
+              AI build prompts
+            </span>
           </div>
         </div>
       )}

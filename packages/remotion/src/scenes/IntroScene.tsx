@@ -116,7 +116,7 @@ export const IntroScene: React.FC = () => {
               textShadow: "0 4px 40px rgba(255,255,255,0.9)",
             }}
           >
-            What if your AI agent could{" "}
+            Ship Ethereum apps faster with{" "}
             <span
               style={{
                 background: `linear-gradient(135deg, ${colors.primary}, ${colors.accent})`,
@@ -124,9 +124,8 @@ export const IntroScene: React.FC = () => {
                 WebkitTextFillColor: "transparent",
               }}
             >
-              1shot
-            </span>{" "}
-            production dapps?
+              AI build prompts
+            </span>
           </div>
         </div>
       )}
