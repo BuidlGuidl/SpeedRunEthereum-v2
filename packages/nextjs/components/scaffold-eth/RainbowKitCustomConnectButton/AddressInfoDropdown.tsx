@@ -13,6 +13,7 @@ import {
   ChevronDownIcon,
   DocumentDuplicateIcon,
   QrCodeIcon,
+  SparklesIcon,
   UserIcon,
 } from "@heroicons/react/24/outline";
 import { BlockieAvatar, isENS } from "~~/components/scaffold-eth";
@@ -81,6 +82,12 @@ export const AddressInfoDropdown = ({
             <Link href={`/builders/${address}`} className="btn-sm !rounded-xl flex gap-3 py-3" onClick={closeDropdown}>
               <UserIcon className="h-6 w-4" />
               <span className="whitespace-nowrap">My Portfolio</span>
+            </Link>
+          </li>
+          <li>
+            <Link href="/build-prompts" className="btn-sm !rounded-xl flex gap-3 py-3" onClick={closeDropdown}>
+              <SparklesIcon className="h-6 w-4" />
+              <span className="whitespace-nowrap">Build Prompts</span>
             </Link>
           </li>
           <li className={selectingNetwork ? "hidden" : ""}>
