@@ -17,6 +17,9 @@ const CTA_DURATION = 150; // 5s
 
 const TRANSITION_DURATION = 15; // 0.5s
 
+// Click sound effect
+const CLICK_SFX = "https://remotion.media/mouse-click.wav";
+
 export const BuildPromptsDemo: React.FC = () => {
   return (
     <AbsoluteFill style={{ backgroundColor: "#0f0b1e" }}>
@@ -25,6 +28,15 @@ export const BuildPromptsDemo: React.FC = () => {
         src={staticFile("build-prompts-8bit-music.mp3")}
         volume={0.3}
       />
+
+      {/* Click sound effects — durationInFrames limits how long the Audio stays mounted */}
+      <Sequence from={210} durationInFrames={30}>
+        <Audio src={CLICK_SFX} volume={0.5} />
+      </Sequence>
+      <Sequence from={270} durationInFrames={30}>
+        <Audio src={CLICK_SFX} volume={0.5} />
+      </Sequence>
+
       <TransitionSeries>
         {/* Scene 1: Hook + Choose Build + Copy Prompt */}
         <TransitionSeries.Sequence durationInFrames={CHOOSE_COPY_DURATION}>
