@@ -9,6 +9,7 @@ import { CursorChatPanel, ChatMsg, InputAction } from "./components/CursorChatPa
 import { CursorIDEChrome } from "./components/CursorIDEChrome";
 import { AnimatedCursor } from "./components/AnimatedCursor";
 import { Confetti } from "./components/Confetti";
+import { PixelGirlSprite } from "./components/PixelGirlSprite";
 import { fonts, colors } from "./theme";
 
 const { fontFamily: serifFont } = loadFont();
@@ -16,10 +17,14 @@ const CLICK_SFX = staticFile("sfx/confirmation.ogg");
 const TAP_SFX = staticFile("sfx/key-tap.mp3");
 const EC = { extrapolateLeft: "clamp" as const, extrapolateRight: "clamp" as const };
 
+// ── Intro duration (frames @ 30fps) ──────────────────────
+const INTRO_DUR = 105; // 3.5 seconds for sprite intro card
+
 // ── Timeline (frames @ 30fps) ────────────────────────────
+// All values are auto-offset by INTRO_DUR so the intro plays first.
 // Timing rule: viewer gets 60-80 frames to READ after each AI message
 // finishes streaming before the next user action begins.
-const T = {
+const _T = {
   // HOOK — single flowing intro (~6s)
   HOOK_L1: 15,       // "If you don't like to solo"
   HOOK_L2: 55,       // "your Solidity education anymore."
@@ -71,6 +76,10 @@ const T = {
   // OUTRO — 5s hold
   OUTRO: 2764, END: 2914,
 };
+// Offset all timeline values by INTRO_DUR
+const T = Object.fromEntries(
+  Object.entries(_T).map(([k, v]) => [k, v + INTRO_DUR])
+) as typeof _T;
 export const AITUTOR_TOTAL_DURATION = T.END;
 
 // ── Chat-focus & Code-focus zooms (stage-based) ─────────
@@ -181,7 +190,7 @@ const UC_CARDS = [
   { start: T.UC1, end: T.UC1_END, num: "01", title: "Learn Ethereum's gotchas", sub: "Your AI tutor explains concepts and edge cases", badgeTitle: "Learn gotchas" },
   { start: T.UC2, end: T.UC2_END, num: "02", title: "Prove you understand", sub: "Answer questions to show you get it", badgeTitle: "Prove understanding" },
   { start: T.UC3, end: T.UC3_END, num: "03", title: "Get hints when stuck", sub: "Ask for help when something's unclear", badgeTitle: "Get hints" },
-  { start: T.UC4, end: T.UC4_END, num: "04", title: "Code. Check. Fix.", sub: "Write code and get real-time error guidance", badgeTitle: "Code. Check. Fix." },
+  { start: T.UC4, end: T.UC4_END, num: "04", title: "Code. Check. Fix.", sub: "Write code and get real-time reviews", badgeTitle: "Code. Check. Fix." },
 ];
 
 // ── Persistent stage ranges (badge stays visible for entire stage) ──
@@ -513,7 +522,7 @@ export const AITutorDemo: React.FC = () => {
 
   return (
     <AbsoluteFill style={{ background: "#0a0a12" }}>
-      <Audio src={staticFile("build-prompts-8bit-music.mp3")} volume={0.18} />
+      <Audio src={staticFile("ai-tutor-video-music.mp3")} volume={0.18} />
 
       {/* Click SFX — on send */}
       {[T.START_SEND, T.READY_SEND, T.ANSWER_SEND, T.HINT_SEND, T.CHECK1_SEND, T.CHECK2_SEND].map((f, i) => (
@@ -524,38 +533,113 @@ export const AITutorDemo: React.FC = () => {
         <Sequence key={`tap-${i}`} from={T.CODE_TYPE_START + i * 14} durationInFrames={15}><Audio src={TAP_SFX} volume={0.08 + Math.random() * 0.04} /></Sequence>
       ))}
 
-      {/* ═══ HOOK — single flowing scene, all lines on same background ═══ */}
-      {frame < T.HOOK_OUT + 30 && (
-        <AbsoluteFill style={{
-          background: "radial-gradient(ellipse at 50% 50%, #0e2a2a 0%, #0a0a12 70%)",
-          justifyContent: "center", alignItems: "center", flexDirection: "column",
-        }}>
-          {/* Line 1: "If you don't like to solo" */}
-          <div style={{ opacity: hookL1Op, transform: `translateY(${hookL1Y}px)`, textAlign: "center" }}>
-            <h1 style={{ fontFamily: fonts.heading, fontSize: 72, fontWeight: 800, margin: 0, color: "#fff", letterSpacing: "-0.02em" }}>
-              If you don't like to <span style={{ color: "#555", fontStyle: "italic" }}>solo</span>
-            </h1>
-          </div>
-          {/* Line 2: "your Solidity education" */}
-          <div style={{ opacity: hookL2Op, transform: `translateY(${hookL2Y}px)`, textAlign: "center", marginTop: 10 }}>
-            <h2 style={{ fontFamily: fonts.heading, fontSize: 50, fontWeight: 500, margin: 0, color: "rgba(255,255,255,0.6)" }}>your Solidity education.</h2>
-          </div>
+      {/* ═══ COMBINED INTRO + HOOK — SRE gradient background ═══ */}
+      {frame < T.HOOK_OUT + 30 && (() => {
+        // Intro sprite animations
+        const introFadeIn = interpolate(frame, [0, 12], [0, 1], EC);
+        const spriteScale = spring({ frame, fps, config: { damping: 14, mass: 0.8 } });
+        const titleOp = interpolate(frame, [18, 38], [0, 1], EC);
+        const titleY = interpolate(frame, [18, 38], [15, 0], { ...EC, easing: Easing.out(Easing.cubic) });
+        // Whole scene fades out at HOOK_OUT
+        const sceneOut = interpolate(frame, [T.HOOK_OUT, T.HOOK_OUT + 25], [1, 0], EC);
 
-          {/* Spacer between the two ideas */}
-          <div style={{ height: 36 }} />
+        return (
+          <AbsoluteFill style={{
+            background: `linear-gradient(180deg, ${colors.bgPrimary} 0%, ${colors.bgSecondary} 100%)`,
+            opacity: introFadeIn * sceneOut,
+            zIndex: 60,
+          }}>
+            {/* Floating background particles */}
+            {Array.from({ length: 8 }, (_, i) => {
+              const baseX = (i * 240 + 80) % 1920;
+              const baseY = 80 + (i * 170) % 750;
+              const offsetY = Math.sin(frame * 0.03 + i * 1.2) * 25;
+              const sz = 6 + (i % 4) * 5;
+              return (
+                <div key={`p-${i}`} style={{
+                  position: "absolute", left: baseX, top: baseY + offsetY,
+                  width: sz, height: sz, borderRadius: 2,
+                  background: i % 2 === 0 ? colors.accent : colors.primaryLight,
+                  opacity: 0.15, zIndex: 0,
+                }} />
+              );
+            })}
+            {/* ── Top half: Sprite + Title (in white area) ── */}
+            <div style={{
+              position: "absolute",
+              top: -38, left: 0, right: 0,
+              height: "50%",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center",
+            }}>
+              <div style={{ transform: `scale(${spriteScale})`, marginBottom: 36 }}>
+                <PixelGirlSprite size={240} />
+              </div>
+              <div style={{
+                opacity: titleOp,
+                transform: `translateY(${titleY}px)`,
+              }}>
+                <h1 style={{
+                  fontFamily: serifFont,
+                  fontSize: 108,
+                  fontWeight: 700,
+                  color: colors.textPrimary,
+                  margin: 0,
+                  letterSpacing: "-0.02em",
+                }}>
+                  AI Tutor mode
+                </h1>
+              </div>
+            </div>
 
-          {/* Line 3: "You can now activate duo mode" */}
-          <div style={{ opacity: duoL1Op, transform: `translateY(${duoL1Y}px)`, textAlign: "center" }}>
-            <h1 style={{ fontFamily: fonts.heading, fontSize: 62, fontWeight: 800, margin: 0, color: "#fff" }}>
-              You can now activate <span style={{ color: colors.accent }}>duo</span> mode
-            </h1>
-          </div>
-          {/* Line 4: "and speedrun it with your agent" */}
-          <div style={{ opacity: duoL2Op, transform: `translateY(${duoL2Y}px)`, textAlign: "center", marginTop: 14 }}>
-            <h2 style={{ fontFamily: fonts.heading, fontSize: 54, fontWeight: 700, margin: 0, color: colors.accent }}>and speedrun it with your agent!</h2>
-          </div>
-        </AbsoluteFill>
-      )}
+            <div style={{
+              position: "absolute",
+              bottom: 38, left: 0, right: 0,
+              height: "50%",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center",
+            }}>
+              {/* Line 1: "If you don't like to solo" */}
+              <div style={{ opacity: hookL1Op, transform: `translateY(${hookL1Y}px)`, textAlign: "center" }}>
+                <h1 style={{ fontFamily: fonts.heading, fontSize: 64, fontWeight: 800, margin: 0, color: colors.textPrimary, letterSpacing: "-0.02em" }}>
+                  If you don't like to <span style={{ color: colors.textMuted, fontStyle: "italic" }}>solo</span>
+                </h1>
+              </div>
+              {/* Line 2: "your Solidity education" */}
+              <div style={{ opacity: hookL2Op, transform: `translateY(${hookL2Y}px)`, textAlign: "center", marginTop: 8 }}>
+                <h2 style={{ fontFamily: fonts.heading, fontSize: 44, fontWeight: 500, margin: 0, color: colors.textSecondary }}>your Solidity education.</h2>
+              </div>
+
+              {/* Spacer */}
+              <div style={{ height: 28 }} />
+
+              {/* Line 3: "You can now activate AI Tutor" */}
+              <div style={{ opacity: duoL1Op, transform: `translateY(${duoL1Y}px)`, textAlign: "center" }}>
+                <h1 style={{ fontFamily: fonts.heading, fontSize: 56, fontWeight: 800, margin: 0, color: colors.textPrimary }}>
+                  You can now activate <span style={{ color: colors.primary }}>AI Tutor</span>
+                </h1>
+              </div>
+              {/* Line 4: "and speedrun it in duo" */}
+              <div style={{ opacity: duoL2Op, transform: `translateY(${duoL2Y}px)`, textAlign: "center", marginTop: 12 }}>
+                <h2 style={{ fontFamily: fonts.heading, fontSize: 48, fontWeight: 700, margin: 0, color: colors.primary }}>and speedrun it in duo</h2>
+              </div>
+            </div>
+            {/* Bottom teal bar */}
+            <div style={{
+              position: "absolute",
+              bottom: 0,
+              width: "100%",
+              height: 60,
+              background: `linear-gradient(180deg, ${colors.accent}44, ${colors.primary})`,
+              zIndex: 0,
+            }} />
+          </AbsoluteFill>
+        );
+      })()}
 
       {/* ═══ USE-CASE TITLE CARDS (full-screen overlays) ═══ */}
       {UC_CARDS.map((uc) => <UseCaseCard key={uc.num} {...uc} frame={frame} startFrame={uc.start} endFrame={uc.end} fps={fps} />)}
@@ -629,16 +713,76 @@ export const AITutorDemo: React.FC = () => {
 
       {/* ═══ OUTRO ═══ */}
       {frame >= T.OUTRO && (
-        <AbsoluteFill style={{ justifyContent: "center", alignItems: "center", flexDirection: "column", opacity: outroOp, zIndex: 30, background: "radial-gradient(ellipse at 50% 45%, #0e2a2a 0%, #0a0a12 70%)" }}>
-          <div style={{ transform: `scale(${ctaScale})`, textAlign: "center" }}>
-            <h1 style={{ fontFamily: serifFont, color: "#fff", fontSize: 96, margin: 0, fontWeight: 700, letterSpacing: "-0.02em", lineHeight: 1.2 }}>
-              Learn Solidity with<br /><span style={{ color: colors.accent }}>your AI tutor</span>
+        <AbsoluteFill style={{
+          background: `linear-gradient(180deg, ${colors.bgPrimary} 0%, ${colors.bgSecondary} 100%)`,
+          opacity: outroOp,
+          zIndex: 30,
+        }}>
+          {/* Floating background particles */}
+          {Array.from({ length: 8 }, (_, i) => {
+            const baseX = (i * 240 + 80) % 1920;
+            const baseY = 80 + (i * 170) % 750;
+            const offsetY = Math.sin(frame * 0.03 + i * 1.2) * 25;
+            const sz = 6 + (i % 4) * 5;
+            return (
+              <div key={`op-${i}`} style={{
+                position: "absolute", left: baseX, top: baseY + offsetY,
+                width: sz, height: sz, borderRadius: 2,
+                background: i % 2 === 0 ? colors.accent : colors.primaryLight,
+                opacity: 0.15, zIndex: 0,
+              }} />
+            );
+          })}
+          {/* ── Top: Sprite + speedrunethereum.com ── */}
+          <div style={{
+            position: "absolute",
+            top: -76, left: 0, right: 0,
+            height: "40%",
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "center",
+            alignItems: "center",
+            gap: 32,
+            transform: `scale(${ctaScale})`,
+          }}>
+            <PixelGirlSprite size={160} />
+            <h2 style={{
+              fontFamily: fonts.heading,
+              fontSize: 48,
+              fontWeight: 700,
+              color: colors.primary,
+              margin: 0,
+              letterSpacing: "-0.01em",
+            }}>
+              speedrunethereum.com
+            </h2>
+          </div>
+
+          {/* ── Center: Main CTA text ── */}
+          <div style={{
+            position: "absolute",
+            top: "calc(40% - 76px)", left: 0, right: 0,
+            height: "60%",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+            transform: `scale(${ctaScale})`,
+          }}>
+            <h1 style={{ fontFamily: serifFont, color: colors.textPrimary, fontSize: 96, margin: 0, fontWeight: 700, letterSpacing: "-0.02em", lineHeight: 1.2, textAlign: "center" }}>
+              Learn Solidity with<br /><span style={{ color: colors.primary }}>your AI tutor</span>
             </h1>
-            <p style={{ fontFamily: fonts.body, color: "rgba(255,255,255,0.5)", fontSize: 33, marginTop: 30 }}>Interactive challenges · Code reviews · Guided learning</p>
+            <p style={{ fontFamily: fonts.body, color: colors.textSecondary, fontSize: 33, marginTop: 30, textAlign: "center" }}>Interactive challenges · Code reviews · Guided learning</p>
           </div>
-          <div style={{ marginTop: 70, backgroundColor: colors.primary, padding: "27px 78px", borderRadius: 100, boxShadow: `0 12px 36px ${colors.accentGlow}`, transform: `scale(${spring({ frame: Math.max(0, frame - T.OUTRO - 40), fps, config: { damping: 18, mass: 0.8 } })})` }}>
-            <span style={{ fontFamily: fonts.heading, color: "#fff", fontSize: 42, fontWeight: 700 }}>speedrunethereum.com</span>
-          </div>
+          {/* Bottom teal bar */}
+          <div style={{
+            position: "absolute",
+            bottom: 0,
+            width: "100%",
+            height: 60,
+            background: `linear-gradient(180deg, ${colors.accent}44, ${colors.primary})`,
+            zIndex: 0,
+          }} />
         </AbsoluteFill>
       )}
     </AbsoluteFill>
