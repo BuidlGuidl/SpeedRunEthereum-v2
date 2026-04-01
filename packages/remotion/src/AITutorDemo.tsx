@@ -14,7 +14,7 @@ import { fonts, colors } from "./theme";
 
 const { fontFamily: serifFont } = loadFont();
 const CLICK_SFX = staticFile("sfx/confirmation.ogg");
-const TAP_SFX = staticFile("sfx/key-tap.mp3");
+const TAP_SFX = staticFile("mechanical-keyboard.mp3");
 const EC = { extrapolateLeft: "clamp" as const, extrapolateRight: "clamp" as const };
 
 // ── Intro duration (frames @ 30fps) ──────────────────────
@@ -26,7 +26,7 @@ const INTRO_DUR = 105; // 3.5 seconds for sprite intro card
 // finishes streaming before the next user action begins.
 const _T = {
   // HOOK — single flowing intro (~6s)
-  HOOK_L1: 15,       // "If you don't like to solo"
+  HOOK_L1: 15,       // "If you don't want to solo"
   HOOK_L2: 55,       // "your Solidity education anymore."
   DUO_L1: 100,       // "Now you can duo with your agent"
   DUO_L2: 130,       // "and speedrun it!"
@@ -187,16 +187,16 @@ function getCamera(f: number): { scale: number; ox: number; oy: number; tx: numb
 
 // ── Use-case cards (full-screen title overlays) ─────────
 const UC_CARDS = [
-  { start: T.UC1, end: T.UC1_END, num: "01", title: "Learn Ethereum's gotchas", sub: "Your AI tutor explains concepts and edge cases", badgeTitle: "Learn gotchas" },
-  { start: T.UC2, end: T.UC2_END, num: "02", title: "Prove you understand", sub: "Answer questions to show you get it", badgeTitle: "Prove understanding" },
-  { start: T.UC3, end: T.UC3_END, num: "03", title: "Get hints when stuck", sub: "Ask for help when something's unclear", badgeTitle: "Get hints" },
+  { start: T.UC1, end: T.UC1_END, num: "01", title: "Learn Ethereum's gotchas", sub: "Your AI breaks down concepts and edge cases", badgeTitle: "Learn gotchas" },
+  { start: T.UC2, end: T.UC2_END, num: "02", title: "Test your knowledge", sub: "Answer quick questions to validate your knowledge", badgeTitle: "Test knowledge" },
+  { start: T.UC3, end: T.UC3_END, num: "03", title: "Get hints when stuck", sub: "Ask your tutor for targeted hints", badgeTitle: "Get hints" },
   { start: T.UC4, end: T.UC4_END, num: "04", title: "Code. Check. Fix.", sub: "Write code and get real-time reviews", badgeTitle: "Code. Check. Fix." },
 ];
 
 // ── Persistent stage ranges (badge stays visible for entire stage) ──
 const STAGE_RANGES = [
   { num: "01", title: "Learn Ethereum's gotchas", start: T.UC1_END, end: T.UC2 },
-  { num: "02", title: "Prove you understand", start: T.UC2_END, end: T.UC3 },
+  { num: "02", title: "Test your knowledge", start: T.UC2_END, end: T.UC3 },
   { num: "03", title: "Get hints when stuck", start: T.UC3_END, end: T.UC4 },
   { num: "04", title: "Code. Check. Fix.", start: T.UC4_END, end: T.OUTRO },
 ];
@@ -356,7 +356,7 @@ const UseCaseCard: React.FC<{
   // Subtitle fades early in shrink — animate opacity, margin, and height together
   const subOp = interpolate(shrinkProg, [0, 0.35], [1, 0], EC);
   const subMargin = interpolate(shrinkProg, [0, 0.35], [20, 0], EC);
-  const subMaxH = interpolate(shrinkProg, [0, 0.35], [60, 0], EC);
+  const subMaxH = interpolate(shrinkProg, [0, 0.35], [120, 0], EC);
 
   // Background and padding
   const bgOp = interpolate(shrinkProg, [0, 0.5], [0.92, 0.85], EC);
@@ -528,10 +528,23 @@ export const AITutorDemo: React.FC = () => {
       {[T.START_SEND, T.READY_SEND, T.ANSWER_SEND, T.HINT_SEND, T.CHECK1_SEND, T.CHECK2_SEND].map((f, i) => (
         <Sequence key={`clk-${i}`} from={f} durationInFrames={30}><Audio src={CLICK_SFX} volume={0.2} /></Sequence>
       ))}
-      {/* Typing SFX — soft taps during code writing */}
-      {Array.from({ length: Math.floor((T.CODE_TYPE_END - T.CODE_TYPE_START) / 14) }).map((_, i) => (
-        <Sequence key={`tap-${i}`} from={T.CODE_TYPE_START + i * 14} durationInFrames={15}><Audio src={TAP_SFX} volume={0.08 + Math.random() * 0.04} /></Sequence>
-      ))}
+      {/* Typing SFX — continuous mechanical typing loop during code writing */}
+      <Sequence from={T.CODE_TYPE_START} durationInFrames={T.CODE_TYPE_END - T.CODE_TYPE_START}>
+        {Array.from({ length: 3 }).map((_, i) => (
+          <Sequence key={`type-loop-${i}`} from={i * 90}>
+            <Audio src={TAP_SFX} volume={0.15} />
+          </Sequence>
+        ))}
+      </Sequence>
+      {/* Typing SFX — user chat input fast typing */}
+      {INPUT_ACTIONS.map((action, idx) => {
+        const dur = action.sendFrame - action.typeStartFrame;
+        return (
+          <Sequence key={`usr-tap-${idx}`} from={action.typeStartFrame} durationInFrames={dur}>
+            <Audio src={TAP_SFX} volume={0.15} />
+          </Sequence>
+        );
+      })}
 
       {/* ═══ COMBINED INTRO + HOOK — SRE gradient background ═══ */}
       {frame < T.HOOK_OUT + 30 && (() => {
@@ -603,10 +616,10 @@ export const AITutorDemo: React.FC = () => {
               justifyContent: "center",
               alignItems: "center",
             }}>
-              {/* Line 1: "If you don't like to solo" */}
+              {/* Line 1: "If you don't want to solo" */}
               <div style={{ opacity: hookL1Op, transform: `translateY(${hookL1Y}px)`, textAlign: "center" }}>
                 <h1 style={{ fontFamily: fonts.heading, fontSize: 64, fontWeight: 800, margin: 0, color: colors.textPrimary, letterSpacing: "-0.02em" }}>
-                  If you don't like to <span style={{ color: colors.textMuted, fontStyle: "italic" }}>solo</span>
+                  If you don't want to <span style={{ color: colors.textMuted, fontStyle: "italic" }}>solo</span>
                 </h1>
               </div>
               {/* Line 2: "your Solidity education" */}
@@ -617,10 +630,10 @@ export const AITutorDemo: React.FC = () => {
               {/* Spacer */}
               <div style={{ height: 28 }} />
 
-              {/* Line 3: "You can now activate AI Tutor" */}
+              {/* Line 3: "You can now activate AI Tutor mode" */}
               <div style={{ opacity: duoL1Op, transform: `translateY(${duoL1Y}px)`, textAlign: "center" }}>
                 <h1 style={{ fontFamily: fonts.heading, fontSize: 56, fontWeight: 800, margin: 0, color: colors.textPrimary }}>
-                  You can now activate <span style={{ color: colors.primary }}>AI Tutor</span>
+                  You can now activate <span style={{ color: colors.primary }}>AI Tutor mode</span>
                 </h1>
               </div>
               {/* Line 4: "and speedrun it in duo" */}
@@ -745,7 +758,9 @@ export const AITutorDemo: React.FC = () => {
             gap: 32,
             transform: `scale(${ctaScale})`,
           }}>
-            <PixelGirlSprite size={160} />
+            <Sequence from={T.OUTRO} layout="none">
+              <PixelGirlSprite size={160} />
+            </Sequence>
             <h2 style={{
               fontFamily: fonts.heading,
               fontSize: 48,
@@ -761,12 +776,13 @@ export const AITutorDemo: React.FC = () => {
           {/* ── Center: Main CTA text ── */}
           <div style={{
             position: "absolute",
-            top: "calc(40% - 76px)", left: 0, right: 0,
-            height: "60%",
+            top: 0, left: 0, right: 0,
+            height: "100%",
             display: "flex",
             flexDirection: "column",
             justifyContent: "center",
             alignItems: "center",
+            paddingTop: "6%", // Pushes it slightly below true center, but much higher than before
             transform: `scale(${ctaScale})`,
           }}>
             <h1 style={{ fontFamily: serifFont, color: colors.textPrimary, fontSize: 96, margin: 0, fontWeight: 700, letterSpacing: "-0.02em", lineHeight: 1.2, textAlign: "center" }}>
