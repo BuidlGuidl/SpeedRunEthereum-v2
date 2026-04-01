@@ -55,6 +55,15 @@ const SendArrow: React.FC<{ active: boolean }> = ({ active }) => (
 );
 
 // ── Component ──────────────────────────────────────────
+// Helper: smoothly compute displayed character count to avoid integer jumps
+// Uses linear interpolation between whole characters so the last char fades in
+function smoothCharCount(elapsed: number, charsPerFrame: number, totalChars: number): { count: number; partialOpacity: number } {
+  const rawChars = elapsed * charsPerFrame;
+  const count = Math.min(Math.floor(rawChars), totalChars);
+  const partialOpacity = count < totalChars ? Math.min(rawChars - count, 1) : 0;
+  return { count, partialOpacity };
+}
+
 export const CursorChatPanel: React.FC<Props> = ({
   messages,
   inputActions,
@@ -94,7 +103,7 @@ export const CursorChatPanel: React.FC<Props> = ({
     if (msg.role === "ai" && msg.streamCharsPerFrame) {
       const elapsed = Math.max(0, frame - msg.appearFrame);
       displayedLen = Math.min(
-        Math.floor(elapsed * msg.streamCharsPerFrame),
+        Math.round(elapsed * msg.streamCharsPerFrame),
         msg.text.length
       );
     }
@@ -168,7 +177,6 @@ export const CursorChatPanel: React.FC<Props> = ({
             flexDirection: "column",
             gap: 16,
             transform: `translateY(-${scrollY}px)`,
-            transition: "transform 0.3s ease",
           }}
         >
           {visibleMessages.map((msg) => {
@@ -179,15 +187,18 @@ export const CursorChatPanel: React.FC<Props> = ({
               config: { damping: 14 },
             });
 
-            // For AI messages, stream text
+            // For AI messages, stream text with sub-character smoothing
             let displayText = msg.text;
+            let nextCharOpacity = 0;
+            let nextChar = '';
             if (!isUser && msg.streamCharsPerFrame) {
               const elapsed = Math.max(0, frame - msg.appearFrame);
-              const chars = Math.min(
-                Math.floor(elapsed * msg.streamCharsPerFrame),
-                msg.text.length
-              );
-              displayText = msg.text.slice(0, chars);
+              const { count, partialOpacity } = smoothCharCount(elapsed, msg.streamCharsPerFrame, msg.text.length);
+              displayText = msg.text.slice(0, count);
+              if (count < msg.text.length && partialOpacity > 0) {
+                nextChar = msg.text[count];
+                nextCharOpacity = partialOpacity;
+              }
             }
 
             return (
@@ -210,13 +221,14 @@ export const CursorChatPanel: React.FC<Props> = ({
                     marginBottom: 8,
                     fontWeight: 600,
                     display: "flex",
-                    alignItems: "center",
+                    alignItems: "baseline",
                     gap: 6,
+                    lineHeight: 1,
                   }}
                 >
                   {isUser ? "You" : "🤖 AI Tutor"}
                   {!isUser && (
-                    <span style={{ color: COLORS.textDim, fontWeight: 400, fontSize: 15 }}>
+                    <span style={{ color: COLORS.textDim, fontWeight: 400, fontSize: 15, lineHeight: 1 }}>
                       Claude Opus 4.6
                     </span>
                   )}
@@ -238,6 +250,9 @@ export const CursorChatPanel: React.FC<Props> = ({
                   }}
                 >
                   {displayText}
+                  {nextCharOpacity > 0 && (
+                    <span style={{ opacity: nextCharOpacity }}>{nextChar}</span>
+                  )}
                 </div>
               </div>
             );

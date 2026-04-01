@@ -8,6 +8,7 @@ import { CodeEditor } from "./components/CodeEditor";
 import { CursorChatPanel, ChatMsg, InputAction } from "./components/CursorChatPanel";
 import { CursorIDEChrome } from "./components/CursorIDEChrome";
 import { AnimatedCursor } from "./components/AnimatedCursor";
+import { Confetti } from "./components/Confetti";
 import { fonts, colors } from "./theme";
 
 const { fontFamily: serifFont } = loadFont();
@@ -68,7 +69,7 @@ const T = {
   SUCCESS: 2664,
 
   // OUTRO — 5s hold
-  OUTRO: 2694, END: 2844,
+  OUTRO: 2764, END: 2914,
 };
 export const AITUTOR_TOTAL_DURATION = T.END;
 
@@ -110,8 +111,7 @@ const CHAT_TX = calcRightAnchorTx(STAGE_ZOOM_CHAT.scale, STAGE_ZOOM_CHAT.ox);
 type Z7 = [number, number, number, number, number, number, number];
 const ZOOMS: Z7[] = [
   [T.CODE_PUSH, T.CODE_PUSH + 50, T.CODE_RETURN, T.CODE_RETURN + 50, 1.18, 35, 60],
-  [T.BUG_HL - 10, T.BUG_HL + 35, T.FIX_STEP1 - 10, T.FIX_STEP1, 1.15, 35, 55],
-  [T.FIX_STEP1, T.FIX_STEP1 + 45, T.FIX_STEP2 + 40, T.FIX_STEP2 + 90, 1.12, 35, 30],
+  [T.BUG_HL - 10, T.BUG_HL + 35, T.FIX_STEP2 + 5, T.CHECK2_TYPE - 5, 1.15, 35, 42],
   [T.AI_TESTS + 15, T.AI_TESTS + 60, T.SUCCESS - 5, T.SUCCESS + 30, 1.10, 78, 55],
 ];
 
@@ -329,8 +329,8 @@ const UseCaseCard: React.FC<{
   const s = spring({ frame: Math.max(0, frame - startFrame), fps, config: { damping: 18, mass: 0.8 } });
 
   // Stop rendering at endFrame — StageBadge takes over
-  // Fade out last 5 frames for clean crossfade
-  const fadeOut = interpolate(frame, [endFrame - 5, endFrame], [1, 0], EC);
+  // Fade out over 25 frames for a slow, smooth disappearance
+  const fadeOut = interpolate(frame, [endFrame - 25, endFrame], [1, 0], EC);
   if (fadeIn <= 0 || frame >= endFrame) return null;
 
   // Sub-phase A: shrink at center (holdEnd → shrinkEnd)
@@ -344,8 +344,10 @@ const UseCaseCard: React.FC<{
   // Scale: shrinks from 1 to 0.58 during sub-phase A
   const scale = interpolate(shrinkProg, [0, 1], [1, 0.58]);
 
-  // Subtitle fades early in shrink
+  // Subtitle fades early in shrink — animate opacity, margin, and height together
   const subOp = interpolate(shrinkProg, [0, 0.35], [1, 0], EC);
+  const subMargin = interpolate(shrinkProg, [0, 0.35], [20, 0], EC);
+  const subMaxH = interpolate(shrinkProg, [0, 0.35], [60, 0], EC);
 
   // Background and padding
   const bgOp = interpolate(shrinkProg, [0, 0.5], [0.92, 0.85], EC);
@@ -378,9 +380,9 @@ const UseCaseCard: React.FC<{
       }}>
         <div style={{ color: colors.accent, fontSize: 39, fontFamily: fonts.mono, fontWeight: 700, marginBottom: numMb, letterSpacing: 2, opacity: 0.8 }}>{num}</div>
         <h2 style={{ color: "#fff", fontSize: 81, fontFamily: fonts.heading, fontWeight: 800, margin: 0, letterSpacing: "-0.02em", whiteSpace: "nowrap" }}>{title}</h2>
-        {subOp > 0.01 && (
-          <p style={{ color: "rgba(255,255,255,0.45)", fontSize: 35, fontFamily: fonts.body, margin: "20px 0 0 0", opacity: subOp }}>{sub}</p>
-        )}
+        <div style={{ overflow: "hidden", maxHeight: subMaxH, marginTop: subMargin }}>
+          <p style={{ color: "rgba(255,255,255,0.45)", fontSize: 35, fontFamily: fonts.body, margin: 0, opacity: subOp }}>{sub}</p>
+        </div>
       </div>
     </AbsoluteFill>
   );
@@ -610,29 +612,32 @@ export const AITutorDemo: React.FC = () => {
         </div>
       )}
 
-      {/* ═══ SUCCESS ═══ */}
+      {/* ═══ SUCCESS + CONFETTI ═══ */}
       {frame >= T.SUCCESS && frame < T.OUTRO + 10 && (
-        <AbsoluteFill style={{ justifyContent: "center", alignItems: "center", pointerEvents: "none", zIndex: 20, opacity: successOp }}>
-          <div style={{ backgroundColor: "rgba(8,132,132,0.94)", padding: "20px 60px", borderRadius: 100, transform: `scale(${successScale})`, boxShadow: "0 16px 48px rgba(8,132,132,0.3)", display: "flex", alignItems: "center", gap: 16 }}>
-            <div style={{ width: 38, height: 38, borderRadius: "50%", backgroundColor: "#fff", display: "flex", justifyContent: "center", alignItems: "center" }}>
-              <span style={{ color: colors.primary, fontSize: 22, fontWeight: "bold" }}>✓</span>
+        <>
+          <Confetti startFrame={T.SUCCESS} durationFrames={T.OUTRO - T.SUCCESS} />
+          <AbsoluteFill style={{ justifyContent: "center", alignItems: "center", pointerEvents: "none", zIndex: 20, opacity: successOp }}>
+            <div style={{ backgroundColor: "rgba(8,132,132,0.94)", padding: "20px 60px", borderRadius: 100, transform: `scale(${successScale})`, boxShadow: "0 16px 48px rgba(8,132,132,0.3)", display: "flex", alignItems: "center", gap: 16 }}>
+              <div style={{ width: 38, height: 38, borderRadius: "50%", backgroundColor: "#fff", display: "flex", justifyContent: "center", alignItems: "center" }}>
+                <span style={{ color: colors.primary, fontSize: 22, fontWeight: "bold" }}>✓</span>
+              </div>
+              <span style={{ color: "#fff", fontSize: 42, fontFamily: fonts.heading, fontWeight: 800 }}>Checkpoint 1 Complete!</span>
             </div>
-            <span style={{ color: "#fff", fontSize: 42, fontFamily: fonts.heading, fontWeight: 800 }}>Checkpoint 1 Complete!</span>
-          </div>
-        </AbsoluteFill>
+          </AbsoluteFill>
+        </>
       )}
 
       {/* ═══ OUTRO ═══ */}
       {frame >= T.OUTRO && (
         <AbsoluteFill style={{ justifyContent: "center", alignItems: "center", flexDirection: "column", opacity: outroOp, zIndex: 30, background: "radial-gradient(ellipse at 50% 45%, #0e2a2a 0%, #0a0a12 70%)" }}>
           <div style={{ transform: `scale(${ctaScale})`, textAlign: "center" }}>
-            <h1 style={{ fontFamily: serifFont, color: "#fff", fontSize: 64, margin: 0, fontWeight: 700, letterSpacing: "-0.02em", lineHeight: 1.2 }}>
+            <h1 style={{ fontFamily: serifFont, color: "#fff", fontSize: 96, margin: 0, fontWeight: 700, letterSpacing: "-0.02em", lineHeight: 1.2 }}>
               Learn Solidity with<br /><span style={{ color: colors.accent }}>your AI tutor</span>
             </h1>
-            <p style={{ fontFamily: fonts.body, color: "rgba(255,255,255,0.5)", fontSize: 22, marginTop: 20 }}>Interactive challenges · Code reviews · Guided learning</p>
+            <p style={{ fontFamily: fonts.body, color: "rgba(255,255,255,0.5)", fontSize: 33, marginTop: 30 }}>Interactive challenges · Code reviews · Guided learning</p>
           </div>
-          <div style={{ marginTop: 55, backgroundColor: colors.primary, padding: "18px 52px", borderRadius: 100, boxShadow: `0 12px 36px ${colors.accentGlow}`, transform: `scale(${spring({ frame: Math.max(0, frame - T.OUTRO - 40), fps, config: { damping: 18, mass: 0.8 } })})` }}>
-            <span style={{ fontFamily: fonts.heading, color: "#fff", fontSize: 28, fontWeight: 700 }}>SpeedRunEthereum.com</span>
+          <div style={{ marginTop: 70, backgroundColor: colors.primary, padding: "27px 78px", borderRadius: 100, boxShadow: `0 12px 36px ${colors.accentGlow}`, transform: `scale(${spring({ frame: Math.max(0, frame - T.OUTRO - 40), fps, config: { damping: 18, mass: 0.8 } })})` }}>
+            <span style={{ fontFamily: fonts.heading, color: "#fff", fontSize: 42, fontWeight: 700 }}>speedrunethereum.com</span>
           </div>
         </AbsoluteFill>
       )}
