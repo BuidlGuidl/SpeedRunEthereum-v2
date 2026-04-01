@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { convertToModelMessages, streamText } from "ai";
-import { fetchGithubAgentsMd, fetchGithubChallengeReadme } from "~~/services/github";
+import { fetchGithubAgentsMd, fetchGithubChallengeReadme, fetchGithubChallengeYaml } from "~~/services/github";
 import { getChatModel } from "~~/utils/ai/models";
 import { buildChatSystemPrompt } from "~~/utils/ai/system-prompt";
 import { isAdminSession } from "~~/utils/auth";
@@ -21,17 +21,20 @@ export async function POST(req: NextRequest) {
 
   let agentsMd: string | null = null;
   let readme: string | null = null;
+  let challengeYaml: string | null = null;
 
   if (github) {
-    const [agentsResult, readmeResult] = await Promise.allSettled([
+    const [agentsResult, readmeResult, yamlResult] = await Promise.allSettled([
       fetchGithubAgentsMd(github),
       fetchGithubChallengeReadme(github),
+      fetchGithubChallengeYaml(github),
     ]);
     agentsMd = agentsResult.status === "fulfilled" ? agentsResult.value : null;
     readme = readmeResult.status === "fulfilled" ? readmeResult.value : null;
+    challengeYaml = yamlResult.status === "fulfilled" ? yamlResult.value : null;
   }
 
-  const systemPrompt = buildChatSystemPrompt(agentsMd, readme, challengeId);
+  const systemPrompt = buildChatSystemPrompt(agentsMd, readme, challengeId, challengeYaml);
 
   // Convert UIMessages (from client's useChat) to ModelMessages (for streamText)
   const modelMessages = await convertToModelMessages(messages);
