@@ -1,11 +1,61 @@
 "use client";
 
-import { FormEvent, useEffect, useMemo, useRef, useState } from "react";
+import { FormEvent, KeyboardEvent, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useChat } from "@ai-sdk/react";
 import { DefaultChatTransport } from "ai";
-import Markdown from "react-markdown";
-import { ChatBubbleLeftRightIcon, PaperAirplaneIcon, SparklesIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import Markdown, { Components } from "react-markdown";
+import {
+  ArrowPathIcon,
+  ChatBubbleLeftRightIcon,
+  CheckIcon,
+  ClipboardDocumentIcon,
+  PaperAirplaneIcon,
+  SparklesIcon,
+  XMarkIcon,
+} from "@heroicons/react/24/outline";
 import { useAuthSession } from "~~/hooks/useAuthSession";
+
+// TODO: Updte / cleanup the logic in this file since some of this can be achived by already present hooks like usehooks-ts or simpler approch.
+function CopyButton({ text }: { text: string }) {
+  const [copied, setCopied] = useState(false);
+
+  const handleCopy = useCallback(async () => {
+    await navigator.clipboard.writeText(text);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  }, [text]);
+
+  return (
+    <button
+      onClick={handleCopy}
+      className="absolute top-2 right-2 p-1 rounded bg-base-300/80 hover:bg-base-300 transition-colors opacity-0 group-hover:opacity-100"
+      aria-label="Copy code"
+    >
+      {copied ? (
+        <CheckIcon className="w-3.5 h-3.5 text-success" />
+      ) : (
+        <ClipboardDocumentIcon className="w-3.5 h-3.5 text-base-content/60" />
+      )}
+    </button>
+  );
+}
+
+const markdownComponents: Components = {
+  pre({ children, ...props }) {
+    const codeElement = children as React.ReactElement<{ children?: string }>;
+    const codeText =
+      typeof codeElement === "object" && codeElement?.props?.children
+        ? String(codeElement.props.children).replace(/\n$/, "")
+        : "";
+
+    return (
+      <div className="relative group">
+        <pre {...props}>{children}</pre>
+        {codeText && <CopyButton text={codeText} />}
+      </div>
+    );
+  },
+};
 
 type ChatWidgetProps = {
   challengeId: string;
@@ -17,7 +67,7 @@ export function ChatWidget({ challengeId, github }: ChatWidgetProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [input, setInput] = useState("");
   const messagesEndRef = useRef<HTMLDivElement>(null);
-  const inputRef = useRef<HTMLInputElement>(null);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const transport = useMemo(
     () =>
@@ -28,7 +78,7 @@ export function ChatWidget({ challengeId, github }: ChatWidgetProps) {
     [challengeId, github],
   );
 
-  const { messages, sendMessage, status, error } = useChat({ transport });
+  const { messages, sendMessage, setMessages, status, error } = useChat({ transport });
 
   const isStreaming = status === "streaming" || status === "submitted";
 
@@ -37,8 +87,35 @@ export function ChatWidget({ challengeId, github }: ChatWidgetProps) {
     const text = input.trim();
     if (!text || isStreaming) return;
     setInput("");
+    if (textareaRef.current) {
+      textareaRef.current.style.height = "auto";
+    }
     await sendMessage({ text });
   };
+
+  const handleKeyDown = (e: KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      handleSubmit(e as unknown as FormEvent);
+    }
+  };
+
+  const handleStartLearning = async () => {
+    await sendMessage({ text: "Let's start learning! Teach me the concepts." });
+  };
+
+  const handleReset = () => {
+    setMessages([]);
+  };
+
+  // Auto-resize textarea
+  useEffect(() => {
+    const textarea = textareaRef.current;
+    if (textarea) {
+      textarea.style.height = "auto";
+      textarea.style.height = `${Math.min(textarea.scrollHeight, 120)}px`;
+    }
+  }, [input]);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -46,7 +123,7 @@ export function ChatWidget({ challengeId, github }: ChatWidgetProps) {
 
   useEffect(() => {
     if (isOpen) {
-      const timer = setTimeout(() => inputRef.current?.focus(), 350);
+      const timer = setTimeout(() => textareaRef.current?.focus(), 350);
       return () => clearTimeout(timer);
     }
   }, [isOpen]);
@@ -87,13 +164,25 @@ export function ChatWidget({ challengeId, github }: ChatWidgetProps) {
               </p>
             </div>
           </div>
-          <button
-            onClick={() => setIsOpen(false)}
-            className="btn btn-xs btn-circle btn-ghost text-secondary-content hover:bg-primary/10 mt-[3px]"
-            aria-label="Close chat"
-          >
-            <XMarkIcon className="w-5 h-5" />
-          </button>
+          <div className="flex items-center gap-1 mt-[3px]">
+            {messages.length > 0 && (
+              <button
+                onClick={handleReset}
+                className="btn btn-xs btn-ghost text-secondary-content hover:bg-primary/10 tooltip tooltip-bottom"
+                data-tip="Start over"
+                aria-label="Start over"
+              >
+                <ArrowPathIcon className="w-4 h-4" />
+              </button>
+            )}
+            <button
+              onClick={() => setIsOpen(false)}
+              className="btn btn-xs btn-circle btn-ghost text-secondary-content hover:bg-primary/10"
+              aria-label="Close chat"
+            >
+              <XMarkIcon className="w-5 h-5" />
+            </button>
+          </div>
         </div>
 
         {/* Messages */}
@@ -104,14 +193,21 @@ export function ChatWidget({ challengeId, github }: ChatWidgetProps) {
                 <ChatBubbleLeftRightIcon className="w-7 h-7 text-primary" />
               </div>
               <div>
-                <p className="font-semibold text-base-content text-sm">Need help with this challenge?</p>
+                <p className="font-semibold text-base-content text-sm">Learn the concepts</p>
                 <p className="text-xs text-base-content/50 mt-1 max-w-[260px]">
-                  Ask a question and I&apos;ll guide you through it. I won&apos;t give you direct answers — learning by
-                  doing is the point!
+                  Get grounded on the concepts before you dive into the code. I&apos;ll explain what this challenge is
+                  about, then help you set it up locally.
                 </p>
               </div>
               <div className="flex flex-wrap gap-2 mt-1 justify-center">
-                {["Where do I start?", "Explain this concept", "I'm getting an error"].map(suggestion => (
+                <button
+                  onClick={handleStartLearning}
+                  disabled={isStreaming}
+                  className="text-[12px] font-medium px-4 py-2 rounded-full bg-primary text-primary-content hover:bg-primary/90 transition-colors disabled:opacity-40"
+                >
+                  Start Learning
+                </button>
+                {["Help me set up locally", "I'm getting an error"].map(suggestion => (
                   <button
                     key={suggestion}
                     onClick={() => setInput(suggestion)}
@@ -144,7 +240,11 @@ export function ChatWidget({ challengeId, github }: ChatWidgetProps) {
                   <div className="prose dark:prose-invert max-w-none overflow-hidden break-words [&>*:first-child]:mt-0 [&>*:last-child]:mb-0 [&>p]:my-1.5 [&>ul]:my-1.5 [&>ol]:my-1.5 [&_li]:my-0.5 [&_pre]:my-2 [&_pre]:overflow-x-auto [&_pre]:max-w-full">
                     {message.parts.map((part, i) => {
                       if (part.type === "text") {
-                        return <Markdown key={i}>{part.text}</Markdown>;
+                        return (
+                          <Markdown key={i} components={markdownComponents}>
+                            {part.text}
+                          </Markdown>
+                        );
                       }
                       return null;
                     })}
@@ -197,15 +297,16 @@ export function ChatWidget({ challengeId, github }: ChatWidgetProps) {
         {/* Input */}
         <form
           onSubmit={handleSubmit}
-          className="shrink-0 border-t border-primary/10 bg-white dark:bg-[#0f1729] px-4 py-3 flex gap-2 items-center"
+          className="shrink-0 border-t border-primary/10 bg-white dark:bg-[#0f1729] px-4 py-3 flex gap-2 items-end"
         >
-          <input
-            ref={inputRef}
-            type="text"
+          <textarea
+            ref={textareaRef}
             value={input}
             onChange={e => setInput(e.target.value)}
+            onKeyDown={handleKeyDown}
             placeholder="Ask about this challenge..."
-            className="input input-bordered input-sm flex-1 bg-base-200/50 dark:bg-[#1a2236] focus:border-primary/30 focus:outline-none text-sm placeholder:text-base-content/40"
+            rows={1}
+            className="textarea textarea-bordered textarea-sm flex-1 bg-base-200/50 dark:bg-[#1a2236] focus:border-primary/30 focus:outline-none text-sm placeholder:text-base-content/40 resize-none min-h-[36px] max-h-[120px] leading-[1.4]"
             disabled={isStreaming}
           />
           <button
