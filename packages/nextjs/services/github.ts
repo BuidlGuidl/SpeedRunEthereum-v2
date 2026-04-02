@@ -48,9 +48,9 @@ export async function fetchGithubAgentsMd(githubString: string): Promise<string 
   }
 }
 
-export async function fetchGithubChallengeYaml(githubString: string): Promise<string | null> {
+export async function fetchGithubConceptsYaml(githubString: string): Promise<string | null> {
   const { owner, repo, branch } = parseGithubUrl(githubString);
-  const apiUrl = `https://api.github.com/repos/${owner}/${repo}/contents/extension/.ai/CHALLENGE.yaml?ref=${branch}`;
+  const apiUrl = `https://api.github.com/repos/${owner}/${repo}/contents/extension/.ai/CONCEPTS.yaml?ref=${branch}`;
 
   const headers: Record<string, string> = {
     Accept: "application/vnd.github.v3+json",
@@ -65,7 +65,7 @@ export async function fetchGithubChallengeYaml(githubString: string): Promise<st
     const response = await fetch(apiUrl, {
       headers,
       cache: "force-cache",
-      next: { tags: [`github-challenge-yaml-${githubString}`] },
+      next: { tags: [`github-concepts-yaml-${githubString}`] },
     });
     if (!response.ok) return null;
 

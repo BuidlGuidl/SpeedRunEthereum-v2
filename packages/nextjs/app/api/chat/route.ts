@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { convertToModelMessages, streamText } from "ai";
-import { fetchGithubAgentsMd, fetchGithubChallengeReadme, fetchGithubChallengeYaml } from "~~/services/github";
+import { fetchGithubChallengeReadme, fetchGithubConceptsYaml } from "~~/services/github";
 import { getChatModel } from "~~/utils/ai/models";
 import { buildChatSystemPrompt } from "~~/utils/ai/system-prompt";
 import { isAdminSession } from "~~/utils/auth";
@@ -19,22 +19,19 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
   }
 
-  let agentsMd: string | null = null;
   let readme: string | null = null;
-  let challengeYaml: string | null = null;
+  let conceptsYaml: string | null = null;
 
   if (github) {
-    const [agentsResult, readmeResult, yamlResult] = await Promise.allSettled([
-      fetchGithubAgentsMd(github),
+    const [readmeResult, conceptsResult] = await Promise.allSettled([
       fetchGithubChallengeReadme(github),
-      fetchGithubChallengeYaml(github),
+      fetchGithubConceptsYaml(github),
     ]);
-    agentsMd = agentsResult.status === "fulfilled" ? agentsResult.value : null;
     readme = readmeResult.status === "fulfilled" ? readmeResult.value : null;
-    challengeYaml = yamlResult.status === "fulfilled" ? yamlResult.value : null;
+    conceptsYaml = conceptsResult.status === "fulfilled" ? conceptsResult.value : null;
   }
 
-  const systemPrompt = buildChatSystemPrompt(agentsMd, readme, challengeId, challengeYaml);
+  const systemPrompt = buildChatSystemPrompt(readme, challengeId, conceptsYaml);
 
   // Convert UIMessages (from client's useChat) to ModelMessages (for streamText)
   const modelMessages = await convertToModelMessages(messages);

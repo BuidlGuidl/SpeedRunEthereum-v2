@@ -80,7 +80,26 @@ export function ChatWidget({ challengeId, github }: ChatWidgetProps) {
 
   const { messages, sendMessage, setMessages, status, error } = useChat({ transport });
 
-  const isStreaming = status === "streaming" || status === "submitted";
+  // Track when we've submitted but status may not have caught up yet.
+  // This closes the race-condition gap where the user message appears
+  // in the array but status is still "ready" for one render cycle.
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  useEffect(() => {
+    // Once the SDK's own status catches up (submitted/streaming/error),
+    // our manual bridge flag is no longer needed.
+    if (status === "submitted" || status === "streaming" || status === "error") {
+      setIsSubmitting(false);
+    }
+  }, [status]);
+
+  // Also clear on error object appearing (covers edge case where
+  // sendMessage rejects but status doesn't transition)
+  useEffect(() => {
+    if (error) setIsSubmitting(false);
+  }, [error]);
+
+  const isStreaming = status === "streaming" || status === "submitted" || isSubmitting;
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -90,6 +109,7 @@ export function ChatWidget({ challengeId, github }: ChatWidgetProps) {
     if (textareaRef.current) {
       textareaRef.current.style.height = "auto";
     }
+    setIsSubmitting(true);
     await sendMessage({ text });
   };
 
@@ -101,11 +121,13 @@ export function ChatWidget({ challengeId, github }: ChatWidgetProps) {
   };
 
   const handleStartLearning = async () => {
+    setIsSubmitting(true);
     await sendMessage({ text: "Let's start learning! Teach me the concepts." });
   };
 
   const handleReset = () => {
     setMessages([]);
+    setIsSubmitting(false);
   };
 
   // Auto-resize textarea
@@ -238,16 +260,20 @@ export function ChatWidget({ challengeId, github }: ChatWidgetProps) {
               >
                 {message.role === "assistant" ? (
                   <div className="prose dark:prose-invert max-w-none overflow-hidden break-words [&>*:first-child]:mt-0 [&>*:last-child]:mb-0 [&>p]:my-1.5 [&>ul]:my-1.5 [&>ol]:my-1.5 [&_li]:my-0.5 [&_pre]:my-2 [&_pre]:overflow-x-auto [&_pre]:max-w-full">
-                    {message.parts.map((part, i) => {
-                      if (part.type === "text") {
-                        return (
-                          <Markdown key={i} components={markdownComponents}>
-                            {part.text}
-                          </Markdown>
-                        );
-                      }
-                      return null;
-                    })}
+                    {message.parts.some(p => p.type === "text" && p.text.trim().length > 0) ? (
+                      message.parts.map((part, i) => {
+                        if (part.type === "text") {
+                          return (
+                            <Markdown key={i} components={markdownComponents}>
+                              {part.text}
+                            </Markdown>
+                          );
+                        }
+                        return null;
+                      })
+                    ) : isStreaming ? (
+                      <span className="loading loading-dots loading-sm text-primary"></span>
+                    ) : null}
                   </div>
                 ) : (
                   message.parts.map((part, i) => {
@@ -259,7 +285,7 @@ export function ChatWidget({ challengeId, github }: ChatWidgetProps) {
             </div>
           ))}
 
-          {isStreaming && messages[messages.length - 1]?.role !== "assistant" && (
+          {isStreaming && messages[messages.length - 1]?.role === "user" && (
             <div className="chat chat-start">
               <div className="chat-image">
                 <div className="w-7 h-7 rounded-full bg-primary/15 flex items-center justify-center">
