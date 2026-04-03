@@ -21,8 +21,12 @@
     "vercel:yolo": "vercel --build-env YARN_ENABLE_IMMUTABLE_INSTALLS=false --build-env ENABLE_EXPERIMENTAL_COREPACK=1 --build-env NEXT_PUBLIC_IGNORE_BUILD_ERROR=true --build-env VERCEL_TELEMETRY_DISABLED=1"
   },
   "dependencies": {
+    "@ai-sdk/google": "^3.0.43",
+    "@ai-sdk/openai": "^3.0.41",
+    "@ai-sdk/react": "^3.0.118",
     "@heroicons/react": "~2.1.5",
     "@neondatabase/serverless": "^1.0.0",
+    "@openrouter/ai-sdk-provider": "^2.3.3",
     "@rainbow-me/rainbowkit": "^2.2.4",
     "@rainbow-me/rainbowkit-siwe-next-auth": "^0.5.0",
     "@tanstack/react-query": "~5.59.15",
@@ -30,6 +34,7 @@
     "@tanstack/react-virtual": "^3.13.2",
     "@uniswap/sdk-core": "~5.8.2",
     "@uniswap/v2-sdk": "~4.6.1",
+    "ai": "^6.0.116",
     "blo": "~1.2.0",
     "burner-connector": "0.0.9",
     "daisyui": "4.12.24",
@@ -53,11 +58,13 @@
     "react-dropzone": "^14.3.8",
     "react-flags-select": "^2.4.0",
     "react-hot-toast": "~2.4.0",
+    "react-markdown": "^10.1.0",
     "rehype-raw": "^7.0.0",
     "remark-gfm": "^4.0.1",
     "usehooks-ts": "~3.1.0",
     "viem": "2.21.32",
     "wagmi": "2.12.23",
+    "zod": "^4.3.6",
     "zustand": "~5.0.0"
   },
   "devDependencies": {
