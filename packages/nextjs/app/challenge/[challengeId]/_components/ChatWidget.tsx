@@ -332,7 +332,7 @@ export function ChatWidget({ challengeId, github }: ChatWidgetProps) {
             onKeyDown={handleKeyDown}
             placeholder="Ask about this challenge..."
             rows={1}
-            className="textarea textarea-bordered textarea-sm flex-1 bg-base-200/50 dark:bg-[#1a2236] focus:border-primary/30 focus:outline-none text-sm placeholder:text-base-content/40 resize-none min-h-[36px] max-h-[120px] leading-[1.4]"
+            className="textarea textarea-bordered textarea-sm flex-1 bg-base-200/50 dark:bg-[#1a2236] focus:border-primary/30 focus:outline-none text-sm placeholder:text-base-content/40 resize-none min-h-[36px] max-h-[160px] leading-[1.4] !rounded-lg py-2"
             disabled={isStreaming}
           />
           <button
