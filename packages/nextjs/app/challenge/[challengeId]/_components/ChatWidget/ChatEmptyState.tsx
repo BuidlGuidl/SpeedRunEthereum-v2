@@ -1,7 +1,7 @@
 import { ChatBubbleLeftRightIcon } from "@heroicons/react/24/outline";
 
 const SUGGESTIONS = [
-  "Let's start learning! Walk me throught the challenge",
+  "Let's start learning! Walk me through the challenge",
   "Help me set up locally",
   "I'm getting an error",
 ];
