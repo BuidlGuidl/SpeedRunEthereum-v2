@@ -35,7 +35,11 @@ A smart contract that generates and renders SVG artwork entirely on-chain. Each 
 - **Required Views:** Frontend to mint, view, and transfer NFTs. A personal gallery view to see owned or all minted NFTs.
 - **Agent Autonomy:** Build the `UI_THEME` to let the art shine. The frontend MUST correctly fetch, decode, and parse the base64 data URIs from `tokenURI()` so the SVGs render natively and beautifully in the DOM as images without broken links.
 
-## 6. Next Iterations (Builder: ask the agent to add these later)
+## 6. Review
+
+- Always review the code using the grumpy-carlos-code-reviewer agent.
+
+## 7. Next Iterations (Builder: ask the agent to add these later)
 
 - [ ] Randomized traits using block data or Chainlink VRF
 - [ ] Interactive NFTs that change based on on-chain events
