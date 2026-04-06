@@ -111,6 +111,7 @@ export function ChatWidget({ challengeId, github }: ChatWidgetProps) {
     }
     setIsSubmitting(true);
     await sendMessage({ text });
+    textareaRef.current?.focus();
   };
 
   const handleKeyDown = (e: KeyboardEvent<HTMLTextAreaElement>) => {
@@ -118,11 +119,6 @@ export function ChatWidget({ challengeId, github }: ChatWidgetProps) {
       e.preventDefault();
       handleSubmit(e as unknown as FormEvent);
     }
-  };
-
-  const handleStartLearning = async () => {
-    setIsSubmitting(true);
-    await sendMessage({ text: "Let's start learning! Teach me the concepts." });
   };
 
   const handleReset = () => {
@@ -190,7 +186,8 @@ export function ChatWidget({ challengeId, github }: ChatWidgetProps) {
             {messages.length > 0 && (
               <button
                 onClick={handleReset}
-                className="btn btn-xs btn-ghost text-secondary-content hover:bg-primary/10 tooltip tooltip-bottom"
+                disabled={isStreaming}
+                className="btn btn-xs btn-ghost text-secondary-content hover:bg-primary/10 tooltip tooltip-bottom disabled:opacity-40"
                 data-tip="Start over"
                 aria-label="Start over"
               >
@@ -222,14 +219,11 @@ export function ChatWidget({ challengeId, github }: ChatWidgetProps) {
                 </p>
               </div>
               <div className="flex flex-wrap gap-2 mt-1 justify-center">
-                <button
-                  onClick={handleStartLearning}
-                  disabled={isStreaming}
-                  className="text-[12px] font-medium px-4 py-2 rounded-full bg-primary text-primary-content hover:bg-primary/90 transition-colors disabled:opacity-40"
-                >
-                  Start Learning
-                </button>
-                {["Help me set up locally", "I'm getting an error"].map(suggestion => (
+                {[
+                  "Let's start learning! Walk me throught the challenge",
+                  "Help me set up locally",
+                  "I'm getting an error",
+                ].map(suggestion => (
                   <button
                     key={suggestion}
                     onClick={() => setInput(suggestion)}
