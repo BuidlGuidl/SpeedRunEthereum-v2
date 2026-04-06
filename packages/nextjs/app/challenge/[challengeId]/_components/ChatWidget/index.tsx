@@ -1,61 +1,12 @@
 "use client";
 
-import { FormEvent, KeyboardEvent, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { FormEvent, KeyboardEvent, useEffect, useMemo, useRef, useState } from "react";
+import { ChatEmptyState } from "./ChatEmptyState";
+import { ChatMessage } from "./ChatMessage";
 import { useChat } from "@ai-sdk/react";
 import { DefaultChatTransport } from "ai";
-import Markdown, { Components } from "react-markdown";
-import {
-  ArrowPathIcon,
-  ChatBubbleLeftRightIcon,
-  CheckIcon,
-  ClipboardDocumentIcon,
-  PaperAirplaneIcon,
-  SparklesIcon,
-  XMarkIcon,
-} from "@heroicons/react/24/outline";
+import { ArrowPathIcon, PaperAirplaneIcon, SparklesIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { useAuthSession } from "~~/hooks/useAuthSession";
-
-// TODO: Updte / cleanup the logic in this file since some of this can be achived by already present hooks like usehooks-ts or simpler approch.
-function CopyButton({ text }: { text: string }) {
-  const [copied, setCopied] = useState(false);
-
-  const handleCopy = useCallback(async () => {
-    await navigator.clipboard.writeText(text);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
-  }, [text]);
-
-  return (
-    <button
-      onClick={handleCopy}
-      className="absolute top-2 right-2 p-1 rounded bg-base-300/80 hover:bg-base-300 transition-colors opacity-0 group-hover:opacity-100"
-      aria-label="Copy code"
-    >
-      {copied ? (
-        <CheckIcon className="w-3.5 h-3.5 text-success" />
-      ) : (
-        <ClipboardDocumentIcon className="w-3.5 h-3.5 text-base-content/60" />
-      )}
-    </button>
-  );
-}
-
-const markdownComponents: Components = {
-  pre({ children, ...props }) {
-    const codeElement = children as React.ReactElement<{ children?: string }>;
-    const codeText =
-      typeof codeElement === "object" && codeElement?.props?.children
-        ? String(codeElement.props.children).replace(/\n$/, "")
-        : "";
-
-    return (
-      <div className="relative group">
-        <pre {...props}>{children}</pre>
-        {codeText && <CopyButton text={codeText} />}
-      </div>
-    );
-  },
-};
 
 type ChatWidgetProps = {
   challengeId: string;
@@ -81,20 +32,14 @@ export function ChatWidget({ challengeId, github }: ChatWidgetProps) {
   const { messages, sendMessage, setMessages, status, error } = useChat({ transport });
 
   // Track when we've submitted but status may not have caught up yet.
-  // This closes the race-condition gap where the user message appears
-  // in the array but status is still "ready" for one render cycle.
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
-    // Once the SDK's own status catches up (submitted/streaming/error),
-    // our manual bridge flag is no longer needed.
     if (status === "submitted" || status === "streaming" || status === "error") {
       setIsSubmitting(false);
     }
   }, [status]);
 
-  // Also clear on error object appearing (covers edge case where
-  // sendMessage rejects but status doesn't transition)
   useEffect(() => {
     if (error) setIsSubmitting(false);
   }, [error]);
@@ -207,76 +152,16 @@ export function ChatWidget({ challengeId, github }: ChatWidgetProps) {
         {/* Messages */}
         <div className="flex-1 overflow-y-auto px-4 py-5 space-y-4 scroll-smooth">
           {messages.length === 0 && (
-            <div className="flex flex-col items-center justify-center h-full text-center px-6 gap-4">
-              <div className="w-14 h-14 rounded-2xl bg-secondary/40 flex items-center justify-center">
-                <ChatBubbleLeftRightIcon className="w-7 h-7 text-primary" />
-              </div>
-              <div>
-                <p className="font-semibold text-base-content text-sm">Learn the concepts</p>
-                <p className="text-xs text-base-content/50 mt-1 max-w-[260px]">
-                  Get grounded on the concepts before you dive into the code. I&apos;ll explain what this challenge is
-                  about, then help you set it up locally.
-                </p>
-              </div>
-              <div className="flex flex-wrap gap-2 mt-1 justify-center">
-                {[
-                  "Let's start learning! Walk me throught the challenge",
-                  "Help me set up locally",
-                  "I'm getting an error",
-                ].map(suggestion => (
-                  <button
-                    key={suggestion}
-                    onClick={() => setInput(suggestion)}
-                    className="text-[11px] px-3 py-1.5 rounded-full border border-primary/20 text-primary hover:bg-primary/10 transition-colors"
-                  >
-                    {suggestion}
-                  </button>
-                ))}
-              </div>
-            </div>
+            <ChatEmptyState
+              onSuggestionClick={text => {
+                setInput(text);
+                textareaRef.current?.focus();
+              }}
+            />
           )}
 
           {messages.map(message => (
-            <div key={message.id} className={`chat ${message.role === "user" ? "chat-end" : "chat-start"}`}>
-              {message.role === "assistant" && (
-                <div className="chat-image">
-                  <div className="w-7 h-7 rounded-full bg-primary/15 flex items-center justify-center">
-                    <SparklesIcon className="w-3.5 h-3.5 text-primary" />
-                  </div>
-                </div>
-              )}
-              <div
-                className={`chat-bubble ${
-                  message.role === "user"
-                    ? "chat-bubble-primary text-[13px] leading-relaxed"
-                    : "chat-prose-compact bg-base-200 dark:bg-[#1a2236] text-base-content border border-primary/5"
-                }`}
-              >
-                {message.role === "assistant" ? (
-                  <div className="prose dark:prose-invert max-w-none overflow-hidden break-words [&>*:first-child]:mt-0 [&>*:last-child]:mb-0 [&>p]:my-1.5 [&>ul]:my-1.5 [&>ol]:my-1.5 [&_li]:my-0.5 [&_pre]:my-2 [&_pre]:overflow-x-auto [&_pre]:max-w-full">
-                    {message.parts.some(p => p.type === "text" && p.text.trim().length > 0) ? (
-                      message.parts.map((part, i) => {
-                        if (part.type === "text") {
-                          return (
-                            <Markdown key={i} components={markdownComponents}>
-                              {part.text}
-                            </Markdown>
-                          );
-                        }
-                        return null;
-                      })
-                    ) : isStreaming ? (
-                      <span className="loading loading-dots loading-sm text-primary"></span>
-                    ) : null}
-                  </div>
-                ) : (
-                  message.parts.map((part, i) => {
-                    if (part.type === "text") return <span key={i}>{part.text}</span>;
-                    return null;
-                  })
-                )}
-              </div>
-            </div>
+            <ChatMessage key={message.id} message={message} isStreaming={isStreaming} />
           ))}
 
           {isStreaming && messages[messages.length - 1]?.role === "user" && (
