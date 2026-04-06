@@ -1,6 +1,7 @@
 ---
 name: "Token-Weighted DAO"
 description: "Decentralized governance where token holders submit proposals and vote with automatic execution."
+imageUrl: "/assets/build-prompts/dao-proposals.png"
 ---
 
 # SPEC: Token-Weighted DAO

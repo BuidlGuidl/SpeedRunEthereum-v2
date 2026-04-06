@@ -87,7 +87,12 @@ export default async function BuilderPage(props: { params: Promise<{ address: st
   }
 
   const userHasCompletedChallenges = userCompletedChallenges.length > 0;
-  const buildIdeas = getAllBuildPrompts().map(({ name, description, imageUrl }) => ({ name, description, imageUrl }));
+  const buildIdeas = getAllBuildPrompts().map(({ name, description, imageUrl, featured }) => ({
+    name,
+    description,
+    imageUrl,
+    featured,
+  }));
 
   // Filter out disabled and non-autograding challenges
   const filteredChallenges = challenges.filter(challenge => challenge.autograding === true && !challenge.disabled);

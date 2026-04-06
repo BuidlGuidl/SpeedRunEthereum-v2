@@ -6,6 +6,7 @@ import { BuildIdeas } from "./BuildIdeas";
 import { SubmitNewBuildButton } from "./SubmitNewBuildButton";
 import { useAccount } from "wagmi";
 import { SparklesIcon } from "@heroicons/react/24/outline";
+import { BuildPromptSummary } from "~~/services/build-prompts";
 import { Build } from "~~/services/database/repositories/builds";
 
 type BuildByUser = {
@@ -24,7 +25,7 @@ export function Builds({
   address: string;
   builds: BuildByUser[];
   userHasCompletedChallenges: boolean;
-  buildIdeas: { name: string; description: string; imageUrl?: string }[];
+  buildIdeas: BuildPromptSummary[];
 }) {
   const { address: connectedAddress } = useAccount();
 
@@ -45,7 +46,7 @@ export function Builds({
             Build Prompts
           </Link>
         </div>
-        <SubmitNewBuildButton isProfileOwner userHasCompletedChallenges={userHasCompletedChallenges} />
+        <SubmitNewBuildButton isProfileOwner={isProfileOwner} userHasCompletedChallenges={userHasCompletedChallenges} />
       </div>
       <div className="p-6 bg-base-100 rounded-lg">
         {hasBuilds && (

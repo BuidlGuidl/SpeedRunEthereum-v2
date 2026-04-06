@@ -1,6 +1,7 @@
 ---
 name: "Commit-Reveal Game"
 description: "Rock-Paper-Scissors betting game using cryptographic hashing to prevent blockchain front-running."
+imageUrl: "/assets/build-prompts/commit-reveal-game.png"
 ---
 
 # SPEC: Commit-Reveal Game
