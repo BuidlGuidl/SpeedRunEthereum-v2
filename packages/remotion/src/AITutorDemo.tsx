@@ -18,7 +18,7 @@ const TAP_SFX = staticFile("mechanical-keyboard.mp3");
 const EC = { extrapolateLeft: "clamp" as const, extrapolateRight: "clamp" as const };
 
 // ── Intro duration (frames @ 30fps) ──────────────────────
-const INTRO_DUR = 105; // 3.5 seconds for sprite intro card
+const INTRO_DUR = 45; // 1.5 seconds for sprite intro card
 
 // ── Timeline (frames @ 30fps) ────────────────────────────
 // All values are auto-offset by INTRO_DUR so the intro plays first.
@@ -185,20 +185,12 @@ function getCamera(f: number): { scale: number; ox: number; oy: number; tx: numb
   return { scale: 1, ox: 50, oy: 50, tx: 0, ty: 0 };
 }
 
-// ── Use-case cards (full-screen title overlays) ─────────
+// ── Use-case cards (full-screen title overlays → persist as compact badge) ──
 const UC_CARDS = [
-  { start: T.UC1, end: T.UC1_END, num: "01", title: "Learn Ethereum's gotchas", sub: "Your AI breaks down concepts and edge cases", badgeTitle: "Learn gotchas" },
-  { start: T.UC2, end: T.UC2_END, num: "02", title: "Test your knowledge", sub: "Answer quick questions to validate your knowledge", badgeTitle: "Test knowledge" },
-  { start: T.UC3, end: T.UC3_END, num: "03", title: "Get hints when stuck", sub: "Ask your tutor for targeted hints", badgeTitle: "Get hints" },
-  { start: T.UC4, end: T.UC4_END, num: "04", title: "Code. Check. Fix.", sub: "Write code and get real-time reviews", badgeTitle: "Code. Check. Fix." },
-];
-
-// ── Persistent stage ranges (badge stays visible for entire stage) ──
-const STAGE_RANGES = [
-  { num: "01", title: "Learn Ethereum's gotchas", start: T.UC1_END, end: T.UC2 },
-  { num: "02", title: "Test your knowledge", start: T.UC2_END, end: T.UC3 },
-  { num: "03", title: "Get hints when stuck", start: T.UC3_END, end: T.UC4 },
-  { num: "04", title: "Code. Check. Fix.", start: T.UC4_END, end: T.OUTRO },
+  { start: T.UC1, end: T.UC1_END, persistUntil: T.UC2, num: "01", title: "Learn Ethereum's gotchas", sub: "Your AI breaks down concepts and edge cases", badgeTitle: "Learn gotchas" },
+  { start: T.UC2, end: T.UC2_END, persistUntil: T.UC3, num: "02", title: "Test your knowledge", sub: "Answer quick questions to validate your knowledge", badgeTitle: "Test knowledge" },
+  { start: T.UC3, end: T.UC3_END, persistUntil: T.UC4, num: "03", title: "Get hints when stuck", sub: "Ask your tutor for targeted hints", badgeTitle: "Get hints" },
+  { start: T.UC4, end: T.UC4_END, persistUntil: T.OUTRO, num: "04", title: "Code. Check. Fix.", sub: "Write code and get real-time reviews", badgeTitle: "Code. Check. Fix." },
 ];
 
 const CODE_TOP_Y = 80; // reused below
@@ -323,29 +315,32 @@ function getCursorInfo(f: number) {
 const LH = 22 * 1.65;
 const CODE_TOP = 104;
 
-// ── Full-screen use-case title card → transitions to compact badge ──
-// Two sub-phases: (A) shrink at center, (B) slide up to top
+// ── Full-screen use-case title card → shrinks & slides to top, then persists ──
+// Three phases: (A) hold at center, (B) shrink+slide to top, (C) persist as compact badge
 const UseCaseCard: React.FC<{
   num: string; title: string; sub: string; badgeTitle: string;
-  frame: number; startFrame: number; endFrame: number; fps: number;
-}> = ({ num, title, sub, badgeTitle, frame, startFrame, endFrame, fps }) => {
+  frame: number; startFrame: number; endFrame: number; persistUntil: number; fps: number;
+}> = ({ num, title, sub, badgeTitle, frame, startFrame, endFrame, persistUntil, fps }) => {
   const dur = endFrame - startFrame;
-  const holdEnd = startFrame + Math.floor(dur * 0.45); // center hold
-  const shrinkEnd = startFrame + Math.floor(dur * 0.72); // shrink finishes
-  const transEnd = endFrame; // slide finishes
+  const holdEnd = startFrame + Math.floor(dur * 0.55); // center hold (longer)
+  const shrinkEnd = startFrame + Math.floor(dur * 0.72); // shrink finishes (faster)
+  const transEnd = startFrame + Math.floor(dur * 0.85); // slide finishes (faster)
 
   const fadeIn = interpolate(frame, [startFrame, startFrame + 15], [0, 1], EC);
   const s = spring({ frame: Math.max(0, frame - startFrame), fps, config: { damping: 18, mass: 0.8 } });
 
-  // Stop rendering at endFrame — StageBadge takes over
-  // Fade out over 25 frames for a slow, smooth disappearance
-  const fadeOut = interpolate(frame, [endFrame - 25, endFrame], [1, 0], EC);
-  if (fadeIn <= 0 || frame >= endFrame) return null;
+  // Fade out near the end of the persist phase
+  const fadeOut = interpolate(frame, [persistUntil - 15, persistUntil], [1, 0], EC);
+  if (fadeIn <= 0 || frame >= persistUntil) return null;
+
+  // After endFrame, lock all animations to their final values (compact badge state)
+  const isPersisting = frame >= endFrame;
 
   // Sub-phase A: shrink at center (holdEnd → shrinkEnd)
-  const shrinkProg = frame <= holdEnd ? 0 : interpolate(frame, [holdEnd, shrinkEnd], [0, 1], EC);
-  // Sub-phase B: slide up (shrinkEnd → transEnd)
-  const slideProg = frame <= shrinkEnd ? 0 : interpolate(frame, [shrinkEnd, transEnd], [0, 1], EC);
+  const shrinkProg = isPersisting ? 1 : (frame <= holdEnd ? 0 : interpolate(frame, [holdEnd, shrinkEnd], [0, 1], EC));
+  // Sub-phase B: slide up (shrinkEnd → transEnd) — ease-out for snappy movement
+  const slideRaw = isPersisting ? 1 : (frame <= shrinkEnd ? 0 : interpolate(frame, [shrinkEnd, transEnd], [0, 1], EC));
+  const slideProg = Easing.out(Easing.cubic)(slideRaw);
 
   // Position: stays at center during shrink, then slides up to badge position
   const yPos = interpolate(slideProg, [0, 1], [50, 4.5]);
@@ -367,16 +362,18 @@ const UseCaseCard: React.FC<{
   // Num margin: column gap reduces as it becomes compact
   const numMb = interpolate(shrinkProg, [0, 1], [16, 6]);
 
+  const op = isPersisting ? fadeOut : fadeIn;
+
   return (
     <AbsoluteFill style={{
       justifyContent: "flex-start", alignItems: "center",
-      zIndex: 50, opacity: fadeIn * fadeOut, pointerEvents: "none",
+      zIndex: 50, opacity: op, pointerEvents: "none",
     }}>
       <div style={{
         position: "absolute",
         top: `${yPos}%`,
         left: "50%",
-        transform: `translate(-50%, -50%) scale(${s * scale})`,
+        transform: `translate(-50%, -50%) scale(${(isPersisting ? 1 : s) * scale})`,
         background: `rgba(10,10,18,${bgOp})`,
         backdropFilter: "blur(16px)",
         padding: `${padV}px ${padH}px`,
@@ -410,10 +407,9 @@ const StageBadge: React.FC<{
   }
   if (!activeStage) return null;
 
-  const fadeIn = interpolate(frame, [activeStage.start, activeStage.start + 18], [0, 1], EC);
+  // No fade-in — UseCaseCard already transitioned to this position seamlessly
   const fadeOut = interpolate(frame, [activeStage.end - 15, activeStage.end], [1, 0], EC);
-  const op = Math.min(fadeIn, fadeOut);
-  const slideY = interpolate(frame, [activeStage.start, activeStage.start + 18], [-12, 0], EC);
+  const op = fadeOut;
 
   return (
     <div
@@ -426,7 +422,7 @@ const StageBadge: React.FC<{
         justifyContent: "center",
         zIndex: 40,
         opacity: op,
-        transform: `translateY(${slideY}px)`,
+        transform: "none",
         pointerEvents: "none",
       }}
     >
@@ -654,11 +650,8 @@ export const AITutorDemo: React.FC = () => {
         );
       })()}
 
-      {/* ═══ USE-CASE TITLE CARDS (full-screen overlays) ═══ */}
-      {UC_CARDS.map((uc) => <UseCaseCard key={uc.num} {...uc} frame={frame} startFrame={uc.start} endFrame={uc.end} fps={fps} />)}
-
-      {/* ═══ PERSISTENT STAGE BADGE (top center, visible during entire stage) ═══ */}
-      <StageBadge frame={frame} stages={STAGE_RANGES} />
+      {/* ═══ USE-CASE TITLE CARDS (animate to top, then persist as compact badge) ═══ */}
+      {UC_CARDS.map((uc) => <UseCaseCard key={uc.num} {...uc} frame={frame} startFrame={uc.start} endFrame={uc.end} persistUntil={uc.persistUntil} fps={fps} />)}
 
       {/* ═══ IDE ═══ */}
       {frame >= T.IDE_IN && (
