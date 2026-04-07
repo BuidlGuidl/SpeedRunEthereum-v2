@@ -18,8 +18,8 @@ A decentralized governance system where holders of an ERC-20 governance token ca
 
 ## 3. Builder Customizations (Tweak before prompting)
 
-- `VOTING_DELAY`: 1 block (short for demo, production DAOs use 1-2 days)
-- `VOTING_PERIOD`: 50 blocks (short for demo, production DAOs use 3-7 days)
+- `VOTING_DELAY`: 0 blocks (zero for local dev. Production DAOs use 1-2 days)
+- `VOTING_PERIOD`: 10 blocks (short for demo — each faucet click or transaction mines one block on local dev. Production DAOs use 3-7 days)
 - `PROPOSAL_THRESHOLD`: 0 (0 for demo so anyone can propose)
 - `QUORUM_PERCENTAGE`: 4 (% of total supply that must vote For+Abstain to pass)
 - `TIMELOCK_DELAY`: 1 block (short for demo, production uses 1-2 days)
@@ -42,9 +42,12 @@ A decentralized governance system where holders of an ERC-20 governance token ca
 - **Agent Autonomy:** Build the `UI_THEME`. The delegation panel is essential — if a user has tokens but hasn't delegated, show a prominent call-to-action to delegate. Color-code proposal states and show countdowns for active and queued proposals.
 
 ## 6. How to Use
+
 After building, walk the user through the full governance flow locally. Use these SE-2 local dev features:
+
 - **Burner wallets**: SE-2 auto-generates a burner wallet per browser session. Opening an incognito tab creates a new persona — use this to simulate multiple voters.
 - **Local faucet**: The faucet button (top-right) sends ETH **and mines a block**, advancing `block.timestamp`. The local chain does NOT auto-mine — the faucet (or any transaction) is how you advance time past voting delay, voting period, and timelock delay.
+- **Governance parameters**: Current low values (`VOTING_DELAY: 0`, etc.) are strictly for fast local testing. **Increase these to safe values (e.g., 1-7 days) for production deployments.**
 - Tailor the testing walkthrough to the actual contracts and UI you scaffolded.
 
 ## 7. Next Iterations (Builder: ask the agent to add these later)
