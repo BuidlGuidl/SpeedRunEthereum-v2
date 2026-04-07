@@ -73,8 +73,8 @@ const _T = {
   // a7: ~235 chars / 1.8 cps = 131 fr → finishes ~2650
   SUCCESS: 2664,
 
-  // OUTRO — 5s hold
-  OUTRO: 2764, END: 2914,
+  // OUTRO — 7s hold
+  OUTRO: 2764, END: 2974,
 };
 // Offset all timeline values by INTRO_DUR
 const T = Object.fromEntries(
