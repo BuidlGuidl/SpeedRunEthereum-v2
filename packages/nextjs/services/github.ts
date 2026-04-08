@@ -81,6 +81,37 @@ export const fetchGithubBuildReadme = async (githubUrl: string): Promise<string 
   }
 };
 
+/**
+ * Check if a README contains MDX components (like <Tabs>) that require
+ * MDX format parsing instead of plain markdown.
+ */
+export const hasMdxComponents = (markdown: string): boolean => {
+  return /<Tabs[\s>]/m.test(markdown);
+};
+
+/**
+ * Prepare a README that contains MDX components for rendering.
+ * Only needed for READMEs with MDX components (e.g. <Tabs>/<Tab>).
+ * - Self-closes void HTML elements for JSX compatibility
+ * - Converts remaining <details>/<summary> to <Details>/<Summary> components
+ *   (MDX can't parse raw HTML <details> — treats them as JSX and fails)
+ */
+export const prepareMdxReadme = (markdown: string): string => {
+  return (
+    markdown
+      // Strip Kramdown-only attribute
+      .replace(/<details\s+markdown='1'>/gi, "<details>")
+      // Self-close void HTML elements
+      .replace(/<(br|hr|img|input|meta|link)(\s[^>]*)?\s*(?<!\/)>/gi, "<$1$2/>")
+      // Convert <details><summary>text</summary> to block-level MDX components
+      .replace(/<details[^>]*>\s*<summary>([\s\S]*?)<\/summary>/gi, "<Details>\n<Summary>$1</Summary>\n\n")
+      .replace(/<\/details>/gi, "\n</Details>")
+      // Strip redundant bold label at start of Tab content (e.g. **Hardhat** when label="Hardhat")
+      // Convention: each <Tab> has a bold label as first line for GitHub readability; SRE strips it
+      .replace(/<Tab label="([^"]+)">\s*\n\n\*\*\1\*\*/gi, '<Tab label="$1">\n\n')
+  );
+};
+
 export const splitChallengeReadme = (readme: string): { headerImageMdx: string; restMdx: string } => {
   const content = readme.replace(/\r\n?/g, "\n");
 
