@@ -37,7 +37,7 @@ A smart contract that generates and renders SVG artwork entirely on-chain. Each 
 
 ## 6. Review
 
-- Always review the code using the grumpy-carlos-code-reviewer agent.
+- Always review the generated code and use the grumpy-carlos-code-reviewer agent for that.
 
 ## 7. Next Iterations (Builder: ask the agent to add these later)
 
