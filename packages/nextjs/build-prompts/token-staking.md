@@ -19,7 +19,7 @@ A DeFi mechanism where users lock up a base ERC-20 token to earn a second "Rewar
 
 - `STAKING_TOKEN_NAME`: "StakeCoin"
 - `REWARD_TOKEN_NAME`: "YieldCoin"
-- `UI_THEME`: DeFi aesthetic with neon accents.
+- `UI_THEME`: DeFi aesthetic with neon accents. Update the SE-2 theme inline withe DeFi asthetic with neon accents"
 
 ## 4. Smart Contract Spec
 
@@ -37,7 +37,11 @@ A DeFi mechanism where users lock up a base ERC-20 token to earn a second "Rewar
 - **Claim UX:** After a successful `claimRewards` transaction, the pending rewards display must immediately reset to 0 and the Reward token balance must refetch from the chain. Don't wait for the next polling cycle. Reset the ticker's reference timestamp so it starts accumulating cleanly from 0.
 - **Agent Autonomy:** Build a sleek `UI_THEME`. Use an interval on the frontend to visually increment the "pending rewards" counter in real-time for a satisfying, magical user experience.
 
-## 6. Next Iterations (Builder: ask the agent to add these later)
+## 6. Review
+
+- Always review the code using the grumpy-carlos-code-reviewer agent.
+
+## 7. Next Iterations (Builder: ask the agent to add these later)
 
 - [ ] Lock-up periods with early withdrawal penalties.
 - [ ] Dynamic APY based on total pool size.
