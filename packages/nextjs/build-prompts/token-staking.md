@@ -19,7 +19,7 @@ A DeFi mechanism where users lock up a base ERC-20 token to earn a second "Rewar
 
 - `STAKING_TOKEN_NAME`: "StakeCoin"
 - `REWARD_TOKEN_NAME`: "YieldCoin"
-- `UI_THEME`: DeFi aesthetic with neon accents. Update the SE-2 theme inline withe DeFi asthetic with neon accents"
+- `UI_THEME`: DeFi aesthetic with neon accents. Update the SE-2 theme to match.
 
 ## 4. Smart Contract Spec
 
