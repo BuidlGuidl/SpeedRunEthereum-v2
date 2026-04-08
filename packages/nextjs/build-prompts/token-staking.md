@@ -35,11 +35,11 @@ A DeFi mechanism where users lock up a base ERC-20 token to earn a second "Rewar
 
 - **Required Views:** Dashboard showing user balances for both tokens, staked amount, and real-time accumulating rewards.
 - **Claim UX:** After a successful `claimRewards` transaction, the pending rewards display must immediately reset to 0 and the Reward token balance must refetch from the chain. Don't wait for the next polling cycle. Reset the ticker's reference timestamp so it starts accumulating cleanly from 0.
-- **Agent Autonomy:** Build a sleek `UI_THEME`. Use an interval on the frontend to visually increment the "pending rewards" counter in real-time for a satisfying, magical user experience.
+- **Agent Autonomy:** Build a sleek `UI_THEME`. Use an interval on the frontend to visually increment the "pending rewards" counter in real-time for a satisfying, magical user experience. The ticker must read REWARD_RATE and totalStaked from the contract and use BigInt math mirroring the Solidity formula — do not hardcode the rate or use floating-point arithmetic.
 
 ## 6. Review
 
-- Always review the code using the grumpy-carlos-code-reviewer agent.
+- Always review the generated code and use the grumpy-carlos-code-reviewer agent for that.
 
 ## 7. Next Iterations (Builder: ask the agent to add these later)
 
