@@ -28,12 +28,12 @@ A betting game that uses cryptographic hashing to hide a player's move until bot
 
 ## 5. Frontend Spec
 
-- **Required Views:** A two-step game interface guiding the user securely through Committing and Revealing. Show the games from the user and the open games (created games with no opponent).
+- **Required Views:** A two-step game interface guiding the user securely through Committing and Revealing, adding a bet when commiting. Show the games from the user and the open games (created games with no opponent). Add a game page (/game/[id]).
 - **Agent Autonomy:** The frontend MUST handle the local generation of the secret salt and the `keccak256` hashing locally before sending the transaction. Hide this complexity from the user for a smooth UX.
 
 ## 6. Review
 
-- Always review the code using the grumpy-carlos-code-reviewer agent.
+- Always review the generated code and use the grumpy-carlos-code-reviewer agent for that.
 
 ## 7. Next Iterations (Builder: ask the agent to add these later)
 
