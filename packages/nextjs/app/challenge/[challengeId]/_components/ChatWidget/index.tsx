@@ -5,6 +5,7 @@ import { ChatEmptyState } from "./ChatEmptyState";
 import { ChatMessage } from "./ChatMessage";
 import { useChat } from "@ai-sdk/react";
 import { DefaultChatTransport } from "ai";
+import { useStickToBottom } from "use-stick-to-bottom";
 import { ArrowPathIcon, PaperAirplaneIcon, SparklesIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { useAuthSession } from "~~/hooks/useAuthSession";
 
@@ -17,8 +18,9 @@ export function ChatWidget({ challengeId, github }: ChatWidgetProps) {
   const { isAdmin } = useAuthSession();
   const [isOpen, setIsOpen] = useState(false);
   const [input, setInput] = useState("");
-  const messagesEndRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  const { scrollRef, contentRef, scrollToBottom } = useStickToBottom({ resize: "smooth", initial: "smooth" });
 
   const transport = useMemo(
     () =>
@@ -55,6 +57,7 @@ export function ChatWidget({ challengeId, github }: ChatWidgetProps) {
       textareaRef.current.style.height = "auto";
     }
     setIsSubmitting(true);
+    scrollToBottom();
     await sendMessage({ text });
     textareaRef.current?.focus();
   };
@@ -79,10 +82,6 @@ export function ChatWidget({ challengeId, github }: ChatWidgetProps) {
       textarea.style.height = `${Math.min(textarea.scrollHeight, 120)}px`;
     }
   }, [input]);
-
-  useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages]);
 
   useEffect(() => {
     if (isOpen) {
@@ -150,53 +149,53 @@ export function ChatWidget({ challengeId, github }: ChatWidgetProps) {
         </div>
 
         {/* Messages */}
-        <div className="flex-1 overflow-y-auto px-4 py-5 space-y-4 scroll-smooth">
-          {messages.length === 0 && (
-            <ChatEmptyState
-              onSuggestionClick={text => {
-                setInput(text);
-                textareaRef.current?.focus();
-              }}
-            />
-          )}
+        <div ref={scrollRef} className="flex-1 overflow-y-auto px-4 py-5">
+          <div ref={contentRef} className="space-y-4">
+            {messages.length === 0 && (
+              <ChatEmptyState
+                onSuggestionClick={text => {
+                  setInput(text);
+                  textareaRef.current?.focus();
+                }}
+              />
+            )}
 
-          {messages.map(message => (
-            <ChatMessage key={message.id} message={message} isStreaming={isStreaming} />
-          ))}
+            {messages.map(message => (
+              <ChatMessage key={message.id} message={message} isStreaming={isStreaming} />
+            ))}
 
-          {isStreaming && messages[messages.length - 1]?.role === "user" && (
-            <div className="chat chat-start">
-              <div className="chat-image">
-                <div className="w-7 h-7 rounded-full bg-primary/15 flex items-center justify-center">
-                  <SparklesIcon className="w-3.5 h-3.5 text-primary" />
+            {isStreaming && messages[messages.length - 1]?.role === "user" && (
+              <div className="chat chat-start">
+                <div className="chat-image">
+                  <div className="w-7 h-7 rounded-full bg-primary/15 flex items-center justify-center">
+                    <SparklesIcon className="w-3.5 h-3.5 text-primary" />
+                  </div>
+                </div>
+                <div className="chat-bubble bg-base-200 dark:bg-[#1a2236] text-base-content border border-primary/5">
+                  <span className="loading loading-dots loading-sm text-primary"></span>
                 </div>
               </div>
-              <div className="chat-bubble bg-base-200 dark:bg-[#1a2236] text-base-content border border-primary/5">
-                <span className="loading loading-dots loading-sm text-primary"></span>
+            )}
+
+            {error && (
+              <div className="alert bg-error/10 border border-error/20 text-error text-sm rounded-xl mx-1">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="stroke-current shrink-0 h-5 w-5"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
+                  />
+                </svg>
+                <span>Something went wrong. Please try again.</span>
               </div>
-            </div>
-          )}
-
-          {error && (
-            <div className="alert bg-error/10 border border-error/20 text-error text-sm rounded-xl mx-1">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="stroke-current shrink-0 h-5 w-5"
-                fill="none"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
-                />
-              </svg>
-              <span>Something went wrong. Please try again.</span>
-            </div>
-          )}
-
-          <div ref={messagesEndRef} />
+            )}
+          </div>
         </div>
 
         {/* Input */}
