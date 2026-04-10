@@ -2,6 +2,7 @@ import { useState } from "react";
 import { UIMessage } from "@ai-sdk/react";
 import CopyToClipboard from "react-copy-to-clipboard";
 import Markdown, { Components } from "react-markdown";
+import remarkGfm from "remark-gfm";
 import { CheckIcon, ClipboardDocumentIcon, SparklesIcon } from "@heroicons/react/24/outline";
 
 function CodeCopyButton({ text }: { text: string }) {
@@ -44,6 +45,15 @@ const markdownComponents: Components = {
       </div>
     );
   },
+  table({ children, ...props }) {
+    return (
+      <div className="overflow-x-auto max-w-full my-2">
+        <table {...props} className="text-xs">
+          {children}
+        </table>
+      </div>
+    );
+  },
 };
 
 type ChatMessageProps = {
@@ -74,7 +84,7 @@ export function ChatMessage({ message, isStreaming }: ChatMessageProps) {
               message.parts.map((part, i) => {
                 if (part.type === "text") {
                   return (
-                    <Markdown key={i} components={markdownComponents}>
+                    <Markdown key={i} remarkPlugins={[remarkGfm]} components={markdownComponents}>
                       {part.text}
                     </Markdown>
                   );
