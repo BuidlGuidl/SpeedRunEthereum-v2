@@ -6,7 +6,7 @@ import { ChatMessage } from "./ChatMessage";
 import { useChat } from "@ai-sdk/react";
 import { DefaultChatTransport } from "ai";
 import { useStickToBottom } from "use-stick-to-bottom";
-import { ArrowPathIcon, PaperAirplaneIcon, SparklesIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import { ArrowDownIcon, ArrowPathIcon, PaperAirplaneIcon, SparklesIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { useAuthSession } from "~~/hooks/useAuthSession";
 
 type ChatWidgetProps = {
@@ -20,7 +20,10 @@ export function ChatWidget({ challengeId, github }: ChatWidgetProps) {
   const [input, setInput] = useState("");
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
-  const { scrollRef, contentRef, scrollToBottom } = useStickToBottom({ resize: "smooth", initial: "smooth" });
+  const { scrollRef, contentRef, scrollToBottom, isAtBottom } = useStickToBottom({
+    resize: "smooth",
+    initial: "smooth",
+  });
 
   const transport = useMemo(
     () =>
@@ -149,53 +152,67 @@ export function ChatWidget({ challengeId, github }: ChatWidgetProps) {
         </div>
 
         {/* Messages */}
-        <div ref={scrollRef} className="flex-1 overflow-y-auto px-4 py-5">
-          <div ref={contentRef} className="space-y-4">
-            {messages.length === 0 && (
-              <ChatEmptyState
-                onSuggestionClick={text => {
-                  setInput(text);
-                  textareaRef.current?.focus();
-                }}
-              />
-            )}
+        <div className="flex-1 relative min-h-0">
+          <div ref={scrollRef} className="absolute inset-0 overflow-y-auto px-4 py-5">
+            <div ref={contentRef} className="space-y-4">
+              {messages.length === 0 && (
+                <ChatEmptyState
+                  onSuggestionClick={text => {
+                    setInput(text);
+                    textareaRef.current?.focus();
+                  }}
+                />
+              )}
 
-            {messages.map(message => (
-              <ChatMessage key={message.id} message={message} isStreaming={isStreaming} />
-            ))}
+              {messages.map(message => (
+                <ChatMessage key={message.id} message={message} isStreaming={isStreaming} />
+              ))}
 
-            {isStreaming && messages[messages.length - 1]?.role === "user" && (
-              <div className="chat chat-start">
-                <div className="chat-image">
-                  <div className="w-7 h-7 rounded-full bg-primary/15 flex items-center justify-center">
-                    <SparklesIcon className="w-3.5 h-3.5 text-primary" />
+              {isStreaming && messages[messages.length - 1]?.role === "user" && (
+                <div className="chat chat-start">
+                  <div className="chat-image">
+                    <div className="w-7 h-7 rounded-full bg-primary/15 flex items-center justify-center">
+                      <SparklesIcon className="w-3.5 h-3.5 text-primary" />
+                    </div>
+                  </div>
+                  <div className="chat-bubble bg-base-200 dark:bg-[#1a2236] text-base-content border border-primary/5">
+                    <span className="loading loading-dots loading-sm text-primary"></span>
                   </div>
                 </div>
-                <div className="chat-bubble bg-base-200 dark:bg-[#1a2236] text-base-content border border-primary/5">
-                  <span className="loading loading-dots loading-sm text-primary"></span>
-                </div>
-              </div>
-            )}
+              )}
 
-            {error && (
-              <div className="alert bg-error/10 border border-error/20 text-error text-sm rounded-xl mx-1">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="stroke-current shrink-0 h-5 w-5"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
-                  />
-                </svg>
-                <span>Something went wrong. Please try again.</span>
-              </div>
-            )}
+              {error && (
+                <div className="alert bg-error/10 border border-error/20 text-error text-sm rounded-xl mx-1">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="stroke-current shrink-0 h-5 w-5"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
+                    />
+                  </svg>
+                  <span>Something went wrong. Please try again.</span>
+                </div>
+              )}
+            </div>
           </div>
+
+          {/* Scroll-to-bottom button — appears when the user has scrolled up from the bottom */}
+          {!isAtBottom && (
+            <button
+              type="button"
+              onClick={() => scrollToBottom()}
+              className="btn btn-circle btn-sm btn-outline absolute bottom-3 left-1/2 -translate-x-1/2 bg-white dark:bg-[#0f1729] shadow-md hover:bg-base-200 dark:hover:bg-[#1a2236] z-10"
+              aria-label="Scroll to latest message"
+            >
+              <ArrowDownIcon className="w-4 h-4" />
+            </button>
+          )}
         </div>
 
         {/* Input */}
