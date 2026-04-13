@@ -41,7 +41,11 @@ A decentralized governance system where holders of an ERC-20 governance token ca
   - **Create Proposal**: Description input, transaction builder (target, value, calldata — support multiple targets), submit button.
 - **Agent Autonomy:** Build the `UI_THEME`. The delegation panel is essential — if a user has tokens but hasn't delegated, show a prominent call-to-action to delegate. Color-code proposal states and show countdowns for active and queued proposals.
 
-## 6. How to Use
+## 6. Review
+
+- Always review the generated code and use the grumpy-carlos-code-reviewer agent for that.
+
+## 7. How to Use
 
 After building, walk the user through the full governance flow locally. Use these SE-2 local dev features:
 
@@ -50,7 +54,7 @@ After building, walk the user through the full governance flow locally. Use thes
 - **Governance parameters**: Current low values (`VOTING_DELAY: 0`, etc.) are strictly for fast local testing. **Increase these to safe values (e.g., 1-7 days) for production deployments.**
 - Tailor the testing walkthrough to the actual contracts and UI you scaffolded.
 
-## 7. Next Iterations (Builder: ask the agent to add these later)
+## 8. Next Iterations (Builder: ask the agent to add these later)
 
 - [ ] Quadratic voting: weight votes by the square root of token holdings.
 - [ ] Vote delegation dashboard for delegating to other addresses.
