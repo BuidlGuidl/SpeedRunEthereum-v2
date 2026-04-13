@@ -29,7 +29,7 @@ A decentralized mapping system (similar to ENS) that links human-readable string
 ## 5. Frontend Spec
 
 - **Required Views:** Search bar to check name availability, registration form, and a dashboard to manage owned names.
-- **Agent Autonomy:** Build the `UI_THEME`. Provide instant visual feedback on name availability as the user types in the search bar, before they even click register. Auto-detect pasted Ethereum addresses and switch to reverse lookup mode — show the primary name and all names resolving to that address. In the dashboard, show name cards with actions to set resolved address, transfer ownership, and set as primary name, with a badge on the current primary.
+- **Agent Autonomy:** Build the `UI_THEME`. Provide instant visual feedback on name availability as the user types in the search bar, before they even click register. When a searched name is taken, show the owner's address. Auto-detect pasted Ethereum addresses and switch to reverse lookup mode — show the primary name and all names resolving to that address. In the dashboard, show name cards with actions to set resolved address, transfer ownership, and set as primary name, with a badge on the current primary.
 
 ## 6. Review
 
