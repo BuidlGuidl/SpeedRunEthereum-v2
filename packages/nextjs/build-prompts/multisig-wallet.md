@@ -30,7 +30,7 @@ A smart contract wallet that requires multiple owners to approve transactions be
 
 ## 5. Frontend Spec
 
-- **Required Views:** Dashboard showing wallet balance (with deposit tracking), list of current owners, a form to submit new transactions, an owner management panel (add/remove owner, change threshold — auto-encodes calldata for self-targeted multisig proposals), and a queue displaying pending/executed transactions. Users can revoke their own approval on pending transactions.
+- **Required Views:** Dashboard showing wallet balance with deposit tracking, list of current owners, a form to submit new transactions, an owner management panel that auto-encodes calldata for self-targeted multisig proposals — add/remove owner, change threshold — and a queue displaying pending/executed transactions. After a transaction is executed, show the result and a link to the transaction detail. Users can revoke their own approval on pending transactions.
 - **Agent Autonomy:** Design the `UI_THEME`. Visually distinguish between transactions that still need the connected user's approval, versus those that have met the threshold and are ready to be executed. Use visual progress bars (e.g., "1/2 Approvals").
 
 ## 6. Review
