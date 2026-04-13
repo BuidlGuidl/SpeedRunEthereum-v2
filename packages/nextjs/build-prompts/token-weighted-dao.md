@@ -39,7 +39,7 @@ A decentralized governance system where holders of an ERC-20 governance token ca
   - **Governance Dashboard**: Token balance with mint button, delegation panel (current delegate, voting power, delegate button), active and past proposals list with state badges and vote tally bars.
   - **Proposal Detail**: Full description, target addresses, vote distribution (For/Against/Abstain) with quorum progress indicator, voting buttons, queue and execute buttons based on proposal state, voter list from events.
   - **Create Proposal**: Description input, transaction builder (target, value, calldata — support multiple targets), submit button.
-- **Agent Autonomy:** Build the `UI_THEME`. The delegation panel is essential — if a user has tokens but hasn't delegated, show a prominent call-to-action to delegate. Color-code proposal states and show countdowns for active and queued proposals.
+- **Agent Autonomy:** Build the `UI_THEME`. The delegation panel is essential — if a user has tokens but hasn't delegated, show a prominent call-to-action to delegate. Color-code proposal states and show countdowns for active and queued proposals. Use Scaffold-ETH 2 components for every address field — `AddressInput` for user input (delegate address, proposal targets) and `Address` for display (current delegate, proposer, voters). Do not fall back to plain `<input>` or raw hex strings.
 
 ## 6. Review
 
