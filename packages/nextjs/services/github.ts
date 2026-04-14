@@ -15,6 +15,69 @@ export function parseGithubUrl(githubString: string): GithubRepoInfo {
   };
 }
 
+export async function fetchGithubAgentsMd(githubString: string): Promise<string | null> {
+  const { owner, repo, branch } = parseGithubUrl(githubString);
+  const apiUrl = `https://api.github.com/repos/${owner}/${repo}/contents/extension/AGENTS.md.args.mjs?ref=${branch}`;
+
+  const headers: Record<string, string> = {
+    Accept: "application/vnd.github.v3+json",
+    "User-Agent": "SpeedRunEthereum-v2",
+  };
+
+  if (process.env.GITHUB_PAT) {
+    headers["Authorization"] = `token ${process.env.GITHUB_PAT}`;
+  }
+
+  try {
+    const response = await fetch(apiUrl, {
+      headers,
+      cache: "force-cache",
+      next: { tags: [`github-agents-${githubString}`] },
+    });
+    if (!response.ok) return null;
+
+    const data = await response.json();
+    if (!data.content) return null;
+
+    const rawFile = Buffer.from(data.content, "base64").toString("utf-8");
+    // grab the actual content removing the variable declaration
+    const match = rawFile.match(/fullContentOverride\s*=\s*`([\s\S]*?)`/);
+    return match?.[1] ?? null;
+  } catch {
+    return null;
+  }
+}
+
+export async function fetchGithubConceptsYaml(githubString: string): Promise<string | null> {
+  const { owner, repo, branch } = parseGithubUrl(githubString);
+  const apiUrl = `https://api.github.com/repos/${owner}/${repo}/contents/extension/.ai/CONCEPTS.yaml?ref=${branch}`;
+
+  const headers: Record<string, string> = {
+    Accept: "application/vnd.github.v3+json",
+    "User-Agent": "SpeedRunEthereum-v2",
+  };
+
+  if (process.env.GITHUB_PAT) {
+    headers["Authorization"] = `token ${process.env.GITHUB_PAT}`;
+  }
+
+  try {
+    const response = await fetch(apiUrl, {
+      headers,
+      cache: "force-cache",
+      next: { tags: [`github-concepts-yaml-${githubString}`] },
+    });
+    if (!response.ok) return null;
+
+    const data = await response.json();
+    if (!data.content) return null;
+
+    return Buffer.from(data.content, "base64").toString("utf-8");
+  } catch {
+    return null;
+  }
+}
+
 export async function fetchGithubChallengeReadme(githubString: string): Promise<string> {
   const { owner, repo, branch } = parseGithubUrl(githubString);
 
@@ -29,7 +92,11 @@ export async function fetchGithubChallengeReadme(githubString: string): Promise<
     headers["Authorization"] = `token ${process.env.GITHUB_PAT}`;
   }
 
-  const response = await fetch(apiUrl, { headers });
+  const response = await fetch(apiUrl, {
+    headers,
+    cache: "force-cache",
+    next: { tags: [`github-readme-${githubString}`] },
+  });
 
   if (!response.ok) {
     throw new Error(`Failed to fetch README: ${response.statusText}`);

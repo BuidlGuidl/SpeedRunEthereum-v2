@@ -3,6 +3,7 @@ import type { ComponentPropsWithoutRef, ReactNode } from "react";
 import { notFound } from "next/navigation";
 import { ChallengeHeader } from "./_components/ChallengeHeader";
 import { ChallengeSidebar } from "./_components/ChallengeSidebar";
+import { ChatWidget } from "./_components/ChatWidget";
 import { ConnectAndRegisterBanner } from "./_components/ConnectAndRegisterBanner";
 import { Details as MdxDetails, Summary as MdxSummary } from "./_components/MdxDetails";
 import { Tab as MdxTab, Tabs as MdxTabs } from "./_components/MdxTabs";
@@ -205,6 +206,9 @@ export default async function ChallengePage(props: { params: Promise<{ challenge
           </div>
         )}
       </div>
+      {staticMetadata?.isAiReady && challenge.github && (
+        <ChatWidget challengeId={challenge.id} github={challenge.github} />
+      )}
     </div>
   );
 }

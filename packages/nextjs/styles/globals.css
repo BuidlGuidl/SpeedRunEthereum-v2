@@ -106,6 +106,42 @@ p {
   font-weight: normal;
 }
 
+/* Chat widget markdown */
+.chat-prose-compact {
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.chat-prose-compact .prose p,
+.chat-prose-compact .prose li,
+.chat-prose-compact .prose blockquote,
+.chat-prose-compact .prose td,
+.chat-prose-compact .prose th,
+.chat-prose-compact .prose strong,
+.chat-prose-compact .prose em,
+.chat-prose-compact .prose ul,
+.chat-prose-compact .prose ol {
+  font-size: 13px;
+}
+
+.chat-prose-compact .prose h1 {
+  font-size: 16px;
+}
+
+.chat-prose-compact .prose h2 {
+  font-size: 15px;
+}
+
+.chat-prose-compact .prose h3,
+.chat-prose-compact .prose h4 {
+  font-size: 14px;
+}
+
+.chat-prose-compact .prose pre,
+.chat-prose-compact .prose code {
+  font-size: 12px;
+}
+
 .flag-selector ul,
 .flag-selector #rfs-btn,
 .flag-selector ul > div,
