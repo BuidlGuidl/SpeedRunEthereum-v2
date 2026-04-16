@@ -64,10 +64,15 @@ export default async function ChallengePage(props: { params: Promise<{ challenge
     return <div>No challenge content available</div>;
   }
 
-  const rawReadme = await fetchGithubChallengeReadme(challenge.github);
-  const isMdx = hasMdxComponents(rawReadme);
-  const challengeReadme = isMdx ? prepareMdxReadme(rawReadme) : rawReadme;
-  const { headerImageMdx, restMdx } = splitChallengeReadme(challengeReadme);
+  let rawReadme: string | null = null;
+  try {
+    rawReadme = await fetchGithubChallengeReadme(challenge.github);
+  } catch (e) {
+    console.error(`Failed to fetch README for ${challenge.id}:`, e);
+  }
+  const isMdx = rawReadme ? hasMdxComponents(rawReadme) : false;
+  const challengeReadme = rawReadme && isMdx ? prepareMdxReadme(rawReadme) : rawReadme;
+  const { headerImageMdx, restMdx } = splitChallengeReadme(challengeReadme ?? "");
   const { owner, repo, branch } = parseGithubUrl(challenge.github);
 
   // Extract headings for the sidebar navigation
