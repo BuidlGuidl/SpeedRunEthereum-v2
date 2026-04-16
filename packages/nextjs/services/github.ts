@@ -29,11 +29,7 @@ export async function fetchGithubAgentsMd(githubString: string): Promise<string 
   }
 
   try {
-    const response = await fetch(apiUrl, {
-      headers,
-      cache: "force-cache",
-      next: { tags: [`github-agents-${githubString}`] },
-    });
+    const response = await fetch(apiUrl, { headers });
     if (!response.ok) return null;
 
     const data = await response.json();
@@ -62,11 +58,7 @@ export async function fetchGithubConceptsYaml(githubString: string): Promise<str
   }
 
   try {
-    const response = await fetch(apiUrl, {
-      headers,
-      cache: "force-cache",
-      next: { tags: [`github-concepts-yaml-${githubString}`] },
-    });
+    const response = await fetch(apiUrl, { headers });
     if (!response.ok) return null;
 
     const data = await response.json();
@@ -92,11 +84,7 @@ export async function fetchGithubChallengeReadme(githubString: string): Promise<
     headers["Authorization"] = `token ${process.env.GITHUB_PAT}`;
   }
 
-  const response = await fetch(apiUrl, {
-    headers,
-    cache: "force-cache",
-    next: { tags: [`github-readme-${githubString}`] },
-  });
+  const response = await fetch(apiUrl, { headers });
 
   if (!response.ok) {
     throw new Error(`Failed to fetch README: ${response.statusText}`);
