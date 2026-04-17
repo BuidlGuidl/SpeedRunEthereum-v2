@@ -4,7 +4,6 @@ import { AfterSreCard } from "./AfterSreCard";
 import { AfterSreLine } from "./AfterSreLine";
 import { ChallengeExpandedCard } from "./ChallengeExpandedCard";
 import { Hero } from "./Hero";
-import { OnboardingBatchesCard } from "./OnboardingBatchesCard";
 import { useAccount } from "wagmi";
 import { useUserChallenges } from "~~/hooks/useUserChallenges";
 import { ChallengeId } from "~~/services/database/config/types";
@@ -49,8 +48,6 @@ export const HomepageClient = ({ challenges }: { challenges: Challenges }) => {
           userChallenges={userChallenges}
           challenges={challenges}
         />
-
-        <OnboardingBatchesCard userChallenges={userChallenges} />
 
         <ChallengeExpandedCard
           key={ChallengeId.ORACLES}
