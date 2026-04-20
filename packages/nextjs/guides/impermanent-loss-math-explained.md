@@ -68,7 +68,7 @@ The impermanent loss formula can be derived from first principles:
 
 **Step 2: After Price Change**
 
-- New price ratio: `p₁`
+- New price ratio (same convention, price of `x` in units of `y`): `p₁`
 - New quantities: `x₁`, `y₁`
 - Still: `k = x₁ × y₁` and `p₁ = y₁/x₁`
 
