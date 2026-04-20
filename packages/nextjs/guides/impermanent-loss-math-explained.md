@@ -63,14 +63,14 @@ The impermanent loss formula can be derived from first principles:
 **Step 1: Define Initial State**
 
 - Initial quantities: `x₀`, `y₀`
-- Initial price ratio: `p₀ = x₀/y₀`
+- Initial price ratio (price of token `x` in units of token `y`): `p₀ = y₀/x₀`
 - Invariant: `k = x₀ × y₀`
 
 **Step 2: After Price Change**
 
 - New price ratio: `p₁`
 - New quantities: `x₁`, `y₁`
-- Still: `k = x₁ × y₁` and `p₁ = x₁/y₁`
+- Still: `k = x₁ × y₁` and `p₁ = y₁/x₁`
 
 **Step 3: Solve for New Quantities**
 From the equations above:
