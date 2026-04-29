@@ -20,7 +20,9 @@ const TRANSITION_DURATION = 15; // 0.5s
 // Click sound effect
 const CLICK_SFX = "https://remotion.media/mouse-click.wav";
 
-export const BuildPromptsDemo: React.FC = () => {
+export const BuildPromptsDemo: React.FC<{ hideStepLabels?: boolean }> = ({
+  hideStepLabels = false,
+}) => {
   return (
     <AbsoluteFill style={{ backgroundColor: "#0f0b1e" }}>
       {/* Background music */}
@@ -75,15 +77,19 @@ export const BuildPromptsDemo: React.FC = () => {
       </TransitionSeries>
 
       {/* Workflow step labels */}
-      <Sequence from={70} durationInFrames={155}>
-        <StepLabel step="STEP 1" text="Choose a Build" duration={155} />
-      </Sequence>
-      <Sequence from={240} durationInFrames={75}>
-        <StepLabel step="STEP 2" text="Copy the Prompt" duration={75} />
-      </Sequence>
-      <Sequence from={370} durationInFrames={70}>
-        <StepLabel step="STEP 3" text="Paste & Let AI Build" duration={70} />
-      </Sequence>
+      {!hideStepLabels && (
+        <>
+          <Sequence from={70} durationInFrames={155}>
+            <StepLabel step="STEP 1" text="Choose a Build" duration={155} />
+          </Sequence>
+          <Sequence from={240} durationInFrames={75}>
+            <StepLabel step="STEP 2" text="Copy the Prompt" duration={75} />
+          </Sequence>
+          <Sequence from={370} durationInFrames={70}>
+            <StepLabel step="STEP 3" text="Paste & Let AI Build" duration={70} />
+          </Sequence>
+        </>
+      )}
     </AbsoluteFill>
   );
 };
