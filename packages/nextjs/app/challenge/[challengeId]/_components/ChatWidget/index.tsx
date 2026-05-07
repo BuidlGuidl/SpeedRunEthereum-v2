@@ -34,7 +34,7 @@ export function ChatWidget({ challengeId, github }: ChatWidgetProps) {
     [challengeId, github],
   );
 
-  const { messages, sendMessage, setMessages, status, error } = useChat({ transport });
+  const { messages, sendMessage, setMessages, status, error, regenerate, clearError } = useChat({ transport });
 
   // Track when we've submitted but status may not have caught up yet.
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -76,6 +76,20 @@ export function ChatWidget({ challengeId, github }: ChatWidgetProps) {
     setMessages([]);
     setIsSubmitting(false);
   };
+
+  const handleRetry = async () => {
+    if (error) clearError();
+    setIsSubmitting(true);
+    scrollToBottom();
+    await regenerate();
+  };
+
+  const lastMessage = messages[messages.length - 1];
+  const lastIsEmptyAssistant =
+    !isStreaming &&
+    !error &&
+    lastMessage?.role === "assistant" &&
+    !lastMessage.parts.some(p => p.type === "text" && p.text.trim().length > 0);
 
   // Auto-resize textarea
   useEffect(() => {
@@ -164,8 +178,12 @@ export function ChatWidget({ challengeId, github }: ChatWidgetProps) {
                 />
               )}
 
-              {messages.map(message => (
-                <ChatMessage key={message.id} message={message} isStreaming={isStreaming} />
+              {messages.map((message, idx) => (
+                <ChatMessage
+                  key={message.id}
+                  message={message}
+                  isStreaming={isStreaming && idx === messages.length - 1}
+                />
               ))}
 
               {isStreaming && messages[messages.length - 1]?.role === "user" && (
@@ -182,7 +200,7 @@ export function ChatWidget({ challengeId, github }: ChatWidgetProps) {
               )}
 
               {error && (
-                <div className="alert bg-error/10 border border-error/20 text-error text-sm rounded-xl mx-1">
+                <div className="alert bg-error/10 border border-error/20 text-error text-sm rounded-xl mx-1 flex items-center gap-2">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     className="stroke-current shrink-0 h-5 w-5"
@@ -196,7 +214,30 @@ export function ChatWidget({ challengeId, github }: ChatWidgetProps) {
                       d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
                     />
                   </svg>
-                  <span>Something went wrong. Please try again.</span>
+                  <span className="flex-1">Something went wrong.</span>
+                  <button
+                    type="button"
+                    onClick={handleRetry}
+                    className="btn btn-xs btn-ghost text-error hover:bg-error/10 gap-1"
+                    aria-label="Retry"
+                  >
+                    <ArrowPathIcon className="w-3.5 h-3.5" />
+                    Retry
+                  </button>
+                </div>
+              )}
+
+              {lastIsEmptyAssistant && (
+                <div className="flex items-center gap-2 text-xs text-base-content/60 px-1">
+                  <span>No response received.</span>
+                  <button
+                    type="button"
+                    onClick={handleRetry}
+                    className="inline-flex items-center gap-1 text-primary hover:underline"
+                  >
+                    <ArrowPathIcon className="w-3 h-3" />
+                    Retry
+                  </button>
                 </div>
               )}
             </div>

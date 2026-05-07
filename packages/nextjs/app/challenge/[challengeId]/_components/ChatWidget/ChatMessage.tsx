@@ -62,6 +62,12 @@ type ChatMessageProps = {
 };
 
 export function ChatMessage({ message, isStreaming }: ChatMessageProps) {
+  const hasText = message.parts.some(p => p.type === "text" && p.text.trim().length > 0);
+
+  // Hide empty assistant bubbles that aren't actively streaming — these are failed/empty
+  // responses; the parent renders a retry control instead.
+  if (message.role === "assistant" && !hasText && !isStreaming) return null;
+
   return (
     <div className={`chat ${message.role === "user" ? "chat-end" : "chat-start"}`}>
       {message.role === "assistant" && (
