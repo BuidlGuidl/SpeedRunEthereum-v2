@@ -6,7 +6,14 @@ import { ChatMessage } from "./ChatMessage";
 import { useChat } from "@ai-sdk/react";
 import { DefaultChatTransport } from "ai";
 import { useStickToBottom } from "use-stick-to-bottom";
-import { ArrowDownIcon, ArrowPathIcon, PaperAirplaneIcon, SparklesIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import {
+  ArrowDownIcon,
+  ArrowPathIcon,
+  ExclamationTriangleIcon,
+  PaperAirplaneIcon,
+  SparklesIcon,
+  XMarkIcon,
+} from "@heroicons/react/24/outline";
 import { useAuthSession } from "~~/hooks/useAuthSession";
 
 type ChatWidgetProps = {
@@ -34,7 +41,7 @@ export function ChatWidget({ challengeId, github }: ChatWidgetProps) {
     [challengeId, github],
   );
 
-  const { messages, sendMessage, setMessages, status, error } = useChat({ transport });
+  const { messages, sendMessage, setMessages, status, error, regenerate, clearError } = useChat({ transport });
 
   // Track when we've submitted but status may not have caught up yet.
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -76,6 +83,22 @@ export function ChatWidget({ challengeId, github }: ChatWidgetProps) {
     setMessages([]);
     setIsSubmitting(false);
   };
+
+  const handleRetry = async () => {
+    if (error) clearError();
+    setIsSubmitting(true);
+    scrollToBottom();
+    await regenerate();
+  };
+
+  const lastMessage = messages[messages.length - 1];
+  const responseMissing =
+    !isStreaming &&
+    !error &&
+    messages.length > 0 &&
+    (lastMessage?.role === "user" ||
+      (lastMessage?.role === "assistant" &&
+        !lastMessage.parts.some(p => p.type === "text" && p.text.trim().length > 0)));
 
   // Auto-resize textarea
   useEffect(() => {
@@ -164,8 +187,12 @@ export function ChatWidget({ challengeId, github }: ChatWidgetProps) {
                 />
               )}
 
-              {messages.map(message => (
-                <ChatMessage key={message.id} message={message} isStreaming={isStreaming} />
+              {messages.map((message, idx) => (
+                <ChatMessage
+                  key={message.id}
+                  message={message}
+                  isStreaming={isStreaming && idx === messages.length - 1}
+                />
               ))}
 
               {isStreaming && messages[messages.length - 1]?.role === "user" && (
@@ -182,21 +209,33 @@ export function ChatWidget({ challengeId, github }: ChatWidgetProps) {
               )}
 
               {error && (
-                <div className="alert bg-error/10 border border-error/20 text-error text-sm rounded-xl mx-1">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="stroke-current shrink-0 h-5 w-5"
-                    fill="none"
-                    viewBox="0 0 24 24"
+                <div className="flex items-center gap-2.5 py-2 px-3 rounded-xl border border-error/25 bg-error/5 dark:bg-error/10">
+                  <ExclamationTriangleIcon className="w-4 h-4 text-error shrink-0" />
+                  <span className="flex-1 text-[13px] text-error">Connection failed.</span>
+                  <button
+                    type="button"
+                    onClick={handleRetry}
+                    className="inline-flex items-center gap-1 text-error font-medium text-[13px] hover:bg-error/10 rounded-full px-2 py-0.5 transition-colors"
+                    aria-label="Retry"
                   >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
-                    />
-                  </svg>
-                  <span>Something went wrong. Please try again.</span>
+                    <ArrowPathIcon className="w-3.5 h-3.5" />
+                    Retry
+                  </button>
+                </div>
+              )}
+
+              {responseMissing && (
+                <div className="flex items-center gap-2.5 py-2 px-3 rounded-xl border border-base-content/10 bg-base-200/40 dark:bg-[#1a2236]/40">
+                  <span className="flex-1 text-[13px] text-base-content/70">Nothing came back.</span>
+                  <button
+                    type="button"
+                    onClick={handleRetry}
+                    className="inline-flex items-center gap-1 text-primary font-medium text-[13px] hover:bg-primary/10 rounded-full px-2 py-0.5 transition-colors"
+                    aria-label="Retry"
+                  >
+                    <ArrowPathIcon className="w-3.5 h-3.5" />
+                    Retry
+                  </button>
                 </div>
               )}
             </div>
