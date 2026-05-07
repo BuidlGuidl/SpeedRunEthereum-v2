@@ -85,11 +85,13 @@ export function ChatWidget({ challengeId, github }: ChatWidgetProps) {
   };
 
   const lastMessage = messages[messages.length - 1];
-  const lastIsEmptyAssistant =
+  const responseMissing =
     !isStreaming &&
     !error &&
-    lastMessage?.role === "assistant" &&
-    !lastMessage.parts.some(p => p.type === "text" && p.text.trim().length > 0);
+    messages.length > 0 &&
+    (lastMessage?.role === "user" ||
+      (lastMessage?.role === "assistant" &&
+        !lastMessage.parts.some(p => p.type === "text" && p.text.trim().length > 0)));
 
   // Auto-resize textarea
   useEffect(() => {
@@ -227,7 +229,7 @@ export function ChatWidget({ challengeId, github }: ChatWidgetProps) {
                 </div>
               )}
 
-              {lastIsEmptyAssistant && (
+              {responseMissing && (
                 <div className="flex items-center gap-2 text-xs text-base-content/60 px-1">
                   <span>No response received.</span>
                   <button
