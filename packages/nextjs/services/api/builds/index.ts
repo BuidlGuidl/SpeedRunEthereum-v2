@@ -1,16 +1,20 @@
 import { BuildCategory, BuildType } from "~~/services/database/config/types";
-import { Build } from "~~/services/database/repositories/builds";
+import { Build, BuildSort, BuildSortDirection } from "~~/services/database/repositories/builds";
 
 export const fetchBuilds = async ({
   category,
   type,
   name,
+  sort,
+  direction,
   start,
   size,
 }: {
   category?: BuildCategory;
   type?: BuildType;
   name?: string;
+  sort?: BuildSort;
+  direction?: BuildSortDirection;
   start?: number;
   size?: number;
 }) => {
@@ -18,6 +22,8 @@ export const fetchBuilds = async ({
   if (name) params.append("name", name);
   if (category) params.append("category", category);
   if (type) params.append("type", type);
+  if (sort) params.append("sort", sort);
+  if (direction) params.append("direction", direction);
   if (start) params.append("start", start.toString());
   if (size) params.append("size", size.toString());
   const response = await fetch(`/api/builds?${params}`);
@@ -27,7 +33,16 @@ export const fetchBuilds = async ({
   }
 
   const buildsData = (await response.json()) as {
-    data: Array<Build & { likes: Array<{ userAddress: string }> }>;
+    data: Array<
+      Build & {
+        likes: Array<{ userAddress: string }>;
+        builders: Array<{
+          userAddress: string;
+          isOwner: boolean;
+          user: { userAddress: string; ens: string | null; ensAvatar: string | null };
+        }>;
+      }
+    >;
     meta: {
       totalRowCount: string;
     };

@@ -1,8 +1,11 @@
 import { BuildCategory, BuildType } from "../config/types";
 import { filterValidUserAddresses } from "./users";
-import { InferInsertModel, InferSelectModel, and, eq, ilike, inArray, sql } from "drizzle-orm";
+import { InferInsertModel, InferSelectModel, and, asc, desc, eq, ilike, inArray, sql } from "drizzle-orm";
 import { db } from "~~/services/database/config/postgresClient";
 import { buildBuilders, buildLikes, builds, lower } from "~~/services/database/config/schema";
+
+export type BuildSort = "likes" | "name" | "date";
+export type BuildSortDirection = "asc" | "desc";
 
 export type Build = InferSelectModel<typeof builds>;
 export type BuildLike = InferSelectModel<typeof buildLikes>;
@@ -212,30 +215,58 @@ export const getAllBuilds = async ({
   category,
   type,
   nameSearch,
+  sort = "likes",
+  direction = "desc",
   start,
   size,
 }: {
   category?: BuildCategory;
   type?: BuildType;
   nameSearch?: string;
+  sort?: BuildSort;
+  direction?: BuildSortDirection;
   start?: number;
   size?: number;
 }) => {
+  const whereClause = and(
+    category ? eq(builds.buildCategory, category) : undefined,
+    type ? eq(builds.buildType, type) : undefined,
+    nameSearch ? ilike(builds.name, `%${nameSearch}%`) : undefined,
+  );
+
+  const orderFn = direction === "asc" ? asc : desc;
+  const orderBy =
+    sort === "name"
+      ? [orderFn(builds.name)]
+      : sort === "date"
+        ? [orderFn(builds.submittedTimestamp)]
+        : [orderFn(sql`(SELECT COUNT(*) FROM build_likes WHERE build_id = ${builds.id})`)];
+
   const query = db.query.builds.findMany({
-    where: and(
-      category ? eq(builds.buildCategory, category) : undefined,
-      type ? eq(builds.buildType, type) : undefined,
-      nameSearch ? ilike(builds.name, `%${nameSearch}%`) : undefined,
-    ),
+    where: whereClause,
     with: {
       likes: true,
+      builders: {
+        with: {
+          user: {
+            columns: {
+              userAddress: true,
+              ens: true,
+              ensAvatar: true,
+            },
+          },
+        },
+      },
     },
-    orderBy: (builds, { desc, sql }) => [desc(sql`(SELECT COUNT(*) FROM build_likes WHERE build_id = ${builds.id})`)],
+    orderBy,
     limit: size || 48,
     offset: start,
   });
 
-  const countQuery = db.select({ count: sql<number>`count(*)` }).from(builds);
+  const countQuery = db
+    .select({ count: sql<number>`count(*)` })
+    .from(builds)
+    .where(whereClause);
 
   const [buildsData, countResult] = await Promise.all([query, countQuery]);
 
