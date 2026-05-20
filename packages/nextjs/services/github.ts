@@ -149,14 +149,6 @@ export const fetchGithubBuildReadme = async (githubUrl: string): Promise<string 
 };
 
 /**
- * Check if a README contains MDX components (like <Tabs>) that require
- * MDX format parsing instead of plain markdown.
- */
-export const hasMdxComponents = (markdown: string): boolean => {
-  return /<Tabs[\s>]/m.test(markdown);
-};
-
-/**
  * Prepare a README that contains MDX components for rendering.
  * Only needed for READMEs with MDX components (e.g. <Tabs>/<Tab>).
  * - Self-closes void HTML elements for JSX compatibility
