@@ -235,12 +235,11 @@ export const getAllBuilds = async ({
   );
 
   const orderFn = direction === "asc" ? asc : desc;
-  const orderBy =
-    sort === "name"
-      ? [orderFn(builds.name)]
-      : sort === "date"
-        ? [orderFn(builds.submittedTimestamp)]
-        : [orderFn(sql`(SELECT COUNT(*) FROM build_likes WHERE build_id = ${builds.id})`)];
+  const sortColumns: Record<BuildSort, ReturnType<typeof orderFn>> = {
+    name: orderFn(builds.name),
+    date: orderFn(builds.submittedTimestamp),
+    likes: orderFn(sql`(SELECT COUNT(*) FROM build_likes WHERE build_id = ${builds.id})`),
+  };
 
   const query = db.query.builds.findMany({
     where: whereClause,
@@ -258,17 +257,29 @@ export const getAllBuilds = async ({
         },
       },
     },
-    orderBy,
+    orderBy: [sortColumns[sort]],
     limit: size || 48,
     offset: start,
   });
 
-  const countQuery = db
+  const filteredCountQuery = db
     .select({ count: sql<number>`count(*)` })
     .from(builds)
     .where(whereClause);
 
-  const [buildsData, countResult] = await Promise.all([query, countQuery]);
+  const totalCountQuery = db.select({ count: sql<number>`count(*)` }).from(builds);
 
-  return { data: buildsData, meta: { totalRowCount: countResult[0]?.count || 0 } };
+  const [buildsData, filteredCountResult, totalCountResult] = await Promise.all([
+    query,
+    filteredCountQuery,
+    totalCountQuery,
+  ]);
+
+  return {
+    data: buildsData,
+    meta: {
+      totalRowCount: filteredCountResult[0]?.count || 0,
+      globalTotalCount: totalCountResult[0]?.count || 0,
+    },
+  };
 };

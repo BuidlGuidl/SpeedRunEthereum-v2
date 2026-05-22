@@ -17,7 +17,6 @@ type SortOption = `${BuildSort}-${BuildSortDirection}`;
 
 const SORT_OPTIONS: { value: SortOption; label: string }[] = [
   { value: "likes-desc", label: "Most Liked" },
-  { value: "likes-asc", label: "Least Liked" },
   { value: "date-desc", label: "Newest" },
   { value: "date-asc", label: "Oldest" },
   { value: "name-asc", label: "Name (A-Z)" },
@@ -29,8 +28,8 @@ const DEFAULT_SORT: SortOption = "likes-desc";
 export function AllBuilds({ searchParams }: { searchParams: { category?: BuildCategory; type?: BuildType } }) {
   const router = useRouter();
   const pathname = usePathname();
-  const [categoryFilter, setCategoryFilter] = useState(searchParams.category || "");
-  const [typeFilter, setTypeFilter] = useState(searchParams.type || "");
+  const [categoryFilter, setCategoryFilter] = useState<BuildCategory | "">(searchParams.category || "");
+  const [typeFilter, setTypeFilter] = useState<BuildType | "">(searchParams.type || "");
   const [nameFilter, setNameFilter] = useState("");
   const [sortOption, setSortOption] = useState<SortOption>(DEFAULT_SORT);
 
@@ -38,13 +37,14 @@ export function AllBuilds({ searchParams }: { searchParams: { category?: BuildCa
 
   const [sort, direction] = sortOption.split("-") as [BuildSort, BuildSortDirection];
 
-  const { builds, isLoading, isFetching, isFetched, refetch, totalBuilds } = useAllBuildsInfiniteQuery({
-    categoryFilter: categoryFilter as BuildCategory,
-    typeFilter: typeFilter as BuildType,
-    nameFilter: debouncedFilter,
-    sort,
-    direction,
-  });
+  const { builds, isLoading, isFetching, isFetched, refetch, totalBuilds, globalTotalBuilds } =
+    useAllBuildsInfiniteQuery({
+      categoryFilter,
+      typeFilter,
+      nameFilter: debouncedFilter,
+      sort,
+      direction,
+    });
 
   const handleCategoryChange = (category: BuildCategory) => {
     if (!category) {
@@ -79,7 +79,9 @@ export function AllBuilds({ searchParams }: { searchParams: { category?: BuildCa
   return (
     <div className="py-12 px-6 max-w-7xl mx-auto w-full">
       <div className="flex items-center gap-3">
-        <h1 className="m-0 text-2xl font-bold lg:text-4xl">All Builds</h1>
+        <h1 className="m-0 text-2xl font-bold lg:text-4xl">
+          Builds {globalTotalBuilds ? <span className="font-normal">({globalTotalBuilds} total)</span> : null}
+        </h1>
       </div>
       <div className="mt-8">
         <div className="grid grid-cols-1 gap-4 md:grid-cols-3 lg:grid-cols-5 lg:gap-6">
@@ -157,7 +159,7 @@ export function AllBuilds({ searchParams }: { searchParams: { category?: BuildCa
           </div>
 
           <div>
-            <p className="mt-0 mb-1 text-sm lg:mb-2">Total Builds</p>
+            <p className="mt-0 mb-1 text-sm lg:mb-2">Filtered Builds</p>
             {isLoading ? (
               <div className="skeleton rounded-md w-24 h-7"></div>
             ) : (

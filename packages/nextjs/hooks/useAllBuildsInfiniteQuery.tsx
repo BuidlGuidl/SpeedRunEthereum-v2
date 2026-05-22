@@ -15,8 +15,8 @@ export function useAllBuildsInfiniteQuery({
   sort,
   direction,
 }: {
-  categoryFilter: BuildCategory;
-  typeFilter: BuildType;
+  categoryFilter: BuildCategory | "";
+  typeFilter: BuildType | "";
   nameFilter: string;
   sort: BuildSort;
   direction: BuildSortDirection;
@@ -27,8 +27,8 @@ export function useAllBuildsInfiniteQuery({
       const start = (pageParam as number) * FETCH_SIZE;
       const response = await fetchBuilds({
         name: nameFilter,
-        category: categoryFilter as BuildCategory,
-        type: typeFilter as BuildType,
+        category: categoryFilter,
+        type: typeFilter,
         sort,
         direction,
         start,
@@ -49,6 +49,7 @@ export function useAllBuildsInfiniteQuery({
 
   const builds = useMemo(() => data?.pages?.flatMap(page => page.data) ?? [], [data]);
   const totalBuilds = data?.pages?.[0]?.meta?.totalRowCount ?? 0;
+  const globalTotalBuilds = data?.pages?.[0]?.meta?.globalTotalCount ?? 0;
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -84,5 +85,6 @@ export function useAllBuildsInfiniteQuery({
     isFetched,
     refetch,
     totalBuilds,
+    globalTotalBuilds,
   };
 }

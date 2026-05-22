@@ -10,22 +10,22 @@ export const fetchBuilds = async ({
   start,
   size,
 }: {
-  category?: BuildCategory;
-  type?: BuildType;
-  name?: string;
-  sort?: BuildSort;
-  direction?: BuildSortDirection;
-  start?: number;
-  size?: number;
+  category: BuildCategory | "";
+  type: BuildType | "";
+  name: string;
+  sort: BuildSort;
+  direction: BuildSortDirection;
+  start: number;
+  size: number;
 }) => {
   const params = new URLSearchParams();
   if (name) params.append("name", name);
   if (category) params.append("category", category);
   if (type) params.append("type", type);
-  if (sort) params.append("sort", sort);
-  if (direction) params.append("direction", direction);
-  if (start) params.append("start", start.toString());
-  if (size) params.append("size", size.toString());
+  params.append("sort", sort);
+  params.append("direction", direction);
+  params.append("start", start.toString());
+  params.append("size", size.toString());
   const response = await fetch(`/api/builds?${params}`);
 
   if (!response.ok) {
@@ -45,6 +45,7 @@ export const fetchBuilds = async ({
     >;
     meta: {
       totalRowCount: string;
+      globalTotalCount: string;
     };
   };
 
