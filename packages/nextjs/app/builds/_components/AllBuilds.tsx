@@ -215,6 +215,7 @@ export function AllBuilds({ searchParams }: { searchParams: { category?: BuildCa
                       <h2 className="text-xl font-bold leading-tight line-clamp-2 flex-1">{build.name}</h2>
                     </div>
                     <p className="text-xs text-neutral mb-2">
+                      Submitted:{" "}
                       {new Date(build.submittedTimestamp).toLocaleDateString("en-US", {
                         year: "numeric",
                         month: "short",

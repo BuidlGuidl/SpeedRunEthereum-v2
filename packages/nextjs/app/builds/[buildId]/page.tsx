@@ -23,6 +23,16 @@ export default async function BuildPage(props: { params: Promise<{ buildId: stri
         <div className="flex flex-col md:flex-row justify-between gap-4 p-6">
           <div className="flex flex-col space-y-3 items-center md:items-start text-center md:text-left">
             <h1 className="text-2xl font-bold">{build?.name}</h1>
+            {build?.submittedTimestamp && (
+              <p className="text-sm text-neutral m-0">
+                Submitted:{" "}
+                {new Date(build.submittedTimestamp).toLocaleDateString("en-US", {
+                  year: "numeric",
+                  month: "short",
+                  day: "numeric",
+                })}
+              </p>
+            )}
             <div className="flex space-x-3">
               {build?.githubUrl && (
                 <Link href={build?.githubUrl} target="_blank" className="btn btn-sm btn-outline">
