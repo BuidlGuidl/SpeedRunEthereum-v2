@@ -16,14 +16,14 @@ import { BuildSort, BuildSortDirection } from "~~/services/database/repositories
 type SortOption = `${BuildSort}-${BuildSortDirection}`;
 
 const SORT_OPTIONS: { value: SortOption; label: string }[] = [
-  { value: "likes-desc", label: "Most Liked" },
   { value: "date-desc", label: "Newest" },
   { value: "date-asc", label: "Oldest" },
+  { value: "likes-desc", label: "Most Liked" },
   { value: "name-asc", label: "Name (A-Z)" },
   { value: "name-desc", label: "Name (Z-A)" },
 ];
 
-const DEFAULT_SORT: SortOption = "likes-desc";
+const DEFAULT_SORT: SortOption = "date-desc";
 
 export function AllBuilds({ searchParams }: { searchParams: { category?: BuildCategory; type?: BuildType } }) {
   const router = useRouter();
@@ -211,9 +211,16 @@ export function AllBuilds({ searchParams }: { searchParams: { category?: BuildCa
                     )}
                   </div>
                   <div className="flex flex-col flex-1 px-6 py-4">
-                    <div className="flex items-start gap-3 mb-2">
+                    <div className="flex items-start gap-3 mb-1">
                       <h2 className="text-xl font-bold leading-tight line-clamp-2 flex-1">{build.name}</h2>
                     </div>
+                    <p className="text-xs text-neutral mb-2">
+                      {new Date(build.submittedTimestamp).toLocaleDateString("en-US", {
+                        year: "numeric",
+                        month: "short",
+                        day: "numeric",
+                      })}
+                    </p>
                     <p className="text-sm my-1 line-clamp-4">{build.desc}</p>
                     <div className="flex-1" />
                     {build.builders.length > 0 && (
