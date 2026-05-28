@@ -8,6 +8,7 @@ import { LikeBuildButton } from "~~/app/builders/[address]/_components/builds/Li
 import { Address } from "~~/components/scaffold-eth";
 import { getBuildByBuildId } from "~~/services/database/repositories/builds";
 import { fetchGithubBuildReadme } from "~~/services/github";
+import { formatShortDate } from "~~/utils/date";
 
 export default async function BuildPage(props: { params: Promise<{ buildId: string }> }) {
   const params = await props.params;
@@ -22,7 +23,12 @@ export default async function BuildPage(props: { params: Promise<{ buildId: stri
       <div className="flex flex-col bg-base-100 rounded-lg w-full lg:max-w-[950px]">
         <div className="flex flex-col md:flex-row justify-between gap-4 p-6">
           <div className="flex flex-col space-y-3 items-center md:items-start text-center md:text-left">
-            <h1 className="text-2xl font-bold">{build?.name}</h1>
+            <div>
+              <h1 className="m-0 text-2xl font-bold">{build?.name}</h1>
+              {build?.submittedTimestamp && (
+                <p className="mt-1 mb-0 text-sm text-neutral">{formatShortDate(build.submittedTimestamp)}</p>
+              )}
+            </div>
             <div className="flex space-x-3">
               {build?.githubUrl && (
                 <Link href={build?.githubUrl} target="_blank" className="btn btn-sm btn-outline">
