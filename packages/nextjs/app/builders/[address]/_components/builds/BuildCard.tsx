@@ -4,6 +4,7 @@ import { DeleteBuildButton } from "./DeleteBuildButton";
 import { EditBuildButton } from "./EditBuildButton";
 import { LikeBuildButton } from "./LikeBuildButton";
 import { Build } from "~~/services/database/repositories/builds";
+import { formatShortDate } from "~~/utils/date";
 
 type Props = {
   ownerAddress: string;
@@ -46,9 +47,10 @@ export const BuildCard = ({ ownerAddress, build, likes, coBuilders }: Props) => 
         )}
       </div>
       <div className="flex flex-col flex-1 px-6 py-4">
-        <div className="flex items-start gap-2 mb-2">
-          <h2 className="text-xl font-bold leading-tight line-clamp-2 flex-1 min-w-0">{build.name}</h2>
+        <div className="flex items-start gap-2">
+          <h2 className="m-0 text-xl font-bold leading-tight line-clamp-2 flex-1 min-w-0">{build.name}</h2>
         </div>
+        <p className="mt-1 mb-2 text-xs text-neutral">{formatShortDate(build.submittedTimestamp)}</p>
         <p className="text-sm my-1 line-clamp-4">{build.desc}</p>
         <div className="flex-1" />
         <div className="flex justify-between items-center pt-2 mt-2 w-full gap-2">

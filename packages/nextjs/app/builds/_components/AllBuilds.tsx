@@ -12,6 +12,7 @@ import { Address } from "~~/components/scaffold-eth";
 import { useAllBuildsInfiniteQuery } from "~~/hooks/useAllBuildsInfiniteQuery";
 import { BuildCategory, BuildType } from "~~/services/database/config/types";
 import { BuildSort, BuildSortDirection } from "~~/services/database/repositories/builds";
+import { formatShortDate } from "~~/utils/date";
 
 type SortOption = `${BuildSort}-${BuildSortDirection}`;
 
@@ -211,17 +212,10 @@ export function AllBuilds({ searchParams }: { searchParams: { category?: BuildCa
                     )}
                   </div>
                   <div className="flex flex-col flex-1 px-6 py-4">
-                    <div className="flex items-start gap-3 mb-1">
-                      <h2 className="text-xl font-bold leading-tight line-clamp-2 flex-1">{build.name}</h2>
+                    <div className="flex items-start gap-3">
+                      <h2 className="m-0 text-xl font-bold leading-tight line-clamp-2 flex-1">{build.name}</h2>
                     </div>
-                    <p className="text-xs text-neutral mb-2">
-                      Submitted:{" "}
-                      {new Date(build.submittedTimestamp).toLocaleDateString("en-US", {
-                        year: "numeric",
-                        month: "short",
-                        day: "numeric",
-                      })}
-                    </p>
+                    <p className="text-xs text-neutral mt-1 mb-2">{formatShortDate(build.submittedTimestamp)}</p>
                     <p className="text-sm my-1 line-clamp-4">{build.desc}</p>
                     <div className="flex-1" />
                     {build.builders.length > 0 && (

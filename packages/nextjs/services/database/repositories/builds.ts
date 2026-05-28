@@ -117,7 +117,7 @@ export const getBuildsByUserAddress = async (userAddress: string) => {
 
   // 2. Fetch all builds, builders, and likes for these IDs in parallel
   const [buildsRows, buildersRows, likesRows] = await Promise.all([
-    db.select().from(builds).where(inArray(builds.id, buildIds)),
+    db.select().from(builds).where(inArray(builds.id, buildIds)).orderBy(desc(builds.submittedTimestamp)),
     db
       .select({
         buildId: buildBuilders.buildId,
