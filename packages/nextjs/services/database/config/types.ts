@@ -22,9 +22,6 @@ export enum ChallengeId {
   STABLECOINS = "stablecoins",
   ZK_VOTING = "zk-voting",
   ORACLES = "oracles",
-  MULTISIG = "multisig",
-  SVG_NFT = "svg-nft",
-  STATE_CHANNELS = "state-channels",
 }
 
 export enum BatchStatus {

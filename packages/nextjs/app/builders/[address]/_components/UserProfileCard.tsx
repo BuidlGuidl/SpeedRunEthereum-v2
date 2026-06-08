@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { UserLocation } from "./UserLocation";
 import { UserNotesIndicator } from "./UserNotesIndicator";
 import { UserSocials } from "./UserSocials";
@@ -20,16 +21,26 @@ type UserProfileCardProps = {
 
 export const UserProfileCard = ({ user, batch }: UserProfileCardProps) => {
   const { isAdmin } = useAuthSession();
+  const [avatarErrored, setAvatarErrored] = useState(false);
+
+  useEffect(() => {
+    setAvatarErrored(false);
+  }, [user.ensAvatar]);
 
   return (
     <>
       <div className="bg-base-100 rounded-lg p-6">
         <div className="flex flex-col md:flex-row justify-around lg:flex-col items-center gap-4">
           <div className="relative">
-            {user.ensAvatar ? (
+            {user.ensAvatar && !avatarErrored ? (
               <div className="w-[224px] h-[224px] relative">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={user.ensAvatar} alt={user.userAddress} className="absolute inset-0" />
+                <img
+                  src={user.ensAvatar}
+                  alt={user.userAddress}
+                  className="absolute inset-0"
+                  onError={() => setAvatarErrored(true)}
+                />
               </div>
             ) : (
               <PunkBlockie address={user.userAddress} scale={2} />

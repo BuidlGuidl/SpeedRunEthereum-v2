@@ -315,16 +315,6 @@ export const CHALLENGE_METADATA: Record<string, ChallengeStaticMetadata> = {
       },
     ],
   },
-  [ChallengeId.MULTISIG]: {
-    title: "Build a Multisignature Wallet in Solidity",
-    description:
-      "Learn to build a multisignature wallet in Solidity that requires multiple approvals for transactions. Essential security pattern for Ethereum developers.",
-  },
-  [ChallengeId.SVG_NFT]: {
-    title: "Create On-Chain SVG NFTs with Solidity",
-    description:
-      "Learn to generate on-chain SVG graphics and create fully on-chain NFTs using Solidity smart contracts. Advanced NFT development tutorial.",
-  },
 };
 
 export function generateHeadingId(text: string): string {

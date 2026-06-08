@@ -62,6 +62,10 @@ type ChatMessageProps = {
 };
 
 export function ChatMessage({ message, isStreaming }: ChatMessageProps) {
+  const hasText = message.parts.some(p => p.type === "text" && p.text.trim().length > 0);
+
+  if (message.role === "assistant" && !hasText && !isStreaming) return null;
+
   return (
     <div className={`chat ${message.role === "user" ? "chat-end" : "chat-start"}`}>
       {message.role === "assistant" && (
