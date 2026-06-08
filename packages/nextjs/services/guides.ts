@@ -1,4 +1,4 @@
-import { ReactElement, createElement } from "react";
+import { ReactElement, ReactNode, createElement, isValidElement } from "react";
 import type { ComponentPropsWithoutRef } from "react";
 import fs from "fs";
 import { compileMDX } from "next-mdx-remote/rsc";
@@ -46,6 +46,16 @@ export function formatGuideDate(dateStr: string): string {
   });
 }
 
+// Flatten rendered MDX children to plain text so heading ids match the ones the
+// table of contents builds from the raw markdown (which contains no React nodes).
+function nodeToText(node: ReactNode): string {
+  if (node === null || node === undefined || typeof node === "boolean") return "";
+  if (typeof node === "string" || typeof node === "number") return String(node);
+  if (Array.isArray(node)) return node.map(nodeToText).join("");
+  if (isValidElement<{ children?: ReactNode }>(node)) return nodeToText(node.props.children);
+  return "";
+}
+
 const mdxComponents = {
   a: (props: ComponentPropsWithoutRef<"a">) => {
     const isInternal = props.href && (props.href.startsWith("/") || props.href.startsWith("#"));
@@ -55,7 +65,7 @@ const mdxComponents = {
   h2: ({ children, ...props }: ComponentPropsWithoutRef<"h2">) =>
     createElement(
       "h2",
-      { ...props, id: generateHeadingId(String(children)), style: { scrollMarginTop: "80px" } },
+      { ...props, id: generateHeadingId(nodeToText(children)), style: { scrollMarginTop: "80px" } },
       children,
     ),
   video: (props: ComponentPropsWithoutRef<"video">) =>

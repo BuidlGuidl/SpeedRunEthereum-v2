@@ -336,6 +336,19 @@ export function generateHeadingId(text: string): string {
     .replace(/\s+/g, "-");
 }
 
+// Strip inline markdown (links, images, code, bold, italic) down to its visible text so the
+// table of contents reads cleanly and its ids match the rendered headings, which carry no markup.
+function stripInlineMarkdown(text: string): string {
+  return text
+    .replace(/!\[([^\]]*)\]\([^)]*\)/g, "$1") // images -> alt text
+    .replace(/\[([^\]]+)\]\([^)]*\)/g, "$1") // links -> link text
+    .replace(/`([^`]+)`/g, "$1") // inline code
+    .replace(/\*\*([^*]+)\*\*/g, "$1") // bold **text**
+    .replace(/__([^_]+)__/g, "$1") // bold __text__
+    .replace(/\*([^*]+)\*/g, "$1") // italic *text*
+    .replace(/_([^_]+)_/g, "$1"); // italic _text_
+}
+
 export function extractHeadings(markdown: string): Heading[] {
   const headings: Heading[] = [];
   let inFence = false;
@@ -348,7 +361,7 @@ export function extractHeadings(markdown: string): Heading[] {
     if (inFence) continue;
     const match = line.match(/^##\s+(.+)$/);
     if (match) {
-      const text = match[1].trim();
+      const text = stripInlineMarkdown(match[1].trim());
       headings.push({ id: generateHeadingId(text), text });
     }
   }
