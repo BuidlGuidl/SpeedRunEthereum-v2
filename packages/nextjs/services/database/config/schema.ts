@@ -129,6 +129,21 @@ export const userNotes = pgTable("user_notes", {
   createdAt: timestamp().defaultNow().notNull(),
 });
 
+// Per-wallet daily token spend on the AI chat assistant. Backs the token-abuse
+// gate in /api/chat — keyed on the UTC day so the budget resets at midnight UTC.
+export const chatTokenUsage = pgTable(
+  "chat_token_usage",
+  {
+    userAddress: varchar({ length: 42 }).notNull(),
+    day: varchar({ length: 10 }).notNull(), // UTC date, YYYY-MM-DD
+    inputTokens: integer().default(0).notNull(),
+    outputTokens: integer().default(0).notNull(),
+    requestCount: integer().default(0).notNull(),
+    updatedAt: timestamp().defaultNow().notNull(),
+  },
+  table => [primaryKey({ columns: [table.userAddress, table.day] })],
+);
+
 export const builds = pgTable(
   "builds",
   {
