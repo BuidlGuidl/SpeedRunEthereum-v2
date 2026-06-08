@@ -337,13 +337,20 @@ export function generateHeadingId(text: string): string {
 }
 
 export function extractHeadings(markdown: string): Heading[] {
-  const h2Regex = /^##\s+(.+)$/gm;
   const headings: Heading[] = [];
-  let match;
-  while ((match = h2Regex.exec(markdown)) !== null) {
-    const text = match[1];
-    const id = generateHeadingId(text);
-    headings.push({ id, text });
+  let inFence = false;
+  for (const line of markdown.split(/\r?\n/)) {
+    // Toggle in/out of fenced code blocks so example snippets aren't indexed as headings.
+    if (/^\s*(```|~~~)/.test(line)) {
+      inFence = !inFence;
+      continue;
+    }
+    if (inFence) continue;
+    const match = line.match(/^##\s+(.+)$/);
+    if (match) {
+      const text = match[1].trim();
+      headings.push({ id: generateHeadingId(text), text });
+    }
   }
   return headings;
 }
