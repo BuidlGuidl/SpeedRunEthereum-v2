@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { convertToModelMessages, streamText } from "ai";
+import { upsertChatConversation } from "~~/services/database/repositories/chatConversations";
 import { getUserByAddress } from "~~/services/database/repositories/users";
 import { fetchGithubChallengeReadme, fetchGithubConceptsYaml } from "~~/services/github";
 import { getChatModel } from "~~/utils/ai/models";
@@ -9,7 +10,7 @@ import { buildChatSystemPrompt } from "~~/utils/ai/system-prompt";
 export const maxDuration = 60;
 
 export async function POST(req: NextRequest) {
-  const { messages, challengeId, github, address } = await req.json();
+  const { messages, challengeId, github, address, conversationId } = await req.json();
 
   // TODO: this is not proof of ownership:
   // a client could send any registered address (impersonation is accepted for now; future EIP-712 or SIWE?).
@@ -24,7 +25,8 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Register as a builder to use the assistant." }, { status: 403 });
   }
 
-  if (!messages || !challengeId) {
+  // conversationId is the client-minted session id; it keys the persisted transcript row (ADR 0004).
+  if (!messages || !challengeId || typeof conversationId !== "string") {
     return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
   }
 
@@ -64,5 +66,16 @@ export async function POST(req: NextRequest) {
     },
   });
 
-  return result.toUIMessageStreamResponse();
+  // Drain the stream server-side (no await) so onFinish still fires — and the row still saves —
+  // if the builder closes the tab mid-answer.
+  void result.consumeStream();
+
+  return result.toUIMessageStreamResponse({
+    // Persist the whole assembled conversation once the turn completes. This is the *second*
+    // onFinish: streamText's onFinish (above) charges tokens; this one logs the transcript.
+    // toUIMessageStreamResponse hands back the full UIMessage[], which we store whole (ADR 0004).
+    onFinish: ({ messages: updatedMessages }) => {
+      void upsertChatConversation(conversationId, userAddress, challengeId, updatedMessages);
+    },
+  });
 }

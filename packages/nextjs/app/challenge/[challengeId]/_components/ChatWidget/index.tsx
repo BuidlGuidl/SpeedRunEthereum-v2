@@ -32,6 +32,13 @@ export function ChatWidget({ challengeId, github }: ChatWidgetProps) {
   useEffect(() => {
     connectedAddressRef.current = connectedAddress;
   }, [connectedAddress]);
+
+  // One conversationId per chat session, minted client-side (ADR 0004): a new id = a new logged row.
+  // Held in a ref so the memoized transport reads the current id at send time; reset mints a fresh one.
+  const conversationIdRef = useRef<string>("");
+  if (!conversationIdRef.current) {
+    conversationIdRef.current = crypto.randomUUID();
+  }
   const [isOpen, setIsOpen] = useState(false);
   const [input, setInput] = useState("");
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -47,7 +54,13 @@ export function ChatWidget({ challengeId, github }: ChatWidgetProps) {
         api: "/api/chat",
         // Build the body at send time so the wallet address is always current (a memo would capture it stale).
         prepareSendMessagesRequest: ({ messages }) => ({
-          body: { messages, challengeId, github, address: connectedAddressRef.current },
+          body: {
+            messages,
+            challengeId,
+            github,
+            address: connectedAddressRef.current,
+            conversationId: conversationIdRef.current,
+          },
         }),
       }),
     [challengeId, github],
@@ -103,6 +116,8 @@ export function ChatWidget({ challengeId, github }: ChatWidgetProps) {
   const handleReset = () => {
     setMessages([]);
     setIsSubmitting(false);
+    // Start a clean session so a mid-challenge clear logs to a new row, not the old one.
+    conversationIdRef.current = crypto.randomUUID();
   };
 
   const handleRetry = async () => {
