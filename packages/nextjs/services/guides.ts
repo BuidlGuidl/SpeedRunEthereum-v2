@@ -3,6 +3,8 @@ import type { ComponentPropsWithoutRef } from "react";
 import fs from "fs";
 import { compileMDX } from "next-mdx-remote/rsc";
 import path from "path";
+import rehypeRaw from "rehype-raw";
+import { GuideImageLightbox } from "~~/app/guides/_components/GuideImageLightbox";
 import { Heading, extractHeadings, generateHeadingId } from "~~/utils/challenges";
 
 const guidesDirectory = path.join(process.cwd(), "guides");
@@ -56,6 +58,26 @@ function nodeToText(node: ReactNode): string {
   return "";
 }
 
+// Raw HTML tables in the markdown are indented for readability, but rehype-raw keeps the
+// newline/indent text nodes inside <table>/<thead>/<tbody>/<tr>, which React rejects as
+// invalid children and turns into hydration errors. Strip them.
+type HastNode = { type: string; tagName?: string; value?: string; children?: HastNode[] };
+
+const TABLE_STRUCTURE_TAGS = new Set(["table", "thead", "tbody", "tfoot", "tr", "colgroup"]);
+
+function rehypeStripTableWhitespace() {
+  return (tree: HastNode) => {
+    const walk = (node: HastNode) => {
+      if (!node.children) return;
+      if (node.tagName && TABLE_STRUCTURE_TAGS.has(node.tagName)) {
+        node.children = node.children.filter(child => !(child.type === "text" && /^\s*$/.test(child.value ?? "")));
+      }
+      node.children.forEach(walk);
+    };
+    walk(tree);
+  };
+}
+
 const mdxComponents = {
   a: (props: ComponentPropsWithoutRef<"a">) => {
     const isInternal = props.href && (props.href.startsWith("/") || props.href.startsWith("#"));
@@ -68,6 +90,8 @@ const mdxComponents = {
       { ...props, id: generateHeadingId(nodeToText(children)), style: { scrollMarginTop: "80px" } },
       children,
     ),
+  img: (props: ComponentPropsWithoutRef<"img">) =>
+    createElement(GuideImageLightbox, { src: typeof props.src === "string" ? props.src : "", alt: props.alt ?? "" }),
   video: (props: ComponentPropsWithoutRef<"video">) =>
     createElement("video", {
       controls: true,
@@ -75,6 +99,32 @@ const mdxComponents = {
       ...props,
       style: { width: "100%", borderRadius: "8px" },
     }),
+  iframe: (props: ComponentPropsWithoutRef<"iframe">) =>
+    createElement(
+      "div",
+      {
+        style: {
+          position: "relative",
+          width: "100%",
+          paddingBottom: "56.25%",
+          borderRadius: "0.75rem",
+          overflow: "hidden",
+          marginTop: "1rem",
+          marginBottom: "1rem",
+        },
+      },
+      createElement("iframe", {
+        ...props,
+        style: {
+          position: "absolute",
+          top: 0,
+          left: 0,
+          width: "100%",
+          height: "100%",
+          border: "none",
+        },
+      }),
+    ),
 };
 
 export async function getAllGuides(): Promise<Guide[]> {
@@ -98,6 +148,10 @@ export async function getGuideBySlug(slug: string): Promise<Guide | null> {
       source: fileContents,
       options: {
         parseFrontmatter: true,
+        mdxOptions: {
+          rehypePlugins: [rehypeRaw, rehypeStripTableWhitespace],
+          format: "md",
+        },
       },
       components: mdxComponents,
     });

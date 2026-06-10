@@ -4130,6 +4130,7 @@ __metadata:
     "@types/node": ~22.17.0
     "@types/pg": ^8
     "@types/react": ~19.1.9
+    "@types/react-dom": ~19.1.0
     "@typescript-eslint/eslint-plugin": ~5.40.0
     "@uniswap/sdk-core": ~5.8.2
     "@uniswap/v2-sdk": ~4.6.1
@@ -5111,6 +5112,15 @@ __metadata:
   version: 1.2.7
   resolution: "@types/range-parser@npm:1.2.7"
   checksum: 95640233b689dfbd85b8c6ee268812a732cf36d5affead89e806fe30da9a430767af8ef2cd661024fd97e19d61f3dec75af2df5e80ec3bea000019ab7028629a
+  languageName: node
+  linkType: hard
+
+"@types/react-dom@npm:~19.1.0":
+  version: 19.1.11
+  resolution: "@types/react-dom@npm:19.1.11"
+  peerDependencies:
+    "@types/react": ^19.0.0
+  checksum: 37253fe56fbf3c75af76a891e8ef921304f78b12078ed708ff964db39f55f43bb6358c6635470a760b3563a6e90ac3ad60d2bf0c19445011b7c5bea891a09466
   languageName: node
   linkType: hard
 
