@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { convertToModelMessages, streamText } from "ai";
+import { convertToModelMessages, createIdGenerator, streamText } from "ai";
 import { upsertChatConversation } from "~~/services/database/repositories/chatConversations";
 import { getUserByAddress } from "~~/services/database/repositories/users";
 import { fetchGithubChallengeReadme, fetchGithubConceptsYaml } from "~~/services/github";
@@ -8,6 +8,11 @@ import { MAX_OUTPUT_TOKENS, chargeTokenUsage, isOverDailyBudget } from "~~/utils
 import { buildChatSystemPrompt } from "~~/utils/ai/system-prompt";
 
 export const maxDuration = 60;
+
+// Server-side id for each new assistant message. The SDK's generator (prefixed, collision-resistant)
+// is the canonical persistence choice; the id is streamed to the client so its copy and the stored
+// copy match. Distinct from conversationId (the row PK / opik session id), which stays a uuid.
+const newMessageId = createIdGenerator({ prefix: "msg", size: 16 });
 
 export async function POST(req: NextRequest) {
   const { messages, challengeId, github, address, conversationId } = await req.json();
@@ -78,7 +83,7 @@ export async function POST(req: NextRequest) {
     originalMessages: messages,
     // The last original message is the user's, so a fresh assistant message is created; without this
     // it would be stored with an empty id. Give every persisted message a real id.
-    generateMessageId: () => crypto.randomUUID(),
+    generateMessageId: newMessageId,
     // Persist the whole assembled conversation once the turn completes. This is the *second*
     // onFinish: streamText's onFinish (above) charges tokens; this one logs the transcript.
     // The full UIMessage[] is stored whole (ADR 0004).
