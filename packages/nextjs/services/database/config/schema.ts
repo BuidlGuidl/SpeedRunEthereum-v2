@@ -145,14 +145,9 @@ export const chatTokenUsage = pgTable(
   table => [primaryKey({ columns: [table.userAddress, table.day] })],
 );
 
-// One AI chat session per row, the whole conversation held in a single jsonb document.
-// The id is minted client-side at session start (= the opik session_id); a new id = a new row.
-// Stored whole rather than a row-per-message: on ai-sdk v6 a UIMessage is a structured object
-// (parts[] + metadata), and toUIMessageStreamResponse hands back the assembled array, so the
-// array is the SDK's own persistence shape. Aggregation reads these blobs later into its own
-// store keyed by conversationId — this table stays a pure append-only session log. See ADR 0004.
+// One AI chat session per row; the whole conversation in a single jsonb document, upserted each turn.
 export const chatConversations = pgTable("chat_conversations", {
-  id: uuid().primaryKey(), // client-minted at session start, not server-defaulted
+  id: uuid().primaryKey(), // client-minted, not server-defaulted
   userAddress: varchar({ length: 42 }).notNull(),
   challengeId: varchar({ length: 255 }).notNull(), // known the moment the chat opens
   messages: jsonb().$type<UIMessage[]>().notNull(), // the whole conversation, one jsonb document

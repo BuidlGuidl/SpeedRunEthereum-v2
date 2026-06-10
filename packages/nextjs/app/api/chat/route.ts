@@ -28,7 +28,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Register as a builder to use the assistant." }, { status: 403 });
   }
 
-  // conversationId is the client-minted session id; it keys the persisted transcript row (ADR 0004).
+  // conversationId keys the persisted transcript row.
   if (!messages || !challengeId || typeof conversationId !== "string") {
     return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
   }

@@ -33,8 +33,8 @@ export function ChatWidget({ challengeId, github }: ChatWidgetProps) {
     connectedAddressRef.current = connectedAddress;
   }, [connectedAddress]);
 
-  // One conversationId per chat session, minted client-side (ADR 0004): a new id = a new logged row.
-  // Held in a ref so the memoized transport reads the current id at send time; reset mints a fresh one.
+  // One conversationId per session = one logged row. In a ref so the memoized transport reads the
+  // current id at send time; reset mints a fresh one.
   const conversationIdRef = useRef<string>("");
   if (!conversationIdRef.current) {
     conversationIdRef.current = crypto.randomUUID();
