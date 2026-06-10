@@ -9,9 +9,7 @@ import { buildChatSystemPrompt } from "~~/utils/ai/system-prompt";
 
 export const maxDuration = 60;
 
-// Server-side id for each new assistant message. The SDK's generator (prefixed, collision-resistant)
-// is the canonical persistence choice; the id is streamed to the client so its copy and the stored
-// copy match. Distinct from conversationId (the row PK / opik session id), which stays a uuid.
+// Stable ids for persisted assistant messages (streamed to the client so both copies match).
 const newMessageId = createIdGenerator({ prefix: "msg", size: 16 });
 
 export async function POST(req: NextRequest) {
@@ -71,22 +69,14 @@ export async function POST(req: NextRequest) {
     },
   });
 
-  // Drain the stream server-side (no await) so onFinish still fires — and the row still saves —
-  // if the builder closes the tab mid-answer.
+  // Drain server-side so the transcript still saves if the builder closes the tab mid-answer.
   void result.consumeStream();
 
   return result.toUIMessageStreamResponse({
-    // streamText only ever sees model messages, so without originalMessages the response's onFinish
-    // would hand back just the new assistant turn. Passing the incoming UIMessage[] puts the SDK in
-    // "persistence mode": onFinish.messages becomes originalMessages + the response, i.e. the whole
-    // conversation, and the response message gets a real id (not "").
+    // Persistence mode: onFinish gets the whole conversation (with ids), not just the new turn.
     originalMessages: messages,
-    // The last original message is the user's, so a fresh assistant message is created; without this
-    // it would be stored with an empty id. Give every persisted message a real id.
     generateMessageId: newMessageId,
-    // Persist the whole assembled conversation once the turn completes. This is the *second*
-    // onFinish: streamText's onFinish (above) charges tokens; this one logs the transcript.
-    // The full UIMessage[] is stored whole (ADR 0004).
+    // Log the full transcript once the turn completes (the token charge happens above in streamText).
     onFinish: ({ messages: updatedMessages }) => {
       void upsertChatConversation(conversationId, userAddress, challengeId, updatedMessages);
     },
