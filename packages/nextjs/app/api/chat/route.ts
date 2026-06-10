@@ -71,9 +71,17 @@ export async function POST(req: NextRequest) {
   void result.consumeStream();
 
   return result.toUIMessageStreamResponse({
+    // streamText only ever sees model messages, so without originalMessages the response's onFinish
+    // would hand back just the new assistant turn. Passing the incoming UIMessage[] puts the SDK in
+    // "persistence mode": onFinish.messages becomes originalMessages + the response, i.e. the whole
+    // conversation, and the response message gets a real id (not "").
+    originalMessages: messages,
+    // The last original message is the user's, so a fresh assistant message is created; without this
+    // it would be stored with an empty id. Give every persisted message a real id.
+    generateMessageId: () => crypto.randomUUID(),
     // Persist the whole assembled conversation once the turn completes. This is the *second*
     // onFinish: streamText's onFinish (above) charges tokens; this one logs the transcript.
-    // toUIMessageStreamResponse hands back the full UIMessage[], which we store whole (ADR 0004).
+    // The full UIMessage[] is stored whole (ADR 0004).
     onFinish: ({ messages: updatedMessages }) => {
       void upsertChatConversation(conversationId, userAddress, challengeId, updatedMessages);
     },
