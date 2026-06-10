@@ -109,6 +109,8 @@ As each deep dive publishes, this guide becomes the hub that links the workflow 
   </tbody>
 </table>
 
+![End-to-end workflow for building an Ethereum dApp with AI, split into a human judgment lane and an AI execution lane across five phases](/assets/guides/ai-dapp-workflow.png)
+
 ---
 ## Before you start
 
@@ -147,6 +149,8 @@ Around late November 2025, with models like [Claude Opus 4.5](https://www.anthro
 The failure mode is familiar if you have tried this with Ethereum code. It imports a hook that existed in an older wagmi example. It writes a contract that stores an array you should have emitted as events. It passes the happy-path test and misses the economic assumption that makes the feature unsafe.
 
 So the bottleneck moved, but it did not disappear. Your job is now:
+
+![The development bottleneck shifting from writing Solidity syntax to writing specs and reviewing AI output](/assets/guides/development-bottleneck-moved.png)
 
 - Make the product decision before the agent starts generating files.
 - Give it enough local context that it follows the repo's patterns.
@@ -187,7 +191,7 @@ The [Speedrun Ethereum challenges](https://speedrunethereum.com) give you a prac
 
 You can "speedrun your speedrun" by running `/start` in Claude Code, Cursor, or most modern IDEs. You'll get the help of an AI tutor to guide you through the curriculum, providing concept explanations, knowledge checks, hints (not answers), and live code reviews.
 
-{/* TODO: Add the Speedrun Ethereum AI Tutor demo video here once the asset is ready. Suggested path: /assets/guides/ai-tutor-demo.mp4 */}
+<iframe src="https://www.youtube-nocookie.com/embed/-PmiWqxzBdo?rel=0&modestbranding=1&iv_load_policy=3&color=white&disablekb=1" title="Speedrun Ethereum AI Tutor Demo" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowFullScreen></iframe>
 
 This is the fastest useful version of learning: you still do the work, but you get unstuck faster and get feedback while the concepts are fresh.
 
@@ -291,6 +295,8 @@ The most common hybrid patterns:
 - **Gasless transactions:** ERC-4337 smart accounts, a paymaster, or a relayer can let users take an action without holding ETH first. The contract still enforces the rules; the backend helps with the transaction flow.
 - **Off-chain computation, on-chain settlement:** compute the expensive part off-chain, then post the result, proof, or commitment on-chain. This is useful when the chain should settle the outcome, but does not need to run every calculation itself.
 
+![What belongs on-chain versus off-chain, connected by hybrid patterns like event indexing and gasless transactions](/assets/guides/onchain-vs-offchain.png)
+
 > **Practical check:** put something on-chain when users need to verify it or act on it. Put it off-chain when it is mostly for search, sorting, notifications, analytics, or a dashboard.
 
 ---
@@ -357,6 +363,8 @@ This is especially useful because your contract already emits events: deposits, 
 ## What actually makes this work
 
 This workflow works because each tool gives the agent better context.
+
+![Four tools bridging the gap between what an AI assistant assumes and what is true about your project: AGENTS.md, the Skills library, Context7, and SpeedRunEthereum](/assets/guides/context-gap-bridge-diagram.png)
 
 `AGENTS.md` tells the assistant how the repo is structured. Skills give it better context for Ethereum standards. Context7 helps when a library or API has changed. Speedrun Ethereum teaches you the core Ethereum ideas, so you can notice when the agent writes something that looks right but is not. Tests and review show where the code breaks.
 
