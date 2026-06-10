@@ -1,5 +1,5 @@
 import type { UIMessage } from "ai";
-import { sql } from "drizzle-orm";
+import { eq, sql } from "drizzle-orm";
 import { db } from "~~/services/database/config/postgresClient";
 import { chatConversations } from "~~/services/database/config/schema";
 
@@ -20,5 +20,7 @@ export async function upsertChatConversation(
         messageCount: messages.length,
         updatedAt: sql`now()`,
       },
+      // Only the row's owner can rewrite it, so a guessed/reused id can't clobber someone else's log.
+      setWhere: eq(chatConversations.userAddress, userAddress),
     });
 }
