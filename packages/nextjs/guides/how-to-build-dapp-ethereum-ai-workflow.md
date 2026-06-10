@@ -32,20 +32,6 @@ faqs:
 
 ---
 
-## Article series
-
-This article is the index. The deep dives will cover the parts where implementation details matter:
-
-1. **Environment and AI context:** Scaffold-ETH 2, `AGENTS.md`, Skills, and live docs.
-2. **Ideation and specs:** choosing a viable dApp idea, writing a spec, and stress-testing the architecture.
-3. **Smart contracts and security:** using Skills, OpenZeppelin, tests, and AI-assisted review without outsourcing judgment.
-4. **Frontend and backend:** wiring Scaffold-ETH hooks, indexing events, and deciding what belongs off-chain.
-5. **Deployment and launch:** testnets, L2s, launch assets, and community automation.
-
-As each deep dive publishes, this guide becomes the hub that links the workflow together.
-
----
-
 ## Workflow map
 
 <table className="workflow-map-table">
