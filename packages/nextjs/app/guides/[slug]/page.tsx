@@ -54,9 +54,9 @@ export default async function GuidePage(props: { params: Promise<{ slug: string 
 
   const heroHeader = (
     <>
-      <h1 className="text-3xl lg:text-4xl font-extrabold text-primary-content mb-3">{guide.title}</h1>
-      {guide.description && <p className="text-lg text-primary-content/90 mb-4">{guide.description}</p>}
-      <div className="text-sm text-primary-content/80 flex items-center gap-4 flex-wrap">
+      <h1 className="text-3xl lg:text-4xl font-extrabold text-base-content mb-3">{guide.title}</h1>
+      {guide.description && <p className="text-lg text-base-content/90 mb-4">{guide.description}</p>}
+      <div className="text-sm text-base-content/80 flex items-center gap-4 flex-wrap">
         {guide.date && <span>📅 {formatGuideDate(guide.date)}</span>}
         <span>🕐 {guide.readingTime} min read</span>
       </div>
@@ -89,7 +89,7 @@ export default async function GuidePage(props: { params: Promise<{ slug: string 
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
       )}
 
-      <div className="bg-gradient-to-r from-primary to-neutral py-10 lg:py-14">
+      <div className="bg-[#A8E7F4] dark:bg-[#015555] py-10 lg:py-14">
         <div className={`${containerClass} ${gridClass}`}>
           {showNavigation && <div className="hidden lg:block" aria-hidden />}
           <div>{heroHeader}</div>
