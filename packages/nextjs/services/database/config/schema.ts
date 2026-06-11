@@ -8,6 +8,7 @@ import {
   UTMParams,
   UserRole,
 } from "./types";
+import type { UIMessage } from "ai";
 import { SQL, relations, sql } from "drizzle-orm";
 import {
   AnyPgColumn,
@@ -143,6 +144,17 @@ export const chatTokenUsage = pgTable(
   },
   table => [primaryKey({ columns: [table.userAddress, table.day] })],
 );
+
+// One AI chat session per row; the whole conversation in a single jsonb document, upserted each turn.
+export const chatConversations = pgTable("chat_conversations", {
+  id: uuid().primaryKey(), // client-minted, not server-defaulted
+  userAddress: varchar({ length: 42 }).notNull(),
+  challengeId: varchar({ length: 255 }).notNull(), // known the moment the chat opens
+  messages: jsonb().$type<UIMessage[]>().notNull(), // the whole conversation, one jsonb document
+  messageCount: integer().default(0).notNull(),
+  createdAt: timestamp().defaultNow().notNull(),
+  updatedAt: timestamp().defaultNow().notNull(),
+});
 
 export const builds = pgTable(
   "builds",

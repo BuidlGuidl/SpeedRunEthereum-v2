@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { convertToModelMessages, streamText } from "ai";
+import { convertToModelMessages, createIdGenerator, streamText } from "ai";
+import { upsertChatConversation } from "~~/services/database/repositories/chatConversations";
 import { getUserByAddress } from "~~/services/database/repositories/users";
 import { fetchGithubChallengeReadme, fetchGithubConceptsYaml } from "~~/services/github";
 import { getChatModel } from "~~/utils/ai/models";
@@ -8,8 +9,11 @@ import { buildChatSystemPrompt } from "~~/utils/ai/system-prompt";
 
 export const maxDuration = 60;
 
+// Stable ids for persisted assistant messages (streamed to the client so both copies match).
+const newMessageId = createIdGenerator({ prefix: "msg", size: 16 });
+
 export async function POST(req: NextRequest) {
-  const { messages, challengeId, github, address } = await req.json();
+  const { messages, challengeId, github, address, conversationId } = await req.json();
 
   // TODO: this is not proof of ownership:
   // a client could send any registered address (impersonation is accepted for now; future EIP-712 or SIWE?).
@@ -24,7 +28,8 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Register as a builder to use the assistant." }, { status: 403 });
   }
 
-  if (!messages || !challengeId) {
+  // conversationId keys the persisted transcript row.
+  if (!messages || !challengeId || typeof conversationId !== "string") {
     return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
   }
 
@@ -64,5 +69,16 @@ export async function POST(req: NextRequest) {
     },
   });
 
-  return result.toUIMessageStreamResponse();
+  // Drain server-side so the transcript still saves if the builder closes the tab mid-answer.
+  void result.consumeStream();
+
+  return result.toUIMessageStreamResponse({
+    // Persistence mode: onFinish gets the whole conversation (with ids), not just the new turn.
+    originalMessages: messages,
+    generateMessageId: newMessageId,
+    // Log the full transcript once the turn completes (the token charge happens above in streamText).
+    onFinish: ({ messages: updatedMessages }) => {
+      void upsertChatConversation(conversationId, userAddress, challengeId, updatedMessages);
+    },
+  });
 }
