@@ -121,7 +121,7 @@ export function ChallengeHeader({
           </div>
         </section>
 
-        <div className="my-8 border-t border-base-content/10" />
+        <div className="my-8 border-t border-base-content/25" />
         {children}
       </div>
     </div>
