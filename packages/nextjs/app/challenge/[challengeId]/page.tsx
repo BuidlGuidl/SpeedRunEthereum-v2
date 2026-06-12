@@ -1,5 +1,6 @@
 import { createElement } from "react";
 import type { ComponentPropsWithoutRef, ReactNode } from "react";
+import Image from "next/image";
 import { notFound } from "next/navigation";
 import { ChallengeHeader } from "./_components/ChallengeHeader";
 import { ChallengeSidebar } from "./_components/ChallengeSidebar";
@@ -75,7 +76,7 @@ export default async function ChallengePage(props: { params: Promise<{ challenge
 
   const rawReadme = await fetchGithubChallengeReadme(challenge.github);
   const challengeReadme = prepareMdxReadme(rawReadme);
-  const { headerImageMdx, restMdx } = splitChallengeReadme(challengeReadme);
+  const { restMdx } = splitChallengeReadme(challengeReadme);
   const { owner, repo, branch } = parseGithubUrl(challenge.github);
 
   // Extract headings for the sidebar navigation
@@ -89,90 +90,125 @@ export default async function ChallengePage(props: { params: Promise<{ challenge
   };
 
   return (
-    <div className="flex relative max-w-[100vw]">
-      {/* Sidebar Navigation */}
-      <ChallengeSidebar headings={headings} />
-
-      {/* Main Content */}
-      <div className="flex-1 flex flex-col items-center py-8 px-5 xl:p-12">
-        {challengeReadme ? (
-          <>
-            <div className="prose dark:prose-invert max-w-fit break-words lg:max-w-[850px]">
-              <MDXRemote
-                source={headerImageMdx}
-                components={{ Tabs: MdxTabs, Tab: MdxTab, Details: MdxDetails, Summary: MdxSummary }}
-                options={mdxRemoteOptions}
-              />
-            </div>
-            <ChallengeHeader
-              skills={staticMetadata?.skills}
-              skillLevel={staticMetadata?.skillLevel}
-              timeToComplete={staticMetadata?.timeToComplete}
-              helpfulLinks={staticMetadata?.helpfulLinks}
-              completedByCount={countOfCompletedChallenge}
-              isAiReady={staticMetadata?.isAiReady}
-            />
-            <div className="prose dark:prose-invert max-w-fit break-words lg:max-w-[850px]">
-              <MDXRemote
-                source={restMdx}
-                components={{
-                  a: (props: ComponentPropsWithoutRef<"a">) =>
-                    createElement("a", { ...props, target: "_blank", rel: "noopener" }),
-                  h2: createH2WithId,
-                  Tabs: MdxTabs,
-                  Tab: MdxTab,
-                  Details: MdxDetails,
-                  Summary: MdxSummary,
-                }}
-                options={mdxRemoteOptions}
-              />
-            </div>
-
-            <a
-              href={`https://github.com/${owner}/${repo}/tree/${branch}`}
-              className="block mt-2"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <button className="btn btn-outline btn-sm sm:btn-md">
-                <span className="text-xs sm:text-sm">View on GitHub</span>
-                <ArrowTopRightOnSquareIcon className="w-3 h-3 sm:w-4 sm:h-4" />
-              </button>
-            </a>
-            {guides && guides.length > 0 && (
-              <div className="max-w-[850px] w-full mx-auto">
-                <div className="mt-16 mb-4 font-semibold text-left">Related guides</div>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2 mb-2">
-                  {guides.map(guide => (
-                    <div key={guide.url} className="p-4 border rounded bg-base-300">
-                      <a href={guide.url} className="text-primary underline font-semibold">
-                        {guide.title}
-                      </a>
-                    </div>
-                  ))}
+    <div className="relative max-w-[100vw]">
+      {challengeReadme ? (
+        <>
+          <div className="overflow-hidden bg-[#A8E7F4] dark:bg-[#015555] py-10 lg:py-12">
+            <div className="challenge-page-shell px-4 lg:px-6 lg:grid lg:grid-cols-[18rem_minmax(0,1fr)] lg:gap-8">
+              <div className="hidden lg:flex items-center justify-center pr-2" aria-hidden>
+                {challenge.previewImage && (
+                  <Image
+                    src={challenge.previewImage}
+                    alt=""
+                    width={270}
+                    height={200}
+                    className="w-full max-w-[250px] h-auto object-contain drop-shadow-[0_10px_14px_rgba(0,109,119,0.18)]"
+                    priority
+                  />
+                )}
+              </div>
+              <div className="relative min-w-0">
+                {challenge.previewImage && (
+                  <Image
+                    src={challenge.previewImage}
+                    alt=""
+                    width={520}
+                    height={380}
+                    className="pointer-events-none absolute -right-12 -top-16 hidden w-[430px] max-w-none opacity-[0.12] lg:block dark:opacity-[0.08]"
+                    aria-hidden
+                  />
+                )}
+                <div className="relative z-10 min-w-0 max-w-[760px]">
+                  <div className="mb-2.5 text-sm font-semibold tracking-[0.1em] text-base-content/70">
+                    CHALLENGE #{challenge.sortOrder}
+                  </div>
+                  <h1 className="text-3xl lg:text-4xl font-extrabold text-base-content mb-3 leading-tight">
+                    {challenge.challengeName}
+                  </h1>
+                  {challenge.description && (
+                    <p className="text-[17px] text-base-content/90 m-0 leading-relaxed">{challenge.description}</p>
+                  )}
                 </div>
               </div>
-            )}
-          </>
-        ) : (
-          <div>Failed to load challenge content</div>
-        )}
-        {challenge.autograding && (
-          <>
-            <ConnectAndRegisterBanner />
-            <SubmitChallengeButton challengeId={challenge.id} />
-          </>
-        )}
-        {challenge.externalLink && (
-          <div className="fixed bottom-8 inset-x-0 mx-auto w-fit">
-            <button className="btn btn-sm sm:btn-md btn-primary text-secondary px-3 sm:px-4 mt-2 text-xs sm:text-sm">
-              <a href={challenge.externalLink.link} target="_blank" rel="noopener noreferrer">
-                {challenge.externalLink.claim}
-              </a>
-            </button>
+            </div>
           </div>
-        )}
-      </div>
+
+          <div className="challenge-page-shell px-4 lg:px-6 lg:grid lg:grid-cols-[18rem_minmax(0,1fr)] lg:gap-8 pt-0 pb-10 lg:pb-14">
+            <ChallengeSidebar headings={headings} />
+
+            <main className="min-w-0 max-w-[1040px]">
+              <ChallengeHeader
+                skills={staticMetadata?.skills}
+                skillLevel={staticMetadata?.skillLevel}
+                timeToComplete={staticMetadata?.timeToComplete}
+                helpfulLinks={staticMetadata?.helpfulLinks}
+                completedByCount={countOfCompletedChallenge}
+              >
+                <article className="prose dark:prose-invert max-w-none break-words mt-8">
+                  <MDXRemote
+                    source={restMdx}
+                    components={{
+                      a: (props: ComponentPropsWithoutRef<"a">) =>
+                        createElement("a", { ...props, target: "_blank", rel: "noopener" }),
+                      h2: createH2WithId,
+                      Tabs: MdxTabs,
+                      Tab: MdxTab,
+                      Details: MdxDetails,
+                      Summary: MdxSummary,
+                    }}
+                    options={mdxRemoteOptions}
+                  />
+                </article>
+
+                <a
+                  href={`https://github.com/${owner}/${repo}/tree/${branch}`}
+                  className="block mt-2"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <button className="btn btn-outline btn-sm sm:btn-md">
+                    <span className="text-xs sm:text-sm">View on GitHub</span>
+                    <ArrowTopRightOnSquareIcon className="w-3 h-3 sm:w-4 sm:h-4" />
+                  </button>
+                </a>
+                {guides && guides.length > 0 && (
+                  <div className="w-full">
+                    <div className="mt-16 mb-4 font-semibold text-left">Related guides</div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2 mb-2">
+                      {guides.map(guide => (
+                        <div key={guide.url} className="p-4 border rounded bg-base-300">
+                          <a href={guide.url} className="text-primary underline font-semibold">
+                            {guide.title}
+                          </a>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {challenge.autograding && (
+                  <>
+                    <ConnectAndRegisterBanner />
+                    <SubmitChallengeButton challengeId={challenge.id} />
+                  </>
+                )}
+              </ChallengeHeader>
+            </main>
+          </div>
+        </>
+      ) : (
+        <div className="px-5 py-8">Failed to load challenge content</div>
+      )}
+
+      {challenge.externalLink && (
+        <div className="fixed bottom-8 inset-x-0 mx-auto w-fit">
+          <button className="btn btn-sm sm:btn-md btn-primary text-secondary px-3 sm:px-4 mt-2 text-xs sm:text-sm">
+            <a href={challenge.externalLink.link} target="_blank" rel="noopener noreferrer">
+              {challenge.externalLink.claim}
+            </a>
+          </button>
+        </div>
+      )}
       {staticMetadata?.isAiReady && challenge.github && (
         <ChatWidget challengeId={challenge.id} github={challenge.github} />
       )}

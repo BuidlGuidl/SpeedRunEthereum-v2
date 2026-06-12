@@ -116,6 +116,17 @@ export function ChatWidget({ challengeId, github }: ChatWidgetProps) {
     }
   }, [isOpen]);
 
+  useEffect(() => {
+    if (isOpen) {
+      document.documentElement.dataset.challengeChatOpen = "true";
+      return () => {
+        delete document.documentElement.dataset.challengeChatOpen;
+      };
+    }
+
+    delete document.documentElement.dataset.challengeChatOpen;
+  }, [isOpen]);
+
   if (!isAdmin) return null;
 
   return (
@@ -146,10 +157,10 @@ export function ChatWidget({ challengeId, github }: ChatWidgetProps) {
               <SparklesIcon className="w-5 h-5 text-secondary-content" />
             </div>
             <div className="min-w-0">
-              <h3 className="font-semibold text-secondary-content text-sm leading-tight mb-0">AI Teaching Assistant</h3>
-              <p className="text-[11px] text-secondary-content/60 leading-tight m-0">
-                Guides you, won&apos;t give answers
-              </p>
+              <h3 className="font-semibold text-secondary-content text-base leading-tight mb-0">
+                AI Teaching Assistant
+              </h3>
+              <p className="text-xs text-secondary-content/65 leading-tight m-0">Guides you, won&apos;t give answers</p>
             </div>
           </div>
           <div className="flex items-center gap-1 mt-[3px]">

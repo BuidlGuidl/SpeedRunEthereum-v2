@@ -13,10 +13,17 @@ export function ChatEmptyState({ onSuggestionClick }: { onSuggestionClick: (text
         <ChatBubbleLeftRightIcon className="w-7 h-7 text-primary" />
       </div>
       <div>
-        <p className="font-semibold text-base-content text-sm">Learn the concepts</p>
-        <p className="text-xs text-base-content/50 mt-1 max-w-[260px]">
+        <p className="font-semibold text-base-content text-base">Learn the concepts</p>
+        <p className="text-sm leading-5 text-base-content/55 mt-2 max-w-[300px]">
           Get grounded on the concepts before you dive into the code. I&apos;ll explain what this challenge is about,
           then help you set it up locally.
+        </p>
+        <p className="text-sm leading-5 text-base-content/65 mt-4 max-w-[300px]">
+          You can also use your local IDE with AI context, or follow the{" "}
+          <a href="#ai-guided-learning-mode-optional" className="link link-primary font-medium">
+            AI-guided section
+          </a>
+          .
         </p>
       </div>
       <div className="flex flex-wrap gap-2 mt-1 justify-center">
@@ -24,7 +31,7 @@ export function ChatEmptyState({ onSuggestionClick }: { onSuggestionClick: (text
           <button
             key={suggestion}
             onClick={() => onSuggestionClick(suggestion)}
-            className="text-[11px] px-3 py-1.5 rounded-full border border-primary/20 text-primary hover:bg-primary/10 transition-colors"
+            className="text-xs px-3 py-1.5 rounded-full border border-primary/20 text-primary hover:bg-primary/10 transition-colors"
           >
             {suggestion}
           </button>

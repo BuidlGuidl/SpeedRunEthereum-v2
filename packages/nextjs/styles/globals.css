@@ -11,6 +11,35 @@ body {
   min-height: 100vh;
 }
 
+.challenge-page-shell {
+  width: 100%;
+  max-width: 1400px;
+  margin-left: auto;
+  margin-right: auto;
+  transition:
+    margin-left 300ms ease,
+    margin-right 300ms ease;
+}
+
+@media (min-width: 1024px) {
+  html[data-challenge-chat-open="true"] .challenge-page-shell {
+    margin-left: 4rem;
+    margin-right: 0;
+  }
+}
+
+@media (min-width: 1280px) {
+  html[data-challenge-chat-open="true"] .challenge-page-shell {
+    margin-left: 5rem;
+  }
+}
+
+@media (min-width: 1536px) {
+  html[data-challenge-chat-open="true"] .challenge-page-shell {
+    margin-left: 6rem;
+  }
+}
+
 h1,
 h2,
 h3,
