@@ -94,32 +94,11 @@ export default async function ChallengePage(props: { params: Promise<{ challenge
     <div className="relative max-w-[100vw]">
       {challengeReadme ? (
         <>
-          <div className="overflow-hidden bg-[#A8E7F4] dark:bg-[#015555] py-10 lg:py-12">
+          <div className="bg-white dark:bg-[#015555] py-10 lg:py-12">
             <div className="challenge-page-shell px-4 lg:px-6 lg:grid lg:grid-cols-[18rem_minmax(0,1fr)] lg:gap-8">
-              <div className="hidden lg:flex items-center justify-center pr-2" aria-hidden>
-                {challenge.previewImage && (
-                  <Image
-                    src={challenge.previewImage}
-                    alt=""
-                    width={270}
-                    height={200}
-                    className="w-full max-w-[250px] h-auto object-contain drop-shadow-[0_10px_14px_rgba(0,109,119,0.18)]"
-                    priority
-                  />
-                )}
-              </div>
-              <div className="relative min-w-0">
-                {challenge.previewImage && (
-                  <Image
-                    src={challenge.previewImage}
-                    alt=""
-                    width={520}
-                    height={380}
-                    className="pointer-events-none absolute -right-12 -top-16 hidden w-[430px] max-w-none opacity-[0.12] lg:block dark:opacity-[0.08]"
-                    aria-hidden
-                  />
-                )}
-                <div className="relative z-10 min-w-0 max-w-[760px]">
+              <div className="hidden lg:block" aria-hidden />
+              <div className="min-w-0 flex flex-col gap-8 lg:flex-row lg:items-center lg:gap-10">
+                <div className="min-w-0 flex-1 max-w-[640px]">
                   <div className="mb-2.5 text-sm font-semibold tracking-[0.1em] text-base-content/70">
                     CHALLENGE #{challenge.sortOrder}
                   </div>
@@ -128,6 +107,18 @@ export default async function ChallengePage(props: { params: Promise<{ challenge
                   </h1>
                   <ChallengeSkills skills={staticMetadata?.skills} />
                 </div>
+                {challenge.previewImage && (
+                  <div className="shrink-0 flex justify-center lg:justify-end">
+                    <Image
+                      src={challenge.previewImage}
+                      alt=""
+                      width={440}
+                      height={330}
+                      className="w-full max-w-[300px] lg:max-w-[360px] h-auto object-contain"
+                      priority
+                    />
+                  </div>
+                )}
               </div>
             </div>
           </div>

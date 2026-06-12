@@ -13,7 +13,7 @@ export function ChallengeSkills({ skills }: { skills?: string[] }) {
       <div className="mb-3 text-sm font-semibold uppercase tracking-wide text-base-content/70">
         Skills you&apos;ll gain
       </div>
-      <ul className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-2.5 text-sm">
+      <ul className="space-y-2.5 text-sm">
         {skills.slice(0, 4).map(skill => (
           <li key={skill} className="flex items-start gap-2">
             <CheckCircleIcon className="w-5 h-5 text-primary self-start shrink-0 mt-0.5" />
