@@ -4,7 +4,6 @@ import SkillLevelIcon from "~~/app/_components/SkillLevelIcon";
 import { SkillLevel } from "~~/utils/challenges";
 
 type Props = {
-  title?: string;
   skillLevel?: SkillLevel;
   timeToComplete?: string;
   helpfulLinks?: { text: string; url?: string }[];

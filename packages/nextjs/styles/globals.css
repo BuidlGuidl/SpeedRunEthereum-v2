@@ -18,13 +18,31 @@ body {
   margin-right: auto;
 }
 
-/* When the chat panel (420px, fixed right) is open, reserve its width instead of shifting the
-   shell: width auto + margin-right can never overflow the viewport, unlike width 100% + margin. */
-@media (min-width: 1024px) {
+/* Reserve the open chat panel's width (420px) on viewports wide enough to fit both; below 2xl it overlays. */
+@media (min-width: 1536px) {
   html[data-challenge-chat-open="true"] .challenge-page-shell {
     width: auto;
     margin-right: calc(420px + 1rem);
   }
+}
+
+/* Thin TOC scrollbar whose thumb only shows while hovering the nav. */
+.toc-scrollbar {
+  scrollbar-width: thin; /* Firefox */
+  scrollbar-color: transparent transparent;
+}
+.toc-scrollbar:hover {
+  scrollbar-color: oklch(var(--bc) / 0.25) transparent;
+}
+.toc-scrollbar::-webkit-scrollbar {
+  width: 6px; /* Chrome/Edge/Safari */
+}
+.toc-scrollbar::-webkit-scrollbar-thumb {
+  background: transparent;
+  border-radius: 3px;
+}
+.toc-scrollbar:hover::-webkit-scrollbar-thumb {
+  background: oklch(var(--bc) / 0.25);
 }
 
 h1,

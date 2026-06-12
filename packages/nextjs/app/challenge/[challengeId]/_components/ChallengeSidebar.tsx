@@ -64,9 +64,9 @@ export function ChallengeSidebar({ headings }: ChallengeSidebarProps) {
       <nav
         className={`
           fixed left-0 top-0 h-full w-72 pt-4 z-40
-          bg-base-100 border-r border-base-300 overflow-y-auto
+          bg-base-100 border-r border-base-300 overflow-y-auto toc-scrollbar
           transition-transform duration-300 ease-in-out
-          lg:sticky lg:top-3 lg:h-[calc(100vh-1.5rem)] lg:w-auto lg:shrink-0 lg:translate-x-0 lg:border-r-0 lg:bg-transparent lg:pt-3
+          lg:sticky lg:top-3 lg:h-auto lg:max-h-[calc(100vh-1.5rem)] lg:w-auto lg:shrink-0 lg:translate-x-0 lg:border-r-0 lg:bg-transparent lg:pt-3
           ${sidebarIsOpen ? "translate-x-0" : "-translate-x-full"}
         `}
       >
