@@ -99,11 +99,8 @@ export default async function ChallengePage(props: { params: Promise<{ challenge
               <div className="hidden lg:block" aria-hidden />
               <div className="min-w-0 flex flex-col gap-8 lg:flex-row lg:items-center lg:gap-10">
                 <div className="min-w-0 flex-1 max-w-[640px]">
-                  <div className="mb-2.5 text-sm font-semibold tracking-[0.1em] text-base-content/70">
-                    CHALLENGE #{challenge.sortOrder}
-                  </div>
                   <h1 className="text-3xl lg:text-4xl font-extrabold text-base-content mb-3 leading-tight">
-                    {challenge.challengeName}
+                    Challenge: {challenge.challengeName}
                   </h1>
                   <ChallengeSkills skills={staticMetadata?.skills} />
                 </div>
