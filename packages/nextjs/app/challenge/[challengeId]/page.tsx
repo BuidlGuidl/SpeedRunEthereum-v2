@@ -4,6 +4,7 @@ import Image from "next/image";
 import { notFound } from "next/navigation";
 import { ChallengeHeader } from "./_components/ChallengeHeader";
 import { ChallengeSidebar } from "./_components/ChallengeSidebar";
+import { ChallengeSkills } from "./_components/ChallengeSkills";
 import { ChatWidget } from "./_components/ChatWidget";
 import { ConnectAndRegisterBanner } from "./_components/ConnectAndRegisterBanner";
 import { Details as MdxDetails, Summary as MdxSummary } from "./_components/MdxDetails";
@@ -125,9 +126,7 @@ export default async function ChallengePage(props: { params: Promise<{ challenge
                   <h1 className="text-3xl lg:text-4xl font-extrabold text-base-content mb-3 leading-tight">
                     {challenge.challengeName}
                   </h1>
-                  {challenge.description && (
-                    <p className="text-[17px] text-base-content/90 m-0 leading-relaxed">{challenge.description}</p>
-                  )}
+                  <ChallengeSkills skills={staticMetadata?.skills} />
                 </div>
               </div>
             </div>
@@ -138,13 +137,12 @@ export default async function ChallengePage(props: { params: Promise<{ challenge
 
             <main className="min-w-0 max-w-[1040px]">
               <ChallengeHeader
-                skills={staticMetadata?.skills}
                 skillLevel={staticMetadata?.skillLevel}
                 timeToComplete={staticMetadata?.timeToComplete}
                 helpfulLinks={staticMetadata?.helpfulLinks}
                 completedByCount={countOfCompletedChallenge}
               >
-                <article className="prose dark:prose-invert max-w-none break-words mt-8">
+                <article className="prose dark:prose-invert max-w-none break-words">
                   <MDXRemote
                     source={restMdx}
                     components={{
