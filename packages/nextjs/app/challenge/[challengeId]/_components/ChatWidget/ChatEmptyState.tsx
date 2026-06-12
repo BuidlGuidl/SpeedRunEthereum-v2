@@ -6,7 +6,13 @@ const SUGGESTIONS = [
   "I'm getting an error",
 ];
 
-export function ChatEmptyState({ onSuggestionClick }: { onSuggestionClick: (text: string) => void }) {
+export function ChatEmptyState({
+  onSuggestionClick,
+  aiGuidedSectionId,
+}: {
+  onSuggestionClick: (text: string) => void;
+  aiGuidedSectionId?: string;
+}) {
   return (
     <div className="flex flex-col items-center justify-center h-full text-center px-6 gap-4">
       <div className="w-14 h-14 rounded-2xl bg-secondary/40 flex items-center justify-center">
@@ -19,10 +25,15 @@ export function ChatEmptyState({ onSuggestionClick }: { onSuggestionClick: (text
           then help you set it up locally.
         </p>
         <p className="text-sm leading-5 text-base-content/65 mt-4 max-w-[300px]">
-          You can also use your local IDE with AI context, or follow the{" "}
-          <a href="#ai-guided-learning-mode-optional" className="link link-primary font-medium">
-            AI-guided section
-          </a>
+          You can also use your local IDE with AI context
+          {aiGuidedSectionId ? (
+            <>
+              , or follow the{" "}
+              <a href={`#${aiGuidedSectionId}`} className="link link-primary font-medium">
+                AI-guided section
+              </a>
+            </>
+          ) : null}
           .
         </p>
       </div>

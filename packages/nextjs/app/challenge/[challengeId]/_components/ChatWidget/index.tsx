@@ -19,9 +19,10 @@ import { useAuthSession } from "~~/hooks/useAuthSession";
 type ChatWidgetProps = {
   challengeId: string;
   github: string;
+  aiGuidedSectionId?: string;
 };
 
-export function ChatWidget({ challengeId, github }: ChatWidgetProps) {
+export function ChatWidget({ challengeId, github, aiGuidedSectionId }: ChatWidgetProps) {
   const { isAdmin } = useAuthSession();
   const [isOpen, setIsOpen] = useState(false);
   const [input, setInput] = useState("");
@@ -191,6 +192,7 @@ export function ChatWidget({ challengeId, github }: ChatWidgetProps) {
             <div ref={contentRef} className="space-y-4">
               {messages.length === 0 && (
                 <ChatEmptyState
+                  aiGuidedSectionId={aiGuidedSectionId}
                   onSuggestionClick={text => {
                     setInput(text);
                     textareaRef.current?.focus();

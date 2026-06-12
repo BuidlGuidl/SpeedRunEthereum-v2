@@ -83,6 +83,11 @@ export default async function ChallengePage(props: { params: Promise<{ challenge
   // Extract headings for the sidebar navigation
   const headings = extractHeadings(restMdx);
 
+  // The chat empty state links to the readme's AI-guided section; derive the anchor from the
+  // extracted headings (same ids the sidebar uses) so the link can't drift, and omit it when
+  // the readme has no such section.
+  const aiGuidedSectionId = headings.find(heading => heading.id.includes("ai-guided"))?.id;
+
   // Custom h2 component that adds IDs for anchor navigation
   const createH2WithId = ({ children, ...props }: { children?: ReactNode }) => {
     const text = String(children);
@@ -196,7 +201,7 @@ export default async function ChallengePage(props: { params: Promise<{ challenge
         </div>
       )}
       {staticMetadata?.isAiReady && challenge.github && (
-        <ChatWidget challengeId={challenge.id} github={challenge.github} />
+        <ChatWidget challengeId={challenge.id} github={challenge.github} aiGuidedSectionId={aiGuidedSectionId} />
       )}
     </div>
   );
