@@ -185,7 +185,7 @@ This is the fastest useful version of learning: you still do the work, but you g
 
 ## Step 3: Plan your Ethereum dApp (spec first, not vibe first)
 
-Before you ask an AI agent to build anything, turn the idea into a spec. The spec is what keeps the agent from guessing: it fixes the decisions that matter before any code exists.
+Before you ask an AI agent to build anything, turn the idea into a spec. The spec is what keeps the agent from guessing, write down the main decisions before you generate any code: features, design, architecture, business logic, and edge cases.
 
 We built 12 **[Build Prompts](https://speedrunethereum.com/build-prompts)** for common Ethereum primitives: Multisig, Bonding Curve, DAO, Streaming Payments, Staking Pool, Token Launchpad, and more. Treat them as starting points, not magic prompts. Pick the closest one, edit the assumptions, and make it match the product you actually want to build.
 
