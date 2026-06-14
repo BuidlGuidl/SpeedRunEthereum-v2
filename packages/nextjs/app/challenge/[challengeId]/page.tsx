@@ -55,6 +55,7 @@ export async function generateMetadata(props: { params: Promise<{ challengeId: s
     title: staticMetadata?.title || challenge?.challengeName || "",
     description: staticMetadata?.description || challenge?.description || "",
     imageRelativePath: challenge?.previewImage || undefined,
+    canonicalPath: `/challenge/${params.challengeId}`,
   });
 }
 

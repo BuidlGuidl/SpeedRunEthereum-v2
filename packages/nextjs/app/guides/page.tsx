@@ -6,6 +6,7 @@ export const metadata = getMetadata({
   title: "Solidity Tutorials and Guides",
   description:
     "Discover in-depth Solidity tutorials and guides to help you become a blockchain developer. Learn Solidity programming, smart contract development, and best practices for building on Ethereum.",
+  canonicalPath: "/guides",
 });
 
 export default async function GuidesPage() {

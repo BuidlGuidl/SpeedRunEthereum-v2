@@ -9,6 +9,18 @@ import { Address } from "~~/components/scaffold-eth";
 import { getBuildByBuildId } from "~~/services/database/repositories/builds";
 import { fetchGithubBuildReadme } from "~~/services/github";
 import { formatShortDate } from "~~/utils/date";
+import { getMetadata } from "~~/utils/scaffold-eth/getMetadata";
+
+export async function generateMetadata(props: { params: Promise<{ buildId: string }> }) {
+  const params = await props.params;
+
+  return getMetadata({
+    title: "Community Build",
+    description: "A Speedrun Ethereum community build.",
+    canonicalPath: `/builds/${params.buildId}`,
+    robots: { index: false, follow: true },
+  });
+}
 
 export default async function BuildPage(props: { params: Promise<{ buildId: string }> }) {
   const params = await props.params;

@@ -6,24 +6,32 @@ const baseUrl = process.env.VERCEL_PROJECT_PRODUCTION_URL
   : `http://localhost:${process.env.PORT || 3000}`;
 const titleTemplate = "%s | Speedrun Ethereum";
 
+type GetMetadataArgs = {
+  title: string;
+  description: string;
+  imageRelativePath?: string;
+  canonicalPath?: string;
+  robots?: Metadata["robots"];
+};
+
 export const getMetadata = ({
   title,
   description,
   imageRelativePath = "/thumbnail.png",
-}: {
-  title: string;
-  description: string;
-  imageRelativePath?: string;
-}): Metadata => {
+  canonicalPath,
+  robots,
+}: GetMetadataArgs): Metadata => {
   const imageUrl = `${baseUrl}${imageRelativePath}`;
 
   return {
     metadataBase: new URL(baseUrl),
+    alternates: canonicalPath ? { canonical: canonicalPath } : undefined,
     title: {
       default: title,
       template: titleTemplate,
     },
     description: description,
+    robots,
     openGraph: {
       title: {
         default: title,

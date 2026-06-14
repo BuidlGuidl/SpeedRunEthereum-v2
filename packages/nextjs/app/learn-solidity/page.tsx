@@ -14,8 +14,8 @@ export const metadata = {
     title: "Learn Solidity with our free Web3 Developer Course",
     description:
       "Master Solidity with a guided curriculum, real-world challenges, and curated guides. Learn by building on Ethereum.",
+    canonicalPath: "/learn-solidity",
   }),
-  alternates: { canonical: "/learn-solidity" },
 };
 
 export default async function LearnSolidityPage() {

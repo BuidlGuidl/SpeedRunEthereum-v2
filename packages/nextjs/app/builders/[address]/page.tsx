@@ -31,6 +31,7 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
   if (!isAddress(address)) {
     return {
       title: "User Not Found",
+      robots: { index: false, follow: true },
     };
   }
   const { shortAddress } = await getShortAddressAndEns(address);
@@ -46,6 +47,8 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
   return {
     metadataBase: new URL(baseUrl),
     title,
+    alternates: { canonical: `/builders/${address}` },
+    robots: { index: false, follow: true },
     openGraph: {
       title,
       type: "website",
