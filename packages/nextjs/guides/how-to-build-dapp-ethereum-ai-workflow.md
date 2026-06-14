@@ -13,8 +13,6 @@ faqs:
     answer: "You can prototype a simple dApp in an afternoon. A secure, well-tested dApp that is ready for real users still takes longer because the hard work shifts to architecture, testing, security review, and deployment decisions."
   - question: "Is Scaffold-ETH 2 suitable for production dApps or just prototyping?"
     answer: "Scaffold-ETH 2 is suitable as a production foundation when you add the normal production work: tests, security review, deployment configuration, monitoring, and audits for contracts that hold value."
-  - question: "What's the difference between deploying on Ethereum mainnet vs. an L2 like Base or Arbitrum?"
-    answer: "An L2 usually gives you much lower transaction costs while keeping the same Solidity and EVM development model. For most new dApps, starting on an L2 like Base, Arbitrum, or Optimism is more practical than deploying directly to Ethereum mainnet."
 ---
 
 *The barrier to building on Ethereum isn't Solidity anymore. It's knowing how to give AI enough context to work without hallucinating, how to review what it produces, and which decisions to keep for yourself.*
