@@ -100,15 +100,15 @@ faqs:
 
 ### What is a dApp?
 
-A decentralized application has two parts. The backend is one or more smart contracts running on Ethereum: they hold the application's state and enforce its rules, and once deployed, that logic is public and no single party (including you) can quietly change it. The frontend is a regular web app that reads contract state and sends transactions. You can host it like any other website, or on decentralized storage like [IPFS](https://docs.ipfs.tech/) so the interface has no single point of failure either.
+A decentralized application has two parts:
+- **The backend is one or more smart contracts** running on Ethereum or other blockchains: they hold the application's state and enforce its rules, and once deployed, that logic is public and no single party (including you) can quietly change it.
+- **The frontend** is a regular web app that reads contract state and sends transactions. You can host it like any other website, or on decentralized storage like [IPFS](https://docs.ipfs.tech/) so the interface has no single point of failure either.
 
 The architecture looks like this:
 
 ![dApp architecture diagram: User wallet signs transactions, frontend sends them via RPC to the smart contract, which writes to blockchain state](/assets/guides/dapp-architecture.png)
 
-Users interact with the dApp through a wallet. The wallet holds their private key and signs transactions with it: the signature proves they control their account and approves that specific action, and the key never leaves the wallet. The frontend just builds the transaction and sends the signed result to the network.
-
-A smart contract works a bit like a vending machine: the rules are fixed when it's deployed, anyone can use it, and you can see exactly what you'll get before you put money in.
+Users interact with the dApp through a wallet. The wallet holds their private key and signs transactions with it. The signature proves they control their account and approves that specific action, and the key never leaves the wallet. The frontend just builds the transaction and sends the signed result to the network.
 
 ### Why build a dApp in 2026?
 
