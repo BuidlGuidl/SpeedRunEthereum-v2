@@ -173,7 +173,7 @@ You want to understand the trade-offs before you commit to one approach, because
 
 If you're new to Ethereum development, do not skip the primitives. AI can help you move faster, but it cannot review a contract for you if you do not understand what the contract is supposed to do.
 
-The [Speedrun Ethereum challenges](https://speedrunethereum.com) give you a practical path through the basics: staking, tokens, NFTs, DEXs, and other patterns you will see again in real dApps. In each challenge you write the contract yourself, run the tests, and deploy it, which is the same loop you'll later supervise an AI agent through.
+The [Speedrun Ethereum challenges](https://speedrunethereum.com) give you a practical path through the basics: staking, tokens, NFTs, DEXs, and other patterns you will see again in real dApps. Each challenge has you write the contract, run the tests, deploy it, connect a frontend, and understand how the pieces fit together before you start directing an AI agent on a project of your own.
 
 You can "speedrun your speedrun" by running `/start` in your agentic AI coding tool. You'll get the help of an AI tutor to guide you through the curriculum, providing concept explanations, knowledge checks, hints (not answers), and live code reviews.
 
