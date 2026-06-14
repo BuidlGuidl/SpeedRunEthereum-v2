@@ -163,9 +163,9 @@ Don't just ask an LLM for "good dApp ideas", you will get generic, unviable junk
 
 **Technical Validation:** Once you have a spark, resist the urge to start generating code. Spend time using tools like [Perplexity](https://perplexity.ai) or [Gemini Deep Research](https://gemini.google/overview/deep-research/) for live technical research (e.g., ERC-4337 compatibility) and [NotebookLM](https://notebooklm.google.com) to chat with dense protocol documentation.
 
-When you are ready to plan the architecture, use a current frontier model to act as your protocol architect. Ask them to propose different approaches with explicit trade-offs for gas cost, complexity, and security.
+When you plan the architecture, use a frontier model to act as your protocol architect. Ask it to propose different approaches and explain the trade-offs of each implementation.
 
-You want to understand the trade-offs before you commit to one approach. A structural problem is much cheaper to fix at this stage.
+You want to understand the trade-offs before you commit to one approach, because a structural problem is much cheaper to fix at this stage.
 
 ---
 
