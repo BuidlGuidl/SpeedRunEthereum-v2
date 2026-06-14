@@ -8,7 +8,7 @@ faqs:
   - question: "Do I need to know Solidity to build a dApp with AI?"
     answer: "You don't need to be a Solidity expert before you start, but you do need enough Ethereum fundamentals to review what the AI produces. AI assistants can generate syntax quickly; your job is to understand the architecture, risks, and trade-offs well enough to catch bad output."
   - question: "What's the best AI tool for Ethereum development in 2026?"
-    answer: "The best tool is one that can work with repository context, terminal output, and project instructions. Claude Code and Cursor are common choices. With Scaffold-ETH 2's AGENTS.md and Skills library, the specific model matters less than the quality of context you give it."
+    answer: "The best tool is one that can work with repository context, terminal output, and project instructions. Claude Code, Cursor, Codex, and opencode are common choices. With Scaffold-ETH 2's AGENTS.md and Skills library, the specific model matters less than the quality of context you give it."
   - question: "How long does it take to build and deploy a dApp with AI assistance?"
     answer: "You can prototype a simple dApp in an afternoon. A secure, well-tested dApp that is ready for real users still takes longer because the hard work shifts to architecture, testing, security review, and deployment decisions."
   - question: "Is Scaffold-ETH 2 suitable for production dApps or just prototyping?"
@@ -102,19 +102,21 @@ faqs:
 
 ### What is a dApp?
 
-A decentralized application is a program whose core logic runs on a blockchain rather than a centralized server you control. Think of it like a vending machine: once it's deployed, the rules are fixed and publicly visible. Anyone can use it, and no single party can quietly change how it works.
+A decentralized application has two parts. The backend is one or more smart contracts running on Ethereum: they hold the application's state and enforce its rules, and once deployed, that logic is public and no single party (including you) can quietly change it. The frontend is a regular web app that reads contract state and sends transactions. You can host it like any other website, or on decentralized storage like [IPFS](https://docs.ipfs.tech/) so the interface has no single point of failure either.
 
 The architecture looks like this:
 
 ![dApp architecture diagram: User wallet signs transactions, frontend sends them via RPC to the smart contract, which writes to blockchain state](/assets/guides/dapp-architecture.png)
 
-The smart contract holds the state and the rules. The frontend is just a UI that reads that state and sends transactions. The wallet is how the user signs those transactions without giving anyone their private key.
+Users interact with the dApp through a wallet. The wallet holds their private key and signs transactions with it: the signature proves they control their account and approves that specific action, and the key never leaves the wallet. The frontend just builds the transaction and sends the signed result to the network.
+
+A smart contract works a bit like a vending machine: the rules are fixed when it's deployed, anyone can use it, and you can see exactly what you'll get before you put money in.
 
 ### Why build a dApp in 2026?
 
 Layer 2s have made Ethereum cheap enough for more product ideas, and AI has made it easier to get a working prototype. That does not mean every app needs a token, a contract, or a DAO.
 
-The honest test is still boring: does the product get better when users can verify the rules, hold the asset themselves, or leave with their state intact? If the answer is no, a normal database will be faster, cheaper, and easier to maintain.
+The honest test is still boring: does the product get better when users can verify the rules or hold the asset themselves? If the answer is no, a normal database will be faster, cheaper, and easier to maintain.
 
 The dApps worth building usually have at least one of these properties:
 
@@ -150,14 +152,14 @@ This guide walks through that workflow. The follow-up deep dives will include th
 You don't need any prior Solidity experience to follow this playbook. You just need:
 
 1. **A standard web dev environment:** Node.js, Git, Yarn and a terminal.
-2. **An agentic AI coding tool:** [Claude Code](https://claude.com/product/claude-code) or Cursor. Standard chat interfaces struggle with multi-file architectures.
+2. **An agentic AI coding tool:** [Claude Code](https://claude.com/product/claude-code), [Cursor](https://cursor.com), [Codex](https://openai.com/codex/), or [opencode](https://opencode.ai). Standard chat interfaces struggle with multi-file architectures.
 3. **Scaffold-ETH 2:** the full-stack toolkit we'll use. It ships with the modern Ethereum stack pre-configured: Solidity, Next.js, Hardhat/Foundry, and wagmi/viem.
 
 ---
 
 ## Step 1: Ideation and research
 
-With AI, it's dangerously easy to build the wrong thing very quickly, which is often worse than writing bad code. Before you touch a scaffold, you need to know *what to build*.
+With AI, it's dangerously easy to build the wrong thing very quickly, which is often worse than writing bad code. Before you create the project, you need to know *what to build*.
 
 Don't just ask an LLM for "good dApp ideas", you will get generic, unviable junk. Instead, use AI as a synthesizer for real human friction, real problems that need a fix (and users willing to pay for it). Use AI to build custom scrapers for Crypto Twitter or Farcaster, then let it distill that noise into a list of real user frustrations. You can even have it stress-test the 'clunky' edges or missing features of giants like Uniswap or Hyperliquid, to find the gaps they've left behind.
 
@@ -165,7 +167,7 @@ Don't just ask an LLM for "good dApp ideas", you will get generic, unviable junk
 
 When you are ready to plan the architecture, use a current frontier model to act as your protocol architect. Ask them to propose different approaches with explicit trade-offs for gas cost, complexity, and security.
 
-You're looking for trade-offs, not a winner. The model will flag architectural dead-ends that you would otherwise learn painfully while building, or even worse, in production.
+You want to understand the trade-offs before you commit to one approach. A structural problem is much cheaper to fix at this stage.
 
 ---
 
@@ -173,9 +175,9 @@ You're looking for trade-offs, not a winner. The model will flag architectural d
 
 If you're new to Ethereum development, do not skip the primitives. AI can help you move faster, but it cannot review a contract for you if you do not understand what the contract is supposed to do.
 
-The [Speedrun Ethereum challenges](https://speedrunethereum.com) give you a practical path through the basics: staking, tokens, NFTs, DEXs, and other patterns you will see again in real dApps. These are not just tutorials to read. You write the code, run the tests, and see where the mechanics break.
+The [Speedrun Ethereum challenges](https://speedrunethereum.com) give you a practical path through the basics: staking, tokens, NFTs, DEXs, and other patterns you will see again in real dApps. In each challenge you write the contract yourself, run the tests, and deploy it, which is the same loop you'll later supervise an AI agent through.
 
-You can "speedrun your speedrun" by running `/start` in Claude Code, Cursor, or most modern IDEs. You'll get the help of an AI tutor to guide you through the curriculum, providing concept explanations, knowledge checks, hints (not answers), and live code reviews.
+You can "speedrun your speedrun" by running `/start` in your agentic AI coding tool. You'll get the help of an AI tutor to guide you through the curriculum, providing concept explanations, knowledge checks, hints (not answers), and live code reviews.
 
 <iframe src="https://www.youtube-nocookie.com/embed/-PmiWqxzBdo?rel=0&modestbranding=1&iv_load_policy=3&color=white&disablekb=1" title="Speedrun Ethereum AI Tutor Demo" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowFullScreen></iframe>
 
@@ -185,7 +187,7 @@ This is the fastest useful version of learning: you still do the work, but you g
 
 ## Step 3: Plan your Ethereum dApp (spec first, not vibe first)
 
-Once you understand the primitive you want to use, turn the idea into a spec before asking an AI agent to build it. This is the part that keeps the agent from guessing.
+Before you ask an AI agent to build anything, turn the idea into a spec. The spec is what keeps the agent from guessing: it fixes the decisions that matter before any code exists.
 
 We built 12 **[Build Prompts](https://speedrunethereum.com/build-prompts)** for common Ethereum primitives: Multisig, Bonding Curve, DAO, Streaming Payments, Staking Pool, Token Launchpad, and more. Treat them as starting points, not magic prompts. Pick the closest one, edit the assumptions, and make it match the product you actually want to build.
 
@@ -229,17 +231,17 @@ If the idea survives that review, then you have something useful to give your co
 
 ---
 
-## Step 4: Let AI scaffold your project with the SE-2 Orchestrator
+## Step 4: Let AI scaffold your project
 
-After the spec, I would not ask the agent to start writing contracts right away. First, I would let it create the Scaffold-ETH 2 project properly. The easiest way to do that is to point it to the **Orchestrator Skill**.
+If you started from a Build Prompt, this step is mostly handled for you. The prompts already include the Scaffold-ETH 2 setup instructions, so you can paste your edited prompt into your AI tool and the agent will create the project correctly before it writes any product code.
 
-Open your AI tool (Claude Code, Cursor, Codex, etc.) and paste the orchestrator URL together with your dApp idea or spec. Something like:
+If you wrote your own spec, give the agent the same setup instructions yourself by pointing it to the **Orchestrator Skill**. Paste the URL together with your spec:
 
-```bash
+```text
 https://docs.scaffoldeth.io/SKILL.md Build me a [your dApp idea]
 ```
 
-The Orchestrator Skill gives the agent the setup instructions. It tells it to check whether the current folder is already a Scaffold-ETH project, run `npx create-eth@latest` only if it needs to, wait until the files exist, and read the generated repo instructions before touching the app code.
+Either way, the orchestrator tells the agent to check whether the current folder is already a Scaffold-ETH project, run `npx create-eth@latest` only if it needs to, wait until the files exist, and read the generated repo instructions before touching the app code.
 
 Stay with it for the first few minutes. If it starts creating its own `contracts/` folder, changing package scripts, skipping the generated instructions, or inventing a custom architecture before the scaffold exists, stop it and point it back to the orchestrator.
 
@@ -249,11 +251,11 @@ This step is boring, but it saves pain later. If the repo starts in the wrong sh
 
 ## Step 5: Use AGENTS.md as the project instructions
 
-When the Scaffold-ETH 2 project is created, look at the root of the repo. You should see an `AGENTS.md` file.
+When the Scaffold-ETH 2 project is created, look at the root of the repo. You should see an `AGENTS.md` file. That file is there for your coding agent: it explains the project structure, the expected commands, and the patterns Scaffold-ETH 2 wants the agent to follow. Most modern coding agents read it automatically when they start a session.
 
-That file is there for your coding agent. It explains the project structure, the expected commands, and the patterns Scaffold-ETH 2 wants the agent to follow. Most modern coding agents will read it automatically when they start a session, but it is still worth checking that the agent is following it before you let it change files.
+This matters because a lot of AI mistakes are not syntax mistakes. The code may compile but still ignore how the repo is supposed to work: stale frontend hooks, invented deploy scripts, hardcoded contract addresses, or code that bypasses the generated contract artifacts.
 
-This matters because a lot of AI mistakes are not syntax mistakes. The code may compile, but still ignore the way the repo is supposed to work. Without the project instructions, the agent may use stale frontend hooks, invent deploy scripts, hardcode contract addresses, or write code that bypasses the generated contract artifacts.
+The file is also yours to extend. Add a short summary of your spec, the decisions you have already made, and anything you don't want the agent to touch. If the agent keeps making the same mistake, write the correction into `AGENTS.md` instead of repeating it every session. Every new session then starts with your product context, not just the framework defaults.
 
 After the first scaffold, I would check the boring files before asking for product features: package scripts, deploy scripts, `scaffold.config.ts`, generated ABIs, and the built-in hooks. If those are correct, the agent has a much better chance of building on top of the repo instead of fighting it.
 
@@ -265,7 +267,7 @@ The **Skills library** is a collection of pre-structured knowledge files (and so
 
 If you ask an AI to write a modern contract from scratch, it often falls back on outdated training data. For example, if you ask it to build an Account Abstraction Paymaster, it will likely hallucinate deprecated `UserOperation` structs or miss critical validation loops. But by pointing your agent to the **ERC-4337 Skill** first, it automatically applies current, audited implementations.
 
-Simply tell your AI to load the relevant skill (e.g., _"Load the ERC-4337 Account Abstraction skill"_), describe your custom logic, and let it draft. This gives you a massive head start, ensuring your baseline code uses the correct modern syntax and actually compiles before you even begin your testing loop.
+The skills are indexed in the project's `AGENTS.md`, so when your task matches one (like "add sign-in with Ethereum" or "build a paymaster"), the agent should find and load the right skill on its own. Check that it actually did: you should see it read the skill file before it starts drafting. If it doesn't, ask for it explicitly ("Load the ERC-4337 Account Abstraction skill"), describe your custom logic, and let it draft. This gives you a baseline that uses the correct modern syntax and actually compiles before you begin your testing loop.
 
 ---
 
@@ -289,9 +291,9 @@ The most common hybrid patterns:
 
 ## Step 8: Build your dApp frontend (prototype fast, then wire it properly)
 
-For UI prototyping, [v0.dev](https://v0.dev) by Vercel is useful because it gets you past the blank-page phase. Describe the interface you want, generate a React component, and bring it into your repo. At this point, v0 does not need to understand your whole Ethereum architecture. It just needs to give you a decent UI starting point.
+For a first version of the UI, asking your coding agent directly is usually enough. It already knows your contract, the repo structure, and the Scaffold-ETH 2 components, so you get a working interface wired to real data without leaving the session.
 
-The important part comes after that: wiring the UI to the real contract.
+When you want a more custom design, a dedicated design tool helps you get past the blank-page phase. Describe the interface in [v0.dev](https://v0.dev), or ask Claude to design it first, then bring the generated React component into your repo. At that stage the design tool doesn't need to understand your Ethereum architecture. It just needs to give you a good starting point.
 
 This is where Scaffold-ETH 2 hooks help. I would start with `useScaffoldReadContract` and `useScaffoldWriteContract` instead of asking the AI to write raw `wagmi` or `viem` code from memory. Those libraries change often enough that agents can still produce examples from an older API.
 
@@ -319,11 +321,22 @@ If the contract will hold real value, plan for a human security review or audit.
 
 Deployment is easier if you do not jump straight from local code to production. I would first use a local Hardhat or Foundry chain while the contracts are still changing, then move to Sepolia, or to the testnet for the L2 you plan to use. That testnet step is where you check the full flow with a real wallet, RPC, block explorer, and deployed address.
 
-For most new dApps, an L2 is usually the first production network I would consider. Base, Arbitrum, and Optimism use the same Solidity toolchain, but transactions are usually much cheaper than Ethereum mainnet. In many projects, changing the target network is mostly configuration. The part that tends to go wrong is making sure the frontend, environment variables, explorer links, and deployment artifacts all point to the same place.
+For most new dApps, an L2 is the first production network I would consider. Base, Arbitrum, and Optimism use the same Solidity toolchain, but transactions are much cheaper than on Ethereum mainnet. In many projects, changing the target network is mostly configuration. The part that tends to go wrong is making sure the frontend, environment variables, explorer links, and deployment artifacts all point to the same place.
 
 Before you deploy, check current fees on [L2Fees.info](https://l2fees.info). Fees move, and a network that is fine for one app may be too expensive for another.
 
-Use the deployment scripts included with Scaffold-ETH 2 as the starting point. If deployment fails, give the full error output to the agent, but ask it to explain the cause before it patches anything: wrong RPC, missing deployer funds, wrong chain id, bad constructor arguments, or the frontend still pointing at an old deployment.
+Scaffold-ETH 2 already includes the commands for this whole ladder:
+
+```bash
+yarn chain                     # run a local network
+yarn deploy                    # deploy your contracts to it
+yarn start                     # frontend on http://localhost:3000
+
+yarn deploy --network sepolia  # deploy to a testnet
+yarn verify --network sepolia  # verify on the block explorer
+```
+
+The [deployment docs](https://docs.scaffoldeth.io/deploying/deploy-smart-contracts) cover the details: deployer accounts, network configuration, and shipping the frontend. If deployment fails, give the full error output to the agent, but ask it to explain the cause before it patches anything: wrong RPC, missing deployer funds, wrong chain id, bad constructor arguments, or the frontend still pointing at an old deployment.
 
 ---
 
