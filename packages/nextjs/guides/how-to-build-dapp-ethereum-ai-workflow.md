@@ -2,7 +2,7 @@
 title: "How to Build an Ethereum dApp with AI: The 2026 Workflow"
 date: "2026-04-29"
 description: "A practical workflow for building Ethereum dApps with AI: specs, Scaffold-ETH 2, smart contracts, frontend, security review, deployment, and launch."
-image: "/assets/guides/how-to-build-dapps-with-ai-thumbnail1.jpg"
+image: "/assets/guides/how-to-build-dapps-with-ai-thumbnail.jpg"
 showNavigation: true
 faqs:
   - question: "Do I need to know Solidity to build a dApp with AI?"
