@@ -8,11 +8,11 @@ faqs:
   - question: "Do I need to know Solidity to build a dApp with AI?"
     answer: "You don't need to be a Solidity expert before you start, but you do need enough Ethereum fundamentals to review what the AI produces. AI assistants can generate syntax quickly; your job is to understand the architecture, risks, and trade-offs well enough to catch bad output."
   - question: "What's the best AI tool for Ethereum development in 2026?"
-    answer: "The best tool is one that can work with repository context, terminal output, and project instructions. Claude Code, Cursor, Codex, and opencode are common choices. With Scaffold-ETH 2's AGENTS.md and Skills library, the specific model matters less than the quality of context you give it."
+    answer: "The best tool is one that can work with repository context, terminal output, and project instructions. Claude Code, Cursor, Codex, and opencode are common choices. With Scaffold-ETH 2's AGENTS.md and Skills library, the specific model matters less than the quality of context you give it, but you should still get better results with frontier models given the same context."
   - question: "How long does it take to build and deploy a dApp with AI assistance?"
     answer: "You can prototype a simple dApp in an afternoon. A secure, well-tested dApp that is ready for real users still takes longer because the hard work shifts to architecture, testing, security review, and deployment decisions."
   - question: "Is Scaffold-ETH 2 suitable for production dApps or just prototyping?"
-    answer: "Scaffold-ETH 2 is suitable as a production foundation when you add the normal production work: tests, security review, deployment configuration, monitoring, and audits for contracts that hold value."
+    answer: "Scaffold-ETH 2 can be a solid starting point for a real dApp, as long as you add tests, security review, deployment configuration, monitoring, and an audit if the contracts will hold real value."
 ---
 
 *The barrier to building on Ethereum isn't Solidity anymore. It's knowing how to give AI enough context to work without hallucinating, how to review what it produces, and which decisions to keep for yourself.*
@@ -303,7 +303,7 @@ For a first version of the UI, asking your coding agent directly is usually enou
 
 When you want a more custom design, a dedicated tool helps you skip the blank-page phase. You can describe the interface in [v0.dev](https://v0.dev) or ask a frontier model to design it, or for professional projects or existing dApps, it often makes sense to go a step further and use [Claude Design](https://claude.ai/design) to build out a cohesive brand or design system upfront. Whichever route you take, you're locking in a solid visual foundation before you start wiring up any onchain logic.
 
-This is where Scaffold-ETH 2 hooks help. You can start with `useScaffoldReadContract` and `useScaffoldWriteContract` instead of asking the AI to write raw `wagmi` or `viem` code from memory. Those libraries change often enough that agents can still produce examples from an older API.
+This is where Scaffold-ETH 2 hooks help. You can start with `useScaffoldReadContract` and `useScaffoldWriteContract` instead of asking the AI to write raw `wagmi` or `viem` code. Those libraries change often enough that agents can still produce examples from an older API.
 
 Before polishing the frontend, click through the flow on a local chain. Check that the UI is reading from the deployed contract data, not from hardcoded sample balances, duplicated addresses, or mock state the agent left behind.
 
