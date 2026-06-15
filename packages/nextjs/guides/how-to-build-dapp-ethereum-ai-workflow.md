@@ -265,7 +265,7 @@ This will help the agent to stop making the same mistake in the future.
 
 When your AI starts writing smart contracts, its biggest enemy is its own training data. If you ask it to build an Account Abstraction Paymaster from scratch, it will likely hallucinate deprecated `UserOperation` structs or miss critical validation loops.
 
-You fix this by providing explicit knowledge files, or **Skills**, instead of hoping the model remembers the correct, up-to-date syntax. In a modern workflow, you should layer this knowledge at two levels:
+You fix this by providing explicit knowledge files, or **Skills**, instead of hoping the model remembers the correct, up-to-date syntax. In a modern workflow, you can layer this knowledge at two levels:
 
 **1. Ecosystem Knowledge (ethskills.com)**
 Before writing any Solidity, your agent needs the base reality of Ethereum today. [ethskills.com](https://ethskills.com/) is an open-source library of AI skills covering current standards, security pitfalls, gas costs, L2s, and contract addresses. Depending on your AI coding tool, you can load this context by pointing the agent to a `SKILL.md` file, installing the skill, adding it to your `AGENTS.md` (either pointing it to the skill url or adding a reviewed copy to your repo).
