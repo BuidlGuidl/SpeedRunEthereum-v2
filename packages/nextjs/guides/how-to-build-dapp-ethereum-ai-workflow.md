@@ -263,11 +263,17 @@ This will help the agent to stop making the same mistake in the future.
 
 ## Step 6: Build secure smart contracts with the Skills library
 
-The **Skills library** is a collection of pre-structured knowledge files (and sometimes scripts) your AI assistant loads as explicit context: OpenZeppelin patterns, SIWE (Sign-In with Ethereum), ERC-4337, and more. Instead of hoping your AI has up-to-date knowledge of a complex Ethereum standard, you provide the exact playbook.
+When your AI starts writing smart contracts, its biggest enemy is its own training data. If you ask it to build an Account Abstraction Paymaster from scratch, it will likely hallucinate deprecated `UserOperation` structs or miss critical validation loops.
 
-If you ask an AI to write a modern contract from scratch, it often falls back on outdated training data. For example, if you ask it to build an Account Abstraction Paymaster, it will likely hallucinate deprecated `UserOperation` structs or miss critical validation loops. But by pointing your agent to the **ERC-4337 Skill** first, it automatically applies current, audited implementations.
+You fix this by providing explicit knowledge files, or **Skills**, instead of hoping the model remembers the correct, up-to-date syntax. In a modern workflow, you should layer this knowledge at two levels:
 
-The skills are indexed in the project's `AGENTS.md`, so when your task matches one (like "add sign-in with Ethereum" or "build a paymaster"), the agent should find and load the right skill on its own. Check that it actually did: you should see it read the skill file before it starts drafting. If it doesn't, ask for it explicitly ("Load the ERC-4337 Account Abstraction skill"), describe your custom logic, and let it draft. This gives you a baseline that uses the correct modern syntax and actually compiles before you begin your testing loop.
+**1. Ecosystem Knowledge (ethskills.com)**
+Before writing any Solidity, your agent needs the base reality of Ethereum today. [ethskills.com](https://ethskills.com/) is an open-source library of AI skills covering current standards, security pitfalls, gas costs, L2s, and contract addresses. Depending on your AI coding tool, you can load this context by pointing the agent to a `SKILL.md` file, installing the skill, adding it to your agent instructions (`AGENTS.md`), or adding a reviewed copy to your repo. This prevents the agent from hallucinating fake addresses or using outdated standards.
+
+**2. Local Implementation Skills**
+While `ethskills` provides the global baseline, Scaffold-ETH 2 ships with local, project-specific skills for building distinct features (like SIWE, ERC-4337, or OpenZeppelin patterns). These are indexed in your project's `AGENTS.md`.
+
+When you assign a task (like "build a paymaster"), the agent should find and load the right local skill on its own. Check that it actually did: you should see it read the skill file before it starts drafting. If it doesn't, ask for it explicitly ("Load the ERC-4337 Account Abstraction skill"). This gives you a starting point that uses the correct modern syntax and actually compiles before you begin your testing loop.
 
 ---
 
