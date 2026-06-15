@@ -223,7 +223,7 @@ protocols am I competing with, and what would need to be true for someone to
 use mine instead?
 ```
 
-Do not just look for encouragement. Look for the part of the idea that breaks: too much state on-chain, unclear incentives, bad UX, expensive transactions, or a product that already exists and wins on trust.
+Use that answer as an adversarial review. The useful part is where it finds how the idea breaks: too much state on-chain, unclear incentives, bad UX, expensive transactions, or a product that already exists and wins on trust.
 
 If the idea survives that review, then you have something useful to give your coding agent. If it does not, change the spec before you create a repo full of code around the wrong plan.
 
