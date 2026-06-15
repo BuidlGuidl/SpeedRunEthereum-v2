@@ -18,14 +18,6 @@ body {
   margin-right: auto;
 }
 
-/* Reserve the open chat panel's width (420px) on viewports wide enough to fit both; below 2xl it overlays. */
-@media (min-width: 1536px) {
-  html[data-challenge-chat-open="true"] .challenge-page-shell {
-    width: auto;
-    margin-right: calc(420px + 1rem);
-  }
-}
-
 /* Thin TOC scrollbar whose thumb only shows while hovering the nav. */
 .toc-scrollbar {
   scrollbar-width: thin; /* Firefox */

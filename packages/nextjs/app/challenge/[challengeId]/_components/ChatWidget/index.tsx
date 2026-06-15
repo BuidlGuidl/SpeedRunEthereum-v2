@@ -117,17 +117,6 @@ export function ChatWidget({ challengeId, github, aiGuidedSectionId }: ChatWidge
     }
   }, [isOpen]);
 
-  useEffect(() => {
-    if (isOpen) {
-      document.documentElement.dataset.challengeChatOpen = "true";
-      return () => {
-        delete document.documentElement.dataset.challengeChatOpen;
-      };
-    }
-
-    delete document.documentElement.dataset.challengeChatOpen;
-  }, [isOpen]);
-
   if (!isAdmin) return null;
 
   return (
