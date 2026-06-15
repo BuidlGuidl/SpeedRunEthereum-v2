@@ -288,7 +288,7 @@ The contract should handle the state that needs to be trustless and verifiable. 
 The most common hybrid patterns:
 
 - **Event indexing:** your contract emits events, and a backend ([The Graph](https://thegraph.com/), [Ponder](https://ponder.sh), or [Envio](https://envio.dev)) reads them and builds queryable state. Querying an indexed database is much faster than reading thousands of historical events directly from the chain.
-- **Gasless transactions:** ERC-4337 smart accounts, a paymaster, or a relayer can let users take an action without holding ETH first. The contract still enforces the rules; the backend helps with the transaction flow.
+- **Gasless transactions:** ERC-4337 smart accounts, a paymaster, or a relayer can let users take an action without holding ETH first. The contract still enforces the rules and the backend helps with the transaction flow.
 - **Off-chain computation, on-chain settlement:** compute the expensive part off-chain, then post the result, proof, or commitment on-chain. This is useful when the chain should settle the outcome, but does not need to run every calculation itself.
 
 ![What belongs on-chain versus off-chain, connected by hybrid patterns like event indexing and gasless transactions](/assets/guides/onchain-vs-offchain.png)
