@@ -247,15 +247,21 @@ This step is boring, but it saves pain later. If the repo starts in the wrong sh
 
 ---
 
-## Step 5: Use AGENTS.md as the project instructions
+## Step 5: Add your project context on top of AGENTS.md
 
-When the Scaffold-ETH 2 project is created, look at the root of the repo. You should see an `AGENTS.md` file. That file is there for your coding agent: it explains the project structure, the expected commands, and the patterns Scaffold-ETH 2 wants the agent to follow. Most modern coding agents read it automatically when they start a session.
+When the Scaffold-ETH 2 project is created, the repo should include an `AGENTS.md` file. That file gives the coding agent the SE-2 defaults: commands, package layout, hook names, deploy flow, and the Skills/Agents index.
 
-This matters because a lot of AI mistakes are not syntax mistakes. The code may compile but still ignore how the repo is supposed to work: stale frontend hooks, invented deploy scripts, hardcoded contract addresses, or code that bypasses the generated contract artifacts.
+Do not stop there, add your specific project context the generated file cannot know:
 
-The file is also yours to extend. Add a short summary of your spec, the decisions you have already made, and anything you don't want the agent to touch. If the agent keeps making the same mistake, write the correction into `AGENTS.md` instead of repeating it every session. Every new session then starts with your product context, not just the framework defaults.
+- what the dApp does
+- which users and roles exist
+- which network you are targeting first
+- which parts must stay onchain
+- which parts can be handled by indexing or a backend
 
-After the first scaffold, I would check the boring files before asking for product features: package scripts, deploy scripts, `scaffold.config.ts`, generated ABIs, and the built-in hooks. If those are correct, the agent has a much better chance of building on top of the repo instead of fighting it.
+Once you start building your project features, if you notice the agent keeps making the same mistake, write the correction or the missing context into `AGENTS.md` instead of repeating it every session.
+
+This will help the agent to stop making the same mistake in the future.
 
 ---
 
