@@ -20,9 +20,10 @@ import { useUser } from "~~/hooks/useUser";
 type ChatWidgetProps = {
   challengeId: string;
   github: string;
+  aiGuidedSectionId?: string;
 };
 
-export function ChatWidget({ challengeId, github }: ChatWidgetProps) {
+export function ChatWidget({ challengeId, github, aiGuidedSectionId }: ChatWidgetProps) {
   const { address: connectedAddress } = useAccount();
   // Show the assistant only to registered builders. Identity is the connected wallet (not ownership-proven).
   const { data: user } = useUser(connectedAddress);
@@ -182,10 +183,10 @@ export function ChatWidget({ challengeId, github }: ChatWidgetProps) {
               <SparklesIcon className="w-5 h-5 text-secondary-content" />
             </div>
             <div className="min-w-0">
-              <h3 className="font-semibold text-secondary-content text-sm leading-tight mb-0">AI Teaching Assistant</h3>
-              <p className="text-[11px] text-secondary-content/60 leading-tight m-0">
-                Guides you, won&apos;t give answers
-              </p>
+              <h3 className="font-semibold text-secondary-content text-base leading-tight mb-0">
+                AI Teaching Assistant
+              </h3>
+              <p className="text-xs text-secondary-content/65 leading-tight m-0">Guides you, won&apos;t give answers</p>
             </div>
           </div>
           <div className="flex items-center gap-1 mt-[3px]">
@@ -216,6 +217,7 @@ export function ChatWidget({ challengeId, github }: ChatWidgetProps) {
             <div ref={contentRef} className="space-y-4">
               {messages.length === 0 && (
                 <ChatEmptyState
+                  aiGuidedSectionId={aiGuidedSectionId}
                   onSuggestionClick={text => {
                     setInput(text);
                     textareaRef.current?.focus();

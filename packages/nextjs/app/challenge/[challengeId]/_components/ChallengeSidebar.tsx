@@ -52,7 +52,7 @@ export function ChallengeSidebar({ headings }: ChallengeSidebarProps) {
   };
 
   if (headings.length === 0) {
-    return null;
+    return <div className="hidden lg:block" aria-hidden />;
   }
 
   return (
@@ -64,9 +64,9 @@ export function ChallengeSidebar({ headings }: ChallengeSidebarProps) {
       <nav
         className={`
           fixed left-0 top-0 h-full w-72 pt-4 z-40
-          bg-base-100 border-r border-base-300 overflow-y-auto
+          bg-base-100 border-r border-base-300 overflow-y-auto toc-scrollbar
           transition-transform duration-300 ease-in-out
-          lg:sticky lg:top-0 lg:h-screen lg:w-64 lg:shrink-0 lg:translate-x-0 lg:border-r-0 lg:bg-transparent
+          lg:sticky lg:top-3 lg:h-auto lg:max-h-[calc(100vh-1.5rem)] lg:w-auto lg:shrink-0 lg:translate-x-0 lg:border-r-0 lg:bg-transparent lg:pt-3
           ${sidebarIsOpen ? "translate-x-0" : "-translate-x-full"}
         `}
       >
@@ -78,15 +78,15 @@ export function ChallengeSidebar({ headings }: ChallengeSidebarProps) {
           <XMarkIcon className="w-5 h-5" />
         </button>
 
-        <div className="p-4">
+        <div className="p-4 lg:px-0">
           <h3 className="font-semibold text-sm uppercase tracking-wider text-base-content/60 mb-4">On this page</h3>
-          <ul className="space-y-1">
+          <ul className="space-y-1 border-l border-base-content/10">
             {headings.map(heading => (
               <li key={heading.id}>
                 <button
                   onClick={() => handleClick(heading.id)}
                   className={`
-                    block w-full text-left px-3 py-2 text-sm rounded-lg transition-colors border-l-2
+                    block w-full text-left px-3 py-2 text-sm transition-colors border-l-2 -ml-px
                     hover:bg-primary/20 hover:text-primary
                     ${
                       activeId === heading.id
