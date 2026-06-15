@@ -101,7 +101,7 @@ faqs:
 ### What is a dApp?
 
 A decentralized application has two parts:
-- **The backend is one or more smart contracts** running on Ethereum or other blockchains: they hold the application's state and enforce its rules, and once deployed, that logic is public and no single party (including you) can quietly change it.
+- **The backend** is one or more smart contracts running on Ethereum or other blockchains: they hold the application's state and enforce its rules, and once deployed, that logic is public and no single party (including you) can quietly change it.
 - **The frontend** is a regular web app that reads contract state and sends transactions. You can host it like any other website, or on decentralized storage like [IPFS](https://docs.ipfs.tech/) so the interface has no single point of failure either.
 
 The architecture looks like this:
