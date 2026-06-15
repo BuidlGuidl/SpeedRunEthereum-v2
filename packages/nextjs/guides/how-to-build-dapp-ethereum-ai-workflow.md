@@ -331,8 +331,6 @@ Deployment is easier if you do not jump straight from local code to production. 
 
 For most new dApps, an L2 is the first production network I would consider. Base, Arbitrum, and Optimism use the same Solidity toolchain, but transactions are much cheaper than on Ethereum mainnet. In many projects, changing the target network is mostly configuration. The part that tends to go wrong is making sure the frontend, environment variables, explorer links, and deployment artifacts all point to the same place.
 
-Before you deploy, check current fees on [L2Fees.info](https://l2fees.info). Fees move, and a network that is fine for one app may be too expensive for another.
-
 Scaffold-ETH 2 already includes the commands for this whole ladder:
 
 ```bash
@@ -344,7 +342,7 @@ yarn deploy --network sepolia  # deploy to a testnet
 yarn verify --network sepolia  # verify on the block explorer
 ```
 
-The [deployment docs](https://docs.scaffoldeth.io/deploying/deploy-smart-contracts) cover the details: deployer accounts, network configuration, and shipping the frontend. If deployment fails, give the full error output to the agent, but ask it to explain the cause before it patches anything: wrong RPC, missing deployer funds, wrong chain id, bad constructor arguments, or the frontend still pointing at an old deployment.
+The [deployment docs](https://docs.scaffoldeth.io/deploying/deploy-smart-contracts) cover the details: deployer accounts, network configuration, and shipping the frontend. If deployment fails, give the full error output to the agent, but ask it to explain the cause before it patches anything: wrong RPC, missing deployer funds, wrong chain id, bad constructor arguments, or the frontend still pointing at an old deployment. It's important to understand the root cause first, because agents can sometimes go crazy trying to solve these kinds of configuration bugs.
 
 ---
 
