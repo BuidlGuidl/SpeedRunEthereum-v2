@@ -268,7 +268,7 @@ When your AI starts writing smart contracts, its biggest enemy is its own traini
 You fix this by providing explicit knowledge files, or **Skills**, instead of hoping the model remembers the correct, up-to-date syntax. In a modern workflow, you can layer this knowledge at two levels:
 
 **1. Ecosystem Knowledge (ethskills.com)**
-Before writing any Solidity, your agent needs the base reality of Ethereum today. [ethskills.com](https://ethskills.com/) is an open-source library of AI skills covering current standards, security pitfalls, gas costs, L2s, and contract addresses. Depending on your AI coding tool, you can load this context by pointing the agent to a `SKILL.md` file, installing the skill, adding it to your `AGENTS.md` (either pointing it to the skill url or adding a reviewed copy to your repo).
+Before writing any Solidity, your agent needs the base reality of Ethereum today. [ethskills.com](https://ethskills.com/) is an open-source library of AI skills covering current standards, security pitfalls, gas costs, L2s, and contract addresses. Depending on your AI coding tool, you can load this context by pointing the agent to a `SKILL.md` file, installing the skill or adding it to your `AGENTS.md` (either pointing it to the skill url or adding a reviewed copy to your repo).
 
 **2. Local Implementation Skills**
 While `ethskills` provides the global baseline, Scaffold-ETH 2 ships with local, project-specific skills for building distinct features (like SIWE, ERC-4337, or OpenZeppelin patterns). These are indexed in your project's `AGENTS.md`.
