@@ -301,9 +301,9 @@ The most common hybrid patterns:
 
 For a first version of the UI, asking your coding agent directly is usually enough. It already knows your contract, the repo structure, and the Scaffold-ETH 2 components, so you get a working interface wired to real data without leaving the session.
 
-When you want a more custom design, a dedicated design tool helps you get past the blank-page phase. Describe the interface in [v0.dev](https://v0.dev), or ask Claude to design it first, then bring the generated React component into your repo. At that stage the design tool doesn't need to understand your Ethereum architecture. It just needs to give you a good starting point.
+When you want a more custom design, a dedicated tool helps you skip the blank-page phase. You can describe the interface in [v0.dev](https://v0.dev) or ask a frontier model to design it, or for professional projects or existing dApps, it often makes sense to go a step further and use [Claude Design](https://claude.ai/design) to build out a cohesive brand or design system upfront. Whichever route you take, you're locking in a solid visual foundation before you start wiring up any onchain logic.
 
-This is where Scaffold-ETH 2 hooks help. I would start with `useScaffoldReadContract` and `useScaffoldWriteContract` instead of asking the AI to write raw `wagmi` or `viem` code from memory. Those libraries change often enough that agents can still produce examples from an older API.
+This is where Scaffold-ETH 2 hooks help. You can start with `useScaffoldReadContract` and `useScaffoldWriteContract` instead of asking the AI to write raw `wagmi` or `viem` code from memory. Those libraries change often enough that agents can still produce examples from an older API.
 
 Before polishing the frontend, click through the flow on a local chain. Check that the UI is reading from the deployed contract data, not from hardcoded sample balances, duplicated addresses, or mock state the agent left behind.
 
