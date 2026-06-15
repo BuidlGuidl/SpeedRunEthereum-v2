@@ -268,12 +268,14 @@ When your AI starts writing smart contracts, its biggest enemy is its own traini
 You fix this by providing explicit knowledge files, or **Skills**, instead of hoping the model remembers the correct, up-to-date syntax. In a modern workflow, you should layer this knowledge at two levels:
 
 **1. Ecosystem Knowledge (ethskills.com)**
-Before writing any Solidity, your agent needs the base reality of Ethereum today. [ethskills.com](https://ethskills.com/) is an open-source library of AI skills covering current standards, security pitfalls, gas costs, L2s, and contract addresses. Depending on your AI coding tool, you can load this context by pointing the agent to a `SKILL.md` file, installing the skill, adding it to your agent instructions (`AGENTS.md`), or adding a reviewed copy to your repo. This prevents the agent from hallucinating fake addresses or using outdated standards.
+Before writing any Solidity, your agent needs the base reality of Ethereum today. [ethskills.com](https://ethskills.com/) is an open-source library of AI skills covering current standards, security pitfalls, gas costs, L2s, and contract addresses. Depending on your AI coding tool, you can load this context by pointing the agent to a `SKILL.md` file, installing the skill, adding it to your `AGENTS.md` (either pointing it to the skill url or adding a reviewed copy to your repo).
 
 **2. Local Implementation Skills**
 While `ethskills` provides the global baseline, Scaffold-ETH 2 ships with local, project-specific skills for building distinct features (like SIWE, ERC-4337, or OpenZeppelin patterns). These are indexed in your project's `AGENTS.md`.
 
-When you assign a task (like "build a paymaster"), the agent should find and load the right local skill on its own. Check that it actually did: you should see it read the skill file before it starts drafting. If it doesn't, ask for it explicitly ("Load the ERC-4337 Account Abstraction skill"). This gives you a starting point that uses the correct modern syntax and actually compiles before you begin your testing loop.
+When you assign a task (like "build a paymaster"), the agent should find and load the right local skill on its own. Check that it actually did: you should see it read the skill file before it starts drafting. If it doesn't, ask for it explicitly ("Load the ERC-4337 Account Abstraction skill").
+
+This prevents the agent from using outdated standards or hallucinating fake addresses.
 
 ---
 
