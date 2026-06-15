@@ -199,11 +199,11 @@ p {
 }
 
 .guide-prose a {
-  @apply text-primary font-medium no-underline;
+  @apply text-primary font-medium underline underline-offset-2;
 }
 
 .guide-prose a:hover {
-  @apply underline opacity-90;
+  @apply opacity-80;
 }
 
 .guide-prose img {
