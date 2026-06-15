@@ -128,7 +128,7 @@ export default async function ChallengePage(props: { params: Promise<{ challenge
           <div className="challenge-page-shell px-4 lg:px-6 lg:grid lg:grid-cols-[18rem_minmax(0,1fr)] lg:gap-8 pt-0 pb-10 lg:pb-14">
             <ChallengeSidebar headings={headings} />
 
-            <main className="min-w-0 max-w-[1040px]">
+            <main className="min-w-0 max-w-[850px]">
               <ChallengeHeader
                 skillLevel={staticMetadata?.skillLevel}
                 timeToComplete={staticMetadata?.timeToComplete}
