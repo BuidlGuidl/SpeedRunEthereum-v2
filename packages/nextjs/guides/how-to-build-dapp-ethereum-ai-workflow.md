@@ -231,7 +231,7 @@ If the idea survives that review, then you have something useful to give your co
 
 ## Step 4: Let AI build your project using Scaffold-ETH 2
 
-If you use a Build Prompt, the **Pre-flight & Context** section handles this for you. It tells the agent to check if the project is already scaffolded and, if not, uses the **Orchestrator Skill** (`https://docs.scaffoldeth.io/SKILL.md`) to set it up correctly.
+If you use a Build Prompt, the **Pre-flight & Context** section handles this for you. It tells the agent to check if the project is already scaffolded and, if not, uses the **[Orchestrator Skill](https://docs.scaffoldeth.io/SKILL.md)** to set it up correctly.
 
 If you wrote your own spec, just add that same check to the top of your prompt:
 
