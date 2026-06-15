@@ -21,7 +21,7 @@ export const ConnectAndRegisterBanner = () => {
   const isWalletConnected = !!connectedAddress;
 
   return (
-    <div className="fixed bottom-8 inset-x-0 mx-auto w-fit max-w-[100%] md:max-w-[650px] p-2">
+    <div className="fixed bottom-8 inset-x-0 z-50 mx-auto w-fit max-w-[100%] md:max-w-[650px] p-2">
       <div className="bg-base-100 border border-primary/30 rounded-lg p-4 shadow-lg">
         <div className="text-center space-y-3">
           <div className="text-sm font-semibold text-primary">🚀 Ready to submit your challenge?</div>
@@ -33,7 +33,7 @@ export const ConnectAndRegisterBanner = () => {
                   You&apos;re viewing this challenge as a <span className="font-bold">guest</span>. Want to start
                   building your <span className="font-bold">onchain portfolio</span>?
                 </p>
-                <p>
+                <p className="hidden md:block">
                   <span className="font-bold">Connect your wallet and register</span> to unlock the full Speedrun
                   Ethereum experience.
                 </p>
@@ -50,7 +50,7 @@ export const ConnectAndRegisterBanner = () => {
 
           <div className="flex justify-center">
             {!isWalletConnected ? (
-              <RainbowKitCustomConnectButton />
+              <RainbowKitCustomConnectButton size="sm" />
             ) : (
               <button
                 className="flex items-center justify-center py-1.5 lg:py-2 px-3 lg:px-8 border-2 border-primary rounded-full bg-base-300 hover:bg-base-200 transition-colors cursor-pointer"
