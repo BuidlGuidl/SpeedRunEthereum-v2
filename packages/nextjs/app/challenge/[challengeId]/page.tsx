@@ -134,6 +134,7 @@ export default async function ChallengePage(props: { params: Promise<{ challenge
                 timeToComplete={staticMetadata?.timeToComplete}
                 helpfulLinks={staticMetadata?.helpfulLinks}
                 completedByCount={countOfCompletedChallenge}
+                isAiReady={staticMetadata?.isAiReady}
               >
                 <article className="prose dark:prose-invert max-w-none break-words">
                   <MDXRemote
