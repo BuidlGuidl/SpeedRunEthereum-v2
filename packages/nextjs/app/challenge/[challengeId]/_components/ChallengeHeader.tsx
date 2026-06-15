@@ -1,126 +1,91 @@
-import { MDXRemote } from "next-mdx-remote/rsc";
-import rehypeRaw from "rehype-raw";
-import remarkGfm from "remark-gfm";
-import { CheckCircleIcon, ClockIcon, LinkIcon, SparklesIcon, UserGroupIcon } from "@heroicons/react/24/outline";
+import type { ReactNode } from "react";
+import { ClockIcon, LinkIcon, SparklesIcon, UserGroupIcon } from "@heroicons/react/24/outline";
 import SkillLevelIcon from "~~/app/_components/SkillLevelIcon";
 import { SkillLevel } from "~~/utils/challenges";
 
 type Props = {
-  title?: string;
-  skills?: string[];
   skillLevel?: SkillLevel;
   timeToComplete?: string;
   helpfulLinks?: { text: string; url?: string }[];
   completedByCount?: number;
   isAiReady?: boolean;
+  children?: ReactNode;
 };
 
+type FactProps = {
+  icon: ReactNode;
+  label: string;
+  value?: ReactNode;
+  children?: ReactNode;
+};
+
+function Fact({ icon, label, value, children }: FactProps) {
+  return (
+    <div className="flex items-start gap-3 min-w-0">
+      <div className="shrink-0 mt-0.5">{icon}</div>
+      <div className="min-w-0">
+        <div className="text-sm text-base-content/70">{label}</div>
+        {children || <div className="font-semibold break-words">{value}</div>}
+      </div>
+    </div>
+  );
+}
+
 export function ChallengeHeader({
-  skills,
   skillLevel,
   timeToComplete,
   helpfulLinks,
   completedByCount,
   isAiReady,
+  children,
 }: Props) {
-  if (!skills || skills.length === 0) {
-    return null;
-  }
   return (
-    <div className="w-full max-w-[850px] mx-auto mb-10">
-      <div className="grid grid-cols-1 md:grid-cols-[2fr_1fr] gap-4">
-        {/* Left card: Skills */}
-        <div className="rounded-2xl border border-primary/10 bg-base-100 p-6 shadow-center h-full flex flex-col">
-          <div className="font-semibold mb-3 text-primary">Skills you&apos;ll gain</div>
-          <div className="flex-1 flex">
-            {skills && skills.length > 0 ? (
-              <ul className="space-y-2 text-sm">
-                {skills.slice(0, 4).map(skill => (
-                  <li key={skill} className="flex items-start gap-2">
-                    <CheckCircleIcon className="w-5 h-5 text-primary self-start shrink-0" />
-                    <div className="flex-1 min-w-0 break-words whitespace-normal leading-5">
-                      <MDXRemote
-                        source={skill}
-                        options={{
-                          mdxOptions: {
-                            rehypePlugins: [rehypeRaw],
-                            remarkPlugins: [remarkGfm],
-                            format: "md",
-                          },
-                        }}
-                        components={{
-                          p: (props: any) => <p className="m-0">{props.children}</p>,
-                        }}
-                      />
-                    </div>
-                  </li>
-                ))}
-              </ul>
-            ) : (
-              <div className="text-sm opacity-70">This challenge helps you build practical Solidity skills.</div>
-            )}
-          </div>
-        </div>
-
-        {/* Right card: Details */}
-        <div className="rounded-2xl border border-primary/10 bg-secondary/20 p-6 shadow-center flex flex-col justify-center">
-          <div className="space-y-4 text-md">
-            <div className="flex items-center gap-3">
-              <SkillLevelIcon level={skillLevel} className="w-8 h-8 text-primary" />
-              <div className="flex-1">
-                <div className="text-sm">Skill level</div>
-                <div className="font-semibold">{skillLevel}</div>
-              </div>
-            </div>
-
-            <div className="flex items-center gap-3">
-              <ClockIcon className="w-8 h-8 text-primary" />
-              <div className="flex-1">
-                <div className="text-sm">Time to complete</div>
-                <div className="font-semibold">{timeToComplete || "—"}</div>
-              </div>
-            </div>
-
-            <div className="flex items-center gap-3">
-              <UserGroupIcon className="w-8 h-8 text-primary" />
-              <div className="flex-1">
-                <div className="text-sm">Completed by</div>
-                <div className="font-semibold">
-                  {completedByCount ? `${completedByCount} builder${completedByCount > 1 ? "s" : ""}` : "—"}
-                </div>
-              </div>
-            </div>
-
-            <div className="flex items-start gap-3">
-              <LinkIcon className="w-8 h-8 text-primary mt-1" />
-              <div className="flex-1">
-                <div className="text-sm">Helpful links</div>
-                {helpfulLinks && helpfulLinks.length > 0 ? (
-                  <ul className="space-y-1 mt-1 text-sm">
-                    {helpfulLinks.map((item, idx) => (
-                      <li key={`${item.text}-${idx}`} className="break-words whitespace-normal">
-                        <a
-                          href={item.url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="link text-primary font-semibold"
-                        >
-                          {item.text}
-                        </a>
-                      </li>
-                    ))}
-                  </ul>
+    <div className="w-full">
+      <div className="relative z-10 -mt-9 mb-6 rounded-2xl bg-base-200 border-2 border-secondary/80 shadow-[0_4px_10px_-2px_rgba(0,0,0,0.12)] grid grid-cols-1 sm:grid-cols-2 md:grid-cols-[0.9fr_1fr_1fr_1.35fr] gap-x-4 gap-y-4 p-6">
+        <Fact
+          icon={<SkillLevelIcon level={skillLevel} className="w-7 h-7 text-primary" />}
+          label="Skill level"
+          value={skillLevel || "Not specified"}
+        />
+        <Fact
+          icon={<ClockIcon className="w-7 h-7 text-primary" />}
+          label="Time to complete"
+          value={timeToComplete || "-"}
+        />
+        <Fact
+          icon={<UserGroupIcon className="w-7 h-7 text-primary" />}
+          label="Completed by"
+          value={completedByCount ? `${completedByCount} builder${completedByCount > 1 ? "s" : ""}` : "-"}
+        />
+        <Fact icon={<LinkIcon className="w-7 h-7 text-primary" />} label="Helpful links">
+          {helpfulLinks && helpfulLinks.length > 0 ? (
+            <div className="mt-0.5 space-y-1">
+              {helpfulLinks.map((item, idx) =>
+                item.url ? (
+                  <a
+                    key={`${item.text}-${idx}`}
+                    href={item.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="link text-primary font-semibold block text-sm break-words"
+                  >
+                    {item.text}
+                  </a>
                 ) : (
-                  <span>None</span>
-                )}
-              </div>
+                  <div key={`${item.text}-${idx}`} className="text-sm font-semibold break-words">
+                    {item.text}
+                  </div>
+                ),
+              )}
             </div>
-          </div>
-        </div>
+          ) : (
+            <span className="text-sm">None</span>
+          )}
+        </Fact>
       </div>
 
       {isAiReady && (
-        <div className="mt-4 rounded-2xl border border-primary/10 bg-base-100 p-6 shadow-center flex items-start gap-4">
+        <div className="mb-6 rounded-2xl border border-primary/10 bg-base-100 p-6 shadow-center flex items-start gap-4">
           <SparklesIcon className="w-8 h-8 text-primary shrink-0 mt-0.5" />
           <div>
             <p className="text-sm opacity-80 m-0">
@@ -135,6 +100,10 @@ export function ChallengeHeader({
           </div>
         </div>
       )}
+
+      <div className="rounded-2xl bg-base-100 border border-primary/10 shadow-sm px-5 py-7 sm:px-8 lg:px-10 lg:py-9">
+        {children}
+      </div>
     </div>
   );
 }

@@ -21,7 +21,7 @@ import { getBlockExplorerAddressLink } from "~~/utils/scaffold-eth";
 /**
  * Custom Wagmi Connect Button (watch balance + custom design)
  */
-export const RainbowKitCustomConnectButton = () => {
+export const RainbowKitCustomConnectButton = ({ size = "md" }: { size?: "sm" | "md" }) => {
   const { targetNetwork } = useTargetNetwork();
   const { address: connectedAddress } = useAccount();
   const { data: user, isLoading: isLoadingUser } = useUser(connectedAddress);
@@ -56,7 +56,11 @@ export const RainbowKitCustomConnectButton = () => {
         if (!connected) {
           return (
             <button
-              className="flex items-center py-1.5 lg:py-2 px-3 lg:px-4 border-2 border-primary rounded-full bg-base-300 hover:bg-base-200 transition-colors cursor-pointer"
+              className={`flex items-center border-2 border-primary rounded-full bg-base-300 hover:bg-base-200 transition-colors cursor-pointer ${
+                size === "sm"
+                  ? "py-1 px-3 text-sm md:py-1.5 md:text-base lg:py-2 lg:px-4"
+                  : "py-1.5 lg:py-2 px-3 lg:px-4"
+              }`}
               onClick={openConnectModal}
               data-testid="connect-button"
               type="button"
