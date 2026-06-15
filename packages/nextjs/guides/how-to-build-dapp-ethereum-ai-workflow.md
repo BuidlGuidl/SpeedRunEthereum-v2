@@ -247,7 +247,7 @@ This forces the agent to use Scaffold-ETH 2's official structure instead of hall
 
 When the Scaffold-ETH 2 project is created, the repo should include an `AGENTS.md` file. That file gives the coding agent the SE-2 defaults: commands, package layout, hook names, deploy flow, and the Skills/Agents index.
 
-Do not stop there, add your specific project context the generated file cannot know:
+Do not stop there, make sure to add the specific details about your project:
 
 - what the dApp does
 - which users and roles exist
