@@ -229,21 +229,17 @@ If the idea survives that review, then you have something useful to give your co
 
 ---
 
-## Step 4: Let AI scaffold your project
+## Step 4: Let AI build your project using Scaffold-ETH 2
 
-If you started from a Build Prompt, this step is mostly handled for you. The prompts already include the Scaffold-ETH 2 setup instructions, so you can paste your edited prompt into your AI tool and the agent will create the project correctly before it writes any product code.
+If you use a Build Prompt, the **Pre-flight & Context** section handles this for you. It tells the agent to check if the project is already scaffolded and, if not, uses the **Orchestrator Skill** (`https://docs.scaffoldeth.io/SKILL.md`) to set it up correctly.
 
-If you wrote your own spec, give the agent the same setup instructions yourself by pointing it to the **Orchestrator Skill**. Paste the URL together with your spec:
+If you wrote your own spec, just add that same check to the top of your prompt:
 
 ```text
-https://docs.scaffoldeth.io/SKILL.md Build me a [your dApp idea]
+Check if ./packages/nextjs/scaffold.config.ts exists. If not, follow https://docs.scaffoldeth.io/SKILL.md to scaffold the project first.
 ```
 
-Either way, the orchestrator tells the agent to check whether the current folder is already a Scaffold-ETH project, run `npx create-eth@latest` only if it needs to, wait until the files exist, and read the generated repo instructions before touching the app code.
-
-Stay with it for the first few minutes. If it starts creating its own `contracts/` folder, changing package scripts, skipping the generated instructions, or inventing a custom architecture before the scaffold exists, stop it and point it back to the orchestrator.
-
-This step is boring, but it saves pain later. If the repo starts in the wrong shape, the next steps get messy quickly: contract paths, deploy scripts, frontend hooks, generated ABIs, and tests all start drifting away from the Scaffold-ETH 2 conventions.
+This forces the agent to use Scaffold-ETH 2's official structure instead of hallucinating its own folder structure and scripts. If the repo starts in the wrong shape, everything else (hooks, deploy scripts, ABIs) will break later.
 
 ---
 
