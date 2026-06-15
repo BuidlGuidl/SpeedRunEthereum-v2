@@ -114,7 +114,7 @@ Users interact with the dApp through a wallet. The wallet holds their private ke
 
 Layer 2s have made Ethereum cheap enough for more product ideas, and AI has made it easier to get a working prototype. That does not mean every app needs a token, a contract, or a DAO.
 
-The honest test is still boring: does the product get better when users can verify the rules or hold the asset themselves? If the answer is no, a normal database will be faster, cheaper, and easier to maintain.
+The honest test is quite simple: does the product get better when users can verify the rules or hold the asset themselves? If the answer is no, a normal database will be faster, cheaper, and easier to maintain.
 
 The dApps worth building usually have at least one of these properties:
 
@@ -191,7 +191,7 @@ We built 12 **[Build Prompts](https://speedrunethereum.com/build-prompts)** for 
 
 ![Build Prompts: AI-ready dApp specifications for Ethereum primitives like Multisig, DAO, Staking Pool and Token Launchpad](/assets/guides/build-prompts-clip.gif)
 
-A useful spec should answer a few boring questions before code starts:
+A useful spec should answer a few foundational questions before code starts:
 
 - Who are the users?
 - What actions can they take?
