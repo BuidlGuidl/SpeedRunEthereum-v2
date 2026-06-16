@@ -42,6 +42,7 @@ export function ChatWidget({ challengeId, github, aiGuidedSectionId }: ChatWidge
   }
   const [isOpen, setIsOpen] = useState(false);
   const [input, setInput] = useState("");
+  const [showHint, setShowHint] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const { scrollRef, contentRef, scrollToBottom, isAtBottom } = useStickToBottom({
@@ -153,18 +154,35 @@ export function ChatWidget({ challengeId, github, aiGuidedSectionId }: ChatWidge
     }
   }, [isOpen]);
 
+  useEffect(() => {
+    const showTimer = setTimeout(() => setShowHint(true), 1000);
+    const hideTimer = setTimeout(() => setShowHint(false), 5000);
+    return () => {
+      clearTimeout(showTimer);
+      clearTimeout(hideTimer);
+    };
+  }, []);
+
   if (!connectedAddress || !user) return null;
 
   return (
     <>
       {/* Floating action button */}
-      <button
-        onClick={() => setIsOpen(true)}
-        className={`fixed bottom-24 right-6 z-50 btn btn-circle btn-primary shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-105 ${isOpen ? "pointer-events-none opacity-0" : "opacity-100"}`}
-        aria-label="Open AI chat assistant"
+      <div
+        className={`tooltip tooltip-left fixed bottom-24 right-6 z-50 transition-opacity duration-200 ${showHint && !isOpen ? "tooltip-open" : ""} ${isOpen ? "pointer-events-none opacity-0" : "opacity-100"}`}
+        data-tip="AI Teaching Assistant"
       >
-        <SparklesIcon className="w-6 h-6" />
-      </button>
+        <button
+          onClick={() => {
+            setShowHint(false);
+            setIsOpen(true);
+          }}
+          className="btn btn-circle btn-primary shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-105"
+          aria-label="Open AI chat assistant"
+        >
+          <SparklesIcon className="w-6 h-6" />
+        </button>
+      </div>
 
       {/* Backdrop (mobile) */}
       <div
