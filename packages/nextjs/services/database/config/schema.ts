@@ -8,6 +8,7 @@ import {
   UTMParams,
   UserRole,
 } from "./types";
+import type { UIMessage } from "ai";
 import { SQL, relations, sql } from "drizzle-orm";
 import {
   AnyPgColumn,
@@ -127,6 +128,32 @@ export const userNotes = pgTable("user_notes", {
     .references(() => users.userAddress),
   comment: text().notNull(),
   createdAt: timestamp().defaultNow().notNull(),
+});
+
+// Per-wallet daily token spend on the AI chat assistant. Backs the token-abuse
+// gate in /api/chat — keyed on the UTC day so the budget resets at midnight UTC.
+export const chatTokenUsage = pgTable(
+  "chat_token_usage",
+  {
+    userAddress: varchar({ length: 42 }).notNull(),
+    day: varchar({ length: 10 }).notNull(), // UTC date, YYYY-MM-DD
+    inputTokens: integer().default(0).notNull(),
+    outputTokens: integer().default(0).notNull(),
+    requestCount: integer().default(0).notNull(),
+    updatedAt: timestamp().defaultNow().notNull(),
+  },
+  table => [primaryKey({ columns: [table.userAddress, table.day] })],
+);
+
+// One AI chat session per row; the whole conversation in a single jsonb document, upserted each turn.
+export const chatConversations = pgTable("chat_conversations", {
+  id: uuid().primaryKey(), // client-minted, not server-defaulted
+  userAddress: varchar({ length: 42 }).notNull(),
+  challengeId: varchar({ length: 255 }).notNull(), // known the moment the chat opens
+  messages: jsonb().$type<UIMessage[]>().notNull(), // the whole conversation, one jsonb document
+  messageCount: integer().default(0).notNull(),
+  createdAt: timestamp().defaultNow().notNull(),
+  updatedAt: timestamp().defaultNow().notNull(),
 });
 
 export const builds = pgTable(

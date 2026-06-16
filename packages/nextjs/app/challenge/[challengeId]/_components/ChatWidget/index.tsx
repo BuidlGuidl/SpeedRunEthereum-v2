@@ -6,6 +6,7 @@ import { ChatMessage } from "./ChatMessage";
 import { useChat } from "@ai-sdk/react";
 import { DefaultChatTransport } from "ai";
 import { useStickToBottom } from "use-stick-to-bottom";
+import { useAccount } from "wagmi";
 import {
   ArrowDownIcon,
   ArrowPathIcon,
@@ -14,7 +15,7 @@ import {
   SparklesIcon,
   XMarkIcon,
 } from "@heroicons/react/24/outline";
-import { useAuthSession } from "~~/hooks/useAuthSession";
+import { useUser } from "~~/hooks/useUser";
 
 type ChatWidgetProps = {
   challengeId: string;
@@ -23,9 +24,25 @@ type ChatWidgetProps = {
 };
 
 export function ChatWidget({ challengeId, github, aiGuidedSectionId }: ChatWidgetProps) {
-  const { isAdmin } = useAuthSession();
+  const { address: connectedAddress } = useAccount();
+  // Show the assistant only to registered builders. Identity is the connected wallet (not ownership-proven).
+  const { data: user } = useUser(connectedAddress);
+
+  // Keep the latest address in a ref so the memoized transport always sends the current one (not a stale capture).
+  const connectedAddressRef = useRef(connectedAddress);
+  useEffect(() => {
+    connectedAddressRef.current = connectedAddress;
+  }, [connectedAddress]);
+
+  // One conversationId per session = one logged row. In a ref so the memoized transport reads the
+  // current id at send time; reset mints a fresh one.
+  const conversationIdRef = useRef<string>("");
+  if (!conversationIdRef.current) {
+    conversationIdRef.current = crypto.randomUUID();
+  }
   const [isOpen, setIsOpen] = useState(false);
   const [input, setInput] = useState("");
+  const [showHint, setShowHint] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const { scrollRef, contentRef, scrollToBottom, isAtBottom } = useStickToBottom({
@@ -37,7 +54,16 @@ export function ChatWidget({ challengeId, github, aiGuidedSectionId }: ChatWidge
     () =>
       new DefaultChatTransport({
         api: "/api/chat",
-        body: { challengeId, github },
+        // Build the body at send time so the wallet address is always current (a memo would capture it stale).
+        prepareSendMessagesRequest: ({ messages }) => ({
+          body: {
+            messages,
+            challengeId,
+            github,
+            address: connectedAddressRef.current,
+            conversationId: conversationIdRef.current,
+          },
+        }),
       }),
     [challengeId, github],
   );
@@ -58,6 +84,15 @@ export function ChatWidget({ challengeId, github, aiGuidedSectionId }: ChatWidge
   }, [error]);
 
   const isStreaming = status === "streaming" || status === "submitted" || isSubmitting;
+
+  // The /api/chat route returns a 429 when the wallet is over its daily token budget.
+  const isRateLimited = !!error && /limit reached|429/i.test(error.message ?? "");
+  // Budget resets at 00:00 UTC — render it in the user's local time so the wait is concrete.
+  const resetLabel = useMemo(() => {
+    const next = new Date();
+    next.setUTCHours(24, 0, 0, 0);
+    return next.toLocaleString(undefined, { weekday: "long", hour: "numeric", minute: "2-digit" });
+  }, []);
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -83,6 +118,8 @@ export function ChatWidget({ challengeId, github, aiGuidedSectionId }: ChatWidge
   const handleReset = () => {
     setMessages([]);
     setIsSubmitting(false);
+    // Start a clean session so a mid-challenge clear logs to a new row, not the old one.
+    conversationIdRef.current = crypto.randomUUID();
   };
 
   const handleRetry = async () => {
@@ -117,18 +154,35 @@ export function ChatWidget({ challengeId, github, aiGuidedSectionId }: ChatWidge
     }
   }, [isOpen]);
 
-  if (!isAdmin) return null;
+  useEffect(() => {
+    const showTimer = setTimeout(() => setShowHint(true), 1000);
+    const hideTimer = setTimeout(() => setShowHint(false), 5000);
+    return () => {
+      clearTimeout(showTimer);
+      clearTimeout(hideTimer);
+    };
+  }, []);
+
+  if (!connectedAddress || !user) return null;
 
   return (
     <>
       {/* Floating action button */}
-      <button
-        onClick={() => setIsOpen(true)}
-        className={`fixed bottom-24 right-6 z-50 btn btn-circle btn-primary shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-105 ${isOpen ? "pointer-events-none opacity-0" : "opacity-100"}`}
-        aria-label="Open AI chat assistant"
+      <div
+        className={`tooltip tooltip-left fixed bottom-24 right-6 z-50 transition-opacity duration-200 ${showHint && !isOpen ? "tooltip-open" : ""} ${isOpen ? "pointer-events-none opacity-0" : "opacity-100"}`}
+        data-tip="AI Teaching Assistant"
       >
-        <SparklesIcon className="w-6 h-6" />
-      </button>
+        <button
+          onClick={() => {
+            setShowHint(false);
+            setIsOpen(true);
+          }}
+          className="btn btn-circle btn-primary shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-105"
+          aria-label="Open AI chat assistant"
+        >
+          <SparklesIcon className="w-6 h-6" />
+        </button>
+      </div>
 
       {/* Backdrop (mobile) */}
       <div
@@ -210,7 +264,54 @@ export function ChatWidget({ challengeId, github, aiGuidedSectionId }: ChatWidge
                 </div>
               )}
 
-              {error && (
+              {error && isRateLimited && (
+                <div className="rounded-2xl border border-primary/15 bg-gradient-to-b from-primary/[0.06] to-secondary/[0.06] dark:from-primary/10 dark:to-[#1a2236] p-4 space-y-3">
+                  <div className="flex items-center gap-2.5">
+                    <div className="w-8 h-8 rounded-full bg-primary/15 flex items-center justify-center shrink-0">
+                      <SparklesIcon className="w-4 h-4 text-primary" />
+                    </div>
+                    <div className="min-w-0">
+                      <p className="font-semibold text-sm text-base-content leading-tight m-0">
+                        That&apos;s your AI chats for today
+                      </p>
+                      <p className="text-[12px] text-base-content/60 leading-tight m-0">No need to stop building.</p>
+                    </div>
+                  </div>
+                  <p className="text-[13px] text-base-content/80 m-0">
+                    More messages unlock <span className="font-medium text-base-content">{resetLabel}</span>.
+                  </p>
+                  <div className="rounded-xl border border-primary/15 bg-base-100/60 dark:bg-[#0f1729]/60 p-3 space-y-1.5">
+                    <p className="text-[12px] font-semibold text-primary m-0 flex items-center gap-1.5">
+                      <SparklesIcon className="w-3.5 h-3.5 shrink-0" />
+                      Don&apos;t stop, take it local!
+                    </p>
+                    <ul className="m-0 list-none space-y-1.5 p-0">
+                      <li className="flex gap-2 text-[12px] leading-snug text-base-content/70">
+                        <span className="mt-[6px] h-1 w-1 shrink-0 rounded-full bg-primary/60" />
+                        <span>
+                          Set this challenge up on your machine — follow{" "}
+                          <span className="inline-flex items-center rounded-md bg-primary/10 px-1.5 py-0.5 text-[11px] font-medium text-primary">
+                            Checkpoint 0
+                          </span>{" "}
+                          in the challenge.
+                        </span>
+                      </li>
+                      <li className="flex gap-2 text-[12px] leading-snug text-base-content/70">
+                        <span className="mt-[6px] h-1 w-1 shrink-0 rounded-full bg-primary/60" />
+                        <span>
+                          Open it in your agent and run{" "}
+                          <code className="rounded bg-primary/10 px-1 py-0.5 font-mono text-[11px] text-primary">
+                            /start
+                          </code>{" "}
+                          for the full AI tutor, no limits!
+                        </span>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              )}
+
+              {error && !isRateLimited && (
                 <div className="flex items-center gap-2.5 py-2 px-3 rounded-xl border border-error/25 bg-error/5 dark:bg-error/10">
                   <ExclamationTriangleIcon className="w-4 h-4 text-error shrink-0" />
                   <span className="flex-1 text-[13px] text-error">Connection failed.</span>
