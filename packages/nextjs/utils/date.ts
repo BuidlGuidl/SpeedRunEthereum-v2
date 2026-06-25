@@ -48,6 +48,14 @@ export const getRelativeTime = (timestamp: string | number | Date) => {
   return getFutureRelativeTime(timestamp);
 };
 
+// Returns a short date like "Nov 22, 2022"
+export const formatShortDate = (timestamp: string | number | Date) =>
+  new Date(timestamp).toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+  });
+
 export const formatDate = (timestamp: string | number | Date) => {
   const date = new Date(timestamp);
   const formatter = new Intl.DateTimeFormat(undefined, {

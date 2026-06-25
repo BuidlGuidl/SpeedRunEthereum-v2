@@ -2,6 +2,9 @@
 
 import { forwardRef, useEffect, useRef, useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
+import { useConnectModal } from "@rainbow-me/rainbowkit";
+import { useAccount } from "wagmi";
 import { ClipboardDocumentIcon, EyeIcon } from "@heroicons/react/24/outline";
 import { CheckCircleIcon } from "@heroicons/react/24/solid";
 import { BuildPrompt } from "~~/services/build-prompts";
@@ -103,6 +106,8 @@ const PromptModal = forwardRef<HTMLDialogElement, PromptModalProps>(({ closeModa
 PromptModal.displayName = "PromptModal";
 
 export function BuildPrompts({ prompts }: { prompts: BuildPrompt[] }) {
+  const { address: connectedAddress } = useAccount();
+  const { openConnectModal } = useConnectModal();
   const [selected, setSelected] = useState<BuildPrompt | null>(null);
   const modalRef = useRef<HTMLDialogElement>(null);
 
@@ -119,9 +124,33 @@ export function BuildPrompts({ prompts }: { prompts: BuildPrompt[] }) {
 
   return (
     <div className="py-12 px-6 max-w-6xl mx-auto w-full">
-      <h1 className="m-0 text-2xl font-bold lg:text-4xl">Build Prompts</h1>
-      <p className="mt-2 text-base-content/70">
-        AI-ready prompts for Ethereum build ideas. Copy a prompt into your AI agent and start building.
+      <h1 className="m-0 text-2xl font-bold lg:text-4xl text-center">Build Prompts</h1>
+      <p className="mt-4 text-base-content/70 text-center max-w-2xl mx-auto">
+        Full project specs for AI coding agents. Pick a build, copy the prompt into your favorite AI (Claude, Cursor,
+        Codex, etc.), and tweak the parameters to scaffold a working dApp on{" "}
+        <a href="https://scaffoldeth.io" target="_blank" rel="noopener noreferrer" className="link">
+          Scaffold-ETH 2
+        </a>
+        .
+      </p>
+      <p className="mt-1 text-base-content/70 text-center max-w-2xl mx-auto">
+        {connectedAddress ? (
+          <>
+            Once it&apos;s live, you can add it to your{" "}
+            <Link href={`/builders/${connectedAddress}`} className="link">
+              portfolio
+            </Link>
+            .
+          </>
+        ) : (
+          <>
+            Once it&apos;s live,{" "}
+            <button onClick={openConnectModal} className="link cursor-pointer">
+              connect your wallet
+            </button>{" "}
+            to add it to your portfolio.
+          </>
+        )}
       </p>
       <div className="mt-8 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-2 lg:grid-cols-3">
         {prompts.map(prompt => (

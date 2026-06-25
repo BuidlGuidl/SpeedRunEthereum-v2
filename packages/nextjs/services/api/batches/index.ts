@@ -119,14 +119,3 @@ export async function fetchUpdateBatch(
 
   return data.batch as Batch;
 }
-
-export async function fetchLatestOpenBatch() {
-  const response = await fetch("/api/batches/latest-open");
-  const data = await response.json();
-
-  if (!response.ok) {
-    throw new Error(data.error || "Failed to fetch active batch");
-  }
-
-  return data.batch as Batch;
-}

@@ -15,6 +15,69 @@ export function parseGithubUrl(githubString: string): GithubRepoInfo {
   };
 }
 
+export async function fetchGithubAgentsMd(githubString: string): Promise<string | null> {
+  const { owner, repo, branch } = parseGithubUrl(githubString);
+  const apiUrl = `https://api.github.com/repos/${owner}/${repo}/contents/extension/AGENTS.md.args.mjs?ref=${branch}`;
+
+  const headers: Record<string, string> = {
+    Accept: "application/vnd.github.v3+json",
+    "User-Agent": "SpeedRunEthereum-v2",
+  };
+
+  if (process.env.GITHUB_PAT) {
+    headers["Authorization"] = `token ${process.env.GITHUB_PAT}`;
+  }
+
+  try {
+    const response = await fetch(apiUrl, {
+      headers,
+      cache: "force-cache",
+      next: { tags: [`github-agents-${githubString}`] },
+    });
+    if (!response.ok) return null;
+
+    const data = await response.json();
+    if (!data.content) return null;
+
+    const rawFile = Buffer.from(data.content, "base64").toString("utf-8");
+    // grab the actual content removing the variable declaration
+    const match = rawFile.match(/fullContentOverride\s*=\s*`([\s\S]*?)`/);
+    return match?.[1] ?? null;
+  } catch {
+    return null;
+  }
+}
+
+export async function fetchGithubConceptsYaml(githubString: string): Promise<string | null> {
+  const { owner, repo, branch } = parseGithubUrl(githubString);
+  const apiUrl = `https://api.github.com/repos/${owner}/${repo}/contents/extension/.ai/CONCEPTS.yaml?ref=${branch}`;
+
+  const headers: Record<string, string> = {
+    Accept: "application/vnd.github.v3+json",
+    "User-Agent": "SpeedRunEthereum-v2",
+  };
+
+  if (process.env.GITHUB_PAT) {
+    headers["Authorization"] = `token ${process.env.GITHUB_PAT}`;
+  }
+
+  try {
+    const response = await fetch(apiUrl, {
+      headers,
+      cache: "force-cache",
+      next: { tags: [`github-concepts-yaml-${githubString}`] },
+    });
+    if (!response.ok) return null;
+
+    const data = await response.json();
+    if (!data.content) return null;
+
+    return Buffer.from(data.content, "base64").toString("utf-8");
+  } catch {
+    return null;
+  }
+}
+
 export async function fetchGithubChallengeReadme(githubString: string): Promise<string> {
   const { owner, repo, branch } = parseGithubUrl(githubString);
 
@@ -29,7 +92,11 @@ export async function fetchGithubChallengeReadme(githubString: string): Promise<
     headers["Authorization"] = `token ${process.env.GITHUB_PAT}`;
   }
 
-  const response = await fetch(apiUrl, { headers });
+  const response = await fetch(apiUrl, {
+    headers,
+    cache: "force-cache",
+    next: { tags: [`github-readme-${githubString}`] },
+  });
 
   if (!response.ok) {
     throw new Error(`Failed to fetch README: ${response.statusText}`);
@@ -79,6 +146,29 @@ export const fetchGithubBuildReadme = async (githubUrl: string): Promise<string 
     console.log("error fetching build README", err);
     return undefined;
   }
+};
+
+/**
+ * Prepare a README that contains MDX components for rendering.
+ * Only needed for READMEs with MDX components (e.g. <Tabs>/<Tab>).
+ * - Self-closes void HTML elements for JSX compatibility
+ * - Converts remaining <details>/<summary> to <Details>/<Summary> components
+ *   (MDX can't parse raw HTML <details> — treats them as JSX and fails)
+ */
+export const prepareMdxReadme = (markdown: string): string => {
+  return (
+    markdown
+      // Strip Kramdown-only attribute
+      .replace(/<details\s+markdown='1'>/gi, "<details>")
+      // Self-close void HTML elements
+      .replace(/<(br|hr|img|input|meta|link)(\s[^>]*)?\s*(?<!\/)>/gi, "<$1$2/>")
+      // Convert <details><summary>text</summary> to block-level MDX components
+      .replace(/<details[^>]*>\s*<summary>([\s\S]*?)<\/summary>/gi, "<Details>\n<Summary>$1</Summary>\n\n")
+      .replace(/<\/details>/gi, "\n</Details>")
+      // Strip redundant bold label at start of Tab content (e.g. **Hardhat** when label="Hardhat")
+      // Convention: each <Tab> has a bold label as first line for GitHub readability; SRE strips it
+      .replace(/<Tab label="([^"]+)">\s*\n\n\*\*\1\*\*/gi, '<Tab label="$1">\n\n')
+  );
 };
 
 export const splitChallengeReadme = (readme: string): { headerImageMdx: string; restMdx: string } => {

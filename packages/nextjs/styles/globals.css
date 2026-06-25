@@ -11,6 +11,32 @@ body {
   min-height: 100vh;
 }
 
+.challenge-page-shell {
+  width: 100%;
+  max-width: 1400px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Thin TOC scrollbar whose thumb only shows while hovering the nav. */
+.toc-scrollbar {
+  scrollbar-width: thin; /* Firefox */
+  scrollbar-color: transparent transparent;
+}
+.toc-scrollbar:hover {
+  scrollbar-color: oklch(var(--bc) / 0.25) transparent;
+}
+.toc-scrollbar::-webkit-scrollbar {
+  width: 6px; /* Chrome/Edge/Safari */
+}
+.toc-scrollbar::-webkit-scrollbar-thumb {
+  background: transparent;
+  border-radius: 3px;
+}
+.toc-scrollbar:hover::-webkit-scrollbar-thumb {
+  background: oklch(var(--bc) / 0.25);
+}
+
 h1,
 h2,
 h3,
@@ -104,6 +130,206 @@ p {
 .prose :where(blockquote):not(:where([class~="not-prose"], [class~="not-prose"] *)) {
   font-style: normal;
   font-weight: normal;
+}
+
+/* Chat widget markdown */
+.chat-prose-compact {
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.chat-prose-compact .prose p,
+.chat-prose-compact .prose li,
+.chat-prose-compact .prose blockquote,
+.chat-prose-compact .prose td,
+.chat-prose-compact .prose th,
+.chat-prose-compact .prose strong,
+.chat-prose-compact .prose em,
+.chat-prose-compact .prose ul,
+.chat-prose-compact .prose ol {
+  font-size: 13px;
+}
+
+.chat-prose-compact .prose h1,
+.chat-prose-compact .prose h2,
+.chat-prose-compact .prose h3,
+.chat-prose-compact .prose h4 {
+  line-height: 1.3;
+}
+
+.chat-prose-compact .prose h1 {
+  font-size: 16px;
+}
+
+.chat-prose-compact .prose h2 {
+  font-size: 15px;
+}
+
+.chat-prose-compact .prose h3,
+.chat-prose-compact .prose h4 {
+  font-size: 14px;
+}
+
+.chat-prose-compact .prose pre,
+.chat-prose-compact .prose code {
+  font-size: 12px;
+}
+
+/* Guide article prose overrides (scoped to /guides/[slug] pages) */
+.guide-prose h2 {
+  @apply mt-10 mb-4 pb-2 border-b-2 border-primary/30 font-bold;
+  line-height: 1.3;
+}
+
+.guide-prose h3 {
+  @apply mt-8 mb-3 font-semibold text-primary;
+  line-height: 1.3;
+}
+
+.guide-prose h4 {
+  @apply mt-6 mb-2 font-semibold;
+}
+
+.guide-prose blockquote {
+  @apply my-4 border-l-4 border-primary bg-base-200 dark:bg-base-200/40 rounded-r-lg px-4 py-1 not-italic;
+}
+
+.guide-prose blockquote p {
+  @apply my-1;
+}
+
+.guide-prose a {
+  @apply text-primary font-medium underline underline-offset-2;
+}
+
+.guide-prose a:hover {
+  @apply opacity-80;
+}
+
+.guide-prose img {
+  @apply rounded-lg shadow-sm;
+}
+
+.guide-prose ul {
+  @apply my-4 space-y-2 pl-5;
+  list-style: disc;
+}
+
+.guide-prose ul > li::marker {
+  @apply text-primary;
+}
+
+.guide-prose ol {
+  @apply my-4 space-y-2 list-decimal pl-6;
+}
+
+.guide-prose ol > li::marker {
+  @apply text-primary font-bold;
+}
+
+.guide-prose li {
+  @apply pl-1;
+}
+
+.guide-prose strong {
+  @apply font-semibold text-neutral;
+}
+
+.guide-prose table {
+  @apply w-full my-6 rounded-lg shadow-md overflow-hidden;
+  table-layout: fixed;
+  word-wrap: break-word;
+}
+
+.guide-prose thead {
+  @apply bg-primary text-primary-content;
+}
+
+.guide-prose th {
+  @apply px-3 py-2 text-left font-semibold text-sm;
+}
+
+.guide-prose th:first-child,
+.guide-prose td:first-child {
+  @apply pl-4;
+}
+
+.guide-prose td {
+  @apply px-3 py-2 border-b border-base-300 text-sm;
+}
+
+.guide-prose tbody tr:nth-child(even) {
+  @apply bg-base-200;
+}
+
+
+.guide-prose .workflow-map-table {
+  border-collapse: separate;
+  border-spacing: 0;
+  overflow: hidden;
+}
+
+.guide-prose .workflow-map-table thead {
+  background-color: rgba(8, 132, 132, 0.12);
+  color: inherit;
+}
+
+.guide-prose .workflow-map-table th {
+  color: inherit;
+  border-bottom: 1px solid rgba(8, 132, 132, 0.18);
+}
+
+[data-theme="dark"] .guide-prose .workflow-map-table thead {
+  background-color: rgba(200, 245, 255, 0.1);
+}
+
+[data-theme="dark"] .guide-prose .workflow-map-table th {
+  border-bottom-color: rgba(200, 245, 255, 0.18);
+}
+@media (min-width: 640px) {
+  .guide-prose th,
+  .guide-prose td {
+    @apply px-4 py-3;
+  }
+  .guide-prose th:first-child,
+  .guide-prose td:first-child {
+    @apply pl-6;
+  }
+  .guide-prose table {
+    table-layout: auto;
+    word-wrap: normal;
+  }
+}
+
+/* Guide FAQ: collapsible details/summary */
+.guide-faq details {
+  @apply my-2 rounded-lg border border-base-300 bg-base-200 dark:bg-base-200/40 overflow-hidden;
+}
+
+.guide-faq details summary {
+  @apply cursor-pointer select-none px-4 py-3 font-semibold text-neutral list-none flex items-center gap-2 text-base;
+}
+
+.guide-faq details summary::-webkit-details-marker {
+  display: none;
+}
+
+.guide-faq details summary::before {
+  content: "";
+  width: 0;
+  height: 0;
+  border-top: 0.25rem solid transparent;
+  border-bottom: 0.25rem solid transparent;
+  border-left: 0.4rem solid currentColor;
+  @apply shrink-0 text-primary transition-transform;
+}
+
+.guide-faq details[open] summary::before {
+  transform: rotate(90deg);
+}
+
+.guide-faq details > *:not(summary) {
+  @apply px-4 pb-3 pt-0;
 }
 
 .flag-selector ul,

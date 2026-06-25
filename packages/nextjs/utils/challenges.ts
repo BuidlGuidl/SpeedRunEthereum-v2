@@ -315,16 +315,6 @@ export const CHALLENGE_METADATA: Record<string, ChallengeStaticMetadata> = {
       },
     ],
   },
-  [ChallengeId.MULTISIG]: {
-    title: "Build a Multisignature Wallet in Solidity",
-    description:
-      "Learn to build a multisignature wallet in Solidity that requires multiple approvals for transactions. Essential security pattern for Ethereum developers.",
-  },
-  [ChallengeId.SVG_NFT]: {
-    title: "Create On-Chain SVG NFTs with Solidity",
-    description:
-      "Learn to generate on-chain SVG graphics and create fully on-chain NFTs using Solidity smart contracts. Advanced NFT development tutorial.",
-  },
 };
 
 export function generateHeadingId(text: string): string {
@@ -336,14 +326,34 @@ export function generateHeadingId(text: string): string {
     .replace(/\s+/g, "-");
 }
 
+// Strip inline markdown (links, images, code, bold, italic) down to its visible text so the
+// table of contents reads cleanly and its ids match the rendered headings, which carry no markup.
+function stripInlineMarkdown(text: string): string {
+  return text
+    .replace(/!\[([^\]]*)\]\([^)]*\)/g, "$1") // images -> alt text
+    .replace(/\[([^\]]+)\]\([^)]*\)/g, "$1") // links -> link text
+    .replace(/`([^`]+)`/g, "$1") // inline code
+    .replace(/\*\*([^*]+)\*\*/g, "$1") // bold **text**
+    .replace(/__([^_]+)__/g, "$1") // bold __text__
+    .replace(/\*([^*]+)\*/g, "$1") // italic *text*
+    .replace(/_([^_]+)_/g, "$1"); // italic _text_
+}
+
 export function extractHeadings(markdown: string): Heading[] {
-  const h2Regex = /^##\s+(.+)$/gm;
   const headings: Heading[] = [];
-  let match;
-  while ((match = h2Regex.exec(markdown)) !== null) {
-    const text = match[1];
-    const id = generateHeadingId(text);
-    headings.push({ id, text });
+  let inFence = false;
+  for (const line of markdown.split(/\r?\n/)) {
+    // Toggle in/out of fenced code blocks so example snippets aren't indexed as headings.
+    if (/^\s*(```|~~~)/.test(line)) {
+      inFence = !inFence;
+      continue;
+    }
+    if (inFence) continue;
+    const match = line.match(/^##\s+(.+)$/);
+    if (match) {
+      const text = stripInlineMarkdown(match[1].trim());
+      headings.push({ id: generateHeadingId(text), text });
+    }
   }
   return headings;
 }
