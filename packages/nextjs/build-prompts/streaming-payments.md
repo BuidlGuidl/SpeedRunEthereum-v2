@@ -31,7 +31,7 @@ A payroll protocol where an employer locks tokens, and they are continuously str
 
 ## 5. Frontend Spec
 
-- **Required Views:** Stream creation form (recipient, deposit, duration), dashboard of active streams (split incoming vs. outgoing), and a withdrawal interface. Each stream card shows start/stop time and a progress bar of streamed vs. claimed vs. remaining. Use Scaffold-ETH 2 components for every address field — `AddressInput` for input (recipient) and `Address` for display (sender/recipient). Do not fall back to plain `<input>`.
+- **Required Views:** Stream creation form (recipient, deposit, duration), dashboard of active streams (split incoming vs. outgoing), and a withdrawal interface. Each stream card shows start/stop time and a progress bar of streamed vs. claimed vs. remaining. Use Scaffold-ETH 2 components for every address field — `AddressInput` for input (recipient) and `Address` for display (sender/recipient). Do not fall back to plain `<input>`. Implement a React component for each feature.
 - **Agent Autonomy:** Use JavaScript intervals (`setInterval`) on the frontend to visually increment the "unlocked funds" counter in real-time. This provides the core "magic" feel of streaming money. The ticker must read the stream's rate (deposit / duration) and timestamps from the contract and use BigInt math mirroring the Solidity formula — do not hardcode the rate or use floating-point arithmetic.
 
 ## 6. Review
