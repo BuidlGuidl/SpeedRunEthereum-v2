@@ -1,0 +1,497 @@
+import React from "react";
+import { interpolate, spring, useCurrentFrame, useVideoConfig } from "remotion";
+import { colors, fonts } from "../theme";
+
+// Live recreation of the product's AI Teaching Assistant drawer
+// (packages/nextjs/app/challenge/[challengeId]/_components/ChatWidget).
+// Fonts are sized up vs the real product so chat stays readable on 1080p.
+
+export type WebChatMsg = {
+  id: string;
+  role: "user" | "ai";
+  text: string;
+  appearFrame: number;
+  streamCharsPerFrame?: number;
+};
+
+export type WebInputAction = {
+  text: string;
+  typeStartFrame: number;
+  sendFrame: number;
+};
+
+type Props = {
+  messages: WebChatMsg[];
+  inputActions: WebInputAction[];
+  /** [showFrom, hideAt] windows for the "assistant is typing" dots bubble */
+  dotWindows?: Array<[number, number]>;
+  /** Frame at which the first suggestion chip gets clicked (chip highlight) */
+  chipClickFrame?: number;
+  width?: number;
+  height?: number;
+};
+
+const PANEL = {
+  headerH: 84,
+  inputH: 78,
+  padX: 18,
+  msgGap: 16,
+  fontSize: 18,
+  lineH: 27, // 18 * 1.5
+  charsPerLine: 36,
+  bubblePad: 26, // vertical padding total per bubble
+};
+
+export const SparklesSvg: React.FC<{ size?: number; color?: string; strokeWidth?: number }> = ({
+  size = 24,
+  color = colors.textPrimary,
+  strokeWidth = 1.6,
+}) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none">
+    <path
+      d="M9.813 15.904 9 18.75l-.813-2.846a4.5 4.5 0 0 0-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 0 0 3.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 0 0 3.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 0 0-3.09 3.09ZM18.259 8.715 18 9.75l-.259-1.035a3.375 3.375 0 0 0-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 0 0 2.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 0 0 2.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 0 0-2.456 2.456ZM16.894 20.567 16.5 21.75l-.394-1.183a2.25 2.25 0 0 0-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 0 0 1.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 0 0 1.423 1.423l1.183.394-1.183.394a2.25 2.25 0 0 0-1.423 1.423Z"
+      stroke={color}
+      strokeWidth={strokeWidth}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>
+);
+
+const PaperPlaneSvg: React.FC<{ size?: number; color?: string }> = ({ size = 18, color = "#fff" }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none">
+    <path
+      d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875L5.999 12Zm0 0h7.5"
+      stroke={color}
+      strokeWidth={1.8}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>
+);
+
+const ArrowPathSvg: React.FC<{ size?: number; color?: string }> = ({ size = 18, color = colors.textPrimary }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none">
+    <path
+      d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99"
+      stroke={color}
+      strokeWidth={1.8}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>
+);
+
+const XMarkSvg: React.FC<{ size?: number; color?: string }> = ({ size = 20, color = colors.textPrimary }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none">
+    <path d="M6 18 18 6M6 6l12 12" stroke={color} strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" />
+  </svg>
+);
+
+// Lines starting with "$ " render as mono terminal chips inside AI bubbles
+const CODE = { lineH: 20, charsPerLine: 36, padV: 14, marginV: 10 };
+const isCodeLine = (line: string) => line.startsWith("$ ");
+
+// Estimate rendered height of a message bubble from its (possibly partial) text
+function bubbleHeight(text: string): number {
+  const segments = text.split("\n");
+  let h = PANEL.bubblePad;
+  for (const seg of segments) {
+    if (isCodeLine(seg)) {
+      h += Math.max(1, Math.ceil(seg.length / CODE.charsPerLine)) * CODE.lineH + CODE.padV + CODE.marginV;
+    } else {
+      h += (seg.length > 0 ? Math.ceil(seg.length / PANEL.charsPerLine) : 1) * PANEL.lineH;
+    }
+  }
+  return h;
+}
+
+function streamedLength(msg: WebChatMsg, frame: number): number {
+  if (msg.role === "user" || !msg.streamCharsPerFrame) return msg.text.length;
+  const elapsed = Math.max(0, frame - msg.appearFrame);
+  return Math.min(Math.floor(elapsed * msg.streamCharsPerFrame), msg.text.length);
+}
+
+const AiAvatar: React.FC = () => (
+  <div
+    style={{
+      width: 32,
+      height: 32,
+      borderRadius: "50%",
+      background: "rgba(8,132,132,0.14)",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      flexShrink: 0,
+    }}
+  >
+    <SparklesSvg size={17} color={colors.primary} strokeWidth={2} />
+  </div>
+);
+
+const TypingDots: React.FC<{ frame: number }> = ({ frame }) => (
+  <div style={{ display: "flex", gap: 12, alignItems: "flex-end" }}>
+    <AiAvatar />
+    <div
+      style={{
+        background: "#f1fbfc",
+        border: "1px solid rgba(8,132,132,0.08)",
+        borderRadius: "16px 16px 16px 4px",
+        padding: "13px 18px",
+        display: "flex",
+        gap: 5,
+        alignItems: "center",
+      }}
+    >
+      {[0, 1, 2].map(i => {
+        const pulse = (Math.sin((frame - i * 5) / 5) + 1) / 2;
+        return (
+          <div
+            key={i}
+            style={{
+              width: 8,
+              height: 8,
+              borderRadius: "50%",
+              background: colors.primary,
+              opacity: 0.25 + pulse * 0.6,
+              transform: `translateY(${-pulse * 3}px)`,
+            }}
+          />
+        );
+      })}
+    </div>
+  </div>
+);
+
+export const CHIP_LABELS = [
+  "Let's start learning! Walk me through the challenge",
+  "Help me set up locally",
+  "I'm getting an error",
+];
+
+const EmptyState: React.FC<{ opacity: number; chipHighlight: number }> = ({ opacity, chipHighlight }) => (
+  <div
+    style={{
+      position: "absolute",
+      inset: 0,
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "center",
+      padding: "56px 28px 0",
+      opacity,
+      textAlign: "center",
+      fontFamily: fonts.body,
+    }}
+  >
+    <div
+      style={{
+        width: 64,
+        height: 64,
+        borderRadius: 18,
+        background: colors.bgTertiary,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        marginBottom: 24,
+      }}
+    >
+      <svg width="30" height="30" viewBox="0 0 24 24" fill="none">
+        <path
+          d="M8.625 12a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm3.75 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm3.75 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0ZM21 12c0 4.556-4.03 8.25-9 8.25a9.764 9.764 0 0 1-2.555-.337A5.972 5.972 0 0 1 5.41 20.97a5.969 5.969 0 0 1-.474-.065 4.48 4.48 0 0 0 .978-2.025c.09-.457-.133-.901-.467-1.226C3.93 16.178 3 14.189 3 12c0-4.556 4.03-8.25 9-8.25s9 3.694 9 8.25Z"
+          stroke={colors.textPrimary}
+          strokeWidth={1.6}
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      </svg>
+    </div>
+    <div style={{ fontSize: 23, fontWeight: 700, color: colors.textPrimary, marginBottom: 14 }}>
+      Learn the concepts
+    </div>
+    <p
+      style={{
+        margin: 0,
+        fontSize: 15.5,
+        lineHeight: 1.5,
+        color: "rgba(2,98,98,0.75)",
+        maxWidth: 340,
+      }}
+    >
+      Get grounded on the concepts before you dive into the code. I&apos;ll explain what this challenge is about,
+      then help you set it up locally.
+    </p>
+    <div style={{ display: "flex", flexDirection: "column", gap: 12, marginTop: 34, alignItems: "center" }}>
+      <div
+        style={{
+          border: `1.5px solid rgba(8,132,132,${0.35 + chipHighlight * 0.6})`,
+          background: chipHighlight > 0 ? `rgba(8,132,132,${0.08 + chipHighlight * 0.12})` : "#fff",
+          color: colors.textPrimary,
+          borderRadius: 999,
+          padding: "10px 20px",
+          fontSize: 15,
+          fontWeight: 600,
+          boxShadow: chipHighlight > 0 ? "0 4px 18px rgba(8,132,132,0.25)" : "0 2px 8px rgba(8,132,132,0.06)",
+          transform: `scale(${1 + chipHighlight * 0.04})`,
+          maxWidth: 380,
+        }}
+      >
+        {CHIP_LABELS[0]}
+      </div>
+      <div style={{ display: "flex", gap: 10 }}>
+        {[CHIP_LABELS[1], CHIP_LABELS[2]].map(label => (
+          <div
+            key={label}
+            style={{
+              border: "1.5px solid rgba(8,132,132,0.35)",
+              background: "#fff",
+              color: colors.textPrimary,
+              borderRadius: 999,
+              padding: "9px 16px",
+              fontSize: 14.5,
+              fontWeight: 600,
+              boxShadow: "0 2px 8px rgba(8,132,132,0.06)",
+            }}
+          >
+            {label}
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+);
+
+export const WebChatPanel: React.FC<Props> = ({
+  messages,
+  inputActions,
+  dotWindows = [],
+  chipClickFrame,
+  width = 440,
+  height = 916,
+}) => {
+  const frame = useCurrentFrame();
+  const { fps } = useVideoConfig();
+
+  const messagesH = height - PANEL.headerH - PANEL.inputH;
+
+  // ── Input state (typewriter) ──
+  let currentInputText = "";
+  let sendActive = false;
+  let showInputCursor = false;
+  for (const action of inputActions) {
+    if (frame >= action.typeStartFrame && frame < action.sendFrame) {
+      const elapsed = frame - action.typeStartFrame;
+      const cpf = action.text.length / ((action.sendFrame - action.typeStartFrame) * 0.72);
+      const chars = Math.min(Math.floor(elapsed * cpf), action.text.length);
+      currentInputText = action.text.slice(0, chars);
+      showInputCursor = true;
+      sendActive = chars >= action.text.length;
+    }
+  }
+  const inputCursorOpacity = showInputCursor
+    ? interpolate((frame % 26) / 26, [0, 0.49, 0.51, 1], [1, 1, 0, 0])
+    : 0;
+
+  // ── Visible messages + dots ──
+  const visible = messages.filter(m => frame >= m.appearFrame);
+  const dotsVisible = dotWindows.some(([a, b]) => frame >= a && frame < b);
+
+  // ── Scroll: bottom-anchor the column so the latest content always sits
+  // just above the input (the camera crops the panel top while zoomed).
+  let totalH = 0;
+  for (const msg of visible) {
+    totalH += bubbleHeight(msg.text.slice(0, streamedLength(msg, frame))) + PANEL.msgGap;
+  }
+  if (dotsVisible) totalH += 46 + PANEL.msgGap;
+  const columnY = messagesH - 24 - totalH; // negative once content overflows = scrolled up
+
+  // ── Empty state fades out when the chip is clicked ──
+  const firstMsgFrame = messages.length > 0 ? Math.min(...messages.map(m => m.appearFrame)) : Infinity;
+  const emptyOut = Math.min(chipClickFrame ?? Infinity, firstMsgFrame);
+  const emptyOpacity = interpolate(frame, [emptyOut, emptyOut + 10], [1, 0], {
+    extrapolateLeft: "clamp",
+    extrapolateRight: "clamp",
+  });
+  const chipHighlight =
+    chipClickFrame !== undefined
+      ? interpolate(frame, [chipClickFrame - 6, chipClickFrame], [0, 1], {
+          extrapolateLeft: "clamp",
+          extrapolateRight: "clamp",
+        })
+      : 0;
+
+  return (
+    <div
+      style={{
+        width,
+        height,
+        background: "#fff",
+        display: "flex",
+        flexDirection: "column",
+        fontFamily: fonts.body,
+        borderLeft: "1px solid rgba(8,132,132,0.1)",
+        boxShadow: "-12px 0 40px -12px rgba(8,132,132,0.25)",
+        overflow: "hidden",
+      }}
+    >
+      {/* ── Header ── */}
+      <div
+        style={{
+          height: PANEL.headerH,
+          background: colors.bgTertiary,
+          display: "flex",
+          alignItems: "center",
+          padding: "0 18px",
+          gap: 12,
+          flexShrink: 0,
+        }}
+      >
+        <SparklesSvg size={24} color={colors.textPrimary} strokeWidth={1.8} />
+        <div style={{ flex: 1, minWidth: 0 }}>
+          <div style={{ fontSize: 19, fontWeight: 700, color: colors.textPrimary, lineHeight: 1.2 }}>
+            AI Teaching Assistant
+          </div>
+          <div style={{ fontSize: 13.5, color: "rgba(2,98,98,0.65)", lineHeight: 1.3 }}>
+            Guides you, won&apos;t give answers
+          </div>
+        </div>
+        {visible.length > 0 && <ArrowPathSvg size={19} />}
+        <XMarkSvg size={22} />
+      </div>
+
+      {/* ── Messages ── */}
+      <div style={{ flex: 1, position: "relative", overflow: "hidden" }}>
+        {emptyOpacity > 0 && <EmptyState opacity={emptyOpacity} chipHighlight={chipHighlight} />}
+        <div
+          style={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            right: 0,
+            padding: `20px ${PANEL.padX}px`,
+            display: "flex",
+            flexDirection: "column",
+            gap: PANEL.msgGap,
+            transform: `translateY(${columnY}px)`,
+          }}
+        >
+          {visible.map(msg => {
+            const isUser = msg.role === "user";
+            const popIn = spring({
+              frame: frame - msg.appearFrame,
+              fps,
+              config: { damping: 16, stiffness: 200, mass: 0.7 },
+            });
+            const shown = msg.text.slice(0, streamedLength(msg, frame));
+
+            return (
+              <div
+                key={msg.id}
+                style={{
+                  display: "flex",
+                  gap: 12,
+                  alignItems: "flex-end",
+                  justifyContent: isUser ? "flex-end" : "flex-start",
+                  opacity: interpolate(frame - msg.appearFrame, [0, 7], [0, 1], { extrapolateRight: "clamp" }),
+                  transform: `scale(${0.9 + popIn * 0.1})`,
+                  transformOrigin: isUser ? "bottom right" : "bottom left",
+                }}
+              >
+                {!isUser && <AiAvatar />}
+                <div
+                  style={{
+                    background: isUser ? colors.primary : "#f1fbfc",
+                    color: isUser ? "#fff" : colors.textPrimary,
+                    border: isUser ? "none" : "1px solid rgba(8,132,132,0.08)",
+                    borderRadius: isUser ? "16px 16px 4px 16px" : "16px 16px 16px 4px",
+                    padding: "12px 16px",
+                    fontSize: PANEL.fontSize,
+                    lineHeight: `${PANEL.lineH}px`,
+                    whiteSpace: "pre-wrap",
+                    maxWidth: width - PANEL.padX * 2 - (isUser ? 30 : 44),
+                    fontWeight: isUser ? 600 : 500,
+                  }}
+                >
+                  {shown.split("\n").map((line, li) =>
+                    isCodeLine(line) ? (
+                      <div
+                        key={li}
+                        style={{
+                          fontFamily: fonts.mono,
+                          fontSize: 14,
+                          lineHeight: `${CODE.lineH}px`,
+                          background: "#04292c",
+                          color: "#7fe7e8",
+                          borderRadius: 8,
+                          padding: "7px 12px",
+                          margin: "5px 0",
+                          whiteSpace: "pre-wrap",
+                          overflowWrap: "break-word",
+                          fontWeight: 600,
+                        }}
+                      >
+                        {line}
+                      </div>
+                    ) : (
+                      <div key={li} style={{ minHeight: line.length === 0 ? PANEL.lineH : undefined }}>
+                        {line}
+                      </div>
+                    ),
+                  )}
+                </div>
+              </div>
+            );
+          })}
+          {dotsVisible && <TypingDots frame={frame} />}
+        </div>
+      </div>
+
+      {/* ── Input ── */}
+      <div
+        style={{
+          height: PANEL.inputH,
+          borderTop: "1px solid rgba(8,132,132,0.1)",
+          background: "#fff",
+          display: "flex",
+          alignItems: "center",
+          gap: 10,
+          padding: "0 16px",
+          flexShrink: 0,
+        }}
+      >
+        <div
+          style={{
+            flex: 1,
+            background: "rgba(233,251,255,0.55)",
+            border: `1px solid rgba(8,132,132,${showInputCursor ? 0.3 : 0.14})`,
+            borderRadius: 12,
+            padding: "11px 15px",
+            fontSize: 16,
+            color: currentInputText ? colors.textPrimary : "rgba(2,98,98,0.4)",
+            whiteSpace: "nowrap",
+            overflow: "hidden",
+          }}
+        >
+          {currentInputText ? currentInputText.slice(-36) : "Ask about this challenge..."}
+          {showInputCursor && (
+            <span style={{ opacity: inputCursorOpacity, color: colors.primary, fontWeight: 600 }}>|</span>
+          )}
+        </div>
+        <div
+          style={{
+            width: 42,
+            height: 42,
+            borderRadius: "50%",
+            background: sendActive ? colors.primary : "rgba(8,132,132,0.35)",
+            boxShadow: sendActive ? "0 0 16px rgba(8,132,132,0.45)" : "none",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            flexShrink: 0,
+          }}
+        >
+          <PaperPlaneSvg size={19} />
+        </div>
+      </div>
+    </div>
+  );
+};

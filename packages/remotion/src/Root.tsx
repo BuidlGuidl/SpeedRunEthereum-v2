@@ -2,6 +2,8 @@ import { Composition } from "remotion";
 import { BuildPromptsDemo } from "./BuildPromptsDemo";
 import { BuildPromptsClip, CLIP_DURATION } from "./BuildPromptsClip";
 import { AITutorDemo, AITUTOR_TOTAL_DURATION } from "./AITutorDemo";
+import { WebAIAssistantLaunch, WEB_AI_ASSISTANT_TOTAL_DURATION } from "./WebAIAssistantLaunch";
+import { WebAIAssistantLaunchV3, WEB_AI_ASSISTANT_V3_TOTAL_DURATION } from "./WebAIAssistantLaunchV3";
 import {
   FoundryAnnouncement,
   FOUNDRY_TOTAL_DURATION,
@@ -40,6 +42,22 @@ export const RemotionRoot: React.FC = () => {
         id="AITutorDemo"
         component={AITutorDemo}
         durationInFrames={AITUTOR_TOTAL_DURATION}
+        fps={30}
+        width={1920}
+        height={1080}
+      />
+      <Composition
+        id="WebAIAssistantLaunch"
+        component={WebAIAssistantLaunch}
+        durationInFrames={WEB_AI_ASSISTANT_TOTAL_DURATION}
+        fps={30}
+        width={1920}
+        height={1080}
+      />
+      <Composition
+        id="WebAIAssistantLaunchV3"
+        component={WebAIAssistantLaunchV3}
+        durationInFrames={WEB_AI_ASSISTANT_V3_TOTAL_DURATION}
         fps={30}
         width={1920}
         height={1080}

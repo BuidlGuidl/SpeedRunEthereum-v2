@@ -1,0 +1,699 @@
+import React from "react";
+import {
+  AbsoluteFill,
+  Audio,
+  Easing,
+  Img,
+  Sequence,
+  interpolate,
+  spring,
+  staticFile,
+  useCurrentFrame,
+  useVideoConfig,
+} from "remotion";
+import { loadFont } from "@remotion/google-fonts/PlayfairDisplay";
+import { AnimatedCursor } from "./components/AnimatedCursor";
+import { PixelGirlSprite } from "./components/PixelGirlSprite";
+import { CHIP_LABELS, WebChatMsg, WebChatPanel, WebInputAction } from "./components/WebChatPanel";
+import { colors, fonts } from "./theme";
+
+const { fontFamily: serifFont } = loadFont();
+const CLICK_SFX = staticFile("sfx/confirmation.ogg");
+const TAP_SFX = staticFile("mechanical-keyboard.mp3");
+const EC = { extrapolateLeft: "clamp" as const, extrapolateRight: "clamp" as const };
+
+// ── Timeline (frames @ 30fps) ────────────────────────────
+// Timing rule (from AITutorDemo): the viewer gets 60-80 frames to READ after
+// each AI message finishes streaming before the next user action begins.
+const T = {
+  // HOOK — branded intro (~6.5s)
+  HOOK_L1: 15,
+  HOOK_L2: 55,
+  HOOK_L3: 100,
+  HOOK_L4: 130,
+  HOOK_OUT: 178,
+
+  // REVEAL — challenge page + FAB click + panel slide-in
+  PAGE_IN: 195,
+  FAB_MOVE: 245,
+  FAB_CLICK: 278,
+  PANEL_IN: 284,
+  ZOOM_IN: 315,
+
+  // CH1 — It knows your challenge
+  CH1: 335,
+  CH1_END: 448,
+  CHIP_MOVE: 458,
+  CHIP_CLICK: 486,
+  U1: 492,
+  A1: 522, // ~400 chars @2.5 cpf → ends ~682, read until 760
+
+  // CH2 — It checks it clicked
+  CH2: 760,
+  CH2_END: 873,
+  A2: 880, // ~80 chars @2.2 → ends ~917
+  U2_TYPE: 975,
+  U2_SEND: 1000,
+  U2: 1005,
+  A3: 1015, // ~128 chars @2.2 → ends ~1073
+  U3_TYPE: 1135,
+  U3_SEND: 1205,
+  U3: 1210,
+  A4: 1222, // ~210 chars @2.2 → ends ~1318, read until 1390
+
+  // CH3 — Guides you, won't give answers
+  CH3: 1390,
+  CH3_END: 1503,
+  U4_TYPE: 1513,
+  U4_SEND: 1563,
+  U4: 1568,
+  A5: 1580, // ~277 chars @2.5 → ends ~1691, read until 1770
+
+  // CH4 — Then take it local
+  CH4: 1770,
+  CH4_END: 1883,
+  A6: 1893, // ~188 chars @2.2 → ends ~1979
+
+  // Pull-back + outro
+  ZOOM_OUT: 2000,
+  OUTRO: 2065,
+  END: 2300,
+};
+export const WEB_AI_ASSISTANT_TOTAL_DURATION = T.END;
+
+// ── Screenshot geometry ─────────────────────────────────
+// ss3.png is a native 1920x916 capture of the challenge page (FAB visible, no panel).
+const SHOT_Y = 82;
+const SHOT_H = 916;
+const PANEL_W = 440;
+const FAB = { x: 1857, y: 798 }; // baked-in floating action button center (shot coords)
+const CHIP1 = { x: 1700, y: 396 }; // first suggestion chip center (shot coords)
+
+// ── Camera ──────────────────────────────────────────────
+// Fixed transform-origin at the right edge / 90% height of the shot:
+// zooming in anchors the panel to the bottom-right of the viewport
+// (panel header crops off-screen — same convention as AITutorDemo's chat zoom).
+const ZOOM_SCALE = 1.5;
+const ZOOM_EASE = 45;
+
+function getCameraScale(f: number): number {
+  const zoomIn = interpolate(f, [T.ZOOM_IN, T.ZOOM_IN + ZOOM_EASE], [0, 1], {
+    ...EC,
+    easing: Easing.inOut(Easing.cubic),
+  });
+  const zoomOut = interpolate(f, [T.ZOOM_OUT, T.ZOOM_OUT + 50], [1, 0], {
+    ...EC,
+    easing: Easing.inOut(Easing.cubic),
+  });
+  return 1 + (ZOOM_SCALE - 1) * zoomIn * zoomOut;
+}
+
+// ── Chat script (abridged from the real product conversation) ──
+const MSGS: WebChatMsg[] = [
+  { id: "u1", role: "user", text: CHIP_LABELS[0], appearFrame: T.U1 },
+  {
+    id: "a1",
+    role: "ai",
+    appearFrame: T.A1,
+    streamCharsPerFrame: 2.5,
+    text: `Crowdfunding is a perfect first dApp: a group of strangers pool money together without trusting each other — they only have to trust the code.\n\nIf enough ETH is collected before a deadline, the funds go to the recipient. If not, everyone gets their money back. No middleman, no escrow, no "trust me bro."\n\nThe rules are enforced by the smart contract itself — once deployed, nobody can change them.`,
+  },
+  {
+    id: "a2",
+    role: "ai",
+    appearFrame: T.A2,
+    streamCharsPerFrame: 2.2,
+    text: `Does this make sense? Want me to test your understanding with a quick question?`,
+  },
+  { id: "u2", role: "user", text: "yes pls", appearFrame: T.U2 },
+  {
+    id: "a3",
+    role: "ai",
+    appearFrame: T.A3,
+    streamCharsPerFrame: 2.2,
+    text: `Try to answer this: why don't contributors need to trust each other — or a middleman — in this system? What enforces the rules?`,
+  },
+  {
+    id: "u3",
+    role: "user",
+    text: "the smart contract enforces the rules — if we don't reach the goal, everyone just gets their money back",
+    appearFrame: T.U3,
+  },
+  {
+    id: "a4",
+    role: "ai",
+    appearFrame: T.A4,
+    streamCharsPerFrame: 2.2,
+    text: `Perfect! You've got it:\n\n• Success: enough ETH before the deadline → funds go to the recipient\n• Failed: goal not reached → everyone gets their money back\n\nNice — let's move on to tracking contributions on-chain.`,
+  },
+  {
+    id: "u4",
+    role: "user",
+    text: "ok just write the withdraw function for me 😅",
+    appearFrame: T.U4,
+  },
+  {
+    id: "a5",
+    role: "ai",
+    appearFrame: T.A5,
+    streamCharsPerFrame: 2.5,
+    text: `Nice try 🙂 I won't hand you the code — you'd learn nothing.\n\nBut here's a hint: the contract needs to know how much each person contributed, not just the total. On-chain that's a mapping — think of it as a dictionary from each address to the amount they've sent.\n\nGive it a shot!`,
+  },
+  {
+    id: "a6",
+    role: "ai",
+    appearFrame: T.A6,
+    streamCharsPerFrame: 2.2,
+    text: `You're ready to build. Set the challenge up on your machine (Checkpoint 0), open it in Claude Code or Cursor, and run /start for the full AI tutor — no limits.\n\nSee you at the finish line 🏁`,
+  },
+];
+
+const INPUT_ACTIONS: WebInputAction[] = [
+  { text: "yes pls", typeStartFrame: T.U2_TYPE, sendFrame: T.U2_SEND },
+  {
+    text: "the smart contract enforces the rules — if we don't reach the goal, everyone just gets their money back",
+    typeStartFrame: T.U3_TYPE,
+    sendFrame: T.U3_SEND,
+  },
+  { text: "ok just write the withdraw function for me 😅", typeStartFrame: T.U4_TYPE, sendFrame: T.U4_SEND },
+];
+
+const DOT_WINDOWS: Array<[number, number]> = [
+  [T.U1 + 8, T.A1],
+  [T.A2 - 16, T.A2],
+  [T.U2 + 8, T.A3],
+  [T.U3 + 8, T.A4],
+  [T.U4 + 8, T.A5],
+  [T.A6 - 16, T.A6],
+];
+
+// ── Chapter cards ───────────────────────────────────────
+const CHAPTERS = [
+  {
+    num: "01",
+    title: "It knows your challenge",
+    sub: "Context-aware help on every AI-ready challenge",
+    start: T.CH1,
+    end: T.CH1_END,
+    persistUntil: T.CH2,
+  },
+  {
+    num: "02",
+    title: "It checks it clicked",
+    sub: "Quick questions prove you really got it",
+    start: T.CH2,
+    end: T.CH2_END,
+    persistUntil: T.CH3,
+  },
+  {
+    num: "03",
+    title: "Guides you, won't give answers",
+    sub: "Hints and teaching — never copy-paste solutions",
+    start: T.CH3,
+    end: T.CH3_END,
+    persistUntil: T.CH4,
+  },
+  {
+    num: "04",
+    title: "Then take it local",
+    sub: "Continue in your IDE with the full AI tutor",
+    start: T.CH4,
+    end: T.CH4_END,
+    persistUntil: T.OUTRO - 10,
+  },
+];
+
+// ── Background: SRE gradient + drifting grid ────────────
+const Background: React.FC = () => {
+  const frame = useCurrentFrame();
+  const drift = interpolate(frame % 300, [0, 300], [0, 48], EC);
+
+  return (
+    <AbsoluteFill
+      style={{
+        background: `linear-gradient(180deg, #f7feff 0%, ${colors.bgSecondary} 100%)`,
+        overflow: "hidden",
+      }}
+    >
+      <div
+        style={{
+          position: "absolute",
+          inset: -60,
+          backgroundImage:
+            "linear-gradient(rgba(8,132,132,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(8,132,132,0.1) 1px, transparent 1px)",
+          backgroundSize: "48px 48px",
+          opacity: 0.3,
+          transform: `translateY(${drift}px)`,
+        }}
+      />
+    </AbsoluteFill>
+  );
+};
+
+// ── Full-screen chapter card → shrinks to a compact top badge (AITutorDemo pattern) ──
+const ChapterCard: React.FC<{
+  num: string;
+  title: string;
+  sub: string;
+  start: number;
+  end: number;
+  persistUntil: number;
+}> = ({ num, title, sub, start, end, persistUntil }) => {
+  const frame = useCurrentFrame();
+  const { fps } = useVideoConfig();
+  const dur = end - start;
+  const holdEnd = start + Math.floor(dur * 0.55);
+  const shrinkEnd = start + Math.floor(dur * 0.72);
+  const transEnd = start + Math.floor(dur * 0.85);
+
+  const fadeIn = interpolate(frame, [start, start + 15], [0, 1], EC);
+  const s = spring({ frame: Math.max(0, frame - start), fps, config: { damping: 18, mass: 0.8 } });
+  const fadeOut = interpolate(frame, [persistUntil - 15, persistUntil], [1, 0], EC);
+  if (frame < start || frame >= persistUntil) return null;
+
+  const isPersisting = frame >= end;
+  const shrinkProg = isPersisting ? 1 : frame <= holdEnd ? 0 : interpolate(frame, [holdEnd, shrinkEnd], [0, 1], EC);
+  const slideRaw = isPersisting ? 1 : frame <= shrinkEnd ? 0 : interpolate(frame, [shrinkEnd, transEnd], [0, 1], EC);
+  const slideProg = Easing.out(Easing.cubic)(slideRaw);
+
+  const yPos = interpolate(slideProg, [0, 1], [50, 4.5]);
+  const scale = interpolate(shrinkProg, [0, 1], [1, 0.52]);
+  const subOp = interpolate(shrinkProg, [0, 0.35], [1, 0], EC);
+  const subMargin = interpolate(shrinkProg, [0, 0.35], [20, 0], EC);
+  const subMaxH = interpolate(shrinkProg, [0, 0.35], [120, 0], EC);
+  const bgOp = interpolate(shrinkProg, [0, 0.5], [0.92, 0.85], EC);
+  const padV = interpolate(shrinkProg, [0, 1], [60, 14]);
+  const padH = interpolate(shrinkProg, [0, 1], [120, 44]);
+  const numMb = interpolate(shrinkProg, [0, 1], [16, 6]);
+  const op = isPersisting ? fadeOut : fadeIn;
+
+  return (
+    <AbsoluteFill style={{ justifyContent: "flex-start", alignItems: "center", zIndex: 50, opacity: op, pointerEvents: "none" }}>
+      <div
+        style={{
+          position: "absolute",
+          top: `${yPos}%`,
+          left: "50%",
+          transform: `translate(-50%, -50%) scale(${(isPersisting ? 1 : s) * scale})`,
+          background: `rgba(10,10,18,${bgOp})`,
+          backdropFilter: "blur(16px)",
+          padding: `${padV}px ${padH}px`,
+          borderRadius: 24,
+          textAlign: "center",
+          border: "1px solid rgba(103,221,222,0.25)",
+          boxShadow: "0 32px 80px rgba(2,98,98,0.35)",
+          display: "flex",
+          flexDirection: "column" as const,
+          alignItems: "center",
+        }}
+      >
+        <div style={{ color: colors.accent, fontSize: 36, fontFamily: fonts.mono, fontWeight: 700, marginBottom: numMb, letterSpacing: 2, opacity: 0.85 }}>
+          {num}
+        </div>
+        <h2 style={{ color: "#fff", fontSize: 76, fontFamily: fonts.heading, fontWeight: 800, margin: 0, letterSpacing: "-0.02em", whiteSpace: "nowrap" }}>
+          {title}
+        </h2>
+        <div style={{ overflow: "hidden", maxHeight: subMaxH, marginTop: subMargin }}>
+          <p style={{ color: "rgba(255,255,255,0.5)", fontSize: 33, fontFamily: fonts.body, margin: 0, opacity: subOp }}>{sub}</p>
+        </div>
+      </div>
+    </AbsoluteFill>
+  );
+};
+
+// ── Floating particles (intro/outro decoration) ─────────
+const Particles: React.FC = () => {
+  const frame = useCurrentFrame();
+  return (
+    <>
+      {Array.from({ length: 8 }, (_, i) => {
+        const baseX = (i * 240 + 80) % 1920;
+        const baseY = 80 + ((i * 170) % 750);
+        const offsetY = Math.sin(frame * 0.03 + i * 1.2) * 25;
+        const sz = 6 + (i % 4) * 5;
+        return (
+          <div
+            key={`p-${i}`}
+            style={{
+              position: "absolute",
+              left: baseX,
+              top: baseY + offsetY,
+              width: sz,
+              height: sz,
+              borderRadius: 2,
+              background: i % 2 === 0 ? colors.accent : colors.primaryLight,
+              opacity: 0.15,
+              zIndex: 0,
+            }}
+          />
+        );
+      })}
+    </>
+  );
+};
+
+// ── Intro / hook ────────────────────────────────────────
+const Hook: React.FC = () => {
+  const frame = useCurrentFrame();
+  const { fps } = useVideoConfig();
+  if (frame >= T.HOOK_OUT + 30) return null;
+
+  const introFadeIn = interpolate(frame, [0, 12], [0, 1], EC);
+  const sceneOut = interpolate(frame, [T.HOOK_OUT, T.HOOK_OUT + 25], [1, 0], EC);
+  const spriteScale = spring({ frame, fps, config: { damping: 14, mass: 0.8 } });
+  const titleOp = interpolate(frame, [18, 38], [0, 1], EC);
+  const titleY = interpolate(frame, [18, 38], [15, 0], { ...EC, easing: Easing.out(Easing.cubic) });
+
+  const line = (start: number) => ({
+    opacity: interpolate(frame, [start, start + 28, T.HOOK_OUT, T.HOOK_OUT + 25], [0, 1, 1, 0], EC),
+    transform: `translateY(${interpolate(frame, [start, start + 38], [18, 0], { ...EC, easing: Easing.out(Easing.cubic) })}px)`,
+    textAlign: "center" as const,
+  });
+
+  return (
+    <AbsoluteFill
+      style={{
+        background: `linear-gradient(180deg, ${colors.bgPrimary} 0%, ${colors.bgSecondary} 100%)`,
+        opacity: introFadeIn * sceneOut,
+        zIndex: 60,
+      }}
+    >
+      <Particles />
+      <div
+        style={{
+          position: "absolute",
+          top: -38,
+          left: 0,
+          right: 0,
+          height: "50%",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <div style={{ transform: `scale(${spriteScale})`, marginBottom: 36 }}>
+          <PixelGirlSprite size={240} />
+        </div>
+        <div style={{ opacity: titleOp, transform: `translateY(${titleY}px)` }}>
+          <h1
+            style={{
+              fontFamily: serifFont,
+              fontSize: 100,
+              fontWeight: 700,
+              color: colors.textPrimary,
+              margin: 0,
+              letterSpacing: "-0.02em",
+            }}
+          >
+            AI Teaching Assistant
+          </h1>
+        </div>
+      </div>
+
+      <div
+        style={{
+          position: "absolute",
+          bottom: 38,
+          left: 0,
+          right: 0,
+          height: "50%",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <div style={line(T.HOOK_L1)}>
+          <h1 style={{ fontFamily: fonts.heading, fontSize: 62, fontWeight: 800, margin: 0, color: colors.textPrimary, letterSpacing: "-0.02em" }}>
+            Stuck reading a challenge <span style={{ color: colors.textMuted, fontStyle: "italic" }}>solo</span>?
+          </h1>
+        </div>
+        <div style={{ ...line(T.HOOK_L2), marginTop: 8 }}>
+          <h2 style={{ fontFamily: fonts.heading, fontSize: 42, fontWeight: 500, margin: 0, color: colors.textSecondary }}>
+            Docs don&apos;t answer back.
+          </h2>
+        </div>
+        <div style={{ height: 28 }} />
+        <div style={line(T.HOOK_L3)}>
+          <h1 style={{ fontFamily: fonts.heading, fontSize: 56, fontWeight: 800, margin: 0, color: colors.textPrimary }}>
+            Now a <span style={{ color: colors.primary }}>teacher</span> lives
+          </h1>
+        </div>
+        <div style={{ ...line(T.HOOK_L4), marginTop: 12 }}>
+          <h2 style={{ fontFamily: fonts.heading, fontSize: 48, fontWeight: 700, margin: 0, color: colors.primary }}>
+            right on the challenge page
+          </h2>
+        </div>
+      </div>
+      <div
+        style={{
+          position: "absolute",
+          bottom: 0,
+          width: "100%",
+          height: 60,
+          background: `linear-gradient(180deg, ${colors.accent}44, ${colors.primary})`,
+          zIndex: 0,
+        }}
+      />
+    </AbsoluteFill>
+  );
+};
+
+// ── The product shot: real page screenshot + live panel + cursor ──
+const ProductShot: React.FC = () => {
+  const frame = useCurrentFrame();
+  const { fps } = useVideoConfig();
+  if (frame < T.PAGE_IN) return null;
+
+  const pageOp = interpolate(frame, [T.PAGE_IN, T.PAGE_IN + 30], [0, 1], EC);
+  const pageY = interpolate(
+    spring({ frame: Math.max(0, frame - T.PAGE_IN), fps, config: { damping: 22, mass: 1.1 } }),
+    [0, 1],
+    [40, 0],
+  );
+  const outroFade = interpolate(frame, [T.OUTRO, T.OUTRO + 30], [1, 0], EC);
+
+  const scale = getCameraScale(frame);
+
+  // Panel slide-in from the right
+  const panelSlide = spring({
+    frame: Math.max(0, frame - T.PANEL_IN),
+    fps,
+    config: { damping: 20, stiffness: 120, mass: 0.9 },
+  });
+  const panelX = interpolate(panelSlide, [0, 1], [PANEL_W + 20, 0]);
+  const panelOpen = frame >= T.PANEL_IN;
+
+  // FAB attention pulse before the click
+  const fabPulse = frame >= T.PAGE_IN + 25 && frame < T.FAB_CLICK + 8;
+  const pulseT = ((frame - T.PAGE_IN) % 40) / 40;
+
+  return (
+    <AbsoluteFill style={{ opacity: pageOp * outroFade }}>
+      <div
+        style={{
+          position: "absolute",
+          left: 0,
+          top: SHOT_Y,
+          width: 1920,
+          height: SHOT_H,
+          transform: `translateY(${pageY}px) scale(${scale})`,
+          transformOrigin: "100% 90%",
+        }}
+      >
+        <div
+          style={{
+            position: "absolute",
+            inset: 0,
+            filter: "drop-shadow(0 30px 60px rgba(2,98,98,0.18))",
+          }}
+        >
+          <Img
+            src={staticFile("web-ai-assistant-sshots/ss3.png")}
+            style={{ width: 1920, height: SHOT_H, display: "block" }}
+          />
+        </div>
+
+        {/* FAB pulse ring (the button itself is baked into the screenshot) */}
+        {fabPulse && (
+          <div
+            style={{
+              position: "absolute",
+              left: FAB.x - 32,
+              top: FAB.y - 32,
+              width: 64,
+              height: 64,
+              borderRadius: "50%",
+              border: `3px solid ${colors.primary}`,
+              transform: `scale(${1 + pulseT * 0.8})`,
+              opacity: (1 - pulseT) * 0.7,
+              pointerEvents: "none",
+            }}
+          />
+        )}
+
+        {/* Live chat panel */}
+        {panelOpen && (
+          <div style={{ position: "absolute", right: 0, top: 0, transform: `translateX(${panelX}px)` }}>
+            <WebChatPanel
+              messages={MSGS}
+              inputActions={INPUT_ACTIONS}
+              dotWindows={DOT_WINDOWS}
+              chipClickFrame={T.CHIP_CLICK}
+              width={PANEL_W}
+              height={SHOT_H}
+            />
+          </div>
+        )}
+
+        {/* Cursor: glide to FAB and click */}
+        <Sequence from={T.FAB_MOVE} durationInFrames={T.FAB_CLICK - T.FAB_MOVE + 16} layout="none">
+          <AnimatedCursor
+            positions={[
+              { x: 1520, y: 620, frame: 0 },
+              { x: FAB.x - 6, y: FAB.y - 8, frame: T.FAB_CLICK - T.FAB_MOVE },
+            ]}
+            clickAtEnd
+            size={20}
+            color={colors.primary}
+          />
+        </Sequence>
+
+        {/* Cursor: glide to the first suggestion chip and click */}
+        <Sequence from={T.CHIP_MOVE} durationInFrames={T.CHIP_CLICK - T.CHIP_MOVE + 16} layout="none">
+          <AnimatedCursor
+            positions={[
+              { x: 1620, y: 700, frame: 0 },
+              { x: CHIP1.x, y: CHIP1.y, frame: T.CHIP_CLICK - T.CHIP_MOVE },
+            ]}
+            clickAtEnd
+            size={16}
+            color={colors.primary}
+          />
+        </Sequence>
+      </div>
+    </AbsoluteFill>
+  );
+};
+
+// ── Outro ───────────────────────────────────────────────
+const Outro: React.FC = () => {
+  const frame = useCurrentFrame();
+  const { fps } = useVideoConfig();
+  if (frame < T.OUTRO) return null;
+
+  const op = interpolate(frame, [T.OUTRO, T.OUTRO + 40], [0, 1], EC);
+  const ctaScale = spring({ frame: Math.max(0, frame - T.OUTRO - 25), fps, config: { damping: 20, mass: 1 } });
+
+  return (
+    <AbsoluteFill
+      style={{
+        background: `linear-gradient(180deg, ${colors.bgPrimary} 0%, ${colors.bgSecondary} 100%)`,
+        opacity: op,
+        zIndex: 30,
+      }}
+    >
+      <Particles />
+      <div
+        style={{
+          position: "absolute",
+          top: -76,
+          left: 0,
+          right: 0,
+          height: "40%",
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "center",
+          alignItems: "center",
+          gap: 32,
+          transform: `scale(${ctaScale})`,
+        }}
+      >
+        <Sequence from={T.OUTRO} layout="none">
+          <PixelGirlSprite size={160} />
+        </Sequence>
+        <h2 style={{ fontFamily: fonts.heading, fontSize: 48, fontWeight: 700, color: colors.primary, margin: 0, letterSpacing: "-0.01em" }}>
+          speedrunethereum.com
+        </h2>
+      </div>
+
+      <div
+        style={{
+          position: "absolute",
+          inset: 0,
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "center",
+          paddingTop: "6%",
+          transform: `scale(${ctaScale})`,
+        }}
+      >
+        <h1
+          style={{
+            fontFamily: serifFont,
+            color: colors.textPrimary,
+            fontSize: 92,
+            margin: 0,
+            fontWeight: 700,
+            letterSpacing: "-0.02em",
+            lineHeight: 1.2,
+            textAlign: "center",
+          }}
+        >
+          Learn Solidity with a teacher
+          <br />
+          <span style={{ color: colors.primary }}>right on the page</span>
+        </h1>
+        <p style={{ fontFamily: fonts.body, color: colors.textSecondary, fontSize: 32, marginTop: 30, textAlign: "center" }}>
+          AI Teaching Assistant · Available now for all registered builders
+        </p>
+      </div>
+      <div
+        style={{
+          position: "absolute",
+          bottom: 0,
+          width: "100%",
+          height: 60,
+          background: `linear-gradient(180deg, ${colors.accent}44, ${colors.primary})`,
+          zIndex: 0,
+        }}
+      />
+    </AbsoluteFill>
+  );
+};
+
+// ── Sound design ────────────────────────────────────────
+const Sound: React.FC = () => (
+  <>
+    <Audio
+      src={staticFile("ai-tutor-video-music.mp3")}
+      volume={f => interpolate(f, [0, 40, T.END - 80, T.END], [0, 0.15, 0.15, 0], EC)}
+    />
+    {[T.FAB_CLICK, T.CHIP_CLICK, T.U2_SEND, T.U3_SEND, T.U4_SEND, T.A4].map((f, i) => (
+      <Sequence key={`clk-${i}`} from={f} durationInFrames={30}>
+        <Audio src={CLICK_SFX} volume={0.2} />
+      </Sequence>
+    ))}
+    {INPUT_ACTIONS.map((action, i) => (
+      <Sequence key={`tap-${i}`} from={action.typeStartFrame} durationInFrames={action.sendFrame - action.typeStartFrame}>
+        <Audio src={TAP_SFX} volume={0.14} />
+      </Sequence>
+    ))}
+  </>
+);
+
+// ── Main ────────────────────────────────────────────────
+export const WebAIAssistantLaunch: React.FC = () => (
+  <AbsoluteFill style={{ background: "#f7feff" }}>
+    <Background />
+    <Sound />
+    <ProductShot />
+    {CHAPTERS.map(ch => (
+      <ChapterCard key={ch.num} {...ch} />
+    ))}
+    <Hook />
+    <Outro />
+  </AbsoluteFill>
+);
