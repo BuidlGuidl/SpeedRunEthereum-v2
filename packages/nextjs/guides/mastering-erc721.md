@@ -139,6 +139,6 @@ Mastering ERC721, metadata, and URI management is fundamental for creating valua
 
 ---
 
-**Ready to build your first NFT? [Try the Tokenization Challenge!](/challenge/tokenization)**
+**Ready to build your first NFT? [Try the Tokenization Challenge on Speedrun Ethereum!](/challenge/tokenization)**
 
 **Already comfortable with the basics? [Try the SVG NFT Challenge!](/challenge/svg-nft)**

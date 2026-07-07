@@ -699,6 +699,6 @@ The commit-reveal scheme is essential for any blockchain application requiring h
 
 ---
 
-**Ready to build? [Try the Dice Game Challenge!](/challenge/dice-game)**
+**Ready to build? [Try the Dice Game Challenge on Speedrun Ethereum!](/challenge/dice-game)**
 
 **Want to learn more about blockchain security? [Read our Flash Loan Exploits Guide!](/guides/flash-loan-exploits)**
