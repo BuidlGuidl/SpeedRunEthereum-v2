@@ -53,8 +53,6 @@ const StartLandingPage = async () => {
           height={280}
         />
         <div className="relative z-10 px-6 lg:pb-12">
-          {/* The HeroLogo below is the visual title; this gives crawlers and assistive tech a single,
-              brand-named H1 without altering the playful hero design. */}
           <h1 className="sr-only">Speedrun Ethereum: Learn to Build on Ethereum by Building Real Projects</h1>
           <p className="text-center mb-10 dark:text-gray-200">
             Learn how to build on <strong>Ethereum</strong>; the superpowers and the gotchas.
