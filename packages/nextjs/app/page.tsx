@@ -2,6 +2,7 @@ import { HomepageClient } from "./_components/HomepageClient";
 import { NextPage } from "next";
 import { getAllChallenges } from "~~/services/database/repositories/challenges";
 import { getMetadata } from "~~/utils/scaffold-eth/getMetadata";
+import { getHomepageStructuredData } from "~~/utils/structuredData";
 
 export const metadata = getMetadata({
   title: "Speedrun Ethereum: Learn Solidity Development Through Interactive Challenges",
@@ -11,8 +12,16 @@ export const metadata = getMetadata({
 
 const Home: NextPage = async () => {
   const challenges = await getAllChallenges();
+  const structuredData = getHomepageStructuredData(challenges);
 
-  return <HomepageClient challenges={challenges} />;
+  return (
+    <>
+      {structuredData.map((schema, index) => (
+        <script key={index} type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />
+      ))}
+      <HomepageClient challenges={challenges} />
+    </>
+  );
 };
 
 export default Home;

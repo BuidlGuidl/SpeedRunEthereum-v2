@@ -23,6 +23,7 @@ import {
 import { fetchGithubChallengeReadme, parseGithubUrl, prepareMdxReadme, splitChallengeReadme } from "~~/services/github";
 import { CHALLENGE_METADATA, extractHeadings, generateHeadingId } from "~~/utils/challenges";
 import { getMetadata } from "~~/utils/scaffold-eth/getMetadata";
+import { getChallengeStructuredData } from "~~/utils/structuredData";
 
 const mdxRemoteOptions: MDXRemoteProps["options"] = {
   mdxOptions: {
@@ -71,6 +72,12 @@ export default async function ChallengePage(props: { params: Promise<{ challenge
   const guides = staticMetadata?.guides;
   const countOfCompletedChallenge = await getCountOfCompletedChallenge(challenge.id as ChallengeId);
 
+  const structuredData = getChallengeStructuredData({
+    id: challenge.id,
+    name: challenge.challengeName,
+    description: staticMetadata?.description || challenge.description,
+  });
+
   if (!challenge.github) {
     return <div>No challenge content available</div>;
   }
@@ -97,6 +104,7 @@ export default async function ChallengePage(props: { params: Promise<{ challenge
 
   return (
     <div className="relative max-w-[100vw]">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
       {challengeReadme ? (
         <>
           <div className="bg-white dark:bg-[#015555] py-10 lg:py-12">
