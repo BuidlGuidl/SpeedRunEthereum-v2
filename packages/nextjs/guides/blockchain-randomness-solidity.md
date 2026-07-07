@@ -284,7 +284,7 @@ Secure randomness is fundamental to fair and trustworthy blockchain applications
 - Always consider economic incentives for manipulation
 - Test thoroughly with adversarial scenarios
 
-**Ready to build provably fair applications?** [Try the Dice Game Challenge!](/challenge/dice-game)
+**Ready to build provably fair applications?** [Try the Dice Game Challenge on Speedrun Ethereum!](/challenge/dice-game)
 
 ---
 

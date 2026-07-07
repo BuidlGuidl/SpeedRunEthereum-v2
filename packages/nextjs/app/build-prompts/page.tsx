@@ -5,7 +5,7 @@ import { getMetadata } from "~~/utils/scaffold-eth/getMetadata";
 export const metadata = getMetadata({
   title: "Build Prompts",
   description:
-    "Full project specs for AI coding agents. Pick a build, copy the prompt into your AI, and customize the parameters to scaffold a working dApp on Scaffold-ETH 2.",
+    "Free, AI-ready project specs from Speedrun Ethereum. Pick a build, copy the prompt into your AI, and customize the parameters to scaffold a working dApp on Scaffold-ETH 2.",
   imageRelativePath: "/build-prompts-thumbnail.png",
   path: "/build-prompts",
 });

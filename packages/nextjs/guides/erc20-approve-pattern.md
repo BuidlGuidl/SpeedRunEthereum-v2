@@ -243,6 +243,6 @@ Staying current with these trends—and adopting new standards and tools as they
 
 ---
 
-**Want to practice? [Try the Token Vendor Challenge!](/challenge/token-vendor)**
+**Want to practice? [Try the Token Vendor Challenge on Speedrun Ethereum!](/challenge/token-vendor)**
 
 **Ready for more? [Build a DEX with the Minimum Viable Exchange (Dex) Challenge!](/challenge/dex)**

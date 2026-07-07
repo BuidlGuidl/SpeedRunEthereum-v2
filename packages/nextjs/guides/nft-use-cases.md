@@ -131,6 +131,6 @@ NFTs are a cornerstone of the decentralized web, enabling:
 
 ---
 
-**Ready to build your first NFT? [Try the Tokenization Challenge!](/challenge/tokenization)**
+**Ready to build your first NFT? [Try the Tokenization Challenge on Speedrun Ethereum!](/challenge/tokenization)**
 
 **Already comfortable with the basics? [Try the SVG NFT Build Idea!](/build-prompts)**

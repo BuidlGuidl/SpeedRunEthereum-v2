@@ -383,6 +383,6 @@ AMMs revolutionized DeFi by making on-chain trading and liquidity provision simp
 
 ---
 
-**Ready to build or test your own AMM? [Try the Minimum Viable Exchange (Dex) Challenge!](/challenge/dex)**
+**Ready to build or test your own AMM? [Try the Minimum Viable Exchange (Dex) Challenge on Speedrun Ethereum!](/challenge/dex)**
 
 **Want to learn more about LP risks? [Read the Impermanent Loss Guide!](/guides/impermanent-loss-math-explained)**

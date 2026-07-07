@@ -284,4 +284,4 @@ Mastering contract-to-contract interactions is essential for any Solidity develo
 
 ---
 
-**Ready to put these patterns into practice? [Try the Token Vendor Challenge!](/challenge/token-vendor)**
+**Ready to put these patterns into practice? [Try the Token Vendor Challenge on Speedrun Ethereum!](/challenge/token-vendor)**
