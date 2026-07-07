@@ -48,6 +48,16 @@ const nextConfig: NextConfig = {
         destination: "/challenge/crowdfunding",
         permanent: true,
       },
+      {
+        source: "/challenge/svg-nft",
+        destination: "/build-prompts",
+        permanent: true,
+      },
+      {
+        source: "/challenge/multisig",
+        destination: "/build-prompts",
+        permanent: true,
+      },
     ];
   },
 };
