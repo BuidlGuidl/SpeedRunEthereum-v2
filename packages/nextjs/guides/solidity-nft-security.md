@@ -169,4 +169,4 @@ Securing your NFT smart contracts is not a one-time task but an ongoing commitme
 
 **Want to put these security best practices to the test in your own NFT project? [Try the Tokenization Challenge!](/challenge/tokenization)**
 
-**Already comfortable with the NFT basics? [Try the SVG NFT Challenge!](/challenge/svg-nft)**
+**Already comfortable with the basics? [Try the SVG NFT Build Idea!](/build-prompts)**
