@@ -12,9 +12,9 @@ export const Hero = () => {
           <HeroDiamond className="h-12 w-12" />
         </div>
 
-        <p className="text-center mb-5  dark:text-gray-200">
+        <h1 className="text-center mb-5  dark:text-gray-200">
           Learn how to build on <strong>Ethereum</strong>; the superpowers and the gotchas.
-        </p>
+        </h1>
 
         <div className="mb-10 lg:mb-5 mt-4 w-full flex justify-center">
           <HeroLogo className="max-w-[600px]" />

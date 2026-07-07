@@ -25,6 +25,7 @@ export const metadata = getMetadata({
   title: "Build your first Apps on Ethereum",
   description:
     "Build your first Ethereum apps with hands-on challenges. Learn smart contracts and dapp development through real, practical experience.",
+  path: "/start",
 });
 
 const StartLandingPage = async () => {
