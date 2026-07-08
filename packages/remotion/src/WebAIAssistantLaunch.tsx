@@ -58,48 +58,49 @@ const T = {
   CHIP_MOVE: 262,
   CHIP_CLICK: 290,
   U1: 296,
-  A1: 326, // ~400 chars @2.5 cpf → ends ~486, read until 562
+  A1: 326, // 402 chars @5.4 cpf → ends ~401 (covered by HL1 + keyword pops)
   HL1_IN: 400,
   HL1_OUT: 560,
 
   // CH2 — It checks it clicked
+  // Retimed for faster streaming: each answer gets a ~50-62f read hold, then act.
   CH2: 562,
-  A2: 577, // ~80 chars @2.2 → ends ~614
-  U2_TYPE: 668,
-  U2_SEND: 693,
-  U2: 698,
-  A3: 708, // ~128 chars @2.2 → ends ~766
-  U3_TYPE: 828,
-  U3_SEND: 898,
-  U3: 903,
-  A4: 915, // ~210 chars @2.2 → ends ~1010, read until 1082
-  DIM_IN: 668,
-  DIM_OUT: 1055,
+  A2: 577, // 79 chars @4.8 → ends ~594, hold 50f
+  U2_TYPE: 644,
+  U2_SEND: 669,
+  U2: 674,
+  A3: 686, // 127 chars @4.8 → ends ~713, hold 62f
+  U3_TYPE: 775,
+  U3_SEND: 845,
+  U3: 850,
+  A4: 862, // 217 chars @4.8 → ends ~908, hold 55f
+  DIM_IN: 644,
+  DIM_OUT: 968,
 
   // CH3 — Hints, not answers
-  CH3: 1082,
-  U4_TYPE: 1097,
-  U4_SEND: 1147,
-  U4: 1152,
-  A5: 1164, // ~277 chars @2.5 → ends ~1275, read until 1352
+  CH3: 948,
+  U4_TYPE: 963,
+  U4_SEND: 1013,
+  U4: 1018,
+  A5: 1030, // 284 chars @5.4 → ends ~1083, hold 60f
 
   // CH4 — It gets you running locally
-  CH4: 1352,
-  U5_TYPE: 1367,
-  U5_SEND: 1417,
-  U5: 1422,
-  A6: 1434, // ~296 chars @2.2 → ends ~1568
-  TERM_IN: 1540,
-  TERM_OUT: 1700,
-  A7: 1705, // ends ~1762, read until 1835
-  HL2_IN: 1750,
-  HL2_OUT: 1830,
+  CH4: 1128,
+  U5_TYPE: 1143,
+  U5_SEND: 1193,
+  U5: 1198,
+  A6: 1210, // 312 chars @4.8 → ends ~1275
+  TERM_IN: 1316,
+  TERM_OUT: 1476,
+  A7: 1481, // 125 chars @4.8 → ends ~1508
+  HL2_IN: 1526,
+  HL2_OUT: 1606,
 
   // Pull-back + outro
-  PULL: 1840,
-  PULL_END: 1892,
-  OUTRO: 1905,
-  END: 2140,
+  PULL: 1616,
+  PULL_END: 1668,
+  OUTRO: 1681,
+  END: 1916,
 };
 export const WEB_AI_ASSISTANT_TOTAL_DURATION = T.END;
 
@@ -149,14 +150,14 @@ const MSGS: WebChatMsg[] = [
     id: "a1",
     role: "ai",
     appearFrame: T.A1,
-    streamCharsPerFrame: 2.5,
+    streamCharsPerFrame: 5.4,
     text: `Crowdfunding is a perfect first dApp: a group of strangers pool money together without trusting each other — they only have to trust the code.\n\nIf enough ETH is collected before a deadline, the funds go to the recipient. If not, everyone gets their money back. No middleman, no escrow, no "trust me bro."\n\nThe rules are enforced by the smart contract itself — once deployed, nobody can change them.`,
   },
   {
     id: "a2",
     role: "ai",
     appearFrame: T.A2,
-    streamCharsPerFrame: 2.2,
+    streamCharsPerFrame: 4.8,
     text: `Does this make sense? Want me to test your understanding with a quick question?`,
   },
   { id: "u2", role: "user", text: "yes pls", appearFrame: T.U2 },
@@ -164,7 +165,7 @@ const MSGS: WebChatMsg[] = [
     id: "a3",
     role: "ai",
     appearFrame: T.A3,
-    streamCharsPerFrame: 2.2,
+    streamCharsPerFrame: 4.8,
     text: `Try to answer this: why don't contributors need to trust each other — or a middleman — in this system? What enforces the rules?`,
   },
   {
@@ -177,7 +178,7 @@ const MSGS: WebChatMsg[] = [
     id: "a4",
     role: "ai",
     appearFrame: T.A4,
-    streamCharsPerFrame: 2.2,
+    streamCharsPerFrame: 4.8,
     text: `Perfect! You've got it:\n\n• Success: enough ETH before the deadline → funds go to the recipient\n• Failed: goal not reached → everyone gets their money back\n\nNice — let's move on to tracking contributions on-chain.`,
   },
   {
@@ -190,7 +191,7 @@ const MSGS: WebChatMsg[] = [
     id: "a5",
     role: "ai",
     appearFrame: T.A5,
-    streamCharsPerFrame: 2.5,
+    streamCharsPerFrame: 5.4,
     text: `Nice try 🙂 I won't hand you the code — you'd learn nothing.\n\nBut here's a hint: the contract needs to know how much each person contributed, not just the total. On-chain that's a mapping — think of it as a dictionary from each address to the amount they've sent.\n\nGive it a shot!`,
   },
   {
@@ -204,14 +205,14 @@ const MSGS: WebChatMsg[] = [
     id: "a6",
     role: "ai",
     appearFrame: T.A6,
-    streamCharsPerFrame: 2.2,
+    streamCharsPerFrame: 4.8,
     text: `Let's get you running — three terminals:\n\n$ npx create-eth@2.0.20 -e challenge-crowdfunding\nscaffolds the challenge\n\n$ yarn chain\nyour local blockchain — terminal 1\n\n$ yarn deploy\ndeploys the contracts — terminal 2\n\n$ yarn start\napp live at localhost:3000 — terminal 3\n\nHit an error? Paste it here.`,
   },
   {
     id: "a7",
     role: "ai",
     appearFrame: T.A7,
-    streamCharsPerFrame: 2.2,
+    streamCharsPerFrame: 4.8,
     text: `Want the full tutor? Open the repo in Cursor or Claude Code and run /start — right in your IDE. See you at the finish line 🏁`,
   },
 ];
@@ -239,10 +240,10 @@ const DOT_WINDOWS: Array<[number, number]> = [
 
 // ── Rail chapter checklist ──────────────────────────────
 const CHAPTERS = [
-  { num: "01", title: "Knows your challenge", sub: "Context-aware help, instantly", start: T.CH1 },
+  { num: "01", title: "Knows your challenge", sub: "Context-aware help", start: T.CH1 },
   { num: "02", title: "Checks it clicked", sub: "Quick questions prove it stuck", start: T.CH2 },
   { num: "03", title: "Hints, not answers", sub: "You write the code", start: T.CH3 },
-  { num: "04", title: "Gets you running locally", sub: "Real steps from the README", start: T.CH4 },
+  { num: "04", title: "Gets you running locally", sub: "The exact local setup steps", start: T.CH4 },
 ];
 
 const INTRO_PILLS = [
@@ -424,7 +425,7 @@ const Rail: React.FC = () => {
                 opacity: interpolate(frame, [T.SUB, T.SUB + 16], [0, 1], EC),
               }}
             >
-              No experience needed — it lives on every challenge page.
+              No experience needed. It lives on every challenge page.
             </p>
           </div>
         )}
@@ -929,7 +930,7 @@ const Outro: React.FC = () => {
         >
           Learn Solidity with a teacher
           <br />
-          <span style={{ color: colors.primary }}>right on the page</span>
+          <span style={{ color: colors.primary }}>right on the challenge page</span>
         </h1>
         <p style={{ fontFamily: fonts.body, color: colors.textSecondary, fontSize: 32, marginTop: 30, textAlign: "center" }}>
           AI Teaching Assistant · Available now for all registered builders
@@ -993,7 +994,7 @@ export const WebAIAssistantLaunch: React.FC = () => (
     {/* Screen-space overlays over the page sliver */}
     <KeywordPop text="no middleman 🤝" x={655} y={385} inF={410} outF={488} />
     <KeywordPop text="goal missed → everyone refunded" x={685} y={480} inF={448} outF={535} />
-    <KeywordPop text="mapping(address => uint256)" x={650} y={430} inF={1200} outF={1290} mono />
+    <KeywordPop text="mapping(address => uint256)" x={650} y={430} inF={1066} outF={1156} mono />
     <MiniTerminal />
     <Rail />
     <Outro />
