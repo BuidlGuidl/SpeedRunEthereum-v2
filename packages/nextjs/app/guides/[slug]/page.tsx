@@ -19,6 +19,7 @@ export async function generateMetadata(props: { params: Promise<{ slug: string }
     title: guide.title,
     description: guide.description,
     imageRelativePath: guide.image,
+    path: `/guides/${params.slug}`,
   });
 }
 

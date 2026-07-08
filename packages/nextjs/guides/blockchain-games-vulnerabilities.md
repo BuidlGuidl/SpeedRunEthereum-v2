@@ -713,7 +713,7 @@ Building secure blockchain games requires thinking like both a developer and an 
 
 ---
 
-**Ready to build secure games? [Try the Dice Game Challenge!](/challenge/dice-game)**
+**Ready to build secure games? [Try the Dice Game Challenge on Speedrun Ethereum!](/challenge/dice-game)**
 
 **Want to learn more about DeFi security? [Check out the Flash Loan Exploits Guide!](/guides/flash-loan-exploits)**
 
