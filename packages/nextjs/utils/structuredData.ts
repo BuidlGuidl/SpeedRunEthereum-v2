@@ -2,8 +2,8 @@ import { Challenges } from "~~/services/database/repositories/challenges";
 
 const SITE_URL = "https://speedrunethereum.com";
 const COURSE_NAME = "Speedrun Ethereum";
-const COURSE_DESCRIPTION =
-  "Learn Solidity development by building real dapps through hands-on Ethereum challenges, from your first NFT to a DEX, oracles, stablecoins, and more.";
+// Canonical node id so the homepage Course and each challenge's `isPartOf` resolve to the same entity.
+const COURSE_ID = `${SITE_URL}/#course`;
 
 const provider = {
   "@type": "Organization",
@@ -12,7 +12,8 @@ const provider = {
 };
 
 // Homepage: the whole curriculum as a Course plus an ordered ItemList of its challenges.
-export function getHomepageStructuredData(challenges: Challenges) {
+// `description` is sourced from the homepage metadata so the two never drift.
+export function getHomepageStructuredData(challenges: Challenges, description: string) {
   const orderedChallenges = challenges
     .filter(challenge => !challenge.disabled)
     .sort((a, b) => a.sortOrder - b.sortOrder);
@@ -20,8 +21,9 @@ export function getHomepageStructuredData(challenges: Challenges) {
   const course = {
     "@context": "https://schema.org",
     "@type": "Course",
+    "@id": COURSE_ID,
     name: COURSE_NAME,
-    description: COURSE_DESCRIPTION,
+    description,
     url: SITE_URL,
     provider,
   };
@@ -33,8 +35,11 @@ export function getHomepageStructuredData(challenges: Challenges) {
     itemListElement: orderedChallenges.map((challenge, index) => ({
       "@type": "ListItem",
       position: index + 1,
-      url: `${SITE_URL}/challenge/${challenge.id}`,
-      name: challenge.challengeName,
+      item: {
+        "@type": "Course",
+        name: challenge.challengeName,
+        url: `${SITE_URL}/challenge/${challenge.id}`,
+      },
     })),
   };
 
@@ -59,9 +64,7 @@ export function getChallengeStructuredData({
     url: `${SITE_URL}/challenge/${id}`,
     provider,
     isPartOf: {
-      "@type": "Course",
-      name: COURSE_NAME,
-      url: SITE_URL,
+      "@id": COURSE_ID,
     },
   };
 }
