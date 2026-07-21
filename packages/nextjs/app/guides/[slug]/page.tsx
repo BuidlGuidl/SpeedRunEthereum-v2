@@ -1,7 +1,9 @@
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import { GuideSidebar } from "../_components/GuideSidebar";
 import { formatGuideDate, getAllGuidesSlugs, getGuideBySlug } from "~~/services/guides";
 import { getMetadata } from "~~/utils/scaffold-eth/getMetadata";
+import { getGuideStructuredData } from "~~/utils/structuredData";
 
 export async function generateStaticParams() {
   const slugs = await getAllGuidesSlugs();
@@ -46,6 +48,15 @@ export default async function GuidePage(props: { params: Promise<{ slug: string 
       }
     : null;
 
+  const guideSchema = getGuideStructuredData({
+    slug: params.slug,
+    title: guide.title,
+    description: guide.description,
+    image: guide.image,
+    datePublished: guide.date,
+  });
+  const structuredData = faqSchema ? [...guideSchema, faqSchema] : guideSchema;
+
   const showNavigation = guide.showNavigation && guide.headings.length > 0;
 
   // When navigation is shown, the hero and the article share a single 2-column grid (TOC + content)
@@ -55,6 +66,17 @@ export default async function GuidePage(props: { params: Promise<{ slug: string 
 
   const heroHeader = (
     <>
+      <nav aria-label="Breadcrumb" className="text-sm text-base-content/80 mb-3">
+        <Link href="/" className="hover:underline">
+          Speedrun Ethereum
+        </Link>
+        <span className="mx-1.5" aria-hidden>
+          ›
+        </span>
+        <Link href="/guides" className="hover:underline">
+          Guides
+        </Link>
+      </nav>
       <h1 className="text-3xl lg:text-4xl font-extrabold text-base-content mb-3">{guide.title}</h1>
       {guide.description && <p className="text-lg text-base-content/90 mb-4">{guide.description}</p>}
       <div className="text-sm text-base-content/80 flex items-center gap-4 flex-wrap">
@@ -86,9 +108,7 @@ export default async function GuidePage(props: { params: Promise<{ slug: string 
 
   return (
     <>
-      {faqSchema && (
-        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
-      )}
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
 
       <div className="bg-[#A8E7F4] dark:bg-[#015555] py-10 lg:py-14">
         <div className={`${containerClass} ${gridClass}`}>
