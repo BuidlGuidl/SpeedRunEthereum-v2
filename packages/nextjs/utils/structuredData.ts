@@ -46,6 +46,86 @@ export function getHomepageStructuredData(challenges: Challenges, description: s
   return [course, itemList];
 }
 
+// Guide page: a TechArticle tied back to the curriculum, plus its breadcrumb trail.
+export function getGuideStructuredData({
+  slug,
+  title,
+  description,
+  image,
+  datePublished,
+}: {
+  slug: string;
+  title: string;
+  description: string;
+  image?: string;
+  datePublished?: string;
+}) {
+  const url = `${SITE_URL}/guides/${slug}`;
+
+  const article = {
+    "@context": "https://schema.org",
+    "@type": "TechArticle",
+    headline: title,
+    description,
+    url,
+    mainEntityOfPage: {
+      "@type": "WebPage",
+      "@id": url,
+    },
+    ...(image ? { image: `${SITE_URL}${image}` } : {}),
+    ...(datePublished ? { datePublished } : {}),
+    author: provider,
+    publisher: provider,
+    isPartOf: {
+      "@id": COURSE_ID,
+    },
+  };
+
+  const breadcrumb = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: COURSE_NAME, item: SITE_URL },
+      { "@type": "ListItem", position: 2, name: "Guides", item: `${SITE_URL}/guides` },
+      { "@type": "ListItem", position: 3, name: title, item: url },
+    ],
+  };
+
+  return [article, breadcrumb];
+}
+
+// Guides index: a CollectionPage tied back to the curriculum, plus its breadcrumb trail.
+export function getGuidesIndexStructuredData({ title, description }: { title: string; description: string }) {
+  const url = `${SITE_URL}/guides`;
+
+  const collection = {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    name: title,
+    description,
+    url,
+    mainEntityOfPage: {
+      "@type": "WebPage",
+      "@id": url,
+    },
+    publisher: provider,
+    isPartOf: {
+      "@id": COURSE_ID,
+    },
+  };
+
+  const breadcrumb = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: COURSE_NAME, item: SITE_URL },
+      { "@type": "ListItem", position: 2, name: "Guides", item: url },
+    ],
+  };
+
+  return [collection, breadcrumb];
+}
+
 // Challenge page: a Course node for a single challenge, tied back to the curriculum.
 export function getChallengeStructuredData({
   id,
