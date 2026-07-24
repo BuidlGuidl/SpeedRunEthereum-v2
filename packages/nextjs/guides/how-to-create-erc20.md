@@ -1,7 +1,9 @@
 ---
 title: "How to Create an ERC20 Token: Complete Solidity Tutorial"
+date: "2025-06-06"
 description: "Step-by-step guide to creating your own ERC20 token in Solidity. Learn the standard, write the contract, and deploy to Ethereum. Includes code, security tips, and best practices."
 image: "/assets/guides/create-erc20-token.jpg"
+showNavigation: true
 ---
 
 Want to launch your own digital currency or utility token on the Ethereum blockchain? This guide provides a comprehensive walkthrough on **how to create an ERC20 token using Solidity**. An ERC20 token is the most widely adopted standard for fungible (interchangeable) tokens on Ethereum, making them essential building blocks for countless decentralized applications (dApps).

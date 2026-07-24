@@ -1,7 +1,9 @@
 ---
 title: "ERC20 Approve Pattern: Secure Token Allowances Guide"
+date: "2025-06-10"
 description: "A concise, developer-focused guide to the ERC20 approve pattern. Learn how token allowances work, common pitfalls, and best practices for secure dApp development and user safety. Includes Solidity examples and actionable tips."
 image: "/assets/guides/approve-pattern.jpg"
+showNavigation: true
 ---
 
 ## TL;DR: ERC20 Approve Pattern

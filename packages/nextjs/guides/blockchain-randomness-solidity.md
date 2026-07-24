@@ -1,7 +1,9 @@
 ---
 title: "Secure Randomness in Solidity: Beyond Block Variables"
+date: "2025-08-28"
 description: "Learn why block.timestamp and blockhash fail for randomness in Solidity. Master Chainlink VRF and commit-reveal schemes to build provably fair smart contracts and secure blockchain games."
 image: "/assets/guides/blockchain-randomness-solidity.jpg"
+showNavigation: true
 ---
 
 ## TL;DR: Blockchain Randomness in Solidity

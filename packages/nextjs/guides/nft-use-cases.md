@@ -1,7 +1,9 @@
 ---
 title: "NFTs in Web3: Understanding Use Cases Beyond Digital Art"
+date: "2025-05-02"
 description: "Explore the real-world applications of NFTs in Web3, from gaming and virtual real estate to ticketing, IP protection, and loyalty programs. See how NFTs are transforming industries beyond art."
 image: /assets/guides/nfts_in_web3.jpg
+showNavigation: true
 ---
 
 NFTs (Non-Fungible Tokens) are often associated with digital art and collectibles, but their potential in the Web3 ecosystem goes far beyond profile pictures and rare images. As unique, verifiable digital assets on the blockchain, NFTs are revolutionizing industries and enabling new forms of ownership, interaction, and value exchange.

@@ -129,8 +129,15 @@ const mdxComponents = {
 
 export async function getAllGuides(): Promise<Guide[]> {
   const slugs = getAllGuidesSlugs();
-  const guides = await Promise.all(slugs.map(getGuideBySlug));
-  return guides.filter(Boolean) as Guide[];
+  const guides = (await Promise.all(slugs.map(getGuideBySlug))).filter(Boolean) as Guide[];
+
+  // Newest first by date. Guides without a date keep their original (alphabetical) order after the dated ones.
+  return guides.sort((a, b) => {
+    if (a.date && b.date) return b.date.localeCompare(a.date);
+    if (a.date) return -1;
+    if (b.date) return 1;
+    return 0;
+  });
 }
 
 export function getAllGuidesSlugs(): string[] {

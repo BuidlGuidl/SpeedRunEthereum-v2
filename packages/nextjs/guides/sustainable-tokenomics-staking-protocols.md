@@ -1,7 +1,9 @@
 ---
 title: "Beyond APY: Sustainable Tokenomics for Your Staking Protocol"
+date: "2025-05-16"
 description: "High APYs are just the start. Learn to engineer advanced tokenomics for your staking protocol focusing on intrinsic utility, smart supply dynamics, and aligned incentives for long-term value and sustainability. A guide for Web3 developers."
 image: /assets/guides/sustainable-tokenomics.jpg
+showNavigation: true
 ---
 
 So you're designing a staking protocol, or looking to improve an existing one. You know that offering rewards (APY) is key to attracting users. But if your strategy is just "offer the highest APY by printing tons of tokens," you might be setting yourself up for a short-lived hype cycle followed by a painful crash.
