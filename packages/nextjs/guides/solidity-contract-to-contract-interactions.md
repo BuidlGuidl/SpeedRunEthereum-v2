@@ -1,7 +1,9 @@
 ---
 title: "Solidity Contract-to-Contract Interactions Guide"
+date: "2025-05-30"
 description: "A practical guide to Solidity contract-to-contract interactions. Learn how contracts call each other, handle errors, and manage security. Includes code patterns, pitfalls, and best practices."
 image: "/assets/guides/contract-interactions.jpg"
+showNavigation: true
 ---
 
 ## TL;DR: Secure Contract-to-Contract Interactions in Solidity

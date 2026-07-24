@@ -1,7 +1,9 @@
 ---
 title: "Solidity Bonding Curves & Dynamic Token Pricing Explained"
+date: "2025-06-03"
 description: "A developer-focused guide to bonding curves and dynamic token pricing in Solidity. Learn the math, use cases, and best practices for implementing bonding curves in your dApps. Includes Solidity code and real-world examples."
 image: "/assets/guides/bonding-curves.jpg"
+showNavigation: true
 ---
 
 ## TL;DR
@@ -276,7 +278,7 @@ contract LinearBondingCurve {
 - **Gas costs** for complex math on Layer 1
 - **Latecomer disadvantage** (prices can get very high)
 
-## Additional Security Risks
+### Additional Security Risks
 
 - **Price manipulation:** Large actors can move the price significantly by executing big trades, creating misleading market signals.
 - **Oracle risks:** If using oracles, manipulation or failure can impact pricing.

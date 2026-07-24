@@ -1,7 +1,9 @@
 ---
 title: "ERC4626 Vaults: Secure Design, Risks & Best Practices"
+date: "2025-09-19"
 description: "Developer guide to ERC4626 vaults: core functions, key risks (inflation, reentrancy, oracle), and secure fees, caps, queues with Solidity examples."
 image: "/assets/guides/erc4626-vaults.jpg"
+showNavigation: true
 ---
 
 ## TL;DR:
@@ -276,7 +278,7 @@ function _accrueFees(uint256 realizedGainAssets) internal {
 
 ---
 
-## 8) Related Guides & Next Steps
+## 8. Related Guides & Next Steps
 
 - Learn secure token approvals: [ERC20 Approve Pattern](/guides/erc20-approve-pattern)
 - Master cross-contract calls: [Solidity Contract-to-Contract Interactions](/guides/solidity-contract-to-contract-interactions)

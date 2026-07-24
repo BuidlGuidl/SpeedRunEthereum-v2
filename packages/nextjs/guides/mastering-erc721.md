@@ -1,7 +1,9 @@
 ---
 title: "Mastering ERC721: Developer Guide to NFT Metadata & Best Practices"
+date: "2025-05-06"
 description: "A comprehensive technical guide for developers on the ERC721 NFT standard: metadata, tokenURI management, OpenZeppelin usage, and best practices for building robust, marketplace-ready NFTs."
 image: /assets/guides/mastering-erc721.jpg
+showNavigation: true
 ---
 
 NFTs (Non-Fungible Tokens) have revolutionized digital ownership, but building robust, marketplace-ready NFTs requires more than just a simple mint function. **This guide will help you master ERC721 as a developer**—from the basics to advanced metadata management, tokenURI best practices, and real-world deployment tips.
