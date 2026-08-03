@@ -11,7 +11,7 @@ faqs:
   - question: "What stack should I use to build and test a DEX locally?"
     answer: "This guide uses Scaffold-ETH 2: it gives you a local chain, one-command deploys, and a Debug Contracts UI so you can call your swap functions from a browser without writing a frontend first. Any Hardhat or Foundry setup works, but you will write more plumbing yourself."
   - question: "Why does my token swap revert with an allowance error?"
-    answer: "Swapping tokens for ETH calls transferFrom, so the DEX contract needs an allowance first. You must call approve on the token contract (with the DEX address and amount) before calling the swap. This two-step pattern trips up almost everyone once; our ERC20 approve pattern guide covers it in depth."
+    answer: "Swapping tokens for ETH calls transferFrom, so the DEX contract needs an allowance first. You must call approve on the token contract (with the DEX address and amount) before calling the swap. This two-step pattern trips up almost everyone at least once. Our ERC20 approve pattern guide covers it in depth."
 ---
 
 *Every DEX interaction you have ever made, every swap, every pool deposit, comes down to about 100 lines of Solidity. In this guide you write those lines yourself, run them on a local chain, and end with a working exchange you can trade against from a browser.*
@@ -33,35 +33,45 @@ A single-pair exchange between ETH and an ERC20 token we'll call Balloons (BAL).
 
 The math behind this design has its own guide: if you want the derivation of x\*y=k, price impact, and why arbitrage keeps pool prices honest, read [Automated Market Makers: Math, Risks & Solidity Code](/guides/automated-market-makers-math) first. Here we take the formula as given and spend our time turning it into a working contract.
 
-One rule of thumb before we start, because it explains most of the code: **the contract never stores the price**. The price is always computed from the current reserves at trade time. That is what makes an AMM self-operating: no oracle, no order matching, just arithmetic on two balances.
+One rule of thumb before we start, because it explains most of the code: **the contract never stores the price**. The price is always computed from the current reserves at trade time. That is what makes an AMM self-operating: there's no order book to match and no oracle to consult, the contract just does arithmetic on two balances.
 
 ## Step 1: Set up the project
 
-You need [Node (v20.18.3 or later)](https://nodejs.org/en/download/), [Yarn](https://classic.yarnpkg.com/en/docs/install/), and [Git](https://git-scm.com/downloads). Then create a fresh Scaffold-ETH 2 project:
+You need [Node (v20.18.3 or later)](https://nodejs.org/en/download/), [Yarn](https://classic.yarnpkg.com/en/docs/install/), and [Git](https://git-scm.com/downloads). Open a terminal and create a fresh Scaffold-ETH 2 project:
 
 ```sh
 npx create-eth@latest dex-tutorial
+```
+
+This downloads the starter project into a new `dex-tutorial` folder and installs all its dependencies, so it can take a few minutes. When it asks which Solidity framework you want, pick **Hardhat** (everything below works with Foundry too, the file paths just differ). Then move into the folder:
+
+```sh
 cd dex-tutorial
 ```
 
-When prompted, pick **Hardhat** as the Solidity framework (everything below works with Foundry too, the file paths just differ). Then open three terminals:
+You'll want three terminal windows open, all inside the `dex-tutorial` folder. In the first one, start a local blockchain that runs only on your machine:
 
 ```sh
-# terminal 1: a local Ethereum chain
 yarn chain
+```
 
-# terminal 2: deploy contracts to it
+Leave it running. In a second terminal, compile and deploy the sample contract to that local chain:
+
+```sh
 yarn deploy
+```
 
-# terminal 3: the frontend
+And in a third, start the web app:
+
+```sh
 yarn start
 ```
 
-Open http://localhost:3000. The **Debug Contracts** tab is the part we care about: it reads your deployed contracts and renders a form for every public function. That UI is our test harness for the whole build; no frontend code needed until the very end.
+Open http://localhost:3000 in your browser and click the **Debug Contracts** tab at the top. This page reads whatever contracts are deployed and gives you a form for every function, so you can call your contract from the browser while you're still building it. We'll use it to test everything before writing a line of frontend code.
 
 ## Step 2: The token
 
-The DEX trades ETH against an ERC20, so we need one. Create `packages/hardhat/contracts/Balloons.sol`:
+The DEX trades ETH against an ERC20 token, so we need one. In your editor, create a new file named `Balloons.sol` in the `packages/hardhat/contracts` folder, next to the sample `YourContract.sol` that's already there. Here's the code:
 
 ```solidity
 // SPDX-License-Identifier: MIT
@@ -78,9 +88,11 @@ contract Balloons is ERC20 {
 
 OpenZeppelin ships with Scaffold-ETH 2's Hardhat package, so the import resolves out of the box. `1000 ether` here just means 1000 * 10^18: `ether` is a unit suffix, handy for any 18-decimal token, not only ETH.
 
+For the next few steps we are only writing contract files. Nothing new will show up in the browser until we deploy in Step 8, so don't worry that the app looks unchanged for a while.
+
 ## Step 3: The DEX skeleton
 
-Create `packages/hardhat/contracts/MiniDEX.sol` with the state we need and nothing else:
+Create a second file named `MiniDEX.sol` in the same `packages/hardhat/contracts` folder, with the state we need and nothing else:
 
 ```solidity
 // SPDX-License-Identifier: MIT
@@ -105,15 +117,15 @@ contract MiniDEX {
 }
 ```
 
-Three design decisions worth naming:
+A few things to notice before we add any logic:
 
-- **The ETH reserve is the contract's own balance** (`address(this).balance`) and the token reserve is `token.balanceOf(address(this))`. We do not mirror them in storage; the balances are the source of truth.
-- `totalLiquidity` and the `liquidity` mapping track each provider's share of the pool. Production DEXs mint an ERC20 LP token for this; a mapping teaches the same accounting with less code.
+- **The ETH reserve is the contract's own balance** (`address(this).balance`) and the token reserve is `token.balanceOf(address(this))`. We don't keep copies in storage. The balances themselves are the source of truth.
+- `totalLiquidity` and the `liquidity` mapping track each provider's share of the pool. Production DEXs mint an ERC20 LP token for this. A mapping teaches the same accounting with less code.
 - Events on every state change. The frontend (and any indexer) reconstructs pool history from these.
 
 ## Step 4: The pricing function
 
-The heart of the exchange. Given an input amount and the two reserves, how much output does the trader get? Constant product says reserves must satisfy x\*y=k before and after the trade, and we skim a 0.3% fee off the input first:
+The heart of the exchange. Given an input amount and the two reserves, how much output does the trader get? Constant product says reserves must satisfy x\*y=k before and after the trade, and we skim a 0.3% fee off the input first. Add this function inside `MiniDEX.sol`, right below the constructor:
 
 ```solidity
 function price(
@@ -141,7 +153,7 @@ Note the function is `pure`: it touches no state, so you can test it exhaustivel
 
 ## Step 5: Seeding the pool
 
-An empty pool cannot price anything (x\*y=k with x = 0 is degenerate), so someone has to deposit both assets once to set the opening ratio:
+An empty pool cannot price anything (x\*y=k with x = 0 is degenerate), so someone has to deposit both assets once to set the opening ratio. Add `init` below `price`:
 
 ```solidity
 function init(uint256 tokens) public payable returns (uint256) {
@@ -153,13 +165,13 @@ function init(uint256 tokens) public payable returns (uint256) {
 }
 ```
 
-The function is `payable`, so the ETH you send with the call becomes the ETH reserve, and `transferFrom` pulls in the tokens. Whatever ratio you seed **is** the opening price: 5 ETH against 5000 BAL declares 1 ETH = 1000 BAL. If that ratio is off-market, arbitrage traders will profitably correct it, at the seeder's expense, so real pools are seeded at market price.
+The function is `payable`, so the ETH you send with the call becomes the ETH reserve, and `transferFrom` pulls in the tokens. Whatever ratio you seed **is** the opening price: 5 ETH against 500 BAL declares 1 ETH = 100 BAL. If that ratio is off-market, arbitrage traders will profitably correct it, at the seeder's expense, so real pools are seeded at market price.
 
 `transferFrom` only works if the token holder has approved the DEX first. This is the classic two-step ERC20 dance, and it will come back in every function that pulls tokens in. If allowances are fuzzy for you, the [ERC20 approve pattern guide](/guides/erc20-approve-pattern) is the prerequisite worth reading now, because the next step will revert without it.
 
 ## Step 6: Swaps, both directions
 
-ETH in, tokens out:
+First, the ETH-to-tokens direction. Add this below `init`:
 
 ```solidity
 function swapEthForTokens() public payable returns (uint256 tokenOutput) {
@@ -174,9 +186,9 @@ function swapEthForTokens() public payable returns (uint256 tokenOutput) {
 }
 ```
 
-The one subtle line is the first reserve calculation. By the time your function body runs, `msg.value` has **already been added** to the contract's balance. Price the trade against the post-deposit balance and you get the wrong (worse) rate, and your pool leaks value with every swap. Subtracting `msg.value` recovers the pre-trade reserve. Almost everyone writes this bug once; now you get to skip it.
+The one subtle line is the first reserve calculation. By the time your function body runs, `msg.value` has **already been added** to the contract's balance. Price the trade against the post-deposit balance and you get the wrong (worse) rate, and your pool leaks value with every swap. Subtracting `msg.value` recovers the pre-trade reserve. Almost everyone writes this bug on their first DEX.
 
-Tokens in, ETH out is the mirror image, with one ordering rule: read the reserves **before** pulling the tokens in:
+Tokens in, ETH out is the mirror image, with one ordering rule: read the reserves **before** pulling the tokens in. Add it below `swapEthForTokens`:
 
 ```solidity
 function swapTokensForEth(uint256 tokenInput) public returns (uint256 ethOutput) {
@@ -192,11 +204,11 @@ function swapTokensForEth(uint256 tokenInput) public returns (uint256 ethOutput)
 }
 ```
 
-If you called `transferFrom` first, the token reserve would already include the trader's input when you price the trade, and the same wrong-rate bug appears on the token side. State reads, then state changes, in that order, is a habit worth building early: it is the same discipline (checks-effects-interactions) that defends against reentrancy in bigger systems.
+If you called `transferFrom` first, the token reserve would already include the trader's input when you price the trade, and the same wrong-rate bug appears on the token side. Reading state first and changing it after is the same discipline (checks-effects-interactions) that defends against reentrancy in bigger systems, and it is worth making a habit now.
 
 ## Step 7: Liquidity in, liquidity out
 
-Anyone can join the pool after `init`, but they must deposit **both assets at the current ratio**, otherwise they would be moving the price for free:
+Anyone can join the pool after `init`, but they must deposit **both assets at the current ratio**, otherwise they would be moving the price for free. Add `addLiquidity` below the swap functions:
 
 ```solidity
 function addLiquidity() public payable returns (uint256 tokensDeposited) {
@@ -216,9 +228,9 @@ function addLiquidity() public payable returns (uint256 tokensDeposited) {
 }
 ```
 
-You send ETH; the contract computes the matching token amount from the current ratio and pulls it in. The `+ 1` rounds the required deposit up so integer division always favors the pool rather than the depositor; tiny rounding leaks compound when a function runs thousands of times. Liquidity shares are minted pro rata: deposit 10% of the existing ETH reserve, receive 10% of the existing shares.
+You send ETH, and the contract computes the matching token amount from the current ratio and pulls it in. The `+ 1` rounds the required deposit up so integer division always favors the pool rather than the depositor. Tiny rounding leaks compound when a function runs thousands of times. Liquidity shares are minted pro rata: deposit 10% of the existing ETH reserve, receive 10% of the existing shares.
 
-Withdrawing burns shares for a proportional slice of **both** reserves:
+Withdrawing burns shares for a proportional slice of **both** reserves. Add `removeLiquidity` last:
 
 ```solidity
 function removeLiquidity(uint256 amount) public returns (uint256 ethOut, uint256 tokensOut) {
@@ -243,7 +255,7 @@ Notice you rarely get back the exact amounts you put in. The ratio of the reserv
 
 ## Step 8: Wire up the deploy and test it
 
-Replace the sample deploy script in `packages/hardhat/deploy/` so it deploys the token first, then the DEX pointing at it:
+Time to put it all on your local chain. Open `packages/hardhat/deploy/00_deploy_your_contract.ts`. This is the script that `yarn deploy` runs. Keep the imports at the top, and replace the deployment section so it deploys the token first, then the DEX pointing at the token's address:
 
 ```ts
 export default deployScript(
@@ -265,23 +277,27 @@ export default deployScript(
 );
 ```
 
-(The generated sample script in your project shows the exact imports and current API; keep its shape and swap in these two deployments.)
+If the sample script in your project looks slightly different, keep its shape and just swap in these two deployments. Now run `yarn deploy` again from the `dex-tutorial` folder.
 
-Run `yarn deploy`, open the Debug Contracts tab, and walk the full lifecycle by hand:
+Head back to the Debug Contracts tab in your browser. You should now see **Balloons** and **MiniDEX** listed, each showing its address at the top of its card, with a copy icon next to it. Grab the MiniDEX address, then walk the full lifecycle by hand:
 
-1. On **Balloons**: `approve` the MiniDEX address for, say, `500 ether` worth of BAL.
-2. On **MiniDEX**: call `init` with 5 ETH as the transaction value and `5000000000000000000000` (5000 \* 10^18) as `tokens`. Wait, you only minted 1000 BAL, so use 5 ETH and 500 BAL. The ratio, not the size, sets the price.
-3. Call `swapEthForTokens` with 0.1 ETH and watch the BAL balance move.
+1. On the **Balloons** card, call `approve`: paste the MiniDEX address as the spender and enter 500 as the amount. Token amounts are always in the token's smallest unit (18 decimals), so the real number is 500 followed by 18 zeros. Click the ∗ button next to the input field and it does that multiplication for you.
+2. On the **MiniDEX** card, call `init`. Payable functions show an extra value field for the ETH you send along: put 5 ETH there, and 500 (times 10^18 again) as `tokens`. Our worked example in Step 4 used 5000 BAL for round numbers, but you only minted 1000, and it makes no difference: the ratio sets the price, not the size. You have just declared 1 ETH = 100 BAL.
+3. Call `swapEthForTokens` with 0.1 ETH as the value, then check `balanceOf` your address on the Balloons card to see the tokens arrive.
 4. `approve` again, then `swapTokensForEth` to go the other way.
 5. `addLiquidity`, then `removeLiquidity`, and check the amounts against what you now expect from the math.
 
-Step 2's deliberate stumble is the point: the Debug tab makes this kind of experiment cheap. Break things here, not on a testnet.
+Break things here. Swap something huge, try to withdraw more liquidity than you own, and read the revert messages. This is the cheapest place you will ever get to experiment with an exchange.
 
 ## Step 9: A minimal frontend touch
 
-Scaffold-ETH 2 generates typed hooks for every deployed contract, so a swap button is a few lines in any component under `packages/nextjs/`:
+Scaffold-ETH 2 generates typed hooks for every deployed contract, so a swap button is a few lines in any component. Try it in `packages/nextjs/app/page.tsx`:
 
 ```tsx
+import { parseEther } from "viem";
+import { useScaffoldWriteContract } from "~~/hooks/scaffold-eth";
+
+// inside your component:
 const { writeContractAsync: swap } = useScaffoldWriteContract({ contractName: "MiniDEX" });
 
 <button
@@ -292,11 +308,11 @@ const { writeContractAsync: swap } = useScaffoldWriteContract({ contractName: "M
 </button>
 ```
 
-The hooks wrap [wagmi](https://wagmi.sh) with your contract's types, so `functionName` autocompletes and a typo is a compile error, not a runtime revert. Building out a full swap UI (input fields, balances, price preview) is a good standalone exercise; every read you need is a `useScaffoldReadContract` call away.
+The hooks wrap [wagmi](https://wagmi.sh) with your contract's types, so `functionName` autocompletes and a typo is a compile error, not a runtime revert. Building out a full swap UI (input fields, balances, price preview) is a good standalone exercise. Every read you need is a `useScaffoldReadContract` call away.
 
 ## Step 10: Deploy to a testnet
 
-When the local version behaves:
+When the local version behaves, you can put it on Sepolia, Ethereum's public test network. From the `dex-tutorial` folder:
 
 ```sh
 yarn generate          # creates a deployer account
@@ -314,9 +330,9 @@ Being honest about the gap between a learning DEX and production is most of the 
 - **LP tokens.** Our mapping works, but production pools mint an ERC20 for shares so positions are transferable and composable with other protocols.
 - **Reentrancy hardening.** We follow checks-effects-interactions, which covers this contract's ETH sends, but production code adds explicit guards and gets audited. Non-standard tokens (fee-on-transfer, missing return values) also break naive `transferFrom` accounting.
 - **Multiple pools and routing.** Uniswap is a factory of pairs plus a router that path-finds through them. Each pool is still the ~100 lines you just wrote.
-- **Price oracles.** Reserves-derived prices can be manipulated inside one transaction; protocols that consume DEX prices use time-weighted averages, not spot.
+- **Price oracles.** Reserves-derived prices can be manipulated inside one transaction. Protocols that consume DEX prices use time-weighted averages, not spot.
 
-None of these are exotic: each is an incremental extension of the contract you now fully understand.
+None of these are exotic. Each one is a manageable extension of the contract you just wrote.
 
 ## Keep building
 
