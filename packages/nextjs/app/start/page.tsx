@@ -24,7 +24,8 @@ import { getMetadata } from "~~/utils/scaffold-eth/getMetadata";
 export const metadata = getMetadata({
   title: "Build your first Apps on Ethereum",
   description:
-    "Build your first Ethereum apps with hands-on challenges. Learn smart contracts and dapp development through real, practical experience.",
+    "Learn Ethereum development by building real dApps. Speedrun Ethereum is a free, hands-on series of smart contract challenges — from your first NFT to a DEX.",
+  path: "/start",
 });
 
 const StartLandingPage = async () => {
@@ -52,6 +53,7 @@ const StartLandingPage = async () => {
           height={280}
         />
         <div className="relative z-10 px-6 lg:pb-12">
+          <h1 className="sr-only">Speedrun Ethereum: Learn to Build on Ethereum by Building Real Projects</h1>
           <p className="text-center mb-10 dark:text-gray-200">
             Learn how to build on <strong>Ethereum</strong>; the superpowers and the gotchas.
           </p>

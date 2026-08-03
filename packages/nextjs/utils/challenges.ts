@@ -34,7 +34,7 @@ export const CHALLENGE_METADATA: Record<string, ChallengeStaticMetadata> = {
   [ChallengeId.TOKENIZATION]: {
     title: "Learn How to Create an NFT in Solidity",
     description:
-      "Build your first NFT smart contract in Solidity. Step-by-step tutorial to mint and deploy NFTs on Ethereum using Scaffold-ETH.",
+      "Build and deploy your first NFT smart contract in Solidity. A free, hands-on Speedrun Ethereum challenge — mint NFTs on Ethereum with Scaffold-ETH 2.",
     isAiReady: true,
     skills: [
       "Compile and deploy your first **smart contract**",
@@ -70,7 +70,7 @@ export const CHALLENGE_METADATA: Record<string, ChallengeStaticMetadata> = {
   [ChallengeId.CROWDFUNDING]: {
     title: "Build a Crowdfunding Application in Solidity",
     description:
-      "Learn to build a crowdfunding application with Solidity. Step-by-step tutorial to help adversarial parties work together to fund a project using Solidity smart contracts on Ethereum.",
+      "Build a decentralized crowdfunding dApp in Solidity with a state machine, payable functions, and events. A free, hands-on Speedrun Ethereum challenge.",
     isAiReady: true,
     skills: [
       "Design and implement a decentralized application (dApp) with a state machine",
@@ -100,7 +100,7 @@ export const CHALLENGE_METADATA: Record<string, ChallengeStaticMetadata> = {
   [ChallengeId.TOKEN_VENDOR]: {
     title: "Create an ERC20 Token and Vendor Contract in Solidity",
     description:
-      "Learn to create your own ERC20 token and build a decentralized vending machine using Solidity smart contracts on Ethereum.",
+      "Create your own ERC20 token and build a decentralized token vending machine in Solidity. A free, hands-on challenge from Speedrun Ethereum.",
     isAiReady: true,
     skills: [
       "Build a custom token on the **ERC20** standard",
@@ -146,7 +146,7 @@ export const CHALLENGE_METADATA: Record<string, ChallengeStaticMetadata> = {
   [ChallengeId.DICE_GAME]: {
     title: "Exploit a Vulnerable Dice Game in Solidity",
     description:
-      "Learn blockchain security by building an attack contract that exploits randomness vulnerabilities in a Solidity dice game. Hands-on security tutorial for developers.",
+      "Learn smart contract security by exploiting a vulnerable Solidity dice game, then understand the fix. A free, hands-on Speedrun Ethereum challenge on on-chain randomness.",
     isAiReady: true,
     skills: [
       "Understand why randomness is tricky on the blockchain",
@@ -178,7 +178,7 @@ export const CHALLENGE_METADATA: Record<string, ChallengeStaticMetadata> = {
   [ChallengeId.DEX]: {
     title: "How to Build a Decentralized Exchange (DEX) in Solidity",
     description:
-      "Step-by-step tutorial to build your own DEX with liquidity pools, token swapping, and automated market making in Solidity.",
+      "Build your own DEX in Solidity with liquidity pools, token swaps, and an automated market maker (AMM). A free, hands-on challenge from Speedrun Ethereum.",
     isAiReady: true,
     skills: [
       "Build and understand an **Automated Market Maker (AMM)**",
@@ -216,7 +216,7 @@ export const CHALLENGE_METADATA: Record<string, ChallengeStaticMetadata> = {
   [ChallengeId.ORACLES]: {
     title: "Build Decentralized Oracle Systems in Solidity",
     description:
-      "Learn to build three fundamental oracle architectures: Whitelist, Staking, and Optimistic Oracles. Understand trade-offs between security, decentralization, and efficiency while implementing dispute resolution and economic incentive mechanisms.",
+      "Build three oracle architectures in Solidity — whitelist, staking, and optimistic — with dispute resolution and economic incentives. A free Speedrun Ethereum challenge.",
     isAiReady: true,
     skills: [
       "Deeply understand how different oracle architectures work and their trade-offs",
@@ -234,7 +234,7 @@ export const CHALLENGE_METADATA: Record<string, ChallengeStaticMetadata> = {
   [ChallengeId.OVER_COLLATERALIZED_LENDING]: {
     title: "Build an Over-Collateralized Lending Platform in Solidity",
     description:
-      "Learn how to create an over-collateralized lending platform using Solidity smart contracts on Ethereum.",
+      "Build an over-collateralized lending and borrowing protocol in Solidity, with liquidations and flash loans. A free, hands-on Speedrun Ethereum challenge.",
     isAiReady: true,
     skills: [
       "Understand how over-collateralized lending works",
@@ -252,7 +252,7 @@ export const CHALLENGE_METADATA: Record<string, ChallengeStaticMetadata> = {
   [ChallengeId.STABLECOINS]: {
     title: "Build a Stablecoin in Solidity",
     description:
-      "Learn how to create a stablecoin using Solidity smart contracts on Ethereum. Understand stability mechanisms and price oracles.",
+      "Build an algorithmic stablecoin in Solidity — collateralization, liquidations, and peg incentives. A free, hands-on challenge from Speedrun Ethereum.",
     isAiReady: true,
     skills: [
       "Understand how collateralization levels and liquidations work together in an **algorithmic stablecoin** system",
@@ -276,7 +276,7 @@ export const CHALLENGE_METADATA: Record<string, ChallengeStaticMetadata> = {
   [ChallengeId.PREDICTION_MARKETS]: {
     title: "Create a Prediction Market in Solidity",
     description:
-      "Learn to build decentralized prediction markets using Solidity. Understand market creation, betting mechanics, and outcome resolution.",
+      "Build a decentralized prediction market in Solidity — market creation, betting mechanics, and oracle-based outcome resolution. A free Speedrun Ethereum challenge.",
     isAiReady: true,
     skills: [
       "Design and build a complete onchain **prediction market** from creation to settlement",
@@ -297,7 +297,7 @@ export const CHALLENGE_METADATA: Record<string, ChallengeStaticMetadata> = {
   [ChallengeId.ZK_VOTING]: {
     title: "Build a Privacy-Preserving ZK Voting dApp",
     description:
-      "Learn how to build a privacy-preserving ZK voting dApp where members vote anonymously using zero-knowledge proofs, Merkle trees, and nullifier hashes to prevent double voting.",
+      "Build a privacy-preserving ZK voting dApp in Solidity and Noir, using zero-knowledge proofs, Merkle trees, and nullifiers. A free, hands-on Speedrun Ethereum challenge.",
     isAiReady: true,
     skills: [
       "Design a **commitment + nullifier** scheme to enforce one-person-one-vote",

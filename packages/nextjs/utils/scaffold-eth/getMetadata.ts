@@ -10,10 +10,12 @@ export const getMetadata = ({
   title,
   description,
   imageRelativePath = "/thumbnail.png",
+  path,
 }: {
   title: string;
   description: string;
   imageRelativePath?: string;
+  path?: string;
 }): Metadata => {
   const imageUrl = `${baseUrl}${imageRelativePath}`;
 
@@ -24,6 +26,8 @@ export const getMetadata = ({
       template: titleTemplate,
     },
     description: description,
+    // Self-referencing canonical, resolved against metadataBase by Next.
+    ...(path ? { alternates: { canonical: path } } : {}),
     openGraph: {
       title: {
         default: title,

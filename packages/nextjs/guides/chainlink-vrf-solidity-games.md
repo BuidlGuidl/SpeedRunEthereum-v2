@@ -1758,7 +1758,7 @@ Chainlink VRF transforms blockchain gaming by providing cryptographically secure
 
 ---
 
-**Ready to implement VRF in your smart contract? [Try the Dice Game Challenge!](/challenge/dice-game)**
+**Ready to implement VRF in your smart contract? [Try the Dice Game Challenge on Speedrun Ethereum!](/challenge/dice-game)**
 
 **Want to learn more about smart contract security? [Check out the Blockchain Games Security Guide!](/guides/blockchain-games-vulnerabilities)**
 

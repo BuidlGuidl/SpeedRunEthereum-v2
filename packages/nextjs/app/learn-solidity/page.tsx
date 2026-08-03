@@ -13,7 +13,7 @@ export const metadata = {
   ...getMetadata({
     title: "Learn Solidity with our free Web3 Developer Course",
     description:
-      "Master Solidity with a guided curriculum, real-world challenges, and curated guides. Learn by building on Ethereum.",
+      "Learn Solidity on Speedrun Ethereum: a free, guided curriculum of real-world challenges and developer guides. Learn Ethereum development by building.",
   }),
   alternates: { canonical: "/learn-solidity" },
 };

@@ -126,8 +126,8 @@ export function BuildPrompts({ prompts }: { prompts: BuildPrompt[] }) {
     <div className="py-12 px-6 max-w-6xl mx-auto w-full">
       <h1 className="m-0 text-2xl font-bold lg:text-4xl text-center">Build Prompts</h1>
       <p className="mt-4 text-base-content/70 text-center max-w-2xl mx-auto">
-        Full project specs for AI coding agents. Pick a build, copy the prompt into your favorite AI (Claude, Cursor,
-        Codex, etc.), and tweak the parameters to scaffold a working dApp on{" "}
+        Full project specs for AI coding agents, from Speedrun Ethereum. Pick a build, copy the prompt into your
+        favorite AI (Claude, Cursor, Codex, etc.), and tweak the parameters to scaffold a working dApp on{" "}
         <a href="https://scaffoldeth.io" target="_blank" rel="noopener noreferrer" className="link">
           Scaffold-ETH 2
         </a>

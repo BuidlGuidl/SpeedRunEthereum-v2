@@ -11,8 +11,8 @@ export const HeroSection = () => {
           <span className="text-primary"> Web3 Developer Course</span>
         </h1>
         <p className="mt-6 max-w-3xl mx-auto text-base-content/80 md:text-lg">
-          Master Solidity with our hands-on tutorials. Build real dApps, complete interactive challenges, and create
-          your on-chain developer portfolio.
+          Master Solidity on Speedrun Ethereum with hands-on tutorials. Build real dApps, complete interactive
+          challenges, and create your on-chain developer portfolio.
         </p>
         <div className="mt-6 flex flex-wrap justify-center gap-6 text-sm text-base-content/70">
           <div className="flex items-center gap-2">
