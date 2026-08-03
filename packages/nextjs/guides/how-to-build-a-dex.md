@@ -2,6 +2,7 @@
 title: "How to Build a DEX on Ethereum: Step-by-Step Solidity Tutorial"
 date: "2026-08-03"
 description: "Build a working decentralized exchange in Solidity: constant-product pricing with a 0.3% fee, ETH/token swaps, and liquidity deposits, using Scaffold-ETH 2 from install to testnet."
+image: "/assets/guides/how-to-build-a-dex.jpg"
 showNavigation: true
 faqs:
   - question: "How does a DEX work under the hood?"
