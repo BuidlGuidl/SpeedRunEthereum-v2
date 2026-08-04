@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { GuideSidebar } from "../_components/GuideSidebar";
-import { formatGuideDate, getAllGuidesSlugs, getGuideBySlug } from "~~/services/guides";
+import { getAllGuidesSlugs, getGuideBySlug } from "~~/services/guides";
 import { getMetadata } from "~~/utils/scaffold-eth/getMetadata";
 import { getGuideStructuredData } from "~~/utils/structuredData";
 
@@ -80,7 +80,6 @@ export default async function GuidePage(props: { params: Promise<{ slug: string 
       <h1 className="text-3xl lg:text-4xl font-extrabold text-base-content mb-3">{guide.title}</h1>
       {guide.description && <p className="text-lg text-base-content/90 mb-4">{guide.description}</p>}
       <div className="text-sm text-base-content/80 flex items-center gap-4 flex-wrap">
-        {guide.date && <span>📅 {formatGuideDate(guide.date)}</span>}
         <span>🕐 {guide.readingTime} min read</span>
       </div>
     </>
