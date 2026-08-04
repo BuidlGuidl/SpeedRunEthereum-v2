@@ -1,7 +1,9 @@
 ---
 title: "Sustainable ERC20 Supply Models: Tokenomics Best Practices for Devs"
+date: "2025-05-27"
 description: "A developer's guide to sustainable ERC20 token supply models. Explore inflation, deflation, capped supply, and dynamic mechanisms for robust tokenomics. Includes Solidity examples and real-world case studies."
 image: "/assets/guides/sustainable-erc20-supply.jpg"
+showNavigation: true
 ---
 
 ## TL;DR: Sustainable ERC20 Supply Models

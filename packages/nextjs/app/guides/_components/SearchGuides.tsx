@@ -67,7 +67,8 @@ export default function SearchGuides({ guides }: { guides: Guide[] }) {
                   <p className="mt-4 text-base-content/80 line-clamp-3">{guide.description}</p>
                 </div>
 
-                <div className="flex justify-end mt-4">
+                <div className="flex items-center justify-between mt-4">
+                  <span className="text-sm text-base-content/70">🕐 {guide.readingTime} min read</span>
                   <Link href={`/guides/${guide.slug}`} className="btn btn-primary btn-sm">
                     Read more
                   </Link>
