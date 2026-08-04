@@ -48,7 +48,7 @@ export function GuideSidebar({ headings }: GuideSidebarProps) {
 
   return (
     <aside className="hidden lg:block">
-      <nav className="lg:sticky lg:top-8 max-h-[calc(100vh-4rem)] overflow-y-auto pr-2">
+      <nav className="toc-scrollbar lg:sticky lg:top-8 max-h-[calc(100vh-4rem)] overflow-y-auto pr-2">
         <h2 className="font-semibold text-xs uppercase tracking-wider text-base-content/50 mb-3">On this page</h2>
         <ul className="border-l border-base-300">
           {headings.map(heading => (
