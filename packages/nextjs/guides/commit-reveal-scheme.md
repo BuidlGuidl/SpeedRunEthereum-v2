@@ -1,7 +1,9 @@
 ---
 title: "Commit-Reveal Scheme in Solidity"
+date: "2025-08-21"
 description: "Learn how to implement the commit-reveal scheme in Solidity to prevent front-running attacks in blockchain games. Complete guide with code examples, security best practices, and real-world applications."
 image: "/assets/guides/commit-reveal-scheme-solidity.jpg"
+showNavigation: true
 ---
 
 ## TL;DR: Commit-Reveal Scheme in Solidity
