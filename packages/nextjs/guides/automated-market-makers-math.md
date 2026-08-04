@@ -1,7 +1,9 @@
 ---
 title: "Automated Market Makers (AMMs): Math, Risks & Solidity Code"
+date: "2025-07-10"
 description: "How AMMs like Uniswap work: constant product formula (x*y=k), price impact, impermanent loss, and Solidity code. Essential for DeFi traders, LPs, and smart contract devs."
 image: "/assets/guides/automated-market-makers-math.jpg"
+showNavigation: true
 ---
 
 ## TL;DR: Automated Market Makers (AMMs) in DeFi

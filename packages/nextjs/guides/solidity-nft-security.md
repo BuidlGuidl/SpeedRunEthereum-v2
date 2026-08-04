@@ -1,7 +1,9 @@
 ---
 title: "Solidity NFT Security: 10 Best Practices to Protect Your Collectibles"
+date: "2025-04-29"
 description: "Discover the top security best practices for NFT smart contracts in Solidity. Learn how to avoid common vulnerabilities, use OpenZeppelin, and audit your ERC721 contracts for real-world deployment."
 image: /assets/guides/solidity-nft-security.jpg
+showNavigation: true
 ---
 
 Non-Fungible Tokens (NFTs) have exploded in popularity, representing billions of dollars in digital assets. However, with great value comes great risk. Smart contract vulnerabilities can lead to devastating losses for both creators and collectors. If you're developing NFT projects using Solidity, prioritizing security isn't just advisable—it's essential.

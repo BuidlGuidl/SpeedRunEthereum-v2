@@ -1,7 +1,9 @@
 ---
 title: "How to Register an ENS Address and Set Your ENS Avatar"
+date: "2025-09-15"
 description: "Step-by-step guide to register an ENS address (.eth), secure your Web3 identity, and set an ENS avatar. Covers pricing, commit–reveal, reverse resolution, and best practices."
 image: "/assets/guides/how-to-register-ens-set-avatar.jpg"
+showNavigation: true
 ---
 
 ## TL;DR:
