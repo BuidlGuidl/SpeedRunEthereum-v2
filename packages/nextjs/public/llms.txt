@@ -54,3 +54,4 @@ Built and maintained by BuidlGuidl. Each challenge ships a working dapp; the gui
 - [Solidity Contract-to-Contract Interactions Guide](https://speedrunethereum.com/guides/solidity-contract-to-contract-interactions): How Solidity contracts call each other, handle errors, and pass data safely.
 - [How to Register an ENS Address and Set Your ENS Avatar](https://speedrunethereum.com/guides/register-ens-domain-set-avatar): Register an ENS name (.eth) and set an ENS avatar for your Web3 identity.
 - [How to Build an Ethereum dApp with AI: The 2026 Workflow](https://speedrunethereum.com/guides/how-to-build-dapp-ethereum-ai-workflow): A 2026 workflow for building Ethereum dApps with AI and Scaffold-ETH 2, from spec to launch.
+- [Deploy Your First Smart Contract to an L2, with Scaffold-ETH 2](https://speedrunethereum.com/guides/deploy-your-first-contract-to-an-l2): Take a contract from an empty folder to a live Arbitrum deployment for cents, with video and edited transcript.
