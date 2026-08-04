@@ -14,7 +14,7 @@ faqs:
   - question: "Can you change or fix a smart contract after it is deployed?"
     answer: "Essentially no, and that is the point. Once deployed, the code is there permanently, and the ability to self-destruct a contract was removed. You can build an upgrade system where a contract delegates execution to another contract so the address stays constant while the code behind it changes, but that cuts against the immutability that makes contracts trustworthy, so upgrade rights are normally locked behind a multisig. The usual migration path is simply to deploy v2 and let people move to it, leaving v1 running exactly as deployed."
   - question: "How do I start building on Ethereum?"
-    answer: "Run npx create-eth@latest to scaffold a project with a local chain, a contracts package, and a frontend already wired together, then work through the Speedrun Ethereum challenges for a curriculum with real specs to build against. The lecture walks that path end to end: tinker against a local chain with burner wallets, test an access-control rule by calling a function as a second account, then deploy to an L2 where a deployment costs about a penny."
+    answer: "Run npx create-eth@latest to scaffold a project with a local chain, a contracts package, and a frontend already wired together. For a guided curriculum with real specs to build against, start at speedrunethereum.com/start. The final third of this lecture walks that path end to end and deploys the result to Arbitrum."
 ---
 
 The interesting question about AI agents and blockchains is not whether they belong together. It is what an agent actually needs that a normal web stack cannot give it: a way to find services it has never heard of, a way to judge whether those services are any good, and a way to pay for a single call without an account, an API key, or a human in the loop.
@@ -30,8 +30,8 @@ The full video is below, followed by a timestamped outline and an edited transcr
 - [A smart contract, and the one holding 9.2 billion dollars (00:00-03:05)](#a-smart-contract-and-the-one-holding-92-billion-dollars-0000-0305)
 - [The curriculum in four minutes, and the liquidation insight (03:05-06:56)](#the-curriculum-in-four-minutes-and-the-liquidation-insight-0305-0656)
 - [How you actually interact with a contract (06:56-14:30)](#how-you-actually-interact-with-a-contract-0656-1430)
-  - Public keys, private keys, and what an address really is (10:41)
-  - Signing is not encrypting (13:44)
+  - [Public keys, private keys, and what an address really is (10:41)](#public-keys-private-keys-and-what-an-address-really-is-1041)
+  - [Signing is not encrypting (13:44)](#signing-is-not-encrypting-1344)
 - [The three kinds of transaction (14:30-16:03)](#the-three-kinds-of-transaction-1430-1603)
 - [Zero knowledge, and the bouncer who learns nothing (16:03-17:35)](#zero-knowledge-and-the-bouncer-who-learns-nothing-1603-1735)
 - [From Solidity to bytecode, and what gas is bidding for (17:35-20:38)](#from-solidity-to-bytecode-and-what-gas-is-bidding-for-1735-2038)
@@ -39,13 +39,13 @@ The full video is below, followed by a timestamped outline and an edited transcr
 - [What if you deploy a contract and then find a bug? (28:58-31:59)](#what-if-you-deploy-a-contract-and-then-find-a-bug-2858-3159)
 - [Audits, re-entrancy, and the Lindy test (31:59-38:47)](#audits-re-entrancy-and-the-lindy-test-3159-3847)
 - [x402: the payment error code that finally got used (38:47-45:39)](#x402-the-payment-error-code-that-finally-got-used-3847-4539)
-  - The client, the server, and the facilitator (45:39)
-  - What the facilitator actually put on chain (49:28)
+  - [The client, the server, and the facilitator (45:39)](#the-client-the-server-and-the-facilitator-4539)
+  - [What the facilitator actually put on chain (49:28)](#what-the-facilitator-actually-put-on-chain-4928)
 - [Why decentralization, demonstrated with a rigged vote (52:30-57:01)](#why-decentralization-demonstrated-with-a-rigged-vote-5230-5701)
 - [Building the app: tinker, then break it on purpose (57:01-65:32)](#building-the-app-tinker-then-break-it-on-purpose-5701-6532)
-  - Everything is atomic, including the revert (63:59)
+  - [Everything is atomic, including the revert (63:59)](#everything-is-atomic-including-the-revert-6359)
 - [Vibe-coding a voting app and shipping it to Arbitrum (65:32-78:32)](#vibe-coding-a-voting-app-and-shipping-it-to-arbitrum-6532-7832)
-  - Why throughput is limited, and what L2s do about it (67:51)
+  - [Why throughput is limited, and what L2s do about it (67:51)](#why-throughput-is-limited-and-what-l2s-do-about-it-6751)
 
 ## The two standards, in short
 
@@ -109,7 +109,7 @@ Calling a contract is the same shape. Instead of "I want to send five tokens to 
 
 There's a `to` address and a data field, and the data field is hexadecimal. All of that information is encoded into it.
 
-### Public keys, private keys, and what an address really is (10:41)
+## Public keys, private keys, and what an address really is (10:41)
 
 **Audience question: when do you use the public versus the private key?**
 
@@ -119,7 +119,7 @@ Your private key you never share. This is really important. If you lose it, your
 
 What's interesting is we could sit here generating private keys all day and never find an account with money in it. There's enough entropy in that hex string that with all the compute power in the world you're not going to find one. All of that changes with quantum computing, and Ethereum is working toward being quantum safe in the next five years, but at current CPU power we could generate keys forever and never hit one.
 
-### Signing is not encrypting (13:44)
+## Signing is not encrypting (13:44)
 
 **Audience question: is it string encryption, or something else?**
 
@@ -207,7 +207,7 @@ Now, error codes. You've hit a 404 before, and a 400, but you've probably never 
 
 You make an HTTP request, whether you're a human, a client, a script or an agent, and you get back a 402 that says payment required. If you want what's behind this query, you have to pay. The response carries an address, an amount, and some metadata. You sign a transaction, put it in the header of your request, and send it again. On the other side the server receives it, takes your transaction, and runs it through a validator that confirms the money moved. That validator is called a facilitator.
 
-### The client, the server, and the facilitator (45:39)
+## The client, the server, and the facilitator (45:39)
 
 Let me show it. I built a service that generates Ethereum vanity addresses, meaning addresses with a chosen pattern like leading zeros. Finding one takes real work: you generate accounts until you hit the pattern, which is exactly how proof of work works. Two leading zeros costs a penny, three costs ten cents, four costs a dollar.
 
@@ -219,7 +219,7 @@ I request three leading zeros from the browser and get an error back. Looking at
 
 Now from a client script instead of the browser. The client requests two leading zeros, which costs a penny, and they negotiate. Sending transaction. Settling payment. Transferring value. The client gets back an address with two leading zeros, and its private key. We paid one penny for the server to generate that key, and it took 1.46 seconds. Dropping the key in confirms it: an address with leading zeros.
 
-### What the facilitator actually put on chain (49:28)
+## What the facilitator actually put on chain (49:28)
 
 Looking at the facilitator's transactions on the explorer, one landed a minute ago. It called a function on the USDC contract called `transferWithAuthorization`. So the facilitator put a transaction on chain that used a signed message from the client to move money from the client to the server. It verifies that, makes sure it gets mined, and then sends an HTTP request back to the server saying this person paid, so the server can do the work. Then the result goes back to the client.
 
@@ -259,7 +259,7 @@ Now something interesting. In the set-greeting function, let's `require` that `m
 
 Redeploy, and the happy case works. Now for a bad guy: an incognito window generates a new burner wallet. Grab some money, try to set the string, and he gets the error, "not Austin". That require statement threw him out of the function.
 
-### Everything is atomic, including the revert (63:59)
+## Everything is atomic, including the revert (63:59)
 
 By the way, it's all atomic. I can move that require statement to the very bottom of the function and it works exactly the same way. It increments the counter, sets the greeting, then hits the require, finds it false, and rolls everything back.
 
@@ -275,7 +275,7 @@ I'll prompt Cursor: build a voting app that asks how's the vibe, answers good or
 
 Scaffold ships cursor rules, and it's nice because the contract and the frontend are both there and already wired together, so the AI pattern matches well. Scaffold-ETH is good at one-shotting these apps.
 
-### Why throughput is limited, and what L2s do about it (67:51)
+## Why throughput is limited, and what L2s do about it (67:51)
 
 **Audience question: one block every 15 seconds with about 300 transactions seems like low bandwidth compared to a conventional transaction processing system.**
 
