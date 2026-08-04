@@ -90,6 +90,12 @@ const mdxComponents = {
       { ...props, id: generateHeadingId(nodeToText(children)), style: { scrollMarginTop: "80px" } },
       children,
     ),
+  h3: ({ children, ...props }: ComponentPropsWithoutRef<"h3">) =>
+    createElement(
+      "h3",
+      { ...props, id: generateHeadingId(nodeToText(children)), style: { scrollMarginTop: "80px" } },
+      children,
+    ),
   img: (props: ComponentPropsWithoutRef<"img">) =>
     createElement(GuideImageLightbox, { src: typeof props.src === "string" ? props.src : "", alt: props.alt ?? "" }),
   video: (props: ComponentPropsWithoutRef<"video">) =>
@@ -150,7 +156,7 @@ export async function getGuideBySlug(slug: string): Promise<Guide | null> {
   try {
     const fileContents = fs.readFileSync(fullPath, "utf8");
     const readingTime = computeReadingTime(fileContents);
-    const headings = extractHeadings(stripFrontmatter(fileContents));
+    const headings = extractHeadings(stripFrontmatter(fileContents), 3);
     const { frontmatter, content } = await compileMDX<GuideMetadata>({
       source: fileContents,
       options: {
