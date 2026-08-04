@@ -109,7 +109,7 @@ Calling a contract is the same shape. Instead of "I want to send five tokens to 
 
 There's a `to` address and a data field, and the data field is hexadecimal. All of that information is encoded into it.
 
-## Public keys, private keys, and what an address really is (10:41)
+### Public keys, private keys, and what an address really is (10:41)
 
 **Audience question: when do you use the public versus the private key?**
 
@@ -119,7 +119,7 @@ Your private key you never share. This is really important. If you lose it, your
 
 What's interesting is we could sit here generating private keys all day and never find an account with money in it. There's enough entropy in that hex string that with all the compute power in the world you're not going to find one. All of that changes with quantum computing, and Ethereum is working toward being quantum safe in the next five years, but at current CPU power we could generate keys forever and never hit one.
 
-## Signing is not encrypting (13:44)
+### Signing is not encrypting (13:44)
 
 **Audience question: is it string encryption, or something else?**
 
@@ -207,7 +207,7 @@ Now, error codes. You've hit a 404 before, and a 400, but you've probably never 
 
 You make an HTTP request, whether you're a human, a client, a script or an agent, and you get back a 402 that says payment required. If you want what's behind this query, you have to pay. The response carries an address, an amount, and some metadata. You sign a transaction, put it in the header of your request, and send it again. On the other side the server receives it, takes your transaction, and runs it through a validator that confirms the money moved. That validator is called a facilitator.
 
-## The client, the server, and the facilitator (45:39)
+### The client, the server, and the facilitator (45:39)
 
 Let me show it. I built a service that generates Ethereum vanity addresses, meaning addresses with a chosen pattern like leading zeros. Finding one takes real work: you generate accounts until you hit the pattern, which is exactly how proof of work works. Two leading zeros costs a penny, three costs ten cents, four costs a dollar.
 
@@ -219,7 +219,7 @@ I request three leading zeros from the browser and get an error back. Looking at
 
 Now from a client script instead of the browser. The client requests two leading zeros, which costs a penny, and they negotiate. Sending transaction. Settling payment. Transferring value. The client gets back an address with two leading zeros, and its private key. We paid one penny for the server to generate that key, and it took 1.46 seconds. Dropping the key in confirms it: an address with leading zeros.
 
-## What the facilitator actually put on chain (49:28)
+### What the facilitator actually put on chain (49:28)
 
 Looking at the facilitator's transactions on the explorer, one landed a minute ago. It called a function on the USDC contract called `transferWithAuthorization`. So the facilitator put a transaction on chain that used a signed message from the client to move money from the client to the server. It verifies that, makes sure it gets mined, and then sends an HTTP request back to the server saying this person paid, so the server can do the work. Then the result goes back to the client.
 
@@ -259,7 +259,7 @@ Now something interesting. In the set-greeting function, let's `require` that `m
 
 Redeploy, and the happy case works. Now for a bad guy: an incognito window generates a new burner wallet. Grab some money, try to set the string, and he gets the error, "not Austin". That require statement threw him out of the function.
 
-## Everything is atomic, including the revert (63:59)
+### Everything is atomic, including the revert (63:59)
 
 By the way, it's all atomic. I can move that require statement to the very bottom of the function and it works exactly the same way. It increments the counter, sets the greeting, then hits the require, finds it false, and rolls everything back.
 
@@ -275,7 +275,7 @@ I'll prompt Cursor: build a voting app that asks how's the vibe, answers good or
 
 Scaffold ships cursor rules, and it's nice because the contract and the frontend are both there and already wired together, so the AI pattern matches well. Scaffold-ETH is good at one-shotting these apps.
 
-## Why throughput is limited, and what L2s do about it (67:51)
+### Why throughput is limited, and what L2s do about it (67:51)
 
 **Audience question: one block every 15 seconds with about 300 transactions seems like low bandwidth compared to a conventional transaction processing system.**
 
