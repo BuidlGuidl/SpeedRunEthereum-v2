@@ -14,7 +14,7 @@ faqs:
   - question: "How do I test contract logic before I build a frontend?"
     answer: "Use the Debug Contracts page. Scaffold-ETH 2 generates a UI for every function on your deployed contract, so you can call them, read state back, and confirm a revert message without writing any React. Combined with burner wallets, which are throwaway browser accounts you can fund from a local faucet, you can prove an access-control rule works by calling the function as the owner, then calling it again as a second account and watching it revert."
   - question: "Where should I start if I want to learn Ethereum development by building?"
-    answer: "Start at Speedrun Ethereum. The first challenge is deliberately code-free and exists to calibrate the tooling: deploy an NFT contract locally, mint from it, and send it between burner wallets. From there each challenge adds one real concept, from staking and coordination through the approve pattern, randomness, and a working DEX. Each one is autograded from your deployed contract and live frontend."
+    answer: "Start at speedrunethereum.com/start, which sets up your environment and takes you into the first challenge. From there the curriculum runs in order, and each challenge is autograded from your deployed contract and live frontend."
 ---
 
 Most Ethereum tutorials show you a contract. Fewer show you the shape of the whole application: where the Solidity lives, where the React lives, what connects them, and which parts you should never write by hand.
@@ -28,31 +28,31 @@ The full video is below, followed by a timestamped outline and an edited transcr
 ## What's in this video
 
 - [What Scaffold-ETH 2 is, and how the app is laid out (00:55-04:15)](#what-scaffold-eth-2-is-and-how-the-app-is-laid-out-0055-0415)
-  - The two packages, and what connects them (02:07)
+  - [The two packages, and what connects them (02:07)](#the-two-packages-and-what-connects-them-0207)
 - [The local loop: three commands, burner wallets, Debug Contracts (04:15-07:20)](#the-local-loop-three-commands-burner-wallets-debug-contracts-0415-0720)
-  - Debug Contracts, before you write any UI (05:47)
+  - [Debug Contracts, before you write any UI (05:47)](#debug-contracts-before-you-write-any-ui-0547)
 - [Tinkering: add a variable, test an assumption (07:20-13:00)](#tinkering-add-a-variable-test-an-assumption-0720-1300)
-  - Testing an assumption with a second account (08:52)
-  - When you move to the frontend (11:26)
+  - [Testing an assumption with a second account (08:52)](#testing-an-assumption-with-a-second-account-0852)
+  - [When you move to the frontend (11:26)](#when-you-move-to-the-frontend-1126)
 - [Challenge 0: NFTs, IPFS, and how autograding works (13:00-23:18)](#challenge-0-nfts-ipfs-and-how-autograding-works-1300-2318)
-  - Running challenge 0: mint an NFT and send it (15:04)
-  - Inside the NFT contract, and where the image lives (18:38)
-  - Public networks, verification, and autograding (21:15)
+  - [Running challenge 0: mint an NFT and send it (15:04)](#running-challenge-0-mint-an-nft-and-send-it-1504)
+  - [Inside the NFT contract, and where the image lives (18:38)](#inside-the-nft-contract-and-where-the-image-lives-1838)
+  - [Public networks, verification, and autograding (21:15)](#public-networks-verification-and-autograding-2115)
 - [Staking as a coordination problem, and why contracts need poking (23:18-33:41)](#staking-as-a-coordination-problem-and-why-contracts-need-poking-2318-3341)
-  - Contracts are not automatic, so pay someone to poke them (26:25)
-  - Contract-to-contract interaction, and what the challenge gives you (29:35)
+  - [Contracts are not automatic, so pay someone to poke them (26:25)](#contracts-are-not-automatic-so-pay-someone-to-poke-them-2625)
+  - [Contract-to-contract interaction, and what the challenge gives you (29:35)](#contract-to-contract-interaction-and-what-the-challenge-gives-you-2935)
 - [Writing the staking contract (33:41-48:41)](#writing-the-staking-contract-3341-4841)
-  - Deadlines, block timestamps, and the local-chain trick (39:22)
-  - The execute branch, withdrawals, and re-entrancy (43:57)
+  - [Deadlines, block timestamps, and the local-chain trick (39:22)](#deadlines-block-timestamps-and-the-local-chain-trick-3922)
+  - [The execute branch, withdrawals, and re-entrancy (43:57)](#the-execute-branch-withdrawals-and-re-entrancy-4357)
 - [Testing both paths, and the edge cases that trap funds (48:41-61:34)](#testing-both-paths-and-the-edge-cases-that-trap-funds-4841-6134)
-  - The happy path, and accepting ETH directly (52:17)
-  - The edge cases that decide whether funds get stuck (56:29)
+  - [The happy path, and accepting ETH directly (52:17)](#the-happy-path-and-accepting-eth-directly-5217)
+  - [The edge cases that decide whether funds get stuck (56:29)](#the-edge-cases-that-decide-whether-funds-get-stuck-5629)
 - [Deploying to a live network (61:34-69:18)](#deploying-to-a-live-network-6134-6918)
 - [The rest of the curriculum: vendor, dice, DEX, multisig (69:18-87:52)](#the-rest-of-the-curriculum-vendor-dice-dex-multisig-6918-8752)
-  - Challenge 2: the token vendor and the approve pattern (69:18)
-  - Challenge 3: randomness you can predict (74:56)
-  - Challenge 4: the DEX, reserves, and liquidity incentives (77:00)
-  - State channels, multisigs, and onchain SVGs (82:40)
+  - [Challenge 2: the token vendor and the approve pattern (69:18)](#challenge-2-the-token-vendor-and-the-approve-pattern-6918)
+  - [Challenge 3: randomness you can predict (74:56)](#challenge-3-randomness-you-can-predict-7456)
+  - [Challenge 4: the DEX, reserves, and liquidity incentives (77:00)](#challenge-4-the-dex-reserves-and-liquidity-incentives-7700)
+  - [State channels, multisigs, and onchain SVGs (82:40)](#state-channels-multisigs-and-onchain-svgs-8240)
 - [Can I contribute my own challenges? (87:52-90:30)](#can-i-contribute-my-own-challenges-8752-9030)
 - [Can you use the blockchain as a database? (90:30-93:07)](#can-you-use-the-blockchain-as-a-database-9030-9307)
 - [Where does IPFS fit, and do I need an API key? (93:07-95:41)](#where-does-ipfs-fit-and-do-i-need-an-api-key-9307-9541)
@@ -85,7 +85,7 @@ We're going to look at Scaffold-ETH, then go through Speedrun Ethereum and talk 
 
 Scaffold-ETH is a dapp developer tool. It's great for tinkering with your smart contracts, and it has an auto-adapting frontend that's really nice when you're iterating. It uses Next.js, RainbowKit, Wagmi and TypeScript, and you get a choice between Hardhat and Foundry on the contracts side. It's a great tool for prototyping: you can get something out the door quickly. I deployed an app earlier today in about 20 minutes and still had plenty of time left for questions.
 
-### The two packages, and what connects them (02:07)
+## The two packages, and what connects them (02:07)
 
 While that installs, let's look at the code. You have two main packages. There's either Foundry or Hardhat, which is your backend: your orchestration tool, your deploying and your testing. And there's Next.js, which is your frontend.
 
@@ -101,7 +101,7 @@ The heart of Scaffold-ETH is that you can have your app in one window and your c
 
 Now, the first concept: burner wallets. I just disconnected MetaMask on purpose. You'll use burners in development rather than production. They're really nice in dev because you can hit a button and it sends a transaction, without dialogs coming up and without getting your chain ID right in MetaMask every time. It's telling me I don't have gas, but if I click the faucet button, now I have some ETH.
 
-### Debug Contracts, before you write any UI (05:47)
+## Debug Contracts, before you write any UI (05:47)
 
 Let's look at the greeter contract. There's a greeting, and it gets set: you send in a string and it's stored. So let's do that. There we go, now we see "Hello World".
 
@@ -115,7 +115,7 @@ The Debug tab is really nice, because now I can go add some code. What if we wan
 
 When I hit save and deploy, watch what happens: we get a new beneficiary field over here. Sure enough, there it is. Notice how that just auto-adapted. All I did was add a line to my contract and deploy it, and the frontend recognized the new variable and displayed it. So you can really tinker with how you want your contract to work and test your assumptions.
 
-### Testing an assumption with a second account (08:52)
+## Testing an assumption with a second account (08:52)
 
 Let's test some assumptions. There's a withdraw function that pulls ETH out of the contract, and it checks `isOwner`. I'm going to take that off and write a different require statement: require that `msg.sender` equals the beneficiary, or it reverts with "not the beneficiary".
 
@@ -127,7 +127,7 @@ Let's grab some faucet funds and try to withdraw. Hopefully it yells at me and s
 
 Like I said: testing your assumptions. I wrote a line of code that said only the beneficiary can call withdraw, and then I tried it as the beneficiary and as another account, and proved it only works for one. That's not exhaustive testing, of course. Eventually you'd want a more extensive test suite. But for figuring out how you want your contract to work, this is a really quick way to iterate.
 
-### When you move to the frontend (11:26)
+## When you move to the frontend (11:26)
 
 Scaffold-ETH is great for this kind of prototyping. Eventually you'll move over to the frontend and write some React.
 
@@ -139,7 +139,7 @@ Scaffold-ETH is the underlying tool, but what I really want to show off is Speed
 
 In that first challenge you deploy an NFT contract, bring up the chain, and get a frontend. Gas and wallets we've covered: you're using burner wallets, going to the faucet for funds, and sending ETH around. There's no code in this first challenge. It's about calibrating your tooling and getting used to how Scaffold-ETH works. You go to the My NFTs tab, hit mint, and it mints you an NFT.
 
-### Running challenge 0: mint an NFT and send it (15:04)
+## Running challenge 0: mint an NFT and send it (15:04)
 
 Let's follow the instructions. Clone it down, check out the `simple-nft` branch, `yarn install`. Then the same thing we do with Scaffold-ETH: `yarn chain` to run our local chain, `yarn deploy` to deploy the contract, `yarn start` for the frontend. It should look very familiar, because it is Scaffold-ETH.
 
@@ -149,7 +149,7 @@ I'd recommend going through each of these challenges properly on your own time. 
 
 Let's mint. There's our first NFT. Let's mint another. Now the directions say to send them around, so we create an incognito window for a second account. There's a red-and-teal one and a green one, so let's send the buffalo to the green one. Copy his address, paste it in, fire the transaction. He got it.
 
-### Inside the NFT contract, and where the image lives (18:38)
+## Inside the NFT contract, and where the image lives (18:38)
 
 That's most of the first challenge: calibrating your tooling. You don't really have to write any Solidity, but let's look at the contract.
 
@@ -159,7 +159,7 @@ Let's debug that. We can check our balance, one. We can look at who owns token 1
 
 So that lives in IPFS. The manifest is in IPFS too, and the hash of that goes onchain. That string is the unique identifier of the content.
 
-### Public networks, verification, and autograding (21:15)
+## Public networks, verification, and autograding (21:15)
 
 Next the challenge has you deploy to Sepolia instead of locally, and do the same thing on a public network. That's how the autograding works. When you're doing this at home you hit submit challenge, put in your deployed URL wherever your Vercel site is, and the link to your contract on Etherscan. We have an autograding system that grades your challenges and tells you if you got it right.
 
@@ -175,7 +175,7 @@ So you build the contract so that everyone stakes in, and if you get enough toge
 
 The cool thing is that all anyone has to trust is the code in the contract. They don't have to trust the other players. Every player has to play by the rules of the contract. This is starting to show the kinds of things you might build on Ethereum. The NFT is a simple collectible, and honestly NFTs are more like passports, like digital credentials. The digitally scarce art thing wasn't as cool as we thought it was. I think NFTs were a little overhyped.
 
-### Contracts are not automatic, so pay someone to poke them (26:25)
+## Contracts are not automatic, so pay someone to poke them (26:25)
 
 There's an interesting thing you learn going through this: contracts aren't automatic. You always have to make a transaction to make something happen. Thinking about the state machine, we're in the staking phase, and then either the success phase or the failure phase. To move between them, someone has to click the button. Someone has to pay for the transaction.
 
@@ -185,7 +185,7 @@ So what you do is write the rules correctly: anyone is allowed to check in once 
 
 If you want an automatic task to run on Ethereum, you don't run a computer that does it. You write the rules correctly and build incentives around those rules to get people to behave the way you want.
 
-### Contract-to-contract interaction, and what the challenge gives you (29:35)
+## Contract-to-contract interaction, and what the challenge gives you (29:35)
 
 Challenge one is building this staking app, and it operates like a state machine: people stake money, and at the deadline we check whether we reached the threshold.
 
@@ -209,7 +209,7 @@ Now let's open an incognito window and stake as a second account. What I want to
 
 And the events? There they are, both of them.
 
-### Deadlines, block timestamps, and the local-chain trick (39:22)
+## Deadlines, block timestamps, and the local-chain trick (39:22)
 
 Now the challenge starts talking about the contract as a state machine and how timing works.
 
@@ -223,7 +223,7 @@ Now execute works. Let's redeploy with a reset so we're on a fresh contract, and
 
 That's what I wanted to test. Does this thing keep track of time correctly, and does it only run the function once the time has passed? It does.
 
-### The execute branch, withdrawals, and re-entrancy (43:57)
+## The execute branch, withdrawals, and re-entrancy (43:57)
 
 `address(this).balance` gives the balance of the contract, and what we want to know is whether it's over the threshold by the deadline. If it is, we call out to the external contract. That's the contract call, and it's really cool: it's calling the `complete` function on the other contract and sending all of its money.
 
@@ -245,7 +245,7 @@ We've staked money in, and when I call execute it should set open-for-withdraw t
 
 So we've tested the sad case: we staked, we weren't able to get enough together, it went into withdraw mode, and users can get their money back. It's not going to get stuck.
 
-### The happy path, and accepting ETH directly (52:17)
+## The happy path, and accepting ETH directly (52:17)
 
 Now the happy path. We want enough people to stake by the deadline, then hit execute, and it should work.
 
@@ -259,7 +259,7 @@ Let's test it. Deploy again, and I'll just send 0.5 ETH straight to the contract
 
 That's a nice piece of UX. Instead of calling a function, you could give people an ENS name. It could be `stake.buidlguidl.eth`, and anyone can just send ETH to it. Someone still has to hit the execute button, but as I said, if you figure out a way to incentivize that, you can make it work in a decentralized way.
 
-### The edge cases that decide whether funds get stuck (56:29)
+## The edge cases that decide whether funds get stuck (56:29)
 
 Can execute get called more than once? This is an interesting one, and you really have to think about all the edge cases.
 
@@ -291,7 +291,7 @@ That's the staking challenge: a simple but powerful coordination mechanism. When
 
 ## The rest of the curriculum: vendor, dice, DEX, multisig (69:18-87:52)
 
-### Challenge 2: the token vendor and the approve pattern (69:18)
+## Challenge 2: the token vendor and the approve pattern (69:18)
 
 Let's go through the rest of the challenges faster.
 
@@ -303,7 +303,7 @@ The hardest part of this challenge is building the vendor to buy the tokens back
 
 So it's two transactions. Buying is easy: you send ETH in and get tokens back. Selling means calling approve on the token in one transaction, then a second transaction that tells the vendor it's been approved and it can take them.
 
-### Challenge 3: randomness you can predict (74:56)
+## Challenge 3: randomness you can predict (74:56)
 
 Challenge three is a dice game. Randomness is particularly tricky on a public, deterministic blockchain, because the chain shows everything. A weak form of randomness is to use the previous block hash, and the problem with that is you can set up an attacker contract.
 
@@ -311,7 +311,7 @@ That's what you'll do here. There's a dice game where you pay to roll: if you wi
 
 So you sit there calling roll on the attacker contract, and it waits until the block hash is just right. You only ever roll on winning rolls. That's not good, obviously, if you wanted real randomness. But it teaches you how this falls apart, how to build an attacker contract, and how randomness can be predicted.
 
-### Challenge 4: the DEX, reserves, and liquidity incentives (77:00)
+## Challenge 4: the DEX, reserves, and liquidity incentives (77:00)
 
 The DEX is probably one of the most important builds you'll make in Speedrun Ethereum.
 
@@ -327,7 +327,7 @@ In the challenge you'll write swap functions in both directions, functions to ad
 
 Everything after this is dessert. If you can build a DEX you can build a lot of different things. It's a good "am I ready yet" test.
 
-### State channels, multisigs, and onchain SVGs (82:40)
+## State channels, multisigs, and onchain SVGs (82:40)
 
 There are three more challenges.
 
