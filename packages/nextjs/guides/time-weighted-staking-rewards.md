@@ -1,7 +1,9 @@
 ---
 title: "Time-Weighted Staking Rewards & Dynamic APY in Solidity"
+date: "2025-05-13"
 description: "Go beyond basic staking! Learn to implement time-weighted rewards to incentivize long-term stakers and dynamic APYs that respond to market conditions in your Solidity contracts. A practical guide for Web3 devs aiming for fairer and more sustainable tokenomics."
 image: /assets/guides/time-weighted-rewards-dynamic-apy.jpg
+showNavigation: true
 ---
 
 So, you've got a staking contract. Users lock up tokens, earn rewards. Cool. But let's ask some real questions:

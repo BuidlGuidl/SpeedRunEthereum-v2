@@ -1,7 +1,9 @@
 ---
 title: "Scalable Solidity Staking: O(1) Reward Distribution"
+date: "2025-05-20"
 description: "Master scalable Solidity staking with O(1) reward distribution. This guide details gas-efficient techniques using per-token accumulated values for fair, low-cost DeFi rewards, perfect for optimizing your smart contracts."
 image: /assets/guides/scalable-staking-rewards-solidity.jpg
+showNavigation: true
 ---
 
 So, you're building a decentralized staking contract and you want users to be able to stake their tokens and earn rewards. Simple, right?
