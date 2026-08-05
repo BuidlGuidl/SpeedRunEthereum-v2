@@ -1,6 +1,6 @@
 ---
 title: "How a Full-Stack Ethereum App Is Structured, with Scaffold-ETH 2"
-date: "2026-08-04"
+date: "2025-06-04"
 description: "Austin Griffith walks through the anatomy of a full-stack Ethereum app at Devcon SEA: the two packages, the local chain, the tinker loop, and the Speedrun Ethereum curriculum that builds on it. Full video and edited transcript."
 image: "/assets/guides/how-a-full-stack-ethereum-app-is-structured.jpg"
 showNavigation: true
