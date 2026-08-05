@@ -1,6 +1,6 @@
 ---
 title: "Deploy Your First Smart Contract to an L2, with Scaffold-ETH 2"
-date: "2026-08-04"
+date: "2026-08-19"
 description: "Austin Griffith and Elliot Friedman take a counter contract from an empty folder to a live deployment on Arbitrum: scaffold, tinker locally, fund a deployer, deploy for a fraction of a cent, then bridging, the address table precompile, and forced transactions. Full video and edited transcript."
 image: "/assets/guides/deploy-your-first-contract-to-an-l2.jpg"
 showNavigation: true
