@@ -97,7 +97,10 @@ export default async function ChallengePage(props: { params: Promise<{ challenge
   // the readme has no such section.
   const aiGuidedSectionId = headings.find(heading => heading.id.includes("ai-guided"))?.id;
 
-  // Custom h2 component that adds IDs for anchor navigation
+  // Custom h2 component that adds IDs for anchor navigation.
+  // Also used for h1: the page already renders the challenge title as its own h1, so a stray
+  // top-level heading in a readme would make a second one. Rendering it as an h2 keeps exactly
+  // one h1 per page whatever the readme does.
   const createH2WithId = ({ children, ...props }: { children?: ReactNode }) => {
     const text = String(children);
     const id = generateHeadingId(text);
@@ -161,6 +164,7 @@ export default async function ChallengePage(props: { params: Promise<{ challenge
                     components={{
                       a: (props: ComponentPropsWithoutRef<"a">) =>
                         createElement("a", { ...props, target: "_blank", rel: "noopener" }),
+                      h1: createH2WithId,
                       h2: createH2WithId,
                       Tabs: MdxTabs,
                       Tab: MdxTab,
