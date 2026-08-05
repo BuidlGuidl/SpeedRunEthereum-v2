@@ -3,7 +3,6 @@ import { getAllBuildPrompts } from "~~/services/build-prompts";
 import { getMetadata } from "~~/utils/scaffold-eth/getMetadata";
 import { getTopLevelPageStructuredData } from "~~/utils/structuredData";
 
-// Shared by the metadata and the structured data so the two can never drift.
 const TITLE = "Build Prompts";
 const DESCRIPTION =
   "Free, AI-ready project specs from Speedrun Ethereum. Pick a build, copy the prompt into your AI, and customize the parameters to scaffold a working dApp on Scaffold-ETH 2.";

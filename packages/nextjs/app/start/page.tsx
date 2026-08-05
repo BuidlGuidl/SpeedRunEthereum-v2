@@ -22,7 +22,6 @@ import { getAllChallenges } from "~~/services/database/repositories/challenges";
 import { getMetadata } from "~~/utils/scaffold-eth/getMetadata";
 import { getTopLevelPageStructuredData } from "~~/utils/structuredData";
 
-// Shared by the metadata and the structured data so the two can never drift.
 const TITLE = "Build your first Apps on Ethereum";
 const DESCRIPTION =
   "Learn Ethereum development by building real dApps. Speedrun Ethereum is a free, hands-on series of smart contract challenges — from your first NFT to a DEX.";

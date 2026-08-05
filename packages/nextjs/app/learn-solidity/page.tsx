@@ -11,7 +11,6 @@ import { getAllGuides } from "~~/services/guides";
 import { getMetadata } from "~~/utils/scaffold-eth/getMetadata";
 import { getTopLevelPageStructuredData } from "~~/utils/structuredData";
 
-// Shared by the metadata and the structured data so the two can never drift.
 const TITLE = "Learn Solidity with our free Web3 Developer Course";
 const DESCRIPTION =
   "Learn Solidity on Speedrun Ethereum: a free, guided curriculum of real-world challenges and developer guides. Learn Ethereum development by building.";
