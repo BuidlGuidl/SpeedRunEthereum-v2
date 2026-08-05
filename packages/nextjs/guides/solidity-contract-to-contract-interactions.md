@@ -4,6 +4,17 @@ date: "2025-05-30"
 description: "A practical guide to Solidity contract-to-contract interactions. Learn how contracts call each other, handle errors, and manage security. Includes code patterns, pitfalls, and best practices."
 image: "/assets/guides/contract-interactions.jpg"
 showNavigation: true
+faqs:
+  - question: "How does one smart contract call another in Solidity?"
+    answer: "When you know the interface at compile time, use a direct call: declare an interface for the target, cast its address to that interface, and call the function. You get type safety and errors propagate automatically. Low-level calls exist for cases where the interface is not known ahead of time, but they trade that safety away."
+  - question: "When should I use call, delegatecall or staticcall?"
+    answer: "call is a generic external call that can send Ether and executes in the callee's context. delegatecall runs the callee's code in the caller's context using the caller's storage, which is how upgradeable proxies work and also why the storage layout of proxy and logic contracts must match exactly. staticcall behaves like call but enforces read-only execution, making it the safe choice for reading data. All three are riskier than a direct interface call."
+  - question: "Why did my low-level call fail without reverting?"
+    answer: "Low-level calls do not revert on failure. They return a success boolean, and if you ignore it execution continues as though the call worked. Always check the success flag and require on it, and decode any return data carefully with abi.decode."
+  - question: "How do I stop a contract-to-contract call from being reentered?"
+    answer: "Use the Checks-Effects-Interactions pattern: validate inputs, update your own state, and only then make the external call. Add OpenZeppelin's ReentrancyGuard with the nonReentrant modifier to any function that both makes an external call and changes state. Reentrancy comes in three shapes worth knowing: single-function, cross-function within the same contract, and cross-contract."
+  - question: "What is the safest way for my contract to pull ERC20 tokens from a user?"
+    answer: "Have the user approve your contract first, then call transferFrom and check the return value. Never assume a transfer succeeded. Not all ERC20 implementations behave identically, and some return false rather than reverting. Treat every external contract as untrusted, including standard tokens, unless you have audited it yourself."
 ---
 
 ## TL;DR: Secure Contract-to-Contract Interactions in Solidity

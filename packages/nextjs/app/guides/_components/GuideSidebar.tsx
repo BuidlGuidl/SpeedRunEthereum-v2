@@ -56,7 +56,9 @@ export function GuideSidebar({ headings }: GuideSidebarProps) {
               <a
                 href={`#${heading.id}`}
                 onClick={event => handleClick(event, heading.id)}
-                className={`block -ml-px border-l-2 pl-4 py-1.5 text-sm leading-snug transition-colors ${
+                className={`block -ml-px border-l-2 py-1.5 leading-snug transition-colors ${
+                  heading.level >= 3 ? "pl-8 text-xs" : "pl-4 text-sm"
+                } ${
                   activeId === heading.id
                     ? "border-primary text-primary font-medium"
                     : "border-transparent text-base-content/60 hover:text-base-content hover:border-base-content/30"
