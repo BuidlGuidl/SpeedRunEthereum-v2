@@ -20,12 +20,25 @@ import { SparklesIcon } from "@heroicons/react/24/outline";
 import { getAllBuildPrompts } from "~~/services/build-prompts";
 import { getAllChallenges } from "~~/services/database/repositories/challenges";
 import { getMetadata } from "~~/utils/scaffold-eth/getMetadata";
+import { getTopLevelPageStructuredData } from "~~/utils/structuredData";
+
+// Shared by the metadata and the structured data so the two can never drift.
+const TITLE = "Build your first Apps on Ethereum";
+const DESCRIPTION =
+  "Learn Ethereum development by building real dApps. Speedrun Ethereum is a free, hands-on series of smart contract challenges — from your first NFT to a DEX.";
 
 export const metadata = getMetadata({
-  title: "Build your first Apps on Ethereum",
-  description:
-    "Learn Ethereum development by building real dApps. Speedrun Ethereum is a free, hands-on series of smart contract challenges — from your first NFT to a DEX.",
+  title: TITLE,
+  description: DESCRIPTION,
   path: "/start",
+});
+
+const structuredData = getTopLevelPageStructuredData({
+  type: "WebPage",
+  path: "/start",
+  title: TITLE,
+  description: DESCRIPTION,
+  breadcrumbName: "Get Started",
 });
 
 const StartLandingPage = async () => {
@@ -34,6 +47,7 @@ const StartLandingPage = async () => {
 
   return (
     <div className="bg-[#F9FEFF] dark:bg-base-200 overflow-hidden">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
       {/* HERO SECTION */}
       <div className="relative">
         <Image

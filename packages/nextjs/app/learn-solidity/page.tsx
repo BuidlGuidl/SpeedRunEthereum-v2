@@ -3,26 +3,40 @@ import { CurriculumSection } from "~~/app/learn-solidity/_components/CurriculumS
 import { FaqSection } from "~~/app/learn-solidity/_components/FaqSection";
 import { HeroSection } from "~~/app/learn-solidity/_components/HeroSection";
 import { WhyWorks } from "~~/app/learn-solidity/_components/WhyWorks";
+import { faqs } from "~~/app/learn-solidity/_components/data";
 import { ConnectAndRegisterSection } from "~~/app/start/_components/ConnectAndRegisterSection";
 import { SpaceshipIcon } from "~~/app/start/_components/Icons";
 import { getAllChallenges } from "~~/services/database/repositories/challenges";
 import { getAllGuides } from "~~/services/guides";
 import { getMetadata } from "~~/utils/scaffold-eth/getMetadata";
+import { getTopLevelPageStructuredData } from "~~/utils/structuredData";
 
-export const metadata = {
-  ...getMetadata({
-    title: "Learn Solidity with our free Web3 Developer Course",
-    description:
-      "Learn Solidity on Speedrun Ethereum: a free, guided curriculum of real-world challenges and developer guides. Learn Ethereum development by building.",
-  }),
-  alternates: { canonical: "/learn-solidity" },
-};
+// Shared by the metadata and the structured data so the two can never drift.
+const TITLE = "Learn Solidity with our free Web3 Developer Course";
+const DESCRIPTION =
+  "Learn Solidity on Speedrun Ethereum: a free, guided curriculum of real-world challenges and developer guides. Learn Ethereum development by building.";
+
+export const metadata = getMetadata({
+  title: TITLE,
+  description: DESCRIPTION,
+  path: "/learn-solidity",
+});
+
+const structuredData = getTopLevelPageStructuredData({
+  type: "WebPage",
+  path: "/learn-solidity",
+  title: TITLE,
+  description: DESCRIPTION,
+  breadcrumbName: "Learn Solidity",
+  faqs: faqs.map(faq => ({ question: faq.q, answer: faq.a })),
+});
 
 export default async function LearnSolidityPage() {
   const [challenges] = await Promise.all([getAllChallenges(), getAllGuides()]);
 
   return (
     <div className="bg-base-200">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
       <HeroSection />
       <CurriculumSection challenges={challenges} />
       <WhyWorks />

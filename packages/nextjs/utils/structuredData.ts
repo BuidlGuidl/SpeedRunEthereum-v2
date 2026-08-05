@@ -148,3 +148,69 @@ export function getChallengeStructuredData({
     },
   };
 }
+
+// Top-level pages (/learn-solidity, /start, /build-prompts): attach the page to the curriculum
+// without declaring a second Course. `isPartOf` and `about` both point at the existing COURSE_ID
+// node minted on the homepage, so the site keeps exactly one course entity.
+export function getTopLevelPageStructuredData({
+  type,
+  path,
+  title,
+  description,
+  breadcrumbName,
+  faqs,
+}: {
+  type: "WebPage" | "CollectionPage";
+  path: string;
+  title: string;
+  description: string;
+  breadcrumbName: string;
+  faqs?: { question: string; answer: string }[];
+}) {
+  const url = `${SITE_URL}${path}`;
+
+  const page = {
+    "@context": "https://schema.org",
+    "@type": type,
+    name: title,
+    description,
+    url,
+    mainEntityOfPage: {
+      "@type": "WebPage",
+      "@id": url,
+    },
+    publisher: provider,
+    isPartOf: {
+      "@id": COURSE_ID,
+    },
+    about: {
+      "@id": COURSE_ID,
+    },
+  };
+
+  const breadcrumb = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: COURSE_NAME, item: SITE_URL },
+      { "@type": "ListItem", position: 2, name: breadcrumbName, item: url },
+    ],
+  };
+
+  if (!faqs?.length) return [page, breadcrumb];
+
+  const faqPage = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faqs.map(faq => ({
+      "@type": "Question",
+      name: faq.question,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: faq.answer,
+      },
+    })),
+  };
+
+  return [page, breadcrumb, faqPage];
+}
