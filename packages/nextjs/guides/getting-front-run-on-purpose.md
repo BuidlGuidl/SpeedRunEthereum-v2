@@ -1,6 +1,6 @@
 ---
 title: "Getting Front-Run on Purpose: What the Mempool Really Exposes"
-date: "2026-08-04"
+date: "2023-09-04"
 description: "Austin Griffith deliberately ships a front-runnable commit-reveal contract to mainnet to find out whether MEV bots are watching. Optimism ignores it. Ethereum mainnet takes the money in one block. Full video and edited transcript."
 image: "/assets/guides/getting-front-run-on-purpose.jpg"
 showNavigation: true
