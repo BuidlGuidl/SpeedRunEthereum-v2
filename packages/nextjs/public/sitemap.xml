@@ -156,6 +156,11 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://speedrunethereum.com/guides/how-to-build-a-dex</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://speedrunethereum.com/guides/automated-market-makers-math</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>

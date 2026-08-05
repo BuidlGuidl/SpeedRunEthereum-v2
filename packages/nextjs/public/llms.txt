@@ -38,6 +38,7 @@ Built and maintained by BuidlGuidl. Each challenge ships a working dapp; the gui
 - [Solidity NFT Security: 10 Best Practices to Protect Your Collectibles](https://speedrunethereum.com/guides/solidity-nft-security): 10 security best practices for NFT smart contracts in Solidity.
 - [NFTs in Web3: Understanding Use Cases Beyond Digital Art](https://speedrunethereum.com/guides/nft-use-cases): Real-world NFT use cases beyond art — gaming, ticketing, identity, and loyalty.
 - [Automated Market Makers (AMMs): Math, Risks & Solidity Code](https://speedrunethereum.com/guides/automated-market-makers-math): How AMMs work in Solidity — the constant-product formula (x*y=k), price impact, and impermanent loss.
+- [How to Build a DEX on Ethereum: Step-by-Step Solidity Tutorial](https://speedrunethereum.com/guides/how-to-build-a-dex): Build a working DEX in Solidity with Scaffold-ETH 2 — constant-product pricing, swaps, and liquidity, from install to testnet.
 - [Impermanent Loss Explained: The Math Behind DeFi's Hidden Risk](https://speedrunethereum.com/guides/impermanent-loss-math-explained): The math behind impermanent loss in DeFi liquidity pools, with examples.
 - [Solidity Bonding Curves & Dynamic Token Pricing Explained](https://speedrunethereum.com/guides/solidity-bonding-curves-token-pricing): How bonding curves work in Solidity for dynamic token pricing.
 - [Flash Loan Exploits: A Developer's Guide to Securing Your DEX](https://speedrunethereum.com/guides/flash-loan-exploits): How flash-loan attacks work and defensive Solidity patterns to secure your DEX.
