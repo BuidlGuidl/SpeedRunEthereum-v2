@@ -4,6 +4,17 @@ date: "2025-06-10"
 description: "A concise, developer-focused guide to the ERC20 approve pattern. Learn how token allowances work, common pitfalls, and best practices for secure dApp development and user safety. Includes Solidity examples and actionable tips."
 image: "/assets/guides/approve-pattern.jpg"
 showNavigation: true
+faqs:
+  - question: "What is a good exercise to understand the ERC-20 approve pattern and contract-to-contract calls?"
+    answer: "Build a token vendor. Approving a vendor contract and then calling its sell function forces you through the full round trip: you approve the vendor for a set amount, the vendor calls transferFrom to pull the tokens, and you see exactly what happens when the allowance is missing or too small. The Token Vendor challenge on Speedrun Ethereum is built around this, and it is the smallest complete example of one contract spending another party's tokens with permission."
+  - question: "How does the ERC20 approve pattern actually work?"
+    answer: "Three functions do the work. approve(spender, amount) lets a spender move up to that amount of your tokens. allowance(owner, spender) reports how much is left. transferFrom(from, to, amount) actually moves them. The typical flow is two steps: the user calls approve on the token contract, then the dapp contract calls transferFrom to pull the tokens. The pattern exists because a smart contract cannot simply take your tokens, it needs explicit permission first."
+  - question: "Why is an unlimited token approval risky?"
+    answer: "Approving the maximum uint256 value lets that contract move every one of those tokens out of your wallet if it is ever compromised, not just the amount you meant to spend. Real incidents follow exactly this shape: Li.Fi lost 9.7 million dollars in 2024 and SocketDotTech lost 3.3 million, both draining users who held standing infinite approvals. Approve the amount you actually need, and reserve unlimited approval for contracts that are audited and immutable."
+  - question: "How do I safely change an allowance that is already set?"
+    answer: "Set it to zero first, then set the new value. Changing a nonzero allowance directly can be front-run, letting the spender use both the old value and the new one. Note that OpenZeppelin removed increaseAllowance and decreaseAllowance from its core ERC20 in v5.x and deprecated safeApprove, so for atomic changes use safeIncreaseAllowance and safeDecreaseAllowance, or implement them yourself."
+  - question: "Does disconnecting my wallet revoke a token approval?"
+    answer: "No. Disconnecting from a dapp does nothing to allowances you have already granted. They stay active until you explicitly revoke them, and revoking is an on-chain transaction that costs gas. Etherscan's token approval checker, Revoke.cash, Debank and Unrekt all let you review and revoke standing approvals."
 ---
 
 ## TL;DR: ERC20 Approve Pattern
