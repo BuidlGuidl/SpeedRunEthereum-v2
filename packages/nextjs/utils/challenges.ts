@@ -3,6 +3,7 @@ import { ChallengeId, ReviewAction } from "~~/services/database/config/types";
 export type Heading = {
   id: string;
   text: string;
+  level: number;
 };
 
 export const REVIEW_ACTION_BADGE_CLASSES: Record<ReviewAction, string> = {
@@ -339,7 +340,9 @@ function stripInlineMarkdown(text: string): string {
     .replace(/_([^_]+)_/g, "$1"); // italic _text_
 }
 
-export function extractHeadings(markdown: string): Heading[] {
+// `maxLevel` is the deepest heading to index. It defaults to 2 so callers that only render top
+// level sections are unaffected; pass 3 to include subsections in the table of contents.
+export function extractHeadings(markdown: string, maxLevel = 2): Heading[] {
   const headings: Heading[] = [];
   let inFence = false;
   for (const line of markdown.split(/\r?\n/)) {
@@ -349,10 +352,12 @@ export function extractHeadings(markdown: string): Heading[] {
       continue;
     }
     if (inFence) continue;
-    const match = line.match(/^##\s+(.+)$/);
+    const match = line.match(/^(#{2,3})\s+(.+)$/);
     if (match) {
-      const text = stripInlineMarkdown(match[1].trim());
-      headings.push({ id: generateHeadingId(text), text });
+      const level = match[1].length;
+      if (level > maxLevel) continue;
+      const text = stripInlineMarkdown(match[2].trim());
+      headings.push({ id: generateHeadingId(text), text, level });
     }
   }
   return headings;
