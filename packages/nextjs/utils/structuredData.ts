@@ -126,7 +126,9 @@ export function getGuidesIndexStructuredData({ title, description }: { title: st
   return [collection, breadcrumb];
 }
 
-// Challenge page: a Course node for a single challenge, tied back to the curriculum.
+// Challenge page: a Course node for a single challenge, tied back to the curriculum, plus its
+// breadcrumb trail. The trail has two levels rather than the guides' three because there is no
+// challenges index page to point the middle crumb at.
 export function getChallengeStructuredData({
   id,
   name,
@@ -136,15 +138,28 @@ export function getChallengeStructuredData({
   name: string;
   description: string;
 }) {
-  return {
+  const url = `${SITE_URL}/challenge/${id}`;
+
+  const course = {
     "@context": "https://schema.org",
     "@type": "Course",
     name,
     description,
-    url: `${SITE_URL}/challenge/${id}`,
+    url,
     provider,
     isPartOf: {
       "@id": COURSE_ID,
     },
   };
+
+  const breadcrumb = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: COURSE_NAME, item: SITE_URL },
+      { "@type": "ListItem", position: 2, name, item: url },
+    ],
+  };
+
+  return [course, breadcrumb];
 }

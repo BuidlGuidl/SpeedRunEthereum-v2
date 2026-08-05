@@ -1,6 +1,7 @@
 import { createElement } from "react";
 import type { ComponentPropsWithoutRef, ReactNode } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ChallengeHeader } from "./_components/ChallengeHeader";
 import { ChallengeSidebar } from "./_components/ChallengeSidebar";
@@ -113,6 +114,15 @@ export default async function ChallengePage(props: { params: Promise<{ challenge
               <div className="hidden lg:block" aria-hidden />
               <div className="min-w-0 flex flex-col gap-8 lg:flex-row lg:items-center lg:gap-10">
                 <div className="min-w-0 flex-1 max-w-[640px]">
+                  <nav aria-label="Breadcrumb" className="text-sm text-base-content/80 mb-3">
+                    <Link href="/" className="hover:underline">
+                      Speedrun Ethereum
+                    </Link>
+                    <span className="mx-1.5" aria-hidden>
+                      ›
+                    </span>
+                    <span>Challenge</span>
+                  </nav>
                   <h1 className="text-3xl lg:text-4xl font-extrabold text-base-content mb-3 leading-tight">
                     Challenge: {challenge.challengeName}
                   </h1>
