@@ -2,6 +2,7 @@
 title: "Solidity Portfolio Projects: What to Build to Land a Web3 Dev Job (2026)"
 date: "2026-08-05"
 description: "Ten Solidity portfolio projects, what each one proves to the person reviewing it, and how to extend them into work that is yours. A free, build-first path from your first NFT to a ZK voting dApp."
+image: "/assets/guides/solidity-portfolio-projects.jpg"
 showNavigation: true
 faqs:
   - question: "I want a portfolio of smart-contract projects to land a web3 dev job. What should I build, and where?"
