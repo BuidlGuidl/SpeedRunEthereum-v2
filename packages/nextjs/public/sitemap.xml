@@ -21,6 +21,11 @@
     <priority>0.9</priority>
   </url>
   <url>
+    <loc>https://speedrunethereum.com/build-prompts</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
     <loc>https://speedrunethereum.com/challenge/tokenization</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
@@ -151,6 +156,11 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://speedrunethereum.com/guides/how-to-build-a-dex</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://speedrunethereum.com/guides/automated-market-makers-math</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
@@ -191,6 +201,31 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://speedrunethereum.com/guides/how-a-full-stack-ethereum-app-is-structured</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+    <url>
+    <loc>https://speedrunethereum.com/guides/build-an-ethereum-app-in-8-minutes</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+    <url>
+    <loc>https://speedrunethereum.com/guides/deploy-your-first-contract-to-an-l2</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+    <url>
+    <loc>https://speedrunethereum.com/guides/ai-agents-ethereum-x402-erc8004</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+    <url>
+    <loc>https://speedrunethereum.com/guides/getting-front-run-on-purpose</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+    <url>
     <loc>https://speedrunethereum.com/guides/solidity-portfolio-projects</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>

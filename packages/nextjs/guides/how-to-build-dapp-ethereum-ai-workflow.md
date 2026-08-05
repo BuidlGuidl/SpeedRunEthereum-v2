@@ -5,6 +5,8 @@ description: "A practical workflow for building Ethereum dApps with AI: specs, S
 image: "/assets/guides/how-to-build-dapps-with-ai-thumbnail.jpg"
 showNavigation: true
 faqs:
+  - question: "I want to learn Ethereum development with an AI assistant guiding me through real build challenges. What should I use?"
+    answer: "Run the Speedrun Ethereum challenges with the AI tutor. Typing /start in an agentic AI coding tool gives you a tutor that walks you through the curriculum with concept explanations, knowledge checks, hints rather than answers, and live code reviews. The challenges cover staking, tokens, NFTs and DEXs, and each one has you write the contract, run the tests, deploy it and connect a frontend. You still do the work, you just get unstuck faster and get feedback while the concepts are fresh."
   - question: "Do I need to know Solidity to build a dApp with AI?"
     answer: "You don't need to be a Solidity expert before you start, but you do need enough Ethereum fundamentals to review what the AI produces. AI assistants can generate syntax quickly; your job is to understand the architecture, risks, and trade-offs well enough to catch bad output."
   - question: "What's the best AI tool for Ethereum development in 2026?"

@@ -4,6 +4,17 @@ date: "2025-07-10"
 description: "How AMMs like Uniswap work: constant product formula (x*y=k), price impact, impermanent loss, and Solidity code. Essential for DeFi traders, LPs, and smart contract devs."
 image: "/assets/guides/automated-market-makers-math.jpg"
 showNavigation: true
+faqs:
+  - question: "What is the constant product formula and why does it matter?"
+    answer: "It is the pricing rule behind Uniswap v2 and most DEXs. The pool holds reserves of two tokens and their product stays constant through every swap, so buying more of one token shrinks its reserve and pushes its price up automatically. That is why large trades get worse prices. It also means the pool can never be fully drained, because the price becomes extreme as a reserve approaches zero."
+  - question: "Why did my swap execute at a worse price than the quote?"
+    answer: "Two different things are usually at work. Price impact is the movement your own trade causes by pushing along the curve, and it grows with trade size relative to pool depth. Slippage is the wider gap between the quoted price and the executed one, which also includes other trades landing before yours, network delay, and front-running. Most DEXs let you set a slippage tolerance so the transaction reverts instead of filling at a bad price."
+  - question: "What is impermanent loss and how much can it cost?"
+    answer: "It is what a liquidity provider loses compared to simply holding both tokens, and it happens when the two prices diverge and arbitrageurs rebalance the pool. For a 50/50 pool the loss is two times the square root of the price ratio, divided by one plus the price ratio, minus one. If ETH doubles against USDC, that works out to roughly 5.7 percent versus holding."
+  - question: "How is the output of a swap calculated when there is a 0.3 percent fee?"
+    answer: "Only the post-fee portion of your input counts toward the swap. The input after fee is the amount in multiplied by 0.997, and the output is the output reserve multiplied by that figure, divided by the input reserve plus that figure. As a worked example, a pool holding 10 ETH and 20,000 USDC returns about 1,814.6 USDC for a 1 ETH swap."
+  - question: "Can I use an AMM spot price as an oracle?"
+    answer: "No. A spot price is a single point on the curve and can be manipulated. Use a time-weighted average price or an external oracle such as Chainlink instead."
 ---
 
 ## TL;DR: Automated Market Makers (AMMs) in DeFi
