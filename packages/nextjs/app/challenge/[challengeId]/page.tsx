@@ -124,7 +124,9 @@ export default async function ChallengePage(props: { params: Promise<{ challenge
                     <span className="mx-1.5" aria-hidden>
                       ›
                     </span>
-                    <span>Challenge</span>
+                    <Link href="/start" className="hover:underline">
+                      Challenges
+                    </Link>
                   </nav>
                   <h1 className="text-3xl lg:text-4xl font-extrabold text-base-content mb-3 leading-tight">
                     Challenge: {challenge.challengeName}

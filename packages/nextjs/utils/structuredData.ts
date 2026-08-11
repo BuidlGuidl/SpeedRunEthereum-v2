@@ -127,8 +127,7 @@ export function getGuidesIndexStructuredData({ title, description }: { title: st
 }
 
 // Challenge page: a Course node for a single challenge, tied back to the curriculum, plus its
-// breadcrumb trail. The trail has two levels rather than the guides' three because there is no
-// challenges index page to point the middle crumb at.
+// breadcrumb trail. The middle crumb is /start, which is where the challenges are listed.
 export function getChallengeStructuredData({
   id,
   name,
@@ -157,7 +156,8 @@ export function getChallengeStructuredData({
     "@type": "BreadcrumbList",
     itemListElement: [
       { "@type": "ListItem", position: 1, name: COURSE_NAME, item: SITE_URL },
-      { "@type": "ListItem", position: 2, name, item: url },
+      { "@type": "ListItem", position: 2, name: "Challenges", item: `${SITE_URL}/start` },
+      { "@type": "ListItem", position: 3, name, item: url },
     ],
   };
 
