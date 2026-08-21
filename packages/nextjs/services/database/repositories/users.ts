@@ -4,8 +4,7 @@ import { ColumnSort, SortingState } from "@tanstack/react-table";
 import { InferInsertModel, and, eq, ilike, inArray, isNotNull, or, sql } from "drizzle-orm";
 import { db } from "~~/services/database/config/postgresClient";
 import { challenges, lower, userChallenges, users } from "~~/services/database/config/schema";
-import { BatchUserStatus } from "~~/services/database/config/types";
-import { BATCH_XP, BUILD_XP, CHALLENGE_XP, SIDE_QUEST_XP } from "~~/utils/xp";
+import { BUILD_XP, CHALLENGE_XP, SIDE_QUEST_XP } from "~~/utils/xp";
 
 type PickSocials<T> = {
   [K in keyof T as K extends `social${string}` ? K : never]?: T[K] extends string | null ? string : never;
@@ -267,7 +266,6 @@ export async function getUserXP(userAddress: string) {
     userLatestSubmissions.filter(
       userSubmission => userSubmission.reviewAction === ReviewAction.ACCEPTED && !userSubmission.challenge.disabled,
     ).length || 0;
-  const hasBatch = user?.batchStatus === BatchUserStatus.GRADUATE;
   const hasBuilds = user?.buildBuilders && user?.buildBuilders.length > 0;
 
   const challengePoints = acceptedNonDisabledChallengesCount * CHALLENGE_XP;
@@ -275,8 +273,7 @@ export async function getUserXP(userAddress: string) {
     key => key !== "_lastCheckedAt",
   ).length;
   const sideQuestPoints = completedSideQuestsCount * SIDE_QUEST_XP;
-  const batchPoints = hasBatch ? BATCH_XP : 0;
   const buildPoints = hasBuilds ? BUILD_XP : 0;
 
-  return challengePoints + sideQuestPoints + batchPoints + buildPoints;
+  return challengePoints + sideQuestPoints + buildPoints;
 }
