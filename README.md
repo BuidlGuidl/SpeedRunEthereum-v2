@@ -102,7 +102,7 @@ The `FIREBASE_STORAGE_BUCKET` should be set to your Firebase Storage bucket name
 
 ### IPFS pinning proxy (challenges)
 
-SRE challenges (Tokenization, Simple NFT) upload NFT metadata to IPFS through `POST /api/ipfs/pin` and read it back via `GET /api/ipfs/[cid]`, so challenge repos don't ship IPFS credentials. Responses of `GET /api/ipfs/[cid]` are cached by the Vercel CDN forever (content is immutable).
+SRE challenges (e.g. Tokenization) upload NFT metadata to IPFS through `POST /api/ipfs/pin` and read it back via `GET /api/ipfs/[cid]`, so challenge repos don't ship IPFS credentials. Responses of `GET /api/ipfs/[cid]` are cached by the Vercel CDN forever (content is immutable).
 
 1. Create a [Pinata](https://pinata.cloud) account
 2. **API Keys → New Key**: leave Admin off, set **Files → Write** only, copy the JWT (shown once)
