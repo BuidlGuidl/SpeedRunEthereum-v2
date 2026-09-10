@@ -15,7 +15,7 @@ export async function pinJSON(content: object): Promise<string> {
   formData.append("name", "sre-challenge-nft-metadata");
   formData.append("cid_version", "v0");
   // Tag so uploads from this proxy can be listed / cleaned up in Pinata
-  formData.append("keyvalues", JSON.stringify({ keyvalues: { source: "sre-challenges" } }));
+  formData.append("keyvalues", JSON.stringify({ source: "sre-challenges" }));
 
   const res = await fetch(PINATA_UPLOAD_URL, {
     method: "POST",
