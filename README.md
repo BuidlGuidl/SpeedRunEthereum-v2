@@ -100,6 +100,20 @@ Replace the content of `FIREBASE_SERVICE_ACCOUNT_KEY` with the JSON content from
 
 The `FIREBASE_STORAGE_BUCKET` should be set to your Firebase Storage bucket name, typically in the format `your-project-id.appspot.com`.
 
+### IPFS pinning proxy (challenges)
+
+SRE challenges (Tokenization, Simple NFT) upload NFT metadata to IPFS through `POST /api/ipfs/pin` and read it back via `GET /api/ipfs/[cid]`, so challenge repos don't ship IPFS credentials. Responses of `GET /api/ipfs/[cid]` are cached by the Vercel CDN forever (content is immutable).
+
+1. Create a [Pinata](https://pinata.cloud) account
+2. **API Keys → New Key**: enable only `pinJSONToIPFS`, copy the JWT
+3. **Gateways**: copy your gateway domain. Keep the default restricted access: the proxy only serves what it pinned
+4. In `.env.local` file in the `packages/nextjs` directory, add:
+
+```
+PINATA_JWT=<your JWT>
+PINATA_GATEWAY=your-gateway.mypinata.cloud
+```
+
 ## Testing
 
 This project uses [Playwright](https://playwright.dev/) with [Synpress](https://github.com/Synthetixio/synpress) for end-to-end testing with MetaMask integration.
