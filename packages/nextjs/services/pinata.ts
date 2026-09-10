@@ -1,30 +1,34 @@
 // Pinata IPFS: used by /api/ipfs/* as a pinning proxy for SRE challenges,
 // so that challenge repos don't need to ship IPFS credentials.
 
-const PINATA_PIN_JSON_URL = "https://api.pinata.cloud/pinning/pinJSONToIPFS";
+const PINATA_UPLOAD_URL = "https://uploads.pinata.cloud/v3/files";
 
 export const isPinningConfigured = () => Boolean(process.env.PINATA_JWT);
 export const isGatewayConfigured = () => Boolean(process.env.PINATA_GATEWAY);
 
-// Pins a JSON object and returns its CID (v0, "Qm..." — same format challenges used before)
+// Pins a JSON object to public IPFS and returns its CID (v0, "Qm..." — same format challenges used before).
+// Uses the v3 Files API; the key needs only the "Files: Write" permission.
 export async function pinJSON(content: object): Promise<string> {
-  const res = await fetch(PINATA_PIN_JSON_URL, {
+  const formData = new FormData();
+  formData.append("file", new Blob([JSON.stringify(content)], { type: "application/json" }), "metadata.json");
+  formData.append("network", "public");
+  formData.append("name", "sre-challenge-nft-metadata");
+  formData.append("cid_version", "v0");
+  // Tag so uploads from this proxy can be listed / cleaned up in Pinata
+  formData.append("keyvalues", JSON.stringify({ keyvalues: { source: "sre-challenges" } }));
+
+  const res = await fetch(PINATA_UPLOAD_URL, {
     method: "POST",
-    headers: { "Content-Type": "application/json", Authorization: `Bearer ${process.env.PINATA_JWT}` },
-    body: JSON.stringify({
-      pinataContent: content,
-      // Tag so pins from this proxy can be listed / cleaned up in Pinata
-      pinataMetadata: { name: "sre-challenge-nft-metadata", keyvalues: { source: "sre-challenges" } },
-      pinataOptions: { cidVersion: 0 },
-    }),
+    headers: { Authorization: `Bearer ${process.env.PINATA_JWT}` },
+    body: formData,
   });
 
   if (!res.ok) {
-    throw new Error(`Pinata pin failed: ${res.status} ${await res.text()}`);
+    throw new Error(`Pinata upload failed: ${res.status} ${await res.text()}`);
   }
 
-  const { IpfsHash } = await res.json();
-  return IpfsHash as string;
+  const { data } = await res.json();
+  return data.cid as string;
 }
 
 // Reads JSON by CID from our dedicated gateway. Returns null if not found.
