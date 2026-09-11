@@ -100,6 +100,17 @@ Replace the content of `FIREBASE_SERVICE_ACCOUNT_KEY` with the JSON content from
 
 The `FIREBASE_STORAGE_BUCKET` should be set to your Firebase Storage bucket name, typically in the format `your-project-id.appspot.com`.
 
+### IPFS pinning proxy (challenges)
+
+SRE challenges (e.g. Tokenization) upload NFT metadata to IPFS through `POST /api/ipfs/pin` and read it back via `GET /api/ipfs/[cid]`, so challenge repos don't ship IPFS credentials. Pinning goes to [BuidlGuidl IPFS](https://www.bgipfs.com). Responses of `GET /api/ipfs/[cid]` are cached by the Vercel CDN for the lifetime of a deployment (content is immutable, so the cache never needs invalidation).
+
+1. Log in at [bgipfs.com](https://bgipfs.com/account), **API Keys → create a key**
+2. In `.env.local` file in the `packages/nextjs` directory, add:
+
+```
+BGIPFS_API_KEY=<your key>
+```
+
 ## Testing
 
 This project uses [Playwright](https://playwright.dev/) with [Synpress](https://github.com/Synthetixio/synpress) for end-to-end testing with MetaMask integration.
