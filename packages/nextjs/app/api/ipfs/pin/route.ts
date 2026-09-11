@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { isPinningConfigured, pinJSON } from "~~/services/pinata";
+import { isPinningConfigured, pinJSON } from "~~/services/bgipfs";
 
 // NFT metadata is a few hundred bytes; this leaves room for attributes.
 const MAX_BODY_BYTES = 10_000;

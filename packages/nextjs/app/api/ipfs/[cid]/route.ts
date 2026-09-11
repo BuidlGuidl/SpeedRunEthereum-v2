@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { fetchPinnedJSON, isGatewayConfigured } from "~~/services/pinata";
+import { fetchPinnedJSON } from "~~/services/bgipfs";
 
 // CIDv0 ("Qm...", base58btc) or CIDv1 ("b...", base32)
 const CID_REGEX = /^(Qm[1-9A-HJ-NP-Za-km-z]{44}|b[a-z2-7]{50,})$/;
@@ -13,10 +13,6 @@ export async function GET(_req: Request, props: { params: Promise<{ cid: string 
 
   if (!CID_REGEX.test(cid)) {
     return NextResponse.json({ error: "Invalid CID" }, { status: 400 });
-  }
-
-  if (!isGatewayConfigured()) {
-    return NextResponse.json({ error: "IPFS gateway unavailable" }, { status: 503 });
   }
 
   try {

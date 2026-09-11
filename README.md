@@ -102,16 +102,13 @@ The `FIREBASE_STORAGE_BUCKET` should be set to your Firebase Storage bucket name
 
 ### IPFS pinning proxy (challenges)
 
-SRE challenges (e.g. Tokenization) upload NFT metadata to IPFS through `POST /api/ipfs/pin` and read it back via `GET /api/ipfs/[cid]`, so challenge repos don't ship IPFS credentials. Responses of `GET /api/ipfs/[cid]` are cached by the Vercel CDN forever (content is immutable).
+SRE challenges (e.g. Tokenization) upload NFT metadata to IPFS through `POST /api/ipfs/pin` and read it back via `GET /api/ipfs/[cid]`, so challenge repos don't ship IPFS credentials. Pinning goes to [BuidlGuidl IPFS](https://www.bgipfs.com). Responses of `GET /api/ipfs/[cid]` are cached by the Vercel CDN forever (content is immutable).
 
-1. Create a [Pinata](https://pinata.cloud) account
-2. **API Keys → New Key**: leave Admin off, set **Files → Write** only, copy the JWT (shown once)
-3. **Gateways**: copy your gateway domain. Keep the default restricted access: the proxy only serves what it pinned
-4. In `.env.local` file in the `packages/nextjs` directory, add:
+1. Log in at [bgipfs.com](https://bgipfs.com/account), **API Keys → create a key**
+2. In `.env.local` file in the `packages/nextjs` directory, add:
 
 ```
-PINATA_JWT=<your JWT>
-PINATA_GATEWAY=your-gateway.mypinata.cloud
+BGIPFS_API_KEY=<your key>
 ```
 
 ## Testing
