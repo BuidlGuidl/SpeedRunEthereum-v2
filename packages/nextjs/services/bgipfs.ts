@@ -16,6 +16,7 @@ export async function pinJSON(content: object): Promise<string> {
     method: "POST",
     headers: { "X-API-Key": process.env.BGIPFS_API_KEY as string, "x-pin-name": "sre-challenge-nft-metadata" },
     body: formData,
+    signal: AbortSignal.timeout(20_000),
   });
 
   const text = await res.text();
@@ -33,11 +34,11 @@ export async function pinJSON(content: object): Promise<string> {
   return Hash;
 }
 
-// Reads JSON by CID from the BuidlGuidl gateway. Returns null if not found.
-export async function fetchPinnedJSON(cid: string): Promise<unknown | null> {
+// Reads JSON by CID from the BuidlGuidl gateway.
+// The gateway serves any public CID; an unknown one answers 500 "no providers found".
+export async function fetchPinnedJSON(cid: string): Promise<unknown> {
   const res = await fetch(`${BGIPFS_GATEWAY_URL}/${cid}`, { signal: AbortSignal.timeout(15_000) });
 
-  if (res.status === 404) return null;
   if (!res.ok) {
     throw new Error(`bgipfs gateway failed: ${res.status}`);
   }

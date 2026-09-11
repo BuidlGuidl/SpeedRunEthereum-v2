@@ -1,6 +1,9 @@
 import { NextResponse } from "next/server";
 import { isPinningConfigured, pinJSON } from "~~/services/bgipfs";
 
+// The upload fetch times out after 20s; keep the function alive long enough to report it
+export const maxDuration = 60;
+
 // NFT metadata is a few hundred bytes; this leaves room for attributes.
 const MAX_BODY_BYTES = 10_000;
 
@@ -46,6 +49,9 @@ export async function POST(request: Request) {
     return NextResponse.json({ cid });
   } catch (error) {
     console.error("Error pinning to IPFS:", error);
+    if (error instanceof Error && error.name === "TimeoutError") {
+      return NextResponse.json({ error: "IPFS pinning timed out" }, { status: 504 });
+    }
     return NextResponse.json({ error: "Error pinning to IPFS" }, { status: 502 });
   }
 }
