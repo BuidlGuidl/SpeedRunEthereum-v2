@@ -19,7 +19,7 @@ export const HomepageClient = ({ challenges }: { challenges: Challenges }) => {
     <div>
       <Hero />
       <BeforeSre />
-      <div className="bg-base-200">
+      <div id="challenges" className="bg-base-200 scroll-mt-24">
         <ChallengeExpandedCard
           key={ChallengeId.TOKENIZATION}
           challengeId={ChallengeId.TOKENIZATION}

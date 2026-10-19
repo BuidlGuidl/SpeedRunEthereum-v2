@@ -34,10 +34,7 @@ const ChallengeExpandedCard = ({
   const reviewAction = userChallenge?.reviewAction;
 
   return (
-    <div
-      id={challengeId === ChallengeId.TOKENIZATION ? "challenges" : undefined}
-      className="challenge-expanded-card flex justify-center group relative scroll-mt-24"
-    >
+    <div className="challenge-expanded-card flex justify-center group relative">
       <div className="flex justify-between max-w-7xl py-8 mx-10 sm:mx-14 pl-10 border-primary border-l-[3px] sm:border-l-[5px] relative flex-col-reverse lg:flex-row border-b-2 group-[:not(:has(+.challenge-expanded-card))]:border-b-0">
         <div className="flex flex-col max-w-full lg:max-w-[40%] gap-18 lg:gap-20">
           <div className="flex flex-col items-start gap-0">
