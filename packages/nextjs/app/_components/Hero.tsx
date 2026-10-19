@@ -25,7 +25,7 @@ export const Hero = () => {
 
       <div className="relative h-[130px]">
         <div className="absolute inset-0 bg-[url('/assets/header_platform.svg')] bg-repeat-x bg-[length:auto_130px] z-10" />
-        <div className="bg-base-200 absolute inset-0 top-auto w-full h-5" />
+        <div className="bg-[#96EAEA] dark:bg-[#3AACAD] absolute inset-0 top-auto w-full h-5" />
       </div>
     </div>
   );
