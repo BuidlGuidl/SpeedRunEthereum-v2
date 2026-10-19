@@ -21,17 +21,18 @@ export const BeforeSre = () => {
             <p className="mb-0 mt-0 max-w-md text-sm leading-relaxed sm:text-base">
               Interactive, browser-based labs to learn the basics before you start the SpeedRun Ethereum challenges.
             </p>
-            <ol
+            <ul
+              role="list"
               aria-label="Learning path"
-              className="mb-6 mt-4 flex flex-col gap-2 text-sm font-medium sm:flex-row sm:flex-wrap sm:items-center sm:gap-x-3"
+              className="mb-6 mt-4 flex list-disc flex-col gap-2 pl-4 text-sm font-medium sm:list-none sm:flex-row sm:flex-wrap sm:items-center sm:gap-x-3 sm:pl-0"
             >
               {["Ethereum basics", "Wallets", "First Solidity contract"].map((step, index) => (
-                <li key={step} className="flex items-center gap-3">
+                <li key={step} className="sm:flex sm:items-center sm:gap-3">
                   {index > 0 && <ArrowRightIcon aria-hidden="true" className="hidden h-3 w-3 sm:block" />}
                   {step}
                 </li>
               ))}
-            </ol>
+            </ul>
             <div className="flex flex-wrap items-center gap-x-6 gap-y-4">
               <a
                 href="https://lab.buidlguidl.com/"
