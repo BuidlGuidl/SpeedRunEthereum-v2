@@ -2,6 +2,7 @@
 
 import { AfterSreCard } from "./AfterSreCard";
 import { AfterSreLine } from "./AfterSreLine";
+import { BeforeSre } from "./BeforeSre";
 import { ChallengeExpandedCard } from "./ChallengeExpandedCard";
 import { Hero } from "./Hero";
 import { useAccount } from "wagmi";
@@ -17,6 +18,7 @@ export const HomepageClient = ({ challenges }: { challenges: Challenges }) => {
   return (
     <div>
       <Hero />
+      <BeforeSre />
       <div className="bg-base-200">
         <ChallengeExpandedCard
           key={ChallengeId.TOKENIZATION}
