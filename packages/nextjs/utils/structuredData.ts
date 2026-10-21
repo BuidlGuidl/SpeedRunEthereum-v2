@@ -126,7 +126,8 @@ export function getGuidesIndexStructuredData({ title, description }: { title: st
   return [collection, breadcrumb];
 }
 
-// Challenge page: a Course node for a single challenge, tied back to the curriculum.
+// Challenge page: a Course node for a single challenge, tied back to the curriculum, plus its
+// breadcrumb trail. The middle crumb is /start, which is where the challenges are listed.
 export function getChallengeStructuredData({
   id,
   name,
@@ -136,17 +137,31 @@ export function getChallengeStructuredData({
   name: string;
   description: string;
 }) {
-  return {
+  const url = `${SITE_URL}/challenge/${id}`;
+
+  const course = {
     "@context": "https://schema.org",
     "@type": "Course",
     name,
     description,
-    url: `${SITE_URL}/challenge/${id}`,
+    url,
     provider,
     isPartOf: {
       "@id": COURSE_ID,
     },
   };
+
+  const breadcrumb = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: COURSE_NAME, item: SITE_URL },
+      { "@type": "ListItem", position: 2, name: "Challenges", item: `${SITE_URL}/start` },
+      { "@type": "ListItem", position: 3, name, item: url },
+    ],
+  };
+
+  return [course, breadcrumb];
 }
 
 // Top-level pages (/learn-solidity, /start, /build-prompts): attach the page to the curriculum
