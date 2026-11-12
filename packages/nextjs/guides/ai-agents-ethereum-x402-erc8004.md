@@ -1,6 +1,6 @@
 ---
 title: "AI Agents and Ethereum: x402 Payments, ERC-8004, and Building the App"
-date: "2025-11-27"
+date: "2026-08-05"
 description: "Austin Griffith's Columbia University guest lecture on where AI agents and Ethereum meet: the x402 payment standard with a working client, server and facilitator, the ERC-8004 agent registry, and a full Scaffold-ETH 2 build deployed to Arbitrum. Full video and edited transcript."
 image: "/assets/guides/ai-agents-ethereum-x402-erc8004.jpg"
 showNavigation: true
