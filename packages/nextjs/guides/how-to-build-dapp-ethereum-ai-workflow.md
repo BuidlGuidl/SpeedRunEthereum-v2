@@ -317,7 +317,7 @@ If the assistant still gets a library pattern wrong, [Context7 MCP](https://cont
 
 AI review is useful before you ask another person to look at the code. I would use it to catch the obvious things first: missing access checks, suspicious state changes, untested branches, and code that does not match the spec. What I would not expect it to do is decide whether the protocol design or incentives make sense.
 
-In Scaffold-ETH 2, the built-in **[Grumpy Carlos Reviewer](https://github.com/scaffold-eth/scaffold-eth-2/blob/main/.agents/agents/grumpy-carlos-code-reviewer.md)** skill is a good first pass before you open a PR. It makes the agent switch from build mode to review mode and look for ways the contract could break.
+In Scaffold-ETH 2, the built-in **[Grumpy Carlos Reviewer](https://github.com/scaffold-eth/scaffold-eth-2/blob/main/templates/base/.agents/agents/grumpy-carlos-code-reviewer.md)** skill is a good first pass before you open a PR. It makes the agent switch from build mode to review mode and look for ways the contract could break.
 
 Once you have that local pass, keep your normal PR review process. Tools like [CodeRabbit](https://docs.coderabbit.ai/) or [Qodo](https://docs.qodo.ai/code-review) can leave automated comments on the pull request and help catch stale patterns or smaller mistakes you missed locally.
 
